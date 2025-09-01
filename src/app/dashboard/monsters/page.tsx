@@ -126,7 +126,7 @@ export default function MonstersPage() {
   const isMaster = user?.role === 'master';
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-stone-gradient -m-6 p-6 min-h-[calc(100vh-theme(spacing.12))]">
        <div className="flex justify-between items-center">
         <div className="relative w-full max-w-sm">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -147,12 +147,12 @@ export default function MonstersPage() {
       <Separator />
 
       {filteredMonsters.length > 0 ? (
-        <div className="grid grid-cols-3 items-center h-[75vh]">
+        <div className="grid md:grid-cols-3 items-center h-[75vh]">
 
            {/* Left Floating Text */}
-            <div className={cn("transition-opacity duration-500", activeMonster ? "opacity-100" : "opacity-0")}>
+            <div className={cn("transition-opacity duration-500 px-4 md:px-8", activeMonster ? "opacity-100" : "opacity-0")}>
               <h3 className="font-headline text-lg text-white/90">Observations</h3>
-              <p className="text-white/70 text-sm mt-2 font-handwriting text-lg leading-relaxed">{activeMonster?.observations}</p>
+              <p className="text-white/70 text-sm mt-2 font-handwriting text-xl leading-relaxed">{activeMonster?.observations}</p>
             </div>
 
 
@@ -191,9 +191,9 @@ export default function MonstersPage() {
             </div>
             
              {/* Right Floating Text */}
-             <div className={cn("transition-opacity duration-500 pl-8", activeMonster ? "opacity-100" : "opacity-0")}>
+             <div className={cn("transition-opacity duration-500 px-4 md:px-8", activeMonster ? "opacity-100" : "opacity-0")}>
                 <h3 className="font-headline text-lg text-white/90 mb-4">Abilities</h3>
-                <div className="space-y-3 text-white/70">
+                <div className="space-y-3 text-white/70 text-lg">
                    <div className="flex justify-between border-b border-white/10 pb-1">
                      <span className="font-semibold">Toughness</span>
                      <span>{activeMonster?.thematicStats.toughness}</span>

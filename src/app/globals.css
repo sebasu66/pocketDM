@@ -101,4 +101,10 @@
   .rotate-y-180 {
     transform: rotateY(180deg);
   }
+  .bg-stone-gradient {
+    @apply bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))];
+    --tw-gradient-from: hsl(0 0% 15%);
+    --tw-gradient-to: hsl(0 0% 5%);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
 }
