@@ -3,7 +3,6 @@
 
 import React, { useState, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-import { GripVertical } from 'lucide-react';
 
 interface StackedCardProps<T> {
   items: T[];
@@ -14,25 +13,41 @@ export function StackedCard<T extends { id: string; name: string }>({ items, ren
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handleCardClick = (index: number) => {
+    console.log(`Card clicked. New active index: ${index}`);
     setActiveIndex(index);
   };
   
   if (!items || items.length === 0) {
+    console.log("No items to render.");
     return null;
   }
   
-  const activeItem = items[activeIndex];
-  const itemsToShow = [...items.filter((_, i) => i !== activeIndex), activeItem];
+  // This logic was flawed before. This is a more robust way to handle the stacking order.
+  const orderedItems = useMemo(() => {
+    console.log(`Recalculating orderedItems. Active index is ${activeIndex}`);
+    const activeItem = items[activeIndex];
+    if (!activeItem) {
+        // This case should not happen if activeIndex is managed correctly
+        console.error(`Error: No active item found at index ${activeIndex}. Defaulting to first item.`);
+        setActiveIndex(0);
+        return items;
+    }
+    const otherItems = items.filter((_, i) => i !== activeIndex);
+    const newOrder = [...otherItems, activeItem];
+    console.log('New order of items to show:', newOrder.map(i => i.id));
+    return newOrder;
+  }, [items, activeIndex]);
 
 
   return (
     <div className="relative w-full h-full flex items-center justify-center">
       <div className="relative w-[400px] h-[600px]">
-        {itemsToShow.map((item, index) => {
+        {orderedItems.map((item, index) => {
+          // We need the original index to pass back to the click handler
           const originalIndex = items.findIndex(i => i.id === item.id);
-          const isActive = index === itemsToShow.length - 1;
+          const isActive = index === orderedItems.length - 1;
           const zIndex = index;
-          const offset = itemsToShow.length - 1 - index;
+          const offset = orderedItems.length - 1 - index;
           
 
           return (
