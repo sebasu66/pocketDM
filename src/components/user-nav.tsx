@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import {
   Avatar,
@@ -33,6 +34,9 @@ export function UserNav() {
             <p className="text-sm font-medium leading-none">Game Master</p>
             <p className="text-xs leading-none text-muted-foreground">
               gm@example.com
+            </p>
+             <p className="text-xs leading-none text-muted-foreground/80 pt-1 font-semibold">
+              (Game Master)
             </p>
           </div>
         </DropdownMenuLabel>
