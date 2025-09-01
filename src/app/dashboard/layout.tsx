@@ -1,16 +1,21 @@
+
 "use client";
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  BookOpen,
+  Home,
   Users,
-  MapPin,
+  Map,
   Shield,
   Skull,
   ScrollText,
   Settings,
   MessagesSquare,
+  BookHeart,
+  Mountain,
+  Swords,
+  BookOpen,
 } from "lucide-react";
 
 import {
@@ -24,7 +29,8 @@ import {
   SidebarInset,
   SidebarFooter,
   SidebarTrigger,
-  SidebarMenuBadge,
+  SidebarGroup,
+  SidebarGroupLabel,
 } from "@/components/ui/sidebar";
 import { UserNav } from "@/components/user-nav";
 import { Logo } from "@/components/logo";
@@ -32,20 +38,22 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/context/auth-context";
 import React from "react";
-import { Skeleton } from "@/components/ui/skeleton";
+import Image from "next/image";
 
-const navItems = [
-  { href: "/dashboard", icon: BookOpen, label: "Campaigns" },
+const worldNavItems = [
   { href: "/dashboard/characters", icon: Users, label: "Characters" },
-  { href: "/dashboard/places", icon: MapPin, label: "Places" },
+  { href: "/dashboard/places", icon: Map, label: "Places" },
   { href: "/dashboard/items", icon: Shield, label: "Items" },
   { href: "/dashboard/monsters", icon: Skull, label: "Monsters" },
-  { href: "/dashboard/narrative", icon: ScrollText, label: "Narrative", badge: 3 },
-  { href: "/dashboard/chat", icon: MessagesSquare, label: "Chat" },
+];
+
+const narrativeNavItems = [
+   { href: "/dashboard/narrative", icon: ScrollText, label: "Threads" },
+   { href: "/dashboard/chat", icon: MessagesSquare, label: "Player Chat" },
 ];
 
 const pageTitles: { [key: string]: string } = {
-  "/dashboard": "Campaigns",
+  "/dashboard": "The Whispering Shadows",
   "/dashboard/characters": "Characters",
   "/dashboard/places": "Places",
   "/dashboard/items": "Items",
@@ -80,31 +88,57 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <Sidebar className="border-r border-border/20">
-        <SidebarHeader>
-          <div className="flex items-center gap-2">
-            <Logo className="w-8 h-8" />
-            <h1 className="text-xl font-headline font-semibold text-foreground">
-              Lore Weaver
-            </h1>
+        <SidebarHeader className="p-0">
+          <div className="relative h-32 w-full">
+             <Image src="https://picsum.photos/400/200?random=50" alt="Campaign Banner" fill className="object-cover" data-ai-hint="fantasy landscape" />
+             <div className="absolute inset-0 bg-gradient-to-t from-sidebar/100 to-sidebar/20" />
+             <div className="absolute bottom-4 left-4">
+                <h2 className="text-2xl font-headline text-white">The Whispering Shadows</h2>
+             </div>
           </div>
         </SidebarHeader>
-        <SidebarContent>
-          <SidebarMenu>
-            {navItems.map((item) => (
-              <SidebarMenuItem key={item.href}>
-                <Link href={item.href} legacyBehavior passHref>
-                  <SidebarMenuButton
-                    isActive={pathname === item.href}
-                    tooltip={{ children: item.label }}
-                  >
-                    <item.icon />
-                    <span>{item.label}</span>
-                    {item.badge && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
+        <SidebarContent className="p-2">
+           <SidebarMenu>
+              <SidebarMenuItem>
+                <Link href="/dashboard" legacyBehavior passHref>
+                  <SidebarMenuButton isActive={pathname === '/dashboard'} tooltip={{ children: 'Dashboard' }}>
+                    <Home />
+                    <span>Dashboard</span>
                   </SidebarMenuButton>
                 </Link>
               </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
+            </SidebarMenu>
+
+          <SidebarGroup>
+            <SidebarGroupLabel>World</SidebarGroupLabel>
+            <SidebarMenu>
+                {worldNavItems.map((item) => (
+                <SidebarMenuItem key={item.href}>
+                    <Link href={item.href} legacyBehavior passHref>
+                    <SidebarMenuButton isActive={pathname.startsWith(item.href)} tooltip={{ children: item.label }}>
+                        <item.icon />
+                        <span>{item.label}</span>
+                    </SidebarMenuButton>
+                    </Link>
+                </SidebarMenuItem>
+                ))}
+            </SidebarMenu>
+          </SidebarGroup>
+          <SidebarGroup>
+            <SidebarGroupLabel>Narrative</SidebarGroupLabel>
+             <SidebarMenu>
+                {narrativeNavItems.map((item) => (
+                <SidebarMenuItem key={item.href}>
+                    <Link href={item.href} legacyBehavior passHref>
+                    <SidebarMenuButton isActive={pathname.startsWith(item.href)} tooltip={{ children: item.label }}>
+                        <item.icon />
+                        <span>{item.label}</span>
+                    </SidebarMenuButton>
+                    </Link>
+                </SidebarMenuItem>
+                ))}
+            </SidebarMenu>
+          </SidebarGroup>
         </SidebarContent>
         <SidebarFooter>
           <Separator className="my-2 bg-border/20" />
@@ -124,7 +158,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <header className="flex items-center justify-between p-4 border-b border-border/20 bg-background/80 backdrop-blur-sm sticky top-0 z-20">
           <div className="flex items-center gap-2">
              <SidebarTrigger className="md:hidden" />
-             <h2 className="text-2xl font-semibold font-headline">{pageTitles[pathname] || "Dashboard"}</h2>
+             <div className="flex items-center gap-2">
+              <BookOpen />
+              <h2 className="text-2xl font-semibold font-headline">{pageTitles[pathname] || "Dashboard"}</h2>
+             </div>
           </div>
           <div className="flex items-center gap-4">
             <Input placeholder="Search entities..." className="hidden md:block w-64 bg-background" />

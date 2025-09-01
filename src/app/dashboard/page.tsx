@@ -1,70 +1,81 @@
+
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { PlusCircle } from "lucide-react";
+import { Star } from "lucide-react";
 
-const campaigns = [
+const mainEntities = [
   {
-    title: "The Whispering Shadows",
-    description: "A realm teetering on the brink of an ancient, creeping darkness.",
-    image: "https://picsum.photos/600/400?random=1",
-    aiHint: "dark fantasy forest",
+    title: "Veronica Korsch",
+    description: "A determined half-elf paladin on a quest to avenge her fallen order.",
+    image: "https://picsum.photos/400/400?random=1",
+    aiHint: "female paladin portrait",
   },
   {
-    title: "Spires of Aerthos",
-    description: "Explore the floating cities and forgotten technologies of a sky-bound civilization.",
+    title: "The Shadow Syndicate",
+    description: "A clandestine group rumored to pull the strings of power from the city's underbelly.",
     image: "https://picsum.photos/600/400?random=2",
-    aiHint: "sky city",
+    aiHint: "fantasy assassins group",
   },
   {
-    title: "The Sunken Kingdom of Azmar",
+    title: "The Sunken City of Azmar",
     description: "Uncover the mysteries of a once-great civilization now lost beneath the waves.",
     image: "https://picsum.photos/600/400?random=3",
     aiHint: "underwater ruins",
-  },
-  {
-    title: "Chronicles of the Crimson Dust",
-    description: "Survive the harsh, magical deserts and carve a new destiny in a land of scarcity and wonder.",
-    image: "https://picsum.photos/600/400?random=4",
-    aiHint: "magic desert",
   },
 ];
 
 export default function DashboardPage() {
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <p className="text-muted-foreground">
-          Welcome back, Game Master. Here are your active campaigns.
-        </p>
-        <Button>
-          <PlusCircle className="mr-2" />
-          New Campaign
-        </Button>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {campaigns.map((campaign, index) => (
-          <Card key={index} className="overflow-hidden transition-all hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-1">
-            <CardHeader className="p-0">
-              <Image
-                src={campaign.image}
-                alt={campaign.title}
-                width={600}
-                height={400}
-                className="w-full h-48 object-cover"
-                data-ai-hint={campaign.aiHint}
-              />
-            </CardHeader>
-            <CardContent className="p-6">
-              <CardTitle className="font-headline text-xl mb-2">{campaign.title}</CardTitle>
-              <CardDescription className="text-muted-foreground">{campaign.description}</CardDescription>
-            </CardContent>
-            <CardFooter className="p-6 pt-0">
-              <Button variant="outline" className="w-full">View Campaign</Button>
-            </CardFooter>
-          </Card>
-        ))}
-      </div>
+      <Card className="overflow-hidden">
+        <div className="relative h-64 w-full">
+           <Image src="https://picsum.photos/1200/400?random=10" alt="Campaign hero image" fill className="object-cover" data-ai-hint="epic fantasy landscape" />
+           <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+        </div>
+        <CardHeader className="relative -mt-20 z-10 p-6">
+           <div className="flex justify-between items-start">
+             <div>
+              <CardTitle className="text-4xl text-white font-headline">The Whispering Shadows</CardTitle>
+              <CardDescription className="text-white/80 max-w-3xl mt-2">
+                A realm teetering on the brink of an ancient, creeping darkness. Once a safe haven for elves, dwarves, gnomes and
+                other creatures, humans started settling in thousands of years ago through war and conquest. The elves live exiles in the north.
+              </CardDescription>
+            </div>
+             <Button variant="outline" className="bg-background/50 border-white/50 text-white backdrop-blur-sm hover:bg-white hover:text-black">
+                <Star />
+                Follow
+             </Button>
+           </div>
+        </CardHeader>
+      </Card>
+
+      <div className="space-y-4">
+        <h3 className="text-2xl font-headline">Main Entities</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {mainEntities.map((entity, index) => (
+            <Card key={index} className="overflow-hidden transition-all hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-1">
+                <CardHeader className="p-0">
+                <Image
+                    src={entity.image}
+                    alt={entity.title}
+                    width={600}
+                    height={400}
+                    className="w-full h-48 object-cover"
+                    data-ai-hint={entity.aiHint}
+                />
+                </CardHeader>
+                <CardContent className="p-6">
+                <CardTitle className="font-headline text-xl mb-2">{entity.title}</CardTitle>
+                <CardDescription className="text-muted-foreground">{entity.description}</CardDescription>
+                </CardContent>
+                <CardFooter className="p-6 pt-0">
+                <Button variant="outline" className="w-full">View Details</Button>
+                </CardFooter>
+            </Card>
+            ))}
+        </div>
+       </div>
     </div>
   );
 }
