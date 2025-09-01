@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useState } from "react";
@@ -26,7 +27,7 @@ const initialMonsters = [
         id: "1",
         name: "Dire Wolf",
         description: "Larger and more ferocious than its common kin, the Dire Wolf is a cunning predator of the northern wilds. Its eyes glow with a faint, malevolent light, and its howl can freeze the blood of the bravest warrior. They hunt in packs, coordinating their attacks with terrifying intelligence.",
-        stats: "AC: 14, HP: 37, Speed: 50ft",
+        stats: "AC: 14\nHP: 37\nSpeed: 50ft",
         image: "https://picsum.photos/seed/direwolf/400/600",
         aiHint: "dire wolf sketch fantasy"
     },
@@ -34,7 +35,7 @@ const initialMonsters = [
         id: "2",
         name: "Human Spawn",
         description: "A horrifying result of dark rituals, the Human Spawn is a twisted mockery of the human form. Its limbs are elongated and its movements are unnaturally fast. It emits a low gurgling sound and is driven by an insatiable hunger for the flesh of the living.",
-        stats: "AC: 12, HP: 22, Speed: 30ft",
+        stats: "AC: 12\nHP: 22\nSpeed: 30ft",
         image: "https://picsum.photos/seed/humanspawn/400/600",
         aiHint: "zombie monster sketch"
     }
@@ -126,21 +127,21 @@ export default function MonstersPage() {
                         alt={monster.name} 
                         fill
                         sizes="400px"
-                        className="object-cover object-center" 
+                        className="object-cover object-center opacity-40" 
                         data-ai-hint={monster.aiHint} 
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
                      {isActive && (
                         <div className="relative p-6 h-full flex flex-col justify-end">
                            <div className="absolute top-4 right-4 text-right">
-                             <div className="text-sm text-destructive-foreground/80 font-mono bg-destructive/80 p-2 rounded">
+                             <div className="text-sm text-red-900 font-mono whitespace-pre-line">
                                 {monster.stats}
                              </div>
                            </div>
                            
                            <div className="flex-1" />
 
-                           <div className="font-handwriting text-lg leading-relaxed h-32 overflow-y-auto mix-blend-multiply text-black bg-white/40 p-4 rounded mb-10">
+                           <div className="font-handwriting text-lg leading-relaxed h-32 overflow-y-auto mix-blend-multiply text-black p-4 rounded">
                                {monster.description}
                            </div>
                            
@@ -156,8 +157,8 @@ export default function MonstersPage() {
                            )}
                         </div>
                      )}
-                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
-                        <h2 className="text-2xl font-headline text-black drop-shadow-lg bg-white/70 px-4 py-1 rounded">{monster.name}</h2>
+                      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full">
+                        <h2 className="text-xl font-headline text-black drop-shadow-lg bg-white/70 px-4 py-1 text-center">{monster.name}</h2>
                       </div>
                 </div>
             )}
