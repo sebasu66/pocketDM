@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState } from "react";
@@ -122,10 +121,10 @@ export default function MonstersPage() {
             items={filteredMonsters}
             renderItem={(monster, isActive) => (
                 <div className="w-full h-full relative rounded-lg overflow-hidden border border-border/20 bg-card text-card-foreground shadow-lg">
-                    <img 
+                    <img
                         src={monster.image} 
                         alt={monster.name} 
-                        className="w-full h-full object-cover object-center" 
+                        className="w-full h-full object-cover" 
                         data-ai-hint={monster.aiHint} 
                     />
                      {isActive && (
