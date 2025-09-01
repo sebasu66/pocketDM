@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useState } from "react";
@@ -20,6 +21,8 @@ import {
   DialogClose
 } from "@/components/ui/dialog";
 import { StackedCard } from "@/components/ui/stacked-card";
+import DireWolfImage from "../../../../public/dire-wolf.png";
+import HumanSpawnImage from "../../../../public/human-spawn.png";
 
 const initialMonsters = [
     {
@@ -27,7 +30,7 @@ const initialMonsters = [
         name: "Dire Wolf",
         description: "Larger and more ferocious than its common kin, the Dire Wolf is a cunning predator of the northern wilds. Its eyes glow with a faint, malevolent light, and its howl can freeze the blood of the bravest warrior. They hunt in packs, coordinating their attacks with terrifying intelligence.",
         stats: "AC: 14\nHP: 37\nSpeed: 50ft",
-        image: "/dire-wolf.png",
+        image: DireWolfImage,
         aiHint: "dire wolf sketch fantasy"
     },
     {
@@ -35,7 +38,7 @@ const initialMonsters = [
         name: "Human Spawn",
         description: "A horrifying result of dark rituals, the Human Spawn is a twisted mockery of the human form. Its limbs are elongated and its movements are unnaturally fast. It emits a low gurgling sound and is driven by an insatiable hunger for the flesh of the living.",
         stats: "AC: 12\nHP: 22\nSpeed: 30ft",
-        image: "/human-spawn.png",
+        image: HumanSpawnImage,
         aiHint: "zombie monster sketch"
     }
 ];
@@ -73,7 +76,7 @@ export default function MonstersPage() {
       setMonsters(monsters.map(m => m.id === editingMonster.id ? {...m, ...editingMonster} as Monster : m));
     } else {
       // Create new monster
-      const newMonster: Monster = {
+      const newMonster: any = {
         id: (monsters.length + 1).toString(),
         name: editingMonster.name || "New Monster",
         description: editingMonster.description || "",
@@ -121,11 +124,13 @@ export default function MonstersPage() {
             items={filteredMonsters}
             renderItem={(monster, isActive) => (
                 <div className="w-full h-full relative rounded-lg overflow-hidden border border-border/20 bg-card text-card-foreground shadow-lg">
-                    <img
+                    <Image
                         src={monster.image} 
                         alt={monster.name} 
+                        fill
                         className="w-full h-full object-cover" 
                         data-ai-hint={monster.aiHint} 
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                      {isActive && (
                         <div className="relative p-6 h-full flex flex-col justify-end">
