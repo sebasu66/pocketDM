@@ -120,7 +120,7 @@ export default function MonstersPage() {
         <StackedCard
             items={filteredMonsters}
             renderItem={(monster, isActive) => (
-                <div className="w-full h-full relative rounded-lg overflow-hidden border border-border/20 bg-card">
+                <div className="w-full h-full relative rounded-lg overflow-hidden border border-border/20 bg-card text-card-foreground">
                     <Image 
                         src={monster.image} 
                         alt={monster.name} 
@@ -130,7 +130,7 @@ export default function MonstersPage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/40 to-transparent" />
                      {isActive && (
-                        <div className="relative p-6 h-full flex flex-col justify-end text-foreground/90">
+                        <div className="relative p-6 h-full flex flex-col justify-end">
                            <div className="absolute top-4 right-4 text-right">
                              <div className="text-sm text-muted-foreground font-mono bg-black/50 p-2 rounded">
                                 {monster.stats}
