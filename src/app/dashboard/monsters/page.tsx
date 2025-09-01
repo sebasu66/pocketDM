@@ -2,145 +2,148 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { PlusCircle, Trash2, Search, BookOpen } from "lucide-react";
+import { PlusCircle, Trash2, Edit, Search } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import Image from "next/image";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose
+} from "@/components/ui/dialog"
 
 const initialMonsters = [
   {
     id: "1",
     name: "Goblin Sneak",
-    description: "A small, wiry creature with green skin and beady eyes. Goblins are known for their cunning and their tendency to attack in groups. This one seems particularly stealthy.",
+    description: "A small, wiry creature with green skin and beady eyes. Known for cunning and group attacks.",
     stats: "AC: 13, HP: 7, Speed: 30ft",
+    image: "https://picsum.photos/200/300?random=20",
+    aiHint: "fantasy goblin portrait"
   },
   {
     id: "2",
     name: "Owlbear",
-    description: "A monstrous beast with the body of a bear and the head of an owl. Its screech can paralyze with fear, and its claws can shred armor. A formidable predator of the deep woods.",
+    description: "A monstrous beast with the body of a bear and the head of an owl. A formidable predator.",
     stats: "AC: 13, HP: 59, Speed: 40ft",
+    image: "https://picsum.photos/200/300?random=21",
+    aiHint: "fantasy owlbear"
   },
   {
     id: "3",
     name: "Gelatinous Cube",
-    description: "A ten-foot cube of transparent ooze that silently patrols dungeon corridors, consuming everything in its path. It is nearly invisible until it's too late.",
+    description: "A ten-foot cube of transparent ooze that silently patrols dungeon corridors.",
     stats: "AC: 6, HP: 84, Speed: 15ft",
+    image: "https://picsum.photos/200/300?random=22",
+    aiHint: "gelatinous cube fantasy"
+  },
+   {
+    id: "4",
+    name: "Beholder",
+    description: "A floating orb of flesh with a large central eye and many smaller eye stalks.",
+    stats: "AC: 18, HP: 180, Speed: 0ft, fly 20ft",
+    image: "https://picsum.photos/200/300?random=23",
+    aiHint: "fantasy beholder monster"
   },
 ];
 
 export default function MonstersPage() {
   const [monsters, setMonsters] = useState(initialMonsters);
-  const [selectedMonster, setSelectedMonster] = useState(monsters[0]);
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredMonsters = monsters.filter((monster) =>
     monster.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  
-  const handleNewMonster = () => {
-    const newMonster = {
-      id: (monsters.length + 1).toString(),
-      name: "New Monster",
-      description: "A new creature waiting to be defined.",
-      stats: "",
-    };
-    setMonsters([newMonster, ...monsters]);
-    setSelectedMonster(newMonster);
-  }
-  
-  const handleDeleteMonster = (id: string) => {
-    const newMonsters = monsters.filter(m => m.id !== id);
-    setMonsters(newMonsters);
-    setSelectedMonster(newMonsters.length > 0 ? newMonsters[0] : null);
-  }
 
   return (
-    <div className="grid md:grid-cols-3 gap-6 h-[calc(100vh-8rem)]">
-      <Card className="md:col-span-1 flex flex-col">
-        <CardHeader>
-          <CardTitle>Bestiary</CardTitle>
-          <div className="relative mt-2">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input 
-              placeholder="Search monsters..." 
-              className="pl-8" 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-        </CardHeader>
-        <CardContent className="flex-grow overflow-y-auto">
-          <div className="space-y-2">
-            {filteredMonsters.map((monster) => (
-              <Button
-                key={monster.id}
-                variant={selectedMonster?.id === monster.id ? "secondary" : "ghost"}
-                className="w-full justify-start h-auto py-2"
-                onClick={() => setSelectedMonster(monster)}
-              >
-                <div className="flex items-center">
-                  <BookOpen className="mr-3" />
-                  <div className="text-left">
-                    <p>{monster.name}</p>
-                    <p className="text-xs text-muted-foreground font-normal truncate max-w-48">{monster.description}</p>
-                  </div>
-                </div>
-              </Button>
-            ))}
-          </div>
-        </CardContent>
-        <CardContent className="border-t pt-4">
-           <Button className="w-full" onClick={handleNewMonster}>
-            <PlusCircle /> New Monster
-          </Button>
-        </CardContent>
-      </Card>
-
-      <Card className="md:col-span-2">
-        {selectedMonster ? (
-          <>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="font-headline text-3xl">{selectedMonster.name}</CardTitle>
-              <Button variant="destructive" size="icon" onClick={() => handleDeleteMonster(selectedMonster.id)}>
-                <Trash2 />
-                 <span className="sr-only">Delete Monster</span>
-              </Button>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <Separator />
+    <div className="space-y-6">
+       <div className="flex justify-between items-center">
+        <div className="relative w-full max-w-sm">
+          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input 
+            placeholder="Search monsters..." 
+            className="pl-8" 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>
+              <PlusCircle /> New Monster
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[625px]">
+            <DialogHeader>
+              <DialogTitle>Create New Monster</DialogTitle>
+              <DialogDescription>
+                Fill out the details for your new creature. Click save when you're done.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
               <div className="space-y-2">
                 <Label htmlFor="monster-name">Name</Label>
-                <Input id="monster-name" value={selectedMonster.name} />
+                <Input id="monster-name" placeholder="e.g., Shadow Ghoul" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="monster-description">Description</Label>
                 <Textarea
                   id="monster-description"
-                  value={selectedMonster.description}
-                  rows={10}
-                  className="text-base"
+                  placeholder="A brief description of the monster's appearance, abilities, and lore."
+                  rows={5}
                 />
               </div>
-               <div className="space-y-2">
-                <Label>Stats</Label>
-                <p className="text-sm text-muted-foreground bg-muted/50 p-4 rounded-md font-mono">{selectedMonster.stats || "No stats defined."}</p>
-                 <p className="text-xs text-muted-foreground">Stats can only be edited by the Game Master.</p>
-              </div>
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button type="button" variant="secondary">
+                  Cancel
+                </Button>
+              </DialogClose>
+              <Button type="submit">Save Monster</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
 
-               <Button>Save Changes</Button>
+      <Separator />
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {filteredMonsters.map((monster) => (
+          <Card key={monster.id} className="overflow-hidden flex flex-col">
+            <CardHeader className="p-0">
+               <Image src={monster.image} alt={monster.name} width={200} height={300} className="w-full h-48 object-cover object-top" data-ai-hint={monster.aiHint} />
+            </CardHeader>
+            <CardContent className="p-4 flex-grow">
+               <CardTitle className="font-headline text-xl mb-2">{monster.name}</CardTitle>
+              <p className="text-muted-foreground text-sm flex-grow">{monster.description}</p>
             </CardContent>
-          </>
-        ) : (
-          <CardContent className="flex flex-col items-center justify-center h-full text-center">
-            <BookOpen className="w-16 h-16 text-muted-foreground/50 mb-4" />
-            <h3 className="text-xl font-semibold">No Monster Selected</h3>
-            <p className="text-muted-foreground">Select a monster from the list or create a new one.</p>
-          </CardContent>
+            <CardFooter className="p-4 pt-0 flex gap-2">
+               <Button variant="outline" className="w-full">
+                  <Edit /> Edit
+                </Button>
+                <Button variant="destructive" size="icon">
+                  <Trash2 />
+                   <span className="sr-only">Delete</span>
+                </Button>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
+       {filteredMonsters.length === 0 && (
+          <div className="text-center col-span-full py-12">
+            <p className="text-muted-foreground">No monsters found matching your search.</p>
+          </div>
         )}
-      </Card>
     </div>
   );
 }
