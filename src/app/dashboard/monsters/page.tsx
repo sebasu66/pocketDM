@@ -22,22 +22,22 @@ import {
 import { StackedCard } from "@/components/ui/stacked-card";
 
 const initialMonsters = [
-  {
-    id: "1",
-    name: "Dire Wolf",
-    description: "Larger and more ferocious than its common kin, the Dire Wolf is a cunning predator of the northern wilds. Its eyes glow with a faint, malevolent light, and its howl can freeze the blood of the bravest warrior. They hunt in packs, coordinating their attacks with terrifying intelligence.",
-    stats: "AC: 14, HP: 37, Speed: 50ft",
-    image: "https://picsum.photos/seed/direwolf/400/600",
-    aiHint: "dire wolf sketch fantasy"
-  },
-  {
-    id: "2",
-    name: "Human Spawn",
-    description: "A horrifying result of dark rituals, the Human Spawn is a twisted mockery of the human form. Its limbs are elongated and its movements are unnaturally fast. It emits a low gurgling sound and is driven by an insatiable hunger for the flesh of the living.",
-    stats: "AC: 12, HP: 22, Speed: 30ft",
-    image: "https://picsum.photos/seed/humanspawn/400/600",
-    aiHint: "zombie monster sketch"
-  }
+    {
+        id: "1",
+        name: "Dire Wolf",
+        description: "Larger and more ferocious than its common kin, the Dire Wolf is a cunning predator of the northern wilds. Its eyes glow with a faint, malevolent light, and its howl can freeze the blood of the bravest warrior. They hunt in packs, coordinating their attacks with terrifying intelligence.",
+        stats: "AC: 14, HP: 37, Speed: 50ft",
+        image: "https://picsum.photos/seed/direwolf/400/600",
+        aiHint: "dire wolf sketch fantasy"
+    },
+    {
+        id: "2",
+        name: "Human Spawn",
+        description: "A horrifying result of dark rituals, the Human Spawn is a twisted mockery of the human form. Its limbs are elongated and its movements are unnaturally fast. It emits a low gurgling sound and is driven by an insatiable hunger for the flesh of the living.",
+        stats: "AC: 12, HP: 22, Speed: 30ft",
+        image: "https://picsum.photos/seed/humanspawn/400/600",
+        aiHint: "zombie monster sketch"
+    }
 ];
 
 type Monster = typeof initialMonsters[0];
@@ -124,7 +124,8 @@ export default function MonstersPage() {
                     <Image 
                         src={monster.image} 
                         alt={monster.name} 
-                        fill 
+                        fill
+                        sizes="400px"
                         className="object-cover object-center" 
                         data-ai-hint={monster.aiHint} 
                     />
@@ -205,7 +206,7 @@ export default function MonstersPage() {
                   <Label className="mb-2">Monster Portrait</Label>
                   <div className="w-48 h-64 bg-background rounded overflow-hidden mb-4 flex items-center justify-center relative">
                     {editingMonster?.image ? (
-                        <Image src={editingMonster.image} alt={editingMonster.name || "Monster"} layout="fill" className="object-cover" />
+                        <Image src={editingMonster.image} alt={editingMonster.name || "Monster"} sizes="200px" layout="fill" className="object-cover" />
                     ): (
                         <p className="text-xs text-muted-foreground p-2">No image</p>
                     )}

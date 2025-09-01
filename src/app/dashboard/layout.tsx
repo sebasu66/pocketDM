@@ -90,7 +90,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <Sidebar className="border-r border-border/20">
         <SidebarHeader className="p-0">
           <div className="relative h-32 w-full">
-             <Image src="https://picsum.photos/400/200?random=50" alt="Campaign Banner" fill className="object-cover" data-ai-hint="fantasy landscape" />
+             <Image src="https://picsum.photos/400/200?random=50" alt="Campaign Banner" fill sizes="100vw" className="object-cover" data-ai-hint="fantasy landscape" />
              <div className="absolute inset-0 bg-gradient-to-t from-sidebar/100 to-sidebar/20" />
              <div className="absolute bottom-4 left-4">
                 <h2 className="text-2xl font-headline text-white">The Whispering Shadows</h2>
@@ -100,12 +100,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <SidebarContent className="p-2">
            <SidebarMenu>
               <SidebarMenuItem>
-                <Link href="/dashboard" legacyBehavior passHref>
-                  <SidebarMenuButton isActive={pathname === '/dashboard'} tooltip={{ children: 'Dashboard' }}>
-                    <Home />
-                    <span>Dashboard</span>
-                  </SidebarMenuButton>
-                </Link>
+                <SidebarMenuButton asChild isActive={pathname === '/dashboard'} tooltip={{ children: 'Dashboard' }}>
+                    <Link href="/dashboard">
+                        <Home />
+                        <span>Dashboard</span>
+                    </Link>
+                </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
 
@@ -114,12 +114,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <SidebarMenu>
                 {worldNavItems.map((item) => (
                 <SidebarMenuItem key={item.href}>
-                    <Link href={item.href} legacyBehavior passHref>
-                    <SidebarMenuButton isActive={pathname.startsWith(item.href)} tooltip={{ children: item.label }}>
-                        <item.icon />
-                        <span>{item.label}</span>
+                    <SidebarMenuButton asChild isActive={pathname.startsWith(item.href)} tooltip={{ children: item.label }}>
+                        <Link href={item.href}>
+                            <item.icon />
+                            <span>{item.label}</span>
+                        </Link>
                     </SidebarMenuButton>
-                    </Link>
                 </SidebarMenuItem>
                 ))}
             </SidebarMenu>
@@ -129,12 +129,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
              <SidebarMenu>
                 {narrativeNavItems.map((item) => (
                 <SidebarMenuItem key={item.href}>
-                    <Link href={item.href} legacyBehavior passHref>
-                    <SidebarMenuButton isActive={pathname.startsWith(item.href)} tooltip={{ children: item.label }}>
-                        <item.icon />
-                        <span>{item.label}</span>
+                     <SidebarMenuButton asChild isActive={pathname.startsWith(item.href)} tooltip={{ children: item.label }}>
+                        <Link href={item.href}>
+                            <item.icon />
+                            <span>{item.label}</span>
+                        </Link>
                     </SidebarMenuButton>
-                    </Link>
                 </SidebarMenuItem>
                 ))}
             </SidebarMenu>
@@ -144,12 +144,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Separator className="my-2 bg-border/20" />
           <SidebarMenu>
             <SidebarMenuItem>
-              <Link href="/dashboard/settings" legacyBehavior passHref>
-                <SidebarMenuButton isActive={pathname === '/dashboard/settings'} tooltip={{ children: 'Settings' }}>
-                  <Settings />
-                  <span>Settings</span>
+                <SidebarMenuButton asChild isActive={pathname === '/dashboard/settings'} tooltip={{ children: 'Settings' }}>
+                  <Link href="/dashboard/settings">
+                    <Settings />
+                    <span>Settings</span>
+                  </Link>
                 </SidebarMenuButton>
-              </Link>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarFooter>

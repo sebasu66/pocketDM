@@ -73,7 +73,7 @@ export function UserNav() {
             </DropdownMenuItem>
            )}
           <DropdownMenuItem asChild>
-             <Link href="/dashboard/settings" className="flex items-center w-full">
+             <Link href="/dashboard/settings">
               <User className="mr-2 h-4 w-4" />
               <span>My Profile</span>
             </Link>
