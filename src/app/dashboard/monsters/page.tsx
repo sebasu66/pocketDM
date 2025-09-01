@@ -140,6 +140,7 @@ export default function MonstersPage() {
       <Separator />
 
       {filteredMonsters.length > 0 ? (
+        <div className="h-[70vh]">
         <StackedCard
             items={filteredMonsters}
             renderItem={(monster, isActive) => (
@@ -148,31 +149,35 @@ export default function MonstersPage() {
                         src={monster.image} 
                         alt={monster.name} 
                         fill 
-                        className="object-cover object-center" 
+                        className="object-cover object-center opacity-80" 
                         data-ai-hint={monster.aiHint} 
                     />
-                    <div className="absolute inset-0 bg-gradient-to-l from-background via-background/80 to-transparent" />
-                    <div className="relative p-6 h-full flex flex-col justify-end text-foreground/90 font-handwriting">
-                       <div className="absolute top-6 right-6 text-right">
-                         <p className="text-lg text-muted-foreground">{monster.stats}</p>
-                       </div>
-                       <div className="w-1/2 ml-auto text-right">
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/50 to-transparent" />
+                     {isActive && (
+                        <div className="relative p-6 h-full flex flex-col justify-end text-foreground/90 font-handwriting">
+                          <div className="flex justify-between items-end">
+                              <h2 className="text-4xl font-headline text-white drop-shadow-lg">{monster.name}</h2>
+                              <p className="text-lg text-muted-foreground">{monster.stats}</p>
+                          </div>
+                          <Separator className="my-4 bg-white/20" />
                           <p className="mt-2 text-xl leading-relaxed">{monster.description}</p>
-                       </div>
-                        {isMaster && isActive && (
-                           <div className="absolute bottom-6 right-6 flex gap-2 mt-4">
-                             <Button variant="outline" size="sm" onClick={() => handleEditMonster(monster)}>
-                                <Edit /> Edit
-                              </Button>
-                              <Button variant="destructive" size="sm">
-                                <Trash2 /> Delete
-                              </Button>
-                           </div>
-                        )}
-                    </div>
+                           
+                           {isMaster && (
+                              <div className="absolute bottom-6 right-6 flex gap-2 mt-4">
+                                <Button variant="outline" size="sm" onClick={() => handleEditMonster(monster)}>
+                                   <Edit /> Edit
+                                 </Button>
+                                 <Button variant="destructive" size="sm">
+                                   <Trash2 /> Delete
+                                 </Button>
+                              </div>
+                           )}
+                        </div>
+                     )}
                 </div>
             )}
             />
+        </div>
       ) : (
          <div className="text-center col-span-full py-12">
             <p className="text-muted-foreground">No monsters found matching your search.</p>
