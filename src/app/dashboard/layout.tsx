@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   BookOpen,
   Users,
@@ -30,6 +30,9 @@ import { UserNav } from "@/components/user-nav";
 import { Logo } from "@/components/logo";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { useAuth } from "@/context/auth-context";
+import React from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const navItems = [
   { href: "/dashboard", icon: BookOpen, label: "Campaigns" },
@@ -54,6 +57,25 @@ const pageTitles: { [key: string]: string } = {
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() || "/dashboard";
+  const { user, isLoading } = useAuth();
+  const router = useRouter();
+
+  React.useEffect(() => {
+    if (!isLoading && !user) {
+      router.push('/');
+    }
+  }, [isLoading, user, router]);
+
+  if (isLoading || !user) {
+    return (
+       <div className="flex items-center justify-center min-h-screen">
+          <div className="flex items-center gap-2">
+            <Logo className="w-8 h-8 animate-spin" />
+            <p className="text-muted-foreground">Loading your session...</p>
+          </div>
+       </div>
+    );
+  }
 
   return (
     <SidebarProvider>

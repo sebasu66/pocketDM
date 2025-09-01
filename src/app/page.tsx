@@ -1,11 +1,38 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/logo";
+import { useAuth } from "@/context/auth-context";
+import { getUserByEmail, checkPassword } from "@/lib/auth";
+import { useToast } from "@/hooks/use-toast";
 
 export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { login } = useAuth();
+  const router = useRouter();
+  const { toast } = useToast();
+
+  const handleLogin = () => {
+    const user = getUserByEmail(email);
+    if (user && checkPassword(user, password)) {
+      login(user.id);
+      router.push("/dashboard");
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Login Failed",
+        description: "Invalid email or password.",
+      });
+    }
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-cover bg-center bg-no-repeat" style={{backgroundImage: "url('https://picsum.photos/1920/1080?grayscale&blur=5&random=1')"}} data-ai-hint="fantasy landscape">
       <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
@@ -29,6 +56,8 @@ export default function LoginPage() {
                 placeholder="m@example.com"
                 required
                 className="bg-background/50"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="grid gap-2">
@@ -41,13 +70,19 @@ export default function LoginPage() {
                   Forgot your password?
                 </Link>
               </div>
-              <Input id="password" type="password" required className="bg-background/50" />
+              <Input 
+                id="password" 
+                type="password" 
+                required 
+                className="bg-background/50"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+              />
             </div>
-            <Link href="/dashboard" className="w-full">
-              <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
+              <Button onClick={handleLogin} type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
                 Login
               </Button>
-            </Link>
             <Button variant="outline" className="w-full">
               Login with Google
             </Button>
