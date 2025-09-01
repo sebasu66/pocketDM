@@ -10,8 +10,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ['PT Sans', 'sans-serif'],
-        headline: ['Playfair Display', 'serif'],
+        body: ['EB Garamond', 'serif'],
+        headline: ['Cinzel', 'serif'],
         code: ['monospace'],
       },
       colors: {
