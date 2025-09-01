@@ -21,8 +21,8 @@ export function StackedCard<T extends { id: string; name: string }>({ items, ren
   }
   
   const orderedItems = useMemo(() => {
+    if (!items[activeIndex]) return [];
     const active = items[activeIndex];
-    if (!active) return [];
     const others = items.filter((_, i) => i !== activeIndex);
     return [...others, active];
   }, [items, activeIndex]);
@@ -51,7 +51,7 @@ export function StackedCard<T extends { id: string; name: string }>({ items, ren
                 zIndex: zIndex,
                 transform: isActive 
                     ? 'translateY(0px) translateX(0px) scale(1)' 
-                    : `translateY(${offset * 30}px) translateX(${offset * 30}px) scale(${1 - offset * 0.05})`,
+                    : `translateY(${offset * 40}px) translateX(${offset * 40}px) scale(${1 - offset * 0.05})`,
               }}
             >
               <div className="w-full h-full relative">
@@ -59,11 +59,10 @@ export function StackedCard<T extends { id: string; name: string }>({ items, ren
                   {!isActive && (
                     <div 
                         className={cn(
-                            "absolute bottom-4 left-1/2 -translate-x-1/2",
-                            "flex items-center justify-center",
+                            "absolute bottom-0 left-1/2 -translate-x-1/2 w-full flex items-center justify-center",
                         )}
                       >
-                        <h3 className="font-headline text-center truncate px-4 text-black bg-white/70 py-1 rounded">
+                        <h3 className="font-headline text-center truncate px-4 text-black bg-white/70 py-0.5 rounded-t">
                             {item.name}
                         </h3>
                       </div>
