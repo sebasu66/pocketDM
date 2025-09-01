@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Star } from "lucide-react";
+import { Star, ScrollText, Skull, Map } from "lucide-react";
 
 const mainEntities = [
   {
@@ -23,6 +23,27 @@ const mainEntities = [
     image: "https://picsum.photos/600/400?random=3",
     aiHint: "underwater ruins",
   },
+];
+
+const latestDevelopments = [
+  {
+    icon: ScrollText,
+    title: "A new clue emerges in Silverwood",
+    description: "The Game Master posted a new narrative thread: 'The party discovered a cryptic message on the body of a fallen Syndicate assassin, pointing towards the old clock tower...'",
+    timestamp: "2 hours ago",
+  },
+  {
+    icon: Map,
+    title: "The city of Ironhaven has been updated",
+    description: "A new district, the 'Smuggler's Wharf', has been added to the city details. Be wary of the characters you might meet there.",
+    timestamp: "1 day ago",
+  },
+  {
+    icon: Skull,
+    title: "A new threat appears",
+    description: "The 'Crawling Horror' has been added to the bestiary. This subterranean creature is known for its ambushes.",
+    timestamp: "3 days ago",
+  }
 ];
 
 export default function DashboardPage() {
@@ -49,6 +70,26 @@ export default function DashboardPage() {
            </div>
         </CardHeader>
       </Card>
+
+      <div className="space-y-4">
+        <h3 className="text-2xl font-headline">Latest Developments</h3>
+        <div className="space-y-4">
+          {latestDevelopments.map((event, index) => (
+            <Card key={index} className="bg-card/50">
+              <CardContent className="p-4 flex items-start gap-4">
+                <div className="bg-primary/20 text-primary-foreground p-3 rounded-md">
+                   <event.icon className="h-6 w-6" />
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold">{event.title}</p>
+                  <p className="text-muted-foreground text-sm">{event.description}</p>
+                </div>
+                <p className="text-xs text-muted-foreground whitespace-nowrap">{event.timestamp}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
 
       <div className="space-y-4">
         <h3 className="text-2xl font-headline">Main Entities</h3>
