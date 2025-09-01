@@ -120,7 +120,7 @@ export default function MonstersPage() {
         <StackedCard
             items={filteredMonsters}
             renderItem={(monster, isActive) => (
-                <div className="w-full h-full relative rounded-lg overflow-hidden border border-border/20 bg-card text-card-foreground">
+                <div className="w-full h-full relative rounded-lg overflow-hidden border border-border/20 bg-card text-card-foreground shadow-lg">
                     <Image 
                         src={monster.image} 
                         alt={monster.name} 
@@ -128,11 +128,11 @@ export default function MonstersPage() {
                         className="object-cover object-center" 
                         data-ai-hint={monster.aiHint} 
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/40 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                      {isActive && (
                         <div className="relative p-6 h-full flex flex-col justify-end">
                            <div className="absolute top-4 right-4 text-right">
-                             <div className="text-sm text-destructive-foreground font-mono bg-destructive/80 p-2 rounded">
+                             <div className="text-sm text-destructive-foreground/80 font-mono bg-destructive/80 p-2 rounded">
                                 {monster.stats}
                              </div>
                            </div>
@@ -141,10 +141,6 @@ export default function MonstersPage() {
 
                            <div className="font-handwriting text-lg leading-relaxed h-32 overflow-y-auto mix-blend-multiply text-black bg-white/40 p-4 rounded mb-10">
                                {monster.description}
-                           </div>
-
-                           <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
-                              <h2 className="text-2xl font-headline text-black drop-shadow-lg bg-white/70 px-4 py-1 rounded">{monster.name}</h2>
                            </div>
                            
                            {isMaster && (
@@ -159,6 +155,9 @@ export default function MonstersPage() {
                            )}
                         </div>
                      )}
+                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
+                        <h2 className="text-2xl font-headline text-black drop-shadow-lg bg-white/70 px-4 py-1 rounded">{monster.name}</h2>
+                      </div>
                 </div>
             )}
             />
@@ -230,5 +229,4 @@ export default function MonstersPage() {
     </div>
   );
 }
-
     
