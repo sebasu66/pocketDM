@@ -1,5 +1,8 @@
+"use client";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { FlippingAvatar } from "@/components/flipping-avatar";
 
 export default function NarrativePage() {
   return (
@@ -24,18 +27,34 @@ export default function NarrativePage() {
       <div className="space-y-4">
         <h3 className="font-headline text-xl">Comments (2)</h3>
         <Card>
-          <CardHeader>
-            <CardDescription>Alice (Player of "Grom") - 1 day ago</CardDescription>
+          <CardHeader className="flex flex-row items-center gap-4">
+             <FlippingAvatar
+              playerImage="https://picsum.photos/100/100?random=5"
+              characterImage="https://picsum.photos/100/100?random=6"
+              playerHint="person face"
+              characterHint="fantasy warrior"
+            />
+            <div className="flex-1">
+              <CardDescription>Alice (Player of "Grom") - 1 day ago</CardDescription>
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="ml-16">
             <p>"Grom steps forward, his hand resting on the pommel of his axe. 'We seek refuge and supplies, Captain. And perhaps a worthy tale or two.'"</p>
           </CardContent>
         </Card>
         <Card>
-          <CardHeader>
-            <CardDescription>Bob (Player of "Lyra") - 1 day ago</CardDescription>
+          <CardHeader className="flex flex-row items-center gap-4">
+            <FlippingAvatar
+              playerImage="https://picsum.photos/100/100?random=7"
+              characterImage="https://picsum.photos/100/100?random=8"
+              playerHint="person portrait"
+              characterHint="fantasy elf"
+            />
+            <div className="flex-1">
+              <CardDescription>Bob (Player of "Lyra") - 1 day ago</CardDescription>
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="ml-16">
             <p>"Lyra scans the guards, her eyes trying to gauge their intentions. She subtly readies a minor illusion spell, just in case."</p>
           </CardContent>
         </Card>

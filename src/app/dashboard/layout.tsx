@@ -10,6 +10,7 @@ import {
   Skull,
   ScrollText,
   Settings,
+  MessagesSquare,
 } from "lucide-react";
 
 import {
@@ -37,6 +38,7 @@ const navItems = [
   { href: "/dashboard/items", icon: Shield, label: "Items" },
   { href: "/dashboard/monsters", icon: Skull, label: "Monsters" },
   { href: "/dashboard/narrative", icon: ScrollText, label: "Narrative", badge: 3 },
+  { href: "/dashboard/chat", icon: MessagesSquare, label: "Chat" },
 ];
 
 const pageTitles: { [key: string]: string } = {
@@ -46,6 +48,7 @@ const pageTitles: { [key: string]: string } = {
   "/dashboard/items": "Items",
   "/dashboard/monsters": "Monsters",
   "/dashboard/narrative": "Narrative Threads",
+  "/dashboard/chat": "Player Chat",
   "/dashboard/settings": "Settings",
 };
 
