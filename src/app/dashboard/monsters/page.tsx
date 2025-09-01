@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { PlusCircle, Trash2, Edit, Search, Upload } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import {
   Dialog,
   DialogContent,
@@ -23,29 +23,50 @@ import {
 import { StackedCard } from "@/components/ui/stacked-card";
 import DireWolfImage from "../../../../public/dire-wolf.png";
 import HumanSpawnImage from "../../../../public/human-spawn.png";
+import { cn } from "@/lib/utils";
 
 const initialMonsters = [
     {
         id: "1",
         name: "Dire Wolf",
-        description: "Larger and more ferocious than its common kin, the Dire Wolf is a cunning predator of the northern wilds. Its eyes glow with a faint, malevolent light, and its howl can freeze the blood of the bravest warrior. They hunt in packs, coordinating their attacks with terrifying intelligence.",
-        stats: "AC: 14\nHP: 37\nSpeed: 50ft",
+        observations: "Larger and more ferocious than its common kin, the Dire Wolf is a cunning predator of the northern wilds. Its eyes glow with a faint, malevolent light, and its howl can freeze the blood of the bravest warrior. They hunt in packs, coordinating their attacks with terrifying intelligence, often outmaneuvering their prey with coordinated flanking maneuvers.",
+        thematicStats: {
+          toughness: "Medium",
+          hitDifficulty: "Medium",
+          speed: "Fast"
+        },
         image: DireWolfImage,
         aiHint: "dire wolf sketch fantasy"
     },
     {
         id: "2",
         name: "Human Spawn",
-        description: "A horrifying result of dark rituals, the Human Spawn is a twisted mockery of the human form. Its limbs are elongated and its movements are unnaturally fast. It emits a low gurgling sound and is driven by an insatiable hunger for the flesh of the living.",
-        stats: "AC: 12\nHP: 22\nSpeed: 30ft",
+        observations: "A horrifying result of dark rituals, the Human Spawn is a twisted mockery of the human form. Its limbs are elongated and its movements are unnaturally fast and jerky. It emits a low gurgling sound and is driven by an insatiable hunger for the flesh of the living. They are often found in places tainted by necromantic energy.",
+        thematicStats: {
+          toughness: "Low",
+          hitDifficulty: "Easy",
+          speed: "Slow"
+        },
         image: HumanSpawnImage,
         aiHint: "zombie monster sketch"
     }
 ];
 
-type Monster = typeof initialMonsters[0];
+type Monster = {
+    id: string;
+    name: string;
+    observations: string;
+    thematicStats: {
+      toughness: string;
+      hitDifficulty: string;
+      speed: string;
+    };
+    image: StaticImageData;
+    aiHint: string;
+};
 
-const emptyMonster: Partial<Monster> = { name: '', description: '' };
+
+const emptyMonster: Partial<Monster> = { name: '', observations: '' };
 
 export default function MonstersPage() {
   const { user } = useAuth();
@@ -53,10 +74,13 @@ export default function MonstersPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingMonster, setEditingMonster] = useState<Partial<Monster> | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const filteredMonsters = monsters
     .filter((monster) => monster.name.toLowerCase().includes(searchTerm.toLowerCase()))
     .slice(0, 8);
+
+  const activeMonster = filteredMonsters[activeIndex];
 
   const handleNewMonster = () => {
     setEditingMonster(emptyMonster);
@@ -79,9 +103,13 @@ export default function MonstersPage() {
       const newMonster: any = {
         id: (monsters.length + 1).toString(),
         name: editingMonster.name || "New Monster",
-        description: editingMonster.description || "",
-        stats: "AC: ?, HP: ?, Speed: ?",
-        image: editingMonster.image || `https://picsum.photos/400/600?random=${Math.random()}`,
+        observations: editingMonster.observations || "",
+        thematicStats: {
+          toughness: "N/A",
+          hitDifficulty: "N/A",
+          speed: "N/A"
+        },
+        image: `https://picsum.photos/400/600?random=${Math.random()}`,
         aiHint: "fantasy monster sketch"
       };
       setMonsters([...monsters, newMonster]);
@@ -119,49 +147,68 @@ export default function MonstersPage() {
       <Separator />
 
       {filteredMonsters.length > 0 ? (
-        <div className="h-[70vh]">
-        <StackedCard
-            items={filteredMonsters}
-            renderItem={(monster, isActive) => (
-                <div className="w-full h-full relative rounded-lg overflow-hidden border border-border/20 bg-card text-card-foreground shadow-lg">
-                    <Image
-                        src={monster.image} 
-                        alt={monster.name} 
-                        fill
-                        className="w-full h-full object-cover" 
-                        data-ai-hint={monster.aiHint} 
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
-                     {isActive && (
-                        <div className="relative p-6 h-full flex flex-col justify-end">
-                           <div className="absolute top-4 right-4 text-right">
-                             <div className="text-sm text-red-900 font-mono whitespace-pre-line">
-                                {monster.stats}
-                             </div>
-                           </div>
-                           
-                           <div className="flex-1" />
+        <div className="grid grid-cols-3 items-center h-[75vh]">
 
-                           <div className="font-handwriting text-lg leading-relaxed h-32 overflow-y-auto mix-blend-multiply text-black p-4 rounded">
-                               {monster.description}
-                           </div>
-                           
-                           {isMaster && (
-                              <div className="absolute top-4 left-4 flex gap-2">
+           {/* Left Floating Text */}
+            <div className={cn("transition-opacity duration-500", activeMonster ? "opacity-100" : "opacity-0")}>
+              <h3 className="font-headline text-lg text-white/90">Observations</h3>
+              <p className="text-white/70 text-sm mt-2 font-handwriting text-lg leading-relaxed">{activeMonster?.observations}</p>
+            </div>
+
+
+            {/* Center Card Stack */}
+            <div className="flex items-center justify-center">
+                <StackedCard
+                    items={filteredMonsters}
+                    activeIndex={activeIndex}
+                    setActiveIndex={setActiveIndex}
+                    renderItem={(monster, isActive) => (
+                        <div className="w-full h-full relative rounded-lg overflow-hidden bg-card text-card-foreground">
+                             <Image
+                                src={monster.image} 
+                                alt={monster.name} 
+                                fill
+                                className="w-full h-full object-cover" 
+                                data-ai-hint={monster.aiHint} 
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                priority={isActive}
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                            {isActive && isMaster && (
+                                <div className="absolute top-4 left-4 flex gap-2">
                                 <Button variant="outline" size="sm" onClick={() => handleEditMonster(monster)}>
-                                   <Edit /> Edit
-                                 </Button>
-                                 <Button variant="destructive" size="sm">
-                                   <Trash2 /> Delete
-                                 </Button>
-                              </div>
-                           )}
+                                    <Edit /> Edit
+                                    </Button>
+                                    <Button variant="destructive" size="sm">
+                                    <Trash2 /> Delete
+                                    </Button>
+                                </div>
+                            )}
+                            <h2 className="absolute bottom-4 left-1/2 -translate-x-1/2 text-2xl font-headline text-white drop-shadow-lg text-center w-full">{monster.name}</h2>
                         </div>
-                     )}
-                     <h2 className="absolute bottom-0 left-1/2 -translate-x-1/2 text-xl font-headline text-black drop-shadow-lg bg-white/70 px-4 py-1 text-center w-full">{monster.name}</h2>
+                    )}
+                />
+            </div>
+            
+             {/* Right Floating Text */}
+             <div className={cn("transition-opacity duration-500 pl-8", activeMonster ? "opacity-100" : "opacity-0")}>
+                <h3 className="font-headline text-lg text-white/90 mb-4">Abilities</h3>
+                <div className="space-y-3 text-white/70">
+                   <div className="flex justify-between border-b border-white/10 pb-1">
+                     <span className="font-semibold">Toughness</span>
+                     <span>{activeMonster?.thematicStats.toughness}</span>
+                   </div>
+                    <div className="flex justify-between border-b border-white/10 pb-1">
+                     <span className="font-semibold">Hit Difficulty</span>
+                     <span>{activeMonster?.thematicStats.hitDifficulty}</span>
+                   </div>
+                    <div className="flex justify-between border-b border-white/10 pb-1">
+                     <span className="font-semibold">Speed</span>
+                     <span>{activeMonster?.thematicStats.speed}</span>
+                   </div>
                 </div>
-            )}
-            />
+            </div>
+
         </div>
       ) : (
          <div className="text-center col-span-full py-12">
@@ -192,13 +239,13 @@ export default function MonstersPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="monster-description">Description</Label>
+                  <Label htmlFor="monster-observations">Observations</Label>
                   <Textarea
-                    id="monster-description"
+                    id="monster-observations"
                     placeholder="A brief description of the monster's appearance, abilities, and lore."
                     rows={8}
-                    value={editingMonster?.description || ''}
-                    onChange={(e) => setEditingMonster({...editingMonster, description: e.target.value })}
+                    value={editingMonster?.observations || ''}
+                    onChange={(e) => setEditingMonster({...editingMonster, observations: e.target.value })}
                   />
                 </div>
               </div>
