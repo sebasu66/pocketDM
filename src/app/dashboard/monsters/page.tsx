@@ -24,43 +24,19 @@ import { StackedCard } from "@/components/ui/stacked-card";
 const initialMonsters = [
   {
     id: "1",
-    name: "Goblin Sneak",
-    description: "A small, wiry creature with green skin and beady eyes. Known for cunning and group attacks from the shadows. They favor rusty daggers and crude traps.",
-    stats: "AC: 13, HP: 7, Speed: 30ft",
-    image: "https://picsum.photos/400/600?random=20",
-    aiHint: "fantasy goblin portrait sketch"
+    name: "Dire Wolf",
+    description: "Larger and more ferocious than its common kin, the Dire Wolf is a cunning predator of the northern wilds. Its eyes glow with a faint, malevolent light, and its howl can freeze the blood of the bravest warrior. They hunt in packs, coordinating their attacks with terrifying intelligence.",
+    stats: "AC: 14, HP: 37, Speed: 50ft",
+    image: "https://picsum.photos/seed/direwolf/400/600",
+    aiHint: "dire wolf sketch fantasy"
   },
   {
     id: "2",
-    name: "Owlbear",
-    description: "A monstrous beast with the body of a bear and the head of an owl. A formidable predator with a savage temperament and a terrifying shriek.",
-    stats: "AC: 13, HP: 59, Speed: 40ft",
-    image: "https://picsum.photos/400/600?random=21",
-aiHint: "fantasy owlbear sketch"
-  },
-  {
-    id: "3",
-    name: "Gelatinous Cube",
-    description: "A ten-foot cube of transparent ooze that silently patrols dungeon corridors, absorbing and digesting organic matter. Nearly invisible.",
-    stats: "AC: 6, HP: 84, Speed: 15ft",
-    image: "https://picsum.photos/400/600?random=22",
-    aiHint: "gelatinous cube fantasy sketch"
-  },
-   {
-    id: "4",
-    name: "Beholder",
-    description: "A floating orb of flesh with a large central eye and many smaller eye stalks, each capable of firing a deadly magical ray. Highly intelligent and paranoid.",
-    stats: "AC: 18, HP: 180, Speed: 0ft, fly 20ft",
-    image: "https://picsum.photos/400/600?random=23",
-    aiHint: "fantasy beholder monster sketch"
-  },
-   {
-    id: "5",
-    name: "Mind Flayer",
-    description: "An alien humanoid with a squid-like head that feeds on the brains of sentient creatures, possessing powerful psionic abilities to control minds.",
-    stats: "AC: 15, HP: 71, Speed: 30ft",
-    image: "https://picsum.photos/400/600?random=24",
-    aiHint: "mind flayer monster sketch"
+    name: "Human Spawn",
+    description: "A horrifying result of dark rituals, the Human Spawn is a twisted mockery of the human form. Its limbs are elongated and its movements are unnaturally fast. It emits a low gurgling sound and is driven by an insatiable hunger for the flesh of the living.",
+    stats: "AC: 12, HP: 22, Speed: 30ft",
+    image: "https://picsum.photos/seed/humanspawn/400/600",
+    aiHint: "zombie monster sketch"
   },
 ];
 
@@ -149,21 +125,25 @@ export default function MonstersPage() {
                         src={monster.image} 
                         alt={monster.name} 
                         fill 
-                        className="object-cover object-center" 
+                        className="object-cover object-center opacity-40" 
                         data-ai-hint={monster.aiHint} 
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/60 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-transparent to-transparent" />
                      {isActive && (
                         <div className="relative p-6 h-full flex flex-col justify-end text-foreground/90">
-                          <div className="flex-1" />
-                          <div className="bg-background/50 backdrop-blur-sm p-4 rounded-md border border-white/10">
+                            <div className="flex-1" />
                             <div className="flex justify-between items-end">
                                 <h2 className="text-4xl font-headline text-white drop-shadow-lg">{monster.name}</h2>
-                                <p className="text-lg font-handwriting text-muted-foreground">{monster.stats}</p>
                             </div>
                             <Separator className="my-3 bg-white/20" />
-                            <p className="font-handwriting text-lg leading-relaxed h-32 overflow-y-auto">{monster.description}</p>
-                          </div>
+                            <div className="grid grid-cols-3 gap-6">
+                                <div className="col-span-2 font-handwriting text-lg leading-relaxed h-32 overflow-y-auto mix-blend-multiply text-black">
+                                    {monster.description}
+                                </div>
+                                <div className="col-span-1 text-sm text-muted-foreground font-mono">
+                                    {monster.stats}
+                                </div>
+                            </div>
                            
                            {isMaster && (
                               <div className="absolute top-4 right-4 flex gap-2">
@@ -248,3 +228,5 @@ export default function MonstersPage() {
     </div>
   );
 }
+
+    
