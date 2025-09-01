@@ -15,7 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { LogOut, User, Settings, KeyRound } from "lucide-react"
+import { LogOut, User, Settings, KeyRound, Crown } from "lucide-react"
 
 export function UserNav() {
   return (
@@ -35,22 +35,23 @@ export function UserNav() {
             <p className="text-xs leading-none text-muted-foreground">
               gm@example.com
             </p>
-             <p className="text-xs leading-none text-muted-foreground/80 pt-1 font-semibold">
-              (Game Master)
-            </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
+           <DropdownMenuItem>
+              <Crown className="mr-2 h-4 w-4 text-amber-400" />
+              <span>Game Master</span>
+            </DropdownMenuItem>
           <DropdownMenuItem>
-            <User className="mr-2 h-4 w-4" />
-            <span>Profile</span>
+             <Link href="/dashboard/settings" className="flex items-center w-full">
+              <User className="mr-2 h-4 w-4" />
+              <span>My Profile</span>
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Link href="/dashboard/settings" className="flex items-center w-full">
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-            </Link>
+            <Settings className="mr-2 h-4 w-4" />
+            <span>Settings</span>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <KeyRound className="mr-2 h-4 w-4" />
@@ -68,3 +69,5 @@ export function UserNav() {
     </DropdownMenu>
   )
 }
+
+    

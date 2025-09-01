@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { PlusCircle, Trash2, Edit, Search } from "lucide-react";
+import { PlusCircle, Trash2, Edit, Search, Upload } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import {
@@ -57,7 +57,7 @@ const initialMonsters = [
 
 type Monster = typeof initialMonsters[0];
 
-const emptyMonster: Omit<Monster, 'id' | 'stats' | 'image' | 'aiHint'> = { name: '', description: '' };
+const emptyMonster: Partial<Monster> = { name: '', description: '' };
 
 export default function MonstersPage() {
   const [monsters, setMonsters] = useState(initialMonsters);
@@ -82,7 +82,7 @@ export default function MonstersPage() {
   const handleSaveMonster = () => {
     if (!editingMonster) return;
 
-    if ('id' in editingMonster) {
+    if ('id' in editingMonster && editingMonster.id) {
       // Update existing monster
       setMonsters(monsters.map(m => m.id === editingMonster.id ? {...m, ...editingMonster} as Monster : m));
     } else {
@@ -92,7 +92,7 @@ export default function MonstersPage() {
         name: editingMonster.name || "New Monster",
         description: editingMonster.description || "",
         stats: "AC: ?, HP: ?, Speed: ?",
-        image: `https://picsum.photos/200/300?random=${Math.random()}`,
+        image: editingMonster.image || `https://picsum.photos/200/300?random=${Math.random()}`,
         aiHint: "fantasy monster"
       };
       setMonsters([...monsters, newMonster]);
@@ -154,35 +154,51 @@ export default function MonstersPage() {
         )}
 
       <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
-        <DialogContent className="sm:max-w-[625px]">
+        <DialogContent className="sm:max-w-[825px]">
           <DialogHeader>
-            <DialogTitle>{editingMonster && 'id' in editingMonster ? 'Edit Monster' : 'Create New Monster'}</DialogTitle>
+            <DialogTitle>{editingMonster && 'id' in editingMonster && editingMonster.id ? 'Edit Monster' : 'Create New Monster'}</DialogTitle>
             <DialogDescription>
-              {editingMonster && 'id' in editingMonster 
+              {editingMonster && 'id' in editingMonster && editingMonster.id 
                 ? "Edit the details for your creature." 
                 : "Fill out the details for your new creature."}
             </DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="monster-name">Name</Label>
-              <Input 
-                id="monster-name" 
-                placeholder="e.g., Shadow Ghoul" 
-                value={editingMonster?.name || ''}
-                onChange={(e) => setEditingMonster({...editingMonster, name: e.target.value })}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="monster-description">Description</Label>
-              <Textarea
-                id="monster-description"
-                placeholder="A brief description of the monster's appearance, abilities, and lore."
-                rows={5}
-                value={editingMonster?.description || ''}
-                onChange={(e) => setEditingMonster({...editingMonster, description: e.target.value })}
-              />
-            </div>
+          <div className="grid md:grid-cols-2 gap-6 py-4">
+             <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="monster-name">Name</Label>
+                  <Input 
+                    id="monster-name" 
+                    placeholder="e.g., Shadow Ghoul" 
+                    value={editingMonster?.name || ''}
+                    onChange={(e) => setEditingMonster({...editingMonster, name: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="monster-description">Description</Label>
+                  <Textarea
+                    id="monster-description"
+                    placeholder="A brief description of the monster's appearance, abilities, and lore."
+                    rows={8}
+                    value={editingMonster?.description || ''}
+                    onChange={(e) => setEditingMonster({...editingMonster, description: e.target.value })}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col items-center justify-center bg-muted/50 rounded-lg p-4 text-center">
+                  <Label className="mb-2">Monster Portrait</Label>
+                  <div className="w-48 h-64 bg-background rounded overflow-hidden mb-4 flex items-center justify-center relative">
+                    {editingMonster?.image ? (
+                        <Image src={editingMonster.image} alt={editingMonster.name || "Monster"} layout="fill" className="object-cover" />
+                    ): (
+                        <p className="text-xs text-muted-foreground p-2">No image</p>
+                    )}
+                  </div>
+                  <Button variant="outline">
+                    <Upload />
+                    Upload Image
+                  </Button>
+              </div>
           </div>
           <DialogFooter>
             <DialogClose asChild>
@@ -197,3 +213,5 @@ export default function MonstersPage() {
     </div>
   );
 }
+
+    
