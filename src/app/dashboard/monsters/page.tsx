@@ -132,14 +132,14 @@ export default function MonstersPage() {
                      {isActive && (
                         <div className="relative p-6 h-full flex flex-col justify-end">
                            <div className="absolute top-4 right-4 text-right">
-                             <div className="text-sm text-muted-foreground font-mono bg-black/50 p-2 rounded">
+                             <div className="text-sm text-destructive-foreground font-mono bg-destructive/80 p-2 rounded">
                                 {monster.stats}
                              </div>
                            </div>
                            
                            <div className="flex-1" />
 
-                           <div className="font-handwriting text-lg leading-relaxed h-32 overflow-y-auto mix-blend-multiply text-black bg-white/40 p-4 rounded">
+                           <div className="font-handwriting text-lg leading-relaxed h-32 overflow-y-auto mix-blend-multiply text-black bg-white/40 p-4 rounded mb-10">
                                {monster.description}
                            </div>
 
@@ -230,3 +230,5 @@ export default function MonstersPage() {
     </div>
   );
 }
+
+    
