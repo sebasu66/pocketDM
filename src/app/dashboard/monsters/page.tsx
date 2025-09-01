@@ -37,7 +37,7 @@ const initialMonsters = [
     stats: "AC: 12, HP: 22, Speed: 30ft",
     image: "https://picsum.photos/seed/humanspawn/400/600",
     aiHint: "zombie monster sketch"
-  },
+  }
 ];
 
 type Monster = typeof initialMonsters[0];
