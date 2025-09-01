@@ -34,7 +34,7 @@ export function StackedCard<T extends { id: string; name: string }>({ items, ren
         const isActive = index === cardOrder.length - 1;
         const zIndex = index;
         const scale = 1 - (cardOrder.length - 1 - index) * 0.05;
-        const translateY = (cardOrder.length - 1 - index) * -20;
+        const translateY = (cardOrder.length - 1 - index) * -40; // Increased spacing
         const opacity = isActive ? 1 : 0.8;
 
         return (

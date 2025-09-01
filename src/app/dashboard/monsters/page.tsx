@@ -25,7 +25,7 @@ const initialMonsters = [
   {
     id: "1",
     name: "Goblin Sneak",
-    description: "A small, wiry creature with green skin and beady eyes. Known for cunning and group attacks.",
+    description: "A small, wiry creature with green skin and beady eyes. Known for cunning and group attacks from the shadows. They favor rusty daggers and crude traps.",
     stats: "AC: 13, HP: 7, Speed: 30ft",
     image: "https://picsum.photos/400/600?random=20",
     aiHint: "fantasy goblin portrait sketch"
@@ -33,15 +33,15 @@ const initialMonsters = [
   {
     id: "2",
     name: "Owlbear",
-    description: "A monstrous beast with the body of a bear and the head of an owl. A formidable predator.",
+    description: "A monstrous beast with the body of a bear and the head of an owl. A formidable predator with a savage temperament and a terrifying shriek.",
     stats: "AC: 13, HP: 59, Speed: 40ft",
     image: "https://picsum.photos/400/600?random=21",
-    aiHint: "fantasy owlbear sketch"
+aiHint: "fantasy owlbear sketch"
   },
   {
     id: "3",
     name: "Gelatinous Cube",
-    description: "A ten-foot cube of transparent ooze that silently patrols dungeon corridors.",
+    description: "A ten-foot cube of transparent ooze that silently patrols dungeon corridors, absorbing and digesting organic matter. Nearly invisible.",
     stats: "AC: 6, HP: 84, Speed: 15ft",
     image: "https://picsum.photos/400/600?random=22",
     aiHint: "gelatinous cube fantasy sketch"
@@ -49,7 +49,7 @@ const initialMonsters = [
    {
     id: "4",
     name: "Beholder",
-    description: "A floating orb of flesh with a large central eye and many smaller eye stalks.",
+    description: "A floating orb of flesh with a large central eye and many smaller eye stalks, each capable of firing a deadly magical ray. Highly intelligent and paranoid.",
     stats: "AC: 18, HP: 180, Speed: 0ft, fly 20ft",
     image: "https://picsum.photos/400/600?random=23",
     aiHint: "fantasy beholder monster sketch"
@@ -57,7 +57,7 @@ const initialMonsters = [
    {
     id: "5",
     name: "Mind Flayer",
-    description: "An alien humanoid with a squid-like head that feeds on the brains of sentient creatures.",
+    description: "An alien humanoid with a squid-like head that feeds on the brains of sentient creatures, possessing powerful psionic abilities to control minds.",
     stats: "AC: 15, HP: 71, Speed: 30ft",
     image: "https://picsum.photos/400/600?random=24",
     aiHint: "mind flayer monster sketch"
@@ -143,14 +143,24 @@ export default function MonstersPage() {
         <StackedCard
             items={filteredMonsters}
             renderItem={(monster, isActive) => (
-                <div className="w-full h-full relative rounded-lg overflow-hidden font-code">
-                    <Image src={monster.image} alt={monster.name} fill className="object-cover object-center opacity-10" data-ai-hint={monster.aiHint} />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
-                    <div className="relative p-6 h-full flex flex-col justify-end text-foreground/90">
-                        <p className="text-sm text-muted-foreground">{monster.stats}</p>
-                        <p className="mt-2 text-base leading-relaxed">{monster.description}</p>
+                <div className="w-full h-full relative rounded-lg overflow-hidden">
+                    <Image 
+                        src={monster.image} 
+                        alt={monster.name} 
+                        fill 
+                        className="object-cover object-center" 
+                        data-ai-hint={monster.aiHint} 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-l from-background via-background/80 to-transparent" />
+                    <div className="relative p-6 h-full flex flex-col justify-end text-foreground/90 font-handwriting">
+                       <div className="absolute top-6 right-6 text-right">
+                         <p className="text-lg text-muted-foreground">{monster.stats}</p>
+                       </div>
+                       <div className="w-1/2 ml-auto text-right">
+                          <p className="mt-2 text-xl leading-relaxed">{monster.description}</p>
+                       </div>
                         {isMaster && isActive && (
-                           <div className="flex gap-2 mt-4">
+                           <div className="absolute bottom-6 right-6 flex gap-2 mt-4">
                              <Button variant="outline" size="sm" onClick={() => handleEditMonster(monster)}>
                                 <Edit /> Edit
                               </Button>
