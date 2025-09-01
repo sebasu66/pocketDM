@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from "next/image";
@@ -38,7 +39,7 @@ export function FlippingAvatar({
         )}
       >
         {/* Player Face */}
-        <div className="absolute w-full h-full backface-hidden rounded-full overflow-hidden">
+        <div className="absolute w-full h-full backface-hidden rounded-full overflow-hidden border-2 border-primary/50">
           <Image
             src={playerImage}
             alt="Player"
@@ -49,7 +50,7 @@ export function FlippingAvatar({
           />
         </div>
         {/* Character Face */}
-        <div className="absolute w-full h-full backface-hidden rotate-y-180 rounded-full overflow-hidden">
+        <div className="absolute w-full h-full backface-hidden rotate-y-180 rounded-full overflow-hidden border-2 border-accent/50">
           <Image
             src={characterImage}
             alt="Character"

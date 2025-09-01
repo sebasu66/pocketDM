@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,38 +27,51 @@ export default function NarrativePage() {
       </Card>
       <div className="space-y-4">
         <h3 className="font-headline text-xl">Comments (2)</h3>
+        
         <Card>
-          <CardHeader className="flex flex-row items-center gap-4">
-             <FlippingAvatar
-              playerImage="https://picsum.photos/100/100?random=5"
-              characterImage="https://picsum.photos/100/100?random=6"
-              playerHint="person face"
-              characterHint="fantasy warrior"
-            />
-            <div className="flex-1">
-              <CardDescription>Alice (Player of "Grom") - 1 day ago</CardDescription>
+          <div className="flex gap-4 p-4">
+            <div className="flex flex-col items-center w-24 flex-shrink-0">
+              <FlippingAvatar
+                playerImage="https://picsum.photos/100/100?random=5"
+                characterImage="https://picsum.photos/100/100?random=6"
+                playerHint="person face"
+                characterHint="fantasy warrior"
+                className="w-16 h-16 mb-2"
+              />
+              <p className="font-bold text-sm text-center">Grom</p>
+              <p className="text-xs text-muted-foreground text-center">Alice</p>
             </div>
-          </CardHeader>
-          <CardContent className="ml-16">
-            <p>"Grom steps forward, his hand resting on the pommel of his axe. 'We seek refuge and supplies, Captain. And perhaps a worthy tale or two.'"</p>
-          </CardContent>
+            <div className="flex-1 relative">
+                <CardDescription className="absolute top-0 right-0 text-xs">1 day ago</CardDescription>
+                <div className="mt-8">
+                  <p>"Grom steps forward, his hand resting on the pommel of his axe. 'We seek refuge and supplies, Captain. And perhaps a worthy tale or two.'"</p>
+                </div>
+            </div>
+          </div>
         </Card>
+
         <Card>
-          <CardHeader className="flex flex-row items-center gap-4">
-            <FlippingAvatar
-              playerImage="https://picsum.photos/100/100?random=7"
-              characterImage="https://picsum.photos/100/100?random=8"
-              playerHint="person portrait"
-              characterHint="fantasy elf"
-            />
-            <div className="flex-1">
-              <CardDescription>Bob (Player of "Lyra") - 1 day ago</CardDescription>
-            </div>
-          </CardHeader>
-          <CardContent className="ml-16">
-            <p>"Lyra scans the guards, her eyes trying to gauge their intentions. She subtly readies a minor illusion spell, just in case."</p>
-          </CardContent>
+           <div className="flex gap-4 p-4">
+              <div className="flex flex-col items-center w-24 flex-shrink-0">
+                <FlippingAvatar
+                  playerImage="https://picsum.photos/100/100?random=7"
+                  characterImage="https://picsum.photos/100/100?random=8"
+                  playerHint="person portrait"
+                  characterHint="fantasy elf"
+                  className="w-16 h-16 mb-2"
+                />
+                <p className="font-bold text-sm text-center">Lyra</p>
+                <p className="text-xs text-muted-foreground text-center">Bob</p>
+              </div>
+              <div className="flex-1 relative">
+                  <CardDescription className="absolute top-0 right-0 text-xs">1 day ago</CardDescription>
+                  <div className="mt-8">
+                     <p>"Lyra scans the guards, her eyes trying to gauge their intentions. She subtly readies a minor illusion spell, just in case."</p>
+                  </div>
+              </div>
+           </div>
         </Card>
+
         <Button>Add Comment</Button>
       </div>
     </div>
