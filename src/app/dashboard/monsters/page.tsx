@@ -28,7 +28,7 @@ const initialMonsters = [
         name: "Dire Wolf",
         description: "Larger and more ferocious than its common kin, the Dire Wolf is a cunning predator of the northern wilds. Its eyes glow with a faint, malevolent light, and its howl can freeze the blood of the bravest warrior. They hunt in packs, coordinating their attacks with terrifying intelligence.",
         stats: "AC: 14\nHP: 37\nSpeed: 50ft",
-        image: "https://picsum.photos/seed/direwolf/400/600",
+        image: "/dire-wolf.png",
         aiHint: "dire wolf sketch fantasy"
     },
     {
@@ -36,7 +36,7 @@ const initialMonsters = [
         name: "Human Spawn",
         description: "A horrifying result of dark rituals, the Human Spawn is a twisted mockery of the human form. Its limbs are elongated and its movements are unnaturally fast. It emits a low gurgling sound and is driven by an insatiable hunger for the flesh of the living.",
         stats: "AC: 12\nHP: 22\nSpeed: 30ft",
-        image: "https://picsum.photos/seed/humanspawn/400/600",
+        image: "/human-spawn.png",
         aiHint: "zombie monster sketch"
     }
 ];
@@ -122,12 +122,10 @@ export default function MonstersPage() {
             items={filteredMonsters}
             renderItem={(monster, isActive) => (
                 <div className="w-full h-full relative rounded-lg overflow-hidden border border-border/20 bg-card text-card-foreground shadow-lg">
-                    <Image 
+                    <img 
                         src={monster.image} 
                         alt={monster.name} 
-                        fill
-                        sizes="400px"
-                        className="object-cover object-center" 
+                        className="w-full h-full object-cover object-center" 
                         data-ai-hint={monster.aiHint} 
                     />
                      {isActive && (
