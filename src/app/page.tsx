@@ -36,7 +36,7 @@ export default function LoginPage() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-cover bg-center bg-no-repeat" style={{backgroundImage: "url('https://picsum.photos/1920/1080?grayscale&blur=5&random=1')"}} data-ai-hint="fantasy landscape">
       <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
-      <Card className="mx-auto max-w-sm z-10 bg-card/80 backdrop-blur-lg">
+      <Card className="mx-auto max-w-md z-10 bg-card/80 backdrop-blur-lg">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
             <Logo className="w-16 h-16"/>
