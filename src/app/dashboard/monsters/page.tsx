@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import { useAuth } from "@/context/auth-context";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -60,6 +61,7 @@ type Monster = typeof initialMonsters[0];
 const emptyMonster: Partial<Monster> = { name: '', description: '' };
 
 export default function MonstersPage() {
+  const { user } = useAuth();
   const [monsters, setMonsters] = useState(initialMonsters);
   const [searchTerm, setSearchTerm] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -106,6 +108,8 @@ export default function MonstersPage() {
     setEditingMonster(null);
   }
 
+  const isMaster = user?.role === 'master';
+
   return (
     <div className="space-y-6">
        <div className="flex justify-between items-center">
@@ -118,9 +122,11 @@ export default function MonstersPage() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <Button onClick={handleNewMonster}>
-            <PlusCircle /> New Monster
-        </Button>
+        {isMaster && (
+            <Button onClick={handleNewMonster}>
+                <PlusCircle /> New Monster
+            </Button>
+        )}
       </div>
 
       <Separator />
@@ -135,15 +141,17 @@ export default function MonstersPage() {
                <CardTitle className="font-headline text-xl mb-2">{monster.name}</CardTitle>
               <p className="text-muted-foreground text-sm flex-grow">{monster.description}</p>
             </CardContent>
-            <CardFooter className="p-4 pt-0 flex gap-2">
-               <Button variant="outline" className="w-full" onClick={() => handleEditMonster(monster)}>
-                  <Edit /> Edit
-                </Button>
-                <Button variant="destructive" size="icon">
-                  <Trash2 />
-                   <span className="sr-only">Delete</span>
-                </Button>
-            </CardFooter>
+            {isMaster && (
+                <CardFooter className="p-4 pt-0 flex gap-2">
+                   <Button variant="outline" className="w-full" onClick={() => handleEditMonster(monster)}>
+                      <Edit /> Edit
+                    </Button>
+                    <Button variant="destructive" size="icon">
+                      <Trash2 />
+                       <span className="sr-only">Delete</span>
+                    </Button>
+                </CardFooter>
+            )}
           </Card>
         ))}
       </div>
@@ -213,5 +221,3 @@ export default function MonstersPage() {
     </div>
   );
 }
-
-    
