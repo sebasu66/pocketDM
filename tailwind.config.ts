@@ -1,3 +1,4 @@
+
 import type {Config} from 'tailwindcss';
 
 export default {
@@ -12,7 +13,7 @@ export default {
       fontFamily: {
         body: ['EB Garamond', 'serif'],
         headline: ['Cinzel', 'serif'],
-        code: ['monospace'],
+        code: ['Recursive', 'monospace'],
       },
       colors: {
         background: 'hsl(var(--background))',
