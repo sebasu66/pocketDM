@@ -120,33 +120,35 @@ export default function MonstersPage() {
         <StackedCard
             items={filteredMonsters}
             renderItem={(monster, isActive) => (
-                <div className="w-full h-full relative rounded-lg overflow-hidden border border-border/20">
+                <div className="w-full h-full relative rounded-lg overflow-hidden border border-border/20 bg-card">
                     <Image 
                         src={monster.image} 
                         alt={monster.name} 
                         fill 
-                        className="object-cover object-center opacity-40" 
+                        className="object-cover object-center" 
                         data-ai-hint={monster.aiHint} 
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/40 to-transparent" />
                      {isActive && (
                         <div className="relative p-6 h-full flex flex-col justify-end text-foreground/90">
-                            <div className="flex-1" />
-                            <div className="flex justify-between items-end">
-                                <h2 className="text-4xl font-headline text-white drop-shadow-lg">{monster.name}</h2>
-                            </div>
-                            <Separator className="my-3 bg-white/20" />
-                            <div className="grid grid-cols-3 gap-6">
-                                <div className="col-span-2 font-handwriting text-lg leading-relaxed h-32 overflow-y-auto mix-blend-multiply text-black">
-                                    {monster.description}
-                                </div>
-                                <div className="col-span-1 text-sm text-muted-foreground font-mono">
-                                    {monster.stats}
-                                </div>
-                            </div>
+                           <div className="absolute top-4 right-4 text-right">
+                             <div className="text-sm text-muted-foreground font-mono bg-black/50 p-2 rounded">
+                                {monster.stats}
+                             </div>
+                           </div>
+                           
+                           <div className="flex-1" />
+
+                           <div className="font-handwriting text-lg leading-relaxed h-32 overflow-y-auto mix-blend-multiply text-black bg-white/40 p-4 rounded">
+                               {monster.description}
+                           </div>
+
+                           <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
+                              <h2 className="text-2xl font-headline text-black drop-shadow-lg bg-white/70 px-4 py-1 rounded">{monster.name}</h2>
+                           </div>
                            
                            {isMaster && (
-                              <div className="absolute top-4 right-4 flex gap-2">
+                              <div className="absolute top-4 left-4 flex gap-2">
                                 <Button variant="outline" size="sm" onClick={() => handleEditMonster(monster)}>
                                    <Edit /> Edit
                                  </Button>
@@ -228,5 +230,3 @@ export default function MonstersPage() {
     </div>
   );
 }
-
-    

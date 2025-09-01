@@ -60,8 +60,8 @@ export function StackedCard<T extends { id: string; name: string }>({ items, ren
                         "flex items-center justify-center",
                     )}
                   >
-                     <h3 className="font-headline text-center truncate px-4 text-muted-foreground flex items-center gap-2">
-                        <GripVertical size={16} /> {item.name}
+                     <h3 className="font-headline text-center truncate px-4 text-black bg-white/70">
+                        {item.name}
                      </h3>
                   </div>
                )}
