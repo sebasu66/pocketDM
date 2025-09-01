@@ -127,10 +127,9 @@ export default function MonstersPage() {
                         alt={monster.name} 
                         fill
                         sizes="400px"
-                        className="object-cover object-center opacity-40" 
+                        className="object-cover object-center" 
                         data-ai-hint={monster.aiHint} 
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
                      {isActive && (
                         <div className="relative p-6 h-full flex flex-col justify-end">
                            <div className="absolute top-4 right-4 text-right">
@@ -157,7 +156,7 @@ export default function MonstersPage() {
                            )}
                         </div>
                      )}
-                      <h2 className="absolute bottom-0 left-1/2 -translate-x-1/2 text-xl font-headline text-black drop-shadow-lg bg-white/70 px-4 py-1 text-center w-full">{monster.name}</h2>
+                     <h2 className="absolute bottom-0 left-1/2 -translate-x-1/2 text-xl font-headline text-black drop-shadow-lg bg-white/70 px-4 py-1 text-center w-full">{monster.name}</h2>
                 </div>
             )}
             />
