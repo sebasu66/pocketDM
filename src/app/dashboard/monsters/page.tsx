@@ -157,9 +157,7 @@ export default function MonstersPage() {
                            )}
                         </div>
                      )}
-                      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full">
-                        <h2 className="text-xl font-headline text-black drop-shadow-lg bg-white/70 px-4 py-1 text-center">{monster.name}</h2>
-                      </div>
+                      <h2 className="absolute bottom-0 left-1/2 -translate-x-1/2 text-xl font-headline text-black drop-shadow-lg bg-white/70 px-4 py-1 text-center w-full">{monster.name}</h2>
                 </div>
             )}
             />
@@ -207,7 +205,7 @@ export default function MonstersPage() {
                   <Label className="mb-2">Monster Portrait</Label>
                   <div className="w-48 h-64 bg-background rounded overflow-hidden mb-4 flex items-center justify-center relative">
                     {editingMonster?.image ? (
-                        <Image src={editingMonster.image} alt={editingMonster.name || "Monster"} sizes="200px" layout="fill" className="object-cover" />
+                        <Image src={editingMonster.image} alt={editingMonster.name || "Monster"} sizes="200px" fill className="object-cover" />
                     ): (
                         <p className="text-xs text-muted-foreground p-2">No image</p>
                     )}
