@@ -16,7 +16,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogFooter,
   DialogClose
 } from "@/components/ui/dialog"
@@ -56,13 +55,56 @@ const initialMonsters = [
   },
 ];
 
+type Monster = typeof initialMonsters[0];
+
+const emptyMonster: Omit<Monster, 'id' | 'stats' | 'image' | 'aiHint'> = { name: '', description: '' };
+
 export default function MonstersPage() {
   const [monsters, setMonsters] = useState(initialMonsters);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingMonster, setEditingMonster] = useState<Partial<Monster> | null>(null);
 
   const filteredMonsters = monsters.filter((monster) =>
     monster.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleNewMonster = () => {
+    setEditingMonster(emptyMonster);
+    setIsDialogOpen(true);
+  }
+
+  const handleEditMonster = (monster: Monster) => {
+    setEditingMonster(monster);
+    setIsDialogOpen(true);
+  }
+
+  const handleSaveMonster = () => {
+    if (!editingMonster) return;
+
+    if ('id' in editingMonster) {
+      // Update existing monster
+      setMonsters(monsters.map(m => m.id === editingMonster.id ? {...m, ...editingMonster} as Monster : m));
+    } else {
+      // Create new monster
+      const newMonster: Monster = {
+        id: (monsters.length + 1).toString(),
+        name: editingMonster.name || "New Monster",
+        description: editingMonster.description || "",
+        stats: "AC: ?, HP: ?, Speed: ?",
+        image: `https://picsum.photos/200/300?random=${Math.random()}`,
+        aiHint: "fantasy monster"
+      };
+      setMonsters([...monsters, newMonster]);
+    }
+    setIsDialogOpen(false);
+    setEditingMonster(null);
+  };
+  
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+    setEditingMonster(null);
+  }
 
   return (
     <div className="space-y-6">
@@ -76,43 +118,9 @@ export default function MonstersPage() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>
-              <PlusCircle /> New Monster
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[625px]">
-            <DialogHeader>
-              <DialogTitle>Create New Monster</DialogTitle>
-              <DialogDescription>
-                Fill out the details for your new creature. Click save when you're done.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="monster-name">Name</Label>
-                <Input id="monster-name" placeholder="e.g., Shadow Ghoul" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="monster-description">Description</Label>
-                <Textarea
-                  id="monster-description"
-                  placeholder="A brief description of the monster's appearance, abilities, and lore."
-                  rows={5}
-                />
-              </div>
-            </div>
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button type="button" variant="secondary">
-                  Cancel
-                </Button>
-              </DialogClose>
-              <Button type="submit">Save Monster</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <Button onClick={handleNewMonster}>
+            <PlusCircle /> New Monster
+        </Button>
       </div>
 
       <Separator />
@@ -128,7 +136,7 @@ export default function MonstersPage() {
               <p className="text-muted-foreground text-sm flex-grow">{monster.description}</p>
             </CardContent>
             <CardFooter className="p-4 pt-0 flex gap-2">
-               <Button variant="outline" className="w-full">
+               <Button variant="outline" className="w-full" onClick={() => handleEditMonster(monster)}>
                   <Edit /> Edit
                 </Button>
                 <Button variant="destructive" size="icon">
@@ -144,6 +152,48 @@ export default function MonstersPage() {
             <p className="text-muted-foreground">No monsters found matching your search.</p>
           </div>
         )}
+
+      <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
+        <DialogContent className="sm:max-w-[625px]">
+          <DialogHeader>
+            <DialogTitle>{editingMonster && 'id' in editingMonster ? 'Edit Monster' : 'Create New Monster'}</DialogTitle>
+            <DialogDescription>
+              {editingMonster && 'id' in editingMonster 
+                ? "Edit the details for your creature." 
+                : "Fill out the details for your new creature."}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="monster-name">Name</Label>
+              <Input 
+                id="monster-name" 
+                placeholder="e.g., Shadow Ghoul" 
+                value={editingMonster?.name || ''}
+                onChange={(e) => setEditingMonster({...editingMonster, name: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="monster-description">Description</Label>
+              <Textarea
+                id="monster-description"
+                placeholder="A brief description of the monster's appearance, abilities, and lore."
+                rows={5}
+                value={editingMonster?.description || ''}
+                onChange={(e) => setEditingMonster({...editingMonster, description: e.target.value })}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button type="button" variant="secondary" onClick={handleDialogClose}>
+                Cancel
+              </Button>
+            </DialogClose>
+            <Button type="button" onClick={handleSaveMonster}>Save Monster</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
