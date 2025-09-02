@@ -54,7 +54,7 @@ const generateStoryFlow = ai.defineFlow(
         // Use the apiKey from input if provided, otherwise it will use the one from the environment.
         const storyPrompt = ai.definePrompt({
             name: 'storyPrompt',
-            input: { schema: StoryInputSchema },
+            input: { schema: z.any() }, // Allow any input to be passed to the prompt
             output: { schema: StoryOutputSchema },
             tools: [getCharactersTool],
             prompt: `
@@ -65,6 +65,8 @@ const generateStoryFlow = ai.defineFlow(
 
                 Based on the following narrative history, write the next logical and engaging post for the story.
                 Your response should be a compelling continuation of the events.
+
+                Campaign ID: {{campaignId}}
 
                 Narrative History:
                 ---

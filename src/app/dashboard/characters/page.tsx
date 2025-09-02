@@ -27,6 +27,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
+import { getCharactersByCampaign, addCharacter, deleteCharacter, updateCharacter } from "@/lib/firebase/characters";
 
 export default function CharactersPage() {
   const { campaign, user, isLoading: isAuthLoading } = useAuth();
@@ -40,9 +41,7 @@ export default function CharactersPage() {
     if (campaign && user) {
       setIsLoading(true);
       try {
-        const response = await fetch(`/api/characters?campaignId=${campaign.id}&userId=${user.id}`);
-        if (!response.ok) throw new Error("Failed to fetch characters");
-        const userCharacters: Character[] = await response.json();
+        const userCharacters: Character[] = await getCharactersByCampaign(campaign.id, user.id);
         const currentChar = userCharacters.length > 0 ? userCharacters[0] : null;
         setCharacter(currentChar);
         setEditingCharacter(currentChar ? { ...currentChar } : null);
@@ -76,12 +75,7 @@ export default function CharactersPage() {
     };
     
     try {
-        const response = await fetch('/api/characters', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newCharacterData)
-        });
-        if (!response.ok) throw new Error("Failed to create character");
+        await addCharacter(newCharacterData);
         toast({ title: "Character Created!", description: "Your new hero is ready for adventure." });
         await fetchCharacter();
         event.currentTarget.reset();
@@ -94,8 +88,7 @@ export default function CharactersPage() {
     if (!character) return;
     
     try {
-        const response = await fetch(`/api/characters/${character.id}`, { method: 'DELETE' });
-        if (!response.ok) throw new Error("Failed to delete character");
+        await deleteCharacter(character.id);
         toast({ title: "Character Deleted", description: "Your hero has been retired." });
         setCharacter(null);
         setEditingCharacter(null);
@@ -115,12 +108,7 @@ export default function CharactersPage() {
     if (!editingCharacter) return;
     
     try {
-        const response = await fetch(`/api/characters/${editingCharacter.id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(editingCharacter)
-        });
-        if (!response.ok) throw new Error("Failed to save changes");
+        await updateCharacter(editingCharacter.id, editingCharacter);
         toast({ title: "Character Saved", description: "Your hero's sheet has been updated." });
         await fetchCharacter();
         setIsSheetOpen(false);
