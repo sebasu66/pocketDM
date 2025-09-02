@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -39,6 +40,8 @@
     --sidebar-accent-foreground: 210 40% 98%;
     --sidebar-border: 43 23% 72% / 0.2;
     --sidebar-ring: 120 18% 52%;
+
+    --font-handwriting: 'Covered By Your Grace', cursive;
   }
 
   .dark {
@@ -76,6 +79,16 @@
     --sidebar-accent-foreground: 210 40% 98%;
     --sidebar-border: 43 23% 72% / 0.2;
     --sidebar-ring: 120 18% 52%;
+  }
+
+  .font-handwriting-grace {
+    --font-handwriting: 'Covered By Your Grace', cursive;
+  }
+  .font-handwriting-merienda {
+    --font-handwriting: 'Merienda', cursive;
+  }
+  .font-handwriting-comic {
+    --font-handwriting: 'Comic Sans MS', 'Comic Sans', cursive;
   }
 }
 

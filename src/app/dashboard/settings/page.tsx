@@ -1,12 +1,18 @@
 
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useTheme } from "@/context/theme-context";
 
 export default function SettingsPage() {
+  const { handwritingFont, setHandwritingFont } = useTheme();
+
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       <Card>
@@ -37,6 +43,30 @@ export default function SettingsPage() {
           </div>
           <div className="flex justify-end">
             <Button>Update Profile</Button>
+          </div>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle className="font-headline">Display Settings</CardTitle>
+          <CardDescription>Customize the look and feel of the application.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="handwriting-font">Handwriting Font</Label>
+            <Select value={handwritingFont} onValueChange={setHandwritingFont}>
+              <SelectTrigger id="handwriting-font">
+                <SelectValue placeholder="Select a font" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="grace">Covered By Your Grace</SelectItem>
+                <SelectItem value="merienda">Merienda</SelectItem>
+                <SelectItem value="comic">Comic Sans MS</SelectItem>
+              </SelectContent>
+            </Select>
+            <p className="text-sm text-muted-foreground">
+              Choose the font used for handwritten notes and titles.
+            </p>
           </div>
         </CardContent>
       </Card>

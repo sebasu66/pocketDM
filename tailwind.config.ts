@@ -7,6 +7,7 @@ export default {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js.ts.jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/context/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
@@ -14,7 +15,7 @@ export default {
         body: ['EB Garamond', 'serif'],
         headline: ['Cinzel', 'serif'],
         code: ['Recursive', 'monospace'],
-        handwriting: ['"Covered By Your Grace"', 'cursive'],
+        handwriting: ['var(--font-handwriting)', 'cursive'],
       },
       colors: {
         background: 'hsl(var(--background))',
