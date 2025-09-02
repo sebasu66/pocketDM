@@ -54,7 +54,7 @@ export function StackedCard<T extends { id: string; name: string }>({ items, ren
               className={cn(
                 "absolute w-full h-full rounded-lg transition-all duration-500 ease-in-out cursor-pointer",
                 isActive 
-                  ? "shadow-lg" 
+                  ? "drop-shadow-[0_4px_3px_rgba(0,0,0,0.5)]" 
                   : "opacity-80 hover:-translate-y-2 blur-[1px]"
               )}
               style={{
