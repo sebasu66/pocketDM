@@ -93,7 +93,7 @@ export default function CharactersPage() {
                         <p className="text-muted-foreground">{character.description}</p>
                     </div>
                      <div className="flex gap-2 pt-4">
-                        <Button className="w-full">
+                        <Button className="w-full" disabled>
                             <Edit /> View/Edit Sheet
                         </Button>
                         <Button variant="outline" size="icon" className="border-destructive/50 text-destructive/80 hover:bg-destructive hover:text-destructive-foreground">
