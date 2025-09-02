@@ -32,7 +32,7 @@ const StoryInputSchema = z.object({
   systemPrompt: z.string().describe("Instructions for the AI on how to behave."),
   narrativeHistory: z.string().describe("The history of the narrative so far, including player actions."),
   // The API key is now optional here, as we will prefer the environment variable.
-  apiKey: z.string().optional().describe("The user's Gemini API key."),
+  apiKey: z.string().optional().describe("An optional Gemini API key. If not provided, the server will use the GEMINI_API_KEY environment variable."),
 });
 export type StoryInput = z.infer<typeof StoryInputSchema>;
 
