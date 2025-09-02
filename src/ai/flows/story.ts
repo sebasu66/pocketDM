@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -11,6 +12,7 @@
 import { ai } from '@/ai/genkit';
 import { getCharactersByCampaign } from '@/lib/firebase/characters';
 import { z } from 'zod';
+import {googleAI} from '@genkit-ai/googleai';
 
 const getCharactersTool = ai.defineTool(
   {
@@ -29,6 +31,7 @@ const StoryInputSchema = z.object({
   campaignId: z.string().describe("The ID of the current campaign."),
   systemPrompt: z.string().describe("Instructions for the AI on how to behave."),
   narrativeHistory: z.string().describe("The history of the narrative so far, including player actions."),
+  apiKey: z.string().describe("The user's Gemini API key."),
 });
 export type StoryInput = z.infer<typeof StoryInputSchema>;
 
@@ -38,27 +41,6 @@ const StoryOutputSchema = z.object({
 export type StoryOutput = z.infer<typeof StoryOutputSchema>;
 
 
-const storyPrompt = ai.definePrompt({
-    name: 'storyPrompt',
-    input: { schema: StoryInputSchema },
-    output: { schema: StoryOutputSchema },
-    tools: [getCharactersTool],
-    prompt: `
-        {{systemPrompt}}
-
-        You have access to tools that can provide you with information about the characters in the campaign.
-        Use them if you need to.
-
-        Based on the following narrative history, write the next logical and engaging post for the story.
-        Your response should be a compelling continuation of the events.
-
-        Narrative History:
-        ---
-        {{narrativeHistory}}
-        ---
-    `,
-});
-
 const generateStoryFlow = ai.defineFlow(
     {
         name: 'generateStoryFlow',
@@ -66,7 +48,36 @@ const generateStoryFlow = ai.defineFlow(
         outputSchema: StoryOutputSchema,
     },
     async (input) => {
-        const { output } = await storyPrompt(input);
+        const { campaignId, systemPrompt, narrativeHistory, apiKey } = input;
+
+        const storyPrompt = ai.definePrompt({
+            name: 'storyPrompt',
+            input: { schema: StoryInputSchema },
+            output: { schema: StoryOutputSchema },
+            tools: [getCharactersTool],
+            prompt: `
+                {{systemPrompt}}
+
+                You have access to tools that can provide you with information about the characters in the campaign.
+                Use them if you need to.
+
+                Based on the following narrative history, write the next logical and engaging post for the story.
+                Your response should be a compelling continuation of the events.
+
+                Narrative History:
+                ---
+                {{narrativeHistory}}
+                ---
+            `,
+            model: googleAI({apiKey}),
+        });
+
+        const { output } = await storyPrompt({
+            campaignId,
+            systemPrompt,
+            narrativeHistory,
+            apiKey, // Pass it through, although it's mainly for model config
+        });
         return output!;
     }
 );

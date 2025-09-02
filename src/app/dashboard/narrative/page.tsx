@@ -101,10 +101,9 @@ export default function NarrativePage() {
             campaignId: campaign.id,
             systemPrompt: systemPrompt || "You are a master storyteller.",
             narrativeHistory: narrativeHistory || "This is the beginning of the story. Please write an engaging introduction.",
+            apiKey: apiKey,
         };
         
-        // This is a temporary solution for the demo.
-        // In a real app, you would handle the API key securely on the backend.
         const result = await generateStory(storyInput);
 
         const newThreadData = {
