@@ -90,9 +90,9 @@ export default function LoginPage() {
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">
-              Need credentials?{" "}
+              Don't have an account?{" "}
               <Link href="/" className="underline">
-                View Demo Accounts
+                Go back to Home
               </Link>
             </div>
           </CardContent>
@@ -101,4 +101,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
