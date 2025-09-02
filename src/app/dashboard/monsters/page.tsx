@@ -221,7 +221,7 @@ export default function MonstersPage() {
           <div className="relative flex items-center justify-center h-full md:col-span-7">
              <RusticIconButton 
                 onClick={handlePrev} 
-                className="absolute z-10 text-white/80 opacity-70 hover:opacity-100"
+                className="z-10 text-white/80 opacity-70 hover:opacity-100"
                 tooltip="Previous"
             >
                 <ArrowLeft size={32} />
@@ -249,7 +249,7 @@ export default function MonstersPage() {
                 />
             <RusticIconButton 
                 onClick={handleNext} 
-                className="absolute z-10 text-white/80 opacity-70 hover:opacity-100"
+                className="z-10 text-white/80 opacity-70 hover:opacity-100"
                 tooltip="Next"
             >
                 <ArrowRight size={32} />
@@ -333,5 +333,3 @@ export default function MonstersPage() {
     </div>
   );
 }
-
-    
