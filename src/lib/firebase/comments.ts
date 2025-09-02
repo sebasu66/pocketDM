@@ -1,5 +1,5 @@
 
-import { query, collection, where, getDocs, orderBy } from "firebase/firestore";
+import { query, collection, where, getDocs, orderBy, addDoc } from "firebase/firestore";
 import { db } from "./config";
 import { NarrativeComment, User } from "./types";
 import { getUserById } from "../auth";
@@ -31,3 +31,9 @@ export const getCommentsByThreadId = async (threadId: string): Promise<Narrative
     
     return commentsWithAuthors;
 };
+
+
+export const addNarrativeComment = async (commentData: Omit<NarrativeComment, 'id'>): Promise<string> => {
+    const docRef = await addDoc(collection(db, COMMENTS_COLLECTION), commentData);
+    return docRef.id;
+}

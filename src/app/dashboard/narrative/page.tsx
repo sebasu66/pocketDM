@@ -1,20 +1,22 @@
 
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { FlippingAvatar } from "@/components/flipping-avatar";
 import { useAuth } from "@/context/auth-context";
-import { Eye, Plus, Music, Bot } from "lucide-react";
+import { Eye, Plus, Music, Bot, Send, MessageSquareQuote, Lock } from "lucide-react";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 import Image from "next/image";
 import { getNarrativeThreadsByCampaign, addNarrativeThread } from "@/lib/firebase/narrative";
-import { getCommentsByThreadId, NarrativeCommentWithAuthor } from "@/lib/firebase/comments";
+import { getCommentsByThreadId, addNarrativeComment, NarrativeCommentWithAuthor } from "@/lib/firebase/comments";
 import { NarrativeThread, User, Character } from "@/lib/firebase/types";
 import { getCharactersByCampaign } from "@/lib/firebase/characters";
 import { generateStory, StoryInput } from "@/ai/flows/story";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 // A helper type to combine comment with author and character details
 type EnrichedComment = NarrativeCommentWithAuthor & {
@@ -32,6 +34,7 @@ export default function NarrativePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
   const [activePlayers, setActivePlayers] = useState<Character[]>([]);
+  const [playerCharacter, setPlayerCharacter] = useState<Character | null>(null);
 
   const isMaster = user?.role === 'master';
 
@@ -45,6 +48,11 @@ export default function NarrativePage() {
     ]);
     
     setActivePlayers(charactersFromDb.filter(c => c.isActive));
+
+    if (user && !isMaster) {
+        const char = charactersFromDb.find(c => c.userId === user.id);
+        setPlayerCharacter(char || null);
+    }
 
     const enrichedThreads = await Promise.all(
       threadsFromDb.map(async (thread) => {
@@ -61,7 +69,7 @@ export default function NarrativePage() {
 
     setThreads(enrichedThreads);
     setIsLoading(false);
-  }, [campaign]);
+  }, [campaign, user, isMaster]);
 
   useEffect(() => {
     fetchNarrativeData();
@@ -117,6 +125,36 @@ export default function NarrativePage() {
         setIsGenerating(false);
       }
   }
+  
+  const handleAddComment = async (text: string, hiddenText: string) => {
+    if (!user || !playerCharacter || !lastThread) return;
+
+    await addNarrativeComment({
+        threadId: lastThread.id,
+        authorId: user.id,
+        characterId: playerCharacter.id,
+        text,
+        hiddenText,
+        createdAt: Date.now(),
+    });
+
+    toast({ title: "Response Posted!", description: "Your actions have been recorded in the annals of history."});
+    
+    await fetchNarrativeData();
+  };
+
+
+  const lastThread = useMemo(() => threads.length > 0 ? threads[threads.length - 1] : null, [threads]);
+  
+  const playersWhoHaveCommented = useMemo(() => new Set(lastThread?.comments.map(c => c.authorId) || []), [lastThread]);
+  
+  const allActivePlayersResponded = useMemo(() => activePlayers.every(p => playersWhoHaveCommented.has(p.userId)), [activePlayers, playersWhoHaveCommented]);
+
+  const isAITurn = lastThread ? (isMaster && allActivePlayersResponded) : isMaster;
+  
+  const hasPlayerResponded = user ? playersWhoHaveCommented.has(user.id) : true;
+
+  const canPlayerRespond = !isMaster && playerCharacter?.isActive && lastThread && !hasPlayerResponded;
 
   if (isLoading) {
     return (
@@ -125,16 +163,6 @@ export default function NarrativePage() {
         </div>
     );
   }
-
-  const lastThread = threads.length > 0 ? threads[threads.length - 1] : null;
-  const lastPosterId = lastThread?.comments[lastThread.comments.length - 1]?.authorId ?? lastThread?.authorId;
-
-  const activePlayerIds = new Set(activePlayers.map(p => p.userId));
-  const playersWhoHaveCommented = new Set(lastThread?.comments.map(c => c.authorId));
-  
-  const allActivePlayersResponded = activePlayers.every(p => playersWhoHaveCommented.has(p.userId));
-
-  const isAITurn = lastThread ? (isMaster && allActivePlayersResponded) : isMaster;
 
   return (
     <div className="grid md:grid-cols-2 gap-8 items-start">
@@ -174,15 +202,16 @@ export default function NarrativePage() {
                         <Bot className="mr-2"/>
                         {isGenerating ? "Generating..." : "Generate Next Post"}
                     </Button>
-                    <RusticIconButton tooltip="Add Manually" className="text-white/90 hover:text-white">
+                    {!isAITurn && (
+                        <p className="text-sm text-white/60 self-center">Waiting for {activePlayers.filter(p => !playersWhoHaveCommented.has(p.userId)).map(p => p.name).join(', ')} to respond.</p>
+                    )}
+                    <RusticIconButton tooltip="Add Manually" className="text-white/90 hover:text-white" disabled>
                         <Plus size={24} />
                     </RusticIconButton>
                 </div>
              )}
-             {!isMaster && (
-                <RusticIconButton tooltip="Add to this Thread" className="text-white/90 hover:text-white">
-                    <Plus size={24} />
-                </RusticIconButton>
+             {canPlayerRespond && (
+                <CommentForm onSubmit={handleAddComment} character={playerCharacter} />
              )}
         </div>
 
@@ -222,8 +251,70 @@ export default function NarrativePage() {
                     </div>
                 </Card>
             ))}
+            {(!lastThread || lastThread.comments.length === 0) && <p className="text-white/70">No player responses yet for the last post.</p>}
             {threads.length === 0 && <p className="text-white/70">The story hasn't begun yet. The Game Master needs to post first.</p>}
         </div>
     </div>
   );
+}
+
+
+function CommentForm({ onSubmit, character }: { onSubmit: (text: string, hiddenText: string) => Promise<void>, character: Character | null }) {
+    const [text, setText] = useState("");
+    const [hiddenText, setHiddenText] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!text || isSubmitting) return;
+        setIsSubmitting(true);
+        await onSubmit(text, hiddenText);
+        setText("");
+        setHiddenText("");
+        setIsSubmitting(false);
+    };
+
+    return (
+        <Card className="bg-card/80 backdrop-blur-sm">
+            <CardHeader>
+                <CardTitle className="font-headline">Your Turn, {character?.name}</CardTitle>
+                <CardDescription>Describe your character's actions, thoughts, and dialogue.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="comment-text" className="flex items-center gap-2">
+                            <MessageSquareQuote />
+                            Public Response
+                        </Label>
+                        <Textarea
+                            id="comment-text"
+                            value={text}
+                            onChange={(e) => setText(e.target.value)}
+                            placeholder="What does your character do or say?"
+                            required
+                            rows={5}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                         <Label htmlFor="hidden-text" className="flex items-center gap-2">
+                            <Lock />
+                           Hidden Thoughts (GM only)
+                        </Label>
+                        <Textarea
+                            id="hidden-text"
+                            value={hiddenText}
+                            onChange={(e) => setHiddenText(e.target.value)}
+                            placeholder="What is your character thinking? (optional, only visible to the GM)"
+                             rows={3}
+                        />
+                    </div>
+                    <Button type="submit" disabled={isSubmitting}>
+                        <Send className="mr-2" />
+                        {isSubmitting ? "Posting..." : "Post Response"}
+                    </Button>
+                </form>
+            </CardContent>
+        </Card>
+    );
 }
