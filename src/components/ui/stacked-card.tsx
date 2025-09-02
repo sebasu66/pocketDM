@@ -23,11 +23,17 @@ export function StackedCard<T extends { id: string; name: string }>({ items, ren
     }
     const activeItem = items[activeIndex];
     const otherItems = items.filter((_, i) => i !== activeIndex);
-    // Add a random rotation to each item for a more organic feel
-    return [...otherItems, activeItem].map(item => ({
+
+    // Assign a unique, stable random rotation to each item
+    const itemsWithRotation = items.map(item => ({
       ...item,
       rotation: Math.random() * 2 - 1, // -1 to 1 degree rotation
     }));
+    
+    const activeItemWithRotation = itemsWithRotation.find(i => i.id === activeItem.id);
+    const otherItemsWithRotation = itemsWithRotation.filter(i => i.id !== activeItem.id);
+    
+    return [...otherItemsWithRotation, activeItemWithRotation];
   }, [items, activeIndex]);
 
   if (orderedItems.length === 0) {
@@ -38,6 +44,7 @@ export function StackedCard<T extends { id: string; name: string }>({ items, ren
     <div className="relative w-full h-full flex items-center justify-center">
       <div className="relative w-[300px] h-[450px] scale-[1.25]">
         {orderedItems.map((item, index) => {
+          if (!item) return null;
           const originalIndex = items.findIndex(i => i.id === item.id);
           const isActive = index === orderedItems.length - 1;
           const zIndex = index;
@@ -51,7 +58,7 @@ export function StackedCard<T extends { id: string; name: string }>({ items, ren
                 "absolute w-full h-full rounded-lg shadow-2xl transition-all duration-500 ease-in-out cursor-pointer",
                 isActive 
                   ? "drop-shadow-[0_25px_25px_rgba(0,0,0,0.5)]" 
-                  : "opacity-80 hover:-translate-y-2 blur-sm"
+                  : "opacity-80 hover:-translate-y-2 blur-[2px]"
               )}
               style={{
                 zIndex: zIndex,
