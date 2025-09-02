@@ -150,11 +150,11 @@ export default function MonstersPage() {
       <Separator />
 
       {filteredMonsters.length > 0 ? (
-        <div className="grid h-[75vh] items-center md:grid-cols-5">
+        <div className="grid h-[75vh] items-center md:grid-cols-10">
           {/* Left Text Column */}
           <div
             className={cn(
-              'px-4 text-white/90 transition-opacity duration-500 md:px-8 h-full md:col-span-2',
+              'px-4 text-white/90 transition-opacity duration-500 md:px-8 h-full md:col-span-3',
               activeMonster ? 'opacity-100' : 'opacity-0'
             )}
           >
@@ -182,7 +182,7 @@ export default function MonstersPage() {
           </div>
 
           {/* Right Card Stack Column */}
-          <div className="flex items-center justify-center h-full md:col-span-3">
+          <div className="flex items-center justify-center h-full md:col-span-7">
             <div className="relative w-full h-full flex items-center justify-center">
               <div className="relative w-[300px] h-[450px] scale-[1.375]">
                 <StackedCard
