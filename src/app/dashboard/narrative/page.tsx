@@ -3,11 +3,11 @@
 
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { FlippingAvatar } from "@/components/flipping-avatar";
 import { useAuth } from "@/context/auth-context";
-import { Eye, Plus } from "lucide-react";
+import { Eye, Plus, Music } from "lucide-react";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
+import Image from "next/image";
 
 const comments = [
     {
@@ -50,16 +50,29 @@ export default function NarrativePage() {
                     <CardTitle className="font-headline text-2xl">The Arrival at Silverwood</CardTitle>
                     <CardDescription>Posted by Game Master - 2 days ago</CardDescription>
                 </CardHeader>
-                <CardContent className="prose prose-invert max-w-none space-y-4 text-foreground/90">
-                    <p>
-                        The party, weary from their travels, finally saw the shimmering rooftops of Silverwood. 
-                        As they approached the main gate, they were greeted by Captain <a href="/dashboard/characters/elara" className="text-accent hover:underline">Elara</a>, 
-                        a stern-looking guard with a noticeable scar above her left eye. She held the legendary{' '}
-                        <a href="/dashboard/items/moonshard-blade" className="text-accent hover:underline">Moonshard Blade</a>, its faint glow pulsing in the twilight.
-                    </p>
-                    <p>
-                        "State your business in Silverwood," she commanded, her voice firm but not unkind. The air was thick with the scent of pine and distant magic.
-                    </p>
+                <CardContent className="space-y-4">
+                   <div className="relative h-64 w-full rounded-lg overflow-hidden border-2 border-primary/20">
+                      <Image src="https://picsum.photos/800/400?random=55" alt="The gates of Silverwood" fill className="object-cover" data-ai-hint="fantasy city gate" />
+                   </div>
+                    <div className="prose prose-invert max-w-none space-y-4 text-foreground/90">
+                        <p>
+                            The party, weary from their travels, finally saw the shimmering rooftops of Silverwood. 
+                            As they approached the main gate, they were greeted by Captain <a href="/dashboard/characters/elara" className="text-accent hover:underline">Elara</a>, 
+                            a stern-looking guard with a noticeable scar above her left eye. She held the legendary{' '}
+                            <a href="/dashboard/items/moonshard-blade" className="text-accent hover:underline">Moonshard Blade</a>, its faint glow pulsing in the twilight.
+                        </p>
+                        <p>
+                            "State your business in Silverwood," she commanded, her voice firm but not unkind. The air was thick with the scent of pine and distant magic.
+                        </p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <h4 className="flex items-center gap-2 font-headline text-lg text-foreground/80"><Music size={18}/>Ambiance</h4>
+                      <audio controls className="w-full h-10">
+                        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg" />
+                        Your browser does not support the audio element.
+                      </audio>
+                    </div>
                     
                     {(isMaster || user?.id === '2') && (
                         <div className="border-l-4 border-primary bg-primary/10 p-4 rounded-r-lg">
