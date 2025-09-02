@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { PlusCircle, Trash2, Sheet, Upload } from "lucide-react";
+import { PlusCircle, Trash2, Sheet, Upload, Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import { getCharactersByCampaign, addCharacter, updateCharacter, deleteCharacter } from "@/lib/firebase/characters";
 import type { Character } from "@/lib/firebase/types";
@@ -24,7 +24,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
 
 export default function CharactersPage() {
   const { campaign, user, isLoading: isAuthLoading } = useAuth();
@@ -62,6 +64,7 @@ export default function CharactersPage() {
       aiHint: "fantasy portrait",
       campaignId: campaign.id,
       userId: user.id,
+      isActive: true,
     };
     
     await addCharacter(newCharacterData);
@@ -72,7 +75,8 @@ export default function CharactersPage() {
   const handleDelete = async () => {
     if (!character) return;
     await deleteCharacter(character.id);
-    await fetchCharacter();
+    setCharacter(null);
+    setEditingCharacter(null);
   };
 
   const handleOpenSheet = () => {
@@ -90,12 +94,12 @@ export default function CharactersPage() {
     setIsSheetOpen(false);
   };
   
-  const handleStatChange = (stat: keyof Character, value: string) => {
+  const handleStatChange = (stat: keyof Character, value: string | boolean) => {
     if (editingCharacter) {
-      const isNumeric = ['level', 'strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'].includes(stat);
+      const isNumeric = ['level', 'strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'].includes(stat as string);
       setEditingCharacter({
         ...editingCharacter,
-        [stat]: isNumeric ? parseInt(value, 10) || 0 : value,
+        [stat]: isNumeric ? parseInt(value as string, 10) || 0 : value,
       });
     }
   };
@@ -139,7 +143,13 @@ export default function CharactersPage() {
             <CardHeader>
                 <div className="flex justify-between items-start">
                     <div>
-                        <CardTitle className="font-headline text-3xl">{character.name}</CardTitle>
+                        <div className="flex items-center gap-4">
+                           <CardTitle className="font-headline text-3xl">{character.name}</CardTitle>
+                           <Badge variant={character.isActive ? "default" : "secondary"}>
+                             {character.isActive ? <Eye className="mr-2" /> : <EyeOff className="mr-2" />}
+                             {character.isActive ? "Active" : "Inactive"}
+                           </Badge>
+                        </div>
                         <CardDescription>Your hero for the campaign: {campaign?.title}</CardDescription>
                     </div>
                     <div className="flex gap-2">
@@ -241,6 +251,10 @@ export default function CharactersPage() {
             {editingCharacter && (
                 <div className="grid md:grid-cols-2 gap-6 py-4 overflow-y-auto">
                     <div className="space-y-4">
+                      <div className="flex items-center space-x-2">
+                        <Switch id="isActive" checked={editingCharacter.isActive} onCheckedChange={(c) => handleStatChange('isActive', c)} />
+                        <Label htmlFor="isActive">Character is Active</Label>
+                      </div>
                       <div className="grid items-center gap-1.5">
                           <Label htmlFor="name">Name</Label>
                           <Input id="name" value={editingCharacter.name} onChange={(e) => handleStatChange('name', e.target.value)} />

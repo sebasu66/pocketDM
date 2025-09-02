@@ -30,9 +30,9 @@ export interface Character {
     dexterity: number;
     constitution: number;
     intelligence: number;
-
     wisdom: number;
     charisma: number;
+    isActive: boolean;
 }
 
 export interface NarrativeThread {
@@ -48,7 +48,7 @@ export interface NarrativeThread {
 }
 
 export interface NarrativeComment {
-    id: string;
+    id:string;
     threadId: string;
     authorId: string; // User ID
     characterId?: string; // Character ID if posted in-character

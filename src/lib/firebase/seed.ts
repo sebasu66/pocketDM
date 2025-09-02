@@ -85,7 +85,8 @@ async function seedDatabase() {
             constitution: 16,
             intelligence: 8,
             wisdom: 12,
-            charisma: 10
+            charisma: 10,
+            isActive: true,
         },
         {
             id: "char-2",
@@ -102,7 +103,8 @@ async function seedDatabase() {
             constitution: 12,
             intelligence: 14,
             wisdom: 16,
-            charisma: 14
+            charisma: 14,
+            isActive: false,
         },
     ];
 
@@ -177,6 +179,7 @@ async function seedDatabase() {
     try {
         await batch.commit();
         console.log("Database seeded successfully!");
+        localStorage.setItem('db_seeded', 'true');
     } catch (error) {
         console.error("Error seeding database: ", error);
     }
@@ -193,9 +196,8 @@ export async function runSeed() {
     // A simple check to prevent re-seeding every time the app loads.
     // In a real app, you'd have a more robust system (e.g., check if a 'seeded' flag exists).
     if (localStorage.getItem('db_seeded')) {
-        console.log("Database already seeded. Skipping.");
+        // console.log("Database already seeded. Skipping.");
         return;
     }
     await seedDatabase();
-    localStorage.setItem('db_seeded', 'true');
 }
