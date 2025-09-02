@@ -24,6 +24,15 @@ export interface Character {
     aiHint: string;
     campaignId: string;
     userId: string;
+    level: number;
+    class: string;
+    strength: number;
+    dexterity: number;
+    constitution: number;
+    intelligence: number;
+
+    wisdom: number;
+    charisma: number;
 }
 
 export interface NarrativeThread {

@@ -14,16 +14,35 @@ let mockCharacters: Character[] = [
         portrait: "https://picsum.photos/400/600?random=10",
         aiHint: "fantasy warrior portrait",
         campaignId: "1",
-        userId: "2" // Alice's ID
+        userId: "2", // Alice's ID
+        level: 3,
+        class: "Barbarian",
+        strength: 18,
+        dexterity: 14,
+        constitution: 16,
+        intelligence: 8,
+        wisdom: 12,
+        charisma: 10
     },
     // Initially, the GM has no character
 ];
 
 // Create
-export const addCharacter = async (character: Omit<Character, 'id'>): Promise<string> => {
+export const addCharacter = async (character: Omit<Character, 'id' | 'level' | 'class' | 'strength' | 'dexterity' | 'constitution' | 'intelligence' | 'wisdom' | 'charisma'>): Promise<string> => {
     // Mock implementation
     const newId = `char-${mockCharacters.length + 1}`;
-    const newCharacter = { id: newId, ...character };
+    const newCharacter: Character = { 
+        id: newId, 
+        ...character,
+        level: 1,
+        class: "Adventurer",
+        strength: 10,
+        dexterity: 10,
+        constitution: 10,
+        intelligence: 10,
+        wisdom: 10,
+        charisma: 10
+    };
     mockCharacters.push(newCharacter);
     console.log("Added character:", newCharacter);
     return Promise.resolve(newId);
@@ -78,6 +97,7 @@ export const updateCharacter = async (id: string, character: Partial<Omit<Charac
     const index = mockCharacters.findIndex(c => c.id === id);
     if (index !== -1) {
         mockCharacters[index] = { ...mockCharacters[index], ...character };
+        console.log("Updated character:", mockCharacters[index]);
     }
     return Promise.resolve();
     /* Real implementation
