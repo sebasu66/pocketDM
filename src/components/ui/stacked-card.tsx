@@ -39,7 +39,7 @@ export function StackedCard<T extends { id: string; name: string }>({ items, ren
 
   return (
     <div className="relative w-full h-full flex items-center justify-center">
-      <div className="relative w-[300px] h-[450px] scale-[1.5]">
+      <div className="relative w-[300px] h-[450px] scale-[1.8]">
         {orderedItems.map((item, index) => {
           if (!item) return null;
           const originalIndex = items.findIndex(i => i.id === item.id);
