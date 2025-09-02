@@ -6,25 +6,17 @@ import { Character } from "./types";
 const CHARACTERS_COLLECTION = "characters";
 
 // Mock data
-const mockCharacters: Character[] = [
+let mockCharacters: Character[] = [
     {
         id: "char-1",
         name: "Grom the Valiant",
         description: "A stoic warrior from the northern mountains, seeking to reclaim his family's honor.",
-        portrait: "https://picsum.photos/200/300?random=10",
+        portrait: "https://picsum.photos/400/600?random=10",
         aiHint: "fantasy warrior portrait",
         campaignId: "1",
         userId: "2" // Alice's ID
     },
-    {
-        id: "char-2",
-        name: "Lyra Whisperwind",
-        description: "An nimble elf rogue with a mysterious past and a knack for getting into trouble.",
-        portrait: "https://picsum.photos/200/300?random=11",
-        aiHint: "fantasy elf portrait",
-        campaignId: "1",
-        userId: "3" // Bob's hypothetical ID
-    }
+    // Initially, the GM has no character
 ];
 
 // Create
@@ -51,11 +43,17 @@ export const getCharacters = async (): Promise<Character[]> => {
     */
 };
 
-export const getCharactersByCampaign = async (campaignId: string): Promise<Character[]> => {
-    const characters = mockCharacters.filter(c => c.campaignId === campaignId);
+export const getCharactersByCampaign = async (campaignId: string, userId?: string): Promise<Character[]> => {
+    let characters = mockCharacters.filter(c => c.campaignId === campaignId);
+    if (userId) {
+        characters = characters.filter(c => c.userId === userId);
+    }
     return Promise.resolve(characters);
     /* Real implementation
-    const q = query(collection(db, CHARACTERS_COLLECTION), where("campaignId", "==", campaignId));
+    let q = query(collection(db, CHARACTERS_COLLECTION), where("campaignId", "==", campaignId));
+    if (userId) {
+        q = query(q, where("userId", "==", userId));
+    }
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Character));
     */
