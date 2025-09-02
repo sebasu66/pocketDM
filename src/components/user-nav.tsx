@@ -84,14 +84,18 @@ export function UserNav() {
               <span>My Profile</span>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
+          <DropdownMenuItem asChild>
+             <Link href="/dashboard/settings">
+              <Settings className="mr-2 h-4 w-4" />
+              <span>Display Settings</span>
+            </Link>
           </DropdownMenuItem>
          {user.role === 'master' && (
-            <DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/dashboard/settings/apikeys">
                 <KeyRound className="mr-2 h-4 w-4" />
-                <span>API Keys</span>
+                <span>AI Settings</span>
+              </Link>
             </DropdownMenuItem>
          )}
         </DropdownMenuGroup>

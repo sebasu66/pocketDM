@@ -74,6 +74,7 @@ const pageTitles: { [key: string]: string } = {
   "/dashboard/narrative": "Narrative Threads",
   "/dashboard/chat": "Player Chat",
   "/dashboard/settings": "Settings",
+  "/dashboard/settings/apikeys": "AI Settings",
 };
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -161,7 +162,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Separator className="my-2 bg-border/20" />
           <SidebarMenu>
             <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname === '/dashboard/settings'} tooltip={{ children: 'Settings' }} onClick={handleLinkClick}>
+                <SidebarMenuButton asChild isActive={pathname.startsWith('/dashboard/settings')} tooltip={{ children: 'Settings' }} onClick={handleLinkClick}>
                   <Link href="/dashboard/settings">
                     <Settings />
                     <span>Settings</span>

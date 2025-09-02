@@ -13,6 +13,8 @@ import { useTheme } from "@/context/theme-context";
 import { useAuth } from "@/context/auth-context";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { User } from '@/lib/firebase/types';
+import Link from 'next/link';
+import { ChevronRight } from 'lucide-react';
 
 export default function SettingsPage() {
   const { handwritingFont, setHandwritingFont } = useTheme();
@@ -103,11 +105,11 @@ export default function SettingsPage() {
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle className="font-headline">Display Settings</CardTitle>
-          <CardDescription>Customize the look and feel of the application.</CardDescription>
+          <CardTitle className="font-headline">Application Settings</CardTitle>
+          <CardDescription>Customize the look, feel, and functionality of the application.</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
+        <CardContent className="space-y-1 divide-y divide-border/50">
+          <div className="space-y-2 pt-4">
             <Label htmlFor="handwriting-font">Handwriting Font</Label>
             <Select value={handwritingFont} onValueChange={setHandwritingFont}>
               <SelectTrigger id="handwriting-font">
@@ -123,6 +125,19 @@ export default function SettingsPage() {
               Choose the font used for handwritten notes and titles.
             </p>
           </div>
+          {user.role === 'master' && (
+            <div className='pt-4'>
+                <Link href="/dashboard/settings/apikeys" className="flex items-center justify-between rounded-lg p-3 -m-3 hover:bg-muted/50 transition-colors">
+                    <div>
+                        <h4 className='font-medium'>AI Settings</h4>
+                        <p className="text-sm text-muted-foreground">
+                            Configure generative AI features and API keys.
+                        </p>
+                    </div>
+                    <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                </Link>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
