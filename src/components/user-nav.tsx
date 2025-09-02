@@ -19,7 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { LogOut, User, Settings, KeyRound, Crown } from "lucide-react"
+import { LogOut, User, Settings, KeyRound, Crown, Home } from "lucide-react"
 import { Skeleton } from "./ui/skeleton";
 
 export function UserNav() {
@@ -28,7 +28,7 @@ export function UserNav() {
 
   const handleLogout = () => {
     logout();
-    router.push("/login");
+    router.push("/");
   };
 
   if (isLoading) {
@@ -72,6 +72,12 @@ export function UserNav() {
                 <span>Player</span>
             </DropdownMenuItem>
            )}
+          <DropdownMenuItem asChild>
+             <Link href="/">
+              <Home className="mr-2 h-4 w-4" />
+              <span>Home</span>
+            </Link>
+          </DropdownMenuItem>
           <DropdownMenuItem asChild>
              <Link href="/dashboard/settings">
               <User className="mr-2 h-4 w-4" />
