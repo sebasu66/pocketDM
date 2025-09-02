@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -220,7 +221,7 @@ export default function MonstersPage() {
           <div className="relative flex items-center justify-center h-full md:col-span-7">
              <RusticIconButton 
                 onClick={handlePrev} 
-                className="absolute z-10 text-white/80 opacity-70 hover:opacity-100 left-0"
+                className="absolute z-10 text-white/80 opacity-70 hover:opacity-100"
                 tooltip="Previous"
             >
                 <ArrowLeft size={32} />
@@ -248,7 +249,7 @@ export default function MonstersPage() {
                 />
             <RusticIconButton 
                 onClick={handleNext} 
-                className="absolute z-10 text-white/80 opacity-70 hover:opacity-100 right-0"
+                className="absolute z-10 text-white/80 opacity-70 hover:opacity-100"
                 tooltip="Next"
             >
                 <ArrowRight size={32} />
@@ -299,19 +300,13 @@ export default function MonstersPage() {
             <div className="flex flex-col items-center justify-center rounded-lg bg-muted/50 p-4 text-center">
               <Label className="mb-2">Monster Portrait</Label>
               <div className="relative mb-4 flex h-64 w-48 items-center justify-center overflow-hidden rounded bg-background">
-                {editingMonster?.image && typeof editingMonster.image !== 'string' ? (
+                {editingMonster?.image ? (
                   <Image
                     src={editingMonster.image}
                     alt={editingMonster.name || 'Monster'}
                     sizes="200px"
                     fill
                     className="object-cover"
-                  />
-                ) : editingMonster?.image && typeof editingMonster.image === 'string' ? (
-                  <img
-                    src={editingMonster.image}
-                    alt={editingMonster.name || 'Monster'}
-                    className="h-full w-full object-cover"
                   />
                 ) : (
                   <p className="p-2 text-xs text-muted-foreground">No image</p>
@@ -338,3 +333,5 @@ export default function MonstersPage() {
     </div>
   );
 }
+
+    
