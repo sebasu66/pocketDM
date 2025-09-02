@@ -61,7 +61,7 @@ type Monster = {
       hitDifficulty: string;
       speed: string;
     };
-    image: StaticImageData;
+    image: StaticImageData | string;
     aiHint: string;
 };
 
@@ -70,7 +70,7 @@ const emptyMonster: Partial<Monster> = { name: '', observations: '' };
 
 export default function MonstersPage() {
   const { user } = useAuth();
-  const [monsters, setMonsters] = useState(initialMonsters);
+  const [monsters, setMonsters] = useState<Monster[]>(initialMonsters);
   const [searchTerm, setSearchTerm] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingMonster, setEditingMonster] = useState<Partial<Monster> | null>(null);
@@ -151,8 +151,8 @@ export default function MonstersPage() {
 
            {/* Left Floating Text */}
             <div className={cn("transition-opacity duration-500 px-4 md:px-8", activeMonster ? "opacity-100" : "opacity-0")}>
-              <h3 className="font-headline text-lg text-white/90">Observations</h3>
-              <p className="text-white/70 mt-2 font-handwriting text-4xl leading-relaxed">{activeMonster?.observations}</p>
+              <h3 className="font-handwriting text-3xl text-white/90 underline underline-offset-8 decoration-white/30 mb-4">Observations</h3>
+              <p className="text-white/70 mt-2 font-headline text-xl leading-relaxed">{activeMonster?.observations}</p>
             </div>
 
 
@@ -191,8 +191,8 @@ export default function MonstersPage() {
             
              {/* Right Floating Text */}
              <div className={cn("transition-opacity duration-500 px-4 md:px-8", activeMonster ? "opacity-100" : "opacity-0")}>
-                <h3 className="font-headline text-lg text-white/90 mb-4">Abilities</h3>
-                <div className="space-y-3 text-white/70 font-handwriting text-4xl leading-relaxed">
+                <h3 className="font-handwriting text-3xl text-white/90 underline underline-offset-8 decoration-white/30 mb-4">Abilities</h3>
+                <div className="space-y-3 text-white/70 font-headline text-xl leading-relaxed">
                    <p>Toughness: {activeMonster?.thematicStats.toughness}</p>
                    <p>Hit Difficulty: {activeMonster?.thematicStats.hitDifficulty}</p>
                    <p>Speed: {activeMonster?.thematicStats.speed}</p>
