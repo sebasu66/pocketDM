@@ -155,15 +155,15 @@ export default function MonstersPage() {
           {/* Left Floating Text */}
           <div
             className={cn(
-              'px-4 text-white/90 transition-opacity duration-500 md:px-8',
+              'px-4 text-white/90 transition-opacity duration-500 md:px-8 h-full',
               activeMonster ? 'opacity-100' : 'opacity-0'
             )}
           >
-            <div className="flex h-full flex-col justify-start">
+            <div className="flex h-full flex-col justify-start pt-16">
               <h3 className="font-handwriting text-3xl underline decoration-white/30 underline-offset-8">
                 Observations
               </h3>
-              <div className="font-handwriting mt-2 space-y-4 text-xl leading-relaxed md:text-2xl">
+              <div className="font-handwriting mt-2 space-y-4 text-xl md:text-2xl leading-relaxed font-light">
                 {activeMonster?.observations.split('\n\n').map((paragraph, index) => (
                   <p key={index}>{paragraph}</p>
                 ))}
@@ -209,15 +209,15 @@ export default function MonstersPage() {
           {/* Right Floating Text */}
           <div
             className={cn(
-              'px-4 text-white/90 transition-opacity duration-500 md:pl-12',
+              'px-4 text-white/90 transition-opacity duration-500 md:pl-12 h-full',
               activeMonster ? 'opacity-100' : 'opacity-0'
             )}
           >
-            <div className="flex h-full flex-col justify-start">
+             <div className="flex h-full flex-col justify-start pt-16">
               <h3 className="font-handwriting text-3xl underline decoration-white/30 underline-offset-8">
                 Abilities
               </h3>
-              <div className="font-handwriting mt-2 space-y-3 text-xl leading-relaxed md:text-2xl">
+              <div className="font-handwriting mt-2 space-y-3 text-xl md:text-2xl leading-relaxed font-light">
                 <p>Toughness: {activeMonster?.thematicStats.toughness}</p>
                 <p>Hit Difficulty: {activeMonster?.thematicStats.hitDifficulty}</p>
                 <p>Speed: {activeMonster?.thematicStats.speed}</p>
@@ -307,3 +307,5 @@ export default function MonstersPage() {
     </div>
   );
 }
+
+    
