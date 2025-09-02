@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Copy } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+const SECRET_API_KEY = 'a-super-secret-key-for-lore-weaver';
+
 export default function ApiDocsPage() {
     const { campaign } = useAuth();
     const { toast } = useToast();
@@ -28,6 +30,7 @@ You are an expert Game Master AI. Your goal is to continue a story for a tableto
 
 **Campaign ID:** ${campaign.id}
 **Your User ID (as Game Master):** 1
+**API Key:** ${SECRET_API_KEY}
 
 ---
 
@@ -43,14 +46,15 @@ You are an expert Game Master AI. Your goal is to continue a story for a tableto
 
 ### API Reference
 
-You must use the following REST API endpoints. The base URL for all requests is: \`${baseUrl}\`
+You must use the following REST API endpoints. The base URL for all requests is: \`${baseUrl}\`.
+You **MUST** include the \`X-API-Key\` header with your secret API key in every request.
 
 #### 1. Get Narrative History & Character Data
 - **Endpoint:** \`GET /api/narrative/${campaign.id}\`
 - **Description:** Fetches the entire narrative history, a list of all characters, and a list of currently active players for the campaign. This should be your first call to understand the state of the game.
 - **Example cURL:**
   \`\`\`bash
-  curl ${baseUrl}/api/narrative/${campaign.id}
+  curl -H "X-API-Key: ${SECRET_API_KEY}" ${baseUrl}/api/narrative/${campaign.id}
   \`\`\`
 - **Example Response Body:**
   \`\`\`json
@@ -107,6 +111,7 @@ You must use the following REST API endpoints. The base URL for all requests is:
   \`\`\`bash
   curl -X POST ${baseUrl}/api/narrative \\
    -H "Content-Type: application/json" \\
+   -H "X-API-Key: ${SECRET_API_KEY}" \\
    -d '{ "campaignId": "${campaign.id}", "authorId": "1", "title": "The Plot Thickens", "createdAt": ${Date.now()}, "content": "<p>Reacting to the players, a new figure emerges from the shadows...</p>" }'
   \`\`\`
 
@@ -137,7 +142,7 @@ Remember to always check the most recent player comments to inform your narrativ
                 <CardHeader>
                     <CardTitle className="font-headline">Using the Lore Weaver API</CardTitle>
                     <CardDescription>
-                        Integrate external tools, scripts, or a local AI with your campaign using these instructions. The base URL for all API requests is your application's domain.
+                        Integrate external tools, scripts, or a local AI with your campaign using these instructions. Your secret API key is provided below.
                     </CardDescription>
                 </CardHeader>
             </Card>
