@@ -45,10 +45,10 @@ export default function HomePage() {
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2 font-headline">
                        <User />
-                        Player Demo
+                        Player Demo (Alice)
                     </CardTitle>
                     <CardDescription>
-                       Log in as a player to create your character, interact with the story, and uncover secrets.
+                       Log in as a player to create your character, interact with the story, and uncover secrets. You'll be playing as Alice, controlling the valiant warrior Grom.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2 font-code text-sm">
