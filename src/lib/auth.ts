@@ -1,16 +1,12 @@
+
 // This is a mock authentication system for demonstration purposes.
 // In a real application, this would be handled by a proper authentication service.
+import { User } from './firebase/types';
 
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: "master" | "player";
-  avatar: string;
-  password?: string; // Only for mock purposes
-}
+// Re-export User type for convenience
+export type { User };
 
-const users: User[] = [
+const users: (User & { password?: string })[] = [
   {
     id: "1",
     name: "Game Master",
@@ -29,15 +25,15 @@ const users: User[] = [
   },
 ];
 
-export const getUserByEmail = (email: string): User | undefined => {
+export const getUserByEmail = (email: string): (User & { password?: string }) | undefined => {
   return users.find((user) => user.email === email);
 };
 
-export const getUserById = (id: string): User | undefined => {
+export const getUserById = (id: string): (User & { password?: string }) | undefined => {
     return users.find((user) => user.id === id);
 }
 
 // In a real app, never handle passwords in plaintext on the client.
-export const checkPassword = (user: User, pass: string): boolean => {
+export const checkPassword = (user: User & { password?: string }, pass: string): boolean => {
   return user.password === pass;
 };
