@@ -130,145 +130,167 @@ export default function MonstersPage() {
   const isMaster = user?.role === 'master';
 
   return (
-    <div className="space-y-6 bg-stone-gradient -m-6 p-6 min-h-[calc(100vh-theme(spacing.12))]">
-       <div className="flex justify-between items-center">
+    <div className="bg-stone-gradient -m-6 min-h-[calc(100vh-theme(spacing.12))] p-6">
+      <div className="flex items-center justify-between">
         <div className="relative w-full max-w-sm">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input 
-            placeholder="Search monsters..." 
-            className="pl-8" 
+          <Input
+            placeholder="Search monsters..."
+            className="pl-8"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         {isMaster && (
-            <Button onClick={handleNewMonster}>
-                <PlusCircle /> New Monster
-            </Button>
+          <Button onClick={handleNewMonster}>
+            <PlusCircle /> New Monster
+          </Button>
         )}
       </div>
 
       <Separator />
 
       {filteredMonsters.length > 0 ? (
-        <div className="grid md:grid-cols-3 items-center h-[75vh]">
-
-           {/* Left Floating Text */}
-            <div className={cn("transition-opacity duration-500 px-4 md:px-8", activeMonster ? "opacity-100" : "opacity-0")}>
-              <div className="h-full flex flex-col justify-start">
-                  <h3 className="font-handwriting text-3xl text-white/90 underline underline-offset-8 decoration-white/30 mb-4">Observations</h3>
-                  <div className="text-white/70 mt-2 font-handwriting text-3xl leading-relaxed space-y-4">
-                      {activeMonster?.observations.split('\n\n').map((paragraph, index) => (
-                        <p key={index}>{paragraph}</p>
-                      ))}
-                  </div>
+        <div className="grid h-[75vh] items-center md:grid-cols-3">
+          {/* Left Floating Text */}
+          <div
+            className={cn(
+              'px-4 text-white/90 transition-opacity duration-500 md:px-8',
+              activeMonster ? 'opacity-100' : 'opacity-0'
+            )}
+          >
+            <div className="flex h-full flex-col justify-start">
+              <h3 className="font-handwriting text-3xl underline decoration-white/30 underline-offset-8">
+                Observations
+              </h3>
+              <div className="font-handwriting mt-2 space-y-4 text-xl leading-relaxed md:text-2xl">
+                {activeMonster?.observations.split('\n\n').map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
               </div>
             </div>
+          </div>
 
-
-            {/* Center Card Stack */}
-            <div className="flex items-center justify-center">
-                <StackedCard
-                    items={filteredMonsters}
-                    activeIndex={activeIndex}
-                    setActiveIndex={setActiveIndex}
-                    renderItem={(monster, isActive) => (
-                        <div className="w-full h-full relative rounded-lg overflow-hidden bg-card text-card-foreground">
-                             <Image
-                                src={monster.image} 
-                                alt={monster.name} 
-                                fill
-                                className="w-full h-full object-cover" 
-                                data-ai-hint={monster.aiHint} 
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                priority={isActive}
-                            />
-                            {isActive && isMaster && (
-                                <div className="absolute top-4 left-4 flex gap-2">
-                                <Button variant="outline" size="sm" onClick={() => handleEditMonster(monster)}>
-                                    <Edit /> Edit
-                                    </Button>
-                                    <Button variant="destructive" size="sm">
-                                    <Trash2 /> Delete
-                                    </Button>
-                                </div>
-                            )}
-                            <h2 className="absolute bottom-6 left-1/2 -translate-x-1/2 text-5xl font-handwriting text-stone-900 drop-shadow-lg text-center w-full mix-blend-multiply">{monster.name}</h2>
-                        </div>
-                    )}
-                />
-            </div>
-            
-             {/* Right Floating Text */}
-             <div className={cn("transition-opacity duration-500 px-4 md:pl-12", activeMonster ? "opacity-100" : "opacity-0")}>
-                <div className="h-full flex flex-col justify-start">
-                    <h3 className="font-handwriting text-3xl text-white/90 underline underline-offset-8 decoration-white/30 mb-4">Abilities</h3>
-                    <div className="space-y-3 text-white/70 font-handwriting text-3xl leading-relaxed">
-                      <p>Toughness: {activeMonster?.thematicStats.toughness}</p>
-                      <p>Hit Difficulty: {activeMonster?.thematicStats.hitDifficulty}</p>
-                      <p>Speed: {activeMonster?.thematicStats.speed}</p>
+          {/* Center Card Stack */}
+          <div className="flex items-center justify-center">
+            <StackedCard
+              items={filteredMonsters}
+              activeIndex={activeIndex}
+              setActiveIndex={setActiveIndex}
+              renderItem={(monster, isActive) => (
+                <div className="relative h-full w-full overflow-hidden rounded-lg bg-card text-card-foreground">
+                  <Image
+                    src={monster.image}
+                    alt={monster.name}
+                    fill
+                    className="h-full w-full object-cover"
+                    data-ai-hint={monster.aiHint}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    priority={isActive}
+                  />
+                  {isActive && isMaster && (
+                    <div className="absolute left-4 top-4 flex gap-2">
+                      <Button variant="outline" size="sm" onClick={() => handleEditMonster(monster)}>
+                        <Edit /> Edit
+                      </Button>
+                      <Button variant="destructive" size="sm">
+                        <Trash2 /> Delete
+                      </Button>
                     </div>
+                  )}
+                  <h2 className="font-handwriting text-5xl text-stone-900 drop-shadow-lg absolute bottom-6 left-1/2 w-full -translate-x-1/2 text-center mix-blend-multiply">
+                    {monster.name}
+                  </h2>
                 </div>
-            </div>
+              )}
+            />
+          </div>
 
+          {/* Right Floating Text */}
+          <div
+            className={cn(
+              'px-4 text-white/90 transition-opacity duration-500 md:pl-12',
+              activeMonster ? 'opacity-100' : 'opacity-0'
+            )}
+          >
+            <div className="flex h-full flex-col justify-start">
+              <h3 className="font-handwriting text-3xl underline decoration-white/30 underline-offset-8">
+                Abilities
+              </h3>
+              <div className="font-handwriting mt-2 space-y-3 text-xl leading-relaxed md:text-2xl">
+                <p>Toughness: {activeMonster?.thematicStats.toughness}</p>
+                <p>Hit Difficulty: {activeMonster?.thematicStats.hitDifficulty}</p>
+                <p>Speed: {activeMonster?.thematicStats.speed}</p>
+              </div>
+            </div>
+          </div>
         </div>
       ) : (
-         <div className="text-center col-span-full py-12">
-            <p className="text-muted-foreground">No monsters found matching your search.</p>
-          </div>
+        <div className="py-12 text-center col-span-full">
+          <p className="text-muted-foreground">No monsters found matching your search.</p>
+        </div>
       )}
-
 
       <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
         <DialogContent className="sm:max-w-[825px]">
           <DialogHeader>
-            <DialogTitle className="font-headline">{editingMonster && 'id' in editingMonster && editingMonster.id ? 'Edit Monster' : 'Create New Monster'}</DialogTitle>
+            <DialogTitle className="font-headline">
+              {editingMonster && 'id' in editingMonster && editingMonster.id ? 'Edit Monster' : 'Create New Monster'}
+            </DialogTitle>
             <DialogDescription>
-              {editingMonster && 'id' in editingMonster && editingMonster.id 
-                ? "Edit the details for your creature." 
-                : "Fill out the details for your new creature."}
+              {editingMonster && 'id' in editingMonster && editingMonster.id
+                ? 'Edit the details for your creature.'
+                : 'Fill out the details for your new creature.'}
             </DialogDescription>
           </DialogHeader>
-          <div className="grid md:grid-cols-2 gap-6 py-4">
-             <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="monster-name">Name</Label>
-                  <Input 
-                    id="monster-name" 
-                    placeholder="e.g., Shadow Ghoul" 
-                    value={editingMonster?.name || ''}
-                    onChange={(e) => setEditingMonster({...editingMonster, name: e.target.value })}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="monster-observations">Observations</Label>
-                  <Textarea
-                    id="monster-observations"
-                    placeholder="A brief description of the monster's appearance, abilities, and lore."
-                    rows={8}
-                    value={editingMonster?.observations || ''}
-                    onChange={(e) => setEditingMonster({...editingMonster, observations: e.target.value })}
-                  />
-                </div>
+          <div className="grid gap-6 py-4 md:grid-cols-2">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="monster-name">Name</Label>
+                <Input
+                  id="monster-name"
+                  placeholder="e.g., Shadow Ghoul"
+                  value={editingMonster?.name || ''}
+                  onChange={(e) => setEditingMonster({ ...editingMonster, name: e.target.value })}
+                />
               </div>
-              <div className="flex flex-col items-center justify-center bg-muted/50 rounded-lg p-4 text-center">
-                  <Label className="mb-2">Monster Portrait</Label>
-                  <div className="w-48 h-64 bg-background rounded overflow-hidden mb-4 flex items-center justify-center relative">
-                    {editingMonster?.image && typeof editingMonster.image !== 'string' ? (
-                        <Image src={editingMonster.image} alt={editingMonster.name || "Monster"} sizes="200px" fill className="object-cover" />
-                    ): (
-                         editingMonster?.image && typeof editingMonster.image === 'string' ? (
-                            <img src={editingMonster.image} alt={editingMonster.name || "Monster"} className="object-cover w-full h-full" />
-                         ) : (
-                            <p className="text-xs text-muted-foreground p-2">No image</p>
-                         )
-                    )}
-                  </div>
-                  <Button variant="outline">
-                    <Upload />
-                    Upload Image
-                  </Button>
+              <div className="space-y-2">
+                <Label htmlFor="monster-observations">Observations</Label>
+                <Textarea
+                  id="monster-observations"
+                  placeholder="A brief description of the monster's appearance, abilities, and lore."
+                  rows={8}
+                  value={editingMonster?.observations || ''}
+                  onChange={(e) => setEditingMonster({ ...editingMonster, observations: e.target.value })}
+                />
               </div>
+            </div>
+            <div className="flex flex-col items-center justify-center rounded-lg bg-muted/50 p-4 text-center">
+              <Label className="mb-2">Monster Portrait</Label>
+              <div className="relative mb-4 flex h-64 w-48 items-center justify-center overflow-hidden rounded bg-background">
+                {editingMonster?.image && typeof editingMonster.image !== 'string' ? (
+                  <Image
+                    src={editingMonster.image}
+                    alt={editingMonster.name || 'Monster'}
+                    sizes="200px"
+                    fill
+                    className="object-cover"
+                  />
+                ) : editingMonster?.image && typeof editingMonster.image === 'string' ? (
+                  <img
+                    src={editingMonster.image}
+                    alt={editingMonster.name || 'Monster'}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <p className="p-2 text-xs text-muted-foreground">No image</p>
+                )}
+              </div>
+              <Button variant="outline">
+                <Upload />
+                Upload Image
+              </Button>
+            </div>
           </div>
           <DialogFooter>
             <DialogClose asChild>
@@ -276,13 +298,12 @@ export default function MonstersPage() {
                 Cancel
               </Button>
             </DialogClose>
-            <Button type="button" onClick={handleSaveMonster}>Save Monster</Button>
+            <Button type="button" onClick={handleSaveMonster}>
+              Save Monster
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
   );
 }
-    
-
-    
