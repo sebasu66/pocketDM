@@ -3,7 +3,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User, Campaign } from '@/lib/firebase/types';
-import { getUserById } from '@/lib/auth';
+import { getUserById, updateUser as updateMockUser } from '@/lib/auth';
 import { getCampaign } from '@/lib/firebase/campaigns';
 
 interface AuthContextType {
@@ -11,6 +11,7 @@ interface AuthContextType {
   campaign: Campaign | null;
   login: (userId: string) => Promise<void>;
   logout: () => void;
+  updateUser: (user: User) => void;
   isLoading: boolean;
 }
 
@@ -64,9 +65,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
     setCampaign(null);
   };
+  
+  const updateUser = (updatedUser: User) => {
+    // This updates our mock database
+    updateMockUser(updatedUser.id, updatedUser);
+    // This updates the react context state
+    setUser(updatedUser);
+  }
 
   return (
-    <AuthContext.Provider value={{ user, campaign, login, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, campaign, login, logout, isLoading, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

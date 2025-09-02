@@ -1,6 +1,7 @@
 
 "use client";
 
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,10 +12,33 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useTheme } from "@/context/theme-context";
 import { useAuth } from "@/context/auth-context";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { User } from '@/lib/firebase/types';
 
 export default function SettingsPage() {
   const { handwritingFont, setHandwritingFont } = useTheme();
-  const { user, isLoading } = useAuth();
+  const { user: authUser, isLoading, updateUser: updateAuthUser } = useAuth();
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    if (authUser) {
+      setUser(authUser);
+    }
+  }, [authUser]);
+
+  const handleAvatarChange = () => {
+    if (user) {
+      const newUser = { ...user, avatar: `https://picsum.photos/100/100?random=${Math.random()}` };
+      setUser(newUser);
+    }
+  };
+
+  const handleUpdateProfile = () => {
+      if (user) {
+          // Here you would call an API to save the user data.
+          // For now, we update the context state.
+          updateAuthUser(user);
+      }
+  }
 
   if (isLoading || !user) {
     return (
@@ -58,22 +82,22 @@ export default function SettingsPage() {
                 <AvatarImage src={user.avatar} alt="User Avatar" data-ai-hint="person portrait" />
                 <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
               </Avatar>
-              <Button variant="outline" size="sm">Change Picture</Button>
+              <Button variant="outline" size="sm" onClick={handleAvatarChange}>Change Picture</Button>
             </div>
             <div className="grid gap-4 flex-1">
               <div className="grid gap-2">
                 <Label htmlFor="username">Username</Label>
-                <Input id="username" defaultValue={user.name} />
+                <Input id="username" value={user.name} onChange={(e) => setUser({...user, name: e.target.value})} />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" defaultValue={user.email} disabled />
+                <Input id="email" type="email" value={user.email} disabled />
                 <p className="text-xs text-muted-foreground">You cannot change your email address.</p>
               </div>
             </div>
           </div>
           <div className="flex justify-end">
-            <Button>Update Profile</Button>
+            <Button onClick={handleUpdateProfile}>Update Profile</Button>
           </div>
         </CardContent>
       </Card>

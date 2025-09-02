@@ -8,12 +8,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { PlusCircle, Trash2, Sheet } from "lucide-react";
+import { PlusCircle, Trash2, Sheet, Upload } from "lucide-react";
 import Image from "next/image";
-import { getCharactersByCampaign, addCharacter, updateCharacter } from "@/lib/firebase/characters";
+import { getCharactersByCampaign, addCharacter, updateCharacter, deleteCharacter } from "@/lib/firebase/characters";
 import type { Character } from "@/lib/firebase/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 export default function CharactersPage() {
   const { campaign, user, isLoading: isAuthLoading } = useAuth();
@@ -57,6 +68,12 @@ export default function CharactersPage() {
     await fetchCharacter(); // Refetch character after creation
     event.currentTarget.reset();
   };
+  
+  const handleDelete = async () => {
+    if (!character) return;
+    await deleteCharacter(character.id);
+    await fetchCharacter();
+  };
 
   const handleOpenSheet = () => {
     if (character) {
@@ -79,6 +96,16 @@ export default function CharactersPage() {
       setEditingCharacter({
         ...editingCharacter,
         [stat]: isNumeric ? parseInt(value, 10) || 0 : value,
+      });
+    }
+  };
+
+  const handlePortraitChange = () => {
+    if (editingCharacter) {
+      setEditingCharacter({
+        ...editingCharacter,
+        portrait: `https://picsum.photos/400/600?random=${Math.random()}`,
+        aiHint: "fantasy portrait",
       });
     }
   };
@@ -119,9 +146,26 @@ export default function CharactersPage() {
                         <Button onClick={handleOpenSheet}>
                             <Sheet /> View/Edit Sheet
                         </Button>
-                        <Button variant="outline" size="icon" className="border-destructive/50 text-destructive/80 hover:bg-destructive hover:text-destructive-foreground">
-                            <Trash2 />
-                        </Button>
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button variant="outline" size="icon" className="border-destructive/50 text-destructive/80 hover:bg-destructive hover:text-destructive-foreground">
+                                    <Trash2 />
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    This action cannot be undone. This will permanently delete your
+                                    character and remove your data from our servers.
+                                </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                     </div>
                 </div>
             </CardHeader>
@@ -187,7 +231,7 @@ export default function CharactersPage() {
       )}
 
       <Dialog open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-        <DialogContent className="sm:max-w-[625px]">
+        <DialogContent className="sm:max-w-[825px] grid-rows-[auto,1fr,auto]">
             <DialogHeader>
                 <DialogTitle className="font-headline">Edit Character Sheet</DialogTitle>
                 <DialogDescription>
@@ -195,24 +239,36 @@ export default function CharactersPage() {
                 </DialogDescription>
             </DialogHeader>
             {editingCharacter && (
-                <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="name" className="text-right">Name</Label>
-                        <Input id="name" value={editingCharacter.name} onChange={(e) => handleStatChange('name', e.target.value)} className="col-span-3" />
+                <div className="grid md:grid-cols-2 gap-6 py-4 overflow-y-auto">
+                    <div className="space-y-4">
+                      <div className="grid items-center gap-1.5">
+                          <Label htmlFor="name">Name</Label>
+                          <Input id="name" value={editingCharacter.name} onChange={(e) => handleStatChange('name', e.target.value)} />
+                      </div>
+                       <div className="grid items-center gap-1.5">
+                          <Label htmlFor="class">Class</Label>
+                          <Input id="class" value={editingCharacter.class} onChange={(e) => handleStatChange('class', e.target.value)} />
+                      </div>
+                       <div className="grid items-center gap-1.5">
+                          <Label htmlFor="level">Level</Label>
+                          <Input id="level" type="number" value={editingCharacter.level} onChange={(e) => handleStatChange('level', e.target.value)} />
+                      </div>
+                      <div className="grid items-center gap-1.5">
+                          <Label htmlFor="description">Description</Label>
+                          <Textarea id="description" value={editingCharacter.description} onChange={(e) => handleStatChange('description', e.target.value)} rows={5} />
+                      </div>
                     </div>
-                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="class" className="text-right">Class</Label>
-                        <Input id="class" value={editingCharacter.class} onChange={(e) => handleStatChange('class', e.target.value)} className="col-span-3" />
+                     <div className="flex flex-col items-center justify-start gap-4">
+                        <Label>Portrait</Label>
+                        <div className="relative w-48 h-72 bg-background rounded overflow-hidden">
+                            <Image src={editingCharacter.portrait} alt={editingCharacter.name} width={200} height={300} className="w-full h-full object-cover" data-ai-hint={editingCharacter.aiHint} />
+                        </div>
+                        <Button variant="outline" onClick={handlePortraitChange}>
+                            <Upload className="mr-2 h-4 w-4" />
+                            Change Portrait
+                        </Button>
                     </div>
-                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="level" className="text-right">Level</Label>
-                        <Input id="level" type="number" value={editingCharacter.level} onChange={(e) => handleStatChange('level', e.target.value)} className="col-span-3" />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="description" className="text-right">Description</Label>
-                        <Textarea id="description" value={editingCharacter.description} onChange={(e) => handleStatChange('description', e.target.value)} className="col-span-3" rows={4} />
-                    </div>
-                    <div className="grid grid-cols-6 gap-4 pt-4">
+                    <div className="md:col-span-2 grid grid-cols-3 sm:grid-cols-6 gap-4 pt-4">
                         <AttributeInput label="STR" value={editingCharacter.strength} onChange={(e) => handleStatChange('strength', e.target.value)} />
                         <AttributeInput label="DEX" value={editingCharacter.dexterity} onChange={(e) => handleStatChange('dexterity', e.target.value)} />
                         <AttributeInput label="CON" value={editingCharacter.constitution} onChange={(e) => handleStatChange('constitution', e.target.value)} />

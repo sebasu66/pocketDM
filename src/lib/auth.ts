@@ -6,7 +6,7 @@ import { User } from './firebase/types';
 // Re-export User type for convenience
 export type { User };
 
-const users: (User & { password?: string })[] = [
+let users: (User & { password?: string })[] = [
   {
     id: "1",
     name: "Game Master",
@@ -39,3 +39,11 @@ export const getUserById = (id: string): (User & { password?: string }) | undefi
 export const checkPassword = (user: User & { password?: string }, pass: string): boolean => {
   return user.password === pass;
 };
+
+// Mock update function
+export const updateUser = (id: string, updatedData: Partial<User>): void => {
+    const userIndex = users.findIndex(u => u.id === id);
+    if (userIndex !== -1) {
+        users[userIndex] = { ...users[userIndex], ...updatedData };
+    }
+}
