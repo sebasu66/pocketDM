@@ -1,4 +1,5 @@
 
+
 export interface User {
     id: string;
     name: string;
@@ -55,4 +56,14 @@ export interface NarrativeComment {
     text: string;
     hiddenText?: string; // For GM-only notes
     createdAt: number; // timestamp
+}
+
+
+// Helper types for API responses
+export type NarrativeCommentWithAuthor = NarrativeComment & { author: User };
+export type EnrichedComment = NarrativeCommentWithAuthor & {
+    character?: Character | null;
+};
+export type EnrichedThread = NarrativeThread & {
+    comments: EnrichedComment[];
 }

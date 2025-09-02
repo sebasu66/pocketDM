@@ -4,8 +4,9 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Star, ScrollText, Skull, Map } from "lucide-react";
+import { Star, ScrollText, Skull, Map, Copy } from "lucide-react";
 import { useAuth } from "@/context/auth-context";
+import { useToast } from "@/hooks/use-toast";
 
 const latestDevelopments = [
   {
@@ -30,9 +31,18 @@ const latestDevelopments = [
 
 export default function DashboardPage() {
   const { campaign } = useAuth();
+  const { toast } = useToast();
 
   if (!campaign) {
     return null; // Or a loading state
+  }
+
+  const handleCopyToClipboard = () => {
+    navigator.clipboard.writeText(campaign.id);
+    toast({
+      title: "Copied to Clipboard",
+      description: "The Campaign ID has been copied to your clipboard.",
+    });
   }
 
   return (
@@ -49,6 +59,12 @@ export default function DashboardPage() {
               <CardDescription className="text-white/80 max-w-3xl mt-2">
                 {campaign.description}
               </CardDescription>
+              <div className="mt-2 flex items-center gap-2">
+                <span className="text-xs font-mono bg-black/50 text-white/70 px-2 py-1 rounded">Campaign ID: {campaign.id}</span>
+                <Button variant="ghost" size="icon" className="h-6 w-6 text-white/70 hover:text-white hover:bg-white/20" onClick={handleCopyToClipboard}>
+                  <Copy size={14}/>
+                </Button>
+              </div>
             </div>
              <Button variant="outline" className="bg-background/50 border-white/50 text-white backdrop-blur-sm hover:bg-white hover:text-black">
                 <Star />
