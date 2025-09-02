@@ -190,7 +190,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               </div>
             </header>
 
-            <main className="p-4 md:p-6">{children}</main>
+            <main 
+              className="p-4 md:p-6 bg-cover bg-fixed bg-center"
+              style={{backgroundImage: "url('https://www.transparenttextures.com/patterns/wood-2.png')"}}
+            >
+              {children}
+            </main>
             
             <RusticIconButton
                 variant="incomplete"
