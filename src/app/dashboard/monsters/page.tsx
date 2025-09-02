@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { PlusCircle, Trash2, Edit, Search, Upload } from "lucide-react";
+import { Plus, Trash2, Edit, Search, Upload } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import Image, { StaticImageData } from "next/image";
 import {
@@ -23,6 +23,7 @@ import { StackedCard } from "@/components/ui/stacked-card";
 import DireWolfImage from "../../../../public/dire-wolf.png";
 import HumanSpawnImage from "../../../../public/human-spawn.png";
 import { cn } from "@/lib/utils";
+import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 
 const initialMonsters = [
     {
@@ -83,17 +84,26 @@ export default function MonstersPage() {
     .filter((monster) => monster.name.toLowerCase().includes(searchTerm.toLowerCase()))
     .slice(0, 8);
 
-  const activeMonster = filteredMonsters[activeIndex];
+  const activeMonster = filteredMonsters.length > 0 ? filteredMonsters[activeIndex] : null;
 
   const handleNewMonster = () => {
     setEditingMonster(emptyMonster);
     setIsDialogOpen(true);
   }
 
-  const handleEditMonster = (monster: Monster) => {
+  const handleEditMonster = (monster: Monster | null) => {
+    if (!monster) return;
     setEditingMonster(monster);
     setIsDialogOpen(true);
   }
+  
+  const handleDeleteMonster = (monsterId: string | undefined) => {
+      if (!monsterId) return;
+      // Note: Add confirmation dialog in a real app
+      setMonsters(monsters.filter(m => m.id !== monsterId));
+      setActiveIndex(0);
+  }
+
 
   const handleSaveMonster = () => {
     if (!editingMonster) return;
@@ -141,21 +151,42 @@ export default function MonstersPage() {
           />
         </div>
         {isMaster && (
-          <Button onClick={handleNewMonster}>
-            <PlusCircle /> New Monster
-          </Button>
+          <div className="flex items-center gap-2">
+            <RusticIconButton
+              tooltip="New Monster"
+              onClick={handleNewMonster}
+              className="text-white/90 hover:text-white"
+            >
+              <Plus size={24} />
+            </RusticIconButton>
+             <RusticIconButton
+              tooltip="Edit Monster"
+              onClick={() => handleEditMonster(activeMonster)}
+              disabled={!activeMonster}
+              className="text-white/90 hover:text-white"
+            >
+              <Edit size={24} />
+            </RusticIconButton>
+             <RusticIconButton
+              tooltip="Delete Monster"
+              onClick={() => handleDeleteMonster(activeMonster?.id)}
+              disabled={!activeMonster}
+              className="text-red-500/80 hover:text-red-500"
+            >
+              <Trash2 size={24} />
+            </RusticIconButton>
+          </div>
         )}
       </div>
 
       <Separator />
 
-      {filteredMonsters.length > 0 ? (
+      {filteredMonsters.length > 0 && activeMonster ? (
         <div className="grid h-[75vh] items-center md:grid-cols-10">
           {/* Left Text Column */}
           <div
             className={cn(
-              'px-4 text-white/90 transition-opacity duration-500 md:px-8 h-full md:col-span-3',
-              activeMonster ? 'opacity-100' : 'opacity-0'
+              'px-4 text-white/90 transition-opacity duration-500 md:px-8 h-full md:col-span-3'
             )}
           >
             <div className="flex h-full flex-col justify-start pt-16">
@@ -168,8 +199,9 @@ export default function MonstersPage() {
                     <p key={index}>{paragraph}</p>
                   ))}
                 </div>
-
-                <h3 className="font-handwriting text-3xl underline decoration-white/30 underline-offset-8 mt-8">
+              </div>
+              <div className="mt-8">
+                <h3 className="font-handwriting text-3xl underline decoration-white/30 underline-offset-8">
                   Abilities
                 </h3>
                 <div className="font-handwriting mt-2 space-y-3 text-lg md:text-xl font-light leading-relaxed">
@@ -183,15 +215,13 @@ export default function MonstersPage() {
 
           {/* Right Card Stack Column */}
           <div className="flex items-center justify-center h-full md:col-span-7">
-            <div className="relative w-full h-full flex items-center justify-center">
-              <div className="relative w-[300px] h-[450px] scale-[1.375]">
-                <StackedCard
-                  items={filteredMonsters}
-                  activeIndex={activeIndex}
-                  setActiveIndex={setActiveIndex}
-                  renderItem={(monster, isActive) => (
+             <StackedCard
+                items={filteredMonsters}
+                activeIndex={activeIndex}
+                setActiveIndex={setActiveIndex}
+                renderItem={(monster, isActive) => (
                     <div className="relative h-full w-full overflow-hidden rounded-lg bg-card text-card-foreground">
-                      <Image
+                    <Image
                         src={monster.image}
                         alt={monster.name}
                         fill
@@ -199,25 +229,13 @@ export default function MonstersPage() {
                         data-ai-hint={monster.aiHint}
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         priority={isActive}
-                      />
-                      {isActive && isMaster && (
-                        <div className="absolute left-4 top-4 flex gap-2">
-                          <Button variant="outline" size="sm" onClick={() => handleEditMonster(monster)}>
-                            <Edit /> Edit
-                          </Button>
-                          <Button variant="destructive" size="sm">
-                            <Trash2 /> Delete
-                          </Button>
-                        </div>
-                      )}
-                      <h2 className="font-handwriting text-5xl text-stone-900 drop-shadow-lg absolute bottom-6 left-1/2 w-full -translate-x-1/2 text-center mix-blend-multiply">
+                    />
+                    <h2 className="font-handwriting text-5xl text-stone-900 drop-shadow-lg absolute bottom-6 left-1/2 w-full -translate-x-1/2 text-center mix-blend-multiply">
                         {monster.name}
-                      </h2>
+                    </h2>
                     </div>
-                  )}
+                )}
                 />
-              </div>
-            </div>
           </div>
 
         </div>
@@ -303,5 +321,3 @@ export default function MonstersPage() {
     </div>
   );
 }
-
-    
