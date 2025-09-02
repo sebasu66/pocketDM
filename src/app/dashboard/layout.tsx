@@ -19,7 +19,8 @@ import {
   BookOpen,
   Menu,
   Crown,
-  Plug
+  Plug,
+  Workflow
 } from "lucide-react";
 
 import {
@@ -78,7 +79,7 @@ const pageTitles: { [key: string]: string } = {
   "/dashboard/chat": "Player Chat",
   "/dashboard/settings": "Settings",
   "/dashboard/settings/apikeys": "AI Settings",
-  "/dashboard/api-docs": "API Docs",
+  "/dashboard/integrations": "Integrations",
 };
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -174,10 +175,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Separator className="my-2 bg-border/20" />
           <SidebarMenu>
              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname.startsWith('/dashboard/api-docs')} tooltip={{ children: 'API Docs' }} onClick={handleLinkClick}>
-                  <Link href="/dashboard/api-docs">
-                    <Plug />
-                    <span>API Docs</span>
+                <SidebarMenuButton asChild isActive={pathname.startsWith('/dashboard/integrations')} tooltip={{ children: 'Integrations' }} onClick={handleLinkClick}>
+                  <Link href="/dashboard/integrations">
+                    <Workflow />
+                    <span>Integrations</span>
                   </Link>
                 </SidebarMenuButton>
             </SidebarMenuItem>
