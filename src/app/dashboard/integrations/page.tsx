@@ -7,49 +7,87 @@ import { CodeBlock } from "@/components/ui/code-block";
 import { Button } from "@/components/ui/button";
 import { Copy, Link as LinkIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import Link from "next/link";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Terminal } from "lucide-react";
+import { useAuth } from "@/context/auth-context";
 
-const simpleInstructions = `
-The easiest way to integrate an external AI is to generate the content on your local machine (e.g., using Gemini) and then simply copy and paste it into the Lore Weaver application.
+const getInstructions = (origin: string, campaignId: string | undefined) => `
+You are an AI assistant tasked with acting as a Game Master for a storytelling game. Your goal is to read the current state of the game and then generate a new narrative post.
 
-1. Generate your story content using your favorite local AI tool.
-2. Go to the "Narrative" page in Lore Weaver.
-3. Click the "Add Manually" button.
-4. Paste the text from the AI into the form.
-`.trim();
+---
 
-const urlInstructions = (origin: string) => `
-You can programmatically create a new narrative post by constructing a special URL. When a user opens this URL, it will open a form that is pre-filled with the content you provide.
+### Step 1: Read the Game State
 
-Base URL:
+First, you need to understand what's happening in the story and who the characters are. Fetch the data from these two API endpoints.
+
+**A) Get All Characters in the Campaign:**
+This gives you a list of all characters, their descriptions, and stats.
+
+\`\`\`bash
+# Replace CAMPAIGN_ID with the actual ID.
+curl "${origin}/api/characters?campaignId=${campaignId || 'YOUR_CAMPAIGN_ID'}"
+\`\`\`
+
+**B) Get the Full Narrative History:**
+This returns all previous posts from the Game Master and all player responses, in chronological order.
+
+\`\`\`bash
+# Replace CAMPAIGN_ID with the actual ID.
+curl "${origin}/api/narrative/${campaignId || 'YOUR_CAMPAIGN_ID'}"
+\`\`\`
+
+---
+
+### Step 2: Write the Next Post
+
+After analyzing the story and characters, decide what happens next. Generate a compelling new story post. The post should be in HTML format.
+
+Example Post Content:
+\`\`\`html
+<p>The old tome's pages crumble under your touch, revealing a map scorched into the leather backing. It points to a location known only as the 'Whispering Peaks,' a place rumored to be guarded by ancient spirits.</p><p>A chilling wind suddenly gusts through the library, snuffing out all the candles. What do you do?</p>
+\`\`\`
+
+---
+
+### Step 3: Post Your Content to the Game
+
+Once you have your new title and HTML content, you must construct a special URL to post it to the game.
+
+**Base URL:**
+\`\`\`
 ${origin}/dashboard/quick-post
+\`\`\`
 
-Query Parameters:
-- title: (Required) The title of the narrative post. Must be URL-encoded.
-- content: (Required) The main content of the post (can include HTML). Must be URL-encoded.
-- autoSubmit: (Optional) Set to "true" to have the form submit automatically upon loading.
+**Query Parameters:**
+- \`title\`: (Required) The title of your post.
+- \`content\`: (Required) The HTML content of your post.
+- \`autoSubmit\`: (Required) Set this to "true".
 
-Example (JavaScript):
----------------------
-const title = "A New Threat Emerges";
-const content = "<p>The ground trembles as a monstrous beast crests the nearby hill.</p>";
+**Example URL Construction (JavaScript):**
+\`\`\`javascript
+const title = "The Map is Revealed";
+const content = "<p>The old tome's pages crumble...</p>";
 const baseUrl = "${origin}/dashboard/quick-post";
+
 const params = new URLSearchParams({
   title,
   content,
   autoSubmit: "true"
 });
 
-const url = \`\${baseUrl}?\${params.toString()}\`;
-// Now, open the 'url' in a web browser to post the content.
-console.log(url);
+const finalUrl = \`\${baseUrl}?\${params.toString()}\`;
+
+// Instruct the user to open 'finalUrl' in their browser.
+// When they open it, your post will be automatically submitted to the game.
+console.log(finalUrl);
+\`\`\`
+
+By following these three steps, you can read the game state, generate new content, and seamlessly post it to the narrative.
 `.trim();
 
 
 export default function IntegrationsPage() {
     const { toast } = useToast();
+    const { campaign } = useAuth();
     const [origin, setOrigin] = React.useState("");
 
     React.useEffect(() => {
@@ -58,11 +96,13 @@ export default function IntegrationsPage() {
         }
     }, []);
 
-    const handleCopy = (content: string) => {
-        navigator.clipboard.writeText(content);
+    const instructionsForAI = getInstructions(origin, campaign?.id);
+
+    const handleCopy = () => {
+        navigator.clipboard.writeText(instructionsForAI);
         toast({
             title: "Instructions Copied!",
-            description: "The steps are on your clipboard.",
+            description: "The complete instructions for your AI are on your clipboard.",
         });
     }
 
@@ -70,37 +110,22 @@ export default function IntegrationsPage() {
         <div className="max-w-4xl mx-auto space-y-8 text-white/90">
             <Card className="bg-card/80 backdrop-blur-sm">
                 <CardHeader>
-                    <CardTitle className="font-headline">Integrating External Tools</CardTitle>
+                    <CardTitle className="font-headline">AI Agent & API Integration</CardTitle>
                     <CardDescription>
-                       There are two primary ways to get externally-generated content into Lore Weaver.
+                       Use this guide to connect an external AI agent or tool to your campaign. The agent can read the game state via API and post new content using a special URL.
                     </CardDescription>
                 </CardHeader>
             </Card>
 
              <Alert>
-                <Terminal className="h-4 w-4" />
-                <AlertTitle>Method 1: Simple Copy & Paste</AlertTitle>
-                <AlertDescription>
-                   This is the easiest method and requires no setup. Simply generate content with an AI and paste it directly into the app.
-                </AlertDescription>
-                 <CardContent className="pt-4">
-                    <CodeBlock content={simpleInstructions} lang="shell" />
-                    <Button onClick={() => handleCopy(simpleInstructions)} className="mt-4">
-                        <Copy className="mr-2" />
-                        Copy Instructions
-                    </Button>
-                </CardContent>
-            </Alert>
-
-            <Alert>
                 <LinkIcon className="h-4 w-4" />
-                <AlertTitle>Method 2: Programmatic URL Generation</AlertTitle>
+                <AlertTitle>Instructions for Your AI Agent</AlertTitle>
                 <AlertDescription>
-                    For more advanced integration, your local tool or AI agent can construct a URL that pre-fills and automatically submits a new narrative post. This is a secure way to automate content creation without handling API keys.
+                   Copy the complete text below and provide it to your AI agent. It contains all the necessary steps and URLs for it to read data and post new narrative threads.
                 </AlertDescription>
                  <CardContent className="pt-4">
-                    <CodeBlock content={urlInstructions(origin)} lang="javascript" />
-                    <Button onClick={() => handleCopy(urlInstructions(origin))} className="mt-4">
+                    <CodeBlock content={instructionsForAI} lang="markdown" />
+                    <Button onClick={handleCopy} className="mt-4">
                         <Copy className="mr-2" />
                         Copy Instructions for AI
                     </Button>
@@ -109,3 +134,4 @@ export default function IntegrationsPage() {
         </div>
     );
 }
+

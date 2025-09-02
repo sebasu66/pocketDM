@@ -1,7 +1,7 @@
 
 // /src/app/api/characters/route.ts
 import { NextResponse } from 'next/server';
-import { getCharactersByCampaign, addCharacter } from '@/lib/firebase/characters';
+import { getCharactersByCampaign } from '@/lib/firebase/characters';
 
 // GET all characters for a campaign
 export async function GET(request: Request) {
@@ -21,13 +21,3 @@ export async function GET(request: Request) {
   }
 }
 
-// CREATE a new character
-export async function POST(request: Request) {
-  try {
-    const body = await request.json();
-    const characterId = await addCharacter(body);
-    return NextResponse.json({ id: characterId, message: 'Character created successfully' }, { status: 201 });
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to create character' }, { status: 500 });
-  }
-}
