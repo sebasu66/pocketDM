@@ -23,14 +23,15 @@ export default function ApiKeysPage() {
     const [systemPrompt, setSystemPrompt] = useState(defaultSystemPrompt);
 
     const handleSave = () => {
-        // In a real app, these would be saved securely to a user-specific database record.
-        // For this demo, we'll just show a success message.
+        // For this demo, we'll use localStorage. In a real app, these would be saved securely.
         localStorage.setItem('gemini_api_key', apiKey);
         localStorage.setItem('ai_system_prompt', systemPrompt);
         
+        // Also setting it in a way that can be read by the server through a cookie or other means
+        // is complex. For now, we recommend setting the .env file.
         toast({
-            title: "Settings Saved",
-            description: "Your AI settings have been updated.",
+            title: "Settings Saved to Browser",
+            description: "Your AI settings have been updated for this browser session. For persistent server-side generation, please also set the GEMINI_API_KEY in the .env file.",
         });
     };
     
@@ -48,7 +49,7 @@ export default function ApiKeysPage() {
       <Card>
         <CardHeader>
           <CardTitle className="font-headline">AI & API Key Settings</CardTitle>
-          <CardDescription>Manage your generative AI settings and API keys here.</CardDescription>
+          <CardDescription>Manage your generative AI settings and API keys here. For the AI to work on the server, you must set the `GEMINI_API_KEY` in the `.env` file.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
             <div className="space-y-2">
@@ -61,7 +62,7 @@ export default function ApiKeysPage() {
                     onChange={(e) => setApiKey(e.target.value)}
                 />
                 <p className="text-xs text-muted-foreground">
-                    Your key is stored locally in your browser and is not sent to our servers. Get one from <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="underline">Google AI Studio</a>.
+                    Your key is stored locally in your browser and is used for client-side requests. Get one from <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="underline">Google AI Studio</a>.
                 </p>
             </div>
 

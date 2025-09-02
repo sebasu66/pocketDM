@@ -31,7 +31,8 @@ const StoryInputSchema = z.object({
   campaignId: z.string().describe("The ID of the current campaign."),
   systemPrompt: z.string().describe("Instructions for the AI on how to behave."),
   narrativeHistory: z.string().describe("The history of the narrative so far, including player actions."),
-  apiKey: z.string().describe("The user's Gemini API key."),
+  // The API key is now optional here, as we will prefer the environment variable.
+  apiKey: z.string().optional().describe("The user's Gemini API key."),
 });
 export type StoryInput = z.infer<typeof StoryInputSchema>;
 
@@ -49,7 +50,8 @@ const generateStoryFlow = ai.defineFlow(
     },
     async (input) => {
         const { campaignId, systemPrompt, narrativeHistory, apiKey } = input;
-
+        
+        // Use the apiKey from input if provided, otherwise it will use the one from the environment.
         const storyPrompt = ai.definePrompt({
             name: 'storyPrompt',
             input: { schema: StoryInputSchema },
@@ -69,14 +71,15 @@ const generateStoryFlow = ai.defineFlow(
                 {{narrativeHistory}}
                 ---
             `,
-            model: googleAI({apiKey}),
+            // Conditionally configure the model with an API key if one is passed.
+            // Genkit will automatically pick up the GEMINI_API_KEY env var if it's set.
+            model: apiKey ? googleAI({apiKey}) : 'googleai/gemini-2.5-flash',
         });
 
         const { output } = await storyPrompt({
             campaignId,
             systemPrompt,
             narrativeHistory,
-            apiKey, // Pass it through, although it's mainly for model config
         });
         return output!;
     }
