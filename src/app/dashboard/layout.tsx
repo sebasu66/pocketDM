@@ -16,8 +16,16 @@ import {
   Mountain,
   Swords,
   BookOpen,
+  Menu
 } from "lucide-react";
 
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 import {
   SidebarProvider,
   Sidebar,
@@ -39,6 +47,8 @@ import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/context/auth-context";
 import React from "react";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const worldNavItems = [
   { href: "/dashboard/characters", icon: Users, label: "Characters" },
@@ -67,6 +77,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() || "/dashboard";
   const { user, isLoading } = useAuth();
   const router = useRouter();
+  const [isSheetOpen, setIsSheetOpen] = React.useState(false);
 
   React.useEffect(() => {
     if (!isLoading && !user) {
@@ -85,10 +96,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     );
   }
 
-  return (
-    <SidebarProvider>
-      <Sidebar className="border-r border-border/20">
-        <SidebarHeader className="p-0">
+  const handleLinkClick = () => {
+    setIsSheetOpen(false);
+  }
+
+  const sidebarContent = (
+    <>
+       <SidebarHeader className="p-0">
           <div className="relative h-32 w-full">
              <Image src="https://picsum.photos/400/200?random=50" alt="Campaign Banner" fill sizes="100vw" className="object-cover" data-ai-hint="fantasy landscape" />
              <div className="absolute inset-0 bg-gradient-to-t from-sidebar/100 to-sidebar/20" />
@@ -100,7 +114,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <SidebarContent className="p-2">
            <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname === '/dashboard'} tooltip={{ children: 'Dashboard' }}>
+                <SidebarMenuButton asChild isActive={pathname === '/dashboard'} tooltip={{ children: 'Dashboard' }} onClick={handleLinkClick}>
                     <Link href="/dashboard">
                         <Home />
                         <span>Dashboard</span>
@@ -114,7 +128,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <SidebarMenu>
                 {worldNavItems.map((item) => (
                 <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton asChild isActive={pathname.startsWith(item.href)} tooltip={{ children: item.label }}>
+                    <SidebarMenuButton asChild isActive={pathname.startsWith(item.href)} tooltip={{ children: item.label }} onClick={handleLinkClick}>
                         <Link href={item.href}>
                             <item.icon />
                             <span>{item.label}</span>
@@ -129,7 +143,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
              <SidebarMenu>
                 {narrativeNavItems.map((item) => (
                 <SidebarMenuItem key={item.href}>
-                     <SidebarMenuButton asChild isActive={pathname.startsWith(item.href)} tooltip={{ children: item.label }}>
+                     <SidebarMenuButton asChild isActive={pathname.startsWith(item.href)} tooltip={{ children: item.label }} onClick={handleLinkClick}>
                         <Link href={item.href}>
                             <item.icon />
                             <span>{item.label}</span>
@@ -144,7 +158,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Separator className="my-2 bg-border/20" />
           <SidebarMenu>
             <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname === '/dashboard/settings'} tooltip={{ children: 'Settings' }}>
+                <SidebarMenuButton asChild isActive={pathname === '/dashboard/settings'} tooltip={{ children: 'Settings' }} onClick={handleLinkClick}>
                   <Link href="/dashboard/settings">
                     <Settings />
                     <span>Settings</span>
@@ -153,11 +167,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarFooter>
-      </Sidebar>
-      <SidebarInset>
+    </>
+  );
+
+  return (
+    <div className="min-h-screen w-full">
+      <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <header className="flex items-center justify-between p-4 border-b border-border/20 bg-background/80 backdrop-blur-sm sticky top-0 z-20">
           <div className="flex items-center gap-2">
-             <SidebarTrigger className="md:hidden" />
              <div className="flex items-center gap-2">
               <BookOpen />
               <h2 className="text-2xl font-semibold font-headline">{pageTitles[pathname] || "Dashboard"}</h2>
@@ -168,8 +185,18 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <UserNav />
           </div>
         </header>
+
         <main className="p-4 md:p-6">{children}</main>
-      </SidebarInset>
-    </SidebarProvider>
+
+        <SheetTrigger asChild>
+            <Button className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg z-30" size="icon">
+                <Menu />
+            </Button>
+        </SheetTrigger>
+        <SheetContent side="right" className="p-0 w-80 bg-sidebar-gradient border-l-0 text-sidebar-foreground">
+           {sidebarContent}
+        </SheetContent>
+      </Sheet>
+    </div>
   );
 }
