@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState, useEffect } from "react";
 import { useAuth } from "@/context/auth-context";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { CodeBlock } from "@/components/ui/code-block";
@@ -11,12 +12,18 @@ import { useToast } from "@/hooks/use-toast";
 export default function ApiDocsPage() {
     const { campaign } = useAuth();
     const { toast } = useToast();
+    const [instructionsForAI, setInstructionsForAI] = useState("Loading instructions...");
+    const [baseUrl, setBaseUrl] = useState("");
 
-    if (!campaign) {
-        return <div>Loading campaign details...</div>;
-    }
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            setBaseUrl(window.location.origin);
+        }
+    }, []);
 
-    const instructionsForAI = `
+    useEffect(() => {
+        if (campaign && baseUrl) {
+            const instructions = `
 You are an expert Game Master AI. Your goal is to continue a story for a tabletop role-playing game. You will interact with a web service to get the story's context and post your response.
 
 **Campaign ID:** ${campaign.id}
@@ -36,14 +43,14 @@ You are an expert Game Master AI. Your goal is to continue a story for a tableto
 
 ### API Reference
 
-You must use the following REST API endpoints. The base URL for all requests is the application's domain (e.g., \`http://localhost:9002\` in a local environment).
+You must use the following REST API endpoints. The base URL for all requests is: \`${baseUrl}\`
 
 #### 1. Get Narrative History & Character Data
-- **Endpoint:** \`GET /api/narrative/\`
+- **Endpoint:** \`GET /api/narrative/${campaign.id}\`
 - **Description:** Fetches the entire narrative history, a list of all characters, and a list of currently active players for the campaign. This should be your first call to understand the state of the game.
 - **Example cURL:**
   \`\`\`bash
-  curl http://localhost:9002/api/narrative/${campaign.id}
+  curl ${baseUrl}/api/narrative/${campaign.id}
   \`\`\`
 - **Example Response Body:**
   \`\`\`json
@@ -98,7 +105,7 @@ You must use the following REST API endpoints. The base URL for all requests is 
   \`\`\`
 - **Example cURL:**
   \`\`\`bash
-  curl -X POST http://localhost:9002/api/narrative \\
+  curl -X POST ${baseUrl}/api/narrative \\
    -H "Content-Type: application/json" \\
    -d '{ "campaignId": "${campaign.id}", "authorId": "1", "title": "The Plot Thickens", "createdAt": ${Date.now()}, "content": "<p>Reacting to the players, a new figure emerges from the shadows...</p>" }'
   \`\`\`
@@ -107,6 +114,14 @@ You must use the following REST API endpoints. The base URL for all requests is 
 
 Remember to always check the most recent player comments to inform your narrative decisions. Be creative and engaging!
 `.trim();
+            setInstructionsForAI(instructions);
+        }
+    }, [campaign, baseUrl]);
+
+
+    if (!campaign) {
+        return <div>Loading campaign details...</div>;
+    }
 
     const handleCopy = () => {
         navigator.clipboard.writeText(instructionsForAI);
@@ -122,7 +137,7 @@ Remember to always check the most recent player comments to inform your narrativ
                 <CardHeader>
                     <CardTitle className="font-headline">Using the Lore Weaver API</CardTitle>
                     <CardDescription>
-                        Integrate external tools, scripts, or a local AI with your campaign using these instructions. The base URL for all API requests is your application's domain (e.g., `http://localhost:9002` for local development).
+                        Integrate external tools, scripts, or a local AI with your campaign using these instructions. The base URL for all API requests is your application's domain.
                     </CardDescription>
                 </CardHeader>
             </Card>
