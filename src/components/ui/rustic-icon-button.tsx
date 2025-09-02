@@ -22,7 +22,7 @@ export const RusticIconButton = React.forwardRef<HTMLButtonElement, RusticIconBu
         <button
             ref={ref}
             className={cn(
-                "relative h-12 w-12 flex items-center justify-center transition-transform duration-200 ease-in-out hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none",
+                "relative h-12 w-12 flex items-center justify-center transition-transform duration-200 ease-in-out hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none drop-shadow-lg",
                 className
             )}
             {...props}

@@ -191,7 +191,6 @@ export default function MonstersPage() {
 
       {filteredMonsters.length > 0 && activeMonster ? (
         <div className="grid h-[75vh] items-center md:grid-cols-10">
-          {/* Left Text Column */}
           <div
             className={cn(
               'px-4 text-white/90 transition-opacity duration-500 md:px-8 h-full md:col-span-3 flex flex-col justify-center'
@@ -219,7 +218,6 @@ export default function MonstersPage() {
             </div>
           </div>
 
-          {/* Right Card Stack Column */}
           <div className="relative flex items-center justify-center h-full md:col-span-7">
              <RusticIconButton 
                 onClick={handlePrev} 
@@ -341,5 +339,3 @@ export default function MonstersPage() {
     </div>
   );
 }
-
-    

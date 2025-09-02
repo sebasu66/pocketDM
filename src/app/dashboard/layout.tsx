@@ -196,7 +196,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 variant="incomplete"
                 tooltip="Toggle Menu"
                 onClick={() => setIsSheetOpen(true)}
-                className="fixed bottom-6 right-6 h-16 w-16 text-white/90 hover:text-white z-30"
+                className="fixed bottom-6 right-6 h-16 w-16 text-white/90 hover:text-white z-30 drop-shadow-lg"
             >
                 <Menu size={28} />
             </RusticIconButton>
