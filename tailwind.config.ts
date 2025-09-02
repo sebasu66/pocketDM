@@ -5,7 +5,7 @@ export default {
   darkMode: ['class'],
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js.ts.jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
@@ -14,7 +14,7 @@ export default {
         body: ['EB Garamond', 'serif'],
         headline: ['Cinzel', 'serif'],
         code: ['Recursive', 'monospace'],
-        handwriting: ['Merienda', 'cursive'],
+        handwriting: ['"Covered By Your Grace"', 'cursive'],
       },
       colors: {
         background: 'hsl(var(--background))',
