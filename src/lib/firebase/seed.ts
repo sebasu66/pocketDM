@@ -2,7 +2,7 @@
 // THIS SCRIPT IS FOR DEMO PURPOSES ONLY
 // It seeds the Firestore database with initial data so the app is usable.
 // In a real application, you would have proper data management and user registration.
-import { collection, writeBatch, doc } from "firebase/firestore";
+import { collection, writeBatch, doc, getDoc } from "firebase/firestore";
 import { db } from "./config";
 import { User, Campaign, Character, NarrativeThread, NarrativeComment } from "./types";
 
@@ -193,11 +193,21 @@ async function seedDatabase() {
 // We will add a temporary trigger in the main AppLayout.
 // **THIS IS FOR DEMO PURPOSES ONLY and should be removed in a real app.**
 export async function runSeed() {
-    // A simple check to prevent re-seeding every time the app loads.
-    // In a real app, you'd have a more robust system (e.g., check if a 'seeded' flag exists).
-    if (localStorage.getItem('db_seeded')) {
-        // console.log("Database already seeded. Skipping.");
-        return;
+    // This is a more robust check to prevent re-seeding. It checks for a single document
+    // that is expected to exist after seeding. This avoids race conditions and issues
+    // with client-side storage during development.
+    try {
+        const seedCheckDoc = doc(db, 'users', '1');
+        const docSnap = await getDoc(seedCheckDoc);
+        if (docSnap.exists()) {
+            // Document exists, so we assume the DB is seeded.
+            // console.log("Database already seeded. Skipping.");
+            return;
+        }
+    } catch (error) {
+        console.error("Error checking for seeded database, proceeding with seed. Error:", error);
     }
+    
+    // If the check fails or the doc doesn't exist, proceed with seeding.
     await seedDatabase();
 }
