@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -221,7 +220,7 @@ export default function MonstersPage() {
           <div className="relative flex items-center justify-center h-full md:col-span-7">
              <RusticIconButton 
                 onClick={handlePrev} 
-                className="absolute left-0 z-10 text-white/80 opacity-70 hover:opacity-100"
+                className="absolute z-10 text-white/80 opacity-70 hover:opacity-100 left-0"
                 tooltip="Previous"
             >
                 <ArrowLeft size={32} />
@@ -249,7 +248,7 @@ export default function MonstersPage() {
                 />
             <RusticIconButton 
                 onClick={handleNext} 
-                className="absolute right-0 z-10 text-white/80 opacity-70 hover:opacity-100"
+                className="absolute z-10 text-white/80 opacity-70 hover:opacity-100 right-0"
                 tooltip="Next"
             >
                 <ArrowRight size={32} />
