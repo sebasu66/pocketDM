@@ -152,7 +152,7 @@ export default function MonstersPage() {
            {/* Left Floating Text */}
             <div className={cn("transition-opacity duration-500 px-4 md:px-8", activeMonster ? "opacity-100" : "opacity-0")}>
               <h3 className="font-headline text-lg text-white/90">Observations</h3>
-              <p className="text-white/70 text-sm mt-2 font-handwriting text-xl leading-relaxed">{activeMonster?.observations}</p>
+              <p className="text-white/70 text-sm mt-2 font-handwriting text-2xl leading-relaxed">{activeMonster?.observations}</p>
             </div>
 
 
@@ -173,7 +173,6 @@ export default function MonstersPage() {
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 priority={isActive}
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                             {isActive && isMaster && (
                                 <div className="absolute top-4 left-4 flex gap-2">
                                 <Button variant="outline" size="sm" onClick={() => handleEditMonster(monster)}>
@@ -184,7 +183,7 @@ export default function MonstersPage() {
                                     </Button>
                                 </div>
                             )}
-                            <h2 className="absolute bottom-4 left-1/2 -translate-x-1/2 text-2xl font-headline text-white drop-shadow-lg text-center w-full">{monster.name}</h2>
+                            <h2 className="absolute bottom-6 left-1/2 -translate-x-1/2 text-5xl font-handwriting text-stone-900 drop-shadow-lg text-center w-full mix-blend-multiply">{monster.name}</h2>
                         </div>
                     )}
                 />
@@ -193,7 +192,7 @@ export default function MonstersPage() {
              {/* Right Floating Text */}
              <div className={cn("transition-opacity duration-500 px-4 md:px-8", activeMonster ? "opacity-100" : "opacity-0")}>
                 <h3 className="font-headline text-lg text-white/90 mb-4">Abilities</h3>
-                <div className="space-y-3 text-white/70 text-lg font-handwriting text-xl leading-relaxed">
+                <div className="space-y-3 text-white/70 text-lg font-handwriting text-2xl leading-relaxed">
                    <p>Toughness: {activeMonster?.thematicStats.toughness}</p>
                    <p>Hit Difficulty: {activeMonster?.thematicStats.hitDifficulty}</p>
                    <p>Speed: {activeMonster?.thematicStats.speed}</p>

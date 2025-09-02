@@ -17,22 +17,26 @@ export function StackedCard<T extends { id: string; name: string }>({ items, ren
     setActiveIndex(index);
   };
   
-  if (!items || items.length === 0) {
-    return null;
-  }
-  
   const orderedItems = useMemo(() => {
-    if (activeIndex < 0 || activeIndex >= items.length) {
+    if (!items || items.length === 0 || activeIndex < 0 || activeIndex >= items.length) {
       return [];
     }
     const activeItem = items[activeIndex];
     const otherItems = items.filter((_, i) => i !== activeIndex);
-    return [...otherItems, activeItem];
+    // Add a random rotation to each item for a more organic feel
+    return [...otherItems, activeItem].map(item => ({
+      ...item,
+      rotation: Math.random() * 2 - 1, // -1 to 1 degree rotation
+    }));
   }, [items, activeIndex]);
+
+  if (orderedItems.length === 0) {
+    return null;
+  }
 
   return (
     <div className="relative w-full h-full flex items-center justify-center">
-      <div className="relative w-[300px] h-[450px] scale-125">
+      <div className="relative w-[300px] h-[450px] scale-[1.25]">
         {orderedItems.map((item, index) => {
           const originalIndex = items.findIndex(i => i.id === item.id);
           const isActive = index === orderedItems.length - 1;
@@ -47,11 +51,11 @@ export function StackedCard<T extends { id: string; name: string }>({ items, ren
                 "absolute w-full h-full rounded-lg shadow-2xl transition-all duration-500 ease-in-out cursor-pointer",
                 isActive 
                   ? "drop-shadow-[0_25px_25px_rgba(0,0,0,0.5)]" 
-                  : "blur-[1px] opacity-70 hover:-translate-y-2"
+                  : "opacity-80 hover:-translate-y-2 blur-sm"
               )}
               style={{
                 zIndex: zIndex,
-                transform: `translateY(${isActive ? 0 : distance * 40}px) scale(${1 - distance * 0.05})`,
+                transform: `translateY(${isActive ? 0 : distance * 20}px) scale(${1 - distance * 0.05}) rotate(${item.rotation}deg)`,
               }}
             >
               <div className="w-full h-full relative">
