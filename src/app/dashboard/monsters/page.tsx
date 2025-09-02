@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState } from "react";
@@ -30,7 +29,7 @@ const initialMonsters = [
         id: "1",
         name: "Dire Wolf",
         observations: `Larger and more ferocious than its common kin, the Dire Wolf is a cunning predator of the northern wilds.
-        
+
 Its eyes glow with a faint, malevolent light, and its howl can freeze the blood of the bravest warrior.
 
 They hunt in packs, coordinating their attacks with terrifying intelligence, often outmaneuvering their prey with coordinated flanking maneuvers.`,
@@ -151,68 +150,74 @@ export default function MonstersPage() {
       <Separator />
 
       {filteredMonsters.length > 0 ? (
-        <div className="grid h-[75vh] items-center md:grid-cols-2">
+        <div className="grid h-[75vh] items-center md:grid-cols-5">
           {/* Left Text Column */}
           <div
             className={cn(
-              'px-4 text-white/90 transition-opacity duration-500 md:px-8 h-full',
+              'px-4 text-white/90 transition-opacity duration-500 md:px-8 h-full md:col-span-2',
               activeMonster ? 'opacity-100' : 'opacity-0'
             )}
           >
             <div className="flex h-full flex-col justify-start pt-16">
-              <h3 className="font-handwriting text-3xl underline decoration-white/30 underline-offset-8">
-                Observations
-              </h3>
-              <div className="font-handwriting mt-2 space-y-4 text-lg md:text-xl font-light leading-relaxed">
-                {activeMonster?.observations.split('\n\n').map((paragraph, index) => (
-                  <p key={index}>{paragraph}</p>
-                ))}
-              </div>
+              <div>
+                <h3 className="font-handwriting text-3xl underline decoration-white/30 underline-offset-8">
+                  Observations
+                </h3>
+                <div className="font-handwriting mt-2 space-y-4 text-lg md:text-xl font-light leading-relaxed">
+                  {activeMonster?.observations.split('\n\n').map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))}
+                </div>
 
-              <h3 className="font-handwriting text-3xl underline decoration-white/30 underline-offset-8 mt-8">
-                Abilities
-              </h3>
-              <div className="font-handwriting mt-2 space-y-3 text-lg md:text-xl font-light leading-relaxed">
-                <p>Toughness: {activeMonster?.thematicStats.toughness}</p>
-                <p>Hit Difficulty: {activeMonster?.thematicStats.hitDifficulty}</p>
-                <p>Speed: {activeMonster?.thematicStats.speed}</p>
+                <h3 className="font-handwriting text-3xl underline decoration-white/30 underline-offset-8 mt-8">
+                  Abilities
+                </h3>
+                <div className="font-handwriting mt-2 space-y-3 text-lg md:text-xl font-light leading-relaxed">
+                  <p>Toughness: {activeMonster?.thematicStats.toughness}</p>
+                  <p>Hit Difficulty: {activeMonster?.thematicStats.hitDifficulty}</p>
+                  <p>Speed: {activeMonster?.thematicStats.speed}</p>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Right Card Stack Column */}
-          <div className="flex items-center justify-center h-full">
-            <StackedCard
-              items={filteredMonsters}
-              activeIndex={activeIndex}
-              setActiveIndex={setActiveIndex}
-              renderItem={(monster, isActive) => (
-                <div className="relative h-full w-full overflow-hidden rounded-lg bg-card text-card-foreground drop-shadow-[0_4px_3px_rgba(0,0,0,0.5)]">
-                  <Image
-                    src={monster.image}
-                    alt={monster.name}
-                    fill
-                    className="h-full w-full object-cover"
-                    data-ai-hint={monster.aiHint}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    priority={isActive}
-                  />
-                  {isActive && isMaster && (
-                    <div className="absolute left-4 top-4 flex gap-2">
-                      <Button variant="outline" size="sm" onClick={() => handleEditMonster(monster)}>
-                        <Edit /> Edit
-                      </Button>
-                      <Button variant="destructive" size="sm">
-                        <Trash2 /> Delete
-                      </Button>
+          <div className="flex items-center justify-center h-full md:col-span-3">
+            <div className="relative w-full h-full flex items-center justify-center">
+              <div className="relative w-[300px] h-[450px] scale-[1.375]">
+                <StackedCard
+                  items={filteredMonsters}
+                  activeIndex={activeIndex}
+                  setActiveIndex={setActiveIndex}
+                  renderItem={(monster, isActive) => (
+                    <div className="relative h-full w-full overflow-hidden rounded-lg bg-card text-card-foreground">
+                      <Image
+                        src={monster.image}
+                        alt={monster.name}
+                        fill
+                        className="h-full w-full object-cover"
+                        data-ai-hint={monster.aiHint}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        priority={isActive}
+                      />
+                      {isActive && isMaster && (
+                        <div className="absolute left-4 top-4 flex gap-2">
+                          <Button variant="outline" size="sm" onClick={() => handleEditMonster(monster)}>
+                            <Edit /> Edit
+                          </Button>
+                          <Button variant="destructive" size="sm">
+                            <Trash2 /> Delete
+                          </Button>
+                        </div>
+                      )}
+                      <h2 className="font-handwriting text-5xl text-stone-900 drop-shadow-lg absolute bottom-6 left-1/2 w-full -translate-x-1/2 text-center mix-blend-multiply">
+                        {monster.name}
+                      </h2>
                     </div>
                   )}
-                  <h2 className="font-handwriting text-5xl text-stone-900 drop-shadow-lg absolute bottom-6 left-1/2 w-full -translate-x-1/2 text-center mix-blend-multiply">
-                    {monster.name}
-                  </h2>
-                </div>
-              )}
-            />
+                />
+              </div>
+            </div>
           </div>
 
         </div>
@@ -298,3 +303,5 @@ export default function MonstersPage() {
     </div>
   );
 }
+
+    
