@@ -147,7 +147,7 @@ export default function MonstersPage() {
   const isMaster = user?.role === 'master';
 
   return (
-    <div className="bg-stone-gradient -m-6 min-h-[calc(100vh-theme(spacing.12))] p-6">
+    <div className="min-h-[calc(100vh-theme(spacing.24))]">
       <div className="flex items-center justify-between">
         <div className="relative w-full max-w-sm">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
