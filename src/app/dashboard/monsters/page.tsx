@@ -151,8 +151,8 @@ export default function MonstersPage() {
       <Separator />
 
       {filteredMonsters.length > 0 ? (
-        <div className="grid h-[75vh] items-center md:grid-cols-3">
-          {/* Left Floating Text */}
+        <div className="grid h-[75vh] items-center md:grid-cols-2">
+          {/* Left Text Column */}
           <div
             className={cn(
               'px-4 text-white/90 transition-opacity duration-500 md:px-8 h-full',
@@ -163,22 +163,31 @@ export default function MonstersPage() {
               <h3 className="font-handwriting text-3xl underline decoration-white/30 underline-offset-8">
                 Observations
               </h3>
-              <div className="font-handwriting mt-2 space-y-4 text-xl md:text-2xl leading-relaxed font-light">
+              <div className="font-handwriting mt-2 space-y-4 text-lg md:text-xl font-light leading-relaxed">
                 {activeMonster?.observations.split('\n\n').map((paragraph, index) => (
                   <p key={index}>{paragraph}</p>
                 ))}
               </div>
+
+              <h3 className="font-handwriting text-3xl underline decoration-white/30 underline-offset-8 mt-8">
+                Abilities
+              </h3>
+              <div className="font-handwriting mt-2 space-y-3 text-lg md:text-xl font-light leading-relaxed">
+                <p>Toughness: {activeMonster?.thematicStats.toughness}</p>
+                <p>Hit Difficulty: {activeMonster?.thematicStats.hitDifficulty}</p>
+                <p>Speed: {activeMonster?.thematicStats.speed}</p>
+              </div>
             </div>
           </div>
 
-          {/* Center Card Stack */}
-          <div className="flex items-center justify-center">
+          {/* Right Card Stack Column */}
+          <div className="flex items-center justify-center h-full">
             <StackedCard
               items={filteredMonsters}
               activeIndex={activeIndex}
               setActiveIndex={setActiveIndex}
               renderItem={(monster, isActive) => (
-                <div className="relative h-full w-full overflow-hidden rounded-lg bg-card text-card-foreground">
+                <div className="relative h-full w-full overflow-hidden rounded-lg bg-card text-card-foreground drop-shadow-[0_4px_3px_rgba(0,0,0,0.5)]">
                   <Image
                     src={monster.image}
                     alt={monster.name}
@@ -206,24 +215,6 @@ export default function MonstersPage() {
             />
           </div>
 
-          {/* Right Floating Text */}
-          <div
-            className={cn(
-              'px-4 text-white/90 transition-opacity duration-500 md:pl-12 h-full',
-              activeMonster ? 'opacity-100' : 'opacity-0'
-            )}
-          >
-             <div className="flex h-full flex-col justify-start pt-16">
-              <h3 className="font-handwriting text-3xl underline decoration-white/30 underline-offset-8">
-                Abilities
-              </h3>
-              <div className="font-handwriting mt-2 space-y-3 text-xl md:text-2xl leading-relaxed font-light">
-                <p>Toughness: {activeMonster?.thematicStats.toughness}</p>
-                <p>Hit Difficulty: {activeMonster?.thematicStats.hitDifficulty}</p>
-                <p>Speed: {activeMonster?.thematicStats.speed}</p>
-              </div>
-            </div>
-          </div>
         </div>
       ) : (
         <div className="py-12 text-center col-span-full">
@@ -307,5 +298,3 @@ export default function MonstersPage() {
     </div>
   );
 }
-
-    
