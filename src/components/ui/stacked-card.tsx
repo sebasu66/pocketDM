@@ -37,6 +37,7 @@ export function StackedCard<T extends { id: string; name: string }>({ items, ren
           const originalIndex = items.findIndex(i => i.id === item.id);
           const isActive = index === orderedItems.length - 1;
           const zIndex = index;
+          const distance = orderedItems.length - 1 - index;
           
           return (
             <div
@@ -50,7 +51,7 @@ export function StackedCard<T extends { id: string; name: string }>({ items, ren
               )}
               style={{
                 zIndex: zIndex,
-                transform: `translateY(${isActive ? 0 : (orderedItems.length - 1 - index) * -40}px) scale(${1 - (orderedItems.length - 1 - index) * 0.05})`,
+                transform: `translateY(${isActive ? 0 : distance * 40}px) scale(${1 - distance * 0.05})`,
               }}
             >
               <div className="w-full h-full relative">

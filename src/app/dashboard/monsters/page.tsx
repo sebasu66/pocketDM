@@ -193,19 +193,10 @@ export default function MonstersPage() {
              {/* Right Floating Text */}
              <div className={cn("transition-opacity duration-500 px-4 md:px-8", activeMonster ? "opacity-100" : "opacity-0")}>
                 <h3 className="font-headline text-lg text-white/90 mb-4">Abilities</h3>
-                <div className="space-y-3 text-white/70 text-lg">
-                   <div className="flex justify-between border-b border-white/10 pb-1">
-                     <span className="font-semibold">Toughness</span>
-                     <span>{activeMonster?.thematicStats.toughness}</span>
-                   </div>
-                    <div className="flex justify-between border-b border-white/10 pb-1">
-                     <span className="font-semibold">Hit Difficulty</span>
-                     <span>{activeMonster?.thematicStats.hitDifficulty}</span>
-                   </div>
-                    <div className="flex justify-between border-b border-white/10 pb-1">
-                     <span className="font-semibold">Speed</span>
-                     <span>{activeMonster?.thematicStats.speed}</span>
-                   </div>
+                <div className="space-y-3 text-white/70 text-lg font-handwriting text-xl leading-relaxed">
+                   <p>Toughness: {activeMonster?.thematicStats.toughness}</p>
+                   <p>Hit Difficulty: {activeMonster?.thematicStats.hitDifficulty}</p>
+                   <p>Speed: {activeMonster?.thematicStats.speed}</p>
                 </div>
             </div>
 
