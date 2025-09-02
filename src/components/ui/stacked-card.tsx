@@ -22,10 +22,9 @@ export function StackedCard<T extends { id: string; name: string }>({ items, ren
       return [];
     }
 
-    // Assign a unique, stable random rotation to each item
     const itemsWithRotation = items.map(item => ({
       ...item,
-      rotation: Math.random() * 2 - 1, // -1 to 1 degree rotation
+      rotation: Math.random() * 2 - 1, 
     }));
     
     const activeItem = itemsWithRotation[activeIndex];
@@ -60,7 +59,7 @@ export function StackedCard<T extends { id: string; name: string }>({ items, ren
               )}
               style={{
                 zIndex: zIndex,
-                transform: `translateX(${isActive ? 0 : distance * 10}px) translateY(${isActive ? 0 : distance * 20}px) scale(${1 - distance * 0.05}) rotate(${item.rotation}deg)`,
+                transform: `translateX(${isActive ? 0 : distance * 20}px) translateY(${isActive ? 0 : distance * 20}px) rotate(${item.rotation}deg)`,
               }}
             >
               <div className="w-full h-full relative">
