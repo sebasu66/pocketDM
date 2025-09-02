@@ -155,12 +155,14 @@ export default function MonstersPage() {
 
            {/* Left Floating Text */}
             <div className={cn("transition-opacity duration-500 px-4 md:px-8", activeMonster ? "opacity-100" : "opacity-0")}>
-              <h3 className="font-handwriting text-3xl text-white/90 underline underline-offset-8 decoration-white/30 mb-4">Observations</h3>
-               <div className="text-white/70 mt-2 font-handwriting text-xl leading-relaxed space-y-4">
-                  {activeMonster?.observations.split('\n\n').map((paragraph, index) => (
-                    <p key={index}>{paragraph}</p>
-                  ))}
-               </div>
+              <div className="h-full flex flex-col justify-start">
+                  <h3 className="font-handwriting text-3xl text-white/90 underline underline-offset-8 decoration-white/30 mb-4">Observations</h3>
+                  <div className="text-white/70 mt-2 font-handwriting text-3xl leading-relaxed space-y-4">
+                      {activeMonster?.observations.split('\n\n').map((paragraph, index) => (
+                        <p key={index}>{paragraph}</p>
+                      ))}
+                  </div>
+              </div>
             </div>
 
 
@@ -199,11 +201,13 @@ export default function MonstersPage() {
             
              {/* Right Floating Text */}
              <div className={cn("transition-opacity duration-500 px-4 md:pl-12", activeMonster ? "opacity-100" : "opacity-0")}>
-                <h3 className="font-handwriting text-3xl text-white/90 underline underline-offset-8 decoration-white/30 mb-4">Abilities</h3>
-                <div className="space-y-3 text-white/70 font-handwriting text-xl leading-relaxed">
-                   <p>Toughness: {activeMonster?.thematicStats.toughness}</p>
-                   <p>Hit Difficulty: {activeMonster?.thematicStats.hitDifficulty}</p>
-                   <p>Speed: {activeMonster?.thematicStats.speed}</p>
+                <div className="h-full flex flex-col justify-start">
+                    <h3 className="font-handwriting text-3xl text-white/90 underline underline-offset-8 decoration-white/30 mb-4">Abilities</h3>
+                    <div className="space-y-3 text-white/70 font-handwriting text-3xl leading-relaxed">
+                      <p>Toughness: {activeMonster?.thematicStats.toughness}</p>
+                      <p>Hit Difficulty: {activeMonster?.thematicStats.hitDifficulty}</p>
+                      <p>Speed: {activeMonster?.thematicStats.speed}</p>
+                    </div>
                 </div>
             </div>
 
