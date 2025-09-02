@@ -152,7 +152,7 @@ export default function MonstersPage() {
            {/* Left Floating Text */}
             <div className={cn("transition-opacity duration-500 px-4 md:px-8", activeMonster ? "opacity-100" : "opacity-0")}>
               <h3 className="font-headline text-lg text-white/90">Observations</h3>
-              <p className="text-white/70 text-sm mt-2 font-handwriting text-2xl leading-relaxed">{activeMonster?.observations}</p>
+              <p className="text-white/70 text-sm mt-2 font-handwriting text-4xl leading-relaxed">{activeMonster?.observations}</p>
             </div>
 
 
@@ -192,7 +192,7 @@ export default function MonstersPage() {
              {/* Right Floating Text */}
              <div className={cn("transition-opacity duration-500 px-4 md:px-8", activeMonster ? "opacity-100" : "opacity-0")}>
                 <h3 className="font-headline text-lg text-white/90 mb-4">Abilities</h3>
-                <div className="space-y-3 text-white/70 text-lg font-handwriting text-2xl leading-relaxed">
+                <div className="space-y-3 text-white/70 text-lg font-handwriting text-4xl leading-relaxed">
                    <p>Toughness: {activeMonster?.thematicStats.toughness}</p>
                    <p>Hit Difficulty: {activeMonster?.thematicStats.hitDifficulty}</p>
                    <p>Speed: {activeMonster?.thematicStats.speed}</p>
@@ -242,10 +242,14 @@ export default function MonstersPage() {
               <div className="flex flex-col items-center justify-center bg-muted/50 rounded-lg p-4 text-center">
                   <Label className="mb-2">Monster Portrait</Label>
                   <div className="w-48 h-64 bg-background rounded overflow-hidden mb-4 flex items-center justify-center relative">
-                    {editingMonster?.image ? (
+                    {editingMonster?.image && typeof editingMonster.image !== 'string' ? (
                         <Image src={editingMonster.image} alt={editingMonster.name || "Monster"} sizes="200px" fill className="object-cover" />
                     ): (
-                        <p className="text-xs text-muted-foreground p-2">No image</p>
+                         editingMonster?.image && typeof editingMonster.image === 'string' ? (
+                            <img src={editingMonster.image} alt={editingMonster.name || "Monster"} className="object-cover w-full h-full" />
+                         ) : (
+                            <p className="text-xs text-muted-foreground p-2">No image</p>
+                         )
                     )}
                   </div>
                   <Button variant="outline">

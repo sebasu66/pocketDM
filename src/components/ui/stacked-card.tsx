@@ -52,9 +52,9 @@ export function StackedCard<T extends { id: string; name: string }>({ items, ren
               key={item.id}
               onClick={() => handleCardClick(originalIndex)}
               className={cn(
-                "absolute w-full h-full rounded-lg shadow-2xl transition-all duration-500 ease-in-out cursor-pointer",
+                "absolute w-full h-full rounded-lg transition-all duration-500 ease-in-out cursor-pointer",
                 isActive 
-                  ? "drop-shadow-[0_25px_25px_rgba(0,0,0,0.5)]" 
+                  ? "shadow-lg" 
                   : "opacity-80 hover:-translate-y-2 blur-[1px]"
               )}
               style={{
