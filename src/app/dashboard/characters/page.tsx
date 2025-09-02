@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/context/auth-context";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { PlusCircle, Trash2, Sheet, Upload, Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
-import { getCharactersByCampaign, addCharacter, updateCharacter, deleteCharacter } from "@/lib/firebase/characters";
 import type { Character } from "@/lib/firebase/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog";
@@ -27,30 +26,39 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/hooks/use-toast";
 
 export default function CharactersPage() {
   const { campaign, user, isLoading: isAuthLoading } = useAuth();
+  const { toast } = useToast();
   const [character, setCharacter] = useState<Character | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [editingCharacter, setEditingCharacter] = useState<Character | null>(null);
 
-  const fetchCharacter = async () => {
+  const fetchCharacter = useCallback(async () => {
     if (campaign && user) {
       setIsLoading(true);
-      const userCharacters = await getCharactersByCampaign(campaign.id, user.id);
-      const currentChar = userCharacters.length > 0 ? userCharacters[0] : null;
-      setCharacter(currentChar);
-      setEditingCharacter(currentChar ? { ...currentChar } : null);
-      setIsLoading(false);
+      try {
+        const response = await fetch(`/api/characters?campaignId=${campaign.id}&userId=${user.id}`);
+        if (!response.ok) throw new Error("Failed to fetch characters");
+        const userCharacters: Character[] = await response.json();
+        const currentChar = userCharacters.length > 0 ? userCharacters[0] : null;
+        setCharacter(currentChar);
+        setEditingCharacter(currentChar ? { ...currentChar } : null);
+      } catch (error) {
+        toast({ variant: "destructive", title: "Error", description: "Could not fetch your character." });
+      } finally {
+        setIsLoading(false);
+      }
     }
-  };
+  }, [campaign, user, toast]);
 
   useEffect(() => {
     if (!isAuthLoading) {
       fetchCharacter();
     }
-  }, [campaign, user, isAuthLoading]);
+  }, [isAuthLoading, fetchCharacter]);
 
   const handleCreateCharacter = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -67,16 +75,33 @@ export default function CharactersPage() {
       isActive: true,
     };
     
-    await addCharacter(newCharacterData);
-    await fetchCharacter(); // Refetch character after creation
-    event.currentTarget.reset();
+    try {
+        const response = await fetch('/api/characters', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newCharacterData)
+        });
+        if (!response.ok) throw new Error("Failed to create character");
+        toast({ title: "Character Created!", description: "Your new hero is ready for adventure." });
+        await fetchCharacter();
+        event.currentTarget.reset();
+    } catch (error) {
+        toast({ variant: "destructive", title: "Error", description: "Could not create your character."});
+    }
   };
   
   const handleDelete = async () => {
     if (!character) return;
-    await deleteCharacter(character.id);
-    setCharacter(null);
-    setEditingCharacter(null);
+    
+    try {
+        const response = await fetch(`/api/characters/${character.id}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error("Failed to delete character");
+        toast({ title: "Character Deleted", description: "Your hero has been retired." });
+        setCharacter(null);
+        setEditingCharacter(null);
+    } catch (error) {
+         toast({ variant: "destructive", title: "Error", description: "Could not delete your character."});
+    }
   };
 
   const handleOpenSheet = () => {
@@ -89,9 +114,19 @@ export default function CharactersPage() {
   const handleSaveChanges = async () => {
     if (!editingCharacter) return;
     
-    await updateCharacter(editingCharacter.id, editingCharacter);
-    await fetchCharacter(); // Refetch to get the latest data
-    setIsSheetOpen(false);
+    try {
+        const response = await fetch(`/api/characters/${editingCharacter.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(editingCharacter)
+        });
+        if (!response.ok) throw new Error("Failed to save changes");
+        toast({ title: "Character Saved", description: "Your hero's sheet has been updated." });
+        await fetchCharacter();
+        setIsSheetOpen(false);
+    } catch (error) {
+        toast({ variant: "destructive", title: "Error", description: "Could not save your changes."});
+    }
   };
   
   const handleStatChange = (stat: keyof Character, value: string | boolean) => {
@@ -261,11 +296,11 @@ export default function CharactersPage() {
                       </div>
                        <div className="grid items-center gap-1.5">
                           <Label htmlFor="class">Class</Label>
-                          <Input id="class" value={editingCharacter.class} onChange={(e) => handleStatChange('class', e.target.value)} />
+                          <Input id="class" value={editingCharacter.class || ''} onChange={(e) => handleStatChange('class', e.target.value)} />
                       </div>
                        <div className="grid items-center gap-1.5">
                           <Label htmlFor="level">Level</Label>
-                          <Input id="level" type="number" value={editingCharacter.level} onChange={(e) => handleStatChange('level', e.target.value)} />
+                          <Input id="level" type="number" value={editingCharacter.level || 1} onChange={(e) => handleStatChange('level', e.target.value)} />
                       </div>
                       <div className="grid items-center gap-1.5">
                           <Label htmlFor="description">Description</Label>
@@ -275,7 +310,7 @@ export default function CharactersPage() {
                      <div className="flex flex-col items-center justify-start gap-4">
                         <Label>Portrait</Label>
                         <div className="relative w-48 h-72 bg-background rounded overflow-hidden">
-                            <Image src={editingCharacter.portrait} alt={editingCharacter.name} width={200} height={300} className="w-full h-full object-cover" data-ai-hint={editingCharacter.aiHint} />
+                            <Image src={editingCharacter.portrait} alt={editingCharacter.name} width={200} height={300} className="w-full h-full object-cover" data-ai-hint={editingCharacter.aiHint || 'fantasy portrait'} />
                         </div>
                         <Button variant="outline" onClick={handlePortraitChange}>
                             <Upload className="mr-2 h-4 w-4" />
@@ -314,6 +349,6 @@ const StatDisplay = ({ label, value }: { label: string; value: number }) => (
 const AttributeInput = ({ label, value, onChange }: { label: string; value: number; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) => (
     <div className="space-y-2">
         <Label htmlFor={`attr-${label}`} className="text-center block">{label}</Label>
-        <Input id={`attr-${label}`} type="number" value={value} onChange={onChange} className="text-center" />
+        <Input id={`attr-${label}`} type="number" value={value || 0} onChange={onChange} className="text-center" />
     </div>
 );
