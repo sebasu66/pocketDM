@@ -14,7 +14,7 @@ export default {
         body: ['EB Garamond', 'serif'],
         headline: ['Cinzel', 'serif'],
         code: ['Recursive', 'monospace'],
-        handwriting: ['Caveat', 'cursive'],
+        handwriting: ['Merienda', 'cursive'],
       },
       colors: {
         background: 'hsl(var(--background))',
