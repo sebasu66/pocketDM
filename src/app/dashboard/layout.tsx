@@ -172,34 +172,36 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <TooltipProvider>
-      <div className="min-h-screen w-full">
-        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-          <header className="flex items-center justify-between p-4 border-b border-border/20 bg-background/80 backdrop-blur-sm sticky top-0 z-20">
-            <div className="flex items-center gap-2">
-               <div className="flex items-center gap-2">
-                <BookOpen />
-                <h2 className="text-2xl font-semibold font-headline">{pageTitles[pathname] || "Dashboard"}</h2>
-               </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <Input placeholder="Search entities..." className="hidden md:block w-64 bg-background" />
-              <UserNav />
-            </div>
-          </header>
+    <SidebarProvider>
+      <TooltipProvider>
+        <div className="min-h-screen w-full">
+          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+            <header className="flex items-center justify-between p-4 border-b border-border/20 bg-background/80 backdrop-blur-sm sticky top-0 z-20">
+              <div className="flex items-center gap-2">
+                 <div className="flex items-center gap-2">
+                  <BookOpen />
+                  <h2 className="text-2xl font-semibold font-headline">{pageTitles[pathname] || "Dashboard"}</h2>
+                 </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <Input placeholder="Search entities..." className="hidden md:block w-64 bg-background" />
+                <UserNav />
+              </div>
+            </header>
 
-          <main className="p-4 md:p-6">{children}</main>
+            <main className="p-4 md:p-6">{children}</main>
 
-          <SheetTrigger asChild>
-              <Button className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg z-30" size="icon">
-                  <Menu />
-              </Button>
-          </SheetTrigger>
-          <SheetContent side="right" className="p-0 w-80 bg-sidebar-gradient border-l-0 text-sidebar-foreground">
-             {sidebarContent}
-          </SheetContent>
-        </Sheet>
-      </div>
-    </TooltipProvider>
+            <SheetTrigger asChild>
+                <Button className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg z-30" size="icon">
+                    <Menu />
+                </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="p-0 w-80 bg-sidebar-gradient border-l-0 text-sidebar-foreground">
+               {sidebarContent}
+            </SheetContent>
+          </Sheet>
+        </div>
+      </TooltipProvider>
+    </SidebarProvider>
   );
 }
