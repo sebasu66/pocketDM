@@ -3,7 +3,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User, Campaign } from '@/lib/firebase/types';
-import { getUserById, updateUser as updateMockUser } from '@/lib/auth';
+import { getUserById, updateUser as updateDbUser } from '@/lib/auth';
 import { getCampaign } from '@/lib/firebase/campaigns';
 
 interface AuthContextType {
@@ -11,7 +11,7 @@ interface AuthContextType {
   campaign: Campaign | null;
   login: (userId: string) => Promise<void>;
   logout: () => void;
-  updateUser: (user: User) => void;
+  updateUser: (user: User) => Promise<void>;
   isLoading: boolean;
 }
 
@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         const storedUserId = localStorage.getItem('userId');
         if (storedUserId) {
-          const loggedInUser = getUserById(storedUserId);
+          const loggedInUser = await getUserById(storedUserId);
           if (loggedInUser) {
             setUser(loggedInUser);
             const campaignData = await getCampaign(loggedInUser.campaignId);
@@ -43,7 +43,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = async (userId: string) => {
-    const loggedInUser = getUserById(userId);
+    setIsLoading(true);
+    const loggedInUser = await getUserById(userId);
     if (loggedInUser) {
       try {
         localStorage.setItem('userId', userId);
@@ -54,6 +55,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         console.error("Could not access local storage or fetch data", e);
       }
     }
+    setIsLoading(false);
   };
 
   const logout = () => {
@@ -66,9 +68,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setCampaign(null);
   };
   
-  const updateUser = (updatedUser: User) => {
+  const updateUser = async (updatedUser: User) => {
+    if (!user) return;
     // This updates our mock database
-    updateMockUser(updatedUser.id, updatedUser);
+    await updateDbUser(updatedUser.id, updatedUser);
     // This updates the react context state
     setUser(updatedUser);
   }

@@ -21,7 +21,7 @@ export default function LoginPage() {
   const { toast } = useToast();
 
   const handleLogin = async () => {
-    const user = getUserByEmail(email);
+    const user = await getUserByEmail(email);
     if (user && checkPassword(user, password)) {
       await login(user.id);
       router.push("/dashboard");

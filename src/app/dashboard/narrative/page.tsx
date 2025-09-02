@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { FlippingAvatar } from "@/components/flipping-avatar";
 import { useAuth } from "@/context/auth-context";
@@ -23,39 +23,42 @@ export default function NarrativePage() {
   const { user, campaign } = useAuth();
   const [thread, setThread] = useState<NarrativeThread | null>(null);
   const [comments, setComments] = useState<EnrichedComment[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   
   const isMaster = user?.role === 'master';
   
-  useEffect(() => {
-    const fetchNarrativeData = async () => {
-      if (!campaign) return;
+  const fetchNarrativeData = useCallback(async () => {
+    if (!campaign) return;
 
-      // For now, we'll fetch a hardcoded thread ID. Later this could be dynamic.
-      const threadId = "thread-1";
-      const currentThread = await getNarrativeThreadById(threadId);
-      setThread(currentThread);
+    setIsLoading(true);
+    // For now, we'll fetch a hardcoded thread ID. Later this could be dynamic.
+    const threadId = "thread-1";
+    const currentThread = await getNarrativeThreadById(threadId);
+    setThread(currentThread);
 
-      if (currentThread) {
-        const threadComments = await getCommentsByThreadId(currentThread.id);
-        
-        // Enrich comments with character data
-        const enrichedComments = await Promise.all(
-            threadComments.map(async (comment) => {
-                let character = null;
-                if (comment.characterId) {
-                    character = await getCharacter(comment.characterId);
-                }
-                return { ...comment, character };
-            })
-        );
-        setComments(enrichedComments);
-      }
-    };
-
-    fetchNarrativeData();
+    if (currentThread) {
+      const threadComments = await getCommentsByThreadId(currentThread.id);
+      
+      // Enrich comments with character data
+      const enrichedComments = await Promise.all(
+          threadComments.map(async (comment) => {
+              let character = null;
+              if (comment.characterId) {
+                  character = await getCharacter(comment.characterId);
+              }
+              return { ...comment, character };
+          })
+      );
+      setComments(enrichedComments);
+    }
+    setIsLoading(false);
   }, [campaign]);
 
-  if (!thread) {
+  useEffect(() => {
+    fetchNarrativeData();
+  }, [fetchNarrativeData]);
+
+  if (isLoading || !thread) {
     return (
         <div className="flex items-center justify-center min-h-[calc(100vh-theme(spacing.24))]">
             <p className="text-muted-foreground">Loading narrative...</p>

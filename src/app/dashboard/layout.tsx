@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import Link from "next/link";
@@ -52,6 +53,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
+import { runSeed } from "@/lib/firebase/seed";
 
 const worldNavItems = [
   { href: "/dashboard/characters", icon: Users, label: "Characters" },
@@ -82,6 +84,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { user, campaign, isLoading } = useAuth();
   const router = useRouter();
   const [isSheetOpen, setIsSheetOpen] = React.useState(false);
+
+  // --- DEMO ONLY: SEED DATABASE ---
+  // This is a temporary solution to seed the database for the demo.
+  // In a real application, this would be handled by a proper backend process.
+  React.useEffect(() => {
+    runSeed();
+  }, []);
+  // --- END DEMO ONLY ---
 
   React.useEffect(() => {
     if (!isLoading && !user) {
