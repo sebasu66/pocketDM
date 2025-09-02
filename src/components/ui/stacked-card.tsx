@@ -21,8 +21,6 @@ export function StackedCard<T extends { id: string; name: string }>({ items, ren
     if (!items || items.length === 0 || activeIndex < 0 || activeIndex >= items.length) {
       return [];
     }
-    const activeItem = items[activeIndex];
-    const otherItems = items.filter((_, i) => i !== activeIndex);
 
     // Assign a unique, stable random rotation to each item
     const itemsWithRotation = items.map(item => ({
@@ -30,10 +28,10 @@ export function StackedCard<T extends { id: string; name: string }>({ items, ren
       rotation: Math.random() * 2 - 1, // -1 to 1 degree rotation
     }));
     
-    const activeItemWithRotation = itemsWithRotation.find(i => i.id === activeItem.id);
-    const otherItemsWithRotation = itemsWithRotation.filter(i => i.id !== activeItem.id);
+    const activeItem = itemsWithRotation[activeIndex];
+    const otherItems = itemsWithRotation.filter((_, i) => i !== activeIndex);
     
-    return [...otherItemsWithRotation, activeItemWithRotation];
+    return [...otherItems, activeItem];
   }, [items, activeIndex]);
 
   if (orderedItems.length === 0) {
@@ -58,11 +56,11 @@ export function StackedCard<T extends { id: string; name: string }>({ items, ren
                 "absolute w-full h-full rounded-lg shadow-2xl transition-all duration-500 ease-in-out cursor-pointer",
                 isActive 
                   ? "drop-shadow-[0_25px_25px_rgba(0,0,0,0.5)]" 
-                  : "opacity-80 hover:-translate-y-2 blur-[2px]"
+                  : "opacity-80 hover:-translate-y-2 blur-[1px]"
               )}
               style={{
                 zIndex: zIndex,
-                transform: `translateY(${isActive ? 0 : distance * 20}px) scale(${1 - distance * 0.05}) rotate(${item.rotation}deg)`,
+                transform: `translateX(${isActive ? 0 : distance * 10}px) translateY(${isActive ? 0 : distance * 20}px) scale(${1 - distance * 0.05}) rotate(${item.rotation}deg)`,
               }}
             >
               <div className="w-full h-full relative">
