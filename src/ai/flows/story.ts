@@ -31,8 +31,8 @@ const StoryInputSchema = z.object({
   campaignId: z.string().describe("The ID of the current campaign."),
   systemPrompt: z.string().describe("Instructions for the AI on how to behave."),
   narrativeHistory: z.string().describe("The history of the narrative so far, including player actions."),
-  // The API key is now optional here, as we will prefer the environment variable.
-  apiKey: z.string().optional().describe("An optional Gemini API key. If not provided, the server will use the GEMINI_API_KEY environment variable."),
+  // The API key is now passed directly to the function
+  apiKey: z.string().describe("The Gemini API key."),
 });
 export type StoryInput = z.infer<typeof StoryInputSchema>;
 
@@ -51,10 +51,14 @@ const generateStoryFlow = ai.defineFlow(
     async (input) => {
         const { campaignId, systemPrompt, narrativeHistory, apiKey } = input;
         
-        // Use the apiKey from input if provided, otherwise it will use the one from the environment.
+        // Ensure the API key is provided, otherwise throw an error.
+        if (!apiKey) {
+            throw new Error("Gemini API key is required.");
+        }
+
         const storyPrompt = ai.definePrompt({
             name: 'storyPrompt',
-            input: { schema: z.any() }, // Allow any input to be passed to the prompt
+            input: { schema: z.any() },
             output: { schema: StoryOutputSchema },
             tools: [getCharactersTool],
             prompt: `
@@ -73,9 +77,8 @@ const generateStoryFlow = ai.defineFlow(
                 {{narrativeHistory}}
                 ---
             `,
-            // Conditionally configure the model with an API key if one is passed.
-            // Genkit will automatically pick up the GEMINI_API_KEY env var if it's set.
-            model: apiKey ? googleAI({apiKey}) : 'googleai/gemini-2.5-flash',
+            // Configure the model with the provided API key.
+            model: googleAI({apiKey}),
         });
 
         const { output } = await storyPrompt({
