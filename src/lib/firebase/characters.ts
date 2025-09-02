@@ -1,23 +1,70 @@
 
-import { collection, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc } from "firebase/firestore"; 
+import { collection, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc, query, where } from "firebase/firestore"; 
 import { db } from "./config";
 import { Character } from "./types";
 
 const CHARACTERS_COLLECTION = "characters";
 
+// Mock data
+const mockCharacters: Character[] = [
+    {
+        id: "char-1",
+        name: "Grom the Valiant",
+        description: "A stoic warrior from the northern mountains, seeking to reclaim his family's honor.",
+        portrait: "https://picsum.photos/200/300?random=10",
+        aiHint: "fantasy warrior portrait",
+        campaignId: "1",
+        userId: "2" // Alice's ID
+    },
+    {
+        id: "char-2",
+        name: "Lyra Whisperwind",
+        description: "An nimble elf rogue with a mysterious past and a knack for getting into trouble.",
+        portrait: "https://picsum.photos/200/300?random=11",
+        aiHint: "fantasy elf portrait",
+        campaignId: "1",
+        userId: "3" // Bob's hypothetical ID
+    }
+];
+
 // Create
 export const addCharacter = async (character: Omit<Character, 'id'>): Promise<string> => {
+    // Mock implementation
+    const newId = `char-${mockCharacters.length + 1}`;
+    const newCharacter = { id: newId, ...character };
+    mockCharacters.push(newCharacter);
+    console.log("Added character:", newCharacter);
+    return Promise.resolve(newId);
+
+    /* Real implementation
     const docRef = await addDoc(collection(db, CHARACTERS_COLLECTION), character);
     return docRef.id;
+    */
 };
 
 // Read
 export const getCharacters = async (): Promise<Character[]> => {
+    return Promise.resolve(mockCharacters);
+    /* Real implementation
     const querySnapshot = await getDocs(collection(db, CHARACTERS_COLLECTION));
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Character));
+    */
 };
 
+export const getCharactersByCampaign = async (campaignId: string): Promise<Character[]> => {
+    const characters = mockCharacters.filter(c => c.campaignId === campaignId);
+    return Promise.resolve(characters);
+    /* Real implementation
+    const q = query(collection(db, CHARACTERS_COLLECTION), where("campaignId", "==", campaignId));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Character));
+    */
+}
+
 export const getCharacter = async (id: string): Promise<Character | null> => {
+    const character = mockCharacters.find(c => c.id === id) || null;
+    return Promise.resolve(character);
+    /* Real implementation
     const docRef = doc(db, CHARACTERS_COLLECTION, id);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
@@ -25,16 +72,31 @@ export const getCharacter = async (id: string): Promise<Character | null> => {
     } else {
         return null;
     }
+    */
 };
 
 // Update
 export const updateCharacter = async (id: string, character: Partial<Omit<Character, 'id'>>): Promise<void> => {
+    const index = mockCharacters.findIndex(c => c.id === id);
+    if (index !== -1) {
+        mockCharacters[index] = { ...mockCharacters[index], ...character };
+    }
+    return Promise.resolve();
+    /* Real implementation
     const docRef = doc(db, CHARACTERS_COLLECTION, id);
     await updateDoc(docRef, character);
+    */
 };
 
 // Delete
 export const deleteCharacter = async (id: string): Promise<void> => {
+    const index = mockCharacters.findIndex(c => c.id === id);
+    if (index !== -1) {
+        mockCharacters.splice(index, 1);
+    }
+    return Promise.resolve();
+    /* Real implementation
     const docRef = doc(db, CHARACTERS_COLLECTION, id);
     await deleteDoc(docRef);
+    */
 };

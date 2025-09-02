@@ -29,11 +29,12 @@ export interface Character {
 export interface NarrativeThread {
     id: string;
     title: string;
-    content: string;
+    content: string; // Can contain HTML
     imageUrl?: string;
     imageAiHint?: string;
     audioUrl?: string;
-    authorId: string; // User ID
+    authorId: string; // User ID (always GM)
+    campaignId: string;
     createdAt: number; // timestamp
 }
 

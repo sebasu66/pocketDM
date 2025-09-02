@@ -9,9 +9,40 @@ import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTheme } from "@/context/theme-context";
+import { useAuth } from "@/context/auth-context";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function SettingsPage() {
   const { handwritingFont, setHandwritingFont } = useTheme();
+  const { user, isLoading } = useAuth();
+
+  if (isLoading || !user) {
+    return (
+      <div className="max-w-3xl mx-auto space-y-8">
+        <Card>
+          <CardHeader>
+            <Skeleton className="h-8 w-48" />
+            <Skeleton className="h-4 w-64" />
+          </CardHeader>
+          <CardContent className="space-y-6">
+             <div className="flex items-center gap-6">
+                <div className="flex flex-col items-center gap-2">
+                    <Skeleton className="h-24 w-24 rounded-full" />
+                    <Skeleton className="h-8 w-24" />
+                </div>
+                <div className="grid gap-4 flex-1">
+                    <Skeleton className="h-14 w-full" />
+                    <Skeleton className="h-14 w-full" />
+                </div>
+             </div>
+             <div className="flex justify-end">
+                <Skeleton className="h-10 w-32" />
+             </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-3xl mx-auto space-y-8">
@@ -24,19 +55,19 @@ export default function SettingsPage() {
           <div className="flex items-center gap-6">
             <div className="flex flex-col items-center gap-2">
               <Avatar className="h-24 w-24">
-                <AvatarImage src="https://picsum.photos/100/100" alt="User Avatar" data-ai-hint="person portrait" />
-                <AvatarFallback>GM</AvatarFallback>
+                <AvatarImage src={user.avatar} alt="User Avatar" data-ai-hint="person portrait" />
+                <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
               </Avatar>
               <Button variant="outline" size="sm">Change Picture</Button>
             </div>
             <div className="grid gap-4 flex-1">
               <div className="grid gap-2">
                 <Label htmlFor="username">Username</Label>
-                <Input id="username" defaultValue="Game Master" />
+                <Input id="username" defaultValue={user.name} />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" defaultValue="gm@example.com" disabled />
+                <Input id="email" type="email" defaultValue={user.email} disabled />
                 <p className="text-xs text-muted-foreground">You cannot change your email address.</p>
               </div>
             </div>
