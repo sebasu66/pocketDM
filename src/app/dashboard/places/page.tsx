@@ -6,7 +6,7 @@ export default function PlacesPage() {
       <CardHeader>
         <CardTitle>Place Management</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-4">
         <p>This is where you will create and manage cities, dungeons, and other locations within your world.</p>
       </CardContent>
     </Card>

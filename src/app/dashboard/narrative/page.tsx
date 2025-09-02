@@ -41,7 +41,7 @@ export default function NarrativePage() {
     : comments.filter(c => c.playerId === user?.id);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <Card>
         <CardHeader>
           <CardTitle className="font-headline">The Arrival at Silverwood</CardTitle>
@@ -69,7 +69,7 @@ export default function NarrativePage() {
 
         </CardContent>
       </Card>
-      <div className="space-y-4">
+      <div className="space-y-6">
         <h3 className="font-headline text-xl">Comments ({visibleComments.length})</h3>
         
         {visibleComments.map((comment) => (

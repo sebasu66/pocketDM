@@ -6,7 +6,7 @@ export default function ItemsPage() {
       <CardHeader>
         <CardTitle>Item Management</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-4">
         <p>This is where you will create and manage magical items, equipment, and other artifacts within your campaigns.</p>
       </CardContent>
     </Card>

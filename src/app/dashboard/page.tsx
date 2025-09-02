@@ -61,7 +61,7 @@ const latestDevelopments = [
 
 export default function DashboardPage() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <Card className="overflow-hidden">
         <div className="relative h-64 w-full">
            <Image src="https://picsum.photos/1200/400?random=10" alt="Campaign hero image" fill className="object-cover" data-ai-hint="epic fantasy landscape" />

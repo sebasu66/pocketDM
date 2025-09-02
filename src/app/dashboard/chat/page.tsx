@@ -6,7 +6,7 @@ export default function ChatPage() {
       <CardHeader>
         <CardTitle>Player Chat</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-4">
         <p>This is where players can communicate freely outside of the game and try to make plans.</p>
       </CardContent>
     </Card>

@@ -14,7 +14,7 @@ export default function SettingsPage() {
   const { handwritingFont, setHandwritingFont } = useTheme();
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
+    <div className="max-w-3xl mx-auto space-y-8">
       <Card>
         <CardHeader>
           <CardTitle className="font-headline">My Profile</CardTitle>

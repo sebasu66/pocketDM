@@ -24,7 +24,7 @@ const characters = [
 
 export default function CharactersPage() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <Card>
         <CardHeader>
           <CardTitle className="font-headline">Create New Character</CardTitle>
@@ -72,7 +72,7 @@ export default function CharactersPage() {
               <CardContent className="p-4">
                 <p className="text-muted-foreground text-sm h-16">{char.description}</p>
               </CardContent>
-              <CardContent className="p-4 pt-0 flex gap-2">
+              <CardContent className="p-4 pt-0 flex gap-2 px-4">
                  <Button className="w-full">
                     <Edit /> View/Edit Sheet
                   </Button>
