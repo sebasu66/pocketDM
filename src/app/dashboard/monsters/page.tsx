@@ -151,7 +151,7 @@ export default function MonstersPage() {
       <Separator />
 
       {filteredMonsters.length > 0 ? (
-        <div className="grid md:grid-cols-3 items-start h-[75vh]">
+        <div className="grid md:grid-cols-3 items-center h-[75vh]">
 
            {/* Left Floating Text */}
             <div className={cn("transition-opacity duration-500 px-4 md:px-8", activeMonster ? "opacity-100" : "opacity-0")}>
