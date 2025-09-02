@@ -192,7 +192,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
             <main 
               className="p-4 md:p-6 bg-cover bg-fixed bg-center"
-              style={{backgroundImage: "url('https://www.transparenttextures.com/patterns/wood-2.png')"}}
+              style={{backgroundImage: "url('https://picsum.photos/seed/wood/1920/1080')"}}
             >
               {children}
             </main>
