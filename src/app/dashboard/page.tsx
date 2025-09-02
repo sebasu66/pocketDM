@@ -11,33 +11,6 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-const mainEntities = [
-  {
-    title: "Veronica Korsch",
-    description: "A determined half-elf paladin on a quest to avenge her fallen order.",
-    image: "https://picsum.photos/400/400?random=1",
-    aiHint: "female paladin portrait",
-  },
-  {
-    title: "The Shadow Syndicate",
-    description: "A clandestine group rumored to pull the strings of power from the city's underbelly.",
-    image: "https://picsum.photos/600/400?random=2",
-    aiHint: "fantasy assassins group",
-  },
-  {
-    title: "The Sunken City of Azmar",
-    description: "Uncover the mysteries of a once-great civilization now lost beneath the waves.",
-    image: "https://picsum.photos/600/400?random=3",
-    aiHint: "underwater ruins",
-  },
-   {
-    title: "The Whispering Peaks",
-    description: "A treacherous mountain range said to drive travelers mad with its constant, unintelligible whispers.",
-    image: "https://picsum.photos/600/400?random=4",
-    aiHint: "snowy mountains fantasy",
-  },
-];
-
 const latestDevelopments = [
   {
     icon: ScrollText,
@@ -103,49 +76,6 @@ export default function DashboardPage() {
           ))}
         </div>
       </div>
-
-      <div className="space-y-4">
-        <h3 className="text-2xl font-headline">Main Entities</h3>
-        <Carousel
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-          className="w-full"
-        >
-          <CarouselContent className="-ml-4">
-            {mainEntities.map((entity, index) => (
-              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3 pl-8">
-                <div className="p-1">
-                  <Card className="overflow-hidden transition-all hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-1 group">
-                      <div className="transform transition-transform duration-300 ease-in-out group-hover:scale-105 group-hover:rotate-0 odd:-rotate-2 even:rotate-1">
-                          <CardHeader className="p-0">
-                          <Image
-                              src={entity.image}
-                              alt={entity.title}
-                              width={600}
-                              height={400}
-                              className="w-full h-48 object-cover"
-                              data-ai-hint={entity.aiHint}
-                          />
-                          </CardHeader>
-                          <CardContent className="p-6">
-                          <CardTitle className="font-headline text-xl mb-2">{entity.title}</CardTitle>
-                          <CardDescription className="text-muted-foreground">{entity.description}</CardDescription>
-                          </CardContent>
-                          <CardFooter className="p-6 pt-0">
-                          <Button variant="outline" className="w-full">View Details</Button>
-                          </CardFooter>
-                      </div>
-                  </Card>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
-       </div>
     </div>
   );
 }
