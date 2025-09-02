@@ -14,6 +14,7 @@ const users: (User & { password?: string })[] = [
     role: "master",
     avatar: "https://picsum.photos/100/100?random=99",
     password: "password",
+    campaignId: "1",
   },
   {
     id: "2",
@@ -22,6 +23,7 @@ const users: (User & { password?: string })[] = [
     role: "player",
     avatar: "https://picsum.photos/100/100?random=5",
     password: "password",
+    campaignId: "1",
   },
 ];
 

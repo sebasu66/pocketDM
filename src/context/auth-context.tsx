@@ -1,11 +1,15 @@
+
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { User, getUserById } from '@/lib/auth';
+import { User, Campaign } from '@/lib/firebase/types';
+import { getUserById } from '@/lib/auth';
+import { getCampaign } from '@/lib/firebase/campaigns';
 
 interface AuthContextType {
   user: User | null;
-  login: (userId: string) => void;
+  campaign: Campaign | null;
+  login: (userId: string) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
 }
@@ -14,47 +18,55 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [campaign, setCampaign] = useState<Campaign | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check for user in localStorage on initial load
-    try {
-      const storedUserId = localStorage.getItem('userId');
-      if (storedUserId) {
-        const loggedInUser = getUserById(storedUserId);
-        if (loggedInUser) {
-          setUser(loggedInUser);
+    const initializeAuth = async () => {
+      try {
+        const storedUserId = localStorage.getItem('userId');
+        if (storedUserId) {
+          const loggedInUser = getUserById(storedUserId);
+          if (loggedInUser) {
+            setUser(loggedInUser);
+            const campaignData = await getCampaign(loggedInUser.campaignId);
+            setCampaign(campaignData);
+          }
         }
+      } catch (e) {
+        console.error("Could not access local storage or fetch data", e);
       }
-    } catch (e) {
-      console.error("Could not access local storage", e);
-    }
-    setIsLoading(false);
+      setIsLoading(false);
+    };
+    initializeAuth();
   }, []);
 
-  const login = (userId: string) => {
+  const login = async (userId: string) => {
     const loggedInUser = getUserById(userId);
     if (loggedInUser) {
-        try {
-            localStorage.setItem('userId', userId);
-        } catch (e) {
-            console.error("Could not access local storage", e);
-        }
+      try {
+        localStorage.setItem('userId', userId);
+        const campaignData = await getCampaign(loggedInUser.campaignId);
         setUser(loggedInUser);
+        setCampaign(campaignData);
+      } catch (e) {
+        console.error("Could not access local storage or fetch data", e);
+      }
     }
   };
 
   const logout = () => {
     try {
-        localStorage.removeItem('userId');
+      localStorage.removeItem('userId');
     } catch (e) {
-        console.error("Could not access local storage", e);
+      console.error("Could not access local storage", e);
     }
     setUser(null);
+    setCampaign(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, campaign, login, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

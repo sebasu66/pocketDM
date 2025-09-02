@@ -5,6 +5,15 @@ export interface User {
     email: string;
     role: "master" | "player";
     avatar: string;
+    campaignId: string;
+}
+
+export interface Campaign {
+    id: string;
+    title: string;
+    description: string;
+    bannerUrl: string;
+    bannerAiHint: string;
 }
 
 export interface Character {
@@ -13,6 +22,8 @@ export interface Character {
     description: string;
     portrait: string;
     aiHint: string;
+    campaignId: string;
+    userId: string;
 }
 
 export interface NarrativeThread {

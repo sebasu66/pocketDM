@@ -1,15 +1,11 @@
 
+"use client";
+
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Star, ScrollText, Skull, Map } from "lucide-react";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+import { useAuth } from "@/context/auth-context";
 
 const latestDevelopments = [
   {
@@ -33,20 +29,25 @@ const latestDevelopments = [
 ];
 
 export default function DashboardPage() {
+  const { campaign } = useAuth();
+
+  if (!campaign) {
+    return null; // Or a loading state
+  }
+
   return (
     <div className="space-y-8">
       <Card className="overflow-hidden">
         <div className="relative h-64 w-full">
-           <Image src="https://picsum.photos/1200/400?random=10" alt="Campaign hero image" fill className="object-cover" data-ai-hint="epic fantasy landscape" />
+           <Image src={campaign.bannerUrl} alt="Campaign hero image" fill className="object-cover" data-ai-hint={campaign.bannerAiHint} />
            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
         </div>
         <CardHeader className="relative -mt-20 z-10 p-6">
            <div className="flex justify-between items-start">
              <div>
-              <CardTitle className="text-4xl text-white font-headline">The Whispering Shadows</CardTitle>
+              <CardTitle className="text-4xl text-white font-headline">{campaign.title}</CardTitle>
               <CardDescription className="text-white/80 max-w-3xl mt-2">
-                A realm teetering on the brink of an ancient, creeping darkness. Once a safe haven for elves, dwarves, gnomes and
-                other creatures, humans started settling in thousands of years ago through war and conquest. The elves live exiles in the north.
+                {campaign.description}
               </CardDescription>
             </div>
              <Button variant="outline" className="bg-background/50 border-white/50 text-white backdrop-blur-sm hover:bg-white hover:text-black">

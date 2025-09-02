@@ -20,10 +20,10 @@ export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const user = getUserByEmail(email);
     if (user && checkPassword(user, password)) {
-      login(user.id);
+      await login(user.id);
       router.push("/dashboard");
     } else {
       toast({
@@ -101,4 +101,3 @@ export default function LoginPage() {
     </div>
   );
 }
-

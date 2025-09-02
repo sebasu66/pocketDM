@@ -65,7 +65,7 @@ const narrativeNavItems = [
 ];
 
 const pageTitles: { [key: string]: string } = {
-  "/dashboard": "The Whispering Shadows",
+  "/dashboard": "Campaign Dashboard",
   "/dashboard/characters": "Characters",
   "/dashboard/places": "Places",
   "/dashboard/items": "Items",
@@ -77,7 +77,7 @@ const pageTitles: { [key: string]: string } = {
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() || "/dashboard";
-  const { user, isLoading } = useAuth();
+  const { user, campaign, isLoading } = useAuth();
   const router = useRouter();
   const [isSheetOpen, setIsSheetOpen] = React.useState(false);
 
@@ -87,12 +87,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     }
   }, [isLoading, user, router]);
 
-  if (isLoading || !user) {
+  if (isLoading || !user || !campaign) {
     return (
        <div className="flex items-center justify-center min-h-screen">
           <div className="flex items-center gap-2">
             <Logo className="w-8 h-8 animate-spin" />
-            <p className="text-muted-foreground">Loading your session...</p>
+            <p className="text-muted-foreground">Loading your campaign...</p>
           </div>
        </div>
     );
@@ -106,10 +106,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <>
        <SidebarHeader className="p-0">
           <div className="relative h-32 w-full">
-             <Image src="https://picsum.photos/400/200?random=50" alt="Campaign Banner" fill sizes="100vw" className="object-cover" data-ai-hint="fantasy landscape" />
+             <Image src={campaign.bannerUrl} alt="Campaign Banner" fill sizes="100vw" className="object-cover" data-ai-hint={campaign.bannerAiHint} />
              <div className="absolute inset-0 bg-gradient-to-t from-sidebar/100 to-sidebar/20" />
              <div className="absolute bottom-4 left-4">
-                <h2 className="text-2xl font-headline text-white">The Whispering Shadows</h2>
+                <h2 className="text-2xl font-headline text-white">{campaign.title}</h2>
              </div>
           </div>
         </SidebarHeader>
