@@ -17,14 +17,18 @@ You are an AI assistant tasked with acting as a Game Master for a storytelling g
 
 ### Step 1: Read the Game State
 
-First, you need to understand what's happening in the story and who the characters are. Fetch the data from these two API endpoints.
+First, you need to understand what's happening in the story and who the characters are. Fetch the data from these two API endpoints. You MUST include the 'X-API-Key' header with the secret key provided.
+
+**The Secret API Key:**
+a-super-secret-key-for-lore-weaver
 
 **A) Get All Characters in the Campaign:**
 This gives you a list of all characters, their descriptions, and stats.
 
 \`\`\`bash
 # Replace CAMPAIGN_ID with the actual ID.
-curl "${origin}/api/characters?campaignId=${campaignId || 'YOUR_CAMPAIGN_ID'}"
+curl -H "X-API-Key: a-super-secret-key-for-lore-weaver" \\
+  "${origin}/api/characters?campaignId=${campaignId || 'YOUR_CAMPAIGN_ID'}"
 \`\`\`
 
 **B) Get the Full Narrative History:**
@@ -32,7 +36,8 @@ This returns all previous posts from the Game Master and all player responses, i
 
 \`\`\`bash
 # Replace CAMPAIGN_ID with the actual ID.
-curl "${origin}/api/narrative/${campaignId || 'YOUR_CAMPAIGN_ID'}"
+curl -H "X-API-Key: a-super-secret-key-for-lore-weaver" \\
+  "${origin}/api/narrative/${campaignId || 'YOUR_CAMPAIGN_ID'}"
 \`\`\`
 
 ---
@@ -43,7 +48,7 @@ After analyzing the story and characters, decide what happens next. Generate a c
 
 Example Post Content:
 \`\`\`html
-<p>The old tome's pages crumble under your touch, revealing a map scorched into the leather backing. It points to a location known only as the 'Whispering Peaks,' a place rumored to be guarded by ancient spirits.</p><p>A chilling wind suddenly gusts through the library, snuffing out all the candles. What do you do?</p>
+<p>The old tome's pages crumble under your touch, revealing a map scorched into the leather backing. It points to a location known only as the 'Whispering Peaks,' a place rumored to be guarded by ancient spirits.</p><p>A chilling wind suddenly gusts through the library, snuff out all the candles. What do you do?</p>
 \`\`\`
 
 ---
@@ -134,4 +139,3 @@ export default function IntegrationsPage() {
         </div>
     );
 }
-
