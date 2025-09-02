@@ -50,6 +50,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 
 const worldNavItems = [
   { href: "/dashboard/characters", icon: Users, label: "Characters" },
@@ -190,12 +191,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </header>
 
             <main className="p-4 md:p-6">{children}</main>
+            
+            <RusticIconButton
+                variant="incomplete"
+                tooltip="Toggle Menu"
+                onClick={() => setIsSheetOpen(true)}
+                className="fixed bottom-6 right-6 h-16 w-16 text-white/90 hover:text-white z-30"
+            >
+                <Menu size={28} />
+            </RusticIconButton>
 
-            <SheetTrigger asChild>
-                <Button className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg z-30" size="icon">
-                    <Menu />
-                </Button>
-            </SheetTrigger>
             <SheetContent side="right" className="p-0 w-80 bg-sidebar-gradient border-l-0 text-sidebar-foreground">
                {sidebarContent}
             </SheetContent>

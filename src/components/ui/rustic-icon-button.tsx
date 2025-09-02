@@ -7,10 +7,16 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
 
 interface RusticIconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     tooltip?: string;
+    variant?: 'complete' | 'incomplete';
+}
+
+const paths = {
+    complete: "M 50,6 C 28,6, 8,24, 8,50 S 25,93, 50,94 S 92,75, 92,50 S 72,6, 50,6 Z",
+    incomplete: "M 82,60 C 82,85, 65,94, 50,94 C 25,94, 8,75, 8,50 C 8,25, 25,6, 50,6 C 68,6, 82,22, 82,40"
 }
 
 export const RusticIconButton = React.forwardRef<HTMLButtonElement, RusticIconButtonProps>(
-  ({ className, children, tooltip, ...props }, ref) => {
+  ({ className, children, tooltip, variant = 'complete', ...props }, ref) => {
     
     const button = (
         <button
@@ -27,11 +33,7 @@ export const RusticIconButton = React.forwardRef<HTMLButtonElement, RusticIconBu
                 className="absolute inset-0 h-full w-full"
                 >
                 <path
-                    d="M 50,6
-                    C 28,6, 8,24, 8,50
-                    S 25,93, 50,94
-                    S 92,75, 92,50
-                    S 72,6, 50,6 Z"
+                    d={paths[variant]}
                     stroke="currentColor"
                     strokeWidth="4"
                     fill="none"
