@@ -29,7 +29,11 @@ const initialMonsters = [
     {
         id: "1",
         name: "Dire Wolf",
-        observations: "Larger and more ferocious than its common kin, the Dire Wolf is a cunning predator of the northern wilds. Its eyes glow with a faint, malevolent light, and its howl can freeze the blood of the bravest warrior. They hunt in packs, coordinating their attacks with terrifying intelligence, often outmaneuvering their prey with coordinated flanking maneuvers.",
+        observations: `Larger and more ferocious than its common kin, the Dire Wolf is a cunning predator of the northern wilds.
+        
+Its eyes glow with a faint, malevolent light, and its howl can freeze the blood of the bravest warrior.
+
+They hunt in packs, coordinating their attacks with terrifying intelligence, often outmaneuvering their prey with coordinated flanking maneuvers.`,
         thematicStats: {
           toughness: "Medium",
           hitDifficulty: "Medium",
@@ -147,12 +151,16 @@ export default function MonstersPage() {
       <Separator />
 
       {filteredMonsters.length > 0 ? (
-        <div className="grid md:grid-cols-3 items-center h-[75vh]">
+        <div className="grid md:grid-cols-3 items-start h-[75vh]">
 
            {/* Left Floating Text */}
             <div className={cn("transition-opacity duration-500 px-4 md:px-8", activeMonster ? "opacity-100" : "opacity-0")}>
               <h3 className="font-handwriting text-3xl text-white/90 underline underline-offset-8 decoration-white/30 mb-4">Observations</h3>
-              <p className="text-white/70 mt-2 font-headline text-xl leading-relaxed">{activeMonster?.observations}</p>
+               <div className="text-white/70 mt-2 font-handwriting text-xl leading-relaxed space-y-4">
+                  {activeMonster?.observations.split('\n\n').map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))}
+               </div>
             </div>
 
 
@@ -190,9 +198,9 @@ export default function MonstersPage() {
             </div>
             
              {/* Right Floating Text */}
-             <div className={cn("transition-opacity duration-500 px-4 md:px-8", activeMonster ? "opacity-100" : "opacity-0")}>
+             <div className={cn("transition-opacity duration-500 px-4 md:pl-12", activeMonster ? "opacity-100" : "opacity-0")}>
                 <h3 className="font-handwriting text-3xl text-white/90 underline underline-offset-8 decoration-white/30 mb-4">Abilities</h3>
-                <div className="space-y-3 text-white/70 font-headline text-xl leading-relaxed">
+                <div className="space-y-3 text-white/70 font-handwriting text-xl leading-relaxed">
                    <p>Toughness: {activeMonster?.thematicStats.toughness}</p>
                    <p>Hit Difficulty: {activeMonster?.thematicStats.hitDifficulty}</p>
                    <p>Speed: {activeMonster?.thematicStats.speed}</p>
@@ -271,4 +279,6 @@ export default function MonstersPage() {
     </div>
   );
 }
+    
+
     
