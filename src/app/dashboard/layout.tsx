@@ -16,7 +16,8 @@ import {
   Mountain,
   Swords,
   BookOpen,
-  Menu
+  Menu,
+  Crown
 } from "lucide-react";
 
 import {
@@ -83,7 +84,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   React.useEffect(() => {
     if (!isLoading && !user) {
-      router.push('/');
+      router.push('/login');
     }
   }, [isLoading, user, router]);
 
