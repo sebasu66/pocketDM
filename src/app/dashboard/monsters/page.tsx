@@ -231,17 +231,17 @@ export default function MonstersPage() {
                 activeIndex={activeIndex}
                 setActiveIndex={setActiveIndex}
                 renderItem={(monster, isActive) => (
-                    <div className="relative h-full w-full overflow-hidden rounded-lg text-card-foreground">
+                    <div className="relative h-full w-full overflow-hidden rounded-lg text-card-foreground bg-stone-900">
                     <Image
                         src={monster.image}
                         alt={monster.name}
                         fill
-                        className="h-full w-full object-cover"
+                        className="h-full w-full object-contain"
                         data-ai-hint={monster.aiHint}
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         priority={isActive}
                     />
-                    <h2 className="font-handwriting text-5xl text-stone-900 drop-shadow-lg absolute bottom-6 left-1/2 w-full -translate-x-1/2 text-center mix-blend-multiply">
+                    <h2 className="font-handwriting text-5xl text-stone-200/90 drop-shadow-lg absolute bottom-6 left-1/2 w-full -translate-x-1/2 text-center mix-blend-plus-lighter">
                         {monster.name}
                     </h2>
                     </div>
@@ -333,5 +333,3 @@ export default function MonstersPage() {
     </div>
   );
 }
-
-    
