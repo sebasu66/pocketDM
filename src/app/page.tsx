@@ -2,12 +2,22 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Logo } from "@/components/logo";
-import { KeyRound, User, Crown } from "lucide-react";
+import { Crown, User } from "lucide-react";
+import { useAuth } from "@/context/auth-context";
 
 export default function HomePage() {
+  const { login } = useAuth();
+  const router = useRouter();
+
+  const handleQuickLogin = async (userId: string) => {
+    await login(userId);
+    router.push("/dashboard");
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center bg-no-repeat p-4" style={{backgroundImage: "url('https://picsum.photos/1920/1080?grayscale&blur=5&random=1')"}} data-ai-hint="fantasy landscape">
       <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
@@ -20,8 +30,8 @@ export default function HomePage() {
             Your all-in-one platform for collaborative TTRPG world-building, character management, and narrative storytelling.
         </p>
         <div className="mt-8">
-            <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6">
-                <Link href="/login">Login to Your Campaign</Link>
+             <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6">
+                <Link href="/login">Go to Login Page</Link>
             </Button>
         </div>
 
@@ -36,9 +46,8 @@ export default function HomePage() {
                         Log in as the Game Master to control the world. Edit campaigns, create monsters, and guide the narrative.
                     </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-2 font-code text-sm">
-                    <p><strong>Email:</strong> gm@example.com</p>
-                    <p><strong>Password:</strong> password</p>
+                <CardContent>
+                    <Button className="w-full" onClick={() => handleQuickLogin("1")}>Quick Login as GM</Button>
                 </CardContent>
             </Card>
              <Card className="bg-card/50 backdrop-blur-lg">
@@ -51,9 +60,8 @@ export default function HomePage() {
                        Log in as a player to create your character, interact with the story, and uncover secrets. You'll be playing as Alice, controlling the valiant warrior Grom.
                     </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-2 font-code text-sm">
-                    <p><strong>Email:</strong> player@example.com</p>
-                    <p><strong>Password:</strong> password</p>
+                <CardContent>
+                     <Button className="w-full" onClick={() => handleQuickLogin("2")}>Quick Login as Player</Button>
                 </CardContent>
             </Card>
         </div>
