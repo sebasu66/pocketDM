@@ -231,7 +231,7 @@ export default function MonstersPage() {
                 activeIndex={activeIndex}
                 setActiveIndex={setActiveIndex}
                 renderItem={(monster, isActive) => (
-                    <div className="relative h-full w-full overflow-hidden rounded-lg bg-stone-900 text-card-foreground">
+                    <div className="relative h-full w-full overflow-hidden rounded-lg text-card-foreground">
                     <Image
                         src={monster.image}
                         alt={monster.name}
@@ -333,3 +333,5 @@ export default function MonstersPage() {
     </div>
   );
 }
+
+    
