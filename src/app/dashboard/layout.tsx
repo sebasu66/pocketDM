@@ -192,7 +192,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
             <main 
               className="p-4 md:p-6 bg-cover bg-fixed bg-center"
-              style={{backgroundImage: "url('https://picsum.photos/seed/wood/1920/1080')"}}
+              style={{backgroundImage: "url('/wood2.jpg')"}}
             >
               {children}
             </main>
@@ -201,7 +201,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 variant="incomplete"
                 tooltip="Toggle Menu"
                 onClick={() => setIsSheetOpen(true)}
-                className="fixed bottom-6 right-6 h-16 w-16 text-white/90 hover:text-white z-30 drop-shadow-lg"
+                className="fixed bottom-6 right-6 h-16 w-16 text-white/90 hover:text-white z-30"
             >
                 <Menu size={28} />
             </RusticIconButton>
