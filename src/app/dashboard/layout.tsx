@@ -18,7 +18,8 @@ import {
   Swords,
   BookOpen,
   Menu,
-  Crown
+  Crown,
+  Plug
 } from "lucide-react";
 
 import {
@@ -77,6 +78,7 @@ const pageTitles: { [key: string]: string } = {
   "/dashboard/chat": "Player Chat",
   "/dashboard/settings": "Settings",
   "/dashboard/settings/apikeys": "AI Settings",
+  "/dashboard/api-docs": "API Docs",
 };
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -171,6 +173,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <SidebarFooter>
           <Separator className="my-2 bg-border/20" />
           <SidebarMenu>
+             <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={pathname.startsWith('/dashboard/api-docs')} tooltip={{ children: 'API Docs' }} onClick={handleLinkClick}>
+                  <Link href="/dashboard/api-docs">
+                    <Plug />
+                    <span>API Docs</span>
+                  </Link>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
             <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname.startsWith('/dashboard/settings')} tooltip={{ children: 'Settings' }} onClick={handleLinkClick}>
                   <Link href="/dashboard/settings">
