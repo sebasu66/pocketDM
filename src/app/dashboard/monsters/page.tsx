@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Plus, Trash2, Edit, Search, Upload } from "lucide-react";
+import { Plus, Trash2, Edit, Search, Upload, ArrowLeft, ArrowRight } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import Image, { StaticImageData } from "next/image";
 import {
@@ -135,6 +135,14 @@ export default function MonstersPage() {
     setIsDialogOpen(false);
     setEditingMonster(null);
   }
+  
+  const handlePrev = () => {
+    setActiveIndex((prev) => (prev === 0 ? filteredMonsters.length - 1 : prev - 1));
+  }
+  
+  const handleNext = () => {
+    setActiveIndex((prev) => (prev === filteredMonsters.length - 1 ? 0 : prev + 1));
+  }
 
   const isMaster = user?.role === 'master';
 
@@ -186,35 +194,40 @@ export default function MonstersPage() {
           {/* Left Text Column */}
           <div
             className={cn(
-              'px-4 text-white/90 transition-opacity duration-500 md:px-8 h-full md:col-span-3'
+              'px-4 text-white/90 transition-opacity duration-500 md:px-8 h-full md:col-span-3 flex flex-col justify-center'
             )}
           >
-            <div className="flex h-full flex-col justify-start pt-16">
-              <div>
-                <h3 className="font-handwriting text-3xl underline decoration-white/30 underline-offset-8">
-                  Observations
-                </h3>
-                <div className="font-handwriting mt-2 space-y-4 text-lg md:text-xl font-light leading-relaxed">
-                  {activeMonster?.observations.split('\n\n').map((paragraph, index) => (
-                    <p key={index}>{paragraph}</p>
-                  ))}
-                </div>
+            <div>
+              <h3 className="font-handwriting text-3xl underline decoration-white/30 underline-offset-8">
+                Observations
+              </h3>
+              <div className="font-handwriting mt-2 space-y-4 text-lg md:text-xl font-light leading-relaxed">
+                {activeMonster?.observations.split('\n\n').map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
               </div>
-              <div className="mt-8">
-                <h3 className="font-handwriting text-3xl underline decoration-white/30 underline-offset-8">
-                  Abilities
-                </h3>
-                <div className="font-handwriting mt-2 space-y-3 text-lg md:text-xl font-light leading-relaxed">
-                  <p>Toughness: {activeMonster?.thematicStats.toughness}</p>
-                  <p>Hit Difficulty: {activeMonster?.thematicStats.hitDifficulty}</p>
-                  <p>Speed: {activeMonster?.thematicStats.speed}</p>
-                </div>
+            </div>
+            <div className="mt-8">
+              <h3 className="font-handwriting text-3xl underline decoration-white/30 underline-offset-8">
+                Abilities
+              </h3>
+              <div className="font-handwriting mt-2 space-y-3 text-lg md:text-xl font-light leading-relaxed">
+                <p>Toughness: {activeMonster?.thematicStats.toughness}</p>
+                <p>Hit Difficulty: {activeMonster?.thematicStats.hitDifficulty}</p>
+                <p>Speed: {activeMonster?.thematicStats.speed}</p>
               </div>
             </div>
           </div>
 
           {/* Right Card Stack Column */}
-          <div className="flex items-center justify-center h-full md:col-span-7">
+          <div className="relative flex items-center justify-center h-full md:col-span-7">
+             <RusticIconButton 
+                onClick={handlePrev} 
+                className="absolute left-0 z-10 text-white/80 opacity-70 hover:opacity-100"
+                tooltip="Previous"
+            >
+                <ArrowLeft size={32} />
+             </RusticIconButton>
              <StackedCard
                 items={filteredMonsters}
                 activeIndex={activeIndex}
@@ -236,6 +249,13 @@ export default function MonstersPage() {
                     </div>
                 )}
                 />
+            <RusticIconButton 
+                onClick={handleNext} 
+                className="absolute right-0 z-10 text-white/80 opacity-70 hover:opacity-100"
+                tooltip="Next"
+            >
+                <ArrowRight size={32} />
+             </RusticIconButton>
           </div>
 
         </div>
@@ -321,3 +341,5 @@ export default function MonstersPage() {
     </div>
   );
 }
+
+    
