@@ -1,5 +1,6 @@
 
 
+
 import { collection, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc, query, where } from "firebase/firestore"; 
 import { db } from "./config";
 import { Character } from "./types";
@@ -67,3 +68,4 @@ export const deleteCharacter = async (id: string): Promise<void> => {
     const docRef = doc(db, CHARACTERS_COLLECTION, id);
     await deleteDoc(docRef);
 };
+

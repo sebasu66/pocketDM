@@ -1,5 +1,6 @@
 
 
+
 export interface User {
     id: string;
     name: string;
@@ -81,3 +82,4 @@ export type EnrichedComment = NarrativeCommentWithAuthor & {
 export type EnrichedThread = NarrativeThread & {
     comments: EnrichedComment[];
 }
+
