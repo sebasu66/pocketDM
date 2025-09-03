@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { getNarrativeThreadsByCampaign } from "@/lib/firebase/narrative";
-import { getCommentsByThreadId } from "@/lib/firebase/comments";
+import { getCommentsByThreadId, addNarrativeComment } from "@/lib/firebase/comments";
 import { getCharactersByCampaign } from "@/lib/firebase/characters";
 import { addNarrativeThread } from "@/lib/firebase/narrative";
 
@@ -41,7 +41,7 @@ export default function NarrativePage() {
           getCharactersByCampaign(campaign.id)
         ]);
         
-        const activePlayers = charactersFromDb.filter(c => c.isActive);
+        const activeChars = charactersFromDb.filter(c => c.isActive);
 
         const enrichedThreads = await Promise.all(
           threadsFromDb.map(async (thread) => {
@@ -57,7 +57,7 @@ export default function NarrativePage() {
         );
         
         setThreads(enrichedThreads);
-        setActivePlayers(activePlayers);
+        setActivePlayers(activeChars);
 
         if (user && !isMaster) {
             const char = charactersFromDb.find((c: Character) => c.userId === user.id);
@@ -139,16 +139,7 @@ export default function NarrativePage() {
     };
 
     try {
-      const response = await fetch('/api/comments', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(commentData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to post comment');
-      }
-
+      await addNarrativeComment(commentData);
       toast({ title: "Response Posted!", description: "Your actions have been recorded in the annals of history."});
       await fetchNarrativeData();
     } catch (error) {
@@ -331,3 +322,5 @@ function CommentForm({ onSubmit, character }: { onSubmit: (text: string, hiddenT
         </Card>
     );
 }
+
+    
