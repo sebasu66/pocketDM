@@ -8,17 +8,18 @@ import { useAuth } from "@/context/auth-context";
 import { Eye, Plus, Music, Bot, Send, MessageSquareQuote, Lock } from "lucide-react";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 import Image from "next/image";
-import type { NarrativeCommentWithAuthor, EnrichedThread } from "@/lib/firebase/types";
-import type { Character } from "@/lib/firebase/types";
+import type { NarrativeCommentWithAuthor, EnrichedThread, Character } from "@/lib/firebase/types";
 import { generateStory, StoryInput } from "@/ai/flows/story";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { getNarrativeThreadsByCampaign } from "@/lib/firebase/narrative";
+import { collection, onSnapshot, query, where, orderBy } from "firebase/firestore";
+import { db } from "@/lib/firebase/config";
 import { getCommentsByThreadId, addNarrativeComment } from "@/lib/firebase/comments";
-import { getCharactersByCampaign } from "@/lib/firebase/characters";
+import { getCharactersByCampaign, getCharacter } from "@/lib/firebase/characters";
 import { addNarrativeThread } from "@/lib/firebase/narrative";
+import { NarrativeThread } from "@/lib/firebase/types";
 
 export default function NarrativePage() {
   const { user, campaign } = useAuth();
@@ -31,49 +32,67 @@ export default function NarrativePage() {
 
   const isMaster = user?.role === 'master';
 
-  const fetchNarrativeData = useCallback(async () => {
-    if (!campaign) return;
-    setIsLoading(true);
-    
-    try {
-        const [threadsFromDb, charactersFromDb] = await Promise.all([
-          getNarrativeThreadsByCampaign(campaign.id),
-          getCharactersByCampaign(campaign.id)
-        ]);
-        
-        const activeChars = charactersFromDb.filter(c => c.isActive);
-
-        const enrichedThreads = await Promise.all(
-          threadsFromDb.map(async (thread) => {
-            const threadComments = await getCommentsByThreadId(thread.id);
-            const enrichedComments = await Promise.all(
-              threadComments.map(async (comment) => {
-                const character = charactersFromDb.find(c => c.id === comment.characterId);
-                return { ...comment, character: character || null };
-              })
-            );
-            return { ...thread, comments: enrichedComments };
-          })
-        );
-        
-        setThreads(enrichedThreads);
-        setActivePlayers(activeChars);
-
-        if (user && !isMaster) {
-            const char = charactersFromDb.find((c: Character) => c.userId === user.id);
-            setPlayerCharacter(char || null);
-        }
-    } catch (error) {
-        console.error("Error fetching narrative data:", error);
-        toast({ variant: "destructive", title: "Error", description: "Could not fetch narrative data." });
-    } finally {
-        setIsLoading(false);
-    }
-  }, [campaign, user, isMaster, toast]);
+  const enrichThreads = useCallback(async (threadsFromDb: NarrativeThread[], charactersFromDb: Character[]) => {
+      const enrichedThreads = await Promise.all(
+        threadsFromDb.map(async (thread) => {
+          const threadComments = await getCommentsByThreadId(thread.id);
+          const enrichedComments = await Promise.all(
+            threadComments.map(async (comment) => {
+              const character = charactersFromDb.find(c => c.id === comment.characterId);
+              return { ...comment, character: character || null };
+            })
+          );
+          return { ...thread, comments: enrichedComments };
+        })
+      );
+      return enrichedThreads;
+  }, []);
 
   useEffect(() => {
-    fetchNarrativeData();
-  }, [fetchNarrativeData]);
+    if (!campaign) return;
+
+    setIsLoading(true);
+
+    const fetchInitialData = async () => {
+        try {
+            const charactersFromDb = await getCharactersByCampaign(campaign.id);
+            const activeChars = charactersFromDb.filter(c => c.isActive);
+            setActivePlayers(activeChars);
+
+            if (user && !isMaster) {
+                const char = await getCharacter(user.id);
+                setPlayerCharacter(char || null);
+            }
+
+             const q = query(
+                collection(db, "narrativeThreads"),
+                where("campaignId", "==", campaign.id),
+                orderBy("createdAt", "asc")
+            );
+
+            const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+                const threadsFromDb = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
+                const enriched = await enrichThreads(threadsFromDb, charactersFromDb);
+                setThreads(enriched);
+                setIsLoading(false);
+            }, (error) => {
+                console.error("Error fetching narrative threads in real-time:", error);
+                toast({ variant: "destructive", title: "Error", description: "Could not fetch narrative data." });
+                setIsLoading(false);
+            });
+
+            return () => unsubscribe();
+        } catch (error) {
+             console.error("Error setting up narrative listener:", error);
+             toast({ variant: "destructive", title: "Error", description: "Could not set up real-time updates." });
+             setIsLoading(false);
+        }
+    };
+
+    fetchInitialData();
+
+  }, [campaign, user, isMaster, toast, enrichThreads]);
+
 
   const handleGenerateNextPost = async () => {
       if (!campaign || !user || user.role !== 'master') return;
@@ -109,14 +128,13 @@ export default function NarrativePage() {
         const newThreadData = {
             campaignId: campaign.id,
             authorId: user.id, // GM
-            title: "The Story Continues...", // The AI could generate this too in a future version
+            title: "The Story Continues...",
             createdAt: Date.now(),
             content: `<p>${result.nextPost.replace(/\n/g, '</p><p>')}</p>`,
         };
 
         await addNarrativeThread(newThreadData);
-
-        await fetchNarrativeData(); // Refresh the whole narrative
+        // No need to fetch, onSnapshot will handle it.
 
       } catch (error) {
         console.error("Error generating story:", error);
@@ -141,7 +159,7 @@ export default function NarrativePage() {
     try {
       await addNarrativeComment(commentData);
       toast({ title: "Response Posted!", description: "Your actions have been recorded in the annals of history."});
-      await fetchNarrativeData();
+      // No need to fetch, onSnapshot will handle it.
     } catch (error) {
       toast({ variant: "destructive", title: "Error", description: "Could not post your response."});
     }
