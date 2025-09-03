@@ -7,27 +7,65 @@ import { CodeBlock } from "@/components/ui/code-block";
 import { Button } from "@/components/ui/button";
 import { Copy, Database, Workflow } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useAuth } from "@/context/auth-context";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 const getDbInstructions = (campaignId: string | undefined) => `
-### How to Post New Narrative Content
+## Direct Database Integration Guide
 
-To have your external agent act as the Game Master, it should connect directly to your Firestore database using the **Firebase Admin SDK** and a secure **Service Account Key**. This gives it the necessary permissions to write new story content.
+This guide explains how an external AI agent or script can securely interact with your campaign data by connecting directly to the Firestore database.
 
-The application's narrative is designed as a chronological list of posts. **Each new Game Master post is a new, separate document in the \`narrativeThreads\` collection.** This is the correct and only way to continue the story. The frontend is built to listen for new documents in this collection and will update in real-time.
+### 1. Authentication: Service Account Key
 
-**Step 1: Get Your Service Account Key**
-1. Go to your Google Cloud Console IAM page for service accounts.
-2. Select your Firebase project.
-3. Find the "Firebase Admin SDK Service Agent" (or create a new service account with the "Editor" role).
-4. Click on the service account, go to the "Keys" tab, and create a new JSON key.
-5. Download this key and save it securely as \`service-account-key.json\` in your agent's directory. **DO NOT commit this file to version control.**
+To connect, your agent must use the Firebase Admin SDK with a **Service Account Key**. This key grants privileged access to your project's resources, bypassing normal user authentication.
 
-**Step 2: Use the Script to Create a New Narrative Thread**
-The script below shows how to add a new document to the \`narrativeThreads\` collection. Each time you run it, it creates a new post in the story. You can adapt this script for your AI agent.
+**Action: Get Your Service Account Key**
+1.  Go to the Google Cloud Console for your project.
+2.  Navigate to **IAM & Admin > Service Accounts**.
+3.  Select the **"Firebase Admin SDK Service Agent"** (or a service account with the "Editor" role).
+4.  Go to the **Keys** tab, click **Add Key > Create new key**, and select **JSON**.
+5.  A JSON file will be downloaded. Save it securely in your agent's directory as \`service-account-key.json\`.
+6.  **Important**: This file is a secret. Do not commit it to version control.
 
-**Example Node.js Script (\`post-narrative.js\`):**
+### 2. Reading the World State
+
+Before generating a new story beat, your agent needs to understand the current state of the world. This involves reading from several collections.
+
+-   **\`characters\`**: To learn about the player characters.
+    -   **Query**: Get all documents where \`campaignId\` matches your current campaign ID.
+    -   **Fields of Interest**: \`name\`, \`description\`, \`class\`, \`level\`, and attribute scores (\`strength\`, \`dexterity\`, etc.). This tells your agent who is in the party and what they are capable of.
+
+-   **\`narrativeThreads\`**: To get the GM's story posts.
+    -   **Query**: Get all documents where \`campaignId\` matches, ordered by \`createdAt\` ascending. This gives you the chronological story.
+    -   **Fields of Interest**: \`title\`, \`content\`.
+
+-   **\`narrativeComments\`**: To get the players' responses to each thread.
+    -   **Query**: For each narrative thread, get all comments where \`threadId\` matches that thread's ID, ordered by \`createdAt\` ascending.
+    -   **Fields of Interest**: \`text\`, \`hiddenText\`, \`characterId\`. This shows how players have reacted to the story.
+
+### 3. Writing to the Database: Continuing the Narrative
+
+**This is the most important concept:** To continue the story, your agent must create a **new document** in the \`narrativeThreads\` collection. The application is designed to render these threads chronologically. Do NOT attempt to update an existing thread with new content.
+
+**Action: Create a New Narrative Thread Document**
+When your agent has decided on the next part of the story, it should create a new document in the \`narrativeThreads\` collection with the following structure:
+
+-   **\`campaignId\`**: (string) The ID of the campaign (\`${campaignId || 'YOUR_CAMPAIGN_ID'}\`).
+-   **\`authorId\`**: (string) The User ID of the Game Master (e.g., "1").
+-   **\`title\`**: (string) A title for the new story post.
+-   **\`content\`**: (string) The main narrative content. HTML is supported for formatting (e.g., \`<p>The story continues...</p>\`).
+-   **\`createdAt\`**: (number) A Unix timestamp (e.g., \`Date.now()\`).
+-   **\`imageUrl\`**: (string, optional) A URL for an image to display with the post.
+-   **\`imageAiHint\`**: (string, optional) A hint for AI image generators (e.g., "fantasy market").
+
+### 4. Frontend Updates
+
+The application uses real-time listeners. When your agent successfully adds a new document to the \`narrativeThreads\` collection, the frontend will **automatically update** for all connected players. There is no need for manual refreshes.
+
+### Example: Node.js Agent Script
+
+Use this script as a template for your agent to post new narrative content.
+
 \`\`\`javascript
 const admin = require('firebase-admin');
 
@@ -36,40 +74,66 @@ const serviceAccount = require('./service-account-key.json');
 
 // --- Configuration ---
 const CAMPAIGN_ID = "${campaignId || 'YOUR_CAMPAIGN_ID'}";
-const GM_USER_ID = "1"; // The user ID for the Game Master
+// This should be the user ID for the Game Master. In this demo, it is '1'.
+const GM_USER_ID = "1"; 
 // --- End Configuration ---
 
-// --- Narrative Content ---
+
+// --- Narrative Content (Generated by your AI) ---
 const newThread = {
   campaignId: CAMPAIGN_ID,
   authorId: GM_USER_ID,
-  title: "The Whispering Cave",
+  title: "A Shadow in the Market",
   createdAt: Date.now(),
   content: \`
-    <p>A chill wind escapes the mouth of the dark cave. Your torch flickers, casting long, dancing shadows on the damp rock walls. A low growl echoes from deep within.</p>
-    <p>What do you do?</p>
+    <p>
+      As the afternoon sun cast long shadows across the bustling Silverwood market, a cloaked figure was seen slipping into the alley behind the 'Gilded Griffin' tavern. 
+      Moments later, a faint cry was heard, abruptly silenced. The usual market chatter seems to mask the incident, and only the most observant of your party might have noticed.
+    </p>
+    <p>
+      What do you do?
+    </p>
   \`,
   imageUrl: "https://picsum.photos/800/400?random=" + Math.floor(Math.random() * 100),
-  imageAiHint: "dark cave entrance fantasy"
+  imageAiHint: "fantasy market alley"
 };
 // --- End Narrative Content ---
 
-// --- Script Logic ---
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
+
+// --- Script Logic (Do not modify below this line) ---
+try {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+  });
+} catch (error) {
+  if (error.code !== 'app/duplicate-app') {
+    console.error('Firebase initialization error:', error);
+    process.exit(1);
+  }
+}
+
 const db = admin.firestore();
 
 async function addNarrativeThread(threadData) {
   try {
     const docRef = await db.collection('narrativeThreads').add(threadData);
     console.log("Successfully created narrative thread with ID:", docRef.id);
+    return docRef.id;
   } catch (error) {
     console.error("Error adding narrative thread:", error);
+    throw error;
   }
 }
 
-addNarrativeThread(newThread).then(() => process.exit(0));
+addNarrativeThread(newThread)
+  .then(() => {
+    console.log("Script finished successfully.");
+    process.exit(0);
+  })
+  .catch(() => {
+    console.error("Script finished with errors.");
+    process.exit(1);
+  });
 \`\`\`
 `.trim();
 
@@ -78,7 +142,10 @@ export default function IntegrationsPage() {
     const { toast } = useToast();
     const { campaign } = useAuth();
     
-    const dbInstructions = getDbInstructions(campaign?.id);
+    const rawDbInstructions = getDbInstructions(campaign?.id);
+    const exampleScriptStartIndex = rawDbInstructions.indexOf('```javascript');
+    const dbInstructions = exampleScriptStartIndex > -1 ? rawDbInstructions.substring(0, exampleScriptStartIndex) : rawDbInstructions;
+    const exampleScript = exampleScriptStartIndex > -1 ? rawDbInstructions.substring(exampleScriptStartIndex).replace(/```javascript|```/g, '') : '';
 
     const handleCopy = (content: string) => {
         navigator.clipboard.writeText(content);
@@ -88,12 +155,15 @@ export default function IntegrationsPage() {
     }
 
     return (
-        <div className="max-w-4xl mx-auto space-y-8 text-white/90">
+        <div className="max-w-4xl mx-auto space-y-8">
             <Card className="bg-card/80 backdrop-blur-sm">
                 <CardHeader>
-                    <CardTitle className="font-headline flex items-center gap-2"><Workflow />Agent Integration</CardTitle>
+                    <div className="flex items-center gap-2">
+                        <Workflow className="w-6 h-6"/>
+                        <CardTitle className="font-headline text-2xl">Direct Database Integration</CardTitle>
+                    </div>
                     <CardDescription>
-                       Use this guide to connect an external AI agent or tool to your campaign. Your agent can read and write game data by connecting directly to the database.
+                       This guide explains how to connect an external AI agent or tool to your campaign by interacting directly with the Firestore database using the Firebase Admin SDK.
                     </CardDescription>
                 </CardHeader>
             </Card>
@@ -102,16 +172,25 @@ export default function IntegrationsPage() {
                 <Database className="h-4 w-4" />
                 <AlertTitle>How to Read & Write Game Data</AlertTitle>
                 <AlertDescription>
-                  Your agent should read and write game data by connecting directly to your Firestore database using the Firebase Admin SDK. This is the secure and correct way to interact with the world. The frontend will update in real-time when new data is added.
+                 <div className="prose prose-sm prose-invert max-w-none text-foreground/80 mt-4" dangerouslySetInnerHTML={{ __html: dbInstructions.replace(/##(.*?)\n/g, '<h3>$1</h3>').replace(/###(.*?)\n/g, '<h4>$1</h4>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/`([^`]+)`/g, '<code>$1</code>') }}/>
                 </AlertDescription>
-                 <CardContent className="pt-4">
-                    <CodeBlock content={dbInstructions} lang="markdown" />
-                    <Button onClick={() => handleCopy(dbInstructions)} className="mt-4">
-                        <Copy className="mr-2" />
-                        Copy Instructions
-                    </Button>
-                </CardContent>
             </Alert>
+            
+            {exampleScript && (
+                 <Card>
+                    <CardHeader>
+                        <CardTitle className="font-headline">Example Agent Script</CardTitle>
+                        <CardDescription>Use this Node.js script as a template for your agent to post new narrative content.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <CodeBlock content={exampleScript} lang="javascript" />
+                        <Button onClick={() => handleCopy(exampleScript)} className="mt-4">
+                            <Copy className="mr-2" />
+                            Copy Example Script
+                        </Button>
+                    </CardContent>
+                </Card>
+            )}
         </div>
     );
 }
