@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { PlusCircle, Trash2, Sheet, Upload, Eye, EyeOff, Sparkles } from "lucide-react";
+import { PlusCircle, Trash2, Sheet, Upload, Eye, EyeOff, Sparkles, HelpCircle } from "lucide-react";
 import Image from "next/image";
 import type { Character, ConditionalRule } from "@/lib/firebase/types";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -30,6 +30,7 @@ import { useToast } from "@/hooks/use-toast";
 import { getCharactersByCampaign, addCharacter, deleteCharacter, updateCharacter } from "@/lib/firebase/characters";
 import { Slider } from "@/components/ui/slider";
 import { getArchetype } from "@/lib/archetypes";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 
 export default function CharactersPage() {
   const { campaign, user, isLoading: isAuthLoading } = useAuth();
@@ -291,7 +292,6 @@ export default function CharactersPage() {
             </CardContent>
         </Card>
       )}
-
       <Dialog open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <DialogContent className="sm:max-w-4xl grid-rows-[auto,1fr,auto]">
             <DialogHeader>
@@ -301,6 +301,7 @@ export default function CharactersPage() {
                 </DialogDescription>
             </DialogHeader>
             {editingCharacter && (
+              <TooltipProvider>
                 <div className="grid md:grid-cols-3 gap-x-8 gap-y-6 py-4 overflow-y-auto max-h-[70vh]">
                     {/* Column 1: Core Info & Portrait */}
                     <div className="space-y-4">
@@ -361,6 +362,7 @@ export default function CharactersPage() {
                                 )}
                             </div>
                              <div className="grid md:grid-cols-2 gap-x-8 gap-y-4">
+                                <WithTooltip tooltip="Where does your character prefer to be in a fight? Backliners are cautious, frontliners are aggressive.">
                                  <BehaviorSlider 
                                      label="Position"
                                      value={editingCharacter.position || 50}
@@ -368,6 +370,8 @@ export default function CharactersPage() {
                                      minLabel="Backline"
                                      maxLabel="Frontline"
                                  />
+                                </WithTooltip>
+                                <WithTooltip tooltip="How courageous is your character? Will they flee from danger or stand and fight to the end?">
                                 <BehaviorSlider 
                                      label="Resolve"
                                      value={editingCharacter.resolve || 50}
@@ -375,6 +379,8 @@ export default function CharactersPage() {
                                      minLabel="Flee"
                                      maxLabel="Fight"
                                  />
+                                </WithTooltip>
+                                <WithTooltip tooltip="Is your character selfish or selfless? Will they prioritize their own gain or protect their friends first?">
                                  <BehaviorSlider 
                                      label="Altruism"
                                      value={editingCharacter.altruism || 50}
@@ -382,6 +388,8 @@ export default function CharactersPage() {
                                      minLabel="Selfish"
                                      maxLabel="Group First"
                                  />
+                                </WithTooltip>
+                                <WithTooltip tooltip="How does your character approach problems? Are they reckless and impulsive, or careful and tactical?">
                                  <BehaviorSlider 
                                      label="Discipline"
                                      value={editingCharacter.discipline || 50}
@@ -389,27 +397,36 @@ export default function CharactersPage() {
                                      minLabel="Reckless"
                                      maxLabel="Tactical"
                                  />
+                                 </WithTooltip>
                              </div>
                         </div>
                         <div className="space-y-4 pt-4 border-t">
                             <h3 className="font-headline text-lg">Behavior Details</h3>
                             <div className="grid md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="preferredAttack">Preferred Attack</Label>
+                                     <WithTooltip tooltip="What is your character's go-to move in a fight? (e.g., 'Fireball', 'Charge with axe', 'Hide and snipe')">
+                                        <LabelWithInfo htmlFor="preferredAttack" label="Preferred Attack" />
+                                     </WithTooltip>
                                     <Input id="preferredAttack" value={editingCharacter.preferredAttack || ''} onChange={(e) => handleStatChange('preferredAttack', e.target.value)} />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="mostPrecious">Most Precious</Label>
+                                    <WithTooltip tooltip="What single person, place, or thing does your character value above all else?">
+                                      <LabelWithInfo htmlFor="mostPrecious" label="Most Precious" />
+                                    </WithTooltip>
                                     <Input id="mostPrecious" value={editingCharacter.mostPrecious || ''} onChange={(e) => handleStatChange('mostPrecious', e.target.value)} />
                                 </div>
                                 <div className="space-y-2 md:col-span-2">
-                                    <Label htmlFor="motto">Motto / Battle Cry</Label>
+                                    <WithTooltip tooltip="A short phrase your character lives by or shouts in battle.">
+                                      <LabelWithInfo htmlFor="motto" label="Motto / Battle Cry" />
+                                    </WithTooltip>
                                     <Input id="motto" value={editingCharacter.motto || ''} onChange={(e) => handleStatChange('motto', e.target.value)} />
                                 </div>
                             </div>
                         </div>
                          <div className="space-y-4 pt-4 border-t">
-                            <h3 className="font-headline text-lg">Conditional Rules</h3>
+                            <WithTooltip tooltip="Define specific rules for the AI to follow. These are high-priority instructions for specific situations.">
+                              <h3 className="font-headline text-lg flex items-center gap-2">Conditional Rules <HelpCircle className="w-4 h-4 text-muted-foreground" /></h3>
+                            </WithTooltip>
                             <div className="space-y-2">
                                 {[0, 1, 2].map(index => (
                                     <ConditionalRuleInput 
@@ -422,8 +439,8 @@ export default function CharactersPage() {
                             </div>
                         </div>
                     </div>
-
                 </div>
+              </TooltipProvider>
             )}
             <DialogFooter>
                 <DialogClose asChild>
@@ -436,6 +453,22 @@ export default function CharactersPage() {
     </div>
   );
 }
+
+const WithTooltip = ({ children, tooltip }: { children: React.ReactNode, tooltip: string }) => (
+  <Tooltip>
+    <TooltipTrigger asChild>{children}</TooltipTrigger>
+    <TooltipContent side="top" align="start" className="max-w-xs">
+      <p>{tooltip}</p>
+    </TooltipContent>
+  </Tooltip>
+);
+
+const LabelWithInfo = ({ label, htmlFor }: { label: string, htmlFor: string }) => (
+    <div className="flex items-center gap-2">
+        <Label htmlFor={htmlFor}>{label}</Label>
+        <HelpCircle className="w-4 h-4 text-muted-foreground" />
+    </div>
+);
 
 const StatDisplay = ({ label, value }: { label: string; value: number }) => (
     <div className="flex flex-col items-center p-2 rounded-lg bg-muted/50 border">
@@ -454,7 +487,7 @@ const AttributeInput = ({ label, value, onChange }: { label: string; value: numb
 const BehaviorSlider = ({ label, value, onValueChange, minLabel, maxLabel }: { label: string; value: number, onValueChange: (value: number[]) => void, minLabel: string, maxLabel: string }) => (
     <div className="space-y-2">
         <div className="flex justify-between items-baseline">
-            <Label>{label}</Label>
+            <Label className="flex items-center gap-2">{label} <HelpCircle className="w-4 h-4 text-muted-foreground" /></Label>
             <span className="text-sm font-mono text-muted-foreground">{value}/100</span>
         </div>
         <Slider
@@ -489,3 +522,5 @@ const ConditionalRuleInput = ({ index, rule, onChange }: { index: number, rule: 
         </div>
     )
 }
+
+    
