@@ -99,6 +99,21 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Custom Scrollbar Styles */
+  ::-webkit-scrollbar {
+      @apply w-2 h-2;
+  }
+  ::-webkit-scrollbar-track {
+      @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+      @apply bg-border/50 border-4 border-solid border-transparent rounded-full;
+      background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+      @apply bg-border;
+  }
 }
 
 @layer utilities {
@@ -124,3 +139,5 @@
     @apply bg-gradient-to-l from-black/90 via-black/80 to-transparent;
   }
 }
+
+    

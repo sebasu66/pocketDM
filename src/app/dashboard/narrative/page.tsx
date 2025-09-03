@@ -215,7 +215,7 @@ export default function NarrativePage() {
             ))}
              {isMaster && (
                 <div className="flex gap-4">
-                    <Button onClick={handleGenerateNextPost} disabled={!isAITurn || isGenerating}>
+                     <Button onClick={handleGenerateNextPost} disabled={!isAITurn || isGenerating}>
                         <Bot className="mr-2"/>
                         {isGenerating ? "Generating..." : "Generate Next Post"}
                     </Button>
@@ -326,12 +326,15 @@ function CommentForm({ onSubmit, character }: { onSubmit: (text: string, hiddenT
                              rows={3}
                         />
                     </div>
-                    <Button type="submit" disabled={isSubmitting}>
-                        <Send className="mr-2" />
-                        {isSubmitting ? "Posting..." : "Post Response"}
-                    </Button>
+                    <div className="flex justify-end">
+                        <RusticIconButton tooltip={isSubmitting ? "Posting..." : "Post Response"} disabled={isSubmitting}>
+                            <Send />
+                        </RusticIconButton>
+                    </div>
                 </form>
             </CardContent>
         </Card>
     );
 }
+
+    

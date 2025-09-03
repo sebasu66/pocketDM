@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { PlusCircle, Trash2, Sheet, Upload, Eye, EyeOff, Sparkles, HelpCircle } from "lucide-react";
+import { PlusCircle, Trash2, Sheet, Upload, Eye, EyeOff, Sparkles, HelpCircle, Save, X } from "lucide-react";
 import Image from "next/image";
 import type { Character, ConditionalRule } from "@/lib/firebase/types";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -31,6 +31,7 @@ import { getCharactersByCampaign, addCharacter, deleteCharacter, updateCharacter
 import { Slider } from "@/components/ui/slider";
 import { getArchetype } from "@/lib/archetypes";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
+import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 
 export default function CharactersPage() {
   const { campaign, user, isLoading: isAuthLoading } = useAuth();
@@ -206,14 +207,14 @@ export default function CharactersPage() {
                         <CardDescription>Your hero for the campaign: {campaign?.title}</CardDescription>
                     </div>
                     <div className="flex gap-2">
-                        <Button onClick={handleOpenSheet}>
-                            <Sheet /> View/Edit Sheet
-                        </Button>
+                        <RusticIconButton tooltip="View/Edit Sheet" onClick={handleOpenSheet}>
+                            <Sheet />
+                        </RusticIconButton>
                         <AlertDialog>
                             <AlertDialogTrigger asChild>
-                                <Button variant="outline" size="icon" className="border-destructive/50 text-destructive/80 hover:bg-destructive hover:text-destructive-foreground">
+                                <RusticIconButton tooltip="Delete Character" variant="incomplete" className="text-red-500/80 hover:text-red-500">
                                     <Trash2 />
-                                </Button>
+                                </RusticIconButton>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                                 <AlertDialogHeader>
@@ -293,7 +294,9 @@ export default function CharactersPage() {
                 <div className="w-48 h-72 bg-background rounded overflow-hidden mb-4 flex items-center justify-center">
                     <p className="text-xs text-muted-foreground p-2">A portrait will be generated for you upon creation.</p>
                 </div>
-                <Button variant="outline" disabled>Upload Image</Button>
+                <RusticIconButton tooltip="Upload Image" disabled>
+                    <Upload />
+                </RusticIconButton>
             </div>
             </CardContent>
         </Card>
@@ -308,7 +311,7 @@ export default function CharactersPage() {
             </DialogHeader>
             {editingCharacter && (
               <TooltipProvider>
-                <div className="grid md:grid-cols-3 gap-x-8 gap-y-6 py-4 overflow-y-auto max-h-[70vh]">
+                <div className="grid md:grid-cols-3 gap-x-8 gap-y-6 py-4 overflow-y-auto max-h-[70vh] pr-4">
                     {/* Column 1: Core Info & Portrait */}
                     <div className="space-y-4">
                       <div className="flex items-center space-x-2">
@@ -336,10 +339,9 @@ export default function CharactersPage() {
                         <div className="relative w-48 h-72 bg-background rounded overflow-hidden">
                             <Image src={editingCharacter.portrait} alt={editingCharacter.name} width={200} height={300} className="w-full h-full object-cover" data-ai-hint={editingCharacter.aiHint || 'fantasy portrait'} />
                         </div>
-                        <Button variant="outline" onClick={handlePortraitChange}>
-                            <Upload className="mr-2 h-4 w-4" />
-                            Change Portrait
-                        </Button>
+                        <RusticIconButton tooltip="Change Portrait" onClick={handlePortraitChange}>
+                            <Upload />
+                        </RusticIconButton>
                     </div>
                     </div>
                     
@@ -445,10 +447,14 @@ export default function CharactersPage() {
               </TooltipProvider>
             )}
             <DialogFooter>
-                <DialogClose asChild>
-                    <Button type="button" variant="secondary">Cancel</Button>
+                 <DialogClose asChild>
+                    <RusticIconButton tooltip="Cancel" variant="incomplete">
+                        <X />
+                    </RusticIconButton>
                 </DialogClose>
-                <Button type="button" onClick={handleSaveChanges}>Save Changes</Button>
+                <RusticIconButton tooltip="Save Changes" onClick={handleSaveChanges}>
+                    <Save />
+                </RusticIconButton>
             </DialogFooter>
         </DialogContent>
       </Dialog>
