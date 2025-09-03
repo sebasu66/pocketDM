@@ -5,10 +5,11 @@ import * as React from "react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { CodeBlock } from "@/components/ui/code-block";
 import { Button } from "@/components/ui/button";
-import { Copy, Database, Workflow } from "lucide-react";
+import { Copy, Database, Workflow, ShieldAlert } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { useRouter } from "next/navigation";
 
 const getDbInstructions = (campaignId: string | undefined) => `
 ## Direct Database Integration Guide
@@ -157,7 +158,32 @@ addNarrativeThread(newThread)
 
 export default function IntegrationsPage() {
     const { toast } = useToast();
-    const { campaign } = useAuth();
+    const { campaign, user, isLoading } = useAuth();
+    const router = useRouter();
+    
+    React.useEffect(() => {
+      if (!isLoading && user?.role !== 'master') {
+        toast({
+          variant: 'destructive',
+          title: 'Access Denied',
+          description: 'You must be a Game Master to view this page.',
+        });
+        router.push('/dashboard');
+      }
+    }, [user, isLoading, router, toast]);
+
+    if (isLoading || user?.role !== 'master') {
+      return (
+        <Card>
+          <CardHeader>
+            <CardTitle>Access Denied</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>You must be a Game Master to view this page. Redirecting...</p>
+          </CardContent>
+        </Card>
+      );
+    }
     
     const rawDbInstructions = getDbInstructions(campaign?.id);
     const exampleScriptStartIndex = rawDbInstructions.indexOf('```javascript');
@@ -185,6 +211,14 @@ export default function IntegrationsPage() {
                 </CardHeader>
             </Card>
 
+            <Alert variant="destructive">
+                <ShieldAlert className="h-4 w-4" />
+                <AlertTitle>For Game Masters Only</AlertTitle>
+                <AlertDescription>
+                    This page contains technical instructions for connecting external services. Proceed with caution.
+                </AlertDescription>
+            </Alert>
+            
             <Alert>
                 <Database className="h-4 w-4" />
                 <AlertTitle>How to Read & Write Game Data</AlertTitle>

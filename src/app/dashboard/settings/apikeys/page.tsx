@@ -1,13 +1,15 @@
 
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from '@/context/auth-context';
+import { useRouter } from 'next/navigation';
 
 const defaultSystemPrompt = `You are a master storyteller and creative Dungeon Master for a tabletop role-playing game. Your task is to weave a compelling and collaborative narrative.
 
@@ -19,23 +21,32 @@ const defaultSystemPrompt = `You are a master storyteller and creative Dungeon M
 
 export default function ApiKeysPage() {
     const { toast } = useToast();
+    const { user, isLoading } = useAuth();
+    const router = useRouter();
     const [apiKey, setApiKey] = useState('');
     const [systemPrompt, setSystemPrompt] = useState(defaultSystemPrompt);
 
+    useEffect(() => {
+        if (!isLoading && user?.role !== 'master') {
+          toast({
+            variant: 'destructive',
+            title: 'Access Denied',
+            description: 'You must be a Game Master to view this page.',
+          });
+          router.push('/dashboard/settings');
+        }
+    }, [user, isLoading, router, toast]);
+
     const handleSave = () => {
-        // For this demo, we'll use localStorage. In a real app, these would be saved securely.
         localStorage.setItem('gemini_api_key', apiKey);
         localStorage.setItem('ai_system_prompt', systemPrompt);
         
-        // Also setting it in a way that can be read by the server through a cookie or other means
-        // is complex. For now, we recommend setting the .env file.
         toast({
             title: "Settings Saved to Browser",
             description: "Your AI settings have been updated for this browser session. For persistent server-side generation, please also set the GEMINI_API_KEY in the .env file.",
         });
     };
     
-    // In a real app, you would load these from a secure source.
     React.useEffect(() => {
         const savedKey = localStorage.getItem('gemini_api_key');
         const savedPrompt = localStorage.getItem('ai_system_prompt');
@@ -43,6 +54,18 @@ export default function ApiKeysPage() {
         if (savedPrompt) setSystemPrompt(savedPrompt);
     }, []);
 
+    if (isLoading || user?.role !== 'master') {
+      return (
+        <Card>
+          <CardHeader>
+            <CardTitle>Access Denied</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>You must be a Game Master to view this page. Redirecting...</p>
+          </CardContent>
+        </Card>
+      );
+    }
 
   return (
     <div className="max-w-3xl mx-auto space-y-8">

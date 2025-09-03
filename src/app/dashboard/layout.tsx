@@ -87,6 +87,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { user, campaign, isLoading } = useAuth();
   const router = useRouter();
   const [isSheetOpen, setIsSheetOpen] = React.useState(false);
+  const isMaster = user?.role === 'master';
 
   // --- DEMO ONLY: SEED DATABASE ---
   // This is a temporary solution to seed the database for the demo.
@@ -174,14 +175,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <SidebarFooter>
           <Separator className="my-2 bg-border/20" />
           <SidebarMenu>
-             <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname.startsWith('/dashboard/integrations')} tooltip={{ children: 'Integrations' }} onClick={handleLinkClick}>
-                  <Link href="/dashboard/integrations">
-                    <Workflow />
-                    <span>Integrations</span>
-                  </Link>
-                </SidebarMenuButton>
-            </SidebarMenuItem>
+             {isMaster && (
+                <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={pathname.startsWith('/dashboard/integrations')} tooltip={{ children: 'Integrations' }} onClick={handleLinkClick}>
+                    <Link href="/dashboard/integrations">
+                        <Workflow />
+                        <span>Integrations</span>
+                    </Link>
+                    </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
             <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname.startsWith('/dashboard/settings')} tooltip={{ children: 'Settings' }} onClick={handleLinkClick}>
                   <Link href="/dashboard/settings">

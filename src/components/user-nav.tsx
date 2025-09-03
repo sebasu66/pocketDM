@@ -25,6 +25,7 @@ import { Skeleton } from "./ui/skeleton";
 export function UserNav() {
   const { user, logout, isLoading } = useAuth();
   const router = useRouter();
+  const isMaster = user?.role === 'master';
 
   const handleLogout = () => {
     logout();
@@ -60,7 +61,7 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-           {user.role === 'master' && (
+           {isMaster && (
             <DropdownMenuItem>
                 <Crown className="mr-2 h-4 w-4 text-amber-400" />
                 <span>Game Master</span>
@@ -90,7 +91,7 @@ export function UserNav() {
               <span>Display Settings</span>
             </Link>
           </DropdownMenuItem>
-         {user.role === 'master' && (
+         {isMaster && (
             <DropdownMenuItem asChild>
               <Link href="/dashboard/settings/apikeys">
                 <KeyRound className="mr-2 h-4 w-4" />
