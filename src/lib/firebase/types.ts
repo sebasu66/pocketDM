@@ -1,6 +1,7 @@
 
 
 
+
 export interface User {
     id: string;
     name: string;
@@ -49,6 +50,8 @@ export interface Character {
     mostPrecious?: string;
     motto?: string;
     conditionalRules?: ConditionalRule[];
+    archetype?: string;
+    archetypeDescription?: string;
 }
 
 export interface NarrativeThread {
@@ -82,4 +85,3 @@ export type EnrichedComment = NarrativeCommentWithAuthor & {
 export type EnrichedThread = NarrativeThread & {
     comments: EnrichedComment[];
 }
-

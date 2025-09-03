@@ -1,14 +1,14 @@
 
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useAuth } from "@/context/auth-context";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { PlusCircle, Trash2, Sheet, Upload, Eye, EyeOff } from "lucide-react";
+import { PlusCircle, Trash2, Sheet, Upload, Eye, EyeOff, Sparkles } from "lucide-react";
 import Image from "next/image";
 import type { Character, ConditionalRule } from "@/lib/firebase/types";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -29,6 +29,7 @@ import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { getCharactersByCampaign, addCharacter, deleteCharacter, updateCharacter } from "@/lib/firebase/characters";
 import { Slider } from "@/components/ui/slider";
+import { getArchetype } from "@/lib/archetypes";
 
 export default function CharactersPage() {
   const { campaign, user, isLoading: isAuthLoading } = useAuth();
@@ -126,10 +127,23 @@ export default function CharactersPage() {
     if (editingCharacter) {
       const isNumeric = ['level', 'strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma', 'position', 'resolve', 'altruism', 'discipline'].includes(stat as string);
       
-      setEditingCharacter({
+      const newEditingCharacter = {
         ...editingCharacter,
         [stat]: isNumeric ? (typeof value === 'number' ? value : parseInt(value as string, 10) || 0) : value,
-      });
+      };
+
+      if (['position', 'resolve', 'altruism', 'discipline'].includes(stat as string)) {
+          const archetype = getArchetype(
+              newEditingCharacter.position || 50,
+              newEditingCharacter.resolve || 50,
+              newEditingCharacter.altruism || 50,
+              newEditingCharacter.discipline || 50
+          );
+          newEditingCharacter.archetype = archetype.archetype;
+          newEditingCharacter.archetypeDescription = archetype.description;
+      }
+      
+      setEditingCharacter(newEditingCharacter);
     }
   };
 
@@ -337,7 +351,15 @@ export default function CharactersPage() {
                         </div>
 
                         <div className="space-y-4 pt-4 border-t">
-                             <h3 className="font-headline text-lg">Behavior Profile</h3>
+                            <div className="flex justify-between items-center">
+                                <h3 className="font-headline text-lg">Behavior Profile</h3>
+                                {editingCharacter.archetype && (
+                                     <div className="text-right">
+                                        <p className="font-bold text-accent flex items-center gap-2"><Sparkles className="w-4 h-4" /> {editingCharacter.archetype}</p>
+                                        <p className="text-xs text-muted-foreground">{editingCharacter.archetypeDescription}</p>
+                                     </div>
+                                )}
+                            </div>
                              <div className="grid md:grid-cols-2 gap-x-8 gap-y-4">
                                  <BehaviorSlider 
                                      label="Position"
