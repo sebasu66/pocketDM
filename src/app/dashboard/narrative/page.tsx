@@ -19,7 +19,6 @@ import { getNarrativeThreadsByCampaign } from "@/lib/firebase/narrative";
 import { getCommentsByThreadId } from "@/lib/firebase/comments";
 import { getCharactersByCampaign } from "@/lib/firebase/characters";
 import { addNarrativeThread } from "@/lib/firebase/narrative";
-import { addNarrativeComment } from "@/lib/firebase/comments";
 
 export default function NarrativePage() {
   const { user, campaign } = useAuth();
@@ -140,7 +139,16 @@ export default function NarrativePage() {
     };
 
     try {
-      await addNarrativeComment(commentData);
+      const response = await fetch('/api/comments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(commentData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to post comment');
+      }
+
       toast({ title: "Response Posted!", description: "Your actions have been recorded in the annals of history."});
       await fetchNarrativeData();
     } catch (error) {
