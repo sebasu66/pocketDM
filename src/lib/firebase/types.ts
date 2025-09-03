@@ -17,6 +17,11 @@ export interface Campaign {
     bannerAiHint: string;
 }
 
+export interface ConditionalRule {
+    if: string;
+    then: string;
+}
+
 export interface Character {
     id: string;
     name: string;
@@ -42,7 +47,7 @@ export interface Character {
     preferredAttack?: string;
     mostPrecious?: string;
     motto?: string;
-    conditionalRules?: string[];
+    conditionalRules?: ConditionalRule[];
 }
 
 export interface NarrativeThread {

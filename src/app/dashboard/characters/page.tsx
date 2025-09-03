@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { PlusCircle, Trash2, Sheet, Upload, Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
-import type { Character } from "@/lib/firebase/types";
+import type { Character, ConditionalRule } from "@/lib/firebase/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog";
 import {
@@ -100,7 +100,11 @@ export default function CharactersPage() {
 
   const handleOpenSheet = () => {
     if (character) {
-      setEditingCharacter({ ...character });
+      const charWithDefaults = {
+        ...character,
+        conditionalRules: character.conditionalRules && character.conditionalRules.length > 0 ? character.conditionalRules : [{if: '', then: ''}, {if: '', then: ''}, {if: '', then: ''}]
+      };
+      setEditingCharacter(charWithDefaults);
       setIsSheetOpen(true);
     }
   };
@@ -129,10 +133,10 @@ export default function CharactersPage() {
     }
   };
 
-  const handleConditionalRuleChange = (index: number, value: string) => {
+  const handleConditionalRuleChange = (index: number, part: 'if' | 'then', value: string) => {
     if (editingCharacter) {
-      const newRules = [...(editingCharacter.conditionalRules || ['', '', ''])];
-      newRules[index] = value;
+      const newRules = [...(editingCharacter.conditionalRules || [{if: '', then: ''}, {if: '', then: ''}, {if: '', then: ''}])];
+      newRules[index] = { ...newRules[index], [part]: value };
       handleStatChange('conditionalRules', newRules);
     }
   };
@@ -385,9 +389,14 @@ export default function CharactersPage() {
                          <div className="space-y-4 pt-4 border-t">
                             <h3 className="font-headline text-lg">Conditional Rules</h3>
                             <div className="space-y-2">
-                                <Textarea value={(editingCharacter.conditionalRules || [])[0] || ''} onChange={(e) => handleConditionalRuleChange(0, e.target.value)} placeholder="IF... THEN..."/>
-                                <Textarea value={(editingCharacter.conditionalRules || [])[1] || ''} onChange={(e) => handleConditionalRuleChange(1, e.target.value)} placeholder="IF... THEN..."/>
-                                <Textarea value={(editingCharacter.conditionalRules || [])[2] || ''} onChange={(e) => handleConditionalRuleChange(2, e.target.value)} placeholder="IF... THEN..."/>
+                                {[0, 1, 2].map(index => (
+                                    <ConditionalRuleInput 
+                                        key={index} 
+                                        index={index} 
+                                        rule={(editingCharacter.conditionalRules || [])[index]}
+                                        onChange={handleConditionalRuleChange}
+                                    />
+                                ))}
                             </div>
                         </div>
                     </div>
@@ -438,3 +447,23 @@ const BehaviorSlider = ({ label, value, onValueChange, minLabel, maxLabel }: { l
         </div>
     </div>
 );
+
+
+const ConditionalRuleInput = ({ index, rule, onChange }: { index: number, rule: ConditionalRule, onChange: (index: number, part: 'if' | 'then', value: string) => void }) => {
+    return (
+        <div className="flex gap-2 items-center">
+            <Label className="font-bold">IF</Label>
+            <Input 
+                value={rule?.if || ''}
+                onChange={(e) => onChange(index, 'if', e.target.value)}
+                placeholder="character health < 10%"
+            />
+            <Label className="font-bold">THEN</Label>
+            <Input
+                value={rule?.then || ''}
+                onChange={(e) => onChange(index, 'then', e.target.value)}
+                placeholder="use health potion"
+            />
+        </div>
+    )
+}
