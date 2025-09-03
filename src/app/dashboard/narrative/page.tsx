@@ -17,7 +17,7 @@ import { Label } from "@/components/ui/label";
 import { collection, onSnapshot, query, where, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 import { getCommentsByThreadId, addNarrativeComment } from "@/lib/firebase/comments";
-import { getCharactersByCampaign, getCharacter } from "@/lib/firebase/characters";
+import { getCharactersByCampaign } from "@/lib/firebase/characters";
 import { addNarrativeThread } from "@/lib/firebase/narrative";
 import { NarrativeThread } from "@/lib/firebase/types";
 
@@ -55,13 +55,12 @@ export default function NarrativePage() {
 
     const fetchInitialData = async () => {
         try {
-            const charactersFromDb = await getCharactersByCampaign(campaign.id);
-            const activeChars = charactersFromDb.filter(c => c.isActive);
-            setActivePlayers(activeChars);
+            const allCharacters = await getCharactersByCampaign(campaign.id);
+            setActivePlayers(allCharacters.filter(c => c.isActive));
 
             if (user && !isMaster) {
-                const char = await getCharacter(user.id);
-                setPlayerCharacter(char || null);
+                const userCharacter = allCharacters.find(c => c.userId === user.id);
+                setPlayerCharacter(userCharacter || null);
             }
 
              const q = query(
@@ -72,6 +71,7 @@ export default function NarrativePage() {
 
             const unsubscribe = onSnapshot(q, async (querySnapshot) => {
                 const threadsFromDb = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
+                const charactersFromDb = await getCharactersByCampaign(campaign.id);
                 const enriched = await enrichThreads(threadsFromDb, charactersFromDb);
                 setThreads(enriched);
                 setIsLoading(false);
@@ -174,7 +174,7 @@ export default function NarrativePage() {
 
   const isAITurn = lastThread ? (isMaster && allActivePlayersResponded) : isMaster;
   
-  const hasPlayerResponded = user ? playersWhoHaveCommented.has(user.id) : true;
+  const hasPlayerResponded = user ? playersWhoHaveCommented.has(user.id) : false;
 
   const canPlayerRespond = !isMaster && playerCharacter?.isActive && lastThread && !hasPlayerResponded;
 
@@ -341,4 +341,3 @@ function CommentForm({ onSubmit, character }: { onSubmit: (text: string, hiddenT
     );
 }
 
-    
