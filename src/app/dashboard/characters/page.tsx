@@ -28,6 +28,7 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { getCharactersByCampaign, addCharacter, deleteCharacter, updateCharacter } from "@/lib/firebase/characters";
+import { Slider } from "@/components/ui/slider";
 
 export default function CharactersPage() {
   const { campaign, user, isLoading: isAuthLoading } = useAuth();
@@ -117,15 +118,25 @@ export default function CharactersPage() {
     }
   };
   
-  const handleStatChange = (stat: keyof Character, value: string | boolean) => {
+  const handleStatChange = (stat: keyof Character, value: any) => {
     if (editingCharacter) {
-      const isNumeric = ['level', 'strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'].includes(stat as string);
+      const isNumeric = ['level', 'strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma', 'position', 'resolve', 'altruism', 'discipline'].includes(stat as string);
+      
       setEditingCharacter({
         ...editingCharacter,
-        [stat]: isNumeric ? parseInt(value as string, 10) || 0 : value,
+        [stat]: isNumeric ? (typeof value === 'number' ? value : parseInt(value as string, 10) || 0) : value,
       });
     }
   };
+
+  const handleConditionalRuleChange = (index: number, value: string) => {
+    if (editingCharacter) {
+      const newRules = [...(editingCharacter.conditionalRules || ['', '', ''])];
+      newRules[index] = value;
+      handleStatChange('conditionalRules', newRules);
+    }
+  };
+
 
   const handlePortraitChange = () => {
     if (editingCharacter) {
@@ -264,7 +275,7 @@ export default function CharactersPage() {
       )}
 
       <Dialog open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-        <DialogContent className="sm:max-w-[825px] grid-rows-[auto,1fr,auto]">
+        <DialogContent className="sm:max-w-4xl grid-rows-[auto,1fr,auto]">
             <DialogHeader>
                 <DialogTitle className="font-headline">Edit Character Sheet</DialogTitle>
                 <DialogDescription>
@@ -272,7 +283,8 @@ export default function CharactersPage() {
                 </DialogDescription>
             </DialogHeader>
             {editingCharacter && (
-                <div className="grid md:grid-cols-2 gap-6 py-4 overflow-y-auto">
+                <div className="grid md:grid-cols-3 gap-x-8 gap-y-6 py-4 overflow-y-auto max-h-[70vh]">
+                    {/* Column 1: Core Info & Portrait */}
                     <div className="space-y-4">
                       <div className="flex items-center space-x-2">
                         <Switch id="isActive" checked={editingCharacter.isActive} onCheckedChange={(c) => handleStatChange('isActive', c)} />
@@ -294,8 +306,7 @@ export default function CharactersPage() {
                           <Label htmlFor="description">Description</Label>
                           <Textarea id="description" value={editingCharacter.description} onChange={(e) => handleStatChange('description', e.target.value)} rows={5} />
                       </div>
-                    </div>
-                     <div className="flex flex-col items-center justify-start gap-4">
+                      <div className="flex flex-col items-center justify-start gap-4 pt-4">
                         <Label>Portrait</Label>
                         <div className="relative w-48 h-72 bg-background rounded overflow-hidden">
                             <Image src={editingCharacter.portrait} alt={editingCharacter.name} width={200} height={300} className="w-full h-full object-cover" data-ai-hint={editingCharacter.aiHint || 'fantasy portrait'} />
@@ -305,14 +316,82 @@ export default function CharactersPage() {
                             Change Portrait
                         </Button>
                     </div>
-                    <div className="md:col-span-2 grid grid-cols-3 sm:grid-cols-6 gap-4 pt-4">
-                        <AttributeInput label="STR" value={editingCharacter.strength} onChange={(e) => handleStatChange('strength', e.target.value)} />
-                        <AttributeInput label="DEX" value={editingCharacter.dexterity} onChange={(e) => handleStatChange('dexterity', e.target.value)} />
-                        <AttributeInput label="CON" value={editingCharacter.constitution} onChange={(e) => handleStatChange('constitution', e.target.value)} />
-                        <AttributeInput label="INT" value={editingCharacter.intelligence} onChange={(e) => handleStatChange('intelligence', e.target.value)} />
-                        <AttributeInput label="WIS" value={editingCharacter.wisdom} onChange={(e) => handleStatChange('wisdom', e.target.value)} />
-                        <AttributeInput label="CHA" value={editingCharacter.charisma} onChange={(e) => handleStatChange('charisma', e.target.value)} />
                     </div>
+                    
+                    {/* Column 2: Attributes & Behavior Profile */}
+                    <div className="space-y-6 md:col-span-2">
+                        <div className="space-y-4">
+                            <h3 className="font-headline text-lg">Attributes</h3>
+                            <div className="grid grid-cols-3 sm:grid-cols-6 gap-4">
+                                <AttributeInput label="STR" value={editingCharacter.strength} onChange={(e) => handleStatChange('strength', e.target.value)} />
+                                <AttributeInput label="DEX" value={editingCharacter.dexterity} onChange={(e) => handleStatChange('dexterity', e.target.value)} />
+                                <AttributeInput label="CON" value={editingCharacter.constitution} onChange={(e) => handleStatChange('constitution', e.target.value)} />
+                                <AttributeInput label="INT" value={editingCharacter.intelligence} onChange={(e) => handleStatChange('intelligence', e.target.value)} />
+                                <AttributeInput label="WIS" value={editingCharacter.wisdom} onChange={(e) => handleStatChange('wisdom', e.target.value)} />
+                                <AttributeInput label="CHA" value={editingCharacter.charisma} onChange={(e) => handleStatChange('charisma', e.target.value)} />
+                            </div>
+                        </div>
+
+                        <div className="space-y-4 pt-4 border-t">
+                             <h3 className="font-headline text-lg">Behavior Profile</h3>
+                             <div className="grid md:grid-cols-2 gap-x-8 gap-y-4">
+                                 <BehaviorSlider 
+                                     label="Position"
+                                     value={editingCharacter.position || 50}
+                                     onValueChange={(v) => handleStatChange('position', v[0])}
+                                     minLabel="Backline"
+                                     maxLabel="Frontline"
+                                 />
+                                <BehaviorSlider 
+                                     label="Resolve"
+                                     value={editingCharacter.resolve || 50}
+                                     onValueChange={(v) => handleStatChange('resolve', v[0])}
+                                     minLabel="Flee"
+                                     maxLabel="Fight"
+                                 />
+                                 <BehaviorSlider 
+                                     label="Altruism"
+                                     value={editingCharacter.altruism || 50}
+                                     onValueChange={(v) => handleStatChange('altruism', v[0])}
+                                     minLabel="Selfish"
+                                     maxLabel="Group First"
+                                 />
+                                 <BehaviorSlider 
+                                     label="Discipline"
+                                     value={editingCharacter.discipline || 50}
+                                     onValueChange={(v) => handleStatChange('discipline', v[0])}
+                                     minLabel="Reckless"
+                                     maxLabel="Tactical"
+                                 />
+                             </div>
+                        </div>
+                        <div className="space-y-4 pt-4 border-t">
+                            <h3 className="font-headline text-lg">Behavior Details</h3>
+                            <div className="grid md:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="preferredAttack">Preferred Attack</Label>
+                                    <Input id="preferredAttack" value={editingCharacter.preferredAttack || ''} onChange={(e) => handleStatChange('preferredAttack', e.target.value)} />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="mostPrecious">Most Precious</Label>
+                                    <Input id="mostPrecious" value={editingCharacter.mostPrecious || ''} onChange={(e) => handleStatChange('mostPrecious', e.target.value)} />
+                                </div>
+                                <div className="space-y-2 md:col-span-2">
+                                    <Label htmlFor="motto">Motto / Battle Cry</Label>
+                                    <Input id="motto" value={editingCharacter.motto || ''} onChange={(e) => handleStatChange('motto', e.target.value)} />
+                                </div>
+                            </div>
+                        </div>
+                         <div className="space-y-4 pt-4 border-t">
+                            <h3 className="font-headline text-lg">Conditional Rules</h3>
+                            <div className="space-y-2">
+                                <Textarea value={(editingCharacter.conditionalRules || [])[0] || ''} onChange={(e) => handleConditionalRuleChange(0, e.target.value)} placeholder="IF... THEN..."/>
+                                <Textarea value={(editingCharacter.conditionalRules || [])[1] || ''} onChange={(e) => handleConditionalRuleChange(1, e.target.value)} placeholder="IF... THEN..."/>
+                                <Textarea value={(editingCharacter.conditionalRules || [])[2] || ''} onChange={(e) => handleConditionalRuleChange(2, e.target.value)} placeholder="IF... THEN..."/>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             )}
             <DialogFooter>
@@ -330,7 +409,7 @@ export default function CharactersPage() {
 const StatDisplay = ({ label, value }: { label: string; value: number }) => (
     <div className="flex flex-col items-center p-2 rounded-lg bg-muted/50 border">
         <span className="text-xs font-bold text-muted-foreground">{label}</span>
-        <span className="text-2xl font-bold font-headline">{value}</span>
+        <span className="text-2xl font-bold font-headline">{value || 0}</span>
     </div>
 );
 
@@ -338,5 +417,24 @@ const AttributeInput = ({ label, value, onChange }: { label: string; value: numb
     <div className="space-y-2">
         <Label htmlFor={`attr-${label}`} className="text-center block">{label}</Label>
         <Input id={`attr-${label}`} type="number" value={value || 0} onChange={onChange} className="text-center" />
+    </div>
+);
+
+const BehaviorSlider = ({ label, value, onValueChange, minLabel, maxLabel }: { label: string; value: number, onValueChange: (value: number[]) => void, minLabel: string, maxLabel: string }) => (
+    <div className="space-y-2">
+        <div className="flex justify-between items-baseline">
+            <Label>{label}</Label>
+            <span className="text-sm font-mono text-muted-foreground">{value}/100</span>
+        </div>
+        <Slider
+            defaultValue={[value]}
+            onValueChange={onValueChange}
+            max={100}
+            step={1}
+        />
+        <div className="flex justify-between text-xs text-muted-foreground">
+            <span>{minLabel}</span>
+            <span>{maxLabel}</span>
+        </div>
     </div>
 );

@@ -34,6 +34,15 @@ export interface Character {
     wisdom: number;
     charisma: number;
     isActive: boolean;
+    // Behavior Profile
+    position?: number;
+    resolve?: number;
+    altruism?: number;
+    discipline?: number;
+    preferredAttack?: string;
+    mostPrecious?: string;
+    motto?: string;
+    conditionalRules?: string[];
 }
 
 export interface NarrativeThread {
