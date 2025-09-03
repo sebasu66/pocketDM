@@ -247,6 +247,12 @@ export default function CharactersPage() {
                         <h3 className="font-headline text-xl">Description</h3>
                         <p className="text-muted-foreground">{character.description}</p>
                     </div>
+                    {character.archetype && (
+                        <div>
+                            <h3 className="font-headline text-xl flex items-center gap-2"><Sparkles className="w-5 h-5 text-accent" />Archetype: {character.archetype}</h3>
+                            <p className="text-muted-foreground italic">"{character.archetypeDescription}"</p>
+                        </div>
+                    )}
                     <div>
                         <h3 className="font-headline text-xl">Attributes</h3>
                         <div className="grid grid-cols-3 gap-4 pt-2">
@@ -362,51 +368,47 @@ export default function CharactersPage() {
                                 )}
                             </div>
                              <div className="grid md:grid-cols-2 gap-x-8 gap-y-4">
-                                <WithTooltip tooltip="Where does your character prefer to be in a fight? Backliners are cautious, frontliners are aggressive.">
                                  <BehaviorSlider 
                                      label="Position"
                                      value={editingCharacter.position || 50}
                                      onValueChange={(v) => handleStatChange('position', v[0])}
                                      minLabel="Backline"
                                      maxLabel="Frontline"
+                                     tooltip="Where does your character prefer to be in a fight? Backliners are cautious, frontliners are aggressive."
                                  />
-                                </WithTooltip>
-                                <WithTooltip tooltip="How courageous is your character? Will they flee from danger or stand and fight to the end?">
                                 <BehaviorSlider 
                                      label="Resolve"
                                      value={editingCharacter.resolve || 50}
                                      onValueChange={(v) => handleStatChange('resolve', v[0])}
                                      minLabel="Flee"
                                      maxLabel="Fight"
+                                     tooltip="How courageous is your character? Will they flee from danger or stand and fight to the end?"
                                  />
-                                </WithTooltip>
-                                <WithTooltip tooltip="Is your character selfish or selfless? Will they prioritize their own gain or protect their friends first?">
                                  <BehaviorSlider 
                                      label="Altruism"
                                      value={editingCharacter.altruism || 50}
                                      onValueChange={(v) => handleStatChange('altruism', v[0])}
                                      minLabel="Selfish"
                                      maxLabel="Group First"
+                                     tooltip="Is your character selfish or selfless? Will they prioritize their own gain or protect their friends first?"
                                  />
-                                </WithTooltip>
-                                <WithTooltip tooltip="How does your character approach problems? Are they reckless and impulsive, or careful and tactical?">
                                  <BehaviorSlider 
                                      label="Discipline"
                                      value={editingCharacter.discipline || 50}
                                      onValueChange={(v) => handleStatChange('discipline', v[0])}
                                      minLabel="Reckless"
                                      maxLabel="Tactical"
+                                     tooltip="How does your character approach problems? Are they reckless and impulsive, or careful and tactical?"
                                  />
-                                 </WithTooltip>
                              </div>
                         </div>
                         <div className="space-y-4 pt-4 border-t">
                             <h3 className="font-headline text-lg">Behavior Details</h3>
                             <div className="grid md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                     <WithTooltip tooltip="What is your character's go-to move in a fight? (e.g., 'Fireball', 'Charge with axe', 'Hide and snipe')">
+                                    <WithTooltip tooltip="What is your character's go-to move in a fight? (e.g., 'Fireball', 'Charge with axe', 'Hide and snipe')">
                                         <LabelWithInfo htmlFor="preferredAttack" label="Preferred Attack" />
-                                     </WithTooltip>
+                                    </WithTooltip>
                                     <Input id="preferredAttack" value={editingCharacter.preferredAttack || ''} onChange={(e) => handleStatChange('preferredAttack', e.target.value)} />
                                 </div>
                                 <div className="space-y-2">
@@ -424,9 +426,9 @@ export default function CharactersPage() {
                             </div>
                         </div>
                          <div className="space-y-4 pt-4 border-t">
-                            <WithTooltip tooltip="Define specific rules for the AI to follow. These are high-priority instructions for specific situations.">
-                              <h3 className="font-headline text-lg flex items-center gap-2">Conditional Rules <HelpCircle className="w-4 h-4 text-muted-foreground" /></h3>
-                            </WithTooltip>
+                             <WithTooltip tooltip="Define specific rules for the AI to follow. These are high-priority instructions for specific situations.">
+                                <h3 className="font-headline text-lg flex items-center gap-2">Conditional Rules <HelpCircle className="w-4 h-4 text-muted-foreground" /></h3>
+                             </WithTooltip>
                             <div className="space-y-2">
                                 {[0, 1, 2].map(index => (
                                     <ConditionalRuleInput 
@@ -484,23 +486,25 @@ const AttributeInput = ({ label, value, onChange }: { label: string; value: numb
     </div>
 );
 
-const BehaviorSlider = ({ label, value, onValueChange, minLabel, maxLabel }: { label: string; value: number, onValueChange: (value: number[]) => void, minLabel: string, maxLabel: string }) => (
-    <div className="space-y-2">
-        <div className="flex justify-between items-baseline">
-            <Label className="flex items-center gap-2">{label} <HelpCircle className="w-4 h-4 text-muted-foreground" /></Label>
-            <span className="text-sm font-mono text-muted-foreground">{value}/100</span>
+const BehaviorSlider = ({ label, value, onValueChange, minLabel, maxLabel, tooltip }: { label: string; value: number, onValueChange: (value: number[]) => void, minLabel: string, maxLabel: string, tooltip: string }) => (
+    <WithTooltip tooltip={tooltip}>
+        <div className="space-y-2">
+            <div className="flex justify-between items-baseline">
+                <Label className="flex items-center gap-2">{label} <HelpCircle className="w-4 h-4 text-muted-foreground" /></Label>
+                <span className="text-sm font-mono text-muted-foreground">{value}/100</span>
+            </div>
+            <Slider
+                defaultValue={[value]}
+                onValueChange={onValueChange}
+                max={100}
+                step={1}
+            />
+            <div className="flex justify-between text-xs text-muted-foreground">
+                <span>{minLabel}</span>
+                <span>{maxLabel}</span>
+            </div>
         </div>
-        <Slider
-            defaultValue={[value]}
-            onValueChange={onValueChange}
-            max={100}
-            step={1}
-        />
-        <div className="flex justify-between text-xs text-muted-foreground">
-            <span>{minLabel}</span>
-            <span>{maxLabel}</span>
-        </div>
-    </div>
+    </WithTooltip>
 );
 
 
