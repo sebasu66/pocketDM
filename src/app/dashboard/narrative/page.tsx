@@ -53,7 +53,13 @@ export default function NarrativePage() {
 
     setIsLoading(true);
 
-    const fetchInitialData = async () => {
+    const q = query(
+        collection(db, "narrativeThreads"),
+        where("campaignId", "==", campaign.id),
+        orderBy("createdAt", "asc")
+    );
+
+    const unsubscribe = onSnapshot(q, async (querySnapshot) => {
         try {
             const allCharacters = await getCharactersByCampaign(campaign.id);
             setActivePlayers(allCharacters.filter(c => c.isActive));
@@ -63,33 +69,22 @@ export default function NarrativePage() {
                 setPlayerCharacter(userCharacter || null);
             }
 
-             const q = query(
-                collection(db, "narrativeThreads"),
-                where("campaignId", "==", campaign.id),
-                orderBy("createdAt", "asc")
-            );
-
-            const unsubscribe = onSnapshot(q, async (querySnapshot) => {
-                const threadsFromDb = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
-                const charactersFromDb = await getCharactersByCampaign(campaign.id);
-                const enriched = await enrichThreads(threadsFromDb, charactersFromDb);
-                setThreads(enriched);
-                setIsLoading(false);
-            }, (error) => {
-                console.error("Error fetching narrative threads in real-time:", error);
-                toast({ variant: "destructive", title: "Error", description: "Could not fetch narrative data." });
-                setIsLoading(false);
-            });
-
-            return () => unsubscribe();
-        } catch (error) {
-             console.error("Error setting up narrative listener:", error);
-             toast({ variant: "destructive", title: "Error", description: "Could not set up real-time updates." });
-             setIsLoading(false);
+            const threadsFromDb = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
+            const enriched = await enrichThreads(threadsFromDb, allCharacters);
+            setThreads(enriched);
+        } catch(error) {
+            console.error("Error processing narrative update:", error);
+            toast({ variant: "destructive", title: "Error", description: "Could not process narrative updates." });
+        } finally {
+            setIsLoading(false);
         }
-    };
+    }, (error) => {
+        console.error("Error fetching narrative threads in real-time:", error);
+        toast({ variant: "destructive", title: "Error", description: "Could not fetch narrative data." });
+        setIsLoading(false);
+    });
 
-    fetchInitialData();
+    return () => unsubscribe();
 
   }, [campaign, user, isMaster, toast, enrichThreads]);
 
@@ -340,4 +335,3 @@ function CommentForm({ onSubmit, character }: { onSubmit: (text: string, hiddenT
         </Card>
     );
 }
-
