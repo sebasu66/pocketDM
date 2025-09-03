@@ -43,6 +43,23 @@ Before generating a new story beat, your agent needs to understand the current s
     -   **Query**: For each narrative thread, get all comments where \`threadId\` matches that thread's ID, ordered by \`createdAt\` ascending.
     -   **Fields of Interest**: \`text\`, \`hiddenText\`, \`characterId\`. This shows how players have reacted to the story.
 
+### 2.1. Understanding Character Behavior
+
+The \`characters\` collection contains a **Behavior Profile** to help your agent understand a character's personality and likely actions in rich detail.
+
+-   **\`archetype\`** (string): A high-level summary of the character's personality (e.g., "Braveheart", "Loot Goblin").
+-   **\`archetypeDescription\`** (string): A brief explanation of the archetype.
+-   **\`position\`** (number, 0-100): Where the character prefers to be in a fight. 0 = backline, 50 = mid-range, 100 = frontline.
+-   **\`resolve\`** (number, 0-100): The character's courage. 0 = flees from danger, 100 = stands and fights to the end.
+-   **\`altruism\`** (number, 0-100): How selfish the character is. 0 = prioritizes self/loot, 100 = prioritizes the group.
+-   **\`discipline\`** (number, 0-100): How tactical the character is. 0 = reckless and impulsive, 100 = careful and disciplined.
+-   **\`preferredAttack\`** (string): A short description of their go-to combat move (e.g., "Fireball", "Charge with axe").
+-   **\`mostPrecious\`** (string): What the character values most (e.g., "My family's heirloom", "The approval of the king").
+-   **\`motto\`** (string): A personal motto or battle cry (e.g., "For glory!", "Leave no stone unturned").
+-   **\`conditionalRules\`** (array of objects): High-priority instructions for specific situations. Each object has the format \`{ if: string, then: string }\`. Example: \`[{ if: "character health < 10%", then: "use health potion" }]\`.
+
+By reading these fields, your agent can make much more nuanced and in-character decisions for how a character acts and reacts to story events.
+
 ### 3. Writing to the Database: Continuing the Narrative
 
 **This is the most important concept:** To continue the story, your agent must create a **new document** in the \`narrativeThreads\` collection. The application is designed to render these threads chronologically. Do NOT attempt to update an existing thread with new content.
@@ -194,5 +211,3 @@ export default function IntegrationsPage() {
         </div>
     );
 }
-
-    
