@@ -115,10 +115,10 @@ export default function DesignTestPage() {
         data-ai-hint="dark wood texture"
     >
         <ExpectedFile name="ui/backgrounds/dark-wood-texture.jpg" />
-        <div className="grid grid-cols-[auto_minmax(0,1fr)_35%] grid-rows-[40%_minmax(0,1fr)] h-[85vh] gap-6">
+        <div className="grid grid-cols-[30%_1fr_30%] grid-rows-[40%_minmax(0,1fr)] h-[85vh] gap-x-6">
 
             {/* Column 1: Narrative Panel */}
-            <div className="row-span-2 w-[450px]">
+            <div className="row-span-2">
                 <Card className="h-full bg-cover bg-center border-0 relative flex flex-col" style={{ backgroundImage: "url('/ui/backgrounds/parchment.jpg')"}}>
                     <ExpectedFile name="ui/backgrounds/parchment.jpg" />
                     <div className="flex-1 p-8 text-black font-serif space-y-8 overflow-hidden">
@@ -155,7 +155,7 @@ export default function DesignTestPage() {
             
             {/* Column 2: Floating Center Panel */}
             <div className="col-start-2 row-span-2 relative">
-                <div className="absolute inset-x-[-12.5%] h-full w-[125%] z-10 flex flex-col gap-6">
+                <div className="absolute inset-x-[-20%] h-full w-[140%] z-10 flex flex-col gap-6">
                     <Card 
                         className="flex-1 border-2 border-stone-600 p-4 flex items-center justify-center bg-cover bg-center relative"
                         style={{ backgroundImage: "url('/ui/backgrounds/stone-panel-background.jpg')"}}
@@ -265,5 +265,6 @@ export default function DesignTestPage() {
     </div>
   );
 }
+
 
     
