@@ -20,8 +20,6 @@ import {
   DialogClose
 } from "@/components/ui/dialog";
 import { StackedCard } from "@/components/ui/stacked-card";
-import DireWolfImage from "../../../../public/monsters/dire-wolf.png";
-import HumanSpawnImage from "../../../../public/monsters/human-spawn.png";
 import { cn } from "@/lib/utils";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 
@@ -39,7 +37,7 @@ They hunt in packs, coordinating their attacks with terrifying intelligence, oft
           hitDifficulty: "Medium",
           speed: "Fast"
         },
-        image: DireWolfImage,
+        image: "/monsters/dire-wolf.png",
         aiHint: "dire wolf sketch fantasy"
     },
     {
@@ -51,7 +49,7 @@ They hunt in packs, coordinating their attacks with terrifying intelligence, oft
           hitDifficulty: "Easy",
           speed: "Slow"
         },
-        image: HumanSpawnImage,
+        image: "/monsters/human-spawn.png",
         aiHint: "zombie monster sketch"
     }
 ];
@@ -65,7 +63,7 @@ type Monster = {
       hitDifficulty: string;
       speed: string;
     };
-    image: StaticImageData | string;
+    image: string;
     aiHint: string;
 };
 
@@ -334,4 +332,3 @@ export default function MonstersPage() {
   );
 }
 
-    

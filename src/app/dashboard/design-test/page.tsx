@@ -11,13 +11,12 @@ import { Character, NarrativeThread } from "@/lib/firebase/types";
 import { getCharactersByCampaign } from "@/lib/firebase/characters";
 import { collection, query, where, orderBy, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
-import DireWolfImage from "../../../../public/monsters/dire-wolf.png";
 
 
 // Mock Data - In a real implementation, this would come from your context or API
 const mockEnemy = {
     name: "Crawling Horror",
-    image: DireWolfImage,
+    image: "/monsters/dire-wolf.png",
     aiHint: "skeletal monster sketch"
 };
 
@@ -233,4 +232,3 @@ export default function DesignTestPage() {
   );
 }
 
-    
