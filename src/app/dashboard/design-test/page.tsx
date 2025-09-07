@@ -121,7 +121,7 @@ export default function DesignTestPage() {
             <div className="row-span-2">
                 <Card className="h-full bg-cover bg-center border-0 relative flex flex-col" style={{ backgroundImage: "url('/ui/backgrounds/parchment.jpg')"}}>
                     <ExpectedFile name="ui/backgrounds/parchment.jpg" />
-                    <div className="flex-1 p-8 text-black font-serif space-y-8 overflow-hidden">
+                    <div className="flex-1 pt-[10%] p-8 text-black font-serif space-y-8 overflow-hidden">
                         {activeThread ? (
                              <ScrollArea className="w-full h-full whitespace-nowrap">
                                 <div className="pr-8 space-y-4 inline-block w-full">
@@ -155,7 +155,12 @@ export default function DesignTestPage() {
             
             {/* Column 2: Floating Center Panel */}
             <div className="col-start-2 row-span-2 relative">
-                <div className="absolute inset-x-[-20%] h-full w-[140%] z-10 flex flex-col gap-6">
+                <div 
+                    className="absolute inset-x-[-20%] h-full w-[140%] z-10 flex flex-col gap-6 p-4 bg-cover bg-center"
+                    style={{ backgroundImage: "url('/ui/backgrounds/red-column-bkg.jpg')"}}
+                    data-ai-hint="old red leather texture"
+                >
+                    <ExpectedFile name="ui/backgrounds/red-column-bkg.jpg" />
                     <Card 
                         className="flex-1 border-2 border-stone-600 p-4 flex items-center justify-center bg-cover bg-center relative"
                         style={{ backgroundImage: "url('/ui/backgrounds/stone-panel-background.jpg')"}}
@@ -265,6 +270,5 @@ export default function DesignTestPage() {
     </div>
   );
 }
-
 
     
