@@ -10,7 +10,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/auth-context";
 import { Character, NarrativeThread } from "@/lib/firebase/types";
 import { getCharactersByCampaign } from "@/lib/firebase/characters";
-import { collection, query, where, orderBy, limit, onSnapshot } from "firebase/firestore";
+import { collection, query, where, orderBy, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 import DireWolfImage from "../../../../public/dire-wolf.png";
 
@@ -33,7 +33,7 @@ const mockEnemy = {
 export default function DesignTestPage() {
   const { user, campaign, isLoading: isAuthLoading } = useAuth();
   const [character, setCharacter] = useState<Character | null>(null);
-  const [narrativeThread, setNarrativeThread] = useState<NarrativeThread | null>(null);
+  const [narrativeThreads, setNarrativeThreads] = useState<NarrativeThread[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -48,19 +48,17 @@ export default function DesignTestPage() {
                 setCharacter(userChars[0]);
             }
 
-            // Fetch narrative thread (real-time)
+            // Fetch narrative threads (real-time)
             const narrativeQuery = query(
                 collection(db, "narrativeThreads"),
                 where("campaignId", "==", campaign.id),
-                orderBy("createdAt", "desc"),
-                limit(1)
+                orderBy("createdAt", "asc")
             );
 
             const unsubscribe = onSnapshot(narrativeQuery, (snapshot) => {
                 if (!snapshot.empty) {
-                    const latestThread = snapshot.docs[0].data() as NarrativeThread;
-                    latestThread.id = snapshot.docs[0].id;
-                    setNarrativeThread(latestThread);
+                    const threads = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
+                    setNarrativeThreads(threads);
                 }
             });
 
@@ -104,25 +102,33 @@ export default function DesignTestPage() {
                 <Card className="h-full bg-cover bg-center border-0 relative" style={{ backgroundImage: "url('/parchment.jpg')"}}>
                     <ExpectedFile name="parchment.jpg" />
                     <ScrollArea className="h-full rounded-md">
-                        {narrativeThread ? (
-                             <CardContent className="p-8 text-black font-serif">
-                                <CardTitle className="text-4xl font-headline text-center mb-2">{narrativeThread.title}</CardTitle>
-                                <CardDescription className="text-center text-lg text-black mb-6">
-                                     Posted on {new Date(narrativeThread.createdAt).toLocaleDateString()}
-                                </CardDescription>
+                        <div className="p-8 text-black font-serif space-y-8">
+                            {narrativeThreads.length > 0 ? (
+                                narrativeThreads.map((thread) => (
+                                    <div key={thread.id} className="space-y-4">
+                                        <CardTitle className="text-4xl font-headline text-center mb-2">{thread.title}</CardTitle>
+                                        <CardDescription className="text-center text-lg text-black mb-6">
+                                            Posted on {new Date(thread.createdAt).toLocaleDateString()}
+                                        </CardDescription>
 
-                                {narrativeThread.imageUrl && (
-                                    <div className="flex justify-center my-6">
-                                        <Image src={narrativeThread.imageUrl} width={300} height={200} alt={narrativeThread.title} data-ai-hint={narrativeThread.imageAiHint || "fantasy scene"} className="border-2 border-black/20" />
+                                        {thread.imageUrl && (
+                                            <div className="flex justify-center my-6">
+                                                <Image src={thread.imageUrl} width={300} height={200} alt={thread.title} data-ai-hint={thread.imageAiHint || "fantasy scene"} className="border-2 border-black/20" />
+                                            </div>
+                                        )}
+                                        <div className="space-y-4 text-justify leading-relaxed prose prose-lg prose-black" dangerouslySetInnerHTML={{ __html: thread.content }}/>
+                                        
+                                        {narrativeThreads.indexOf(thread) < narrativeThreads.length - 1 && (
+                                            <hr className="border-black/20 my-8" />
+                                        )}
                                     </div>
-                                )}
-                                <div className="space-y-4 text-justify leading-relaxed prose prose-lg prose-black" dangerouslySetInnerHTML={{ __html: narrativeThread.content }}/>
-                            </CardContent>
-                        ): (
-                            <CardContent className="p-8 text-black font-serif">
-                                <CardTitle className="text-4xl font-headline text-center mb-2">No Narrative Yet</CardTitle>
-                            </CardContent>
-                        )}
+                                ))
+                            ) : (
+                                <CardContent className="p-8 text-black font-serif">
+                                    <CardTitle className="text-4xl font-headline text-center mb-2">No Narrative Yet</CardTitle>
+                                </CardContent>
+                            )}
+                        </div>
                     </ScrollArea>
                 </Card>
             </div>
