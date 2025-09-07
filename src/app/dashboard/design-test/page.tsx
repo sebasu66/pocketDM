@@ -115,7 +115,7 @@ export default function DesignTestPage() {
         data-ai-hint="dark wood texture"
     >
         <ExpectedFile name="ui/backgrounds/dark-wood-texture.jpg" />
-        <div className="grid grid-cols-[30%_1fr_30%] grid-rows-[40%_minmax(0,1fr)] h-[85vh] gap-x-6">
+        <div className="grid grid-cols-[35%_25%_40%] grid-rows-[40%_minmax(0,1fr)] h-[85vh] gap-x-6">
 
             {/* Column 1: Narrative Panel */}
             <div className="row-span-2">
@@ -162,7 +162,7 @@ export default function DesignTestPage() {
                 >
                     <ExpectedFile name="ui/backgrounds/red-column-bkg.jpg" />
                     <Card 
-                        className="flex-1 border-2 border-stone-600 p-4 flex items-center justify-center bg-cover bg-center relative"
+                        className="flex-1 border-2 border-stone-600 p-4 flex items-center justify-center bg-cover bg-center relative overflow-hidden"
                         style={{ backgroundImage: "url('/ui/backgrounds/stone-panel-background.jpg')"}}
                         data-ai-hint="dark stone texture"
                     >
@@ -179,7 +179,7 @@ export default function DesignTestPage() {
                         </div>
                     </Card>
                      <Card 
-                        className="flex-1 border-2 border-stone-600 p-4 flex items-center justify-center bg-cover bg-center relative"
+                        className="flex-1 border-2 border-stone-600 p-4 flex items-center justify-center bg-cover bg-center relative overflow-hidden"
                         style={{ backgroundImage: "url('/ui/backgrounds/stone-panel-background.jpg')"}}
                         data-ai-hint="dark stone texture"
                     >
