@@ -13,11 +13,12 @@ import { db } from "@/lib/firebase/config";
 import { ArrowLeft, ArrowRight, ChevronsRight } from "lucide-react";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 
 const mockEnemy = {
     name: "Crawling Horror",
-    image: "/monsters/dire-wolf.png",
+    image: "/monsters/human-spawn.png",
     aiHint: "skeletal monster sketch"
 };
 
@@ -114,21 +115,24 @@ export default function DesignTestPage() {
         data-ai-hint="dark wood texture"
     >
         <ExpectedFile name="ui/backgrounds/dark-wood-texture.jpg" />
-        <div className="grid grid-cols-[35%_minmax(0,1fr)_35%] grid-rows-[40%_minmax(0,1fr)] h-[85vh] gap-6">
+        <div className="grid grid-cols-[auto_minmax(0,1fr)_35%] grid-rows-[40%_minmax(0,1fr)] h-[85vh] gap-6">
 
             {/* Column 1: Narrative Panel */}
-            <div className="row-span-2">
+            <div className="row-span-2 w-[450px]">
                 <Card className="h-full bg-cover bg-center border-0 relative flex flex-col" style={{ backgroundImage: "url('/ui/backgrounds/parchment.jpg')"}}>
                     <ExpectedFile name="ui/backgrounds/parchment.jpg" />
-                    <div className="flex-1 overflow-y-auto p-8 text-black font-serif space-y-8">
+                    <div className="flex-1 p-8 text-black font-serif space-y-8 overflow-hidden">
                         {activeThread ? (
-                             <div className="space-y-4">
-                                <CardTitle className="text-4xl font-headline text-center mb-2">{activeThread.title}</CardTitle>
-                                <CardDescription className="text-center text-lg text-black mb-6">
-                                    Posted on {new Date(activeThread.createdAt).toLocaleDateString()} (Post {activeThreadIndex + 1}/{narrativeThreads.length})
-                                </CardDescription>
-                                <div className="space-y-4 text-justify leading-relaxed prose prose-lg prose-black" dangerouslySetInnerHTML={{ __html: activeThread.content }}/>
-                            </div>
+                             <ScrollArea className="w-full h-full whitespace-nowrap">
+                                <div className="pr-8 space-y-4 inline-block w-full">
+                                    <CardTitle className="text-4xl font-headline text-center mb-2 whitespace-normal">{activeThread.title}</CardTitle>
+                                    <CardDescription className="text-center text-lg text-black mb-6 whitespace-normal">
+                                        Posted on {new Date(activeThread.createdAt).toLocaleDateString()} (Post {activeThreadIndex + 1}/{narrativeThreads.length})
+                                    </CardDescription>
+                                    <div className="space-y-4 text-justify leading-relaxed prose prose-lg prose-black whitespace-normal" dangerouslySetInnerHTML={{ __html: activeThread.content }}/>
+                                </div>
+                                <ScrollBar orientation="horizontal" />
+                             </ScrollArea>
                         ) : (
                             <CardContent className="p-8 text-black font-serif">
                                 <CardTitle className="text-4xl font-headline text-center mb-2">No Narrative Yet</CardTitle>

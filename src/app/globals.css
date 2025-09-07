@@ -114,6 +114,25 @@
   ::-webkit-scrollbar-thumb:hover {
       @apply bg-border;
   }
+
+  /* Custom Horizontal Scrollbar for Design Test */
+   [data-orientation="horizontal"] > [data-radix-scroll-area-viewport] {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  }
+   [data-orientation="horizontal"] > [data-radix-scroll-area-viewport]::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+   [data-orientation="horizontal"] > [data-radix-scroll-area-scrollbar] {
+    @apply h-2.5 flex-col border-t-transparent p-0;
+  }
+   [data-orientation="horizontal"] > [data-radix-scroll-area-scrollbar] > [data-radix-scroll-area-thumb] {
+    @apply h-2 relative flex-1 rounded-full bg-black/30;
+  }
+   [data-orientation="horizontal"] > [data-radix-scroll-area-scrollbar] > [data-radix-scroll-area-thumb]::before {
+     content: "";
+     @apply absolute top-1/2 left-1/2 w-4 h-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black/50;
+   }
 }
 
 @layer utilities {
