@@ -32,7 +32,7 @@ export default function DesignTestPage() {
   return (
     <div 
         className="relative min-h-[calc(100vh-10rem)] w-full p-4 md:p-6 bg-cover bg-center"
-        style={{ backgroundImage: "url('https://picsum.photos/1920/1080?grayscale&blur=2&random=2')" }}
+        style={{ backgroundImage: "url('/dark-wood-texture.jpg')" }}
         data-ai-hint="dark wood texture"
     >
         {/* We use a grid to define the main areas, and then absolute positioning for layering */}
@@ -71,7 +71,11 @@ export default function DesignTestPage() {
             <div className="col-start-2 row-span-2 relative">
                 {/* Floating Red Panel */}
                 <div className="absolute inset-x-[-12.5%] h-full w-[125%] z-10 flex flex-col gap-6">
-                    <Card className="flex-1 bg-red-900/50 border-2 border-stone-600 p-4 flex items-center justify-center">
+                    <Card 
+                        className="flex-1 border-2 border-stone-600 p-4 flex items-center justify-center bg-cover bg-center"
+                        style={{ backgroundImage: "url('/stone-panel-background.jpg')"}}
+                        data-ai-hint="dark stone texture"
+                    >
                          <div className="relative w-full h-full border-4 border-stone-500 shadow-lg">
                             <Image src={mockLocation.imageUrl} alt={mockLocation.name} fill className="object-cover" data-ai-hint={mockLocation.imageHint}/>
                             <div className="absolute bottom-2 left-2 right-2 bg-black/50 p-2 text-center">
@@ -79,7 +83,11 @@ export default function DesignTestPage() {
                             </div>
                         </div>
                     </Card>
-                     <Card className="flex-1 bg-red-900/50 border-2 border-stone-600 p-4 flex items-center justify-center">
+                     <Card 
+                        className="flex-1 border-2 border-stone-600 p-4 flex items-center justify-center bg-cover bg-center"
+                        style={{ backgroundImage: "url('/stone-panel-background.jpg')"}}
+                        data-ai-hint="dark stone texture"
+                    >
                         <div className="relative w-full h-full" style={{
                             maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 60%, transparent 100%)',
                             WebkitMaskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 60%, transparent 100%)'
@@ -95,7 +103,11 @@ export default function DesignTestPage() {
 
             {/* Column 3, Row 1: Character Panel */}
             <div className="col-start-3">
-                 <Card className="h-full bg-stone-800/20 border-2 border-stone-500 backdrop-blur-sm relative overflow-hidden">
+                 <Card 
+                    className="h-full border-2 border-stone-500 backdrop-blur-sm relative overflow-hidden bg-cover bg-center"
+                    style={{ backgroundImage: "url('/player-panel-background.jpg')"}}
+                    data-ai-hint="leather texture"
+                 >
                     <Image src={mockCharacter.portraitUrl} alt={mockCharacter.name} fill className="object-cover object-top opacity-30" data-ai-hint={mockCharacter.portraitHint} />
                     <div className="relative h-full flex flex-col justify-between p-6 text-white">
                         <CardHeader className="p-0">
@@ -121,7 +133,11 @@ export default function DesignTestPage() {
             
             {/* Column 3, Row 2: Tabs Panel */}
             <div className="col-start-3 row-start-2">
-                <Card className="h-full border-2 border-amber-800/50" style={{backgroundColor: "rgba(245, 222, 179, 0.8)"}}>
+                <Card 
+                    className="h-full border-2 border-amber-800/50 bg-cover bg-center" 
+                    style={{ backgroundImage: "url('/tabs-panel-background.jpg')"}}
+                    data-ai-hint="old paper"
+                >
                     <Tabs defaultValue="chat" className="h-full flex flex-col p-4">
                         <TabsList className="bg-transparent justify-start gap-4">
                             <TabsTrigger value="chat" className="text-xl data-[state=active]:bg-black/10 data-[state=active]:shadow-inner text-black/70 data-[state=active]:text-black font-headline">CHAT</TabsTrigger>
