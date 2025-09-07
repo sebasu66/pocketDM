@@ -4,16 +4,17 @@
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import React, { useEffect, useState, useMemo } from "react";
 import { useAuth } from "@/context/auth-context";
 import { Character, NarrativeThread } from "@/lib/firebase/types";
 import { getCharactersByCampaign } from "@/lib/firebase/characters";
 import { collection, query, where, orderBy, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
+import { ArrowLeft, ArrowRight, ChevronsRight } from "lucide-react";
+import { RusticIconButton } from "@/components/ui/rustic-icon-button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 
-// Mock Data - In a real implementation, this would come from your context or API
 const mockEnemy = {
     name: "Crawling Horror",
     image: "/monsters/dire-wolf.png",
@@ -25,48 +26,58 @@ export default function DesignTestPage() {
   const [character, setCharacter] = useState<Character | null>(null);
   const [narrativeThreads, setNarrativeThreads] = useState<NarrativeThread[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeThreadIndex, setActiveThreadIndex] = useState(0);
 
   useEffect(() => {
     if (isAuthLoading || !user || !campaign) return;
 
-    const fetchPageData = async () => {
-        setIsLoading(true);
-        try {
-            // Fetch character
-            const userChars = await getCharactersByCampaign(campaign.id, user.id);
-            if (userChars.length > 0) {
-                setCharacter(userChars[0]);
-            }
-
-            // Fetch narrative threads (real-time)
-            const narrativeQuery = query(
-                collection(db, "narrativeThreads"),
-                where("campaignId", "==", campaign.id),
-                orderBy("createdAt", "asc")
-            );
-
-            const unsubscribe = onSnapshot(narrativeQuery, (snapshot) => {
-                if (!snapshot.empty) {
-                    const threads = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
-                    setNarrativeThreads(threads);
-                }
-            });
-
-            return () => unsubscribe();
-        } catch (error) {
-            console.error("Failed to fetch design test data:", error);
-        } finally {
-            setIsLoading(false);
+    setIsLoading(true);
+    
+    // Fetch character
+    getCharactersByCampaign(campaign.id, user.id).then(userChars => {
+        if (userChars.length > 0) {
+            setCharacter(userChars[0]);
         }
-    };
+    }).catch(error => {
+        console.error("Failed to fetch character:", error);
+    });
 
-    fetchPageData();
+    // Fetch narrative threads (real-time)
+    const narrativeQuery = query(
+        collection(db, "narrativeThreads"),
+        where("campaignId", "==", campaign.id),
+        orderBy("createdAt", "asc")
+    );
+
+    const unsubscribe = onSnapshot(narrativeQuery, (snapshot) => {
+        if (!snapshot.empty) {
+            const threads = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
+            setNarrativeThreads(threads);
+            setActiveThreadIndex(threads.length - 1); // Default to the latest thread
+        }
+        setIsLoading(false);
+    }, (error) => {
+        console.error("Failed to fetch narrative threads:", error);
+        setIsLoading(false);
+    });
+
+    return () => unsubscribe();
 
   }, [user, campaign, isAuthLoading]);
 
-  const lastThread = useMemo(() => {
-      return narrativeThreads.length > 0 ? narrativeThreads[narrativeThreads.length - 1] : null;
-  }, [narrativeThreads]);
+  const activeThread = useMemo(() => {
+      return narrativeThreads.length > 0 ? narrativeThreads[activeThreadIndex] : null;
+  }, [narrativeThreads, activeThreadIndex]);
+
+  const handlePrevThread = () => {
+    setActiveThreadIndex(prev => Math.max(0, prev - 1));
+  };
+  const handleNextThread = () => {
+    setActiveThreadIndex(prev => Math.min(narrativeThreads.length - 1, prev + 1));
+  };
+  const handleGoToLatest = () => {
+    setActiveThreadIndex(narrativeThreads.length - 1);
+  };
 
   const ExpectedFile = ({ name }: { name: string }) => (
     <div className="absolute top-2 right-2 bg-black/50 text-white text-xs p-1 rounded font-mono z-20">
@@ -75,7 +86,25 @@ export default function DesignTestPage() {
   );
 
   if (isLoading || isAuthLoading) {
-      return <div className="text-white">Loading design test...</div>
+      return (
+        <div className="relative min-h-[calc(100vh-10rem)] w-full p-4 md:p-6 bg-cover bg-center">
+            <div className="grid grid-cols-[35%_minmax(0,1fr)_35%] grid-rows-[40%_minmax(0,1fr)] h-[85vh] gap-6">
+                {/* Column 1: Narrative Panel */}
+                <div className="row-span-2"><Skeleton className="h-full w-full" /></div>
+                {/* Column 2: Center Panel */}
+                <div className="col-start-2 row-span-2 relative">
+                    <div className="absolute inset-x-[-12.5%] h-full w-[125%] z-10 flex flex-col gap-6">
+                        <Skeleton className="flex-1" />
+                        <Skeleton className="flex-1" />
+                    </div>
+                </div>
+                 {/* Column 3, Row 1: Character Panel */}
+                <div className="col-start-3"><Skeleton className="h-full w-full" /></div>
+                {/* Column 3, Row 2: Tabs Panel */}
+                <div className="col-start-3 row-start-2"><Skeleton className="h-full w-full" /></div>
+            </div>
+        </div>
+      )
   }
 
   return (
@@ -85,42 +114,43 @@ export default function DesignTestPage() {
         data-ai-hint="dark wood texture"
     >
         <ExpectedFile name="ui/backgrounds/dark-wood-texture.jpg" />
-        {/* We use a grid to define the main areas, and then absolute positioning for layering */}
         <div className="grid grid-cols-[35%_minmax(0,1fr)_35%] grid-rows-[40%_minmax(0,1fr)] h-[85vh] gap-6">
 
             {/* Column 1: Narrative Panel */}
             <div className="row-span-2">
-                <Card className="h-full bg-cover bg-center border-0 relative" style={{ backgroundImage: "url('/ui/backgrounds/parchment.jpg')"}}>
+                <Card className="h-full bg-cover bg-center border-0 relative flex flex-col" style={{ backgroundImage: "url('/ui/backgrounds/parchment.jpg')"}}>
                     <ExpectedFile name="ui/backgrounds/parchment.jpg" />
-                    <ScrollArea className="h-full rounded-md">
-                        <div className="p-8 text-black font-serif space-y-8">
-                            {narrativeThreads.length > 0 ? (
-                                narrativeThreads.map((thread) => (
-                                    <div key={thread.id} className="space-y-4">
-                                        <CardTitle className="text-4xl font-headline text-center mb-2">{thread.title}</CardTitle>
-                                        <CardDescription className="text-center text-lg text-black mb-6">
-                                            Posted on {new Date(thread.createdAt).toLocaleDateString()}
-                                        </CardDescription>
-                                        <div className="space-y-4 text-justify leading-relaxed prose prose-lg prose-black" dangerouslySetInnerHTML={{ __html: thread.content }}/>
-                                        
-                                        {narrativeThreads.indexOf(thread) < narrativeThreads.length - 1 && (
-                                            <hr className="border-black/20 my-8" />
-                                        )}
-                                    </div>
-                                ))
-                            ) : (
-                                <CardContent className="p-8 text-black font-serif">
-                                    <CardTitle className="text-4xl font-headline text-center mb-2">No Narrative Yet</CardTitle>
-                                </CardContent>
-                            )}
-                        </div>
-                    </ScrollArea>
+                    <div className="flex-1 overflow-y-auto p-8 text-black font-serif space-y-8">
+                        {activeThread ? (
+                             <div className="space-y-4">
+                                <CardTitle className="text-4xl font-headline text-center mb-2">{activeThread.title}</CardTitle>
+                                <CardDescription className="text-center text-lg text-black mb-6">
+                                    Posted on {new Date(activeThread.createdAt).toLocaleDateString()} (Post {activeThreadIndex + 1}/{narrativeThreads.length})
+                                </CardDescription>
+                                <div className="space-y-4 text-justify leading-relaxed prose prose-lg prose-black" dangerouslySetInnerHTML={{ __html: activeThread.content }}/>
+                            </div>
+                        ) : (
+                            <CardContent className="p-8 text-black font-serif">
+                                <CardTitle className="text-4xl font-headline text-center mb-2">No Narrative Yet</CardTitle>
+                            </CardContent>
+                        )}
+                    </div>
+                     <CardContent className="p-4 border-t-2 border-black/10 flex justify-center items-center gap-4">
+                        <RusticIconButton tooltip="Previous Post" onClick={handlePrevThread} disabled={activeThreadIndex <= 0}>
+                            <ArrowLeft />
+                        </RusticIconButton>
+                        <RusticIconButton tooltip="Go to Latest Post" onClick={handleGoToLatest} disabled={activeThreadIndex === narrativeThreads.length - 1}>
+                           <ChevronsRight />
+                        </RusticIconButton>
+                        <RusticIconButton tooltip="Next Post" onClick={handleNextThread} disabled={activeThreadIndex >= narrativeThreads.length - 1}>
+                           <ArrowRight />
+                        </RusticIconButton>
+                    </CardContent>
                 </Card>
             </div>
             
-            {/* Column 2: Empty Spacer for the floating panel */}
+            {/* Column 2: Floating Center Panel */}
             <div className="col-start-2 row-span-2 relative">
-                {/* Floating Red Panel */}
                 <div className="absolute inset-x-[-12.5%] h-full w-[125%] z-10 flex flex-col gap-6">
                     <Card 
                         className="flex-1 border-2 border-stone-600 p-4 flex items-center justify-center bg-cover bg-center relative"
@@ -129,11 +159,11 @@ export default function DesignTestPage() {
                     >
                          <ExpectedFile name="ui/backgrounds/stone-panel-background.jpg" />
                          <div className="relative w-full h-full border-4 border-stone-500 shadow-lg">
-                            {lastThread?.imageUrl && (
+                            {activeThread?.imageUrl && (
                                 <>
-                                    <Image src={lastThread.imageUrl} alt={lastThread.title} fill className="object-cover" data-ai-hint={lastThread.imageAiHint || "fantasy scene"}/>
+                                    <Image src={activeThread.imageUrl} alt={activeThread.title} fill className="object-cover" data-ai-hint={activeThread.imageAiHint || "fantasy scene"}/>
                                     <div className="absolute bottom-2 left-2 right-2 bg-black/50 p-2 text-center">
-                                        <p className="font-headline text-lg text-white drop-shadow-md">{lastThread.title}</p>
+                                        <p className="font-headline text-lg text-white drop-shadow-md">{activeThread.title}</p>
                                     </div>
                                 </>
                             )}
@@ -232,3 +262,4 @@ export default function DesignTestPage() {
   );
 }
 
+    
