@@ -20,7 +20,8 @@ import {
   Menu,
   Crown,
   Plug,
-  Workflow
+  Workflow,
+  Brush,
 } from "lucide-react";
 
 import {
@@ -67,6 +68,7 @@ const worldNavItems = [
 const narrativeNavItems = [
    { href: "/dashboard/narrative", icon: ScrollText, label: "Threads" },
    { href: "/dashboard/chat", icon: MessagesSquare, label: "Player Chat" },
+   { href: "/dashboard/design-test", icon: Brush, label: "Design Test" },
 ];
 
 const pageTitles: { [key: string]: string } = {
@@ -80,6 +82,7 @@ const pageTitles: { [key: string]: string } = {
   "/dashboard/settings": "Settings",
   "/dashboard/settings/apikeys": "AI Settings",
   "/dashboard/integrations": "Integrations",
+  "/dashboard/design-test": "Design Test Page",
 };
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
