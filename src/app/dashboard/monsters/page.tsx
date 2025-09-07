@@ -20,8 +20,8 @@ import {
   DialogClose
 } from "@/components/ui/dialog";
 import { StackedCard } from "@/components/ui/stacked-card";
-import DireWolfImage from "../../../../public/dire-wolf.png";
-import HumanSpawnImage from "../../../../public/human-spawn.png";
+import DireWolfImage from "../../../../public/monsters/dire-wolf.png";
+import HumanSpawnImage from "../../../../public/monsters/human-spawn.png";
 import { cn } from "@/lib/utils";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 
@@ -333,3 +333,5 @@ export default function MonstersPage() {
     </div>
   );
 }
+
+    

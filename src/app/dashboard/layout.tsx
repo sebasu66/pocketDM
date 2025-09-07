@@ -13,13 +13,8 @@ import {
   ScrollText,
   Settings,
   MessagesSquare,
-  BookHeart,
-  Mountain,
-  Swords,
   BookOpen,
   Menu,
-  Crown,
-  Plug,
   Workflow,
   Brush,
 } from "lucide-react";
@@ -27,13 +22,9 @@ import {
 import {
   Sheet,
   SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet"
 import {
   SidebarProvider,
-  Sidebar,
   SidebarHeader,
   SidebarContent,
   SidebarMenu,
@@ -41,19 +32,15 @@ import {
   SidebarMenuButton,
   SidebarInset,
   SidebarFooter,
-  SidebarTrigger,
   SidebarGroup,
   SidebarGroupLabel,
 } from "@/components/ui/sidebar";
 import { UserNav } from "@/components/user-nav";
-import { Logo } from "@/components/logo";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/context/auth-context";
 import React from "react";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 import { runSeed } from "@/lib/firebase/seed";
@@ -82,7 +69,7 @@ const pageTitles: { [key: string]: string } = {
   "/dashboard/settings": "Settings",
   "/dashboard/settings/apikeys": "AI Settings",
   "/dashboard/integrations": "Integrations",
-  "/dashboard/design-test": "Design Test Page",
+  "/dashboard/design-test": "Design Test",
 };
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -110,7 +97,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     return (
        <div className="flex items-center justify-center min-h-screen">
           <div className="flex items-center gap-2">
-            <Logo className="w-8 h-8 animate-spin" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" className="w-8 h-8 animate-spin"><defs><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style={{ stopColor: "hsl(var(--accent))", stopOpacity: 1 }} /><stop offset="100%" style={{ stopColor: "hsl(var(--primary))", stopOpacity: 1 }} /></linearGradient></defs><path d="M20 80 C20 40, 40 20, 50 20 S80 40, 80 80 L60 80 C60 50, 50 40, 50 40 C50 40, 40 50, 40 80 Z" stroke="url(#grad1)" strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round" /><path d="M30 70 L70 70 M40 60 L60 60 M45 50 L55 50" stroke="hsl(var(--border))" strokeWidth="3" fill="none" strokeLinecap="round" /></svg>
             <p className="text-muted-foreground">Loading your campaign...</p>
           </div>
        </div>
@@ -221,7 +208,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
             <main 
               className="p-4 md:p-6 bg-cover bg-fixed bg-center"
-              style={{backgroundImage: "url('/wood2.jpg')"}}
+              style={{backgroundImage: "url('/ui/backgrounds/wood2.jpg')"}}
             >
               {children}
             </main>
@@ -244,3 +231,5 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     </SidebarProvider>
   );
 }
+
+    
