@@ -9,16 +9,13 @@ import { cn } from "@/lib/utils"
 const Tabs = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Root>
->(({ orientation, ...props }, ref) => (
+>(({ className, ...props }, ref) => (
   <TabsPrimitive.Root
     ref={ref}
-    orientation={orientation}
     className={cn(
       "flex",
-      orientation === "horizontal"
-        ? "flex-col"
-        : "flex-row",
-      props.className
+      props.orientation === "vertical" ? "flex-row" : "flex-col",
+      className
     )}
     {...props}
   />
@@ -33,8 +30,8 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
-      "data-[orientation=vertical]:flex-col data-[orientation=vertical]:h-auto data-[orientation=vertical]:items-stretch data-[orientation=vertical]:w-auto",
+      "inline-flex items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
+      "data-[orientation=vertical]:flex-col data-[orientation=vertical]:h-auto data-[orientation=vertical]:items-stretch data-[orientation=vertical]:w-auto data-[orientation=horizontal]:h-10",
       className
     )}
     {...props}

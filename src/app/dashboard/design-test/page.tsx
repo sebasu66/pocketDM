@@ -15,7 +15,7 @@ import { ArrowLeft, ArrowRight, ChevronsRight } from "lucide-react";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { initialMonsters } from "./../monsters/page";
+import { initialMonsters } from "@/app/dashboard/monsters/page";
 import { ThreadComments } from "./ThreadComments";
 
 
@@ -47,7 +47,6 @@ export default function DesignTestPage() {
 
     setIsLoading(true);
     
-    // Fetch characters
     getCharactersByCampaign(campaign.id).then(allChars => {
         setActivePlayers(allChars.filter(c => c.isActive));
         const userChar = allChars.find(c => c.userId === user.id);
@@ -58,7 +57,6 @@ export default function DesignTestPage() {
         console.error("Failed to fetch characters:", error);
     });
 
-    // Fetch narrative threads (real-time)
     const narrativeQuery = query(
         collection(db, "narrativeThreads"),
         where("campaignId", "==", campaign.id),
@@ -69,9 +67,8 @@ export default function DesignTestPage() {
         if (!snapshot.empty) {
             const threads = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
             setNarrativeThreads(threads);
-            setActiveThreadIndex(threads.length - 1); // Default to the latest thread
+            setActiveThreadIndex(threads.length - 1);
             
-            // Fetch comments for all threads
             const newComments: Record<string, EnrichedComment[]> = {};
             for (const thread of threads) {
                 const threadComments = await getCommentsByThreadId(thread.id);
@@ -88,7 +85,7 @@ export default function DesignTestPage() {
 
     return () => unsubscribe();
 
-  }, [user, campaign, isAuthLoading]);
+  }, [user, campaign, isAuthLoading, fetchCommentsForThread]);
 
   const activeThread = useMemo(() => {
       return narrativeThreads.length > 0 ? narrativeThreads[activeThreadIndex] : null;
@@ -99,7 +96,12 @@ export default function DesignTestPage() {
   }, [activeThread, comments]);
 
   const lastThread = useMemo(() => narrativeThreads.length > 0 ? narrativeThreads[narrativeThreads.length - 1] : null, [narrativeThreads]);
-  const lastThreadComments = useMemo(() => lastThread ? comments[lastThread.id] || [] : [], [lastThread, comments]);
+  
+  const lastThreadComments = useMemo(() => {
+      if (!lastThread) return [];
+      return comments[lastThread.id] || [];
+  }, [lastThread, comments]);
+
   const hasPlayerRespondedToLastThread = useMemo(() => {
     if (!user || !lastThreadComments) return false;
     return lastThreadComments.some(c => c.authorId === user.id);
@@ -133,7 +135,6 @@ export default function DesignTestPage() {
           hiddenText,
           createdAt: Date.now(),
       });
-      // Re-fetch comments for the last thread
       await fetchCommentsForThread(lastThread.id);
   };
 
@@ -167,8 +168,7 @@ export default function DesignTestPage() {
         data-ai-hint="dark wood texture"
     >
         <div className="relative grid grid-cols-[38%_24%_38%] h-[85vh]">
-
-            {/* Left Panel */}
+            {/* Left Panel: Narrative */}
             <div className="h-full pr-8">
                 <Card className="h-full bg-cover bg-center border-0 relative flex flex-col" style={{ backgroundImage: "url('/ui/backgrounds/parchment.jpg')"}}>
                     <div className="flex-1 pt-[10%] p-8 text-black font-serif space-y-8 overflow-hidden">
@@ -245,7 +245,7 @@ export default function DesignTestPage() {
                 </Card>
             </div>
 
-            {/* Right Panel */}
+            {/* Right Panel: Character & Tabs */}
             <div className="h-full pl-8 grid grid-rows-2 gap-6">
                 {character ? (
                      <Card 
@@ -291,21 +291,21 @@ export default function DesignTestPage() {
                     style={{ backgroundImage: "url('/ui/backgrounds/tabs-panel-background.jpg')"}}
                     data-ai-hint="old paper"
                 >
-                    <Tabs defaultValue="comments" className="h-full flex p-4" orientation="vertical">
-                        <TabsList className="bg-transparent flex-col justify-start gap-4">
-                            <TabsTrigger value="chat" className="text-xl data-[state=active]:bg-black/10 data-[state=active]:shadow-inner text-black/70 data-[state=active]:text-black font-headline w-full">CHAT</TabsTrigger>
-                            <TabsTrigger value="notes" className="text-xl data-[state=active]:bg-black/10 data-[state=active]:shadow-inner text-black/70 data-[state=active]:text-black font-headline w-full">NOTES</TabsTrigger>
-                            <TabsTrigger value="comments" className="relative text-xl data-[state=active]:bg-black/10 data-[state=active]:shadow-inner text-black/70 data-[state=active]:text-black font-headline w-full">
-                                COMMENTS
+                    <Tabs defaultValue="comments" className="h-full flex flex-row-reverse p-4">
+                        <TabsList className="bg-transparent flex-col justify-start gap-4 ml-4">
+                            <TabsTrigger value="chat" className="text-xl data-[state=active]:bg-black/10 data-[state=active]:shadow-inner text-black/70 data-[state=active]:text-black font-headline w-full justify-end">CHAT</TabsTrigger>
+                            <TabsTrigger value="notes" className="text-xl data-[state=active]:bg-black/10 data-[state=active]:shadow-inner text-black/70 data-[state=active]:text-black font-headline w-full justify-end">NOTES</TabsTrigger>
+                            <TabsTrigger value="comments" className="relative text-xl data-[state=active]:bg-black/10 data-[state=active]:shadow-inner text-black/70 data-[state=active]:text-black font-headline w-full justify-end">
                                 {isPlayerTurn && (
-                                    <span className="absolute top-1 right-1 flex h-3 w-3">
+                                    <span className="absolute top-1 left-1 flex h-3 w-3">
                                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
                                         <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
                                     </span>
                                 )}
+                                COMMENTS
                             </TabsTrigger>
                         </TabsList>
-                         <div className="flex-1 ml-4">
+                         <div className="flex-1">
                             <TabsContent value="chat" className="flex-1 mt-0 h-full">
                                 <p className="text-black/80">Chat content goes here.</p>
                             </TabsContent>
