@@ -159,12 +159,9 @@
   }
 
   .bookmark {
-    @apply inline-flex items-center justify-center p-4 rounded-l-md border-y-2 border-l-2 border-black/20 shadow-md transition-all duration-200;
-    @apply font-handwriting-merienda font-bold text-lg tracking-wider;
+    @apply inline-flex items-center justify-center p-2 rounded-l-md border-y-2 border-l-2 border-black/20 shadow-md transition-all duration-200 h-28;
+    @apply font-sans font-bold text-sm tracking-wider;
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 15% 50%);
-  }
-  .bookmark > span {
-    @apply -rotate-90;
   }
 
   .bookmark-chat {
@@ -178,7 +175,7 @@
   }
 
   .bookmark[data-state="active"] {
-    @apply -translate-x-2 shadow-xl;
+    @apply -translate-x-1 shadow-lg;
   }
 
 }

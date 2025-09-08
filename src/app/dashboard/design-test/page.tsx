@@ -11,18 +11,14 @@ import { getCharactersByCampaign } from "@/lib/firebase/characters";
 import { getCommentsByThreadId, addNarrativeComment } from "@/lib/firebase/comments";
 import { collection, query, where, orderBy, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
-import { ArrowLeft, ArrowRight, ChevronsRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronsRight, Edit } from "lucide-react";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { initialMonsters } from "@/app/dashboard/monsters/page";
 import { ThreadComments } from "./ThreadComments";
-
-const ExpectedFile = ({ name }: { name: string }) => (
-    <div className="absolute top-2 right-2 bg-black/50 text-white text-xs p-1 rounded font-mono z-20">
-        /public/{name}
-    </div>
-  );
+import { GameModal, GameModalTrigger, GameModalContent, GameModalHeader, GameModalTitle, GameModalDescription, GameModalFooter } from "@/components/ui/game-modal";
+import { Button } from "@/components/ui/button";
 
 export default function DesignTestPage() {
   const { user, campaign, isLoading: isAuthLoading } = useAuth();
@@ -213,7 +209,6 @@ export default function DesignTestPage() {
                                 className="object-cover" 
                                 data-ai-hint={activeThread?.imageAiHint || "fantasy landscape"}
                             />
-                            {!activeThread?.imageUrl && <ExpectedFile name="locations/default_location.jpg" />}
                             <div className="absolute bottom-2 left-2 right-2 bg-black/50 p-2 text-center">
                                 <p className="font-headline text-lg text-white drop-shadow-md">{activeThread?.title || 'A Quiet Place'}</p>
                             </div>
@@ -240,7 +235,7 @@ export default function DesignTestPage() {
                 <div className="absolute top-0 right-0 h-full w-[45%] flex flex-col gap-y-4">
                     {character ? (
                         <Card
-                            className="h-[48%] border-0 backdrop-blur-sm relative overflow-hidden bg-contain bg-no-repeat bg-center"
+                            className="h-[48%] border-0 relative overflow-hidden bg-contain bg-no-repeat bg-center"
                             style={{ backgroundImage: "url('/ui/backgrounds/player-panel-background.jpg')"}}
                             data-ai-hint="leather texture"
                         >
@@ -290,23 +285,50 @@ export default function DesignTestPage() {
                                     <p className="text-black/80">Player notes go here.</p>
                                 </TabsContent>
                                 <TabsContent value="comments" className="mt-0 h-full overflow-y-auto">
-                                    <ThreadComments 
-                                        comments={activeThreadComments}
-                                        activePlayers={activePlayers}
-                                        character={character}
-                                        user={user}
-                                        canRespond={activeThreadIndex === narrativeThreads.length - 1 && isPlayerTurn}
-                                        allActivePlayersResponded={allActivePlayersResponded}
-                                        onAddComment={handleAddComment}
-                                    />
+                                   <GameModal>
+                                       <GameModalTrigger asChild>
+                                           <Button variant="outline" className="w-full h-full bg-black/5 hover:bg-black/10">
+                                               <div className="text-center">
+                                                    <p className="font-headline text-lg">View & Respond</p>
+                                                    <p className="text-xs text-black/60">Click to open responses</p>
+                                                    {isPlayerTurn && (
+                                                        <div className="mt-4 flex items-center justify-center gap-2 text-blue-600">
+                                                            <span className="relative flex h-3 w-3">
+                                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                                                                <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
+                                                            </span>
+                                                           Your action is required!
+                                                        </div>
+                                                    )}
+                                               </div>
+                                           </Button>
+                                       </GameModalTrigger>
+                                       <GameModalContent>
+                                            <GameModalHeader>
+                                                <GameModalTitle>Thread Responses</GameModalTitle>
+                                                <GameModalDescription>
+                                                    Read player responses and submit your own action for this thread.
+                                                </GameModalDescription>
+                                            </GameModalHeader>
+                                            <ThreadComments 
+                                                comments={activeThreadComments}
+                                                activePlayers={activePlayers}
+                                                character={character}
+                                                user={user}
+                                                canRespond={activeThreadIndex === narrativeThreads.length - 1 && isPlayerTurn}
+                                                allActivePlayersResponded={allActivePlayersResponded}
+                                                onAddComment={handleAddComment}
+                                            />
+                                       </GameModalContent>
+                                   </GameModal>
                                 </TabsContent>
                             </div>
                             <TabsList className="flex-col h-auto bg-transparent w-32 items-stretch justify-start gap-2 pl-4">
                                 <TabsTrigger value="chat" className="bookmark bookmark-chat">
-                                    <span className="[writing-mode:vertical-lr]">CHAT</span>
+                                    <span className="[writing-mode:vertical-lr] rotate-180 uppercase font-sans">CHAT</span>
                                 </TabsTrigger>
                                 <TabsTrigger value="notes" className="bookmark bookmark-notes">
-                                    <span className="[writing-mode:vertical-lr]">NOTES</span>
+                                    <span className="[writing-mode:vertical-lr] rotate-180 uppercase font-sans">NOTES</span>
                                 </TabsTrigger>
                                 <TabsTrigger value="comments" className="bookmark bookmark-comments relative">
                                     {isPlayerTurn && (
@@ -315,7 +337,7 @@ export default function DesignTestPage() {
                                             <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
                                         </span>
                                     )}
-                                    <span className="[writing-mode:vertical-lr]">COMMENTS</span>
+                                    <span className="[writing-mode:vertical-lr] rotate-180 uppercase font-sans">COMMENTS</span>
                                 </TabsTrigger>
                             </TabsList>
                         </Tabs>

@@ -8,8 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Lock, MessageSquareQuote, Send } from 'lucide-react';
-import { RusticIconButton } from '@/components/ui/rustic-icon-button';
 import { useAuth } from '@/context/auth-context';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface ThreadCommentsProps {
     comments: EnrichedComment[];
@@ -47,44 +47,48 @@ export function ThreadComments({
     if (!comments) return <p className="text-black/70">Loading comments...</p>;
 
     return (
-        <div className="space-y-4 text-black/80">
-            {visibleComments.length === 0 && !canRespond && (
-                <p className="text-black/70 italic p-4 text-center">No responses yet for this thread.</p>
-            )}
+        <div className="space-y-4 text-black/80 max-w-2xl mx-auto">
+             <ScrollArea className="h-96 w-full pr-4">
+                <div className="space-y-4">
+                    {visibleComments.length === 0 && !canRespond && (
+                        <p className="text-black/70 italic p-4 text-center">No responses yet for this thread.</p>
+                    )}
 
-            {visibleComments.map(comment => (
-                <div key={comment.id} className="p-3 rounded-md bg-black/5 border border-black/10">
-                    <div className="flex items-center gap-3">
-                        <FlippingAvatar
-                            playerImage={comment.author.avatar}
-                            characterImage={comment.character?.portrait || 'https://picsum.photos/100/100?random=1'}
-                            playerHint="person face"
-                            characterHint="fantasy portrait"
-                            className="w-12 h-12 flex-shrink-0 border-2 border-primary/20"
-                        />
-                        <div className="flex-1">
-                            <p className="font-bold text-base text-black">{comment.character?.name || comment.author.name}</p>
-                            <p className="text-xs text-black/60">{new Date(comment.createdAt).toLocaleString()}</p>
-                        </div>
-                    </div>
-                    <div className="mt-2 pl-2">
-                        <p className="text-sm text-black/90 whitespace-pre-wrap">{comment.text}</p>
-                        {isMaster && comment.hiddenText && (
-                            <div className="border-l-2 border-red-800/50 bg-red-900/10 p-2 rounded-r-sm mt-2">
-                                <p className="flex items-center gap-1 text-xs font-semibold text-red-900/80"><Lock size={12}/> Hidden</p>
-                                <p className="text-xs text-red-900/70 italic">"{comment.hiddenText}"</p>
+                    {visibleComments.map(comment => (
+                        <div key={comment.id} className="p-3 rounded-md bg-black/5 border border-black/10">
+                            <div className="flex items-center gap-3">
+                                <FlippingAvatar
+                                    playerImage={comment.author.avatar}
+                                    characterImage={comment.character?.portrait || 'https://picsum.photos/100/100?random=1'}
+                                    playerHint="person face"
+                                    characterHint="fantasy portrait"
+                                    className="w-12 h-12 flex-shrink-0 border-2 border-primary/20"
+                                />
+                                <div className="flex-1">
+                                    <p className="font-bold text-base text-black">{comment.character?.name || comment.author.name}</p>
+                                    <p className="text-xs text-black/60">{new Date(comment.createdAt).toLocaleString()}</p>
+                                </div>
                             </div>
-                        )}
-                    </div>
+                            <div className="mt-2 pl-2">
+                                <p className="text-sm text-black/90 whitespace-pre-wrap">{comment.text}</p>
+                                {isMaster && comment.hiddenText && (
+                                    <div className="border-l-2 border-red-800/50 bg-red-900/10 p-2 rounded-r-sm mt-2">
+                                        <p className="flex items-center gap-1 text-xs font-semibold text-red-900/80"><Lock size={12}/> Hidden</p>
+                                        <p className="text-xs text-red-900/70 italic">"{comment.hiddenText}"</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                    
+                    {!allActivePlayersResponded && !isMaster && (
+                        <div className="p-3 rounded-md bg-black/5 border-dashed border-black/20 text-center">
+                            <p className="text-xs text-black/60">Waiting for other players to respond. Their messages will be revealed once everyone has acted.</p>
+                        </div>
+                    )}
                 </div>
-            ))}
+            </ScrollArea>
             
-            {!allActivePlayersResponded && !isMaster && (
-                <div className="p-3 rounded-md bg-black/5 border-dashed border-black/20 text-center">
-                    <p className="text-xs text-black/60">Waiting for other players to respond. Their messages will be revealed once everyone has acted.</p>
-                </div>
-            )}
-
             {canRespond && character && <CommentForm onSubmit={onAddComment} />}
         </div>
     );
@@ -107,7 +111,7 @@ function CommentForm({ onSubmit }: { onSubmit: (text: string, hiddenText: string
     };
 
     return (
-        <div className="p-4 rounded-lg bg-black/10 border border-black/20">
+        <div className="p-4 rounded-lg bg-black/10 border border-black/20 mt-4">
             <form onSubmit={handleSubmit} className="space-y-4">
                 <h4 className="font-bold font-headline text-black">Your Response</h4>
                 <div className="space-y-2">
@@ -151,3 +155,4 @@ function CommentForm({ onSubmit }: { onSubmit: (text: string, hiddenText: string
     );
 }
 
+    
