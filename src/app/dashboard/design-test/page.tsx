@@ -168,14 +168,17 @@ export default function DesignTestPage() {
                     >
                          <ExpectedFile name="ui/backgrounds/stone-panel-background.jpg" />
                          <div className="relative w-full h-full border-4 border-stone-500 shadow-lg">
-                            {activeThread?.imageUrl && (
-                                <>
-                                    <Image src={activeThread.imageUrl} alt={activeThread.title} fill className="object-cover" data-ai-hint={activeThread.imageAiHint || "fantasy scene"}/>
-                                    <div className="absolute bottom-2 left-2 right-2 bg-black/50 p-2 text-center">
-                                        <p className="font-headline text-lg text-white drop-shadow-md">{activeThread.title}</p>
-                                    </div>
-                                </>
-                            )}
+                            <Image 
+                                src={activeThread?.imageUrl || '/ui/locations/default_location_image.jpg'} 
+                                alt={activeThread?.title || 'Default Location'} 
+                                fill 
+                                className="object-cover" 
+                                data-ai-hint={activeThread?.imageAiHint || "fantasy landscape"}
+                            />
+                            {!activeThread?.imageUrl && <ExpectedFile name="ui/locations/default_location_image.jpg" />}
+                            <div className="absolute bottom-2 left-2 right-2 bg-black/50 p-2 text-center">
+                                <p className="font-headline text-lg text-white drop-shadow-md">{activeThread?.title || 'A Quiet Place'}</p>
+                            </div>
                         </div>
                     </Card>
                      <Card 
@@ -189,6 +192,7 @@ export default function DesignTestPage() {
                             WebkitMaskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 60%, transparent 100%)'
                         }}>
                             <Image src={mockEnemy.image} alt={mockEnemy.name} fill className="object-contain" data-ai-hint={mockEnemy.aiHint}/>
+                            <ExpectedFile name="monsters/human-spawn.png" />
                             <div className="absolute bottom-2 left-2 right-2 bg-black/50 p-2 text-center">
                                 <p className="font-headline text-lg text-white drop-shadow-md">{mockEnemy.name}</p>
                             </div>
