@@ -23,7 +23,7 @@ import { StackedCard } from "@/components/ui/stacked-card";
 import { cn } from "@/lib/utils";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 
-const initialMonsters = [
+export const initialMonsters = [
     {
         id: "1",
         name: "Dire Wolf",
@@ -331,4 +331,3 @@ export default function MonstersPage() {
     </div>
   );
 }
-
