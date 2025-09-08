@@ -14,13 +14,14 @@ import { ArrowLeft, ArrowRight, ChevronsRight } from "lucide-react";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { initialMonsters } from "./../monsters/page";
 
 
-const mockEnemy = {
-    name: "Crawling Horror",
-    image: "/monsters/human-spawn.png",
-    aiHint: "skeletal monster sketch"
-};
+const ExpectedFile = ({ name }: { name: string }) => (
+    <div className="absolute top-2 right-2 bg-black/50 text-white text-xs p-1 rounded font-mono z-20">
+        /public/{name}
+    </div>
+  );
 
 export default function DesignTestPage() {
   const { user, campaign, isLoading: isAuthLoading } = useAuth();
@@ -28,6 +29,8 @@ export default function DesignTestPage() {
   const [narrativeThreads, setNarrativeThreads] = useState<NarrativeThread[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeThreadIndex, setActiveThreadIndex] = useState(0);
+
+  const mockEnemy = initialMonsters[1];
 
   useEffect(() => {
     if (isAuthLoading || !user || !campaign) return;
@@ -80,12 +83,6 @@ export default function DesignTestPage() {
     setActiveThreadIndex(narrativeThreads.length - 1);
   };
 
-  const ExpectedFile = ({ name }: { name: string }) => (
-    <div className="absolute top-2 right-2 bg-black/50 text-white text-xs p-1 rounded font-mono z-20">
-        /public/{name}
-    </div>
-  );
-
   if (isLoading || isAuthLoading) {
       return (
         <div className="relative min-h-[calc(100vh-10rem)] w-full p-4 md:p-6 bg-cover bg-center">
@@ -114,7 +111,7 @@ export default function DesignTestPage() {
         style={{ backgroundImage: "url('/ui/backgrounds/dark-wood-texture.jpg')" }}
         data-ai-hint="dark wood texture"
     >
-        <div className="grid grid-cols-[35%_25%_40%] grid-rows-[40%_minmax(0,1fr)] h-[85vh] gap-x-6">
+        <div className="relative grid grid-cols-[35%_minmax(0,1fr)_35%] grid-rows-[40%_minmax(0,1fr)] h-[85vh] gap-x-6">
 
             {/* Column 1: Narrative Panel */}
             <div className="row-span-2">
@@ -152,7 +149,8 @@ export default function DesignTestPage() {
             </div>
             
             {/* Column 2: Floating Center Panel */}
-            <div className="col-start-2 row-span-2 z-10 flex flex-col gap-6 p-4 bg-cover bg-center"
+            <div 
+                className="absolute left-1/2 -translate-x-1/2 w-[25%] h-full z-10 flex flex-col gap-6 p-4 bg-cover bg-center drop-shadow-2xl"
                 style={{ backgroundImage: "url('/ui/backgrounds/red-column-bkg.jpg')"}}
                 data-ai-hint="old red leather texture"
             >
