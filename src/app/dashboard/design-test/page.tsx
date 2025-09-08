@@ -152,173 +152,175 @@ export default function DesignTestPage() {
   }
 
   return (
-    <div 
-        className="relative min-h-[calc(100vh-10rem)] w-full p-4 md:p-6 bg-cover bg-center overflow-hidden"
-        style={{ backgroundImage: "url('/ui/backgrounds/dark-wood-texture.jpg')" }}
-        data-ai-hint="dark wood texture"
-    >
-        <div className="relative h-[85vh]">
-            {/* Left Panel: Narrative */}
-            <div className="absolute top-0 left-0 h-full w-[38%] p-4">
-                <Card className="h-full bg-cover bg-center border-0 relative flex flex-col" style={{ backgroundImage: "url('/ui/backgrounds/parchment.jpg')"}}>
-                    <div className="flex-1 pt-[10%] p-8 text-black font-serif space-y-8 overflow-hidden">
-                        {activeThread ? (
-                             <ScrollArea className="w-full h-full whitespace-nowrap">
-                                <div className="pr-8 space-y-4 inline-block w-full">
-                                    <CardTitle className="text-4xl font-headline text-center mb-2 whitespace-normal">{activeThread.title}</CardTitle>
-                                    <CardDescription className="text-center text-lg text-black mb-6 whitespace-normal">
-                                        Posted on {new Date(activeThread.createdAt).toLocaleDateString()} (Post {activeThreadIndex + 1}/{narrativeThreads.length})
-                                    </CardDescription>
-                                    <div className="space-y-4 text-justify leading-relaxed prose prose-lg prose-black whitespace-normal" dangerouslySetInnerHTML={{ __html: activeThread.content }}/>
-                                </div>
-                                <ScrollBar orientation="horizontal" />
-                             </ScrollArea>
-                        ) : (
-                            <CardContent className="p-8 text-black font-serif">
-                                <CardTitle className="text-4xl font-headline text-center mb-2">No Narrative Yet</CardTitle>
-                            </CardContent>
-                        )}
-                    </div>
-                     <CardContent className="p-4 border-t-2 border-black/10 flex justify-center items-center gap-4">
-                        <RusticIconButton tooltip="Previous Post" onClick={handlePrevThread} disabled={activeThreadIndex <= 0}>
-                            <ArrowLeft />
-                        </RusticIconButton>
-                        <RusticIconButton tooltip="Go to Latest Post" onClick={handleGoToLatest} disabled={activeThreadIndex === narrativeThreads.length - 1}>
-                           <ChevronsRight />
-                        </RusticIconButton>
-                        <RusticIconButton tooltip="Next Post" onClick={handleNextThread} disabled={activeThreadIndex >= narrativeThreads.length - 1}>
-                           <ArrowRight />
-                        </RusticIconButton>
-                    </CardContent>
-                </Card>
-            </div>
-            
-             {/* Center Floating Panel */}
-             <div 
-                className="absolute left-1/2 -translate-x-1/2 w-[25%] h-full z-10 flex flex-col gap-6 p-4 bg-cover bg-center drop-shadow-2xl"
-                style={{ backgroundImage: "url('/ui/backgrounds/red-column-bkg.jpg')"}}
-                data-ai-hint="old red leather texture"
-            >
-                <Card 
-                    className="flex-1 border-2 border-stone-600 p-4 flex items-center justify-center bg-cover bg-center relative overflow-hidden"
-                    style={{ backgroundImage: "url('/ui/backgrounds/stone-panel-background.jpg')"}}
-                    data-ai-hint="dark stone texture"
-                >
-                      <div className="relative w-full h-full border-4 border-stone-500 shadow-lg">
-                         <Image 
-                            src={activeThread?.imageUrl || '/locations/default_location.jpg'} 
-                            alt={activeThread?.title || 'Default Location'} 
-                            fill 
-                            className="object-cover" 
-                            data-ai-hint={activeThread?.imageAiHint || "fantasy landscape"}
-                        />
-                         {!activeThread?.imageUrl && <ExpectedFile name="locations/default_location.jpg" />}
-                        <div className="absolute bottom-2 left-2 right-2 bg-black/50 p-2 text-center">
-                            <p className="font-headline text-lg text-white drop-shadow-md">{activeThread?.title || 'A Quiet Place'}</p>
-                        </div>
-                    </div>
-                </Card>
-                  <Card 
-                    className="flex-1 border-2 border-stone-600 p-4 flex items-center justify-center bg-cover bg-center relative overflow-hidden"
-                    style={{ backgroundImage: "url('/ui/backgrounds/stone-panel-background.jpg')"}}
-                    data-ai-hint="dark stone texture"
-                >
-                    <div className="relative w-full h-full" style={{
-                        maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 60%, transparent 100%)',
-                        WebkitMaskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 60%, transparent 100%)'
-                    }}>
-                        <Image src={mockEnemy.image} alt={mockEnemy.name} fill className="object-contain" data-ai-hint={mockEnemy.aiHint}/>
-                        <div className="absolute bottom-2 left-2 right-2 bg-black/50 p-2 text-center">
-                            <p className="font-headline text-lg text-white drop-shadow-md">{mockEnemy.name}</p>
-                        </div>
-                    </div>
-                </Card>
-            </div>
-
-            {/* Right Side Panels */}
-            <div className="absolute top-0 right-0 h-full w-[45%] flex flex-col gap-y-4">
-                {character ? (
-                     <Card
-                        className="h-[48%] border-0 backdrop-blur-sm relative overflow-hidden bg-cover bg-center"
-                        style={{ backgroundImage: "url('/ui/backgrounds/player-panel-background.jpg')"}}
-                        data-ai-hint="leather texture"
-                     >
-                        <div className="relative h-full flex flex-col justify-between p-6 text-white">
-                            <CardHeader className="p-0">
-                                <CardTitle className="font-headline text-5xl tracking-widest text-right">{character.name.toUpperCase()}</CardTitle>
-                            </CardHeader>
-                            <CardContent className="p-0 text-right space-y-4">
-                                <div>
-                                    <h4 className="font-headline text-2xl tracking-wider">STATS:</h4>
-                                    <ul className="font-mono text-lg grid grid-cols-3 gap-x-4">
-                                        <li>STR: {character.strength}</li>
-                                        <li>DEX: {character.dexterity}</li>
-                                        <li>CON: {character.constitution}</li>
-                                        <li>INT: {character.intelligence}</li>
-                                        <li>WIS: {character.wisdom}</li>
-                                        <li>CHA: {character.charisma}</li>
-                                    </ul>
-                                </div>
-                                {character.archetype && (
-                                     <div>
-                                        <h4 className="font-headline text-2xl tracking-wider">ARCHETYPE:</h4>
-                                        <p className="text-lg font-bold">{character.archetype}</p>
-                                        <p className="text-base text-stone-300 italic">"{character.archetypeDescription}"</p>
+    <div className="min-w-[1280px]">
+        <div 
+            className="relative min-h-[calc(100vh-10rem)] w-full p-4 md:p-6 bg-cover bg-center overflow-hidden"
+            style={{ backgroundImage: "url('/ui/backgrounds/dark-wood-texture.jpg')" }}
+            data-ai-hint="dark wood texture"
+        >
+            <div className="relative h-[85vh]">
+                {/* Left Panel: Narrative */}
+                <div className="absolute top-0 left-0 h-full w-[38%] p-4">
+                    <Card className="h-full bg-cover bg-center border-0 relative flex flex-col" style={{ backgroundImage: "url('/ui/backgrounds/parchment.jpg')"}}>
+                        <div className="flex-1 pt-[10%] p-8 text-black font-serif space-y-8 overflow-hidden">
+                            {activeThread ? (
+                                <ScrollArea className="w-full h-full whitespace-nowrap">
+                                    <div className="pr-8 space-y-4 inline-block w-full">
+                                        <CardTitle className="text-4xl font-headline text-center mb-2 whitespace-normal">{activeThread.title}</CardTitle>
+                                        <CardDescription className="text-center text-lg text-black mb-6 whitespace-normal">
+                                            Posted on {new Date(activeThread.createdAt).toLocaleDateString()} (Post {activeThreadIndex + 1}/{narrativeThreads.length})
+                                        </CardDescription>
+                                        <div className="space-y-4 text-justify leading-relaxed prose prose-lg prose-black whitespace-normal" dangerouslySetInnerHTML={{ __html: activeThread.content }}/>
                                     </div>
-                                )}
-                            </CardContent>
+                                    <ScrollBar orientation="horizontal" />
+                                </ScrollArea>
+                            ) : (
+                                <CardContent className="p-8 text-black font-serif">
+                                    <CardTitle className="text-4xl font-headline text-center mb-2">No Narrative Yet</CardTitle>
+                                </CardContent>
+                            )}
                         </div>
+                        <CardContent className="p-4 border-t-2 border-black/10 flex justify-center items-center gap-4">
+                            <RusticIconButton tooltip="Previous Post" onClick={handlePrevThread} disabled={activeThreadIndex <= 0}>
+                                <ArrowLeft />
+                            </RusticIconButton>
+                            <RusticIconButton tooltip="Go to Latest Post" onClick={handleGoToLatest} disabled={activeThreadIndex === narrativeThreads.length - 1}>
+                            <ChevronsRight />
+                            </RusticIconButton>
+                            <RusticIconButton tooltip="Next Post" onClick={handleNextThread} disabled={activeThreadIndex >= narrativeThreads.length - 1}>
+                            <ArrowRight />
+                            </RusticIconButton>
+                        </CardContent>
                     </Card>
-                ): (
-                    <Card className="h-[48%] border-0 backdrop-blur-sm relative overflow-hidden bg-cover bg-center">
-                        <CardContent><p className="text-white">No active character for this user.</p></CardContent>
-                    </Card>
-                )}
+                </div>
                 
-                <Card 
-                    className="h-[48%] border-0 bg-cover bg-center relative p-4 flex" 
-                    style={{ backgroundImage: "url('/ui/backgrounds/tabs-panel-background.jpg')"}}
-                    data-ai-hint="old paper"
+                {/* Center Floating Panel */}
+                <div 
+                    className="absolute left-1/2 -translate-x-1/2 w-[25%] h-full z-10 flex flex-col gap-6 p-4 bg-cover bg-center drop-shadow-2xl"
+                    style={{ backgroundImage: "url('/ui/backgrounds/red-column-bkg.jpg')"}}
+                    data-ai-hint="old red leather texture"
                 >
-                    <Tabs defaultValue="comments" className="flex-1 flex" orientation="vertical">
-                         <div className="flex-1 h-full">
-                            <TabsContent value="chat" className="mt-0 h-full">
-                                <p className="text-black/80">Chat content goes here.</p>
-                            </TabsContent>
-                            <TabsContent value="notes" className="mt-0 h-full">
-                                 <p className="text-black/80">Player notes go here.</p>
-                            </TabsContent>
-                            <TabsContent value="comments" className="mt-0 h-full overflow-y-auto">
-                                <ThreadComments 
-                                    comments={activeThreadComments}
-                                    activePlayers={activePlayers}
-                                    character={character}
-                                    user={user}
-                                    canRespond={activeThreadIndex === narrativeThreads.length - 1 && isPlayerTurn}
-                                    allActivePlayersResponded={allActivePlayersResponded}
-                                    onAddComment={handleAddComment}
-                                />
-                            </TabsContent>
+                    <Card 
+                        className="flex-1 border-2 border-stone-600 p-4 flex items-center justify-center bg-cover bg-center relative overflow-hidden"
+                        style={{ backgroundImage: "url('/ui/backgrounds/stone-panel-background.jpg')"}}
+                        data-ai-hint="dark stone texture"
+                    >
+                        <div className="relative w-full h-full border-4 border-stone-500 shadow-lg">
+                            <Image 
+                                src={activeThread?.imageUrl || '/locations/default_location.jpg'} 
+                                alt={activeThread?.title || 'Default Location'} 
+                                fill 
+                                className="object-cover" 
+                                data-ai-hint={activeThread?.imageAiHint || "fantasy landscape"}
+                            />
+                            {!activeThread?.imageUrl && <ExpectedFile name="locations/default_location.jpg" />}
+                            <div className="absolute bottom-2 left-2 right-2 bg-black/50 p-2 text-center">
+                                <p className="font-headline text-lg text-white drop-shadow-md">{activeThread?.title || 'A Quiet Place'}</p>
+                            </div>
                         </div>
-                         <TabsList className="flex-col h-auto bg-transparent w-32 items-stretch justify-start gap-2 pl-4">
-                            <TabsTrigger value="chat" className="bookmark bookmark-chat">
-                                <span className="[writing-mode:vertical-lr]">CHAT</span>
-                            </TabsTrigger>
-                            <TabsTrigger value="notes" className="bookmark bookmark-notes">
-                                <span className="[writing-mode:vertical-lr]">NOTES</span>
-                            </TabsTrigger>
-                            <TabsTrigger value="comments" className="bookmark bookmark-comments relative">
-                                {isPlayerTurn && (
-                                    <span className="absolute top-1 right-1 flex h-3 w-3">
-                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-                                        <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
-                                    </span>
-                                )}
-                                <span className="[writing-mode:vertical-lr]">COMMENTS</span>
-                            </TabsTrigger>
-                        </TabsList>
-                    </Tabs>
-                </Card>
+                    </Card>
+                    <Card 
+                        className="flex-1 border-2 border-stone-600 p-4 flex items-center justify-center bg-cover bg-center relative overflow-hidden"
+                        style={{ backgroundImage: "url('/ui/backgrounds/stone-panel-background.jpg')"}}
+                        data-ai-hint="dark stone texture"
+                    >
+                        <div className="relative w-full h-full" style={{
+                            maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 60%, transparent 100%)',
+                            WebkitMaskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 60%, transparent 100%)'
+                        }}>
+                            <Image src={mockEnemy.image} alt={mockEnemy.name} fill className="object-contain" data-ai-hint={mockEnemy.aiHint}/>
+                            <div className="absolute bottom-2 left-2 right-2 bg-black/50 p-2 text-center">
+                                <p className="font-headline text-lg text-white drop-shadow-md">{mockEnemy.name}</p>
+                            </div>
+                        </div>
+                    </Card>
+                </div>
+
+                {/* Right Side Panels */}
+                <div className="absolute top-0 right-0 h-full w-[45%] flex flex-col gap-y-4">
+                    {character ? (
+                        <Card
+                            className="h-[48%] border-0 backdrop-blur-sm relative overflow-hidden bg-contain bg-no-repeat bg-center"
+                            style={{ backgroundImage: "url('/ui/backgrounds/player-panel-background.jpg')"}}
+                            data-ai-hint="leather texture"
+                        >
+                            <div className="relative h-full flex flex-col justify-between p-6 text-white">
+                                <CardHeader className="p-0">
+                                    <CardTitle className="font-headline text-5xl tracking-widest text-right">{character.name.toUpperCase()}</CardTitle>
+                                </CardHeader>
+                                <CardContent className="p-0 text-right space-y-4">
+                                    <div>
+                                        <h4 className="font-headline text-2xl tracking-wider">STATS:</h4>
+                                        <ul className="font-mono text-lg grid grid-cols-3 gap-x-4">
+                                            <li>STR: {character.strength}</li>
+                                            <li>DEX: {character.dexterity}</li>
+                                            <li>CON: {character.constitution}</li>
+                                            <li>INT: {character.intelligence}</li>
+                                            <li>WIS: {character.wisdom}</li>
+                                            <li>CHA: {character.charisma}</li>
+                                        </ul>
+                                    </div>
+                                    {character.archetype && (
+                                        <div>
+                                            <h4 className="font-headline text-2xl tracking-wider">ARCHETYPE:</h4>
+                                            <p className="text-lg font-bold">{character.archetype}</p>
+                                            <p className="text-base text-stone-300 italic">"{character.archetypeDescription}"</p>
+                                        </div>
+                                    )}
+                                </CardContent>
+                            </div>
+                        </Card>
+                    ): (
+                        <Card className="h-[48%] border-0 backdrop-blur-sm relative overflow-hidden bg-contain bg-no-repeat bg-center">
+                            <CardContent><p className="text-white">No active character for this user.</p></CardContent>
+                        </Card>
+                    )}
+                    
+                    <Card 
+                        className="h-[48%] border-0 bg-contain bg-no-repeat bg-center relative p-4 flex" 
+                        style={{ backgroundImage: "url('/ui/backgrounds/tabs-panel-background.jpg')"}}
+                        data-ai-hint="old paper"
+                    >
+                        <Tabs defaultValue="comments" className="flex-1 flex" orientation="vertical">
+                            <div className="flex-1 h-full">
+                                <TabsContent value="chat" className="mt-0 h-full">
+                                    <p className="text-black/80">Chat content goes here.</p>
+                                </TabsContent>
+                                <TabsContent value="notes" className="mt-0 h-full">
+                                    <p className="text-black/80">Player notes go here.</p>
+                                </TabsContent>
+                                <TabsContent value="comments" className="mt-0 h-full overflow-y-auto">
+                                    <ThreadComments 
+                                        comments={activeThreadComments}
+                                        activePlayers={activePlayers}
+                                        character={character}
+                                        user={user}
+                                        canRespond={activeThreadIndex === narrativeThreads.length - 1 && isPlayerTurn}
+                                        allActivePlayersResponded={allActivePlayersResponded}
+                                        onAddComment={handleAddComment}
+                                    />
+                                </TabsContent>
+                            </div>
+                            <TabsList className="flex-col h-auto bg-transparent w-32 items-stretch justify-start gap-2 pl-4">
+                                <TabsTrigger value="chat" className="bookmark bookmark-chat">
+                                    <span className="[writing-mode:vertical-lr]">CHAT</span>
+                                </TabsTrigger>
+                                <TabsTrigger value="notes" className="bookmark bookmark-notes">
+                                    <span className="[writing-mode:vertical-lr]">NOTES</span>
+                                </TabsTrigger>
+                                <TabsTrigger value="comments" className="bookmark bookmark-comments relative">
+                                    {isPlayerTurn && (
+                                        <span className="absolute top-1 right-1 flex h-3 w-3">
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                                            <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+                                        </span>
+                                    )}
+                                    <span className="[writing-mode:vertical-lr]">COMMENTS</span>
+                                </TabsTrigger>
+                            </TabsList>
+                        </Tabs>
+                    </Card>
+                </div>
             </div>
         </div>
     </div>
