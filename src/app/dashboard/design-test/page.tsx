@@ -152,48 +152,45 @@ export default function DesignTestPage() {
             </div>
             
             {/* Column 2: Floating Center Panel */}
-            <div className="col-start-2 row-span-2 relative">
-                <div 
-                    className="absolute inset-x-[-20%] h-full w-[140%] z-10 flex flex-col gap-6 p-4 bg-cover bg-center"
-                    style={{ backgroundImage: "url('/ui/backgrounds/red-column-bkg.jpg')"}}
-                    data-ai-hint="old red leather texture"
+            <div className="col-start-2 row-span-2 z-10 flex flex-col gap-6 p-4 bg-cover bg-center"
+                style={{ backgroundImage: "url('/ui/backgrounds/red-column-bkg.jpg')"}}
+                data-ai-hint="old red leather texture"
+            >
+                <Card 
+                    className="flex-1 border-2 border-stone-600 p-4 flex items-center justify-center bg-cover bg-center relative overflow-hidden"
+                    style={{ backgroundImage: "url('/ui/backgrounds/stone-panel-background.jpg')"}}
+                    data-ai-hint="dark stone texture"
                 >
-                    <Card 
-                        className="flex-1 border-2 border-stone-600 p-4 flex items-center justify-center bg-cover bg-center relative overflow-hidden"
-                        style={{ backgroundImage: "url('/ui/backgrounds/stone-panel-background.jpg')"}}
-                        data-ai-hint="dark stone texture"
-                    >
-                         <div className="relative w-full h-full border-4 border-stone-500 shadow-lg">
-                            <Image 
-                                src={activeThread?.imageUrl || '/locations/default_location.jpg'} 
-                                alt={activeThread?.title || 'Default Location'} 
-                                fill 
-                                className="object-cover" 
-                                data-ai-hint={activeThread?.imageAiHint || "fantasy landscape"}
-                            />
-                            {!activeThread?.imageUrl && <ExpectedFile name="locations/default_location.jpg" />}
-                            <div className="absolute bottom-2 left-2 right-2 bg-black/50 p-2 text-center">
-                                <p className="font-headline text-lg text-white drop-shadow-md">{activeThread?.title || 'A Quiet Place'}</p>
-                            </div>
+                      <div className="relative w-full h-full border-4 border-stone-500 shadow-lg">
+                        <Image 
+                            src={activeThread?.imageUrl || '/locations/default_location.jpg'} 
+                            alt={activeThread?.title || 'Default Location'} 
+                            fill 
+                            className="object-cover" 
+                            data-ai-hint={activeThread?.imageAiHint || "fantasy landscape"}
+                        />
+                        {!activeThread?.imageUrl && <ExpectedFile name="locations/default_location.jpg" />}
+                        <div className="absolute bottom-2 left-2 right-2 bg-black/50 p-2 text-center">
+                            <p className="font-headline text-lg text-white drop-shadow-md">{activeThread?.title || 'A Quiet Place'}</p>
                         </div>
-                    </Card>
-                     <Card 
-                        className="flex-1 border-2 border-stone-600 p-4 flex items-center justify-center bg-cover bg-center relative overflow-hidden"
-                        style={{ backgroundImage: "url('/ui/backgrounds/stone-panel-background.jpg')"}}
-                        data-ai-hint="dark stone texture"
-                    >
-                        <div className="relative w-full h-full" style={{
-                            maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 60%, transparent 100%)',
-                            WebkitMaskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 60%, transparent 100%)'
-                        }}>
-                            <Image src={mockEnemy.image} alt={mockEnemy.name} fill className="object-contain" data-ai-hint={mockEnemy.aiHint}/>
-                            <ExpectedFile name="monsters/human-spawn.png" />
-                            <div className="absolute bottom-2 left-2 right-2 bg-black/50 p-2 text-center">
-                                <p className="font-headline text-lg text-white drop-shadow-md">{mockEnemy.name}</p>
-                            </div>
+                    </div>
+                </Card>
+                  <Card 
+                    className="flex-1 border-2 border-stone-600 p-4 flex items-center justify-center bg-cover bg-center relative overflow-hidden"
+                    style={{ backgroundImage: "url('/ui/backgrounds/stone-panel-background.jpg')"}}
+                    data-ai-hint="dark stone texture"
+                >
+                    <div className="relative w-full h-full" style={{
+                        maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 60%, transparent 100%)',
+                        WebkitMaskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 60%, transparent 100%)'
+                    }}>
+                        <Image src={mockEnemy.image} alt={mockEnemy.name} fill className="object-contain" data-ai-hint={mockEnemy.aiHint}/>
+                        <ExpectedFile name="monsters/human-spawn.png" />
+                        <div className="absolute bottom-2 left-2 right-2 bg-black/50 p-2 text-center">
+                            <p className="font-headline text-lg text-white drop-shadow-md">{mockEnemy.name}</p>
                         </div>
-                    </Card>
-                </div>
+                    </div>
+                </Card>
             </div>
 
             {/* Column 3, Row 1: Character Panel */}
@@ -267,3 +264,5 @@ export default function DesignTestPage() {
     </div>
   );
 }
+
+    
