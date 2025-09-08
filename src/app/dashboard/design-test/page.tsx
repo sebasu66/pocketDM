@@ -4,10 +4,11 @@
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { useAuth } from "@/context/auth-context";
-import { Character, NarrativeThread } from "@/lib/firebase/types";
+import type { Character, NarrativeThread, EnrichedComment } from "@/lib/firebase/types";
 import { getCharactersByCampaign } from "@/lib/firebase/characters";
+import { getCommentsByThreadId, addNarrativeComment } from "@/lib/firebase/comments";
 import { collection, query, where, orderBy, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 import { ArrowLeft, ArrowRight, ChevronsRight } from "lucide-react";
@@ -15,6 +16,7 @@ import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { initialMonsters } from "./../monsters/page";
+import { ThreadComments } from "./ThreadComments";
 
 
 const ExpectedFile = ({ name }: { name: string }) => (
@@ -27,23 +29,33 @@ export default function DesignTestPage() {
   const { user, campaign, isLoading: isAuthLoading } = useAuth();
   const [character, setCharacter] = useState<Character | null>(null);
   const [narrativeThreads, setNarrativeThreads] = useState<NarrativeThread[]>([]);
+  const [comments, setComments] = useState<Record<string, EnrichedComment[]>>({});
+  const [activePlayers, setActivePlayers] = useState<Character[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeThreadIndex, setActiveThreadIndex] = useState(0);
 
   const mockEnemy = initialMonsters[1];
+
+  const fetchCommentsForThread = useCallback(async (threadId: string) => {
+    const threadComments = await getCommentsByThreadId(threadId);
+    setComments(prev => ({ ...prev, [threadId]: threadComments }));
+  }, []);
+
 
   useEffect(() => {
     if (isAuthLoading || !user || !campaign) return;
 
     setIsLoading(true);
     
-    // Fetch character
-    getCharactersByCampaign(campaign.id, user.id).then(userChars => {
-        if (userChars.length > 0) {
-            setCharacter(userChars[0]);
+    // Fetch characters
+    getCharactersByCampaign(campaign.id).then(allChars => {
+        setActivePlayers(allChars.filter(c => c.isActive));
+        const userChar = allChars.find(c => c.userId === user.id);
+        if (userChar) {
+            setCharacter(userChar);
         }
     }).catch(error => {
-        console.error("Failed to fetch character:", error);
+        console.error("Failed to fetch characters:", error);
     });
 
     // Fetch narrative threads (real-time)
@@ -53,11 +65,20 @@ export default function DesignTestPage() {
         orderBy("createdAt", "asc")
     );
 
-    const unsubscribe = onSnapshot(narrativeQuery, (snapshot) => {
+    const unsubscribe = onSnapshot(narrativeQuery, async (snapshot) => {
         if (!snapshot.empty) {
             const threads = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
             setNarrativeThreads(threads);
             setActiveThreadIndex(threads.length - 1); // Default to the latest thread
+            
+            // Fetch comments for all threads
+            const newComments: Record<string, EnrichedComment[]> = {};
+            for (const thread of threads) {
+                const threadComments = await getCommentsByThreadId(thread.id);
+                newComments[thread.id] = threadComments;
+            }
+            setComments(newComments);
+
         }
         setIsLoading(false);
     }, (error) => {
@@ -72,6 +93,25 @@ export default function DesignTestPage() {
   const activeThread = useMemo(() => {
       return narrativeThreads.length > 0 ? narrativeThreads[activeThreadIndex] : null;
   }, [narrativeThreads, activeThreadIndex]);
+  
+  const activeThreadComments = useMemo(() => {
+    return activeThread ? comments[activeThread.id] || [] : [];
+  }, [activeThread, comments]);
+
+  const lastThread = useMemo(() => narrativeThreads.length > 0 ? narrativeThreads[narrativeThreads.length - 1] : null, [narrativeThreads]);
+  const lastThreadComments = useMemo(() => lastThread ? comments[lastThread.id] || [] : [], [lastThread, comments]);
+  const hasPlayerRespondedToLastThread = useMemo(() => {
+    if (!user || !lastThreadComments) return false;
+    return lastThreadComments.some(c => c.authorId === user.id);
+  }, [user, lastThreadComments]);
+
+  const allActivePlayersResponded = useMemo(() => {
+      if (!activePlayers.length || !lastThreadComments) return false;
+      const respondedPlayerIds = new Set(lastThreadComments.map(c => c.authorId));
+      return activePlayers.every(p => respondedPlayerIds.has(p.userId));
+  }, [activePlayers, lastThreadComments]);
+
+  const isPlayerTurn = lastThread && !hasPlayerRespondedToLastThread && !allActivePlayersResponded;
 
   const handlePrevThread = () => {
     setActiveThreadIndex(prev => Math.max(0, prev - 1));
@@ -82,6 +122,21 @@ export default function DesignTestPage() {
   const handleGoToLatest = () => {
     setActiveThreadIndex(narrativeThreads.length - 1);
   };
+  
+  const handleAddComment = async (text: string, hiddenText: string) => {
+      if (!user || !character || !lastThread) return;
+      await addNarrativeComment({
+          threadId: lastThread.id,
+          authorId: user.id,
+          characterId: character.id,
+          text,
+          hiddenText,
+          createdAt: Date.now(),
+      });
+      // Re-fetch comments for the last thread
+      await fetchCommentsForThread(lastThread.id);
+  };
+
 
   if (isLoading || isAuthLoading) {
       return (
@@ -149,7 +204,7 @@ export default function DesignTestPage() {
             </div>
             
             {/* Column 2: Floating Center Panel */}
-            <div 
+             <div 
                 className="absolute left-1/2 -translate-x-1/2 w-[25%] h-full z-10 flex flex-col gap-6 p-4 bg-cover bg-center drop-shadow-2xl"
                 style={{ backgroundImage: "url('/ui/backgrounds/red-column-bkg.jpg')"}}
                 data-ai-hint="old red leather texture"
@@ -160,7 +215,7 @@ export default function DesignTestPage() {
                     data-ai-hint="dark stone texture"
                 >
                       <div className="relative w-full h-full border-4 border-stone-500 shadow-lg">
-                        <Image 
+                         <Image 
                             src={activeThread?.imageUrl || '/locations/default_location.jpg'} 
                             alt={activeThread?.title || 'Default Location'} 
                             fill 
@@ -183,13 +238,13 @@ export default function DesignTestPage() {
                         WebkitMaskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 60%, transparent 100%)'
                     }}>
                         <Image src={mockEnemy.image} alt={mockEnemy.name} fill className="object-contain" data-ai-hint={mockEnemy.aiHint}/>
-                        <ExpectedFile name="monsters/human-spawn.png" />
                         <div className="absolute bottom-2 left-2 right-2 bg-black/50 p-2 text-center">
                             <p className="font-headline text-lg text-white drop-shadow-md">{mockEnemy.name}</p>
                         </div>
                     </div>
                 </Card>
             </div>
+
 
             {/* Column 3, Row 1: Character Panel */}
             <div className="col-start-3">
@@ -240,11 +295,19 @@ export default function DesignTestPage() {
                     style={{ backgroundImage: "url('/ui/backgrounds/tabs-panel-background.jpg')"}}
                     data-ai-hint="old paper"
                 >
-                    <Tabs defaultValue="chat" className="h-full flex flex-col p-4">
+                    <Tabs defaultValue="comments" className="h-full flex flex-col p-4">
                         <TabsList className="bg-transparent justify-start gap-4">
                             <TabsTrigger value="chat" className="text-xl data-[state=active]:bg-black/10 data-[state=active]:shadow-inner text-black/70 data-[state=active]:text-black font-headline">CHAT</TabsTrigger>
                             <TabsTrigger value="notes" className="text-xl data-[state=active]:bg-black/10 data-[state=active]:shadow-inner text-black/70 data-[state=active]:text-black font-headline">NOTES</TabsTrigger>
-                            <TabsTrigger value="comments" className="text-xl data-[state=active]:bg-black/10 data-[state=active]:shadow-inner text-black/70 data-[state=active]:text-black font-headline">COMMENTS</TabsTrigger>
+                            <TabsTrigger value="comments" className="relative text-xl data-[state=active]:bg-black/10 data-[state=active]:shadow-inner text-black/70 data-[state=active]:text-black font-headline">
+                                COMMENTS
+                                {isPlayerTurn && (
+                                    <span className="absolute top-1 right-1 flex h-3 w-3">
+                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                                        <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+                                    </span>
+                                )}
+                            </TabsTrigger>
                         </TabsList>
                         <TabsContent value="chat" className="flex-1 mt-4">
                             <p className="text-black/80">Chat content goes here.</p>
@@ -252,8 +315,16 @@ export default function DesignTestPage() {
                         <TabsContent value="notes" className="flex-1 mt-4">
                              <p className="text-black/80">Player notes go here.</p>
                         </TabsContent>
-                        <TabsContent value="comments" className="flex-1 mt-4">
-                             <p className="text-black/80">Narrative comments go here.</p>
+                        <TabsContent value="comments" className="flex-1 mt-4 overflow-y-auto">
+                            <ThreadComments 
+                                comments={activeThreadComments}
+                                activePlayers={activePlayers}
+                                character={character}
+                                user={user}
+                                canRespond={activeThreadIndex === narrativeThreads.length - 1 && isPlayerTurn}
+                                allActivePlayersResponded={allActivePlayersResponded}
+                                onAddComment={handleAddComment}
+                            />
                         </TabsContent>
                     </Tabs>
                 </Card>
@@ -262,5 +333,3 @@ export default function DesignTestPage() {
     </div>
   );
 }
-
-    
