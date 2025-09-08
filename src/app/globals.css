@@ -157,6 +157,30 @@
   .bg-sidebar-gradient {
     @apply bg-gradient-to-l from-black/90 via-black/80 to-transparent;
   }
+
+  .bookmark {
+    @apply inline-flex items-center justify-center p-4 rounded-l-md border-y-2 border-l-2 border-black/20 shadow-md transition-all duration-200;
+    @apply font-handwriting-merienda font-bold text-lg tracking-wider;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 15% 50%);
+  }
+  .bookmark > span {
+    @apply -rotate-90;
+  }
+
+  .bookmark-chat {
+    @apply bg-[#8a6d4c] text-white/80;
+  }
+  .bookmark-notes {
+    @apply bg-[#5a4d41] text-white/80;
+  }
+  .bookmark-comments {
+    @apply bg-[#a59179] text-black/80;
+  }
+
+  .bookmark[data-state="active"] {
+    @apply -translate-x-2 shadow-xl;
+  }
+
 }
 
     

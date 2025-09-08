@@ -18,7 +18,6 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { initialMonsters } from "@/app/dashboard/monsters/page";
 import { ThreadComments } from "./ThreadComments";
 
-
 const ExpectedFile = ({ name }: { name: string }) => (
     <div className="absolute top-2 right-2 bg-black/50 text-white text-xs p-1 rounded font-mono z-20">
         /public/{name}
@@ -237,14 +236,13 @@ export default function DesignTestPage() {
             </div>
 
             {/* Right Side Panels */}
-            <div className="absolute top-0 right-0 h-full w-[45%] p-4 flex flex-col gap-6">
+            <div className="absolute top-0 right-0 h-full w-[45%] flex flex-col gap-y-4">
                 {character ? (
-                     <Card 
-                        className="h-1/2 border-2 border-stone-500 backdrop-blur-sm relative overflow-hidden bg-cover bg-center"
+                     <Card
+                        className="h-[48%] border-0 backdrop-blur-sm relative overflow-hidden bg-cover bg-center"
                         style={{ backgroundImage: "url('/ui/backgrounds/player-panel-background.jpg')"}}
                         data-ai-hint="leather texture"
                      >
-                        <Image src={character.portrait} alt={character.name} fill className="object-cover object-top opacity-30" data-ai-hint={character.aiHint} />
                         <div className="relative h-full flex flex-col justify-between p-6 text-white">
                             <CardHeader className="p-0">
                                 <CardTitle className="font-headline text-5xl tracking-widest text-right">{character.name.toUpperCase()}</CardTitle>
@@ -272,38 +270,25 @@ export default function DesignTestPage() {
                         </div>
                     </Card>
                 ): (
-                    <Card className="h-1/2 border-2 border-stone-500 backdrop-blur-sm relative overflow-hidden bg-cover bg-center">
+                    <Card className="h-[48%] border-0 backdrop-blur-sm relative overflow-hidden bg-cover bg-center">
                         <CardContent><p className="text-white">No active character for this user.</p></CardContent>
                     </Card>
                 )}
                 
                 <Card 
-                    className="h-1/2 border-2 border-amber-800/50 bg-cover bg-center relative" 
+                    className="h-[48%] border-0 bg-cover bg-center relative p-4 flex" 
                     style={{ backgroundImage: "url('/ui/backgrounds/tabs-panel-background.jpg')"}}
                     data-ai-hint="old paper"
                 >
-                    <Tabs defaultValue="comments" className="h-full flex flex-row-reverse p-4" orientation="vertical">
-                        <TabsList className="bg-transparent flex-col justify-start gap-4 ml-4">
-                            <TabsTrigger value="chat" className="text-xl data-[state=active]:bg-black/10 data-[state=active]:shadow-inner text-black/70 data-[state=active]:text-black font-headline w-full justify-end">CHAT</TabsTrigger>
-                            <TabsTrigger value="notes" className="text-xl data-[state=active]:bg-black/10 data-[state=active]:shadow-inner text-black/70 data-[state=active]:text-black font-headline w-full justify-end">NOTES</TabsTrigger>
-                            <TabsTrigger value="comments" className="relative text-xl data-[state=active]:bg-black/10 data-[state=active]:shadow-inner text-black/70 data-[state=active]:text-black font-headline w-full justify-end">
-                                {isPlayerTurn && (
-                                    <span className="absolute top-1 left-1 flex h-3 w-3">
-                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-                                        <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
-                                    </span>
-                                )}
-                                COMMENTS
-                            </TabsTrigger>
-                        </TabsList>
-                         <div className="flex-1">
-                            <TabsContent value="chat" className="flex-1 mt-0 h-full">
+                    <Tabs defaultValue="comments" className="flex-1 flex" orientation="vertical">
+                         <div className="flex-1 h-full">
+                            <TabsContent value="chat" className="mt-0 h-full">
                                 <p className="text-black/80">Chat content goes here.</p>
                             </TabsContent>
-                            <TabsContent value="notes" className="flex-1 mt-0 h-full">
+                            <TabsContent value="notes" className="mt-0 h-full">
                                  <p className="text-black/80">Player notes go here.</p>
                             </TabsContent>
-                            <TabsContent value="comments" className="flex-1 mt-0 h-full overflow-y-auto">
+                            <TabsContent value="comments" className="mt-0 h-full overflow-y-auto">
                                 <ThreadComments 
                                     comments={activeThreadComments}
                                     activePlayers={activePlayers}
@@ -315,6 +300,23 @@ export default function DesignTestPage() {
                                 />
                             </TabsContent>
                         </div>
+                         <TabsList className="flex-col h-auto bg-transparent w-32 items-stretch justify-start gap-2 pl-4">
+                            <TabsTrigger value="chat" className="bookmark bookmark-chat">
+                                <span className="[writing-mode:vertical-lr]">CHAT</span>
+                            </TabsTrigger>
+                            <TabsTrigger value="notes" className="bookmark bookmark-notes">
+                                <span className="[writing-mode:vertical-lr]">NOTES</span>
+                            </TabsTrigger>
+                            <TabsTrigger value="comments" className="bookmark bookmark-comments relative">
+                                {isPlayerTurn && (
+                                    <span className="absolute top-1 right-1 flex h-3 w-3">
+                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                                        <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+                                    </span>
+                                )}
+                                <span className="[writing-mode:vertical-lr]">COMMENTS</span>
+                            </TabsTrigger>
+                        </TabsList>
                     </Tabs>
                 </Card>
             </div>
@@ -322,3 +324,5 @@ export default function DesignTestPage() {
     </div>
   );
 }
+
+    
