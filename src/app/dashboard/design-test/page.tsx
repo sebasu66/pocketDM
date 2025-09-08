@@ -165,13 +165,13 @@ export default function DesignTestPage() {
                     >
                          <div className="relative w-full h-full border-4 border-stone-500 shadow-lg">
                             <Image 
-                                src={activeThread?.imageUrl || '/ui/locations/default_location_image.jpg'} 
+                                src={activeThread?.imageUrl || '/locations/default_location.jpg'} 
                                 alt={activeThread?.title || 'Default Location'} 
                                 fill 
                                 className="object-cover" 
                                 data-ai-hint={activeThread?.imageAiHint || "fantasy landscape"}
                             />
-                            {!activeThread?.imageUrl && <ExpectedFile name="ui/locations/default_location_image.jpg" />}
+                            {!activeThread?.imageUrl && <ExpectedFile name="locations/default_location.jpg" />}
                             <div className="absolute bottom-2 left-2 right-2 bg-black/50 p-2 text-center">
                                 <p className="font-headline text-lg text-white drop-shadow-md">{activeThread?.title || 'A Quiet Place'}</p>
                             </div>
@@ -267,4 +267,3 @@ export default function DesignTestPage() {
     </div>
   );
 }
-
