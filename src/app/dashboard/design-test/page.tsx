@@ -162,14 +162,14 @@ export default function DesignTestPage() {
 
   return (
     <div 
-        className="relative min-h-[calc(100vh-10rem)] w-full p-4 md:p-6 bg-cover bg-center"
+        className="relative min-h-[calc(100vh-10rem)] w-full p-4 md:p-6 bg-cover bg-center overflow-hidden"
         style={{ backgroundImage: "url('/ui/backgrounds/dark-wood-texture.jpg')" }}
         data-ai-hint="dark wood texture"
     >
-        <div className="relative grid grid-cols-[35%_minmax(0,1fr)_35%] grid-rows-[40%_minmax(0,1fr)] h-[85vh] gap-x-6">
+        <div className="relative grid grid-cols-[38%_24%_38%] h-[85vh]">
 
-            {/* Column 1: Narrative Panel */}
-            <div className="row-span-2">
+            {/* Left Panel */}
+            <div className="h-full pr-8">
                 <Card className="h-full bg-cover bg-center border-0 relative flex flex-col" style={{ backgroundImage: "url('/ui/backgrounds/parchment.jpg')"}}>
                     <div className="flex-1 pt-[10%] p-8 text-black font-serif space-y-8 overflow-hidden">
                         {activeThread ? (
@@ -203,7 +203,7 @@ export default function DesignTestPage() {
                 </Card>
             </div>
             
-            {/* Column 2: Floating Center Panel */}
+             {/* Center Floating Panel */}
              <div 
                 className="absolute left-1/2 -translate-x-1/2 w-[25%] h-full z-10 flex flex-col gap-6 p-4 bg-cover bg-center drop-shadow-2xl"
                 style={{ backgroundImage: "url('/ui/backgrounds/red-column-bkg.jpg')"}}
@@ -245,9 +245,8 @@ export default function DesignTestPage() {
                 </Card>
             </div>
 
-
-            {/* Column 3, Row 1: Character Panel */}
-            <div className="col-start-3">
+            {/* Right Panel */}
+            <div className="h-full pl-8 grid grid-rows-2 gap-6">
                 {character ? (
                      <Card 
                         className="h-full border-2 border-stone-500 backdrop-blur-sm relative overflow-hidden bg-cover bg-center"
@@ -286,20 +285,17 @@ export default function DesignTestPage() {
                         <CardContent><p className="text-white">No active character for this user.</p></CardContent>
                     </Card>
                 )}
-            </div>
-            
-            {/* Column 3, Row 2: Tabs Panel */}
-            <div className="col-start-3 row-start-2">
+                
                 <Card 
                     className="h-full border-2 border-amber-800/50 bg-cover bg-center relative" 
                     style={{ backgroundImage: "url('/ui/backgrounds/tabs-panel-background.jpg')"}}
                     data-ai-hint="old paper"
                 >
-                    <Tabs defaultValue="comments" className="h-full flex flex-col p-4">
-                        <TabsList className="bg-transparent justify-start gap-4">
-                            <TabsTrigger value="chat" className="text-xl data-[state=active]:bg-black/10 data-[state=active]:shadow-inner text-black/70 data-[state=active]:text-black font-headline">CHAT</TabsTrigger>
-                            <TabsTrigger value="notes" className="text-xl data-[state=active]:bg-black/10 data-[state=active]:shadow-inner text-black/70 data-[state=active]:text-black font-headline">NOTES</TabsTrigger>
-                            <TabsTrigger value="comments" className="relative text-xl data-[state=active]:bg-black/10 data-[state=active]:shadow-inner text-black/70 data-[state=active]:text-black font-headline">
+                    <Tabs defaultValue="comments" className="h-full flex p-4" orientation="vertical">
+                        <TabsList className="bg-transparent flex-col justify-start gap-4">
+                            <TabsTrigger value="chat" className="text-xl data-[state=active]:bg-black/10 data-[state=active]:shadow-inner text-black/70 data-[state=active]:text-black font-headline w-full">CHAT</TabsTrigger>
+                            <TabsTrigger value="notes" className="text-xl data-[state=active]:bg-black/10 data-[state=active]:shadow-inner text-black/70 data-[state=active]:text-black font-headline w-full">NOTES</TabsTrigger>
+                            <TabsTrigger value="comments" className="relative text-xl data-[state=active]:bg-black/10 data-[state=active]:shadow-inner text-black/70 data-[state=active]:text-black font-headline w-full">
                                 COMMENTS
                                 {isPlayerTurn && (
                                     <span className="absolute top-1 right-1 flex h-3 w-3">
@@ -309,23 +305,25 @@ export default function DesignTestPage() {
                                 )}
                             </TabsTrigger>
                         </TabsList>
-                        <TabsContent value="chat" className="flex-1 mt-4">
-                            <p className="text-black/80">Chat content goes here.</p>
-                        </TabsContent>
-                        <TabsContent value="notes" className="flex-1 mt-4">
-                             <p className="text-black/80">Player notes go here.</p>
-                        </TabsContent>
-                        <TabsContent value="comments" className="flex-1 mt-4 overflow-y-auto">
-                            <ThreadComments 
-                                comments={activeThreadComments}
-                                activePlayers={activePlayers}
-                                character={character}
-                                user={user}
-                                canRespond={activeThreadIndex === narrativeThreads.length - 1 && isPlayerTurn}
-                                allActivePlayersResponded={allActivePlayersResponded}
-                                onAddComment={handleAddComment}
-                            />
-                        </TabsContent>
+                         <div className="flex-1 ml-4">
+                            <TabsContent value="chat" className="flex-1 mt-0 h-full">
+                                <p className="text-black/80">Chat content goes here.</p>
+                            </TabsContent>
+                            <TabsContent value="notes" className="flex-1 mt-0 h-full">
+                                 <p className="text-black/80">Player notes go here.</p>
+                            </TabsContent>
+                            <TabsContent value="comments" className="flex-1 mt-0 h-full overflow-y-auto">
+                                <ThreadComments 
+                                    comments={activeThreadComments}
+                                    activePlayers={activePlayers}
+                                    character={character}
+                                    user={user}
+                                    canRespond={activeThreadIndex === narrativeThreads.length - 1 && isPlayerTurn}
+                                    allActivePlayersResponded={allActivePlayersResponded}
+                                    onAddComment={handleAddComment}
+                                />
+                            </TabsContent>
+                        </div>
                     </Tabs>
                 </Card>
             </div>
@@ -333,3 +331,5 @@ export default function DesignTestPage() {
     </div>
   );
 }
+
+    
