@@ -246,10 +246,10 @@ export default function DesignTestPage() {
             </div>
 
             {/* Right Panel: Character & Tabs */}
-            <div className="h-full pl-8 grid grid-rows-2 gap-6">
+            <div className="h-full pl-8 flex flex-col gap-6">
                 {character ? (
                      <Card 
-                        className="h-full border-2 border-stone-500 backdrop-blur-sm relative overflow-hidden bg-cover bg-center"
+                        className="flex-1 border-2 border-stone-500 backdrop-blur-sm relative overflow-hidden bg-cover bg-center"
                         style={{ backgroundImage: "url('/ui/backgrounds/player-panel-background.jpg')"}}
                         data-ai-hint="leather texture"
                      >
@@ -281,17 +281,17 @@ export default function DesignTestPage() {
                         </div>
                     </Card>
                 ): (
-                    <Card className="h-full border-2 border-stone-500 backdrop-blur-sm relative overflow-hidden bg-cover bg-center">
+                    <Card className="flex-1 border-2 border-stone-500 backdrop-blur-sm relative overflow-hidden bg-cover bg-center">
                         <CardContent><p className="text-white">No active character for this user.</p></CardContent>
                     </Card>
                 )}
                 
                 <Card 
-                    className="h-full border-2 border-amber-800/50 bg-cover bg-center relative" 
+                    className="flex-1 border-2 border-amber-800/50 bg-cover bg-center relative" 
                     style={{ backgroundImage: "url('/ui/backgrounds/tabs-panel-background.jpg')"}}
                     data-ai-hint="old paper"
                 >
-                    <Tabs defaultValue="comments" className="h-full flex flex-row-reverse p-4">
+                    <Tabs defaultValue="comments" className="h-full flex flex-row-reverse p-4" orientation="vertical">
                         <TabsList className="bg-transparent flex-col justify-start gap-4 ml-4">
                             <TabsTrigger value="chat" className="text-xl data-[state=active]:bg-black/10 data-[state=active]:shadow-inner text-black/70 data-[state=active]:text-black font-headline w-full justify-end">CHAT</TabsTrigger>
                             <TabsTrigger value="notes" className="text-xl data-[state=active]:bg-black/10 data-[state=active]:shadow-inner text-black/70 data-[state=active]:text-black font-headline w-full justify-end">NOTES</TabsTrigger>
@@ -332,4 +332,3 @@ export default function DesignTestPage() {
   );
 }
 
-    
