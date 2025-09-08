@@ -142,20 +142,11 @@ export default function DesignTestPage() {
   if (isLoading || isAuthLoading) {
       return (
         <div className="relative min-h-[calc(100vh-10rem)] w-full p-4 md:p-6 bg-cover bg-center">
-            <div className="grid grid-cols-[35%_minmax(0,1fr)_35%] grid-rows-[40%_minmax(0,1fr)] h-[85vh] gap-6">
-                {/* Column 1: Narrative Panel */}
-                <div className="row-span-2"><Skeleton className="h-full w-full" /></div>
-                {/* Column 2: Center Panel */}
-                <div className="col-start-2 row-span-2 relative">
-                    <div className="absolute inset-x-[-12.5%] h-full w-[125%] z-10 flex flex-col gap-6">
-                        <Skeleton className="flex-1" />
-                        <Skeleton className="flex-1" />
-                    </div>
-                </div>
-                 {/* Column 3, Row 1: Character Panel */}
-                <div className="col-start-3"><Skeleton className="h-full w-full" /></div>
-                {/* Column 3, Row 2: Tabs Panel */}
-                <div className="col-start-3 row-start-2"><Skeleton className="h-full w-full" /></div>
+            <div className="relative h-[85vh]">
+                <Skeleton className="absolute left-0 top-0 w-[38%] h-full" />
+                <Skeleton className="absolute left-1/2 -translate-x-1/2 w-[25%] h-full z-10" />
+                <Skeleton className="absolute right-0 top-0 w-[45%] h-[48%]" />
+                <Skeleton className="absolute right-0 bottom-0 w-[45%] h-[48%]" />
             </div>
         </div>
       )
@@ -167,9 +158,9 @@ export default function DesignTestPage() {
         style={{ backgroundImage: "url('/ui/backgrounds/dark-wood-texture.jpg')" }}
         data-ai-hint="dark wood texture"
     >
-        <div className="relative grid grid-cols-[38%_24%_38%] h-[85vh]">
+        <div className="relative h-[85vh]">
             {/* Left Panel: Narrative */}
-            <div className="h-full pr-8">
+            <div className="absolute top-0 left-0 h-full w-[38%] p-4">
                 <Card className="h-full bg-cover bg-center border-0 relative flex flex-col" style={{ backgroundImage: "url('/ui/backgrounds/parchment.jpg')"}}>
                     <div className="flex-1 pt-[10%] p-8 text-black font-serif space-y-8 overflow-hidden">
                         {activeThread ? (
@@ -222,7 +213,7 @@ export default function DesignTestPage() {
                             className="object-cover" 
                             data-ai-hint={activeThread?.imageAiHint || "fantasy landscape"}
                         />
-                        {!activeThread?.imageUrl && <ExpectedFile name="locations/default_location.jpg" />}
+                         {!activeThread?.imageUrl && <ExpectedFile name="locations/default_location.jpg" />}
                         <div className="absolute bottom-2 left-2 right-2 bg-black/50 p-2 text-center">
                             <p className="font-headline text-lg text-white drop-shadow-md">{activeThread?.title || 'A Quiet Place'}</p>
                         </div>
@@ -245,11 +236,11 @@ export default function DesignTestPage() {
                 </Card>
             </div>
 
-            {/* Right Panel: Character & Tabs */}
-            <div className="h-full pl-8 flex flex-col gap-6">
+            {/* Right Side Panels */}
+            <div className="absolute top-0 right-0 h-full w-[45%] p-4 flex flex-col gap-6">
                 {character ? (
                      <Card 
-                        className="flex-1 border-2 border-stone-500 backdrop-blur-sm relative overflow-hidden bg-cover bg-center"
+                        className="h-1/2 border-2 border-stone-500 backdrop-blur-sm relative overflow-hidden bg-cover bg-center"
                         style={{ backgroundImage: "url('/ui/backgrounds/player-panel-background.jpg')"}}
                         data-ai-hint="leather texture"
                      >
@@ -281,13 +272,13 @@ export default function DesignTestPage() {
                         </div>
                     </Card>
                 ): (
-                    <Card className="flex-1 border-2 border-stone-500 backdrop-blur-sm relative overflow-hidden bg-cover bg-center">
+                    <Card className="h-1/2 border-2 border-stone-500 backdrop-blur-sm relative overflow-hidden bg-cover bg-center">
                         <CardContent><p className="text-white">No active character for this user.</p></CardContent>
                     </Card>
                 )}
                 
                 <Card 
-                    className="flex-1 border-2 border-amber-800/50 bg-cover bg-center relative" 
+                    className="h-1/2 border-2 border-amber-800/50 bg-cover bg-center relative" 
                     style={{ backgroundImage: "url('/ui/backgrounds/tabs-panel-background.jpg')"}}
                     data-ai-hint="old paper"
                 >
@@ -331,4 +322,3 @@ export default function DesignTestPage() {
     </div>
   );
 }
-
