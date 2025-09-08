@@ -114,13 +114,11 @@ export default function DesignTestPage() {
         style={{ backgroundImage: "url('/ui/backgrounds/dark-wood-texture.jpg')" }}
         data-ai-hint="dark wood texture"
     >
-        <ExpectedFile name="ui/backgrounds/dark-wood-texture.jpg" />
         <div className="grid grid-cols-[35%_25%_40%] grid-rows-[40%_minmax(0,1fr)] h-[85vh] gap-x-6">
 
             {/* Column 1: Narrative Panel */}
             <div className="row-span-2">
                 <Card className="h-full bg-cover bg-center border-0 relative flex flex-col" style={{ backgroundImage: "url('/ui/backgrounds/parchment.jpg')"}}>
-                    <ExpectedFile name="ui/backgrounds/parchment.jpg" />
                     <div className="flex-1 pt-[10%] p-8 text-black font-serif space-y-8 overflow-hidden">
                         {activeThread ? (
                              <ScrollArea className="w-full h-full whitespace-nowrap">
@@ -160,13 +158,11 @@ export default function DesignTestPage() {
                     style={{ backgroundImage: "url('/ui/backgrounds/red-column-bkg.jpg')"}}
                     data-ai-hint="old red leather texture"
                 >
-                    <ExpectedFile name="ui/backgrounds/red-column-bkg.jpg" />
                     <Card 
                         className="flex-1 border-2 border-stone-600 p-4 flex items-center justify-center bg-cover bg-center relative overflow-hidden"
                         style={{ backgroundImage: "url('/ui/backgrounds/stone-panel-background.jpg')"}}
                         data-ai-hint="dark stone texture"
                     >
-                         <ExpectedFile name="ui/backgrounds/stone-panel-background.jpg" />
                          <div className="relative w-full h-full border-4 border-stone-500 shadow-lg">
                             <Image 
                                 src={activeThread?.imageUrl || '/ui/locations/default_location_image.jpg'} 
@@ -186,7 +182,6 @@ export default function DesignTestPage() {
                         style={{ backgroundImage: "url('/ui/backgrounds/stone-panel-background.jpg')"}}
                         data-ai-hint="dark stone texture"
                     >
-                        <ExpectedFile name="ui/backgrounds/stone-panel-background.jpg" />
                         <div className="relative w-full h-full" style={{
                             maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 60%, transparent 100%)',
                             WebkitMaskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 60%, transparent 100%)'
@@ -209,7 +204,6 @@ export default function DesignTestPage() {
                         style={{ backgroundImage: "url('/ui/backgrounds/player-panel-background.jpg')"}}
                         data-ai-hint="leather texture"
                      >
-                        <ExpectedFile name="ui/backgrounds/player-panel-background.jpg" />
                         <Image src={character.portrait} alt={character.name} fill className="object-cover object-top opacity-30" data-ai-hint={character.aiHint} />
                         <div className="relative h-full flex flex-col justify-between p-6 text-white">
                             <CardHeader className="p-0">
@@ -251,7 +245,6 @@ export default function DesignTestPage() {
                     style={{ backgroundImage: "url('/ui/backgrounds/tabs-panel-background.jpg')"}}
                     data-ai-hint="old paper"
                 >
-                    <ExpectedFile name="ui/backgrounds/tabs-panel-background.jpg" />
                     <Tabs defaultValue="chat" className="h-full flex flex-col p-4">
                         <TabsList className="bg-transparent justify-start gap-4">
                             <TabsTrigger value="chat" className="text-xl data-[state=active]:bg-black/10 data-[state=active]:shadow-inner text-black/70 data-[state=active]:text-black font-headline">CHAT</TabsTrigger>
@@ -275,4 +268,3 @@ export default function DesignTestPage() {
   );
 }
 
-    
