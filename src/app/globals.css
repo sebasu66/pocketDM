@@ -159,8 +159,8 @@
   }
 
   .bookmark {
-    @apply inline-flex items-center justify-center p-2 rounded-l-md border-y-2 border-l-2 border-black/20 shadow-md transition-all duration-200 h-28;
-    @apply font-sans font-bold text-sm tracking-wider;
+    @apply inline-flex items-center justify-center p-2 rounded-l-md border-y-2 border-l-2 border-black/20 shadow-md transition-all duration-200 h-24 w-10; /* Smaller height and width */
+    @apply font-sans font-bold text-xs tracking-wider uppercase; /* More readable font */
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 15% 50%);
   }
 
@@ -177,7 +177,6 @@
   .bookmark[data-state="active"] {
     @apply -translate-x-1 shadow-lg;
   }
-
 }
 
     

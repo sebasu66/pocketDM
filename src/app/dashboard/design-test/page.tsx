@@ -150,9 +150,7 @@ export default function DesignTestPage() {
   return (
     <div className="min-w-[1280px]">
         <div 
-            className="relative min-h-[calc(100vh-10rem)] w-full p-4 md:p-6 bg-cover bg-center overflow-hidden"
-            style={{ backgroundImage: "url('/ui/backgrounds/dark-wood-texture.jpg')" }}
-            data-ai-hint="dark wood texture"
+            className="relative min-h-[calc(100vh-10rem)] w-full p-4 md:p-6 overflow-hidden"
         >
             <div className="relative h-[85vh]">
                 {/* Left Panel: Narrative */}
@@ -235,7 +233,7 @@ export default function DesignTestPage() {
                 <div className="absolute top-0 right-0 h-full w-[45%] flex flex-col gap-y-4">
                     {character ? (
                         <Card
-                            className="h-[48%] border-0 relative overflow-hidden bg-contain bg-no-repeat bg-center"
+                            className="h-[48%] border-0 relative overflow-hidden bg-contain bg-no-repeat bg-right"
                             style={{ backgroundImage: "url('/ui/backgrounds/player-panel-background.jpg')"}}
                             data-ai-hint="leather texture"
                         >
@@ -272,7 +270,7 @@ export default function DesignTestPage() {
                     )}
                     
                     <Card 
-                        className="h-[48%] border-0 bg-contain bg-no-repeat bg-center relative p-4 flex" 
+                        className="h-[48%] border-0 bg-contain bg-no-repeat bg-right relative p-4 flex" 
                         style={{ backgroundImage: "url('/ui/backgrounds/tabs-panel-background.jpg')"}}
                         data-ai-hint="old paper"
                     >
