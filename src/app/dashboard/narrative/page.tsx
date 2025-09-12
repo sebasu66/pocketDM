@@ -9,7 +9,7 @@ import { Plus, Music, Bot, Send, MessageSquareQuote, Lock, RotateCcw, Trash2, Fi
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 import Image from "next/image";
 import type { EnrichedThread, Character } from "@/lib/firebase/types";
-import { generateStory, StoryInput } from "@/ai/flows/story";
+import { generateStory, StoryInput } from "@/ai/flows/narrative-orchestrator";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -452,3 +452,5 @@ function CommentForm({ onSubmit, character }: { onSubmit: (text: string, hiddenT
         </Card>
     );
 }
+
+    
