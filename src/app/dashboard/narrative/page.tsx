@@ -70,7 +70,7 @@ export default function NarrativePage() {
 
   useEffect(() => {
     if (!campaign || !user) return;
-/*
+
     setIsLoading(true);
 
     const q = query(
@@ -103,7 +103,7 @@ export default function NarrativePage() {
         toast({ variant: "destructive", title: "Error", description: "Could not fetch narrative data." });
         setIsLoading(false);
     });
-*/
+
     return () => unsubscribe();
 
   }, [campaign, user, isMaster, toast, enrichThreads]);
@@ -112,7 +112,7 @@ export default function NarrativePage() {
   const handleGenerateNextPost = async () => {
       if (!campaign || !user || user.role !== 'master') return;
 
-      //setIsGenerating(true);
+      setIsGenerating(true);
       toast({ title: "AI is thinking...", description: "The Dungeon Master is crafting the next part of your story." });
 
       try {
@@ -131,13 +131,9 @@ export default function NarrativePage() {
             apiKey: apiKey,
         };
 
-        console.log("putaaaaaa.     button generate next post clicked");
-        console.log("Generating story with input:", storyInput);
-        //setLastPrompt(storyInput);
+        setLastPrompt(storyInput); // For logging/debugging on the client
 
         const result = await generateStory(storyInput);
-
-        console.log("Generated story:", result);
 
         const newThreadData = {
             campaignId: campaign.id,
@@ -159,7 +155,7 @@ export default function NarrativePage() {
             description: `An error occurred: ${error.message || String(error)}`
         });
       } finally {
-        //setIsGenerating(false);
+        setIsGenerating(false);
       }
   }
 
@@ -232,7 +228,7 @@ export default function NarrativePage() {
       if (threads.length === 0) return true;
       // Otherwise, it's the GM's turn if all active players have responded.
       return allActivePlayersResponded;
-  }, [isMaster, threads, allActivePlayersResponded]);
+  }, [isMaster, threads.length, allActivePlayersResponded]);
   
   const hasPlayerResponded = user ? playersWhoHaveCommented.has(user.id) : false;
 
@@ -466,5 +462,3 @@ function CommentForm({ onSubmit, character }: { onSubmit: (text: string, hiddenT
         </Card>
     );
 }
-
-    
