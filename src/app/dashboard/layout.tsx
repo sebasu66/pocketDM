@@ -17,6 +17,8 @@ import {
   Menu,
   Workflow,
   Brush,
+  Layers,
+  BrainCircuit,
 } from "lucide-react";
 
 import {
@@ -55,7 +57,11 @@ const worldNavItems = [
 const narrativeNavItems = [
    { href: "/dashboard/narrative", icon: ScrollText, label: "Threads" },
    { href: "/dashboard/chat", icon: MessagesSquare, label: "Player Chat" },
-   { href: "/dashboard/design-test", icon: Brush, label: "Design Test" },
+];
+
+const designNavItems = [
+  { href: "/dashboard/design-test", icon: Brush, label: "Design Test" },
+  { href: "/dashboard/design-test-3d", icon: Layers, label: "Design Test 3D" },
 ];
 
 const pageTitles: { [key: string]: string } = {
@@ -70,6 +76,8 @@ const pageTitles: { [key: string]: string } = {
   "/dashboard/settings/apikeys": "AI Settings",
   "/dashboard/integrations": "Integrations",
   "/dashboard/design-test": "Design Test",
+  "/dashboard/design-test-3d": "3D Design Test",
+  "/dashboard/ai-log": "AI Log",
 };
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -150,6 +158,31 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <SidebarGroupLabel>Narrative</SidebarGroupLabel>
              <SidebarMenu>
                 {narrativeNavItems.map((item) => (
+                <SidebarMenuItem key={item.href}>
+                     <SidebarMenuButton asChild isActive={pathname.startsWith(item.href)} tooltip={{ children: item.label }} onClick={handleLinkClick}>
+                        <Link href={item.href}>
+                            <item.icon />
+                            <span>{item.label}</span>
+                        </Link>
+                    </SidebarMenuButton>
+                </SidebarMenuItem>
+                ))}
+                {isMaster && (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={pathname.startsWith('/dashboard/ai-log')} tooltip={{ children: 'AI Log' }} onClick={handleLinkClick}>
+                      <Link href="/dashboard/ai-log">
+                        <BrainCircuit />
+                        <span>AI Log</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )}
+            </SidebarMenu>
+          </SidebarGroup>
+          <SidebarGroup>
+            <SidebarGroupLabel>Design Sandbox</SidebarGroupLabel>
+             <SidebarMenu>
+                {designNavItems.map((item) => (
                 <SidebarMenuItem key={item.href}>
                      <SidebarMenuButton asChild isActive={pathname.startsWith(item.href)} tooltip={{ children: item.label }} onClick={handleLinkClick}>
                         <Link href={item.href}>

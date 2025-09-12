@@ -48,7 +48,7 @@ export default function NarrativePage() {
 
   const [threads, setThreads] = useState<EnrichedThread[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isGenerating, setIsGenerating] = useState(isMaster);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [activePlayers, setActivePlayers] = useState<Character[]>([]);
   const [playerCharacter, setPlayerCharacter] = useState<Character | null>(null);
   const [lastPrompt, setLastPrompt] = useState<StoryInput | null>(null);
@@ -70,7 +70,7 @@ export default function NarrativePage() {
   }, []);
 
   useEffect(() => {
-    if (!campaign) return;
+    if (!campaign || !user) return;
 
     setIsLoading(true);
 
@@ -133,7 +133,7 @@ export default function NarrativePage() {
         const narrativeHistory = threads.map(t => {
             const gmPost = `GM: ${t.title}\n${t.content.replace(/<[^>]*>?/gm, '')}`;
             const playerPosts = t.comments.map(c => {
-                const authorName = c.character?.name || c.author.name || "Unknown";
+                const authorName = c.character?.name || `${c.author.name} (Deleted Character)`;
                 return `${authorName}: ${c.text}`;
             }).join('\n');
             return `${gmPost}\n${playerPosts}`;
@@ -358,12 +358,14 @@ export default function NarrativePage() {
                             playerImage={comment.author.avatar}
                             characterImage={comment.character?.portrait || 'https://picsum.photos/100/100?random=1'}
                             playerHint="person face"
-                            characterHint="fantasy portrait"
+                            characterHint={comment.character?.aiHint || "fantasy portrait"}
                             className="w-16 h-16 flex-shrink-0 border-2 border-primary/20"
                         />
                         <div className="flex-1">
                             <p className="font-bold text-lg">{comment.character?.name || comment.author.name}</p>
-                            <p className="text-sm text-muted-foreground">{comment.author.name}</p>
+                            <p className="text-sm text-muted-foreground">
+                                {comment.character ? comment.author.name : '(Deleted Character)'}
+                            </p>
                         </div>
                         <CardDescription className="text-xs">{new Date(comment.createdAt).toLocaleDateString()}</CardDescription>
                         </div>
@@ -452,3 +454,4 @@ function CommentForm({ onSubmit, character }: { onSubmit: (text: string, hiddenT
     );
 }
 
+    
