@@ -117,7 +117,7 @@ export default function NarrativePage() {
 
       try {
         const apiKey = localStorage.getItem('gemini_api_key');
-        const systemPrompt = localStorage.getItem('ai_system_prompt');
+        const systemPrompt = campaign.systemPrompt;
 
         if (!apiKey) {
             toast({ variant: "destructive", title: "API Key Not Found", description: "Please set your Gemini API key in the AI settings." });
@@ -224,9 +224,7 @@ export default function NarrativePage() {
 
   const isAITurn = useMemo(() => {
       if (!isMaster) return false;
-      // If there are no threads, it's the GM's turn to start.
       if (threads.length === 0) return true;
-      // Otherwise, it's the GM's turn if all active players have responded.
       return allActivePlayersResponded;
   }, [isMaster, threads.length, allActivePlayersResponded]);
   

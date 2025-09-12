@@ -90,7 +90,7 @@ export default function AiLogPage() {
                         id: currentThread.id,
                         timestamp: currentThread.createdAt,
                         request: {
-                            systemPrompt: localStorage.getItem('ai_system_prompt') || "You are a master storyteller.",
+                            systemPrompt: campaign.systemPrompt || "You are a master storyteller.",
                             narrativeState: narrativeState,
                         },
                         response: currentThread.content,

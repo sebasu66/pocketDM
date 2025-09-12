@@ -21,7 +21,7 @@ const defaultSystemPrompt = `You are a master storyteller and creative Dungeon M
 
 export default function ApiKeysPage() {
     const { toast } = useToast();
-    const { user, isLoading } = useAuth();
+    const { user, campaign, updateCampaign, isLoading } = useAuth();
     const router = useRouter();
     const [apiKey, setApiKey] = useState('');
     const [systemPrompt, setSystemPrompt] = useState(defaultSystemPrompt);
@@ -39,18 +39,22 @@ export default function ApiKeysPage() {
 
     useEffect(() => {
         const savedKey = localStorage.getItem('gemini_api_key');
-        const savedPrompt = localStorage.getItem('ai_system_prompt');
         if (savedKey) setApiKey(savedKey);
-        if (savedPrompt) setSystemPrompt(savedPrompt);
-    }, []);
+        
+        if (campaign?.systemPrompt) {
+            setSystemPrompt(campaign.systemPrompt);
+        }
+    }, [campaign]);
 
-    const handleSave = () => {
+    const handleSave = async () => {
         localStorage.setItem('gemini_api_key', apiKey);
-        localStorage.setItem('ai_system_prompt', systemPrompt);
+        if (campaign) {
+            await updateCampaign({ ...campaign, systemPrompt });
+        }
         
         toast({
             title: "Settings Saved",
-            description: "Your Gemini API key and system prompt have been saved to local storage.",
+            description: "Your Gemini API key and system prompt have been saved.",
         });
     };
 
@@ -72,7 +76,7 @@ export default function ApiKeysPage() {
       <Card>
         <CardHeader>
           <CardTitle className="font-headline">AI & API Key Settings</CardTitle>
-          <CardDescription>Manage your generative AI settings and API keys here. Your key is stored in your browser's local storage.</CardDescription>
+          <CardDescription>Manage your generative AI settings and API keys here. Your key is stored in your browser's local storage, but the prompt is saved to the campaign.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
             <div className="space-y-2">

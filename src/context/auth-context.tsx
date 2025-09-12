@@ -4,7 +4,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User, Campaign } from '@/lib/firebase/types';
 import { getUserById, updateUser as updateDbUser } from '@/lib/auth';
-import { getCampaign } from '@/lib/firebase/campaigns';
+import { getCampaign, updateCampaign as updateDbCampaign } from '@/lib/firebase/campaigns';
 
 interface AuthContextType {
   user: User | null;
@@ -12,6 +12,7 @@ interface AuthContextType {
   login: (userId: string) => Promise<void>;
   logout: () => void;
   updateUser: (user: User) => Promise<void>;
+  updateCampaign: (campaign: Campaign) => Promise<void>;
   isLoading: boolean;
 }
 
@@ -70,14 +71,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   
   const updateUser = async (updatedUser: User) => {
     if (!user) return;
-    // This updates our mock database
     await updateDbUser(updatedUser.id, updatedUser);
-    // This updates the react context state
     setUser(updatedUser);
-  }
+  };
+
+  const updateCampaign = async (updatedCampaign: Campaign) => {
+    if (!campaign) return;
+    await updateDbCampaign(updatedCampaign.id, updatedCampaign);
+    setCampaign(updatedCampaign);
+  };
 
   return (
-    <AuthContext.Provider value={{ user, campaign, login, logout, isLoading, updateUser }}>
+    <AuthContext.Provider value={{ user, campaign, login, logout, isLoading, updateUser, updateCampaign }}>
       {children}
     </AuthContext.Provider>
   );

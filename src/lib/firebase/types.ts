@@ -2,6 +2,7 @@
 
 
 
+
 export interface User {
     id: string;
     name: string;
@@ -17,6 +18,7 @@ export interface Campaign {
     description: string;
     bannerUrl: string;
     bannerAiHint: string;
+    systemPrompt?: string;
 }
 
 export interface ConditionalRule {

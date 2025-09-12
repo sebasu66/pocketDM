@@ -2,9 +2,18 @@
 // THIS SCRIPT IS FOR DEMO PURPOSES ONLY
 // It seeds the Firestore database with initial data so the app is usable.
 // In a real application, you would have proper data management and user registration.
-import { collection, writeBatch, doc, getDoc } from "firebase/firestore";
+import { collection, writeBatch, doc } from "firebase/firestore";
 import { db } from "./config";
 import { User, Campaign, Character, NarrativeThread, NarrativeComment } from "./types";
+
+const defaultSystemPrompt = `You are a master storyteller and creative Dungeon Master for a tabletop role-playing game. Your task is to weave a compelling and collaborative narrative.
+
+- **Analyze the History**: Carefully read the narrative history provided, which includes your previous posts and the players' actions.
+- **Consult Character Data**: Use the available tools to look up information about the player characters. Refer to them by name and incorporate their unique backstories and abilities into the narrative.
+- **Drive the Story Forward**: Write the next post in the story. It should be a direct continuation of the events, reacting to player choices and introducing new challenges, characters, or plot developments.
+- **Be Evocative**: Use descriptive language to paint a vivid picture of the world, its inhabitants, and the atmosphere.
+- **Maintain Tone**: Adhere to the established tone of the campaign (e.g., epic fantasy, gritty noir, lighthearted adventure).`;
+
 
 // --- Seeding Data ---
 
@@ -81,7 +90,8 @@ async function seedDatabase() {
             title: "The Whispering Shadows",
             description: "A realm teetering on the brink of an ancient, creeping darkness. Once a safe haven for elves, dwarves, gnomes and other creatures, humans started settling in thousands of years ago through war and conquest. The elves live exiles in the north.",
             bannerUrl: "https://picsum.photos/1200/400?random=10",
-            bannerAiHint: "epic fantasy landscape"
+            bannerAiHint: "epic fantasy landscape",
+            systemPrompt: defaultSystemPrompt,
         }
     ];
 
@@ -184,9 +194,6 @@ async function seedDatabase() {
     }
 }
 
-// We only want to seed the database once.
-// A simple way is to use a flag in localStorage, but for a more robust
-// server/client environment, we check if a key document exists.
 let seeded = false;
 
 export async function runSeed() {

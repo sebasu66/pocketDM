@@ -1,5 +1,5 @@
 
-import { doc, getDoc } from "firebase/firestore"; 
+import { doc, getDoc, updateDoc } from "firebase/firestore"; 
 import { db } from "./config";
 import { Campaign } from "./types";
 
@@ -14,3 +14,8 @@ export const getCampaign = async (id: string): Promise<Campaign | null> => {
    
     return null;
 };
+
+export const updateCampaign = async (id: string, campaignData: Partial<Campaign>): Promise<void> => {
+    const docRef = doc(db, "campaigns", id);
+    await updateDoc(docRef, campaignData);
+}
