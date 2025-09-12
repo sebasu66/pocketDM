@@ -179,35 +179,20 @@ async function seedDatabase() {
     try {
         await batch.commit();
         console.log("Database seeded successfully!");
-        localStorage.setItem('db_seeded', 'true');
     } catch (error) {
         console.error("Error seeding database: ", error);
     }
 }
 
+// We only want to seed the database once.
+// A simple way is to use a flag in localStorage, but for a more robust
+// server/client environment, we check if a key document exists.
+let seeded = false;
 
-// To run this seeding script, you would typically execute it as a standalone node script
-// e.g., `node -r ts-node/register src/lib/firebase/seed.ts`
-// For the purpose of this demo environment, we will find a way to trigger it.
-// A simple way is to add a temporary button in the UI or call it from a component's useEffect.
-// We will add a temporary trigger in the main AppLayout.
-// **THIS IS FOR DEMO PURPOSES ONLY and should be removed in a real app.**
 export async function runSeed() {
-    // This is a more robust check to prevent re-seeding. It checks for a single document
-    // that is expected to exist after seeding. This avoids race conditions and issues
-    // with client-side storage during development.
-    try {
-        const seedCheckDoc = doc(db, 'users', '1');
-        const docSnap = await getDoc(seedCheckDoc);
-        if (docSnap.exists()) {
-            // Document exists, so we assume the DB is seeded.
-            // console.log("Database already seeded. Skipping.");
-            return;
-        }
-    } catch (error) {
-        console.error("Error checking for seeded database, proceeding with seed. Error:", error);
+    if (seeded) {
+        return;
     }
-    
-    // If the check fails or the doc doesn't exist, proceed with seeding.
+    seeded = true;
     await seedDatabase();
 }
