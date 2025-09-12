@@ -8,7 +8,7 @@ import { useAuth } from "@/context/auth-context";
 import { Plus, Music, Bot, Send, MessageSquareQuote, Lock, RotateCcw, Trash2, FileText } from "lucide-react";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 import Image from "next/image";
-import type { NarrativeCommentWithAuthor, EnrichedThread, Character } from "@/lib/firebase/types";
+import type { EnrichedThread, Character } from "@/lib/firebase/types";
 import { generateStory, StoryInput } from "@/ai/flows/story";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -133,7 +133,7 @@ export default function NarrativePage() {
         const narrativeHistory = threads.map(t => {
             const gmPost = `GM: ${t.title}\n${t.content.replace(/<[^>]*>?/gm, '')}`;
             const playerPosts = t.comments.map(c => {
-                const authorName = c.character?.name || c.author.name || "Unknown";
+                const authorName = c.character?.name || c.author?.name || "Unknown";
                 return `${authorName}: ${c.text}`;
             }).join('\n');
             return `${gmPost}\n${playerPosts}`;
@@ -165,7 +165,7 @@ export default function NarrativePage() {
 
       } catch (error) {
         console.error("Error generating story:", error);
-        toast({ variant: "destructive", title: "AI Generation Failed", description: "Something went wrong. Check the console for details." });
+        toast({ variant: "destructive", title: "AI Generation Failed", description: `Something went wrong. Check the console for details. ${error}` });
       } finally {
         setIsGenerating(false);
       }
@@ -260,7 +260,7 @@ export default function NarrativePage() {
                     <CardContent className="space-y-4">
                     {thread.imageUrl && (
                         <div className="relative h-64 w-full rounded-lg overflow-hidden border-2 border-primary/20">
-                            <Image src={thread.imageUrl} alt={thread.title} fill className="object-cover" data-ai-hint={thread.imageAiHint} />
+                            <Image src={thread.imageUrl} alt={thread.title} fill className="object-cover" data-ai-hint={thread.imageAiHint} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" />
                         </div>
                     )}
                         <div className="prose prose-invert max-w-none space-y-4 text-foreground/90" dangerouslySetInnerHTML={{ __html: thread.content }} />
@@ -362,9 +362,9 @@ export default function NarrativePage() {
                             className="w-16 h-16 flex-shrink-0 border-2 border-primary/20"
                         />
                         <div className="flex-1">
-                            <p className="font-bold text-lg">{comment.character?.name || comment.author.name}</p>
+                            <p className="font-bold text-lg">{comment.character?.name || comment.author?.name}</p>
                             <p className="text-sm text-muted-foreground">
-                                {comment.character ? comment.author.name : '(Deleted Character)'}
+                                {comment.character ? comment.author?.name : '(Deleted Character)'}
                             </p>
                         </div>
                         <CardDescription className="text-xs">{new Date(comment.createdAt).toLocaleDateString()}</CardDescription>

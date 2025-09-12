@@ -20,12 +20,8 @@ export const getCommentsByThreadId = async (threadId: string): Promise<Narrative
     const commentsWithAuthors = await Promise.all(
         comments.map(async (comment) => {
             const author = await getUserById(comment.authorId);
-            if (!author) {
-                // In a real app, you might want to handle this more gracefully,
-                // maybe with a placeholder user.
-                throw new Error(`Author with ID ${comment.authorId} not found for comment ${comment.id}`);
-            }
-            return { ...comment, author };
+            const finalAuthor = author || { id: 'unknown', name: 'Unknown Author', email: '', role: 'player', avatar: '', campaignId: '' };
+            return { ...comment, author: finalAuthor };
         })
     );
     
