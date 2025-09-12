@@ -9,10 +9,9 @@ import { getAuth } from "firebase/auth";
 const firebaseConfig = {
   "projectId": "lore-weaver-2kklj",
   "appId": "1:66807357862:web:1aff4a072775f146c5ef67",
-  "storageBucket": "lore-weaver-2kklj.firebasestorage.app",
+  "storageBucket": "lore-weaver-2kklj.appspot.com",
   "apiKey": "AIzaSyBUDGb6l7n1DIb3gR5ppQSjdBFSa9PxYt0",
   "authDomain": "lore-weaver-2kklj.firebaseapp.com",
-  "measurementId": "",
   "messagingSenderId": "66807357862"
 };
 
