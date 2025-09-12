@@ -46,6 +46,8 @@ import Image from "next/image";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 import { runSeed } from "@/lib/firebase/seed";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase/config";
 
 const worldNavItems = [
   { href: "/dashboard/characters", icon: Users, label: "Characters" },
@@ -94,6 +96,28 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     runSeed();
   }, []);
   // --- END DEMO ONLY ---
+  
+  // --- START: Firestore Connection Test ---
+  React.useEffect(() => {
+    const verifyConnection = async () => {
+      console.log("%cFirestore: Attempting to verify connection...", "color: yellow; font-weight: bold;");
+      try {
+        const testDocRef = doc(db, 'users', '1');
+        const docSnap = await getDoc(testDocRef);
+        if (docSnap.exists()) {
+          console.log("%cFirestore: Connection verified successfully!", "color: lightgreen; font-weight: bold;");
+          console.log("Firestore: Fetched test document data:", docSnap.data());
+        } else {
+           console.error("%cFirestore: Connection test failed. Test document 'users/1' does not exist.", "color: orange; font-weight: bold;");
+        }
+      } catch (error) {
+        console.error("%cFirestore: Connection verification failed:", "color: red; font-weight: bold;", error);
+      }
+    };
+    
+    verifyConnection();
+  }, []);
+  // --- END: Firestore Connection Test ---
 
   React.useEffect(() => {
     if (!isLoading && !user) {
