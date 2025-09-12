@@ -2,6 +2,7 @@
 import { doc, getDoc, collection, addDoc, query, where, getDocs, orderBy, writeBatch, deleteDoc } from "firebase/firestore";
 import { db } from "./config";
 import { NarrativeThread } from "./types";
+import { initialThread } from "./seed";
 
 const NARRATIVE_THREADS_COLLECTION = "narrativeThreads";
 
@@ -46,29 +47,33 @@ export const restartCampaignNarrative = async (campaignId: string): Promise<void
     );
     const threadsSnapshot = await getDocs(threadsQuery);
 
-    if (threadsSnapshot.empty) {
-        console.log("No narrative threads to delete.");
-        return;
-    }
-
     const threadIds = threadsSnapshot.docs.map(d => d.id);
 
-    // Find all comments for those threads
-    const commentsQuery = query(
-        collection(db, "narrativeComments"),
-        where("threadId", "in", threadIds)
-    );
-    const commentsSnapshot = await getDocs(commentsQuery);
+    // Delete all threads if they exist
+    if (threadIds.length > 0) {
+        // Find all comments for those threads
+        const commentsQuery = query(
+            collection(db, "narrativeComments"),
+            where("threadId", "in", threadIds)
+        );
+        const commentsSnapshot = await getDocs(commentsQuery);
 
-    // Delete all comments
-    commentsSnapshot.forEach(doc => {
-        batch.delete(doc.ref);
-    });
+        // Delete all comments
+        commentsSnapshot.forEach(doc => {
+            batch.delete(doc.ref);
+        });
 
-    // Delete all threads
-    threadsSnapshot.forEach(doc => {
-        batch.delete(doc.ref);
-    });
+        // Delete all threads
+        threadsSnapshot.forEach(doc => {
+            batch.delete(doc.ref);
+        });
+    }
+
+    // Add the initial thread back
+    const { id: _, ...threadData } = initialThread;
+    const newThreadRef = doc(collection(db, NARRATIVE_THREADS_COLLECTION));
+    batch.set(newThreadRef, threadData);
+
 
     await batch.commit();
 }

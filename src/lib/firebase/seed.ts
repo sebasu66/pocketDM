@@ -6,6 +6,31 @@ import { collection, writeBatch, doc, getDoc } from "firebase/firestore";
 import { db } from "./config";
 import { User, Campaign, Character, NarrativeThread, NarrativeComment } from "./types";
 
+// --- Seeding Data ---
+
+export const initialThread: (Omit<NarrativeThread, 'id'> & { id: string }) = {
+    id: "thread-1",
+    campaignId: "1",
+    authorId: "1", // Game Master
+    title: "The Arrival at Silverwood",
+    createdAt: new Date('2024-07-28T10:00:00Z').getTime(),
+    imageUrl: "https://picsum.photos/800/400?random=55",
+    imageAiHint: "fantasy city gate",
+    audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    content: `
+        <p>
+            The party, weary from their travels, finally saw the shimmering rooftops of Silverwood. 
+            As they approached the main gate, they were greeted by Captain <a href="/dashboard/characters/elara" class="text-accent hover:underline">Elara</a>, 
+            a stern-looking guard with a noticeable scar above her left eye. She held the legendary{' '}
+            <a href="/dashboard/items/moonshard-blade" class="text-accent hover:underline">Moonshard Blade</a>, its faint glow pulsing in the twilight.
+        </p>
+        <p>
+            "State your business in Silverwood," she commanded, her voice firm but not unkind. The air was thick with the scent of pine and distant magic.
+        </p>
+    `
+};
+
+
 async function seedDatabase() {
     console.log("Seeding database...");
     const batch = writeBatch(db);
@@ -116,36 +141,11 @@ async function seedDatabase() {
     console.log("Characters queued for seeding.");
 
     // 4. Narrative Threads
-    const narrativeThreads: (Omit<NarrativeThread, 'id'> & { id: string })[] = [
-        {
-            id: "thread-1",
-            campaignId: "1",
-            authorId: "1", // Game Master
-            title: "The Arrival at Silverwood",
-            createdAt: new Date('2024-07-28T10:00:00Z').getTime(),
-            imageUrl: "https://picsum.photos/800/400?random=55",
-            imageAiHint: "fantasy city gate",
-            audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-            content: `
-                <p>
-                    The party, weary from their travels, finally saw the shimmering rooftops of Silverwood. 
-                    As they approached the main gate, they were greeted by Captain <a href="/dashboard/characters/elara" class="text-accent hover:underline">Elara</a>, 
-                    a stern-looking guard with a noticeable scar above her left eye. She held the legendary{' '}
-                    <a href="/dashboard/items/moonshard-blade" class="text-accent hover:underline">Moonshard Blade</a>, its faint glow pulsing in the twilight.
-                </p>
-                <p>
-                    "State your business in Silverwood," she commanded, her voice firm but not unkind. The air was thick with the scent of pine and distant magic.
-                </p>
-            `
-        }
-    ];
-
-    narrativeThreads.forEach(thread => {
-        const { id, ...threadData } = thread;
-        const threadRef = doc(db, "narrativeThreads", id);
-        batch.set(threadRef, threadData);
-    });
+    const { id: threadId, ...threadData } = initialThread;
+    const threadRef = doc(db, "narrativeThreads", threadId);
+    batch.set(threadRef, threadData);
     console.log("Narrative threads queued for seeding.");
+
 
     // 5. Narrative Comments
     const narrativeComments: (Omit<NarrativeComment, 'id'> & { id: string })[] = [
