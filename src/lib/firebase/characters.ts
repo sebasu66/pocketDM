@@ -2,6 +2,7 @@
 
 
 
+
 import { collection, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc, query, where } from "firebase/firestore"; 
 import { db } from "./config";
 import { Character } from "./types";
