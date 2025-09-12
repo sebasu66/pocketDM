@@ -19,6 +19,30 @@ const defaultSystemPrompt = `You are a master storyteller and creative Dungeon M
 - **Be Evocative**: Use descriptive language to paint a vivid picture of the world, its inhabitants, and the atmosphere.
 - **Maintain Tone**: Adhere to the established tone of the campaign (e.g., epic fantasy, gritty noir, lighthearted adventure).`;
 
+// Helper function to set a cookie
+function setCookie(name: string, value: string, days: number) {
+    let expires = "";
+    if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+
+// Helper function to get a cookie
+function getCookie(name: string): string | null {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for(let i=0;i < ca.length;i++) {
+        let c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+
+
 export default function ApiKeysPage() {
     const { toast } = useToast();
     const { user, isLoading } = useAuth();
@@ -38,17 +62,17 @@ export default function ApiKeysPage() {
     }, [user, isLoading, router, toast]);
 
     const handleSave = () => {
-        localStorage.setItem('gemini_api_key', apiKey);
+        setCookie('gemini_api_key', apiKey, 7); // Save for 7 days
         localStorage.setItem('ai_system_prompt', systemPrompt);
         
         toast({
-            title: "Settings Saved to Browser",
-            description: "Your AI settings have been updated for this browser session. For persistent server-side generation, please also set the GEMINI_API_KEY in the .env file.",
+            title: "Settings Saved",
+            description: "Your Gemini API key has been saved to a cookie and the system prompt to local storage.",
         });
     };
     
     React.useEffect(() => {
-        const savedKey = localStorage.getItem('gemini_api_key');
+        const savedKey = getCookie('gemini_api_key');
         const savedPrompt = localStorage.getItem('ai_system_prompt');
         if (savedKey) setApiKey(savedKey);
         if (savedPrompt) setSystemPrompt(savedPrompt);
@@ -72,7 +96,7 @@ export default function ApiKeysPage() {
       <Card>
         <CardHeader>
           <CardTitle className="font-headline">AI & API Key Settings</CardTitle>
-          <CardDescription>Manage your generative AI settings and API keys here. For the AI to work on the server, you must set the `GEMINI_API_KEY` in the `.env` file.</CardDescription>
+          <CardDescription>Manage your generative AI settings and API keys here. Your key is stored in your browser cookies.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
             <div className="space-y-2">
@@ -85,7 +109,7 @@ export default function ApiKeysPage() {
                     onChange={(e) => setApiKey(e.target.value)}
                 />
                 <p className="text-xs text-muted-foreground">
-                    Your key is stored locally in your browser and is used for client-side requests. Get one from <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="underline">Google AI Studio</a>.
+                    Your key is stored locally in your browser cookies. Get one from <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="underline">Google AI Studio</a>.
                 </p>
             </div>
 
