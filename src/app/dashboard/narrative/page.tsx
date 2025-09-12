@@ -116,46 +116,46 @@ export default function NarrativePage() {
 
       let storyInput: StoryInput;
 
-      if (promptOverride) {
-        storyInput = promptOverride;
-      } else {
-        const apiKey = localStorage.getItem('gemini_api_key');
-        const systemPrompt = localStorage.getItem('ai_system_prompt');
-
-        if (!apiKey) {
-            toast({ variant: "destructive", title: "API Key Not Found", description: "Please set your Gemini API key in the AI settings." });
-            setIsGenerating(false);
-            return;
-        }
-
-        const narrativeState = {
-            characters: activePlayers.map(c => ({
-                id: c.id,
-                name: c.name,
-                description: c.description,
-                class: c.class,
-            })),
-            threads: threads.map(t => ({
-                title: t.title,
-                content: t.content,
-                comments: t.comments.map(c => ({
-                    authorName: c.character?.name || c.author?.name || 'Unknown',
-                    text: c.text,
-                }))
-            }))
-        };
-
-        storyInput = {
-            campaignId: campaign.id,
-            systemPrompt: systemPrompt || "You are a master storyteller.",
-            narrativeState,
-            apiKey: apiKey,
-        };
-      }
-      
-      setLastPrompt(storyInput);
-
       try {
+        if (promptOverride) {
+          storyInput = promptOverride;
+        } else {
+          const apiKey = localStorage.getItem('gemini_api_key');
+          const systemPrompt = localStorage.getItem('ai_system_prompt');
+
+          if (!apiKey) {
+              toast({ variant: "destructive", title: "API Key Not Found", description: "Please set your Gemini API key in the AI settings." });
+              setIsGenerating(false);
+              return;
+          }
+
+          const narrativeState = {
+              characters: activePlayers.map(c => ({
+                  id: c.id,
+                  name: c.name,
+                  description: c.description,
+                  class: c.class,
+              })),
+              threads: threads.map(t => ({
+                  title: t.title,
+                  content: t.content,
+                  comments: t.comments.map(c => ({
+                      authorName: c.character?.name || c.author?.name || 'Unknown',
+                      text: c.text,
+                  }))
+              }))
+          };
+
+          storyInput = {
+              campaignId: campaign.id,
+              systemPrompt: systemPrompt || "You are a master storyteller.",
+              narrativeState,
+              apiKey: apiKey,
+          };
+        }
+        
+        setLastPrompt(storyInput);
+
         const result = await generateStory(storyInput);
 
         const newThreadData = {
@@ -167,11 +167,14 @@ export default function NarrativePage() {
         };
 
         await addNarrativeThread(newThreadData);
-        // No need to fetch, onSnapshot will handle it.
 
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error generating story:", error);
-        toast({ variant: "destructive", title: "AI Generation Failed", description: `Something went wrong. Check the console for details. ${error}` });
+        toast({ 
+            variant: "destructive", 
+            title: "AI Generation Failed", 
+            description: `An error occurred: ${error.message || String(error)}`
+        });
       } finally {
         setIsGenerating(false);
       }
@@ -361,7 +364,7 @@ export default function NarrativePage() {
                     <div className="flex flex-col gap-4 p-4">
                         <div className="flex items-center gap-4">
                         <FlippingAvatar
-                            playerImage={comment.author.avatar}
+                            playerImage={comment.author?.avatar || 'https://picsum.photos/100/100?random=1'}
                             characterImage={comment.character?.portrait || 'https://picsum.photos/100/100?random=1'}
                             playerHint="person face"
                             characterHint={comment.character?.aiHint || "fantasy portrait"}

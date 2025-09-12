@@ -70,7 +70,8 @@ const generateStoryFlow = ai.defineFlow(
         outputSchema: StoryOutputSchema,
     },
     async (input) => {
-        const { campaignId, systemPrompt, narrativeState, apiKey } = input;
+      try {
+        const { apiKey } = input;
         
         if (!apiKey) {
             throw new Error("Gemini API key is required.");
@@ -114,7 +115,18 @@ const generateStoryFlow = ai.defineFlow(
         });
 
         const { output } = await storyPrompt(input);
-        return output!;
+        
+        if (!output) {
+            throw new Error("AI returned no output.");
+        }
+        
+        return output;
+
+      } catch (error: any) {
+        console.error("Error in generateStoryFlow:", error);
+        // Re-throw the error so the client can catch it
+        throw new Error(`AI generation failed: ${error.message}`);
+      }
     }
 );
 
