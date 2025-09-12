@@ -39,6 +39,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { getUserById } from "@/lib/auth";
 
 export default function NarrativePage() {
   const { user, campaign } = useAuth();
@@ -462,3 +463,4 @@ function CommentForm({ onSubmit, character }: { onSubmit: (text: string, hiddenT
     );
 }
 
+    
