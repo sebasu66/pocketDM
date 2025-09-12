@@ -217,11 +217,8 @@ export default function DesignTestPage() {
                         style={{ backgroundImage: "url('/ui/backgrounds/stone-panel-background.jpg')"}}
                         data-ai-hint="dark stone texture"
                     >
-                        <div className="relative w-full h-full" style={{
-                            maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 60%, transparent 100%)',
-                            WebkitMaskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 60%, transparent 100%)'
-                        }}>
-                            <Image src={mockEnemy.image} alt={mockEnemy.name} fill className="object-contain" data-ai-hint={mockEnemy.aiHint}/>
+                        <div className="relative w-full h-full mask-slash">
+                            <Image src={mockEnemy.image} alt={mockEnemy.name} fill className="object-cover" data-ai-hint={mockEnemy.aiHint}/>
                             <div className="absolute bottom-2 left-2 right-2 bg-black/50 p-2 text-center">
                                 <p className="font-headline text-lg text-white drop-shadow-md">{mockEnemy.name}</p>
                             </div>
@@ -346,5 +343,3 @@ export default function DesignTestPage() {
     </div>
   );
 }
-
-    

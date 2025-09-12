@@ -177,6 +177,15 @@
   .bookmark[data-state="active"] {
     @apply -translate-x-1 shadow-lg;
   }
-}
 
-    
+  .mask-slash {
+    mask-image: url('/ui/backgrounds/slash-mask.png');
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-image: url('/ui/backgrounds/slash-mask.png');
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+  }
+}
