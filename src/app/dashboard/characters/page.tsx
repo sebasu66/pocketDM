@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { PlusCircle, Trash2, Sheet, Upload, Eye, EyeOff, Sparkles, HelpCircle, Save, X } from "lucide-react";
+import { PlusCircle, Trash2, Sheet, Upload, Eye, EyeOff, Sparkles, HelpCircle, Save, X, User as UserIcon } from "lucide-react";
 import Image from "next/image";
 import type { Character, ConditionalRule } from "@/lib/firebase/types";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -32,36 +32,51 @@ import { Slider } from "@/components/ui/slider";
 import { getArchetype } from "@/lib/archetypes";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
+import { getUserById } from "@/lib/auth";
 
 export default function CharactersPage() {
   const { campaign, user, isLoading: isAuthLoading } = useAuth();
   const { toast } = useToast();
   const [character, setCharacter] = useState<Character | null>(null);
+  const [allCharacters, setAllCharacters] = useState<(Character & { playerName: string })[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [editingCharacter, setEditingCharacter] = useState<Character | null>(null);
 
-  const fetchCharacter = useCallback(async () => {
+  const isMaster = user?.role === 'master';
+
+  const fetchCharacters = useCallback(async () => {
     if (campaign && user) {
       setIsLoading(true);
       try {
-        const userCharacters: Character[] = await getCharactersByCampaign(campaign.id, user.id);
-        const currentChar = userCharacters.length > 0 ? userCharacters[0] : null;
-        setCharacter(currentChar);
-        setEditingCharacter(currentChar ? { ...currentChar } : null);
+        if (isMaster) {
+          const charactersFromDb = await getCharactersByCampaign(campaign.id);
+          const charactersWithPlayers = await Promise.all(
+            charactersFromDb.map(async (char) => {
+              const player = await getUserById(char.userId);
+              return { ...char, playerName: player?.name || 'Unknown Player' };
+            })
+          );
+          setAllCharacters(charactersWithPlayers);
+        } else {
+          const userCharacters: Character[] = await getCharactersByCampaign(campaign.id, user.id);
+          const currentChar = userCharacters.length > 0 ? userCharacters[0] : null;
+          setCharacter(currentChar);
+          setEditingCharacter(currentChar ? { ...currentChar } : null);
+        }
       } catch (error) {
-        toast({ variant: "destructive", title: "Error", description: "Could not fetch your character." });
+        toast({ variant: "destructive", title: "Error", description: "Could not fetch characters." });
       } finally {
         setIsLoading(false);
       }
     }
-  }, [campaign, user, toast]);
+  }, [campaign, user, toast, isMaster]);
 
   useEffect(() => {
     if (!isAuthLoading) {
-      fetchCharacter();
+      fetchCharacters();
     }
-  }, [isAuthLoading, fetchCharacter]);
+  }, [isAuthLoading, fetchCharacters]);
 
   const handleCreateCharacter = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -81,35 +96,37 @@ export default function CharactersPage() {
     try {
         await addCharacter(newCharacterData);
         toast({ title: "Character Created!", description: "Your new hero is ready for adventure." });
-        await fetchCharacter();
+        await fetchCharacters();
         event.currentTarget.reset();
     } catch (error) {
         toast({ variant: "destructive", title: "Error", description: "Could not create your character."});
     }
   };
   
-  const handleDelete = async () => {
-    if (!character) return;
+  const handleDelete = async (characterId: string) => {
+    if (!characterId) return;
     
     try {
-        await deleteCharacter(character.id);
-        toast({ title: "Character Deleted", description: "Your hero has been retired." });
-        setCharacter(null);
-        setEditingCharacter(null);
+        await deleteCharacter(characterId);
+        toast({ title: "Character Deleted", description: "The hero has been retired from the campaign." });
+        if (isMaster) {
+          setAllCharacters(prev => prev.filter(c => c.id !== characterId));
+        } else {
+          setCharacter(null);
+          setEditingCharacter(null);
+        }
     } catch (error) {
-         toast({ variant: "destructive", title: "Error", description: "Could not delete your character."});
+         toast({ variant: "destructive", title: "Error", description: "Could not delete the character."});
     }
   };
 
-  const handleOpenSheet = () => {
-    if (character) {
-      const charWithDefaults = {
-        ...character,
-        conditionalRules: character.conditionalRules && character.conditionalRules.length > 0 ? character.conditionalRules : [{if: '', then: ''}, {if: '', then: ''}, {if: '', then: ''}]
-      };
-      setEditingCharacter(charWithDefaults);
-      setIsSheetOpen(true);
-    }
+  const handleOpenSheet = (char: Character) => {
+    const charWithDefaults = {
+      ...char,
+      conditionalRules: char.conditionalRules && char.conditionalRules.length > 0 ? char.conditionalRules : [{if: '', then: ''}, {if: '', then: ''}, {if: '', then: ''}]
+    };
+    setEditingCharacter(charWithDefaults);
+    setIsSheetOpen(true);
   };
 
   const handleSaveChanges = async () => {
@@ -117,8 +134,8 @@ export default function CharactersPage() {
     
     try {
         await updateCharacter(editingCharacter.id, editingCharacter);
-        toast({ title: "Character Saved", description: "Your hero's sheet has been updated." });
-        await fetchCharacter();
+        toast({ title: "Character Saved", description: "The hero's sheet has been updated." });
+        await fetchCharacters();
         setIsSheetOpen(false);
     } catch (error) {
         toast({ variant: "destructive", title: "Error", description: "Could not save your changes."});
@@ -176,20 +193,78 @@ export default function CharactersPage() {
                 <Skeleton className="h-8 w-48" />
                 <Skeleton className="h-4 w-64 mt-2" />
             </CardHeader>
-            <CardContent className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                    <Skeleton className="h-10 w-full" />
-                    <Skeleton className="h-24 w-full" />
-                    <Skeleton className="h-10 w-32" />
-                </div>
-                <div className="flex flex-col items-center justify-center bg-muted/50 rounded-lg p-4">
-                    <Skeleton className="w-48 h-72 rounded" />
-                </div>
+            <CardContent>
+                <Skeleton className="h-48 w-full" />
             </CardContent>
         </Card>
     )
   }
 
+  // GAME MASTER VIEW
+  if (isMaster) {
+    return (
+      <div className="space-y-8">
+        <Card>
+          <CardHeader>
+            <CardTitle className="font-headline">Campaign Roster</CardTitle>
+            <CardDescription>Manage all characters in your campaign: {campaign?.title}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {allCharacters.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {allCharacters.map(char => (
+                  <Card key={char.id} className="flex flex-col">
+                    <CardHeader>
+                      <div className="flex justify-between items-start">
+                        <CardTitle className="font-headline text-2xl">{char.name}</CardTitle>
+                        <Badge variant={char.isActive ? "default" : "secondary"} className="shrink-0">
+                             {char.isActive ? <Eye className="mr-1" /> : <EyeOff className="mr-1" />}
+                             {char.isActive ? "Active" : "Inactive"}
+                        </Badge>
+                      </div>
+                      <CardDescription className="flex items-center gap-2 pt-1"><UserIcon size={14}/> {char.playerName}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex-grow flex flex-col justify-center items-center">
+                       <Image src={char.portrait} alt={char.name} width={200} height={300} className="w-48 h-72 object-cover rounded-lg border-2 border-primary/20" data-ai-hint={char.aiHint} />
+                    </CardContent>
+                    <CardFooter className="flex justify-center gap-2">
+                       <RusticIconButton tooltip="View/Edit Sheet" onClick={() => handleOpenSheet(char)}>
+                            <Sheet />
+                        </RusticIconButton>
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <RusticIconButton tooltip="Kick Character" variant="incomplete" className="text-red-500/80 hover:text-red-500">
+                                    <Trash2 />
+                                </RusticIconButton>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                <AlertDialogTitle>Kick {char.name}?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    This action cannot be undone. This will permanently delete this
+                                    character from the campaign.
+                                </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => handleDelete(char.id)}>Kick Character</AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <p className="text-muted-foreground text-center py-8">No characters have joined this campaign yet.</p>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // PLAYER VIEW
   return (
     <div className="space-y-8">
       {character ? (
@@ -207,7 +282,7 @@ export default function CharactersPage() {
                         <CardDescription>Your hero for the campaign: {campaign?.title}</CardDescription>
                     </div>
                     <div className="flex gap-2">
-                        <RusticIconButton tooltip="View/Edit Sheet" onClick={handleOpenSheet}>
+                        <RusticIconButton tooltip="View/Edit Sheet" onClick={() => handleOpenSheet(character)}>
                             <Sheet />
                         </RusticIconButton>
                         <AlertDialog>
@@ -226,7 +301,7 @@ export default function CharactersPage() {
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+                                <AlertDialogAction onClick={() => handleDelete(character.id)}>Delete</AlertDialogAction>
                                 </AlertDialogFooter>
                             </AlertDialogContent>
                         </AlertDialog>
