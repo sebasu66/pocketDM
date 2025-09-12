@@ -100,10 +100,6 @@ export default function LoginPage() {
             </div>
           </CardContent>
         </Card>
-         <div className="flex justify-center gap-2 mt-4">
-            <Button variant="ghost" onClick={() => setLocale('en')} className={cn("text-xs", locale === 'en' && "font-bold text-accent")}>English</Button>
-            <Button variant="ghost" onClick={() => setLocale('es')} className={cn("text-xs", locale === 'es' && "font-bold text-accent")}>Español</Button>
-        </div>
       </div>
     </div>
   );

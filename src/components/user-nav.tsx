@@ -18,13 +18,21 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuPortal,
+  DropdownMenuSubContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
 } from "@/components/ui/dropdown-menu"
-import { LogOut, User, Settings, KeyRound, Crown, Home } from "lucide-react"
+import { LogOut, User, Settings, KeyRound, Crown, Home, Globe } from "lucide-react"
 import { Skeleton } from "./ui/skeleton";
+import { useI18n } from "@/context/i18n-context";
 
 export function UserNav() {
   const { user, logout, isLoading } = useAuth();
   const router = useRouter();
+  const { locale, setLocale, t } = useI18n();
   const isMaster = user?.role === 'master';
 
   const handleLogout = () => {
@@ -100,6 +108,21 @@ export function UserNav() {
             </DropdownMenuItem>
          )}
         </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
+            <Globe className="mr-2 h-4 w-4" />
+            <span>Language</span>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuPortal>
+            <DropdownMenuSubContent>
+              <DropdownMenuRadioGroup value={locale} onValueChange={(value) => setLocale(value as 'en' | 'es')}>
+                <DropdownMenuRadioItem value="en">English</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="es">Español</DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuSubContent>
+          </DropdownMenuPortal>
+        </DropdownMenuSub>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout}>
             <LogOut className="mr-2 h-4 w-4" />
