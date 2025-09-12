@@ -5,7 +5,7 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { FlippingAvatar } from "@/components/flipping-avatar";
 import { useAuth } from "@/context/auth-context";
-import { Eye, Plus, Music, Bot, Send, MessageSquareQuote, Lock } from "lucide-react";
+import { Plus, Music, Bot, Send, MessageSquareQuote, Lock, RotateCcw, Trash2, FileText } from "lucide-react";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 import Image from "next/image";
 import type { NarrativeCommentWithAuthor, EnrichedThread, Character } from "@/lib/firebase/types";
@@ -18,8 +18,27 @@ import { collection, onSnapshot, query, where, orderBy } from "firebase/firestor
 import { db } from "@/lib/firebase/config";
 import { getCommentsByThreadId, addNarrativeComment } from "@/lib/firebase/comments";
 import { getCharactersByCampaign } from "@/lib/firebase/characters";
-import { addNarrativeThread } from "@/lib/firebase/narrative";
+import { addNarrativeThread, deleteNarrativeThread, restartCampaignNarrative } from "@/lib/firebase/narrative";
 import { NarrativeThread } from "@/lib/firebase/types";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function NarrativePage() {
   const { user, campaign } = useAuth();
@@ -29,6 +48,7 @@ export default function NarrativePage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [activePlayers, setActivePlayers] = useState<Character[]>([]);
   const [playerCharacter, setPlayerCharacter] = useState<Character | null>(null);
+  const [lastPrompt, setLastPrompt] = useState<StoryInput | null>(null);
 
   const isMaster = user?.role === 'master';
 
@@ -89,13 +109,17 @@ export default function NarrativePage() {
   }, [campaign, user, isMaster, toast, enrichThreads]);
 
 
-  const handleGenerateNextPost = async () => {
+  const handleGenerateNextPost = async (promptOverride?: StoryInput) => {
       if (!campaign || !user || user.role !== 'master') return;
 
       setIsGenerating(true);
       toast({ title: "AI is thinking...", description: "The Dungeon Master is crafting the next part of your story." });
 
-      try {
+      let storyInput: StoryInput;
+
+      if (promptOverride) {
+        storyInput = promptOverride;
+      } else {
         const apiKey = localStorage.getItem('gemini_api_key');
         const systemPrompt = localStorage.getItem('ai_system_prompt');
 
@@ -111,13 +135,17 @@ export default function NarrativePage() {
             return `${gmPost}\n${playerPosts}`;
         }).join('\n\n---\n\n');
 
-        const storyInput: StoryInput = {
+        storyInput = {
             campaignId: campaign.id,
             systemPrompt: systemPrompt || "You are a master storyteller.",
             narrativeHistory: narrativeHistory || "This is the beginning of the story. Please write an engaging introduction.",
             apiKey: apiKey,
         };
-        
+      }
+      
+      setLastPrompt(storyInput);
+
+      try {
         const result = await generateStory(storyInput);
 
         const newThreadData = {
@@ -137,6 +165,38 @@ export default function NarrativePage() {
       } finally {
         setIsGenerating(false);
       }
+  }
+
+   const handleRedo = async () => {
+    if (!lastThread) return;
+    setIsGenerating(true);
+    try {
+        await deleteNarrativeThread(lastThread.id);
+        // The onSnapshot listener will update the state, which will trigger a re-render.
+        // We need a slight delay before generating the next post to ensure the state is updated.
+        setTimeout(() => {
+            handleGenerateNextPost();
+        }, 500);
+    } catch (error) {
+        console.error("Error redoing generation:", error);
+        toast({ variant: "destructive", title: "Error", description: "Could not redo the last generation."});
+        setIsGenerating(false);
+    }
+  }
+
+  const handleRestart = async () => {
+    if (!campaign) return;
+    setIsGenerating(true);
+    toast({ title: "Restarting Campaign...", description: "Clearing all narrative history."});
+    try {
+        await restartCampaignNarrative(campaign.id);
+        // onSnapshot will handle the update
+    } catch (error) {
+        console.error("Error restarting campaign:", error);
+        toast({ variant: "destructive", title: "Error", description: "Could not restart the campaign."});
+    } finally {
+        setIsGenerating(false);
+    }
   }
   
   const handleAddComment = async (text: string, hiddenText: string) => {
@@ -214,17 +274,68 @@ export default function NarrativePage() {
                 </Card>
             ))}
              {isMaster && (
-                <div className="flex gap-4">
-                     <Button onClick={handleGenerateNextPost} disabled={!isAITurn || isGenerating}>
-                        <Bot className="mr-2"/>
-                        {isGenerating ? "Generating..." : "Generate Next Post"}
-                    </Button>
-                    {!isAITurn && (
-                        <p className="text-sm text-white/60 self-center">Waiting for {activePlayers.filter(p => !playersWhoHaveCommented.has(p.userId)).map(p => p.name).join(', ')} to respond.</p>
-                    )}
-                    <RusticIconButton tooltip="Add Manually" className="text-white/90 hover:text-white" disabled>
-                        <Plus size={24} />
-                    </RusticIconButton>
+                <div className="p-4 rounded-lg bg-card/50 backdrop-blur-sm sticky bottom-4 space-y-4">
+                     <div className="flex gap-2">
+                        <Button onClick={() => handleGenerateNextPost()} disabled={!isAITurn || isGenerating} className="flex-1">
+                            <Bot className="mr-2"/>
+                            {isGenerating ? "Generating..." : "Generate Next Post"}
+                        </Button>
+                        <RusticIconButton tooltip="Add Manually" className="text-white/90 hover:text-white" disabled>
+                            <Plus size={24} />
+                        </RusticIconButton>
+                     </div>
+                      <div className="flex justify-between items-center">
+                        {!isAITurn && (
+                            <p className="text-sm text-white/60 self-center">Waiting for {activePlayers.filter(p => !playersWhoHaveCommented.has(p.userId)).map(p => p.name).join(', ')} to respond.</p>
+                        )}
+                         <div className="flex gap-2 ml-auto">
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <Button variant="outline" size="sm" disabled={!lastPrompt}>
+                                        <FileText className="mr-2"/> View AI Prompt
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogContent className="sm:max-w-3xl">
+                                    <DialogHeader>
+                                        <DialogTitle className="font-headline">Last AI Prompt</DialogTitle>
+                                        <DialogDescription>This is the exact data that was sent to the Gemini model for the last generation.</DialogDescription>
+                                    </DialogHeader>
+                                    <div className="space-y-4 max-h-[60vh] overflow-y-auto p-4 bg-muted/50 rounded-md">
+                                        <div>
+                                            <h4 className="font-bold text-lg">System Prompt</h4>
+                                            <pre className="text-xs whitespace-pre-wrap font-mono bg-background/50 p-2 rounded">{lastPrompt?.systemPrompt}</pre>
+                                        </div>
+                                        <div>
+                                            <h4 className="font-bold text-lg">Narrative History</h4>
+                                            <pre className="text-xs whitespace-pre-wrap font-mono bg-background/50 p-2 rounded">{lastPrompt?.narrativeHistory}</pre>
+                                        </div>
+                                    </div>
+                                </DialogContent>
+                            </Dialog>
+                            <Button variant="outline" size="sm" onClick={handleRedo} disabled={isGenerating || threads.length === 0}>
+                                <RotateCcw className="mr-2"/> Redo
+                            </Button>
+                             <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <Button variant="destructive" size="sm" disabled={isGenerating || threads.length === 0}>
+                                        <Trash2 className="mr-2"/> Restart
+                                    </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This action cannot be undone. This will permanently delete all narrative threads and comments for this campaign, restarting the story from the beginning.
+                                    </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction onClick={handleRestart}>Restart Campaign</AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        </div>
+                    </div>
                 </div>
              )}
              {canPlayerRespond && (
@@ -292,7 +403,7 @@ function CommentForm({ onSubmit, character }: { onSubmit: (text: string, hiddenT
     };
 
     return (
-        <Card className="bg-card/80 backdrop-blur-sm">
+        <Card className="bg-card/80 backdrop-blur-sm sticky bottom-4">
             <CardHeader>
                 <CardTitle className="font-headline">Your Turn, {character?.name}</CardTitle>
                 <CardDescription>Describe your character's actions, thoughts, and dialogue.</CardDescription>
@@ -327,7 +438,7 @@ function CommentForm({ onSubmit, character }: { onSubmit: (text: string, hiddenT
                         />
                     </div>
                     <div className="flex justify-end">
-                        <RusticIconButton tooltip={isSubmitting ? "Posting..." : "Post Response"} disabled={isSubmitting}>
+                        <RusticIconButton tooltip={isSubmitting ? "Posting..." : "Post Response"} disabled={isSubmitting} type="submit">
                             <Send />
                         </RusticIconButton>
                     </div>
@@ -336,5 +447,3 @@ function CommentForm({ onSubmit, character }: { onSubmit: (text: string, hiddenT
         </Card>
     );
 }
-
-    
