@@ -70,7 +70,7 @@ export default function NarrativePage() {
 
   useEffect(() => {
     if (!campaign || !user) return;
-
+/*
     setIsLoading(true);
 
     const q = query(
@@ -103,7 +103,7 @@ export default function NarrativePage() {
         toast({ variant: "destructive", title: "Error", description: "Could not fetch narrative data." });
         setIsLoading(false);
     });
-
+*/
     return () => unsubscribe();
 
   }, [campaign, user, isMaster, toast, enrichThreads]);
@@ -112,7 +112,7 @@ export default function NarrativePage() {
   const handleGenerateNextPost = async () => {
       if (!campaign || !user || user.role !== 'master') return;
 
-      setIsGenerating(true);
+      //setIsGenerating(true);
       toast({ title: "AI is thinking...", description: "The Dungeon Master is crafting the next part of your story." });
 
       try {
@@ -130,10 +130,14 @@ export default function NarrativePage() {
             systemPrompt: systemPrompt || "You are a master storyteller.",
             apiKey: apiKey,
         };
-        
-        setLastPrompt(storyInput);
+
+        console.log("putaaaaaa.     button generate next post clicked");
+        console.log("Generating story with input:", storyInput);
+        //setLastPrompt(storyInput);
 
         const result = await generateStory(storyInput);
+
+        console.log("Generated story:", result);
 
         const newThreadData = {
             campaignId: campaign.id,
@@ -155,7 +159,7 @@ export default function NarrativePage() {
             description: `An error occurred: ${error.message || String(error)}`
         });
       } finally {
-        setIsGenerating(false);
+        //setIsGenerating(false);
       }
   }
 
