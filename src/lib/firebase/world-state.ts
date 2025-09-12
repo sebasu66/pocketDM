@@ -32,9 +32,14 @@ export async function getWorldState(campaignId: string) {
         // 3. For each thread, fetch its comments and enrich them
         const threadsWithComments = await Promise.all(allThreads.map(async (thread) => {
             const comments = await getCommentsByThreadId(thread.id);
-            const enrichedComments = comments.map(c => ({
-                authorName: c.character?.name || c.author.name || 'Unknown',
-                text: c.text,
+            const enrichedComments = await Promise.all(comments.map(async (comment) => {
+                const character = allCharacters.find(c => c.id === comment.characterId);
+                // Use character name if available, otherwise fall back to the user's name
+                const authorName = character?.name || comment.author.name || 'Unknown';
+                return {
+                    authorName: authorName,
+                    text: comment.text,
+                };
             }));
             return {
                 title: thread.title,
