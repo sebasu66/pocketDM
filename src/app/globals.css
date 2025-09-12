@@ -24,7 +24,6 @@
     --border: 43 23% 72%;
     --input: 43 23% 50%;
     --ring: 120 18% 52%;
-    --radius: 0.5rem;
 
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
@@ -178,14 +177,4 @@
     @apply -translate-x-1 shadow-lg;
   }
 
-  .mask-slash {
-    mask-image: url('/ui/backgrounds/slash-mask.png');
-    mask-size: contain;
-    mask-repeat: no-repeat;
-    mask-position: center;
-    -webkit-mask-image: url('/ui/backgrounds/slash-mask.png');
-    -webkit-mask-size: contain;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-  }
 }

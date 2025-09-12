@@ -217,7 +217,7 @@ export default function DesignTestPage() {
                         style={{ backgroundImage: "url('/ui/backgrounds/stone-panel-background.jpg')"}}
                         data-ai-hint="dark stone texture"
                     >
-                        <div className="relative w-full h-full mask-slash">
+                        <div className="relative w-full h-full">
                             <Image src={mockEnemy.image} alt={mockEnemy.name} fill className="object-cover" data-ai-hint={mockEnemy.aiHint}/>
                             <div className="absolute bottom-2 left-2 right-2 bg-black/50 p-2 text-center">
                                 <p className="font-headline text-lg text-white drop-shadow-md">{mockEnemy.name}</p>
