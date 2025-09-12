@@ -43,7 +43,6 @@ import {
 export default function NarrativePage() {
   const { user, campaign } = useAuth();
   const { toast } = useToast();
-  
   const isMaster = user?.role === 'master';
 
   const [threads, setThreads] = useState<EnrichedThread[]>([]);
@@ -51,7 +50,7 @@ export default function NarrativePage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [activePlayers, setActivePlayers] = useState<Character[]>([]);
   const [playerCharacter, setPlayerCharacter] = useState<Character | null>(null);
-  const [lastPrompt, setLastPrompt] = useState<any | null>(null); // Storing the reconstructed prompt for logging
+  const [lastPrompt, setLastPrompt] = useState<any | null>(null); // Storing for logging purposes
 
   const enrichThreads = useCallback(async (threadsFromDb: NarrativeThread[], charactersFromDb: Character[]) => {
       const enrichedThreads = await Promise.all(
@@ -129,19 +128,9 @@ export default function NarrativePage() {
             systemPrompt: systemPrompt || "You are a master storyteller.",
             apiKey: apiKey,
         };
-
-        // For logging purposes, we reconstruct what the backend will generate
-        setLastPrompt({
-          systemPrompt: storyInput.systemPrompt,
-          narrativeState: {
-            characters: activePlayers.map(c => ({ id: c.id, name: c.name, description: c.description, class: c.class })),
-            threads: threads.map(t => ({
-                title: t.title,
-                content: t.content,
-                comments: t.comments.map(c => ({ authorName: c.character?.name || c.author?.name || 'Unknown', text: c.text }))
-            }))
-          }
-        });
+        
+        // The backend flow will now construct the prompt. We no longer need to log it from here.
+        setLastPrompt(storyInput);
 
         const result = await generateStory(storyInput);
 
@@ -312,16 +301,16 @@ export default function NarrativePage() {
                                 <DialogContent className="sm:max-w-3xl">
                                     <DialogHeader>
                                         <DialogTitle className="font-headline">Last AI Prompt</DialogTitle>
-                                        <DialogDescription>This is the exact data that was sent to the Gemini model for the last generation.</DialogDescription>
+                                        <DialogDescription>This is the exact data that was sent to the Gemini model for the last generation. The prompt is now constructed on the backend.</DialogDescription>
                                     </DialogHeader>
                                     <div className="space-y-4 max-h-[60vh] overflow-y-auto p-4 bg-muted/50 rounded-md">
                                         <div>
                                             <h4 className="font-bold text-lg">System Prompt</h4>
                                             <pre className="text-xs whitespace-pre-wrap font-mono bg-background/50 p-2 rounded">{lastPrompt?.systemPrompt}</pre>
                                         </div>
-                                        <div>
-                                            <h4 className="font-bold text-lg">Narrative State (JSON)</h4>
-                                            <pre className="text-xs whitespace-pre-wrap font-mono bg-background/50 p-2 rounded">{JSON.stringify(lastPrompt?.narrativeState, null, 2)}</pre>
+                                         <div>
+                                            <h4 className="font-bold text-lg">Campaign ID</h4>
+                                            <pre className="text-xs whitespace-pre-wrap font-mono bg-background/50 p-2 rounded">{lastPrompt?.campaignId}</pre>
                                         </div>
                                     </div>
                                 </DialogContent>
