@@ -30,9 +30,14 @@ export const I18nProvider = ({ children }: { children: ReactNode }) => {
       const storedLocale = localStorage.getItem('locale') as Locale | null;
       if (storedLocale && ['en', 'es'].includes(storedLocale)) {
         setLocale(storedLocale);
+      } else {
+        const browserLang = navigator.language.split('-')[0];
+        if (browserLang === 'es') {
+          setLocale('es');
+        }
       }
     } catch (e) {
-      console.error("Could not access local storage for locale", e);
+      console.error("Could not access local storage or navigator for locale", e);
     }
   }, []);
 
