@@ -43,14 +43,15 @@ import {
 export default function NarrativePage() {
   const { user, campaign } = useAuth();
   const { toast } = useToast();
+  
+  const isMaster = user?.role === 'master';
+
   const [threads, setThreads] = useState<EnrichedThread[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isGenerating, setIsGenerating] = useState(isMaster);
   const [activePlayers, setActivePlayers] = useState<Character[]>([]);
   const [playerCharacter, setPlayerCharacter] = useState<Character | null>(null);
   const [lastPrompt, setLastPrompt] = useState<StoryInput | null>(null);
-
-  const isMaster = user?.role === 'master';
 
   const enrichThreads = useCallback(async (threadsFromDb: NarrativeThread[], charactersFromDb: Character[]) => {
       const enrichedThreads = await Promise.all(
@@ -132,8 +133,7 @@ export default function NarrativePage() {
         const narrativeHistory = threads.map(t => {
             const gmPost = `GM: ${t.title}\n${t.content.replace(/<[^>]*>?/gm, '')}`;
             const playerPosts = t.comments.map(c => {
-                //Safeguard againist the Game Master not having a character or name.
-                const authorName = c.character?.name || c.author?.name || "Unknown";
+                const authorName = c.character?.name || c.author.name || "Unknown";
                 return `${authorName}: ${c.text}`;
             }).join('\n');
             return `${gmPost}\n${playerPosts}`;
@@ -452,4 +452,3 @@ function CommentForm({ onSubmit, character }: { onSubmit: (text: string, hiddenT
     );
 }
 
-    
