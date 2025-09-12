@@ -56,10 +56,11 @@ export default function NarrativePage() {
       const enrichedThreads = await Promise.all(
         threadsFromDb.map(async (thread) => {
           const threadComments = await getCommentsByThreadId(thread.id);
-          const enrichedComments = threadComments.map(comment => {
+          const enrichedComments = await Promise.all(threadComments.map(async (comment) => {
               const character = charactersFromDb.find(c => c.id === comment.characterId);
-              return { ...comment, character: character || null };
-          });
+              const author = await getUserById(comment.authorId);
+              return { ...comment, character: character || null, author: author! };
+          }));
           return { ...thread, comments: enrichedComments };
         })
       );
@@ -129,7 +130,6 @@ export default function NarrativePage() {
             apiKey: apiKey,
         };
         
-        // The backend flow will now construct the prompt. We no longer need to log it from here.
         setLastPrompt(storyInput);
 
         const result = await generateStory(storyInput);
@@ -216,9 +216,18 @@ export default function NarrativePage() {
   
   const playersWhoHaveCommented = useMemo(() => new Set(lastThread?.comments.map(c => c.authorId) || []), [lastThread]);
   
-  const allActivePlayersResponded = useMemo(() => activePlayers.every(p => playersWhoHaveCommented.has(p.userId)), [activePlayers, playersWhoHaveCommented]);
+  const allActivePlayersResponded = useMemo(() => {
+      if (!lastThread || activePlayers.length === 0) return false;
+      return activePlayers.every(p => playersWhoHaveCommented.has(p.userId));
+  }, [activePlayers, playersWhoHaveCommented, lastThread]);
 
-  const isAITurn = lastThread ? (isMaster && allActivePlayersResponded) : isMaster;
+  const isAITurn = useMemo(() => {
+      if (!isMaster) return false;
+      // If there are no threads, it's the GM's turn to start.
+      if (threads.length === 0) return true;
+      // Otherwise, it's the GM's turn if all active players have responded.
+      return allActivePlayersResponded;
+  }, [isMaster, threads, allActivePlayersResponded]);
   
   const hasPlayerResponded = user ? playersWhoHaveCommented.has(user.id) : false;
 
@@ -453,4 +462,3 @@ function CommentForm({ onSubmit, character }: { onSubmit: (text: string, hiddenT
     );
 }
 
-    
