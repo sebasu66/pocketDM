@@ -9,5 +9,13 @@
     "noAccountPrompt": "¿No tienes una cuenta?",
     "goHomeLink": "Volver al inicio",
     "loginFailedTitle": "Inicio de sesión fallido",
-    "loginFailedDescription": "Correo electrónico o contraseña no válidos."
+    "loginFailedDescription": "Correo electrónico o contraseña no válidos.",
+    "homeSubtitle": "Tu plataforma todo en uno para la construcción colaborativa de mundos de TTRPG, gestión de personajes y narración de historias.",
+    "goToLoginButton": "Ir a la página de inicio de sesión",
+    "gmDemoTitle": "Demo del Game Master",
+    "gmDemoDescription": "Inicia sesión como Game Master para controlar el mundo. Edita campañas, crea monstruos y guía la narrativa.",
+    "gmDemoButton": "Inicio de sesión rápido como GM",
+    "playerDemoTitle": "Demo del Jugador (Alice)",
+    "playerDemoDescription": "Inicia sesión como jugador para crear tu personaje, interactuar con la historia y descubrir secretos. Jugarás como Alice, controlando al valiente guerrero Grom.",
+    "playerDemoButton": "Inicio de sesión rápido como Jugador"
 }

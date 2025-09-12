@@ -9,5 +9,13 @@
     "noAccountPrompt": "Don't have an account?",
     "goHomeLink": "Go back to Home",
     "loginFailedTitle": "Login Failed",
-    "loginFailedDescription": "Invalid email or password."
+    "loginFailedDescription": "Invalid email or password.",
+    "homeSubtitle": "Your all-in-one platform for collaborative TTRPG world-building, character management, and narrative storytelling.",
+    "goToLoginButton": "Go to Login Page",
+    "gmDemoTitle": "Game Master Demo",
+    "gmDemoDescription": "Log in as the Game Master to control the world. Edit campaigns, create monsters, and guide the narrative.",
+    "gmDemoButton": "Quick Login as GM",
+    "playerDemoTitle": "Player Demo (Alice)",
+    "playerDemoDescription": "Log in as a player to create your character, interact with the story, and uncover secrets. You'll be playing as Alice, controlling the valiant warrior Grom.",
+    "playerDemoButton": "Quick Login as Player"
 }

@@ -8,10 +8,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Logo } from "@/components/logo";
 import { Crown, User } from "lucide-react";
 import { useAuth } from "@/context/auth-context";
+import { useI18n } from "@/context/i18n-context";
 
 export default function HomePage() {
   const { login } = useAuth();
   const router = useRouter();
+  const { t } = useI18n();
 
   const handleQuickLogin = async (userId: string) => {
     await login(userId);
@@ -27,11 +29,11 @@ export default function HomePage() {
         </div>
         <h1 className="text-6xl font-headline drop-shadow-lg">Lore Weaver</h1>
         <p className="text-xl text-white/80 mt-4 max-w-2xl mx-auto">
-            Your all-in-one platform for collaborative TTRPG world-building, character management, and narrative storytelling.
+            {t('homeSubtitle')}
         </p>
         <div className="mt-8">
              <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6">
-                <Link href="/login">Go to Login Page</Link>
+                <Link href="/login">{t('goToLoginButton')}</Link>
             </Button>
         </div>
 
@@ -40,28 +42,28 @@ export default function HomePage() {
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2 font-headline">
                         <Crown className="text-amber-400" />
-                        Game Master Demo
+                        {t('gmDemoTitle')}
                     </CardTitle>
                     <CardDescription>
-                        Log in as the Game Master to control the world. Edit campaigns, create monsters, and guide the narrative.
+                        {t('gmDemoDescription')}
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <Button className="w-full" onClick={() => handleQuickLogin("1")}>Quick Login as GM</Button>
+                    <Button className="w-full" onClick={() => handleQuickLogin("1")}>{t('gmDemoButton')}</Button>
                 </CardContent>
             </Card>
              <Card className="bg-card/50 backdrop-blur-lg">
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2 font-headline">
                        <User />
-                        Player Demo (Alice)
+                        {t('playerDemoTitle')}
                     </CardTitle>
                     <CardDescription>
-                       Log in as a player to create your character, interact with the story, and uncover secrets. You'll be playing as Alice, controlling the valiant warrior Grom.
+                       {t('playerDemoDescription')}
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                     <Button className="w-full" onClick={() => handleQuickLogin("2")}>Quick Login as Player</Button>
+                     <Button className="w-full" onClick={() => handleQuickLogin("2")}>{t('playerDemoButton')}</Button>
                 </CardContent>
             </Card>
         </div>
@@ -69,4 +71,3 @@ export default function HomePage() {
     </div>
   );
 }
-
