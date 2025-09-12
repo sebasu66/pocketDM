@@ -57,12 +57,10 @@ export default function NarrativePage() {
       const enrichedThreads = await Promise.all(
         threadsFromDb.map(async (thread) => {
           const threadComments = await getCommentsByThreadId(thread.id);
-          const enrichedComments = await Promise.all(
-            threadComments.map(async (comment) => {
+          const enrichedComments = threadComments.map(comment => {
               const character = charactersFromDb.find(c => c.id === comment.characterId);
               return { ...comment, character: character || null };
-            })
-          );
+          });
           return { ...thread, comments: enrichedComments };
         })
       );
@@ -133,6 +131,7 @@ export default function NarrativePage() {
         const narrativeHistory = threads.map(t => {
             const gmPost = `GM: ${t.title}\n${t.content.replace(/<[^>]*>?/gm, '')}`;
             const playerPosts = t.comments.map(c => {
+                // Defensive check for author name
                 const authorName = c.character?.name || c.author?.name || "Unknown";
                 return `${authorName}: ${c.text}`;
             }).join('\n');
@@ -260,7 +259,7 @@ export default function NarrativePage() {
                     <CardContent className="space-y-4">
                     {thread.imageUrl && (
                         <div className="relative h-64 w-full rounded-lg overflow-hidden border-2 border-primary/20">
-                            <Image src={thread.imageUrl} alt={thread.title} fill className="object-cover" data-ai-hint={thread.imageAiHint} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" />
+                            <Image src={thread.imageUrl} alt={thread.title} fill className="object-cover" data-ai-hint={thread.imageAiHint || 'fantasy scene'} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" />
                         </div>
                     )}
                         <div className="prose prose-invert max-w-none space-y-4 text-foreground/90" dangerouslySetInnerHTML={{ __html: thread.content }} />
@@ -289,7 +288,7 @@ export default function NarrativePage() {
                         </RusticIconButton>
                      </div>
                       <div className="flex justify-between items-center">
-                        {!isAITurn && (
+                        {!isAITurn && threads.length > 0 && (
                             <p className="text-sm text-white/60 self-center">Waiting for {activePlayers.filter(p => !playersWhoHaveCommented.has(p.userId)).map(p => p.name).join(', ')} to respond.</p>
                         )}
                          <div className="flex gap-2 ml-auto">

@@ -14,6 +14,7 @@ import { getCommentsByThreadId } from '@/lib/firebase/comments';
 import { getCharactersByCampaign } from '@/lib/firebase/characters';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Bot } from 'lucide-react';
+import { getUserByEmail } from '@/lib/auth';
 
 export default function AiLogPage() {
     const { user, campaign, isLoading: isAuthLoading } = useAuth();
@@ -46,11 +47,14 @@ export default function AiLogPage() {
         const unsubscribe = onSnapshot(q, async (snapshot) => {
             const threads = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
             const allCharacters = await getCharactersByCampaign(campaign.id);
+            const gmUser = await getUserByEmail('gm@example.com');
             
             const generatedEntries = [];
             for (let i = 0; i < threads.length; i++) {
                 const currentThread = threads[i];
-                if (i === 0) continue; // The first thread is manually created, so no AI log for it.
+                // The first thread is manually created, so no AI log for it.
+                // Any thread created by a non-GM user should also be ignored
+                if (i === 0 || currentThread.authorId !== gmUser?.id) continue;
 
                 const previousThread = threads[i - 1];
                 const comments = await getCommentsByThreadId(previousThread.id);
@@ -58,7 +62,8 @@ export default function AiLogPage() {
                 const narrativeHistory = `GM: ${previousThread.title}\n${previousThread.content.replace(/<[^>]*>?/gm, '')}\n` +
                     comments.map(c => {
                         const character = allCharacters.find(char => char.id === c.characterId);
-                        const authorName = character?.name || c.author.name || "Unknown";
+                        // Robust name finding: Character > Author > "Unknown"
+                        const authorName = character?.name || c.author?.name || "Unknown";
                         return `${authorName}: ${c.text}`;
                     }).join('\n');
 
@@ -134,7 +139,7 @@ export default function AiLogPage() {
                                 <div className="flex items-center gap-4">
                                     <Bot className="h-5 w-5" />
                                     <div className="text-left">
-                                        <p className="font-semibold">AI Generation - Post #{totalGenerations - index + 1}</p>
+                                        <p className="font-semibold">AI Generation - Post #{totalGenerations - index}</p>
                                         <p className="text-xs text-muted-foreground">
                                             {new Date(entry.timestamp).toLocaleString()}
                                         </p>
