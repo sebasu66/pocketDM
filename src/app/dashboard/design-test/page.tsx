@@ -19,9 +19,11 @@ import { initialMonsters } from "@/app/dashboard/monsters/page";
 import { ThreadComments } from "./ThreadComments";
 import { GameModal, GameModalTrigger, GameModalContent, GameModalHeader, GameModalTitle, GameModalDescription, GameModalFooter } from "@/components/ui/game-modal";
 import { Button } from "@/components/ui/button";
+import { useI18n } from "@/context/i18n-context";
 
 export default function DesignTestPage() {
   const { user, campaign, isLoading: isAuthLoading } = useAuth();
+  const { t } = useI18n();
   const [character, setCharacter] = useState<Character | null>(null);
   const [narrativeThreads, setNarrativeThreads] = useState<NarrativeThread[]>([]);
   const [comments, setComments] = useState<Record<string, EnrichedComment[]>>({});
@@ -114,7 +116,7 @@ export default function DesignTestPage() {
     setActiveThreadIndex(prev => Math.max(0, prev - 1));
   };
   const handleNextThread = () => {
-    setActiveThreadIndex(prev => Math.min(narrativeThreads.length - 1, prev + 1));
+    setActiveThreadIndex(prev => Math.min(narrativeThreads.length - 1, prev - 1));
   };
   const handleGoToLatest = () => {
     setActiveThreadIndex(narrativeThreads.length - 1);
@@ -162,7 +164,7 @@ export default function DesignTestPage() {
                                     <div className="pr-8 space-y-4 inline-block w-full">
                                         <CardTitle className="text-4xl font-headline text-center mb-2 whitespace-normal">{activeThread.title}</CardTitle>
                                         <CardDescription className="text-center text-lg text-black mb-6 whitespace-normal">
-                                            Posted on {new Date(activeThread.createdAt).toLocaleDateString()} (Post {activeThreadIndex + 1}/{narrativeThreads.length})
+                                            {t('designTestPostedOn', { date: new Date(activeThread.createdAt).toLocaleDateString(), current: activeThreadIndex + 1, total: narrativeThreads.length })}
                                         </CardDescription>
                                         <div className="space-y-4 text-justify leading-relaxed prose prose-lg prose-black whitespace-normal" dangerouslySetInnerHTML={{ __html: activeThread.content }}/>
                                     </div>
@@ -170,18 +172,18 @@ export default function DesignTestPage() {
                                 </ScrollArea>
                             ) : (
                                 <CardContent className="p-8 text-black font-serif">
-                                    <CardTitle className="text-4xl font-headline text-center mb-2">No Narrative Yet</CardTitle>
+                                    <CardTitle className="text-4xl font-headline text-center mb-2">{t('designTestNoNarrative')}</CardTitle>
                                 </CardContent>
                             )}
                         </div>
                         <CardContent className="p-4 border-t-2 border-black/10 flex justify-center items-center gap-4">
-                            <RusticIconButton tooltip="Previous Post" onClick={handlePrevThread} disabled={activeThreadIndex <= 0}>
+                            <RusticIconButton tooltip={t('designTestPreviousPost')} onClick={handlePrevThread} disabled={activeThreadIndex <= 0}>
                                 <ArrowLeft />
                             </RusticIconButton>
-                            <RusticIconButton tooltip="Go to Latest Post" onClick={handleGoToLatest} disabled={activeThreadIndex === narrativeThreads.length - 1}>
+                            <RusticIconButton tooltip={t('designTestGoToLatest')} onClick={handleGoToLatest} disabled={activeThreadIndex === narrativeThreads.length - 1}>
                             <ChevronsRight />
                             </RusticIconButton>
-                            <RusticIconButton tooltip="Next Post" onClick={handleNextThread} disabled={activeThreadIndex >= narrativeThreads.length - 1}>
+                            <RusticIconButton tooltip={t('designTestNextPost')} onClick={handleNextThread} disabled={activeThreadIndex >= narrativeThreads.length - 1}>
                             <ArrowRight />
                             </RusticIconButton>
                         </CardContent>
@@ -208,7 +210,7 @@ export default function DesignTestPage() {
                                 data-ai-hint={activeThread?.imageAiHint || "fantasy landscape"}
                             />
                             <div className="absolute bottom-2 left-2 right-2 bg-black/50 p-2 text-center">
-                                <p className="font-headline text-lg text-white drop-shadow-md">{activeThread?.title || 'A Quiet Place'}</p>
+                                <p className="font-headline text-lg text-white drop-shadow-md">{activeThread?.title || t('designTestLocation')}</p>
                             </div>
                         </div>
                     </Card>
@@ -240,7 +242,7 @@ export default function DesignTestPage() {
                                 </CardHeader>
                                 <CardContent className="p-0 text-right space-y-4">
                                     <div>
-                                        <h4 className="font-headline text-2xl tracking-wider">STATS:</h4>
+                                        <h4 className="font-headline text-2xl tracking-wider">{t('designTestPlayerStats')}</h4>
                                         <ul className="font-mono text-lg grid grid-cols-3 gap-x-4">
                                             <li>STR: {character.strength}</li>
                                             <li>DEX: {character.dexterity}</li>
@@ -252,7 +254,7 @@ export default function DesignTestPage() {
                                     </div>
                                     {character.archetype && (
                                         <div>
-                                            <h4 className="font-headline text-2xl tracking-wider">ARCHETYPE:</h4>
+                                            <h4 className="font-headline text-2xl tracking-wider">{t('designTestPlayerArchetype')}</h4>
                                             <p className="text-lg font-bold">{character.archetype}</p>
                                             <p className="text-base text-stone-300 italic">"{character.archetypeDescription}"</p>
                                         </div>
@@ -262,7 +264,7 @@ export default function DesignTestPage() {
                         </Card>
                     ): (
                         <Card className="h-[48%] border-0 backdrop-blur-sm relative overflow-hidden bg-contain bg-no-repeat bg-center">
-                            <CardContent><p className="text-white">No active character for this user.</p></CardContent>
+                            <CardContent><p className="text-white">{t('designTestNoCharacter')}</p></CardContent>
                         </Card>
                     )}
                     
@@ -274,25 +276,25 @@ export default function DesignTestPage() {
                         <Tabs defaultValue="comments" className="flex-1 flex" orientation="vertical">
                             <div className="flex-1 h-full">
                                 <TabsContent value="chat" className="mt-0 h-full">
-                                    <p className="text-black/80">Chat content goes here.</p>
+                                    <p className="text-black/80">{t('designTestTabsChat')}</p>
                                 </TabsContent>
                                 <TabsContent value="notes" className="mt-0 h-full">
-                                    <p className="text-black/80">Player notes go here.</p>
+                                    <p className="text-black/80">{t('designTestTabsNotes')}</p>
                                 </TabsContent>
                                 <TabsContent value="comments" className="mt-0 h-full overflow-y-auto">
                                    <GameModal>
                                        <GameModalTrigger asChild>
                                            <Button variant="outline" className="w-full h-full bg-black/5 hover:bg-black/10">
                                                <div className="text-center">
-                                                    <p className="font-headline text-lg">View & Respond</p>
-                                                    <p className="text-xs text-black/60">Click to open responses</p>
+                                                    <p className="font-headline text-lg">{t('designTestViewAndRespond')}</p>
+                                                    <p className="text-xs text-black/60">{t('designTestClickToOpen')}</p>
                                                     {isPlayerTurn && (
                                                         <div className="mt-4 flex items-center justify-center gap-2 text-blue-600">
                                                             <span className="relative flex h-3 w-3">
                                                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                                                                 <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
                                                             </span>
-                                                           Your action is required!
+                                                           {t('designTestActionRequired')}
                                                         </div>
                                                     )}
                                                </div>
@@ -300,9 +302,9 @@ export default function DesignTestPage() {
                                        </GameModalTrigger>
                                        <GameModalContent>
                                             <GameModalHeader>
-                                                <GameModalTitle>Thread Responses</GameModalTitle>
+                                                <GameModalTitle>{t('designTestThreadResponses')}</GameModalTitle>
                                                 <GameModalDescription>
-                                                    Read player responses and submit your own action for this thread.
+                                                    {t('designTestThreadResponsesDesc')}
                                                 </GameModalDescription>
                                             </GameModalHeader>
                                             <ThreadComments 
@@ -313,6 +315,7 @@ export default function DesignTestPage() {
                                                 canRespond={activeThreadIndex === narrativeThreads.length - 1 && isPlayerTurn}
                                                 allActivePlayersResponded={allActivePlayersResponded}
                                                 onAddComment={handleAddComment}
+                                                t={t}
                                             />
                                        </GameModalContent>
                                    </GameModal>
@@ -320,10 +323,10 @@ export default function DesignTestPage() {
                             </div>
                             <TabsList className="flex-col h-auto bg-transparent w-32 items-stretch justify-start gap-2 pl-4">
                                 <TabsTrigger value="chat" className="bookmark bookmark-chat">
-                                    <span className="[writing-mode:vertical-lr] rotate-180 uppercase font-sans">CHAT</span>
+                                    <span className="[writing-mode:vertical-lr] rotate-180 uppercase font-sans">{t('designTestTabsChat')}</span>
                                 </TabsTrigger>
                                 <TabsTrigger value="notes" className="bookmark bookmark-notes">
-                                    <span className="[writing-mode:vertical-lr] rotate-180 uppercase font-sans">NOTES</span>
+                                    <span className="[writing-mode:vertical-lr] rotate-180 uppercase font-sans">{t('designTestTabsNotes')}</span>
                                 </TabsTrigger>
                                 <TabsTrigger value="comments" className="bookmark bookmark-comments relative">
                                     {isPlayerTurn && (
@@ -332,7 +335,7 @@ export default function DesignTestPage() {
                                             <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
                                         </span>
                                     )}
-                                    <span className="[writing-mode:vertical-lr] rotate-180 uppercase font-sans">COMMENTS</span>
+                                    <span className="[writing-mode:vertical-lr] rotate-180 uppercase font-sans">{t('designTestTabsComments')}</span>
                                 </TabsTrigger>
                             </TabsList>
                         </Tabs>
@@ -343,3 +346,5 @@ export default function DesignTestPage() {
     </div>
   );
 }
+
+    

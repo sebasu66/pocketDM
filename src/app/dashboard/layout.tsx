@@ -48,39 +48,7 @@ import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 import { runSeed } from "@/lib/firebase/seed";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
-
-const worldNavItems = [
-  { href: "/dashboard/characters", icon: Users, label: "Characters" },
-  { href: "/dashboard/places", icon: Map, label: "Places" },
-  { href: "/dashboard/items", icon: Shield, label: "Items" },
-  { href: "/dashboard/monsters", icon: Skull, label: "Monsters" },
-];
-
-const narrativeNavItems = [
-   { href: "/dashboard/narrative", icon: ScrollText, label: "Threads" },
-   { href: "/dashboard/chat", icon: MessagesSquare, label: "Player Chat" },
-];
-
-const designNavItems = [
-  { href: "/dashboard/design-test", icon: Brush, label: "Design Test" },
-  { href: "/dashboard/design-test-3d", icon: Layers, label: "Design Test 3D" },
-];
-
-const pageTitles: { [key: string]: string } = {
-  "/dashboard": "Campaign Dashboard",
-  "/dashboard/characters": "Characters",
-  "/dashboard/places": "Places",
-  "/dashboard/items": "Items",
-  "/dashboard/monsters": "Monsters",
-  "/dashboard/narrative": "Narrative Threads",
-  "/dashboard/chat": "Player Chat",
-  "/dashboard/settings": "Settings",
-  "/dashboard/settings/apikeys": "AI Settings",
-  "/dashboard/integrations": "Integrations",
-  "/dashboard/design-test": "Design Test",
-  "/dashboard/design-test-3d": "3D Design Test",
-  "/dashboard/ai-log": "AI Log",
-};
+import { useI18n } from "@/context/i18n-context";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() || "/dashboard";
@@ -88,6 +56,40 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [isSheetOpen, setIsSheetOpen] = React.useState(false);
   const isMaster = user?.role === 'master';
+  const { t } = useI18n();
+
+  const worldNavItems = [
+    { href: "/dashboard/characters", icon: Users, label: t('sidebarCharacters') },
+    { href: "/dashboard/places", icon: Map, label: t('sidebarPlaces') },
+    { href: "/dashboard/items", icon: Shield, label: t('sidebarItems') },
+    { href: "/dashboard/monsters", icon: Skull, label: t('sidebarMonsters') },
+  ];
+
+  const narrativeNavItems = [
+    { href: "/dashboard/narrative", icon: ScrollText, label: t('sidebarThreads') },
+    { href: "/dashboard/chat", icon: MessagesSquare, label: t('sidebarPlayerChat') },
+  ];
+
+  const designNavItems = [
+    { href: "/dashboard/design-test", icon: Brush, label: t('sidebarDesignTest') },
+    { href: "/dashboard/design-test-3d", icon: Layers, label: t('sidebar3dDesignTest') },
+  ];
+
+  const pageTitles: { [key: string]: string } = {
+    "/dashboard": t('pageTitleDashboard'),
+    "/dashboard/characters": t('pageTitleCharacters'),
+    "/dashboard/places": t('pageTitlePlaces'),
+    "/dashboard/items": t('pageTitleItems'),
+    "/dashboard/monsters": t('pageTitleMonsters'),
+    "/dashboard/narrative": t('pageTitleNarrative'),
+    "/dashboard/chat": t('pageTitleChat'),
+    "/dashboard/settings": t('pageTitleSettings'),
+    "/dashboard/settings/apikeys": t('pageTitleAiSettings'),
+    "/dashboard/integrations": t('pageTitleIntegrations'),
+    "/dashboard/design-test": t('pageTitleDesignTest'),
+    "/dashboard/design-test-3d": t('pageTitle3dDesignTest'),
+    "/dashboard/ai-log": t('pageTitleAiLog'),
+  };
 
   // --- DEMO ONLY: SEED DATABASE ---
   // This is a temporary solution to seed the database for the demo.
@@ -130,7 +132,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
        <div className="flex items-center justify-center min-h-screen">
           <div className="flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" className="w-8 h-8 animate-spin"><defs><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style={{ stopColor: "hsl(var(--accent))", stopOpacity: 1 }} /><stop offset="100%" style={{ stopColor: "hsl(var(--primary))", stopOpacity: 1 }} /></linearGradient></defs><path d="M20 80 C20 40, 40 20, 50 20 S80 40, 80 80 L60 80 C60 50, 50 40, 50 40 C50 40, 40 50, 40 80 Z" stroke="url(#grad1)" strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round" /><path d="M30 70 L70 70 M40 60 L60 60 M45 50 L55 50" stroke="hsl(var(--border))" strokeWidth="3" fill="none" strokeLinecap="round" /></svg>
-            <p className="text-muted-foreground">Loading your campaign...</p>
+            <p className="text-muted-foreground">{t('loadingCampaign')}</p>
           </div>
        </div>
     );
@@ -154,17 +156,17 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <SidebarContent className="p-2">
            <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname === '/dashboard'} tooltip={{ children: 'Dashboard' }} onClick={handleLinkClick}>
+                <SidebarMenuButton asChild isActive={pathname === '/dashboard'} tooltip={{ children: t('sidebarDashboard') }} onClick={handleLinkClick}>
                     <Link href="/dashboard">
                         <Home />
-                        <span>Dashboard</span>
+                        <span>{t('sidebarDashboard')}</span>
                     </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
 
           <SidebarGroup>
-            <SidebarGroupLabel>World</SidebarGroupLabel>
+            <SidebarGroupLabel>{t('sidebarWorld')}</SidebarGroupLabel>
             <SidebarMenu>
                 {worldNavItems.map((item) => (
                 <SidebarMenuItem key={item.href}>
@@ -179,7 +181,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </SidebarMenu>
           </SidebarGroup>
           <SidebarGroup>
-            <SidebarGroupLabel>Narrative</SidebarGroupLabel>
+            <SidebarGroupLabel>{t('sidebarNarrative')}</SidebarGroupLabel>
              <SidebarMenu>
                 {narrativeNavItems.map((item) => (
                 <SidebarMenuItem key={item.href}>
@@ -193,10 +195,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 ))}
                 {isMaster && (
                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={pathname.startsWith('/dashboard/ai-log')} tooltip={{ children: 'AI Log' }} onClick={handleLinkClick}>
+                    <SidebarMenuButton asChild isActive={pathname.startsWith('/dashboard/ai-log')} tooltip={{ children: t('sidebarAiLog') }} onClick={handleLinkClick}>
                       <Link href="/dashboard/ai-log">
                         <BrainCircuit />
-                        <span>AI Log</span>
+                        <span>{t('sidebarAiLog')}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -204,7 +206,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </SidebarMenu>
           </SidebarGroup>
           <SidebarGroup>
-            <SidebarGroupLabel>Design Sandbox</SidebarGroupLabel>
+            <SidebarGroupLabel>{t('sidebarDesignSandbox')}</SidebarGroupLabel>
              <SidebarMenu>
                 {designNavItems.map((item) => (
                 <SidebarMenuItem key={item.href}>
@@ -224,19 +226,19 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <SidebarMenu>
              {isMaster && (
                 <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={pathname.startsWith('/dashboard/integrations')} tooltip={{ children: 'Integrations' }} onClick={handleLinkClick}>
+                    <SidebarMenuButton asChild isActive={pathname.startsWith('/dashboard/integrations')} tooltip={{ children: t('sidebarIntegrations') }} onClick={handleLinkClick}>
                     <Link href="/dashboard/integrations">
                         <Workflow />
-                        <span>Integrations</span>
+                        <span>{t('sidebarIntegrations')}</span>
                     </Link>
                     </SidebarMenuButton>
                 </SidebarMenuItem>
               )}
             <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname.startsWith('/dashboard/settings')} tooltip={{ children: 'Settings' }} onClick={handleLinkClick}>
+                <SidebarMenuButton asChild isActive={pathname.startsWith('/dashboard/settings')} tooltip={{ children: t('sidebarSettings') }} onClick={handleLinkClick}>
                   <Link href="/dashboard/settings">
                     <Settings />
-                    <span>Settings</span>
+                    <span>{t('sidebarSettings')}</span>
                   </Link>
                 </SidebarMenuButton>
             </SidebarMenuItem>
@@ -258,7 +260,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                  </div>
               </div>
               <div className="flex items-center gap-4">
-                <Input placeholder="Search entities..." className="hidden md:block w-64 bg-background" />
+                <Input placeholder={t('searchInputPlaceholder')} className="hidden md:block w-64 bg-background" />
                 <UserNav />
               </div>
             </header>
@@ -287,3 +289,5 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     </SidebarProvider>
   );
 }
+
+    

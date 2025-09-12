@@ -19,6 +19,7 @@ interface ThreadCommentsProps {
     canRespond: boolean;
     allActivePlayersResponded: boolean;
     onAddComment: (text: string, hiddenText: string) => Promise<void>;
+    t: (key: string) => string;
 }
 
 export function ThreadComments({ 
@@ -28,7 +29,8 @@ export function ThreadComments({
     user,
     canRespond, 
     allActivePlayersResponded,
-    onAddComment
+    onAddComment,
+    t
 }: ThreadCommentsProps) {
     const { user: authUser } = useAuth();
     const isMaster = authUser?.role === 'master';
@@ -44,14 +46,14 @@ export function ThreadComments({
     }, [comments, user, allActivePlayersResponded, isMaster]);
 
 
-    if (!comments) return <p className="text-black/70">Loading comments...</p>;
+    if (!comments) return <p className="text-black/70">{t('designTestLoadingComments')}</p>;
 
     return (
         <div className="space-y-4 text-black/80 max-w-2xl mx-auto">
              <ScrollArea className="h-96 w-full pr-4">
                 <div className="space-y-4">
                     {visibleComments.length === 0 && !canRespond && (
-                        <p className="text-black/70 italic p-4 text-center">No responses yet for this thread.</p>
+                        <p className="text-black/70 italic p-4 text-center">{t('designTestNoResponses')}</p>
                     )}
 
                     {visibleComments.map(comment => (
@@ -73,7 +75,7 @@ export function ThreadComments({
                                 <p className="text-sm text-black/90 whitespace-pre-wrap">{comment.text}</p>
                                 {isMaster && comment.hiddenText && (
                                     <div className="border-l-2 border-red-800/50 bg-red-900/10 p-2 rounded-r-sm mt-2">
-                                        <p className="flex items-center gap-1 text-xs font-semibold text-red-900/80"><Lock size={12}/> Hidden</p>
+                                        <p className="flex items-center gap-1 text-xs font-semibold text-red-900/80"><Lock size={12}/> {t('designTestHidden')}</p>
                                         <p className="text-xs text-red-900/70 italic">"{comment.hiddenText}"</p>
                                     </div>
                                 )}
@@ -83,19 +85,19 @@ export function ThreadComments({
                     
                     {!allActivePlayersResponded && !isMaster && (
                         <div className="p-3 rounded-md bg-black/5 border-dashed border-black/20 text-center">
-                            <p className="text-xs text-black/60">Waiting for other players to respond. Their messages will be revealed once everyone has acted.</p>
+                            <p className="text-xs text-black/60">{t('designTestWaitingForPlayers')}</p>
                         </div>
                     )}
                 </div>
             </ScrollArea>
             
-            {canRespond && character && <CommentForm onSubmit={onAddComment} />}
+            {canRespond && character && <CommentForm onSubmit={onAddComment} t={t} />}
         </div>
     );
 }
 
 
-function CommentForm({ onSubmit }: { onSubmit: (text: string, hiddenText: string) => Promise<void> }) {
+function CommentForm({ onSubmit, t }: { onSubmit: (text: string, hiddenText: string) => Promise<void>, t: (key: string) => string }) {
     const [text, setText] = useState("");
     const [hiddenText, setHiddenText] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -113,17 +115,17 @@ function CommentForm({ onSubmit }: { onSubmit: (text: string, hiddenText: string
     return (
         <div className="p-4 rounded-lg bg-black/10 border border-black/20 mt-4">
             <form onSubmit={handleSubmit} className="space-y-4">
-                <h4 className="font-bold font-headline text-black">Your Response</h4>
+                <h4 className="font-bold font-headline text-black">{t('narrativePublicResponse')}</h4>
                 <div className="space-y-2">
                     <Label htmlFor="comment-text" className="flex items-center gap-2 text-sm text-black/80">
                         <MessageSquareQuote size={16} />
-                        Public Response
+                        {t('narrativePublicResponse')}
                     </Label>
                     <Textarea
                         id="comment-text"
                         value={text}
                         onChange={(e) => setText(e.target.value)}
-                        placeholder="What does your character do or say?"
+                        placeholder={t('narrativePublicResponsePlaceholder')}
                         required
                         rows={4}
                         className="bg-white/50"
@@ -132,13 +134,13 @@ function CommentForm({ onSubmit }: { onSubmit: (text: string, hiddenText: string
                 <div className="space-y-2">
                      <Label htmlFor="hidden-text" className="flex items-center gap-2 text-sm text-black/80">
                         <Lock size={16} />
-                       Hidden Thoughts (GM only)
+                       {t('narrativeHiddenThoughts')}
                     </Label>
                     <Textarea
                         id="hidden-text"
                         value={hiddenText}
                         onChange={(e) => setHiddenText(e.target.value)}
-                        placeholder="What is your character thinking? (optional, only visible to the GM)"
+                        placeholder={t('narrativeHiddenThoughtsPlaceholder')}
                          rows={2}
                          className="bg-white/50"
 
@@ -146,7 +148,7 @@ function CommentForm({ onSubmit }: { onSubmit: (text: string, hiddenText: string
                 </div>
                 <div className="flex justify-end">
                     <Button type="submit" disabled={isSubmitting} className="bg-stone-800 text-white hover:bg-stone-700">
-                        {isSubmitting ? "Posting..." : "Post Response"}
+                        {isSubmitting ? t('narrativePosting') : t('narrativePostResponse')}
                         <Send className="ml-2" size={16}/>
                     </Button>
                 </div>

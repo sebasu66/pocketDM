@@ -10,6 +10,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
+import { useI18n } from '@/context/i18n-context';
+import Link from 'next/link';
 
 const defaultSystemPrompt = `You are a master storyteller and creative Dungeon Master for a tabletop role-playing game. Your task is to weave a compelling and collaborative narrative.
 
@@ -25,17 +27,18 @@ export default function ApiKeysPage() {
     const router = useRouter();
     const [apiKey, setApiKey] = useState('');
     const [systemPrompt, setSystemPrompt] = useState(defaultSystemPrompt);
+    const { t } = useI18n();
 
     useEffect(() => {
         if (!isLoading && user?.role !== 'master') {
           toast({
             variant: 'destructive',
-            title: 'Access Denied',
-            description: 'You must be a Game Master to view this page.',
+            title: t('charactersAccessDenied'),
+            description: t('charactersMustBeGM'),
           });
           router.push('/dashboard/settings');
         }
-    }, [user, isLoading, router, toast]);
+    }, [user, isLoading, router, toast, t]);
 
     useEffect(() => {
         const savedKey = localStorage.getItem('gemini_api_key');
@@ -53,8 +56,8 @@ export default function ApiKeysPage() {
         }
         
         toast({
-            title: "Settings Saved",
-            description: "Your Gemini API key and system prompt have been saved.",
+            title: t('apiKeysSavedToast'),
+            description: t('apiKeysSavedToastDesc'),
         });
     };
 
@@ -62,10 +65,10 @@ export default function ApiKeysPage() {
       return (
         <Card>
           <CardHeader>
-            <CardTitle>Access Denied</CardTitle>
+            <CardTitle>{t('charactersAccessDenied')}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>You must be a Game Master to view this page. Redirecting...</p>
+            <p>{t('charactersMustBeGM')}</p>
           </CardContent>
         </Card>
       );
@@ -75,26 +78,27 @@ export default function ApiKeysPage() {
     <div className="max-w-3xl mx-auto space-y-8">
       <Card>
         <CardHeader>
-          <CardTitle className="font-headline">AI & API Key Settings</CardTitle>
-          <CardDescription>Manage your generative AI settings and API keys here. Your key is stored in your browser's local storage, but the prompt is saved to the campaign.</CardDescription>
+          <CardTitle className="font-headline">{t('apiKeysTitle')}</CardTitle>
+          <CardDescription>{t('apiKeysDesc')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
             <div className="space-y-2">
-                <Label htmlFor="api-key">Gemini API Key</Label>
+                <Label htmlFor="api-key">{t('apiKeysGeminiLabel')}</Label>
                 <Input 
                     id="api-key" 
                     type="password" 
-                    placeholder="Enter your Google AI Studio API Key"
+                    placeholder={t('apiKeysGeminiPlaceholder')}
                     value={apiKey}
                     onChange={(e) => setApiKey(e.target.value)}
                 />
                 <p className="text-xs text-muted-foreground">
-                    Your key is stored locally in your browser. Get one from <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="underline">Google AI Studio</a>.
+                    {t('apiKeysGeminiDesc', {link: ''})}
+                    <Link href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="underline">Google AI Studio</Link>.
                 </p>
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="system-prompt">AI System Prompt</Label>
+                <Label htmlFor="system-prompt">{t('apiKeysSystemPromptLabel')}</Label>
                 <Textarea 
                     id="system-prompt"
                     value={systemPrompt}
@@ -103,14 +107,16 @@ export default function ApiKeysPage() {
                     className="font-mono text-xs"
                 />
                 <p className="text-xs text-muted-foreground">
-                    This is the core instruction given to the AI to define its role and behavior. You can tweak it to change the AI's personality or style.
+                    {t('apiKeysSystemPromptDesc')}
                 </p>
             </div>
              <div className="flex justify-end">
-                <Button onClick={handleSave}>Save Settings</Button>
+                <Button onClick={handleSave}>{t('apiKeysSave')}</Button>
             </div>
         </CardContent>
       </Card>
     </div>
   );
 }
+
+    

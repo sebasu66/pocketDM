@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
@@ -40,10 +41,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { getUserById } from "@/lib/auth";
+import { useI18n } from "@/context/i18n-context";
 
 export default function NarrativePage() {
   const { user, campaign } = useAuth();
   const { toast } = useToast();
+  const { t } = useI18n();
   const isMaster = user?.role === 'master';
 
   const [threads, setThreads] = useState<EnrichedThread[]>([]);
@@ -113,14 +116,14 @@ export default function NarrativePage() {
       if (!campaign || !user || user.role !== 'master') return;
 
       setIsGenerating(true);
-      toast({ title: "AI is thinking...", description: "The Dungeon Master is crafting the next part of your story." });
+      toast({ title: t('narrativeThinking'), description: t('narrativeThinkingDesc') });
 
       try {
         const apiKey = localStorage.getItem('gemini_api_key');
         const systemPrompt = campaign.systemPrompt;
 
         if (!apiKey) {
-            toast({ variant: "destructive", title: "API Key Not Found", description: "Please set your Gemini API key in the AI settings." });
+            toast({ variant: "destructive", title: t('narrativeApiKeyNotFound'), description: t('narrativeApiKeyNotFoundDesc') });
             setIsGenerating(false);
             return;
         }
@@ -145,13 +148,13 @@ export default function NarrativePage() {
 
         await addNarrativeThread(newThreadData);
 
-        toast({ title: "Story Updated!", description: "The next chapter has been written." });
+        toast({ title: t('narrativeStoryUpdated'), description: t('narrativeStoryUpdatedDesc') });
 
       } catch (error: any) {
         console.error("Error generating story:", error);
         toast({ 
             variant: "destructive", 
-            title: "AI Generation Failed", 
+            title: t('narrativeGenerationFailed'), 
             description: `An error occurred: ${error.message || String(error)}`
         });
       } finally {
@@ -171,7 +174,7 @@ export default function NarrativePage() {
         }, 500);
     } catch (error) {
         console.error("Error redoing generation:", error);
-        toast({ variant: "destructive", title: "Error", description: "Could not redo the last generation."});
+        toast({ variant: "destructive", title: "Error", description: t('narrativeErrorRedo')});
         setIsGenerating(false);
     }
   }
@@ -179,13 +182,13 @@ export default function NarrativePage() {
   const handleRestart = async () => {
     if (!campaign) return;
     setIsGenerating(true);
-    toast({ title: "Restarting Campaign...", description: "Clearing all narrative history."});
+    toast({ title: t('narrativeRestarting'), description: t('narrativeRestartingDesc')});
     try {
         await restartCampaignNarrative(campaign.id);
         // onSnapshot will handle the update
     } catch (error) {
         console.error("Error restarting campaign:", error);
-        toast({ variant: "destructive", title: "Error", description: "Could not restart the campaign."});
+        toast({ variant: "destructive", title: "Error", description: t('narrativeErrorRestart')});
     } finally {
         setIsGenerating(false);
     }
@@ -205,10 +208,10 @@ export default function NarrativePage() {
 
     try {
       await addNarrativeComment(commentData);
-      toast({ title: "Response Posted!", description: "Your actions have been recorded in the annals of history."});
+      toast({ title: t('narrativeResponsePosted'), description: t('narrativeResponsePostedDesc')});
       // No need to fetch, onSnapshot will handle it.
     } catch (error) {
-      toast({ variant: "destructive", title: "Error", description: "Could not post your response."});
+      toast({ variant: "destructive", title: "Error", description: t('narrativeErrorPost')});
     }
   };
 
@@ -235,7 +238,7 @@ export default function NarrativePage() {
   if (isLoading) {
     return (
         <div className="flex items-center justify-center min-h-[calc(100vh-theme(spacing.24))]">
-            <p className="text-muted-foreground">Loading narrative...</p>
+            <p className="text-muted-foreground">{t('narrativeLoading')}</p>
         </div>
     );
   }
@@ -249,7 +252,7 @@ export default function NarrativePage() {
                     <CardHeader>
                         <CardTitle className="font-headline text-2xl">{thread.title}</CardTitle>
                         <CardDescription>
-                            Posted by Game Master - {new Date(thread.createdAt).toLocaleDateString()}
+                            {t('narrativePostedBy', {date: new Date(thread.createdAt).toLocaleDateString()})}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -262,10 +265,10 @@ export default function NarrativePage() {
 
                         {thread.audioUrl && (
                         <div className="space-y-2">
-                            <h4 className="flex items-center gap-2 font-headline text-lg text-foreground/80"><Music size={18}/>Ambiance</h4>
+                            <h4 className="flex items-center gap-2 font-headline text-lg text-foreground/80"><Music size={18}/>{t('narrativeAmbiance')}</h4>
                             <audio controls className="w-full h-10">
                             <source src={thread.audioUrl} type="audio/mpeg" />
-                            Your browser does not support the audio element.
+                            {t('narrativeAudioNotSupported')}
                             </audio>
                         </div>
                         )}
@@ -277,19 +280,19 @@ export default function NarrativePage() {
                      <div className="flex gap-2">
                         <Button onClick={() => handleGenerateNextPost()} disabled={!isAITurn || isGenerating} className="flex-1">
                             <Bot className="mr-2"/>
-                            {isGenerating ? "Generating..." : "Generate Next Post"}
+                            {isGenerating ? t('narrativeGenerating') : t('narrativeGenerateNext')}
                         </Button>
                         <Dialog>
                             <DialogTrigger asChild>
-                                <RusticIconButton tooltip="Add Manually" className="text-white/90 hover:text-white">
+                                <RusticIconButton tooltip={t('narrativeAddManually')} className="text-white/90 hover:text-white">
                                     <Plus size={24} />
                                 </RusticIconButton>
                             </DialogTrigger>
                              <DialogContent>
                                 <DialogHeader>
-                                    <DialogTitle>Feature Not Implemented</DialogTitle>
+                                    <DialogTitle>{t('narrativeNotImplemented')}</DialogTitle>
                                     <DialogDescription>
-                                        Manually adding a narrative post is not yet available. Please use the AI generation feature.
+                                        {t('narrativeNotImplementedDesc')}
                                     </DialogDescription>
                                 </DialogHeader>
                             </DialogContent>
@@ -297,51 +300,51 @@ export default function NarrativePage() {
                      </div>
                       <div className="flex justify-between items-center">
                         {!isAITurn && threads.length > 0 && (
-                            <p className="text-sm text-white/60 self-center">Waiting for {activePlayers.filter(p => !playersWhoHaveCommented.has(p.userId)).map(p => p.name).join(', ')} to respond.</p>
+                            <p className="text-sm text-white/60 self-center">{t('narrativeWaitingFor', {players: activePlayers.filter(p => !playersWhoHaveCommented.has(p.userId)).map(p => p.name).join(', ')})}</p>
                         )}
                          <div className="flex gap-2 ml-auto">
                             <Dialog>
                                 <DialogTrigger asChild>
                                     <Button variant="outline" size="sm" disabled={!lastPrompt}>
-                                        <FileText className="mr-2"/> View AI Prompt
+                                        <FileText className="mr-2"/> {t('narrativeViewPrompt')}
                                     </Button>
                                 </DialogTrigger>
                                 <DialogContent className="sm:max-w-3xl">
                                     <DialogHeader>
-                                        <DialogTitle className="font-headline">Last AI Prompt</DialogTitle>
-                                        <DialogDescription>This is the exact data that was sent to the Gemini model for the last generation. The prompt is now constructed on the backend.</DialogDescription>
+                                        <DialogTitle className="font-headline">{t('narrativeLastPrompt')}</DialogTitle>
+                                        <DialogDescription>{t('narrativeLastPromptDesc')}</DialogDescription>
                                     </DialogHeader>
                                     <div className="space-y-4 max-h-[60vh] overflow-y-auto p-4 bg-muted/50 rounded-md">
                                         <div>
-                                            <h4 className="font-bold text-lg">System Prompt</h4>
+                                            <h4 className="font-bold text-lg">{t('narrativeSystemPrompt')}</h4>
                                             <pre className="text-xs whitespace-pre-wrap font-mono bg-background/50 p-2 rounded">{lastPrompt?.systemPrompt}</pre>
                                         </div>
                                          <div>
-                                            <h4 className="font-bold text-lg">Campaign ID</h4>
+                                            <h4 className="font-bold text-lg">{t('narrativeCampaignId')}</h4>
                                             <pre className="text-xs whitespace-pre-wrap font-mono bg-background/50 p-2 rounded">{lastPrompt?.campaignId}</pre>
                                         </div>
                                     </div>
                                 </DialogContent>
                             </Dialog>
                             <Button variant="outline" size="sm" onClick={handleRedo} disabled={isGenerating || threads.length === 0}>
-                                <RotateCcw className="mr-2"/> Redo
+                                <RotateCcw className="mr-2"/> {t('narrativeRedo')}
                             </Button>
                              <AlertDialog>
                                 <AlertDialogTrigger asChild>
                                     <Button variant="destructive" size="sm" disabled={isGenerating || threads.length === 0}>
-                                        <Trash2 className="mr-2"/> Restart
+                                        <Trash2 className="mr-2"/> {t('narrativeRestart')}
                                     </Button>
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
                                     <AlertDialogHeader>
-                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogTitle>{t('narrativeRestartConfirm')}</AlertDialogTitle>
                                     <AlertDialogDescription>
-                                        This action cannot be undone. This will permanently delete all narrative threads and comments for this campaign, restarting the story from the beginning.
+                                        {t('narrativeRestartConfirmDesc')}
                                     </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                    <AlertDialogAction onClick={handleRestart}>Restart Campaign</AlertDialogAction>
+                                    <AlertDialogCancel>{t('charactersCancel')}</AlertDialogCancel>
+                                    <AlertDialogAction onClick={handleRestart}>{t('narrativeRestart')}</AlertDialogAction>
                                     </AlertDialogFooter>
                                 </AlertDialogContent>
                             </AlertDialog>
@@ -350,13 +353,13 @@ export default function NarrativePage() {
                 </div>
              )}
              {canPlayerRespond && (
-                <CommentForm onSubmit={handleAddComment} character={playerCharacter} />
+                <CommentForm onSubmit={handleAddComment} character={playerCharacter} t={t} />
              )}
         </div>
 
         {/* Right Column: Comments */}
         <div className="space-y-6">
-            <h3 className="text-2xl font-headline text-white drop-shadow-md">Player Responses</h3>
+            <h3 className="text-2xl font-headline text-white drop-shadow-md">{t('narrativePlayerResponses')}</h3>
             {lastThread && lastThread.comments.map(comment => (
                  <Card key={comment.id} className="bg-card/80 backdrop-blur-sm">
                     <div className="flex flex-col gap-4 p-4">
@@ -381,7 +384,7 @@ export default function NarrativePage() {
                                 <p>{comment.text}</p>
                                 {isMaster && comment.hiddenText && (
                                     <div className="border-l-2 border-destructive bg-destructive/10 p-3 rounded-r-md mt-2">
-                                        <p className="flex items-center gap-2 text-xs font-semibold text-destructive-foreground/80">Hidden Message</p>
+                                        <p className="flex items-center gap-2 text-xs font-semibold text-destructive-foreground/80">{t('narrativeHiddenMessage')}</p>
                                         <div className="prose prose-sm prose-invert text-destructive-foreground/70">
                                             <p>"{comment.hiddenText}"</p>
                                         </div>
@@ -392,15 +395,15 @@ export default function NarrativePage() {
                     </div>
                 </Card>
             ))}
-            {(!lastThread || lastThread.comments.length === 0) && <p className="text-white/70">No player responses yet for the last post.</p>}
-            {threads.length === 0 && <p className="text-white/70">The story hasn't begun yet. The Game Master needs to post first.</p>}
+            {(!lastThread || lastThread.comments.length === 0) && <p className="text-white/70">{t('narrativeNoResponses')}</p>}
+            {threads.length === 0 && <p className="text-white/70">{t('narrativeNotStarted')}</p>}
         </div>
     </div>
   );
 }
 
 
-function CommentForm({ onSubmit, character }: { onSubmit: (text: string, hiddenText: string) => Promise<void>, character: Character | null }) {
+function CommentForm({ onSubmit, character, t }: { onSubmit: (text: string, hiddenText: string) => Promise<void>, character: Character | null, t: (key:string) => string }) {
     const [text, setText] = useState("");
     const [hiddenText, setHiddenText] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -418,21 +421,21 @@ function CommentForm({ onSubmit, character }: { onSubmit: (text: string, hiddenT
     return (
         <Card className="bg-card/80 backdrop-blur-sm sticky bottom-4">
             <CardHeader>
-                <CardTitle className="font-headline">Your Turn, {character?.name}</CardTitle>
-                <CardDescription>Describe your character's actions, thoughts, and dialogue.</CardDescription>
+                <CardTitle className="font-headline">{t('narrativeYourTurn', {characterName: character?.name})}</CardTitle>
+                <CardDescription>{t('narrativeYourTurnDesc')}</CardDescription>
             </CardHeader>
             <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor="comment-text" className="flex items-center gap-2">
                             <MessageSquareQuote />
-                            Public Response
+                            {t('narrativePublicResponse')}
                         </Label>
                         <Textarea
                             id="comment-text"
                             value={text}
                             onChange={(e) => setText(e.target.value)}
-                            placeholder="What does your character do or say?"
+                            placeholder={t('narrativePublicResponsePlaceholder')}
                             required
                             rows={5}
                         />
@@ -440,18 +443,18 @@ function CommentForm({ onSubmit, character }: { onSubmit: (text: string, hiddenT
                     <div className="space-y-2">
                          <Label htmlFor="hidden-text" className="flex items-center gap-2">
                             <Lock />
-                           Hidden Thoughts (GM only)
+                           {t('narrativeHiddenThoughts')}
                         </Label>
                         <Textarea
                             id="hidden-text"
                             value={hiddenText}
                             onChange={(e) => setHiddenText(e.target.value)}
-                            placeholder="What is your character thinking? (optional, only visible to the GM)"
+                            placeholder={t('narrativeHiddenThoughtsPlaceholder')}
                              rows={3}
                         />
                     </div>
                     <div className="flex justify-end">
-                        <RusticIconButton tooltip={isSubmitting ? "Posting..." : "Post Response"} disabled={isSubmitting} type="submit">
+                        <RusticIconButton tooltip={isSubmitting ? t('narrativePosting') : t('narrativePostResponse')} disabled={isSubmitting} type="submit">
                             <Send />
                         </RusticIconButton>
                     </div>
@@ -460,3 +463,5 @@ function CommentForm({ onSubmit, character }: { onSubmit: (text: string, hiddenT
         </Card>
     );
 }
+
+    

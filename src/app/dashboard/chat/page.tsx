@@ -1,14 +1,20 @@
+
+"use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useI18n } from "@/context/i18n-context";
 
 export default function ChatPage() {
+  const { t } = useI18n();
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Player Chat</CardTitle>
+        <CardTitle>{t('chatTitle')}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <p>This is where players can communicate freely outside of the game and try to make plans.</p>
+        <p>{t('chatDescription')}</p>
       </CardContent>
     </Card>
   );
 }
+
+    

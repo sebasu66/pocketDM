@@ -15,11 +15,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { User } from '@/lib/firebase/types';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
+import { useI18n } from '@/context/i18n-context';
 
 export default function SettingsPage() {
   const { handwritingFont, setHandwritingFont } = useTheme();
   const { user: authUser, isLoading, updateUser: updateAuthUser } = useAuth();
   const [user, setUser] = useState<User | null>(null);
+  const { t } = useI18n();
 
   useEffect(() => {
     if (authUser) {
@@ -74,8 +76,8 @@ export default function SettingsPage() {
     <div className="max-w-3xl mx-auto space-y-8">
       <Card>
         <CardHeader>
-          <CardTitle className="font-headline">My Profile</CardTitle>
-          <CardDescription>Manage your personal account details and preferences.</CardDescription>
+          <CardTitle className="font-headline">{t('settingsProfileTitle')}</CardTitle>
+          <CardDescription>{t('settingsProfileDesc')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex items-center gap-6">
@@ -84,54 +86,54 @@ export default function SettingsPage() {
                 <AvatarImage src={user.avatar} alt="User Avatar" data-ai-hint="person portrait" />
                 <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
               </Avatar>
-              <Button variant="outline" size="sm" onClick={handleAvatarChange}>Change Picture</Button>
+              <Button variant="outline" size="sm" onClick={handleAvatarChange}>{t('settingsChangePicture')}</Button>
             </div>
             <div className="grid gap-4 flex-1">
               <div className="grid gap-2">
-                <Label htmlFor="username">Username</Label>
+                <Label htmlFor="username">{t('settingsUsername')}</Label>
                 <Input id="username" value={user.name} onChange={(e) => setUser({...user, name: e.target.value})} />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t('settingsEmail')}</Label>
                 <Input id="email" type="email" value={user.email} disabled />
-                <p className="text-xs text-muted-foreground">You cannot change your email address.</p>
+                <p className="text-xs text-muted-foreground">{t('settingsEmailDesc')}</p>
               </div>
             </div>
           </div>
           <div className="flex justify-end">
-            <Button onClick={handleUpdateProfile}>Update Profile</Button>
+            <Button onClick={handleUpdateProfile}>{t('settingsUpdateProfile')}</Button>
           </div>
         </CardContent>
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle className="font-headline">Application Settings</CardTitle>
-          <CardDescription>Customize the look, feel, and functionality of the application.</CardDescription>
+          <CardTitle className="font-headline">{t('settingsAppTitle')}</CardTitle>
+          <CardDescription>{t('settingsAppDesc')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-1 divide-y divide-border/50">
           <div className="space-y-2 pt-4">
-            <Label htmlFor="handwriting-font">Handwriting Font</Label>
+            <Label htmlFor="handwriting-font">{t('settingsHandwritingFont')}</Label>
             <Select value={handwritingFont} onValueChange={setHandwritingFont}>
               <SelectTrigger id="handwriting-font">
-                <SelectValue placeholder="Select a font" />
+                <SelectValue placeholder={t('settingsSelectFont')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="grace">Covered By Your Grace</SelectItem>
-                <SelectItem value="merienda">Merienda</SelectItem>
-                <SelectItem value="comic">Comic Sans MS</SelectItem>
+                <SelectItem value="grace">{t('settingsFontGrace')}</SelectItem>
+                <SelectItem value="merienda">{t('settingsFontMerienda')}</SelectItem>
+                <SelectItem value="comic">{t('settingsFontComic')}</SelectItem>
               </SelectContent>
             </Select>
             <p className="text-sm text-muted-foreground">
-              Choose the font used for handwritten notes and titles.
+              {t('settingsHandwritingFontDesc')}
             </p>
           </div>
           {user.role === 'master' && (
             <div className='pt-4'>
                 <Link href="/dashboard/settings/apikeys" className="flex items-center justify-between rounded-lg p-3 -m-3 hover:bg-muted/50 transition-colors">
                     <div>
-                        <h4 className='font-medium'>AI Settings</h4>
+                        <h4 className='font-medium'>{t('settingsAiSettings')}</h4>
                         <p className="text-sm text-muted-foreground">
-                            Configure generative AI features and API keys.
+                            {t('settingsAiSettingsDesc')}
                         </p>
                     </div>
                     <ChevronRight className="h-5 w-5 text-muted-foreground" />
@@ -143,3 +145,5 @@ export default function SettingsPage() {
     </div>
   );
 }
+
+    

@@ -15,20 +15,22 @@ import { getCharactersByCampaign } from '@/lib/firebase/characters';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Bot } from 'lucide-react';
 import { getUserByEmail } from '@/lib/auth';
+import { useI18n } from '@/context/i18n-context';
 
 export default function AiLogPage() {
     const { user, campaign, isLoading: isAuthLoading } = useAuth();
     const router = useRouter();
     const { toast } = useToast();
+    const { t } = useI18n();
     const [logEntries, setLogEntries] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         if (!isAuthLoading && user?.role !== 'master') {
-            toast({ variant: 'destructive', title: 'Access Denied', description: 'You must be a Game Master to view this page.' });
+            toast({ variant: 'destructive', title: t('charactersAccessDenied'), description: t('charactersMustBeGM') });
             router.push('/dashboard');
         }
-    }, [user, isAuthLoading, router, toast]);
+    }, [user, isAuthLoading, router, toast, t]);
 
     useEffect(() => {
         if (!campaign || !user || user.role !== 'master') return;
@@ -127,10 +129,10 @@ export default function AiLogPage() {
       return (
         <Card>
           <CardHeader>
-            <CardTitle>Access Denied</CardTitle>
+            <CardTitle>{t('charactersAccessDenied')}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>You must be a Game Master to view this page. Redirecting...</p>
+            <p>{t('charactersMustBeGM')}</p>
           </CardContent>
         </Card>
       );
@@ -142,9 +144,9 @@ export default function AiLogPage() {
         <div className="max-w-4xl mx-auto space-y-6">
             <Card className="bg-card/80 backdrop-blur-sm">
                 <CardHeader>
-                    <CardTitle className="font-headline text-2xl">AI Generation Log</CardTitle>
+                    <CardTitle className="font-headline text-2xl">{t('aiLogTitle')}</CardTitle>
                     <CardDescription>
-                        A chronological record of requests sent to the Gemini model and the responses received.
+                        {t('aiLogDescription')}
                     </CardDescription>
                 </CardHeader>
             </Card>
@@ -152,7 +154,7 @@ export default function AiLogPage() {
             {logEntries.length === 0 ? (
                 <Card>
                     <CardContent className="p-6 text-center text-muted-foreground">
-                        No AI generations have occurred yet.
+                        {t('aiLogNoGenerations')}
                     </CardContent>
                 </Card>
             ) : (
@@ -163,7 +165,7 @@ export default function AiLogPage() {
                                 <div className="flex items-center gap-4">
                                     <Bot className="h-5 w-5" />
                                     <div className="text-left">
-                                        <p className="font-semibold">AI Generation - Post #{totalGenerations - index}</p>
+                                        <p className="font-semibold">{t('aiLogGeneration', {postNumber: totalGenerations - index})}</p>
                                         <p className="text-xs text-muted-foreground">
                                             {new Date(entry.timestamp).toLocaleString()}
                                         </p>
@@ -173,16 +175,16 @@ export default function AiLogPage() {
                             <AccordionContent className="p-4 pt-0">
                                 <div className="space-y-4">
                                     <div>
-                                        <h4 className="font-semibold text-lg mb-2">Request to Gemini</h4>
+                                        <h4 className="font-semibold text-lg mb-2">{t('aiLogRequestToGemini')}</h4>
                                         <div className="space-y-2 p-3 bg-muted/50 rounded-md border">
-                                            <h5 className="font-medium">System Prompt</h5>
+                                            <h5 className="font-medium">{t('narrativeSystemPrompt')}</h5>
                                             <pre className="text-xs whitespace-pre-wrap font-mono bg-background/50 p-2 rounded">{entry.request.systemPrompt}</pre>
-                                            <h5 className="font-medium">Narrative State (as JSON)</h5>
+                                            <h5 className="font-medium">{t('aiLogNarrativeState')}</h5>
                                             <pre className="text-xs whitespace-pre-wrap font-mono bg-background/50 p-2 rounded">{JSON.stringify(entry.request.narrativeState, null, 2)}</pre>
                                         </div>
                                     </div>
                                     <div>
-                                        <h4 className="font-semibold text-lg mb-2">Response from Gemini</h4>
+                                        <h4 className="font-semibold text-lg mb-2">{t('aiLogResponseFromGemini')}</h4>
                                         <div className="p-3 bg-muted/50 rounded-md border">
                                             <div className="prose prose-sm prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: entry.response }} />
                                         </div>
@@ -196,3 +198,5 @@ export default function AiLogPage() {
         </div>
     );
 }
+
+    

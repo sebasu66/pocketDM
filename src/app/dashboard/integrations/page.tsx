@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { useRouter } from "next/navigation";
+import { useI18n } from "@/context/i18n-context";
 
 const getDbInstructions = (campaignId: string | undefined) => `
 ## Direct Database Integration Guide
@@ -160,26 +161,27 @@ export default function IntegrationsPage() {
     const { toast } = useToast();
     const { campaign, user, isLoading } = useAuth();
     const router = useRouter();
+    const { t } = useI18n();
     
     React.useEffect(() => {
       if (!isLoading && user?.role !== 'master') {
         toast({
           variant: 'destructive',
-          title: 'Access Denied',
-          description: 'You must be a Game Master to view this page.',
+          title: t('charactersAccessDenied'),
+          description: t('charactersMustBeGM'),
         });
         router.push('/dashboard');
       }
-    }, [user, isLoading, router, toast]);
+    }, [user, isLoading, router, toast, t]);
 
     if (isLoading || user?.role !== 'master') {
       return (
         <Card>
           <CardHeader>
-            <CardTitle>Access Denied</CardTitle>
+            <CardTitle>{t('charactersAccessDenied')}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>You must be a Game Master to view this page. Redirecting...</p>
+            <p>{t('charactersMustBeGM')}</p>
           </CardContent>
         </Card>
       );
@@ -193,7 +195,7 @@ export default function IntegrationsPage() {
     const handleCopy = (content: string) => {
         navigator.clipboard.writeText(content);
         toast({
-            title: "Copied to Clipboard!",
+            title: t('dashboardCopied'),
         });
     }
 
@@ -203,25 +205,25 @@ export default function IntegrationsPage() {
                 <CardHeader>
                     <div className="flex items-center gap-2">
                         <Workflow className="w-6 h-6"/>
-                        <CardTitle className="font-headline text-2xl">Direct Database Integration</CardTitle>
+                        <CardTitle className="font-headline text-2xl">{t('integrationsTitle')}</CardTitle>
                     </div>
                     <CardDescription>
-                       This guide explains how to connect an external AI agent or tool to your campaign by interacting directly with the Firestore database using the Firebase Admin SDK.
+                       {t('integrationsDescription')}
                     </CardDescription>
                 </CardHeader>
             </Card>
 
             <Alert variant="destructive">
                 <ShieldAlert className="h-4 w-4" />
-                <AlertTitle>For Game Masters Only</AlertTitle>
+                <AlertTitle>{t('integrationsGMsOnly')}</AlertTitle>
                 <AlertDescription>
-                    This page contains technical instructions for connecting external services. Proceed with caution.
+                    {t('integrationsGMsOnlyDesc')}
                 </AlertDescription>
             </Alert>
             
             <Alert>
                 <Database className="h-4 w-4" />
-                <AlertTitle>How to Read & Write Game Data</AlertTitle>
+                <AlertTitle>{t('integrationsHowTo')}</AlertTitle>
                 <AlertDescription>
                  <div className="prose prose-sm prose-invert max-w-none text-foreground/80 mt-4" dangerouslySetInnerHTML={{ __html: dbInstructions.replace(/##(.*?)\n/g, '<h3>$1</h3>').replace(/###(.*?)\n/g, '<h4>$1</h4>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/`([^`]+)`/g, '<code>$1</code>') }}/>
                 </AlertDescription>
@@ -230,14 +232,14 @@ export default function IntegrationsPage() {
             {exampleScript && (
                  <Card>
                     <CardHeader>
-                        <CardTitle className="font-headline">Example Agent Script</CardTitle>
-                        <CardDescription>Use this Node.js script as a template for your agent to post new narrative content.</CardDescription>
+                        <CardTitle className="font-headline">{t('integrationsExampleScript')}</CardTitle>
+                        <CardDescription>{t('integrationsExampleScriptDesc')}</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <CodeBlock content={exampleScript} lang="javascript" />
                         <Button onClick={() => handleCopy(exampleScript)} className="mt-4">
                             <Copy className="mr-2" />
-                            Copy Example Script
+                            {t('integrationsCopyScript')}
                         </Button>
                     </CardContent>
                 </Card>
@@ -245,3 +247,5 @@ export default function IntegrationsPage() {
         </div>
     );
 }
+
+    

@@ -22,6 +22,7 @@ import {
 import { StackedCard } from "@/components/ui/stacked-card";
 import { cn } from "@/lib/utils";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
+import { useI18n } from "@/context/i18n-context";
 
 export const initialMonsters = [
     {
@@ -77,6 +78,7 @@ export default function MonstersPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingMonster, setEditingMonster] = useState<Partial<Monster> | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const { t } = useI18n();
 
   const filteredMonsters = monsters
     .filter((monster) => monster.name.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -150,7 +152,7 @@ export default function MonstersPage() {
         <div className="relative w-full max-w-sm">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search monsters..."
+            placeholder={t('monstersSearchPlaceholder')}
             className="pl-8"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -159,14 +161,14 @@ export default function MonstersPage() {
         {isMaster && (
           <div className="flex items-center gap-2">
             <RusticIconButton
-              tooltip="New Monster"
+              tooltip={t('monstersNew')}
               onClick={handleNewMonster}
               className="text-white/90 hover:text-white"
             >
               <Plus size={24} />
             </RusticIconButton>
              <RusticIconButton
-              tooltip="Edit Monster"
+              tooltip={t('monstersEdit')}
               onClick={() => handleEditMonster(activeMonster)}
               disabled={!activeMonster}
               className="text-white/90 hover:text-white"
@@ -174,7 +176,7 @@ export default function MonstersPage() {
               <Edit size={24} />
             </RusticIconButton>
              <RusticIconButton
-              tooltip="Delete Monster"
+              tooltip={t('monstersDelete')}
               onClick={() => handleDeleteMonster(activeMonster?.id)}
               disabled={!activeMonster}
               className="text-red-500/80 hover:text-red-500"
@@ -196,7 +198,7 @@ export default function MonstersPage() {
           >
             <div>
               <h3 className="font-handwriting text-3xl underline decoration-white/30 underline-offset-8">
-                Observations
+                {t('monstersObservations')}
               </h3>
               <div className="font-handwriting mt-2 space-y-4 text-lg md:text-xl font-light leading-relaxed">
                 {activeMonster?.observations.split('\n\n').map((paragraph, index) => (
@@ -206,12 +208,12 @@ export default function MonstersPage() {
             </div>
             <div className="mt-8">
               <h3 className="font-handwriting text-3xl underline decoration-white/30 underline-offset-8">
-                Abilities
+                {t('monstersAbilities')}
               </h3>
               <div className="font-handwriting mt-2 space-y-3 text-lg md:text-xl font-light leading-relaxed">
-                <p>Toughness: {activeMonster?.thematicStats.toughness}</p>
-                <p>Hit Difficulty: {activeMonster?.thematicStats.hitDifficulty}</p>
-                <p>Speed: {activeMonster?.thematicStats.speed}</p>
+                <p>{t('monstersToughness')}: {activeMonster?.thematicStats.toughness}</p>
+                <p>{t('monstersHitDifficulty')}: {activeMonster?.thematicStats.hitDifficulty}</p>
+                <p>{t('monstersSpeed')}: {activeMonster?.thematicStats.speed}</p>
               </div>
             </div>
           </div>
@@ -220,7 +222,7 @@ export default function MonstersPage() {
              <RusticIconButton 
                 onClick={handlePrev} 
                 className="z-10 text-white/80 opacity-70 hover:opacity-100"
-                tooltip="Previous"
+                tooltip={t('monstersPrevious')}
             >
                 <ArrowLeft size={32} />
              </RusticIconButton>
@@ -248,7 +250,7 @@ export default function MonstersPage() {
             <RusticIconButton 
                 onClick={handleNext} 
                 className="z-10 text-white/80 opacity-70 hover:opacity-100"
-                tooltip="Next"
+                tooltip={t('monstersNext')}
             >
                 <ArrowRight size={32} />
              </RusticIconButton>
@@ -257,7 +259,7 @@ export default function MonstersPage() {
         </div>
       ) : (
         <div className="py-12 text-center col-span-full">
-          <p className="text-muted-foreground">No monsters found matching your search.</p>
+          <p className="text-muted-foreground">{t('monstersNoMatch')}</p>
         </div>
       )}
 
@@ -265,30 +267,30 @@ export default function MonstersPage() {
         <DialogContent className="sm:max-w-[825px]">
           <DialogHeader>
             <DialogTitle className="font-headline">
-              {editingMonster && 'id' in editingMonster && editingMonster.id ? 'Edit Monster' : 'Create New Monster'}
+              {editingMonster && 'id' in editingMonster && editingMonster.id ? t('monstersEditTitle') : t('monstersCreateTitle')}
             </DialogTitle>
             <DialogDescription>
               {editingMonster && 'id' in editingMonster && editingMonster.id
-                ? 'Edit the details for your creature.'
-                : 'Fill out the details for your new creature.'}
+                ? t('monstersEditDesc')
+                : t('monstersCreateDesc')}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-6 py-4 md:grid-cols-2">
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="monster-name">Name</Label>
+                <Label htmlFor="monster-name">{t('charactersName')}</Label>
                 <Input
                   id="monster-name"
-                  placeholder="e.g., Shadow Ghoul"
+                  placeholder={t('monstersNamePlaceholder')}
                   value={editingMonster?.name || ''}
                   onChange={(e) => setEditingMonster({ ...editingMonster, name: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="monster-observations">Observations</Label>
+                <Label htmlFor="monster-observations">{t('monstersObservations')}</Label>
                 <Textarea
                   id="monster-observations"
-                  placeholder="A brief description of the monster's appearance, abilities, and lore."
+                  placeholder={t('monstersObservationsPlaceholder')}
                   rows={8}
                   value={editingMonster?.observations || ''}
                   onChange={(e) => setEditingMonster({ ...editingMonster, observations: e.target.value })}
@@ -296,7 +298,7 @@ export default function MonstersPage() {
               </div>
             </div>
             <div className="flex flex-col items-center justify-center rounded-lg bg-muted/50 p-4 text-center">
-              <Label className="mb-2">Monster Portrait</Label>
+              <Label className="mb-2">{t('monstersPortrait')}</Label>
               <div className="relative mb-4 flex h-64 w-48 items-center justify-center overflow-hidden rounded bg-background">
                 {editingMonster?.image ? (
                   <Image
@@ -307,23 +309,23 @@ export default function MonstersPage() {
                     className="object-cover"
                   />
                 ) : (
-                  <p className="p-2 text-xs text-muted-foreground">No image</p>
+                  <p className="p-2 text-xs text-muted-foreground">{t('monstersNoImage')}</p>
                 )}
               </div>
               <Button variant="outline">
                 <Upload />
-                Upload Image
+                {t('charactersUploadImage')}
               </Button>
             </div>
           </div>
           <DialogFooter>
             <DialogClose asChild>
               <Button type="button" variant="secondary" onClick={handleDialogClose}>
-                Cancel
+                {t('charactersCancel')}
               </Button>
             </DialogClose>
             <Button type="button" onClick={handleSaveMonster}>
-              Save Monster
+              {t('monstersSave')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -331,3 +333,5 @@ export default function MonstersPage() {
     </div>
   );
 }
+
+    
