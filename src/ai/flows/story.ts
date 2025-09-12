@@ -12,8 +12,8 @@
  */
 
 import { z } from 'zod';
-import { generateNarrative } from '@/ai/services/narrative-service';
-import { getWorldState } from '@/lib/firebase/world';
+import { generateNarrative } from '@/ai/services/narrative-generator';
+import { getWorldState } from '@/lib/firebase/world-state';
 
 const StoryInputSchema = z.object({
   campaignId: z.string().describe("The ID of the current campaign."),
