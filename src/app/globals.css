@@ -14,8 +14,8 @@
     --popover: 25 25% 10%;
     --popover-foreground: 30 15% 88%;
 
-    --primary: 30 40% 60%; /* Muted gold/brass */
-    --primary-foreground: 25 25% 12%;
+    --primary: 35 55% 45%; /* Dark Golden */
+    --primary-foreground: 35 25% 95%; /* Light Parchment */
 
     --secondary: 30 20% 30%; /* Darker accent */
     --secondary-foreground: 30 15% 88%;
@@ -61,8 +61,8 @@
     --popover: 25 25% 10%;
     --popover-foreground: 30 15% 88%;
 
-    --primary: 30 40% 60%; /* Muted gold/brass */
-    --primary-foreground: 25 25% 12%;
+    --primary: 35 55% 45%; /* Dark Golden */
+    --primary-foreground: 35 25% 95%; /* Light Parchment */
 
     --secondary: 30 20% 30%; /* Darker accent */
     --secondary-foreground: 30 15% 88%;
