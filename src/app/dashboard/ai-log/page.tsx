@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { collection, query, where, orderBy, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
-import type { NarrativeThread } from '@/lib/firebase/types';
+import type { NarrativeThread, EnrichedComment } from '@/lib/firebase/types';
 import { getCommentsByThreadId } from '@/lib/firebase/comments';
 import { getCharactersByCampaign } from '@/lib/firebase/characters';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -22,7 +22,6 @@ export default function AiLogPage() {
     const { toast } = useToast();
     const [logEntries, setLogEntries] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [systemPrompt, setSystemPrompt] = useState<string | null>(null);
 
     useEffect(() => {
         if (!isAuthLoading && user?.role !== 'master') {
@@ -35,8 +34,6 @@ export default function AiLogPage() {
         if (!campaign || !user || user.role !== 'master') return;
 
         setIsLoading(true);
-        const savedPrompt = localStorage.getItem('ai_system_prompt');
-        setSystemPrompt(savedPrompt);
 
         const q = query(
             collection(db, "narrativeThreads"),
@@ -45,40 +42,67 @@ export default function AiLogPage() {
         );
 
         const unsubscribe = onSnapshot(q, async (snapshot) => {
-            const threads = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
-            const allCharacters = await getCharactersByCampaign(campaign.id);
-            const gmUser = await getUserByEmail('gm@example.com');
-            
-            const generatedEntries = [];
-            for (let i = 0; i < threads.length; i++) {
-                const currentThread = threads[i];
-                // The first thread is manually created, so no AI log for it.
-                // Any thread created by a non-GM user should also be ignored
-                if (i === 0 || currentThread.authorId !== gmUser?.id) continue;
+            try {
+                const threads = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
+                const allCharacters = await getCharactersByCampaign(campaign.id);
+                const gmUser = await getUserByEmail('gm@example.com');
+                
+                const allEnrichedComments: { [key: string]: EnrichedComment[] } = {};
 
-                const previousThread = threads[i - 1];
-                const comments = await getCommentsByThreadId(previousThread.id);
+                const generatedEntries = [];
+                for (let i = 0; i < threads.length; i++) {
+                    const currentThread = threads[i];
+                    // Any thread not created by the GM is not an AI log entry.
+                    if (currentThread.authorId !== gmUser?.id) continue;
+                    // The first thread is manually created, so it's a response, not a request.
+                    if (i === 0) continue;
 
-                const narrativeHistory = `GM: ${previousThread.title}\n${previousThread.content.replace(/<[^>]*>?/gm, '')}\n` +
-                    comments.map(c => {
-                        const character = allCharacters.find(char => char.id === c.characterId);
-                        // Robust name finding: Character > Author > "Unknown"
-                        const authorName = character?.name || c.author?.name || "Unknown";
-                        return `${authorName}: ${c.text}`;
-                    }).join('\n');
+                    const previousThreads = threads.slice(0, i);
+                    
+                    // Build up comments cache to avoid re-fetching
+                    for(const pt of previousThreads) {
+                        if (!allEnrichedComments[pt.id]) {
+                           allEnrichedComments[pt.id] = await getCommentsByThreadId(pt.id);
+                        }
+                    }
 
-                generatedEntries.push({
-                    id: currentThread.id,
-                    timestamp: currentThread.createdAt,
-                    request: {
-                        systemPrompt: savedPrompt || "You are a master storyteller.",
-                        narrativeHistory: narrativeHistory,
-                    },
-                    response: currentThread.content,
-                });
+                    const narrativeState = {
+                        characters: allCharacters.map(c => ({
+                            id: c.id,
+                            name: c.name,
+                            description: c.description,
+                            class: c.class,
+                        })),
+                        threads: previousThreads.map(t => {
+                            const comments = allEnrichedComments[t.id] || [];
+                            return {
+                                title: t.title,
+                                content: t.content.replace(/<[^>]*>?/gm, ''), // strip html for log
+                                comments: comments.map(c => ({
+                                    authorName: c.character?.name || c.author?.name || 'Unknown',
+                                    text: c.text,
+                                }))
+                            };
+                        })
+                    };
+
+                    generatedEntries.push({
+                        id: currentThread.id,
+                        timestamp: currentThread.createdAt,
+                        request: {
+                            systemPrompt: localStorage.getItem('ai_system_prompt') || "You are a master storyteller.",
+                            narrativeState: narrativeState,
+                        },
+                        response: currentThread.content,
+                    });
+                }
+                setLogEntries(generatedEntries.reverse()); // Show newest first
+            } catch (error) {
+                console.error("Error building AI logs:", error);
+                toast({ variant: "destructive", title: "Error", description: "Could not build AI log data." });
+            } finally {
+                setIsLoading(false);
             }
-            setLogEntries(generatedEntries.reverse()); // Show newest first
-            setIsLoading(false);
         }, (error) => {
             console.error("Error fetching AI logs:", error);
             toast({ variant: "destructive", title: "Error", description: "Could not fetch AI log data." });
@@ -153,8 +177,8 @@ export default function AiLogPage() {
                                         <div className="space-y-2 p-3 bg-muted/50 rounded-md border">
                                             <h5 className="font-medium">System Prompt</h5>
                                             <pre className="text-xs whitespace-pre-wrap font-mono bg-background/50 p-2 rounded">{entry.request.systemPrompt}</pre>
-                                            <h5 className="font-medium">Narrative History</h5>
-                                            <pre className="text-xs whitespace-pre-wrap font-mono bg-background/50 p-2 rounded">{entry.request.narrativeHistory}</pre>
+                                            <h5 className="font-medium">Narrative State (as JSON)</h5>
+                                            <pre className="text-xs whitespace-pre-wrap font-mono bg-background/50 p-2 rounded">{JSON.stringify(entry.request.narrativeState, null, 2)}</pre>
                                         </div>
                                     </div>
                                     <div>

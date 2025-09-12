@@ -26,12 +26,33 @@ const getCharactersTool = ai.defineTool(
   }
 );
 
+// Simplified schemas for the AI prompt context
+const CharacterSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string(),
+  class: z.string().optional(),
+});
+
+const CommentSchema = z.object({
+  authorName: z.string(),
+  text: z.string(),
+});
+
+const ThreadSchema = z.object({
+  title: z.string(),
+  content: z.string(),
+  comments: z.array(CommentSchema),
+});
+
 
 const StoryInputSchema = z.object({
   campaignId: z.string().describe("The ID of the current campaign."),
   systemPrompt: z.string().describe("Instructions for the AI on how to behave."),
-  narrativeHistory: z.string().describe("The history of the narrative so far, including player actions."),
-  // The API key is now passed directly to the function
+  narrativeState: z.object({
+      characters: z.array(CharacterSchema),
+      threads: z.array(ThreadSchema),
+  }).describe("The entire state of the narrative so far, including all characters and a chronological list of threads and their comments."),
   apiKey: z.string().describe("The Gemini API key."),
 });
 export type StoryInput = z.infer<typeof StoryInputSchema>;
@@ -49,16 +70,15 @@ const generateStoryFlow = ai.defineFlow(
         outputSchema: StoryOutputSchema,
     },
     async (input) => {
-        const { campaignId, systemPrompt, narrativeHistory, apiKey } = input;
+        const { campaignId, systemPrompt, narrativeState, apiKey } = input;
         
-        // Ensure the API key is provided, otherwise throw an error.
         if (!apiKey) {
             throw new Error("Gemini API key is required.");
         }
 
         const storyPrompt = ai.definePrompt({
             name: 'storyPrompt',
-            input: { schema: z.any() },
+            input: { schema: StoryInputSchema },
             output: { schema: StoryOutputSchema },
             tools: [getCharactersTool],
             prompt: `
@@ -67,25 +87,33 @@ const generateStoryFlow = ai.defineFlow(
                 You have access to tools that can provide you with information about the characters in the campaign.
                 Use them if you need to.
 
-                Based on the following narrative history, write the next logical and engaging post for the story.
+                Here is the current state of the campaign (Campaign ID: {{campaignId}}).
+
+                ## Player Characters in the party:
+                {{#each narrativeState.characters}}
+                - **{{this.name}} ({{this.class}}):** {{this.description}}
+                {{/each}}
+
+                ## Narrative History:
+                {{#each narrativeState.threads}}
+                ---
+                ### GM Post: {{this.title}}
+                {{{this.content}}}
+
+                **Player Responses:**
+                {{#each this.comments}}
+                - **{{this.authorName}}:** {{this.text}}
+                {{/each}}
+                {{/each}}
+                ---
+
+                Based on this entire history, write the next logical and engaging post for the story.
                 Your response should be a compelling continuation of the events.
-
-                Campaign ID: {{campaignId}}
-
-                Narrative History:
-                ---
-                {{narrativeHistory}}
-                ---
             `,
-            // Configure the model with the provided API key.
             model: googleAI({apiKey}),
         });
 
-        const { output } = await storyPrompt({
-            campaignId,
-            systemPrompt,
-            narrativeHistory,
-        });
+        const { output } = await storyPrompt(input);
         return output!;
     }
 );

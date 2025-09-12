@@ -128,20 +128,27 @@ export default function NarrativePage() {
             return;
         }
 
-        const narrativeHistory = threads.map(t => {
-            const gmPost = `GM: ${t.title}\n${t.content.replace(/<[^>]*>?/gm, '')}`;
-            const playerPosts = t.comments.map(c => {
-                // Defensive check for author name
-                const authorName = c.character?.name || c.author?.name || "Unknown";
-                return `${authorName}: ${c.text}`;
-            }).join('\n');
-            return `${gmPost}\n${playerPosts}`;
-        }).join('\n\n---\n\n');
+        const narrativeState = {
+            characters: activePlayers.map(c => ({
+                id: c.id,
+                name: c.name,
+                description: c.description,
+                class: c.class,
+            })),
+            threads: threads.map(t => ({
+                title: t.title,
+                content: t.content,
+                comments: t.comments.map(c => ({
+                    authorName: c.character?.name || c.author?.name || 'Unknown',
+                    text: c.text,
+                }))
+            }))
+        };
 
         storyInput = {
             campaignId: campaign.id,
             systemPrompt: systemPrompt || "You are a master storyteller.",
-            narrativeHistory: narrativeHistory || "This is the beginning of the story. Please write an engaging introduction.",
+            narrativeState,
             apiKey: apiKey,
         };
       }
@@ -309,8 +316,8 @@ export default function NarrativePage() {
                                             <pre className="text-xs whitespace-pre-wrap font-mono bg-background/50 p-2 rounded">{lastPrompt?.systemPrompt}</pre>
                                         </div>
                                         <div>
-                                            <h4 className="font-bold text-lg">Narrative History</h4>
-                                            <pre className="text-xs whitespace-pre-wrap font-mono bg-background/50 p-2 rounded">{lastPrompt?.narrativeHistory}</pre>
+                                            <h4 className="font-bold text-lg">Narrative State (JSON)</h4>
+                                            <pre className="text-xs whitespace-pre-wrap font-mono bg-background/50 p-2 rounded">{JSON.stringify(lastPrompt?.narrativeState, null, 2)}</pre>
                                         </div>
                                     </div>
                                 </DialogContent>
@@ -363,7 +370,7 @@ export default function NarrativePage() {
                         <div className="flex-1">
                             <p className="font-bold text-lg">{comment.character?.name || comment.author?.name}</p>
                             <p className="text-sm text-muted-foreground">
-                                {comment.character ? comment.author?.name : '(Deleted Character)'}
+                                {comment.character ? (comment.author?.name || 'Unknown User') : '(Deleted Character)'}
                             </p>
                         </div>
                         <CardDescription className="text-xs">{new Date(comment.createdAt).toLocaleDateString()}</CardDescription>
