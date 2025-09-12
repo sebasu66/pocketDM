@@ -51,7 +51,7 @@ export default function NarrativePage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [activePlayers, setActivePlayers] = useState<Character[]>([]);
   const [playerCharacter, setPlayerCharacter] = useState<Character | null>(null);
-  const [lastPrompt, setLastPrompt] = useState<StoryInput | null>(null);
+  const [lastPrompt, setLastPrompt] = useState<any | null>(null); // Storing the reconstructed prompt for logging
 
   const enrichThreads = useCallback(async (threadsFromDb: NarrativeThread[], charactersFromDb: Character[]) => {
       const enrichedThreads = await Promise.all(
@@ -108,65 +108,54 @@ export default function NarrativePage() {
   }, [campaign, user, isMaster, toast, enrichThreads]);
 
 
-  const handleGenerateNextPost = async (promptOverride?: StoryInput) => {
+  const handleGenerateNextPost = async () => {
       if (!campaign || !user || user.role !== 'master') return;
 
       setIsGenerating(true);
       toast({ title: "AI is thinking...", description: "The Dungeon Master is crafting the next part of your story." });
 
-      let storyInput: StoryInput;
-
       try {
-        if (promptOverride) {
-          storyInput = promptOverride;
-        } else {
-          const apiKey = localStorage.getItem('gemini_api_key');
-          const systemPrompt = localStorage.getItem('ai_system_prompt');
+        const apiKey = localStorage.getItem('gemini_api_key');
+        const systemPrompt = localStorage.getItem('ai_system_prompt');
 
-          if (!apiKey) {
-              toast({ variant: "destructive", title: "API Key Not Found", description: "Please set your Gemini API key in the AI settings." });
-              setIsGenerating(false);
-              return;
-          }
-
-          const narrativeState = {
-              characters: activePlayers.map(c => ({
-                  id: c.id,
-                  name: c.name,
-                  description: c.description,
-                  class: c.class,
-              })),
-              threads: threads.map(t => ({
-                  title: t.title,
-                  content: t.content,
-                  comments: t.comments.map(c => ({
-                      authorName: c.character?.name || c.author?.name || 'Unknown',
-                      text: c.text,
-                  }))
-              }))
-          };
-
-          storyInput = {
-              campaignId: campaign.id,
-              systemPrompt: systemPrompt || "You are a master storyteller.",
-              narrativeState,
-              apiKey: apiKey,
-          };
+        if (!apiKey) {
+            toast({ variant: "destructive", title: "API Key Not Found", description: "Please set your Gemini API key in the AI settings." });
+            setIsGenerating(false);
+            return;
         }
         
-        setLastPrompt(storyInput);
+        const storyInput: StoryInput = {
+            campaignId: campaign.id,
+            systemPrompt: systemPrompt || "You are a master storyteller.",
+            apiKey: apiKey,
+        };
+
+        // For logging purposes, we reconstruct what the backend will generate
+        setLastPrompt({
+          systemPrompt: storyInput.systemPrompt,
+          narrativeState: {
+            characters: activePlayers.map(c => ({ id: c.id, name: c.name, description: c.description, class: c.class })),
+            threads: threads.map(t => ({
+                title: t.title,
+                content: t.content,
+                comments: t.comments.map(c => ({ authorName: c.character?.name || c.author?.name || 'Unknown', text: c.text }))
+            }))
+          }
+        });
 
         const result = await generateStory(storyInput);
 
         const newThreadData = {
             campaignId: campaign.id,
             authorId: user.id, // GM
-            title: "The Story Continues...",
+            title: "The Story Continues...", // The AI could generate a title in the future
             createdAt: Date.now(),
             content: `<p>${result.nextPost.replace(/\n/g, '</p><p>')}</p>`,
         };
 
         await addNarrativeThread(newThreadData);
+
+        toast({ title: "Story Updated!", description: "The next chapter has been written." });
 
       } catch (error: any) {
         console.error("Error generating story:", error);
@@ -293,9 +282,21 @@ export default function NarrativePage() {
                             <Bot className="mr-2"/>
                             {isGenerating ? "Generating..." : "Generate Next Post"}
                         </Button>
-                        <RusticIconButton tooltip="Add Manually" className="text-white/90 hover:text-white" disabled>
-                            <Plus size={24} />
-                        </RusticIconButton>
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <RusticIconButton tooltip="Add Manually" className="text-white/90 hover:text-white">
+                                    <Plus size={24} />
+                                </RusticIconButton>
+                            </DialogTrigger>
+                             <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Feature Not Implemented</DialogTitle>
+                                    <DialogDescription>
+                                        Manually adding a narrative post is not yet available. Please use the AI generation feature.
+                                    </DialogDescription>
+                                </DialogHeader>
+                            </DialogContent>
+                        </Dialog>
                      </div>
                       <div className="flex justify-between items-center">
                         {!isAITurn && threads.length > 0 && (
@@ -371,7 +372,7 @@ export default function NarrativePage() {
                             className="w-16 h-16 flex-shrink-0 border-2 border-primary/20"
                         />
                         <div className="flex-1">
-                            <p className="font-bold text-lg">{comment.character?.name || comment.author?.name}</p>
+                            <p className="font-bold text-lg">{comment.character?.name || comment.author?.name || 'Unknown'}</p>
                             <p className="text-sm text-muted-foreground">
                                 {comment.character ? (comment.author?.name || 'Unknown User') : '(Deleted Character)'}
                             </p>

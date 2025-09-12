@@ -11,6 +11,8 @@
 
 import { ai } from '@/ai/genkit';
 import { getCharactersByCampaign } from '@/lib/firebase/characters';
+import { getCommentsByThreadId } from '@/lib/firebase/comments';
+import { getNarrativeThreadsByCampaign } from '@/lib/firebase/narrative';
 import { z } from 'zod';
 import {googleAI} from '@genkit-ai/googleai';
 
@@ -45,14 +47,14 @@ const ThreadSchema = z.object({
   comments: z.array(CommentSchema),
 });
 
+const NarrativeStateSchema = z.object({
+    characters: z.array(CharacterSchema),
+    threads: z.array(ThreadSchema),
+});
 
 const StoryInputSchema = z.object({
   campaignId: z.string().describe("The ID of the current campaign."),
   systemPrompt: z.string().describe("Instructions for the AI on how to behave."),
-  narrativeState: z.object({
-      characters: z.array(CharacterSchema),
-      threads: z.array(ThreadSchema),
-  }).describe("The entire state of the narrative so far, including all characters and a chronological list of threads and their comments."),
   apiKey: z.string().describe("The Gemini API key."),
 });
 export type StoryInput = z.infer<typeof StoryInputSchema>;
@@ -71,15 +73,50 @@ const generateStoryFlow = ai.defineFlow(
     },
     async (input) => {
       try {
-        const { apiKey } = input;
+        const { apiKey, campaignId, systemPrompt } = input;
         
         if (!apiKey) {
             throw new Error("Gemini API key is required.");
         }
 
+        // --- Direct Database Access ---
+        console.log(`[AI Flow] Fetching data for campaign: ${campaignId}`);
+        const allCharacters = await getCharactersByCampaign(campaignId);
+        const allThreads = await getNarrativeThreadsByCampaign(campaignId);
+
+        const threadsWithComments = await Promise.all(allThreads.map(async (thread) => {
+            const comments = await getCommentsByThreadId(thread.id);
+            const enrichedComments = comments.map(c => ({
+                authorName: c.character?.name || c.author?.name || 'Unknown',
+                text: c.text,
+            }));
+            return {
+                title: thread.title,
+                content: thread.content,
+                comments: enrichedComments,
+            };
+        }));
+
+        const narrativeState = {
+            characters: allCharacters.map(c => ({
+                id: c.id,
+                name: c.name,
+                description: c.description,
+                class: c.class,
+            })),
+            threads: threadsWithComments,
+        };
+        console.log('[AI Flow] Successfully constructed narrative state from database.');
+        // --- End Direct Database Access ---
+
+
         const storyPrompt = ai.definePrompt({
             name: 'storyPrompt',
-            input: { schema: StoryInputSchema },
+            input: { schema: z.object({
+                campaignId: z.string(),
+                systemPrompt: z.string(),
+                narrativeState: NarrativeStateSchema
+            }) },
             output: { schema: StoryOutputSchema },
             tools: [getCharactersTool],
             prompt: `
@@ -113,12 +150,18 @@ const generateStoryFlow = ai.defineFlow(
             `,
             model: googleAI({apiKey}),
         });
-
-        const { output } = await storyPrompt(input);
+        
+        console.log("[AI Flow] Sending prompt to Gemini...");
+        const { output } = await storyPrompt({
+            campaignId,
+            systemPrompt,
+            narrativeState,
+        });
         
         if (!output) {
             throw new Error("AI returned no output.");
         }
+        console.log("[AI Flow] Received response from Gemini.");
         
         return output;
 
