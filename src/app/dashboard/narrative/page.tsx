@@ -447,3 +447,5 @@ function CommentForm({ onSubmit, character }: { onSubmit: (text: string, hiddenT
         </Card>
     );
 }
+
+    
