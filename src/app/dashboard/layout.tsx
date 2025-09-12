@@ -241,8 +241,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
             <main 
               className="p-4 md:p-6 bg-cover bg-fixed bg-center"
-              style={{backgroundImage: "url('/ui/backgrounds/wood2.jpg')"}}
-              data-ai-hint="dark wood"
             >
               {children}
             </main>
@@ -265,5 +263,3 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     </SidebarProvider>
   );
 }
-
-    

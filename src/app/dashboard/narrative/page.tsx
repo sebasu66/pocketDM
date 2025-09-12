@@ -133,7 +133,7 @@ export default function NarrativePage() {
         const narrativeHistory = threads.map(t => {
             const gmPost = `GM: ${t.title}\n${t.content.replace(/<[^>]*>?/gm, '')}`;
             const playerPosts = t.comments.map(c => {
-                const authorName = c.character?.name || `${c.author.name} (Deleted Character)`;
+                const authorName = c.character?.name || c.author.name || "Unknown";
                 return `${authorName}: ${c.text}`;
             }).join('\n');
             return `${gmPost}\n${playerPosts}`;
@@ -453,5 +453,3 @@ function CommentForm({ onSubmit, character }: { onSubmit: (text: string, hiddenT
         </Card>
     );
 }
-
-    

@@ -9,11 +9,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { collection, query, where, orderBy, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
-import type { NarrativeThread, EnrichedComment, Character } from '@/lib/firebase/types';
+import type { NarrativeThread } from '@/lib/firebase/types';
 import { getCommentsByThreadId } from '@/lib/firebase/comments';
 import { getCharactersByCampaign } from '@/lib/firebase/characters';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Bot, User } from 'lucide-react';
+import { Bot } from 'lucide-react';
 
 export default function AiLogPage() {
     const { user, campaign, isLoading: isAuthLoading } = useAuth();
@@ -106,6 +106,8 @@ export default function AiLogPage() {
         </Card>
       );
     }
+    
+    const totalGenerations = logEntries.length;
 
     return (
         <div className="max-w-4xl mx-auto space-y-6">
@@ -132,7 +134,7 @@ export default function AiLogPage() {
                                 <div className="flex items-center gap-4">
                                     <Bot className="h-5 w-5" />
                                     <div className="text-left">
-                                        <p className="font-semibold">AI Generation - Post #{threads.length - index}</p>
+                                        <p className="font-semibold">AI Generation - Post #{totalGenerations - index + 1}</p>
                                         <p className="text-xs text-muted-foreground">
                                             {new Date(entry.timestamp).toLocaleString()}
                                         </p>
@@ -165,8 +167,3 @@ export default function AiLogPage() {
         </div>
     );
 }
-
-// Dummy threads for skeleton loading
-const threads = Array(3).fill(null);
-
-    
