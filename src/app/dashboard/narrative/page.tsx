@@ -45,7 +45,7 @@ export default function NarrativePage() {
   const { toast } = useToast();
   const [threads, setThreads] = useState<EnrichedThread[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(isMaster);
   const [activePlayers, setActivePlayers] = useState<Character[]>([]);
   const [playerCharacter, setPlayerCharacter] = useState<Character | null>(null);
   const [lastPrompt, setLastPrompt] = useState<StoryInput | null>(null);
@@ -131,7 +131,11 @@ export default function NarrativePage() {
 
         const narrativeHistory = threads.map(t => {
             const gmPost = `GM: ${t.title}\n${t.content.replace(/<[^>]*>?/gm, '')}`;
-            const playerPosts = t.comments.map(c => `${c.character?.name || c.author.name}: ${c.text}`).join('\n');
+            const playerPosts = t.comments.map(c => {
+                //Safeguard againist the Game Master not having a character or name.
+                const authorName = c.character?.name || c.author?.name || "Unknown";
+                return `${authorName}: ${c.text}`;
+            }).join('\n');
             return `${gmPost}\n${playerPosts}`;
         }).join('\n\n---\n\n');
 
