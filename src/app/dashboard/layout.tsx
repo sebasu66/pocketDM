@@ -19,6 +19,7 @@ import {
   Brush,
   Layers,
   BrainCircuit,
+  Newspaper,
 } from "lucide-react";
 
 import {
@@ -71,8 +72,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   ];
 
   const designNavItems = [
-    { href: "/dashboard/design-test", icon: Brush, label: t('sidebarDesignTest') },
-    { href: "/dashboard/design-test-3d", icon: Layers, label: t('sidebar3dDesignTest') },
+    { href: "/dashboard/playerview", icon: Newspaper, label: 'Player View' },
   ];
 
   const pageTitles: { [key: string]: string } = {
@@ -86,8 +86,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     "/dashboard/settings": t('pageTitleSettings'),
     "/dashboard/settings/apikeys": t('pageTitleAiSettings'),
     "/dashboard/integrations": t('pageTitleIntegrations'),
-    "/dashboard/design-test": t('pageTitleDesignTest'),
-    "/dashboard/design-test-3d": t('pageTitle3dDesignTest'),
+    "/dashboard/playerview": 'Player View',
     "/dashboard/ai-log": t('pageTitleAiLog'),
   };
 
@@ -289,5 +288,3 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     </SidebarProvider>
   );
 }
-
-    

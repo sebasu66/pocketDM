@@ -12,8 +12,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ['EB Garamond', 'serif'],
-        headline: ['Cinzel', 'serif'],
+        body: ['Cormorant Garamond', 'serif'],
+        headline: ['MedievalSharp', 'cursive'],
         code: ['Recursive', 'monospace'],
         handwriting: ['var(--font-handwriting)', 'cursive'],
       },
