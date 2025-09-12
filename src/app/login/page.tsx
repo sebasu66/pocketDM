@@ -12,6 +12,8 @@ import { Logo } from "@/components/logo";
 import { useAuth } from "@/context/auth-context";
 import { getUserByEmail, checkPassword } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
+import { useI18n } from "@/context/i18n-context";
+import { cn } from "@/lib/utils";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -19,6 +21,7 @@ export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
+  const { t, setLocale, locale } = useI18n();
 
   const handleLogin = async () => {
     const user = await getUserByEmail(email);
@@ -28,8 +31,8 @@ export default function LoginPage() {
     } else {
       toast({
         variant: "destructive",
-        title: "Login Failed",
-        description: "Invalid email or password.",
+        title: t('loginFailedTitle'),
+        description: t('loginFailedDescription'),
       });
     }
   };
@@ -45,13 +48,13 @@ export default function LoginPage() {
             </div>
             <CardTitle className="text-3xl font-headline">Lore Weaver</CardTitle>
             <CardDescription>
-              Sign in to your campaign hub
+              {t('loginSubtitle')}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t('emailLabel')}</Label>
                 <Input
                   id="email"
                   type="email"
@@ -64,12 +67,12 @@ export default function LoginPage() {
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">{t('passwordLabel')}</Label>
                   <Link
                     href="#"
                     className="ml-auto inline-block text-sm underline"
                   >
-                    Forgot your password?
+                    {t('forgotPasswordLink')}
                   </Link>
                 </div>
                 <Input 
@@ -83,20 +86,24 @@ export default function LoginPage() {
                 />
               </div>
                 <Button onClick={handleLogin} type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-                  Login
+                  {t('loginButton')}
                 </Button>
               <Button variant="outline" className="w-full">
-                Login with Google
+                {t('loginWithGoogleButton')}
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">
-              Don't have an account?{" "}
+              {t('noAccountPrompt')}{" "}
               <Link href="/" className="underline">
-                Go back to Home
+                {t('goHomeLink')}
               </Link>
             </div>
           </CardContent>
         </Card>
+         <div className="flex justify-center gap-2 mt-4">
+            <Button variant="ghost" onClick={() => setLocale('en')} className={cn("text-xs", locale === 'en' && "font-bold text-accent")}>English</Button>
+            <Button variant="ghost" onClick={() => setLocale('es')} className={cn("text-xs", locale === 'es' && "font-bold text-accent")}>Español</Button>
+        </div>
       </div>
     </div>
   );

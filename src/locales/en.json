@@ -1,0 +1,13 @@
+
+{
+    "loginSubtitle": "Sign in to your campaign hub",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "forgotPasswordLink": "Forgot your password?",
+    "loginButton": "Login",
+    "loginWithGoogleButton": "Login with Google",
+    "noAccountPrompt": "Don't have an account?",
+    "goHomeLink": "Go back to Home",
+    "loginFailedTitle": "Login Failed",
+    "loginFailedDescription": "Invalid email or password."
+}

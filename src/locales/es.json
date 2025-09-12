@@ -1,0 +1,13 @@
+
+{
+    "loginSubtitle": "Inicia sesión en tu centro de campaña",
+    "emailLabel": "Correo electrónico",
+    "passwordLabel": "Contraseña",
+    "forgotPasswordLink": "¿Olvidaste tu contraseña?",
+    "loginButton": "Iniciar sesión",
+    "loginWithGoogleButton": "Iniciar sesión con Google",
+    "noAccountPrompt": "¿No tienes una cuenta?",
+    "goHomeLink": "Volver al inicio",
+    "loginFailedTitle": "Inicio de sesión fallido",
+    "loginFailedDescription": "Correo electrónico o contraseña no válidos."
+}

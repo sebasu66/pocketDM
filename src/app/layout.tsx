@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Toaster } from "@/components/ui/toaster"
 import { AuthProvider } from '@/context/auth-context';
 import { ThemeProvider } from '@/context/theme-context';
+import { I18nProvider } from '@/context/i18n-context';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -24,10 +25,12 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <ThemeProvider>
-          <AuthProvider>
-            {children}
-            <Toaster />
-          </AuthProvider>
+          <I18nProvider>
+            <AuthProvider>
+              {children}
+              <Toaster />
+            </AuthProvider>
+          </I18nProvider>
         </ThemeProvider>
       </body>
     </html>
