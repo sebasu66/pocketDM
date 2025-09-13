@@ -270,14 +270,17 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               {children}
             </main>
             
-            <RusticIconButton
-                variant="incomplete"
-                tooltip="Toggle Menu"
-                onClick={() => setIsSheetOpen(true)}
-                className="fixed bottom-6 right-6 h-16 w-16 text-white/90 hover:text-white z-30"
-            >
-                <Menu size={28} />
-            </RusticIconButton>
+            {pathname !== '/dashboard/playerview' && (
+              <RusticIconButton
+                  variant="incomplete"
+                  tooltip="Toggle Menu"
+                  onClick={() => setIsSheetOpen(true)}
+                  className="fixed bottom-6 right-6 h-16 w-16 text-white/90 hover:text-white z-30"
+              >
+                  <Menu size={28} />
+              </RusticIconButton>
+            )}
+
 
             <SheetContent side="right" className="p-0 w-80 bg-sidebar-gradient border-l-0 text-sidebar-foreground">
                {sidebarContent}
