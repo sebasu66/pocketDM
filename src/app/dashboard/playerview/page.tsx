@@ -8,9 +8,12 @@ import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestor
 import type { NarrativeThread } from '@/lib/firebase/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Menu } from 'lucide-react';
 import { RusticIconButton } from '@/components/ui/rustic-icon-button';
 import { useI18n } from '@/context/i18n-context';
+import React from 'react';
+import { Sheet, SheetContent } from '@/components/ui/sheet';
+import { Separator } from '@/components/ui/separator';
 
 export default function PlayerViewPage() {
     const { campaign, isLoading: isAuthLoading } = useAuth();
@@ -18,6 +21,8 @@ export default function PlayerViewPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [narrativeThreads, setNarrativeThreads] = useState<NarrativeThread[]>([]);
     const [activeThreadIndex, setActiveThreadIndex] = useState(0);
+    const [isSheetOpen, setIsSheetOpen] = React.useState(false);
+
 
     useEffect(() => {
         if (!campaign) return;
@@ -131,7 +136,7 @@ export default function PlayerViewPage() {
                 </div>
             </div>
 
-            <div className="fixed bottom-24 right-6 z-30 flex flex-col gap-4">
+            <div className="fixed bottom-6 right-6 z-30 flex h-14 items-center gap-2 rounded-full bg-black/20 p-2 backdrop-blur-sm">
                 <RusticIconButton
                     tooltip={t('designTestPreviousPost')}
                     onClick={handlePrev}
@@ -148,7 +153,23 @@ export default function PlayerViewPage() {
                 >
                     <ArrowRight />
                 </RusticIconButton>
+                
+                <Separator orientation="vertical" className="h-6 bg-white/20" />
+
+                <RusticIconButton
+                    tooltip="Toggle Menu"
+                    onClick={() => setIsSheetOpen(true)}
+                    className="text-white/90 hover:text-white"
+                >
+                    <Menu />
+                </RusticIconButton>
             </div>
+             <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                 <SheetContent side="right" className="p-0 w-80 bg-sidebar-gradient border-l-0 text-sidebar-foreground">
+                    {/* Placeholder for sidebar content */}
+                 </SheetContent>
+            </Sheet>
         </div>
     );
 }
+
