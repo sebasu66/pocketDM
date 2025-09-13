@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useEffect, useState, useMemo } from 'react';
@@ -129,7 +130,7 @@ export default function PlayerViewPage() {
                     </div>
                     <div className="w-full">
                         <div 
-                          className="prose prose-lg prose-invert max-w-none text-foreground/90 leading-relaxed" 
+                          className="prose prose-xl prose-invert max-w-none text-foreground/90 leading-relaxed [&_p]:text-indent-[2em]" 
                           dangerouslySetInnerHTML={{ __html: activeThread.content }}
                         />
                     </div>
@@ -172,4 +173,3 @@ export default function PlayerViewPage() {
         </div>
     );
 }
-
