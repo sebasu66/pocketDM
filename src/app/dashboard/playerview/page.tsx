@@ -10,9 +10,11 @@ import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { RusticIconButton } from '@/components/ui/rustic-icon-button';
+import { useI18n } from '@/context/i18n-context';
 
 export default function PlayerViewPage() {
     const { campaign, isLoading: isAuthLoading } = useAuth();
+    const { t } = useI18n();
     const [isLoading, setIsLoading] = useState(true);
     const [narrativeThreads, setNarrativeThreads] = useState<NarrativeThread[]>([]);
     const [activeThreadIndex, setActiveThreadIndex] = useState(0);
@@ -74,8 +76,8 @@ export default function PlayerViewPage() {
     if (!activeThread) {
         return (
              <div className="min-h-[60vh] flex flex-col items-center justify-center text-center p-8">
-                <h1 className="text-4xl font-headline uppercase tracking-widest">The story awaits</h1>
-                <p className="mt-4 text-foreground/70">No narrative has been posted for this campaign yet.</p>
+                <h1 className="text-4xl font-headline uppercase tracking-widest">{t('notFoundTitle')}</h1>
+                <p className="mt-4 text-foreground/70">{t('notFoundDescription')}</p>
             </div>
         )
     }
@@ -126,9 +128,9 @@ export default function PlayerViewPage() {
                 </div>
             </div>
 
-            <div className="fixed bottom-6 left-6 z-30 flex gap-4">
+            <div className="fixed bottom-24 right-6 z-30 flex flex-col gap-4">
                 <RusticIconButton
-                    tooltip="Previous Post"
+                    tooltip={t('designTestPreviousPost')}
                     onClick={handlePrev}
                     disabled={activeThreadIndex === 0}
                     className="text-white/90 hover:text-white"
@@ -136,7 +138,7 @@ export default function PlayerViewPage() {
                     <ArrowLeft />
                 </RusticIconButton>
                 <RusticIconButton
-                    tooltip="Next Post"
+                    tooltip={t('designTestNextPost')}
                     onClick={handleNext}
                     disabled={activeThreadIndex === narrativeThreads.length - 1}
                     className="text-white/90 hover:text-white"
