@@ -132,24 +132,22 @@ export default function PlayerViewPage() {
             </div>
 
             <div className="fixed bottom-24 right-6 z-30 flex flex-col gap-4">
-                {canGoPrev && (
-                    <RusticIconButton
-                        tooltip={t('designTestPreviousPost')}
-                        onClick={handlePrev}
-                        className="text-white/90 hover:text-white"
-                    >
-                        <ArrowLeft />
-                    </RusticIconButton>
-                )}
-                {canGoNext && (
-                    <RusticIconButton
-                        tooltip={t('designTestNextPost')}
-                        onClick={handleNext}
-                        className="text-white/90 hover:text-white"
-                    >
-                        <ArrowRight />
-                    </RusticIconButton>
-                )}
+                <RusticIconButton
+                    tooltip={t('designTestPreviousPost')}
+                    onClick={handlePrev}
+                    disabled={!canGoPrev}
+                    className="text-white/90 hover:text-white"
+                >
+                    <ArrowLeft />
+                </RusticIconButton>
+                <RusticIconButton
+                    tooltip={t('designTestNextPost')}
+                    onClick={handleNext}
+                    disabled={!canGoNext}
+                    className="text-white/90 hover:text-white"
+                >
+                    <ArrowRight />
+                </RusticIconButton>
             </div>
         </div>
     );
