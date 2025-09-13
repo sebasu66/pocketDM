@@ -29,8 +29,7 @@
     "pageTitleSettings": "Ajustes",
     "pageTitleAiSettings": "Ajustes de IA",
     "pageTitleIntegrations": "Integraciones",
-    "pageTitleDesignTest": "Prueba de Diseño",
-    "pageTitle3dDesignTest": "Prueba de Diseño 3D",
+    "pageTitleReaderView": "Vista de Lector",
     "pageTitleAiLog": "Registro de IA",
 
     "loadingCampaign": "Cargando tu campaña...",
@@ -45,8 +44,7 @@
     "sidebarThreads": "Hilos",
     "sidebarPlayerChat": "Chat de Jugadores",
     "sidebarAiLog": "Registro de IA",
-    "sidebarDesignTest": "Prueba de Diseño",
-    "sidebar3dDesignTest": "Prueba de Diseño 3D",
+    "sidebarReaderView": "Vista de Lector",
     "sidebarIntegrations": "Integraciones",
     "sidebarSettings": "Ajustes",
     "searchInputPlaceholder": "Buscar entidades...",
@@ -299,5 +297,3 @@
     "designTestWaitingForPlayers": "Esperando a que otros jugadores respondan. Sus mensajes se revelarán una vez que todos hayan actuado.",
     "designTestHidden": "Oculto"
 }
-
-    

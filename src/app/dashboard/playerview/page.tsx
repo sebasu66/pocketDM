@@ -8,11 +8,14 @@ import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestor
 import type { NarrativeThread } from '@/lib/firebase/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { RusticIconButton } from '@/components/ui/rustic-icon-button';
 
 export default function PlayerViewPage() {
     const { campaign, isLoading: isAuthLoading } = useAuth();
     const [isLoading, setIsLoading] = useState(true);
     const [narrativeThreads, setNarrativeThreads] = useState<NarrativeThread[]>([]);
+    const [activeThreadIndex, setActiveThreadIndex] = useState(0);
 
     useEffect(() => {
         if (!campaign) return;
@@ -20,13 +23,14 @@ export default function PlayerViewPage() {
         const narrativeQuery = query(
             collection(db, "narrativeThreads"),
             where("campaignId", "==", campaign.id),
-            orderBy("createdAt", "desc")
+            orderBy("createdAt", "asc") // Order chronologically
         );
 
         const unsubscribe = onSnapshot(narrativeQuery, (snapshot) => {
             if (!snapshot.empty) {
                 const threads = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
                 setNarrativeThreads(threads);
+                setActiveThreadIndex(threads.length - 1); // Start at the latest thread
             }
             setIsLoading(false);
         }, (error) => {
@@ -38,9 +42,17 @@ export default function PlayerViewPage() {
     }, [campaign]);
 
     const activeThread = useMemo(() => {
-        return narrativeThreads.length > 0 ? narrativeThreads[0] : null;
-    }, [narrativeThreads]);
+        return narrativeThreads.length > 0 ? narrativeThreads[activeThreadIndex] : null;
+    }, [narrativeThreads, activeThreadIndex]);
     
+    const handlePrev = () => {
+        setActiveThreadIndex(prev => Math.max(0, prev - 1));
+    };
+
+    const handleNext = () => {
+        setActiveThreadIndex(prev => Math.min(narrativeThreads.length - 1, prev + 1));
+    };
+
     if (isAuthLoading || isLoading) {
         return (
             <div className="w-full h-full p-4 md:p-8 space-y-8">
@@ -112,6 +124,25 @@ export default function PlayerViewPage() {
                         />
                     </div>
                 </div>
+            </div>
+
+            <div className="fixed bottom-6 left-6 z-30 flex gap-4">
+                <RusticIconButton
+                    tooltip="Previous Post"
+                    onClick={handlePrev}
+                    disabled={activeThreadIndex === 0}
+                    className="text-white/90 hover:text-white"
+                >
+                    <ArrowLeft />
+                </RusticIconButton>
+                <RusticIconButton
+                    tooltip="Next Post"
+                    onClick={handleNext}
+                    disabled={activeThreadIndex === narrativeThreads.length - 1}
+                    className="text-white/90 hover:text-white"
+                >
+                    <ArrowRight />
+                </RusticIconButton>
             </div>
         </div>
     );

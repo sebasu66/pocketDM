@@ -72,7 +72,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   ];
 
   const designNavItems = [
-    { href: "/dashboard/playerview", icon: Newspaper, label: 'Player View' },
+    { href: "/dashboard/playerview", icon: Newspaper, label: t('sidebarReaderView') },
   ];
 
   const pageTitles: { [key: string]: string } = {
@@ -86,7 +86,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     "/dashboard/settings": t('pageTitleSettings'),
     "/dashboard/settings/apikeys": t('pageTitleAiSettings'),
     "/dashboard/integrations": t('pageTitleIntegrations'),
-    "/dashboard/playerview": 'Player View',
+    "/dashboard/playerview": t('pageTitleReaderView'),
     "/dashboard/ai-log": t('pageTitleAiLog'),
   };
 

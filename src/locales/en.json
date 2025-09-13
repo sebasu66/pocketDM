@@ -29,8 +29,7 @@
     "pageTitleSettings": "Settings",
     "pageTitleAiSettings": "AI Settings",
     "pageTitleIntegrations": "Integrations",
-    "pageTitleDesignTest": "Design Test",
-    "pageTitle3dDesignTest": "3D Design Test",
+    "pageTitleReaderView": "Reader View",
     "pageTitleAiLog": "AI Log",
 
     "loadingCampaign": "Loading your campaign...",
@@ -45,8 +44,7 @@
     "sidebarThreads": "Threads",
     "sidebarPlayerChat": "Player Chat",
     "sidebarAiLog": "AI Log",
-    "sidebarDesignTest": "Design Test",
-    "sidebar3dDesignTest": "3D Design Test",
+    "sidebarReaderView": "Reader View",
     "sidebarIntegrations": "Integrations",
     "sidebarSettings": "Settings",
     "searchInputPlaceholder": "Search entities...",
@@ -299,5 +297,3 @@
     "designTestWaitingForPlayers": "Waiting for other players to respond. Their messages will be revealed once everyone has acted.",
     "designTestHidden": "Hidden"
 }
-
-    
