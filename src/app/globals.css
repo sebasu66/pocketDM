@@ -191,7 +191,7 @@
   }
 
   .image-mask-squared {
-    mask-image: url('/ui/backgrounds/squared-mask.jpg');
+    mask-image: url('/ui/backgrounds/squared-mask.png');
     mask-size: contain;
     mask-repeat: no-repeat;
     mask-position: center;

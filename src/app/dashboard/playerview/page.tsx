@@ -92,7 +92,7 @@ export default function PlayerViewPage() {
 
     return (
         <div 
-            className="min-h-[calc(100vh-10rem)] w-full mx-auto max-w-7xl flex flex-col md:flex-row bg-stone-gradient"
+            className="min-h-[calc(100vh-10rem)] w-full mx-auto max-w-7xl flex bg-stone-gradient"
         >
             <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
             {/* Vertical Banner on Wide Screens */}
@@ -118,23 +118,19 @@ export default function PlayerViewPage() {
                     {activeThread.title}
                 </h1>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
-                    <div className="w-full">
-                        <div 
-                            className="relative aspect-[4/3] w-full image-mask-squared"
-                            style={{
-                                backgroundImage: `url(${activeThread.imageUrl || '/locations/default_location.jpg'})`
-                            }}
-                            data-ai-hint={activeThread.imageAiHint || "fantasy scene"}
-                        >
-                        </div>
+                <div>
+                    <div 
+                        className="relative aspect-[4/3] w-full md:w-1/2 md:float-right md:ml-8 md:mb-4 image-mask-squared"
+                        style={{
+                            backgroundImage: `url(${activeThread.imageUrl || '/locations/default_location.jpg'})`
+                        }}
+                        data-ai-hint={activeThread.imageAiHint || "fantasy scene"}
+                    >
                     </div>
-                    <div className="w-full">
-                        <div 
-                          className="prose prose-xl prose-invert max-w-none text-foreground/90 leading-relaxed" 
-                          dangerouslySetInnerHTML={{ __html: activeThread.content }}
-                        />
-                    </div>
+                    <div 
+                        className="prose prose-xl prose-invert max-w-none text-foreground/90 leading-relaxed mt-8 md:mt-0" 
+                        dangerouslySetInnerHTML={{ __html: activeThread.content }}
+                    />
                 </div>
             </div>
 
