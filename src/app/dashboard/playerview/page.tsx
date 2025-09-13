@@ -121,9 +121,17 @@ export default function PlayerViewPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
                     <div className="w-full">
-                        <div className="relative aspect-[4/3] w-full rounded-sm overflow-hidden border-4 border-card">
+                        <div 
+                            className="relative aspect-[4/3] w-full"
+                            style={{
+                                maskImage: 'url(/ui/backgrounds/squared-mask.jpg)',
+                                maskSize: 'contain',
+                                maskRepeat: 'no-repeat',
+                                maskPosition: 'center',
+                            }}
+                        >
                              <Image 
-                                src={activeThread.imageUrl || '/placeholder.jpg'} 
+                                src={activeThread.imageUrl || '/locations/default_location.jpg'} 
                                 alt={activeThread.title}
                                 fill
                                 className="object-cover"
