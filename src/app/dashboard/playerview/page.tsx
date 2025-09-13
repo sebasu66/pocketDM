@@ -122,15 +122,12 @@ export default function PlayerViewPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
                     <div className="w-full">
                         <div 
-                            className="relative aspect-[4/3] w-full image-mask-squared"
+                            className="relative aspect-[4/3] w-full image-mask-squared bg-cover bg-center"
+                            style={{
+                                backgroundImage: `url(${activeThread.imageUrl || '/locations/default_location.jpg'})`
+                            }}
+                            data-ai-hint={activeThread.imageAiHint || "fantasy scene"}
                         >
-                             <Image 
-                                src={activeThread.imageUrl || '/locations/default_location.jpg'} 
-                                alt={activeThread.title}
-                                fill
-                                className="object-cover"
-                                data-ai-hint={activeThread.imageAiHint || "fantasy scene"}
-                             />
                         </div>
                     </div>
                     <div className="w-full">
