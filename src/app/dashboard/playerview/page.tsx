@@ -130,7 +130,7 @@ export default function PlayerViewPage() {
                     </div>
                     <div className="w-full">
                         <div 
-                          className="prose prose-xl prose-invert max-w-none text-foreground/90 leading-relaxed [&_p]:text-indent-[2em]" 
+                          className="prose prose-xl prose-invert max-w-none text-foreground/90 leading-relaxed" 
                           dangerouslySetInnerHTML={{ __html: activeThread.content }}
                         />
                     </div>

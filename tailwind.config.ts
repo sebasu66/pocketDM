@@ -101,6 +101,7 @@ export default {
   },
   plugins: [
     require('tailwindcss-animate'),
+    require('@tailwindcss/typography'),
     plugin(function ({ addUtilities }) {
       addUtilities({
         '.text-indent-2em': {
