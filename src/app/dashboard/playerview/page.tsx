@@ -92,17 +92,21 @@ export default function PlayerViewPage() {
     const canGoPrev = activeThreadIndex > 0;
 
     return (
-        <div className="min-h-[calc(100vh-10rem)] w-full mx-auto max-w-7xl flex flex-col md:flex-row">
+        <div 
+            className="min-h-[calc(100vh-10rem)] w-full mx-auto max-w-7xl flex flex-col md:flex-row bg-cover bg-center bg-fixed"
+            style={{backgroundImage: "url('https://picsum.photos/1920/1080?grayscale&blur=5&random=1')"}}
+        >
+            <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
             {/* Vertical Banner on Wide Screens */}
             {campaign && (
-                <div className="hidden md:flex items-center justify-center p-4">
+                <div className="hidden md:flex items-center justify-center p-4 z-10">
                     <h2 className="font-headline text-2xl text-foreground/80 [writing-mode:vertical-rl] rotate-180 uppercase tracking-widest">
                         {campaign.title}
                     </h2>
                 </div>
             )}
             
-            <div className="flex-1 p-4 md:p-8">
+            <div className="flex-1 p-4 md:p-8 z-10">
                  {/* Horizontal Banner on Mobile */}
                 {campaign && (
                     <div className="md:hidden text-center mb-8">
