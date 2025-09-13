@@ -154,17 +154,13 @@ export default function PlayerViewPage() {
                     onClick={handlePrev}
                     disabled={!canGoPrev}
                     className="text-white/90 hover:text-white"
-                >
-                    <ArrowLeft />
-                </RusticIconButton>
+                />
                 <RusticIconButton
                     tooltip={t('designTestNextPost')}
                     onClick={handleNext}
                     disabled={!canGoNext}
                     className="text-white/90 hover:text-white"
-                >
-                    <ArrowRight />
-                </RusticIconButton>
+                />
                 
                 <Separator orientation="vertical" className="h-6 bg-white/20" />
 
