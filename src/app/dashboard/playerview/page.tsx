@@ -93,7 +93,7 @@ export default function PlayerViewPage() {
 
     return (
         <div 
-            className="min-h-[calc(100vh-10rem)] w-full mx-auto max-w-7xl flex flex-col md:flex-row bg-background"
+            className="min-h-[calc(100vh-10rem)] w-full mx-auto max-w-7xl flex flex-col md:flex-row bg-stone-gradient"
         >
             <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
             {/* Vertical Banner on Wide Screens */}
