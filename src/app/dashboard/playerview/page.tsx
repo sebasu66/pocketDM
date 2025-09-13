@@ -8,7 +8,6 @@ import { db } from '@/lib/firebase/config';
 import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
 import type { NarrativeThread } from '@/lib/firebase/types';
 import { Skeleton } from '@/components/ui/skeleton';
-import Image from 'next/image';
 import { ArrowLeft, ArrowRight, Menu } from 'lucide-react';
 import { RusticIconButton } from '@/components/ui/rustic-icon-button';
 import { useI18n } from '@/context/i18n-context';
@@ -122,7 +121,7 @@ export default function PlayerViewPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
                     <div className="w-full">
                         <div 
-                            className="relative aspect-[4/3] w-full image-mask-squared bg-cover bg-center"
+                            className="relative aspect-[4/3] w-full image-mask-squared"
                             style={{
                                 backgroundImage: `url(${activeThread.imageUrl || '/locations/default_location.jpg'})`
                             }}

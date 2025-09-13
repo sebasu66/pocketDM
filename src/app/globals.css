@@ -195,6 +195,9 @@
     mask-size: contain;
     mask-repeat: no-repeat;
     mask-position: center;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
 }
