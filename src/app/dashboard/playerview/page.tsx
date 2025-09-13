@@ -82,6 +82,9 @@ export default function PlayerViewPage() {
         )
     }
 
+    const canGoNext = activeThreadIndex < narrativeThreads.length - 1;
+    const canGoPrev = activeThreadIndex > 0;
+
     return (
         <div className="min-h-[calc(100vh-10rem)] w-full mx-auto max-w-7xl flex flex-col md:flex-row">
             {/* Vertical Banner on Wide Screens */}
@@ -129,22 +132,24 @@ export default function PlayerViewPage() {
             </div>
 
             <div className="fixed bottom-24 right-6 z-30 flex flex-col gap-4">
-                <RusticIconButton
-                    tooltip={t('designTestPreviousPost')}
-                    onClick={handlePrev}
-                    disabled={activeThreadIndex === 0}
-                    className="text-white/90 hover:text-white"
-                >
-                    <ArrowLeft />
-                </RusticIconButton>
-                <RusticIconButton
-                    tooltip={t('designTestNextPost')}
-                    onClick={handleNext}
-                    disabled={activeThreadIndex === narrativeThreads.length - 1}
-                    className="text-white/90 hover:text-white"
-                >
-                    <ArrowRight />
-                </RusticIconButton>
+                {canGoPrev && (
+                    <RusticIconButton
+                        tooltip={t('designTestPreviousPost')}
+                        onClick={handlePrev}
+                        className="text-white/90 hover:text-white"
+                    >
+                        <ArrowLeft />
+                    </RusticIconButton>
+                )}
+                {canGoNext && (
+                    <RusticIconButton
+                        tooltip={t('designTestNextPost')}
+                        onClick={handleNext}
+                        className="text-white/90 hover:text-white"
+                    >
+                        <ArrowRight />
+                    </RusticIconButton>
+                )}
             </div>
         </div>
     );
