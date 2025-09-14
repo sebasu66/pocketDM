@@ -13,6 +13,7 @@ import { useI18n } from '@/context/i18n-context';
 import React from 'react';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Separator } from '@/components/ui/separator';
+import Image from 'next/image';
 
 export default function PlayerViewPage() {
     const { campaign, isLoading: isAuthLoading } = useAuth();
@@ -119,11 +120,14 @@ export default function PlayerViewPage() {
                     <div>
                         <div 
                             className="relative aspect-[4/3] w-full md:w-1/2 md:float-right md:ml-8 md:mb-4 image-mask-squared"
-                            style={{
-                                backgroundImage: `url(${imageUrl})`
-                            }}
                             data-ai-hint={activeThread.imageAiHint || "fantasy scene"}
                         >
+                             <Image
+                                src={imageUrl}
+                                alt={activeThread.title}
+                                fill
+                                className="object-cover"
+                            />
                         </div>
                         <div 
                             className="prose prose-xl prose-invert max-w-none text-foreground/90 leading-relaxed mt-8 md:mt-0" 
