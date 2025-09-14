@@ -14,7 +14,7 @@ export default {
     extend: {
       fontFamily: {
         body: ['Cormorant Garamond', 'serif'],
-        headline: ['MedievalSharp', 'cursive'],
+        headline: ['Uncial Antiqua', 'cursive'],
         code: ['Recursive', 'monospace'],
         handwriting: ['var(--font-handwriting)', 'cursive'],
       },

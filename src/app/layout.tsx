@@ -21,7 +21,7 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cormorant+Garamond:wght@400;700&family=Recursive:wght@400;700&family=Covered+By+Your+Grace&family=Merienda:wght@300;400;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cormorant+Garamond:wght@400;700&family=Recursive:wght@400;700&family=Covered+By+Your+Grace&family=Merienda:wght@300;400;700&family=Uncial+Antiqua&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
         <ThemeProvider>
