@@ -15,6 +15,7 @@ export default {
       fontFamily: {
         body: ['Cormorant Garamond', 'serif'],
         headline: ['Uncial Antiqua', 'cursive'],
+        medieval: ['MedievalSharp', 'cursive'],
         code: ['Recursive', 'monospace'],
         handwriting: ['var(--font-handwriting)', 'cursive'],
       },
