@@ -174,7 +174,7 @@ export default function PlayerViewPage() {
                 </h2>
             </div>
             
-            <div className="flex-1 md:p-8 z-10">
+            <div className="flex-1 md:p-8 z-10 pb-20">
                  
                 <div className="md:hidden text-center h-20 flex items-center justify-center bg-leather-column drop-shadow-2xl mb-8">
                     <h2 className="font-body text-2xl text-foreground/80 uppercase tracking-widest">
@@ -209,14 +209,14 @@ export default function PlayerViewPage() {
                 <Separator className="my-8 md:my-12 bg-border/50" />
 
                 <div className="p-4 md:p-0">
-                    <div className="bg-background/50 p-4 md:p-8 rounded-lg">
+                    <div className="bg-transparent p-4 md:p-8 rounded-lg">
                         <ThreadComments comments={activeThread.comments} t={t} />
                     </div>
                 </div>
                 
                 {activeThreadIndex === narrativeThreads.length - 1 && canPlayerRespond && (
                     <div className="p-4 md:p-0 mt-8">
-                        <div className='bg-card/50 backdrop-blur-lg rounded-lg'>
+                        <div className='backdrop-blur-lg rounded-lg'>
                            <CommentForm onSubmit={handleAddComment} character={playerCharacter} t={t} />
                         </div>
                     </div>
