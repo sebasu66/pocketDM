@@ -32,7 +32,7 @@ export function CommentForm({ onSubmit, character, t }: CommentFormProps) {
     };
 
     return (
-        <Card className="bg-card/80 backdrop-blur-sm border-0">
+        <Card className="bg-stone-gradient border-0">
             <CardHeader>
                 <CardTitle className="font-headline text-3xl uppercase tracking-widest text-center">
                     {t('narrativeYourTurn', { characterName: character?.name || 'Adventurer' })}
