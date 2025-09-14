@@ -14,6 +14,14 @@ const defaultSystemPrompt = `You are a master storyteller and creative Dungeon M
 - **Be Evocative**: Use descriptive language to paint a vivid picture of the world, its inhabitants, and the atmosphere.
 - **Maintain Tone**: Adhere to the established tone of the campaign (e.g., epic fantasy, gritty noir, lighthearted adventure).`;
 
+const defaultSystemPromptEs = `Eres un maestro narrador y un creativo Dungeon Master para un juego de rol de mesa. Tu tarea es tejer una narrativa convincente y colaborativa.
+
+- **Analiza la Historia**: Lee atentamente el historial narrativo proporcionado, que incluye tus publicaciones anteriores y las acciones de los jugadores.
+- **Consulta los Datos de los Personajes**: Usa las herramientas disponibles para buscar información sobre los personajes de los jugadores. Refiérete a ellos por su nombre e incorpora sus historias y habilidades únicas en la narrativa.
+- **Impulsa la Historia**: Escribe la siguiente publicación de la historia. Debe ser una continuación directa de los eventos, reaccionando a las elecciones de los jugadores e introduciendo nuevos desafíos, personajes o giros en la trama.
+- **Sé Evocativo**: Usa un lenguaje descriptivo para pintar una imagen vívida del mundo, sus habitantes y la atmósfera.
+- **Mantén el Tono**: Adhiérete al tono establecido de la campaña (p. ej., fantasía épica, noir descarnado, aventura ligera).`;
+
 
 // --- Seeding Data ---
 
@@ -39,6 +47,25 @@ export const initialThread: (Omit<NarrativeThread, 'id'> & { id: string }) = {
     `
 };
 
+const initialSpanishThread: (Omit<NarrativeThread, 'id'> & { id: string }) = {
+    id: "hilo-1",
+    campaignId: "2",
+    authorId: "1", // Game Master
+    title: "El Ocaso en el Priorato",
+    createdAt: new Date('2024-07-28T10:00:00Z').getTime(),
+    imageUrl: "https://picsum.photos/800/400?random=65",
+    imageAiHint: "fantasy monastery sunset",
+    audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+    content: `
+        <p>
+            El sol poniente teñía de naranja y púrpura las antiguas piedras del Priorato del Ocaso. Una quietud antinatural se había apoderado del lugar, un silencio que pesaba más que la ausencia de sonido.
+        </p>
+        <p>
+            En el centro del patio, una fuente que una vez manaba agua pura ahora borboteaba un lodo negruzco y corrupto. Un miasma vil flotaba en el aire. La puerta principal del santuario estaba entreabierta, invitando a la oscuridad interior.
+        </p>
+    `
+};
+
 
 async function seedDatabase() {
     console.log("Seeding database...");
@@ -53,7 +80,7 @@ async function seedDatabase() {
             role: "master",
             avatar: "https://picsum.photos/100/100?random=99",
             password: "password",
-            campaignId: "1",
+            campaignId: "1", // Default to campaign 1, can be switched
         },
         {
             id: "2",
@@ -72,6 +99,24 @@ async function seedDatabase() {
             avatar: "https://picsum.photos/100/100?random=6",
             password: "password",
             campaignId: "1",
+        },
+        {
+            id: "4",
+            name: "Carlos",
+            email: "jugador1@example.com",
+            role: "player",
+            avatar: "https://picsum.photos/100/100?random=7",
+            password: "password",
+            campaignId: "2",
+        },
+        {
+            id: "5",
+            name: "Diana",
+            email: "jugador2@example.com",
+            role: "player",
+            avatar: "https://picsum.photos/100/100?random=8",
+            password: "password",
+            campaignId: "2",
         }
     ];
 
@@ -92,6 +137,14 @@ async function seedDatabase() {
             bannerUrl: "https://picsum.photos/1200/400?random=10",
             bannerAiHint: "epic fantasy landscape",
             systemPrompt: defaultSystemPrompt,
+        },
+        {
+            id: "2",
+            title: "Crónicas de la Sombra",
+            description: "Un reino al borde de una antigua y creciente oscuridad. Antaño un refugio seguro para elfos, enanos y gnomos, los humanos comenzaron a asentarse hace miles de años a través de la guerra y la conquista. Los elfos viven exiliados en el norte.",
+            bannerUrl: "https://picsum.photos/1200/400?random=20",
+            bannerAiHint: "dark fantasy landscape",
+            systemPrompt: defaultSystemPromptEs,
         }
     ];
 
@@ -105,6 +158,7 @@ async function seedDatabase() {
 
     // 3. Characters
     const characters: (Omit<Character, 'id'> & { id: string })[] = [
+        // English Campaign Characters
         {
             id: "char-1",
             name: "Grom the Valiant",
@@ -141,6 +195,43 @@ async function seedDatabase() {
             charisma: 14,
             isActive: false,
         },
+        // Spanish Campaign Characters
+        {
+            id: "char-3",
+            name: "Sir Kaelan",
+            description: "Un paladín inquebrantable de la Orden de la Llama Plateada, juró proteger a los inocentes a cualquier costo. Su fe es su escudo y su martillo de guerra, la justicia.",
+            portrait: "https://picsum.photos/400/600?random=12",
+            aiHint: "fantasy paladin portrait",
+            campaignId: "2",
+            userId: "4", // Carlos's ID
+            level: 2,
+            class: "Paladín",
+            strength: 16,
+            dexterity: 10,
+            constitution: 14,
+            intelligence: 10,
+            wisdom: 13,
+            charisma: 15,
+            isActive: true,
+        },
+        {
+            id: "char-4",
+            name: "Seraphina",
+            description: "Una hechicera enigmática cuyo linaje se remonta a los dragones de antaño. Su magia es tan salvaje e impredecible como su temperamento.",
+            portrait: "https://picsum.photos/400/600?random=13",
+            aiHint: "fantasy sorceress portrait",
+            campaignId: "2",
+            userId: "5", // Diana's ID
+            level: 2,
+            class: "Hechicera",
+            strength: 8,
+            dexterity: 14,
+            constitution: 12,
+            intelligence: 15,
+            wisdom: 10,
+            charisma: 18,
+            isActive: true,
+        },
     ];
 
     characters.forEach(character => {
@@ -151,9 +242,12 @@ async function seedDatabase() {
     console.log("Characters queued for seeding.");
 
     // 4. Narrative Threads
-    const { id: threadId, ...threadData } = initialThread;
-    const threadRef = doc(db, "narrativeThreads", threadId);
-    batch.set(threadRef, threadData);
+    const threads = [initialThread, initialSpanishThread];
+    threads.forEach(thread => {
+        const { id, ...threadData } = thread;
+        const threadRef = doc(db, "narrativeThreads", id);
+        batch.set(threadRef, threadData);
+    });
     console.log("Narrative threads queued for seeding.");
 
 
@@ -175,6 +269,15 @@ async function seedDatabase() {
             characterId: "char-2", // Lyra's ID
             createdAt: new Date('2024-07-29T11:05:00Z').getTime(),
             text: "Lyra scans the guards, her eyes trying to gauge their intentions. She subtly readies a minor illusion spell, just in case."
+        },
+        {
+            id: "comment-3",
+            threadId: "hilo-1",
+            authorId: "4", // Carlos's user ID
+            characterId: "char-3", // Kaelan's ID
+            createdAt: new Date('2024-07-29T12:00:00Z').getTime(),
+            text: "Sir Kaelan avanza con cautela, su mano sobre el símbolo sagrado de su escudo. 'Una corrupción profana emana de este lugar. Debemos purgarla.'",
+            hiddenText: "Espero que mi fe sea suficiente para enfrentar lo que sea que acecha aquí."
         }
     ];
 
