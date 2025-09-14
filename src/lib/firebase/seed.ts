@@ -51,18 +51,23 @@ const initialSpanishThread: (Omit<NarrativeThread, 'id'> & { id: string }) = {
     id: "hilo-1",
     campaignId: "2",
     authorId: "1", // Game Master
-    title: "El Susurro del Viento Glacial",
+    title: "La Encrucijada del Ermitaño",
     createdAt: new Date('2024-07-28T10:00:00Z').getTime(),
+    imageUrl: "https://picsum.photos/800/400?random=21",
+    imageAiHint: "ancient forest crossroads",
     audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
     content: `
         <p>
-            Un viento gélido, cargado con el lamento de espíritus olvidados, azota los páramos congelados. La nieve, tan fina como el polvo de huesos, se arremolina y descubre los contornos de unas ruinas antiguas, un esqueleto de piedra negra contra el lienzo gris del cielo. Este es el Monasterio Olvidado de la Aguja Sombría, un lugar del que solo se habla en susurros.
+            El camino a través del Bosque Tenebroso se bifurca ante vosotros. A la izquierda, un sendero cubierto de musgo serpentea hacia la oscuridad, prometiendo un atajo a través del corazón del bosque. A la derecha, el camino principal, más ancho y seguro, continúa hacia el siguiente pueblo.
         </p>
         <p>
-            El frío no es natural; se aferra a vosotros, denso y pesado, buscando robar el calor de vuestros corazones. El silencio es casi absoluto, roto solo por el crujido de la escarcha bajo vuestras botas y el latido ahogado de vuestros propios corazones. En el centro del patio en ruinas, una estatua de un guerrero sin nombre permanece cubierta de hielo, su mano extendida apuntando hacia una puerta de cripta, entreabierta y rezumando una oscuridad más fría que la propia ventisca.
+            Sentado en una roca en la encrucijada, un anciano encapuchado llamado <b>Silas</b> os observa con ojos que parecen contener la sabiduría de siglos. Sujeta un bastón retorcido, el <a href="/dashboard/items/baston-susurrante" class="text-accent hover:underline">Bastón Susurrante</a>, que parece vibrar con una energía apenas contenida.
         </p>
         <p>
-            Algo antiguo y malévolo duerme aquí. Y vuestra presencia lo está despertando.
+            "El camino rápido está plagado de peligros que ponen a prueba el alma", susurra, su voz como el crujir de hojas secas. "El camino largo es seguro, pero lento. Vuestro destino os espera, pero el sendero que elijáis definirá vuestro viaje."
+        </p>
+        <p>
+            ¿Qué hacéis?
         </p>
     `
 };
@@ -270,15 +275,6 @@ async function seedDatabase() {
             characterId: "char-2", // Lyra's ID
             createdAt: new Date('2024-07-29T11:05:00Z').getTime(),
             text: "Lyra scans the guards, her eyes trying to gauge their intentions. She subtly readies a minor illusion spell, just in case."
-        },
-        {
-            id: "comment-3",
-            threadId: "hilo-1",
-            authorId: "4", // Carlos's user ID
-            characterId: "char-3", // Kaelan's ID
-            createdAt: new Date('2024-07-29T12:00:00Z').getTime(),
-            text: "Sir Kaelan avanza con cautela, su mano sobre el símbolo sagrado de su escudo. 'Una corrupción profana emana de este lugar. Debemos purgarla.'",
-            hiddenText: "Espero que mi fe sea suficiente para enfrentar lo que sea que acecha aquí."
         }
     ];
 
@@ -307,3 +303,5 @@ export async function runSeed() {
     seeded = true;
     await seedDatabase();
 }
+
+    
