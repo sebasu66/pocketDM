@@ -53,8 +53,8 @@ const initialSpanishThread: (Omit<NarrativeThread, 'id'> & { id: string }) = {
     authorId: "1", // Game Master
     title: "La Encrucijada del Ermitaño",
     createdAt: new Date('2024-07-28T10:00:00Z').getTime(),
-    imageUrl: "https://picsum.photos/800/400?random=21",
-    imageAiHint: "ancient forest crossroads",
+    imageUrl: "",
+    imageAiHint: "",
     audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
     content: `
         <p>
@@ -304,4 +304,3 @@ export async function runSeed() {
     await seedDatabase();
 }
 
-    
