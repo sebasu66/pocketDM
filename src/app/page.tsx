@@ -13,7 +13,7 @@ import { useI18n } from "@/context/i18n-context";
 export default function HomePage() {
   const { login } = useAuth();
   const router = useRouter();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
 
   const handleQuickLogin = async (userId: string) => {
     await login(userId);
@@ -52,20 +52,39 @@ export default function HomePage() {
                     <Button className="w-full" onClick={() => handleQuickLogin("1")}>{t('gmDemoButton')}</Button>
                 </CardContent>
             </Card>
-             <Card className="bg-card/50 backdrop-blur-lg">
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2 font-headline">
-                       <User />
-                        {t('playerDemoTitle')}
-                    </CardTitle>
-                    <CardDescription>
-                       {t('playerDemoDescription')}
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                     <Button className="w-full" onClick={() => handleQuickLogin("2")}>{t('playerDemoButton')}</Button>
-                </CardContent>
-            </Card>
+             {locale === 'es' ? (
+                <Card className="bg-card/50 backdrop-blur-lg">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2 font-headline">
+                           <User />
+                            {t('playerDemoTitle')}
+                        </CardTitle>
+                        <CardDescription>
+                           {t('playerDemoDescription')}
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                         <Button className="w-full" onClick={() => handleQuickLogin("4")}>{t('playerDemoButton')} (Carlos)</Button>
+                         <Button className="w-full" onClick={() => handleQuickLogin("5")}>{t('playerDemoButton')} (Diana)</Button>
+                    </CardContent>
+                </Card>
+             ) : (
+                <Card className="bg-card/50 backdrop-blur-lg">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2 font-headline">
+                           <User />
+                            {t('playerDemoTitle')}
+                        </CardTitle>
+                        <CardDescription>
+                           {t('playerDemoDescription')}
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Button className="w-full" onClick={() => handleQuickLogin("2")}>{t('playerDemoButton')} (Alice)</Button>
+                        <Button className="w-full" onClick={() => handleQuickLogin("3")} disabled>{t('playerDemoButton')} (Bob - Inactive)</Button>
+                    </CardContent>
+                </Card>
+             )}
         </div>
       </div>
     </div>
