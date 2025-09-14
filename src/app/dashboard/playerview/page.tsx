@@ -89,7 +89,7 @@ export default function PlayerViewPage() {
     const canGoNext = activeThreadIndex < narrativeThreads.length - 1;
     const canGoPrev = activeThreadIndex > 0;
     
-    const imageUrl = activeThread.imageUrl || '/locations/default_location.jpg';
+    const imageUrl = activeThread.imageUrl || 'https://picsum.photos/seed/default/800/600';
 
     return (
         <div 
