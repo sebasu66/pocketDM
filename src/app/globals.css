@@ -205,12 +205,4 @@
     background-size: cover;
     background-position: center;
   }
-
-  .bg-leather-column-rotated {
-    background-image: url('/ui/backgrounds/red-column-bkg.jpg');
-    background-size: cover;
-    background-position: center;
-    transform: rotate(-90deg);
-  }
-
 }

@@ -14,7 +14,6 @@ import { useI18n } from '@/context/i18n-context';
 import React from 'react';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Separator } from '@/components/ui/separator';
-import { Banner } from './Banner';
 
 export default function PlayerViewPage() {
     const { campaign, isLoading: isAuthLoading } = useAuth();
@@ -97,11 +96,23 @@ export default function PlayerViewPage() {
         >
             <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
             
-            {campaign && <Banner title={campaign.title} orientation="vertical" />}
+            {campaign && (
+                 <div className="hidden md:flex items-center justify-center p-4 z-10 bg-leather-column drop-shadow-2xl">
+                    <h2 className="font-headline text-2xl text-foreground/80 [writing-mode:vertical-rl] rotate-180 uppercase tracking-widest">
+                        {campaign.title}
+                    </h2>
+                </div>
+            )}
             
             <div className="flex-1 p-4 md:p-8 z-10">
                  
-                {campaign && <Banner title={campaign.title} orientation="horizontal" />}
+                {campaign && (
+                    <div className="md:hidden text-center mb-8 h-24 flex items-center justify-center bg-leather-column drop-shadow-2xl">
+                        <h2 className="font-headline text-2xl text-foreground/80 uppercase tracking-widest">
+                            {campaign.title}
+                        </h2>
+                    </div>
+                )}
                 
                 <h1 className="text-4xl md:text-6xl font-headline uppercase tracking-widest text-center mb-8 md:mb-12">
                     {activeThread.title}
