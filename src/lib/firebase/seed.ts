@@ -158,7 +158,7 @@ async function seedDatabase() {
             id: "char-1",
             name: "Grom the Valiant",
             description: "A stoic warrior from the northern mountains, seeking to reclaim his family's honor.",
-            portrait: "https://picsum.photos/400/600?random=10",
+            portrait: "/characters/char-1/portrait.png",
             aiHint: "fantasy warrior portrait",
             campaignId: "1",
             userId: "2", // Alice's ID
@@ -176,7 +176,7 @@ async function seedDatabase() {
             id: "char-2",
             name: "Lyra Swiftwind",
             description: "An elven ranger, outcast from her homeland, with an uncanny connection to the spirits of the forest.",
-            portrait: "https://picsum.photos/400/600?random=11",
+            portrait: "/characters/char-2/portrait.png",
             aiHint: "fantasy elf ranger portrait",
             campaignId: "1",
             userId: "3", // Bob's ID
@@ -195,7 +195,7 @@ async function seedDatabase() {
             id: "char-3",
             name: "Sir Kaelan",
             description: "Un paladín inquebrantable de la Orden de la Llama Plateada, juró proteger a los inocentes a cualquier costo. Su fe es su escudo y su martillo de guerra, la justicia.",
-            portrait: "https://picsum.photos/400/600?random=12",
+            portrait: "/characters/char-3/portrait.png",
             aiHint: "fantasy paladin portrait",
             campaignId: "2",
             userId: "4", // Carlos's ID
@@ -213,7 +213,7 @@ async function seedDatabase() {
             id: "char-4",
             name: "Seraphina",
             description: "Una hechicera enigmática cuyo linaje se remonta a los dragones de antaño. Su magia es tan salvaje e impredecible como su temperamento.",
-            portrait: "https://picsum.photos/400/600?random=13",
+            portrait: "/characters/char-4/portrait.png",
             aiHint: "fantasy sorceress portrait",
             campaignId: "2",
             userId: "5", // Diana's ID

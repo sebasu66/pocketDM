@@ -89,7 +89,7 @@ export default function CharactersPage() {
     const newCharacterData = {
       name: formData.get("char-name") as string,
       description: formData.get("char-background") as string,
-      portrait: `https://picsum.photos/400/600?random=${Math.random()}`,
+      portrait: `/characters/new/portrait.png`,
       aiHint: "fantasy portrait",
       campaignId: campaign.id,
       userId: user.id,
@@ -182,7 +182,7 @@ export default function CharactersPage() {
     if (editingCharacter) {
       setEditingCharacter({
         ...editingCharacter,
-        portrait: `https://picsum.photos/400/600?random=${Math.random()}`,
+        portrait: `/characters/${editingCharacter.id}/portrait.png?v=${Date.now()}`,
         aiHint: "fantasy portrait",
       });
     }
