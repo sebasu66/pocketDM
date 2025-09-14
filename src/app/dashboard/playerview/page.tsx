@@ -207,16 +207,15 @@ export default function PlayerViewPage() {
                 <Separator className="my-8 md:my-12 bg-border/50" />
 
                 <div className="p-4 md:p-0">
-                    <ThreadComments comments={activeThread.comments} t={t} />
+                     <div className="bg-background/50 p-4 md:p-8 rounded-lg">
+                        <ThreadComments comments={activeThread.comments} t={t} />
+                    </div>
                 </div>
                 
                 {activeThreadIndex === narrativeThreads.length - 1 && canPlayerRespond && (
-                    <>
-                        <Separator className="my-8 md:my-12 bg-border/50" />
-                        <div className="p-4 md:p-0">
-                           <CommentForm onSubmit={handleAddComment} character={playerCharacter} t={t} />
-                        </div>
-                    </>
+                    <div className="p-4 md:p-0 sticky bottom-4">
+                       <CommentForm onSubmit={handleAddComment} character={playerCharacter} t={t} />
+                    </div>
                 )}
             </div>
 
@@ -252,3 +251,5 @@ export default function PlayerViewPage() {
         </div>
     );
 }
+
+    
