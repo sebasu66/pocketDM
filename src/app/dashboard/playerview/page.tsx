@@ -207,7 +207,7 @@ export default function PlayerViewPage() {
                 <Separator className="my-8 md:my-12 bg-border/50" />
 
                 <div className="p-4 md:p-0">
-                     <div className="bg-background/50 p-4 md:p-8 rounded-lg">
+                    <div>
                         <ThreadComments comments={activeThread.comments} t={t} />
                     </div>
                 </div>
