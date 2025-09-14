@@ -68,11 +68,14 @@ export default function PlayerViewPage() {
                           return { ...thread, comments: enrichedComments };
                         })
                     );
-
+                    
+                    const isNewThread = enrichedThreads.length > narrativeThreads.length;
                     setNarrativeThreads(enrichedThreads);
-                    // Start at the latest thread, unless it's the very first load
-                    if(activeThreadIndex === 0 && narrativeThreads.length === 0){
-                       setActiveThreadIndex(enrichedThreads.length - 1);
+
+                    if (isNewThread) {
+                      setActiveThreadIndex(enrichedThreads.length - 1);
+                    } else if (activeThreadIndex === 0 && narrativeThreads.length === 0) {
+                      setActiveThreadIndex(enrichedThreads.length - 1);
                     }
                 }
             } catch (error) {
@@ -229,14 +232,18 @@ export default function PlayerViewPage() {
                         tooltip={t('designTestPreviousPost')}
                         onClick={handlePrev}
                         className="text-white/90 hover:text-white"
-                    />
+                    >
+                      <ArrowLeft/>
+                    </RusticIconButton>
                 )}
                 {canGoNext && (
                     <RusticIconButton
                         tooltip={t('designTestNextPost')}
                         onClick={handleNext}
                         className="text-white/90 hover:text-white"
-                    />
+                    >
+                      <ArrowRight/>
+                    </RusticIconButton>
                 )}
                 
                 {(canGoPrev || canGoNext) && <Separator orientation="vertical" className="h-6 bg-white/20" />}
@@ -286,3 +293,5 @@ export default function PlayerViewPage() {
         </div>
     );
 }
+
+    
