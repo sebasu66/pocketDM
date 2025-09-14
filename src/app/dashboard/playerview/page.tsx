@@ -104,14 +104,14 @@ export default function PlayerViewPage() {
             
             <div className="flex-1 md:p-8 z-10">
                  
-                <div className="md:hidden text-center h-24 flex items-center justify-center bg-leather-column drop-shadow-2xl">
+                <div className="md:hidden text-center h-20 flex items-center justify-center bg-leather-column drop-shadow-2xl">
                     <h2 className="font-body text-2xl text-foreground/80 uppercase tracking-widest">
                         {campaign?.title}
                     </h2>
                 </div>
                 
                 <div className="p-4 md:p-0">
-                    <h1 className="text-4xl md:text-7xl font-headline uppercase tracking-widest text-center mb-12 md:mb-16">
+                    <h1 className="text-4xl md:text-7xl font-headline uppercase tracking-widest text-center mb-8 md:mb-12">
                         {activeThread.title}
                     </h1>
 
