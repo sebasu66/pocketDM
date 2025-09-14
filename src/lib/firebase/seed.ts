@@ -51,24 +51,13 @@ const initialSpanishThread: (Omit<NarrativeThread, 'id'> & { id: string }) = {
     id: "hilo-1",
     campaignId: "2",
     authorId: "1", // Game Master
-    title: "La Encrucijada del Ermitaño",
+    title: "El Llamado en la Tormenta",
     createdAt: new Date('2024-07-28T10:00:00Z').getTime(),
     imageUrl: "",
     imageAiHint: "",
     audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
     content: `
-        <p>
-            El camino a través del Bosque Tenebroso se bifurca ante vosotros. A la izquierda, un sendero cubierto de musgo serpentea hacia la oscuridad, prometiendo un atajo a través del corazón del bosque. A la derecha, el camino principal, más ancho y seguro, continúa hacia el siguiente pueblo.
-        </p>
-        <p>
-            Sentado en una roca en la encrucijada, un anciano encapuchado llamado <b>Silas</b> os observa con ojos que parecen contener la sabiduría de siglos. Sujeta un bastón retorcido, el <a href="/dashboard/items/baston-susurrante" class="text-accent hover:underline">Bastón Susurrante</a>, que parece vibrar con una energía apenas contenida.
-        </p>
-        <p>
-            "El camino rápido está plagado de peligros que ponen a prueba el alma", susurra, su voz como el crujir de hojas secas. "El camino largo es seguro, pero lento. Vuestro destino os espera, pero el sendero que elijáis definirá vuestro viaje."
-        </p>
-        <p>
-            ¿Qué hacéis?
-        </p>
+       <p>En el gélido mundo de Rassilon, el invierno eterno ha apretado su garra sobre la tierra. Hace quinientos años, la Guerra de la Ventisca aniquiló imperios, y los dioses, debilitados, apenas sostienen el equilibrio del cosmos. La nieve cubre los antiguos reinos, y bestias monstruosas acechan en la penumbra de los bosques helados. En este mundo de desesperanza, los héroes son faros de luz, enfrentándose a la oscuridad que amenaza con consumir lo poco que queda de la civilización. La Orden de la Llama Plateada lucha por preservar la justicia, mientras los antiguos linajes mágicos, como los descendientes de los dragones, despiertan poderes olvidados para desafiar al destino. Sin embargo, el hielo no es el único enemigo: intrigas políticas, cultos oscuros y profecías antiguas conspiran para sumir a Rassilon en un caos aún mayor.</p><p>La ventisca aúlla como un lobo hambriento mientras Sir Kaelan y Seraphina avanzan por el desfiladero de Hraefn’s Pass, un sendero traicionero en las Montañas del Hueso Gris. Han sido convocados urgentemente al asentamiento de Frosthaven, un pequeño bastión humano al borde del territorio salvaje. El mensaje, garabateado con mano temblorosa, hablaba de una reliquia sagrada, el Cáliz de la Llama Eterna, que ha sido robada de su santuario. Sin ella, la protección divina de Frosthaven se desvanece, y los rumores susurran que los orcos de las tierras heladas planean un asalto inminente.</p><p>El viento les golpea con furia, y la nieve dificulta ver más allá de unos pasos. De repente, un grito desgarrador corta la tormenta, procedente de un risco cercano. A través de la ventisca, logran distinguir una figura tambaleante: un joven explorador, herido, con sangre congelada en su capa. Balbucea algo sobre un "monstruo de escarcha" que acecha en las cuevas cercanas, donde los ladrones del Cáliz podrían haberse refugiado. Sin embargo, el tiempo apremia: Frosthaven está a solo unas horas, y cada minuto que pasa aumenta el riesgo de que el asentamiento caiga ante los orcos.</p>
     `
 };
 
