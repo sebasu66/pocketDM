@@ -258,25 +258,7 @@ async function seedDatabase() {
 
 
     // 5. Narrative Comments
-    const narrativeComments: (Omit<NarrativeComment, 'id'> & { id: string })[] = [
-        {
-            id: "comment-1",
-            threadId: "thread-1",
-            authorId: "2", // Alice's user ID
-            characterId: "char-1", // Grom's ID
-            createdAt: new Date('2024-07-29T11:00:00Z').getTime(),
-            text: "Grom steps forward, his hand resting on the pommel of his axe. 'We seek refuge and supplies, Captain. And perhaps a worthy tale or two.'",
-            hiddenText: "I'm keeping an eye on the captain. She seems too calm."
-        },
-        {
-            id: "comment-2",
-            threadId: "thread-1",
-            authorId: "3", // Bob's user ID
-            characterId: "char-2", // Lyra's ID
-            createdAt: new Date('2024-07-29T11:05:00Z').getTime(),
-            text: "Lyra scans the guards, her eyes trying to gauge their intentions. She subtly readies a minor illusion spell, just in case."
-        }
-    ];
+    const narrativeComments: (Omit<NarrativeComment, 'id'> & { id: string })[] = [];
 
     narrativeComments.forEach(comment => {
         const { id, ...commentData } = comment;
@@ -303,4 +285,3 @@ export async function runSeed() {
     seeded = true;
     await seedDatabase();
 }
-
