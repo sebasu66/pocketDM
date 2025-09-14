@@ -27,7 +27,11 @@ export default function LoginPage() {
     const user = await getUserByEmail(email);
     if (user && checkPassword(user, password)) {
       await login(user.id);
-      router.push("/dashboard");
+      if (user.role === 'player') {
+        router.push("/dashboard/playerview");
+      } else {
+        router.push("/dashboard");
+      }
     } else {
       toast({
         variant: "destructive",

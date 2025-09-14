@@ -9,6 +9,7 @@ import { Logo } from "@/components/logo";
 import { Crown, User } from "lucide-react";
 import { useAuth } from "@/context/auth-context";
 import { useI18n } from "@/context/i18n-context";
+import { getUserById } from "@/lib/auth";
 
 export default function HomePage() {
   const { login } = useAuth();
@@ -16,8 +17,13 @@ export default function HomePage() {
   const { t, locale } = useI18n();
 
   const handleQuickLogin = async (userId: string) => {
+    const user = await getUserById(userId);
     await login(userId);
-    router.push("/dashboard");
+    if (user?.role === 'player') {
+      router.push("/dashboard/playerview");
+    } else {
+      router.push("/dashboard");
+    }
   };
 
   return (
