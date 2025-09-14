@@ -1,12 +1,12 @@
 
 "use client";
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { db } from '@/lib/firebase/config';
 import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
-import type { NarrativeThread, EnrichedThread, EnrichedComment, Character } from '@/lib/firebase/types';
-import { getCommentsByThreadId } from '@/lib/firebase/comments';
+import type { NarrativeThread, EnrichedThread, Character } from '@/lib/firebase/types';
+import { getCommentsByThreadId, addNarrativeComment } from '@/lib/firebase/comments';
 import { getCharactersByCampaign } from '@/lib/firebase/characters';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ArrowLeft, ArrowRight, Menu } from 'lucide-react';
@@ -18,15 +18,19 @@ import { Separator } from '@/components/ui/separator';
 import Image from 'next/image';
 import { ThreadComments } from './ThreadComments';
 import { getUserById } from '@/lib/auth';
+import { CommentForm } from './CommentForm';
+import { useToast } from '@/hooks/use-toast';
 
 export default function PlayerViewPage() {
-    const { campaign, isLoading: isAuthLoading } = useAuth();
+    const { user, campaign, isLoading: isAuthLoading } = useAuth();
     const { t } = useI18n();
+    const { toast } = useToast();
     const [isLoading, setIsLoading] = useState(true);
     const [narrativeThreads, setNarrativeThreads] = useState<EnrichedThread[]>([]);
     const [activeThreadIndex, setActiveThreadIndex] = useState(0);
     const [isSheetOpen, setIsSheetOpen] = React.useState(false);
-
+    const [playerCharacter, setPlayerCharacter] = useState<Character | null>(null);
+    const [activePlayers, setActivePlayers] = useState<Character[]>([]);
 
     useEffect(() => {
         if (!campaign) return;
@@ -34,43 +38,67 @@ export default function PlayerViewPage() {
         const narrativeQuery = query(
             collection(db, "narrativeThreads"),
             where("campaignId", "==", campaign.id),
-            orderBy("createdAt", "asc") // Order chronologically
+            orderBy("createdAt", "asc")
         );
-
+        
         const unsubscribe = onSnapshot(narrativeQuery, async (snapshot) => {
-            if (!snapshot.empty) {
-                const threadsFromDb = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
-                
-                const allCharacters = await getCharactersByCampaign(campaign.id);
-                
-                const enrichedThreads = await Promise.all(
-                    threadsFromDb.map(async (thread) => {
-                      const threadComments = await getCommentsByThreadId(thread.id);
-                      const enrichedComments = await Promise.all(threadComments.map(async (comment) => {
-                          const character = allCharacters.find(c => c.id === comment.characterId);
-                          const author = await getUserById(comment.authorId);
-                          return { ...comment, character: character || null, author: author! };
-                      }));
-                      return { ...thread, comments: enrichedComments };
-                    })
-                );
+            setIsLoading(true);
+            try {
+                if (!snapshot.empty) {
+                    const threadsFromDb = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
+                    
+                    const allCharacters = await getCharactersByCampaign(campaign.id);
+                    setActivePlayers(allCharacters.filter(c => c.isActive));
 
-                setNarrativeThreads(enrichedThreads);
-                setActiveThreadIndex(threadsFromDb.length - 1); // Start at the latest thread
+                    if (user) {
+                        const userCharacter = allCharacters.find(c => c.userId === user.id);
+                        setPlayerCharacter(userCharacter || null);
+                    }
+
+                    const enrichedThreads = await Promise.all(
+                        threadsFromDb.map(async (thread) => {
+                          const threadComments = await getCommentsByThreadId(thread.id);
+                          const enrichedComments = await Promise.all(threadComments.map(async (comment) => {
+                              const character = allCharacters.find(c => c.id === comment.characterId);
+                              const author = await getUserById(comment.authorId);
+                              return { ...comment, character: character || null, author: author! };
+                          }));
+                          return { ...thread, comments: enrichedComments };
+                        })
+                    );
+
+                    setNarrativeThreads(enrichedThreads);
+                    // Start at the latest thread, unless it's the very first load
+                    if(activeThreadIndex === 0 && narrativeThreads.length === 0){
+                       setActiveThreadIndex(enrichedThreads.length - 1);
+                    }
+                }
+            } catch (error) {
+                 console.error("Failed to process narrative threads:", error);
             }
-            setIsLoading(false);
+            finally {
+                setIsLoading(false);
+            }
         }, (error) => {
             console.error("Failed to fetch narrative threads:", error);
             setIsLoading(false);
         });
 
         return () => unsubscribe();
-    }, [campaign]);
+    }, [campaign, user, activeThreadIndex, narrativeThreads.length]);
 
     const activeThread = useMemo(() => {
         return narrativeThreads.length > 0 ? narrativeThreads[activeThreadIndex] : null;
     }, [narrativeThreads, activeThreadIndex]);
     
+    const lastThread = useMemo(() => narrativeThreads.length > 0 ? narrativeThreads[narrativeThreads.length - 1] : null, [narrativeThreads]);
+    
+    const playersWhoHaveCommented = useMemo(() => new Set(lastThread?.comments.map(c => c.authorId) || []), [lastThread]);
+    
+    const hasPlayerResponded = user ? playersWhoHaveCommented.has(user.id) : false;
+
+    const canPlayerRespond = lastThread && playerCharacter?.isActive && !hasPlayerResponded;
+
     const handlePrev = () => {
         setActiveThreadIndex(prev => Math.max(0, prev - 1));
     };
@@ -78,6 +106,27 @@ export default function PlayerViewPage() {
     const handleNext = () => {
         setActiveThreadIndex(prev => Math.min(narrativeThreads.length - 1, prev + 1));
     };
+    
+    const handleAddComment = async (text: string, hiddenText: string) => {
+        if (!user || !playerCharacter || !lastThread) return;
+        
+        const commentData = {
+            threadId: lastThread.id,
+            authorId: user.id,
+            characterId: playerCharacter.id,
+            text,
+            hiddenText,
+            createdAt: Date.now(),
+        };
+
+        try {
+          await addNarrativeComment(commentData);
+          toast({ title: t('narrativeResponsePosted'), description: t('narrativeResponsePostedDesc')});
+        } catch (error) {
+          toast({ variant: "destructive", title: "Error", description: t('narrativeErrorPost')});
+        }
+    };
+
 
     if (isAuthLoading || isLoading) {
         return (
@@ -125,7 +174,7 @@ export default function PlayerViewPage() {
             
             <div className="flex-1 md:p-8 z-10">
                  
-                <div className="md:hidden text-center mb-8 h-20 flex items-center justify-center bg-leather-column drop-shadow-2xl">
+                <div className="md:hidden text-center h-20 flex items-center justify-center bg-leather-column drop-shadow-2xl mb-8">
                     <h2 className="font-body text-2xl text-foreground/80 uppercase tracking-widest">
                         {campaign?.title}
                     </h2>
@@ -160,6 +209,15 @@ export default function PlayerViewPage() {
                 <div className="p-4 md:p-0">
                     <ThreadComments comments={activeThread.comments} t={t} />
                 </div>
+                
+                {activeThreadIndex === narrativeThreads.length - 1 && canPlayerRespond && (
+                    <>
+                        <Separator className="my-8 md:my-12 bg-border/50" />
+                        <div className="p-4 md:p-0">
+                           <CommentForm onSubmit={handleAddComment} character={playerCharacter} t={t} />
+                        </div>
+                    </>
+                )}
             </div>
 
             <div className="fixed bottom-6 right-6 z-30 flex h-14 items-center gap-2 rounded-full bg-black/20 p-2 backdrop-blur-sm">
@@ -194,5 +252,3 @@ export default function PlayerViewPage() {
         </div>
     );
 }
-
-    
