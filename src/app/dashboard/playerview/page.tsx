@@ -224,20 +224,22 @@ export default function PlayerViewPage() {
             </div>
 
             <div className="fixed bottom-6 right-6 z-30 flex h-14 items-center gap-2 rounded-full bg-black/20 p-2 backdrop-blur-sm">
-                <RusticIconButton
-                    tooltip={t('designTestPreviousPost')}
-                    onClick={handlePrev}
-                    disabled={!canGoPrev}
-                    className="text-white/90 hover:text-white"
-                />
-                <RusticIconButton
-                    tooltip={t('designTestNextPost')}
-                    onClick={handleNext}
-                    disabled={!canGoNext}
-                    className="text-white/90 hover:text-white"
-                />
+                {canGoPrev && (
+                    <RusticIconButton
+                        tooltip={t('designTestPreviousPost')}
+                        onClick={handlePrev}
+                        className="text-white/90 hover:text-white"
+                    />
+                )}
+                {canGoNext && (
+                    <RusticIconButton
+                        tooltip={t('designTestNextPost')}
+                        onClick={handleNext}
+                        className="text-white/90 hover:text-white"
+                    />
+                )}
                 
-                <Separator orientation="vertical" className="h-6 bg-white/20" />
+                {(canGoPrev || canGoNext) && <Separator orientation="vertical" className="h-6 bg-white/20" />}
 
                  <RusticIconButton
                     tooltip={t('charactersViewEditSheet')}
@@ -284,5 +286,3 @@ export default function PlayerViewPage() {
         </div>
     );
 }
-
-    
