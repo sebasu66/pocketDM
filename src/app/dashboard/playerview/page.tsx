@@ -14,6 +14,7 @@ import { useI18n } from '@/context/i18n-context';
 import React from 'react';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Separator } from '@/components/ui/separator';
+import { Banner } from './Banner';
 
 export default function PlayerViewPage() {
     const { campaign, isLoading: isAuthLoading } = useAuth();
@@ -95,24 +96,12 @@ export default function PlayerViewPage() {
             className="min-h-[calc(100vh-10rem)] w-full mx-auto max-w-7xl flex bg-stone-gradient"
         >
             <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
-            {/* Vertical Banner on Wide Screens */}
-            {campaign && (
-                <div className="hidden md:flex items-center justify-center p-4 z-10">
-                    <h2 className="font-headline text-2xl text-foreground/80 [writing-mode:vertical-rl] rotate-180 uppercase tracking-widest">
-                        {campaign.title}
-                    </h2>
-                </div>
-            )}
+            
+            {campaign && <Banner title={campaign.title} orientation="vertical" />}
             
             <div className="flex-1 p-4 md:p-8 z-10">
-                 {/* Horizontal Banner on Mobile */}
-                {campaign && (
-                    <div className="md:hidden text-center mb-8">
-                        <h2 className="font-headline text-2xl text-foreground/80 uppercase tracking-widest">
-                            {campaign.title}
-                        </h2>
-                    </div>
-                )}
+                 
+                {campaign && <Banner title={campaign.title} orientation="horizontal" />}
                 
                 <h1 className="text-4xl md:text-6xl font-headline uppercase tracking-widest text-center mb-8 md:mb-12">
                     {activeThread.title}
