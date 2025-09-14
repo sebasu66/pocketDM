@@ -104,33 +104,35 @@ export default function PlayerViewPage() {
                 </div>
             )}
             
-            <div className="flex-1 p-4 md:p-8 z-10">
+            <div className="flex-1 p-0 md:p-8 z-10">
                  
                 {campaign && (
-                    <div className="md:hidden text-center mb-8 h-24 flex items-center justify-center bg-leather-column drop-shadow-2xl">
+                    <div className="md:hidden text-center h-24 flex items-center justify-center bg-leather-column drop-shadow-2xl mb-8">
                         <h2 className="font-headline text-2xl text-foreground/80 uppercase tracking-widest">
                             {campaign.title}
                         </h2>
                     </div>
                 )}
                 
-                <h1 className="text-4xl md:text-6xl font-headline uppercase tracking-widest text-center mb-8 md:mb-12">
-                    {activeThread.title}
-                </h1>
+                <div className="p-4 md:p-0">
+                    <h1 className="text-4xl md:text-6xl font-headline uppercase tracking-widest text-center mb-8 md:mb-12">
+                        {activeThread.title}
+                    </h1>
 
-                <div>
-                    <div 
-                        className="relative aspect-[4/3] w-full md:w-1/2 md:float-right md:ml-8 md:mb-4 image-mask-squared"
-                        style={{
-                            backgroundImage: `url(${activeThread.imageUrl || '/locations/default_location.jpg'})`
-                        }}
-                        data-ai-hint={activeThread.imageAiHint || "fantasy scene"}
-                    >
+                    <div>
+                        <div 
+                            className="relative aspect-[4/3] w-full md:w-1/2 md:float-right md:ml-8 md:mb-4 image-mask-squared"
+                            style={{
+                                backgroundImage: `url(${activeThread.imageUrl || '/locations/default_location.jpg'})`
+                            }}
+                            data-ai-hint={activeThread.imageAiHint || "fantasy scene"}
+                        >
+                        </div>
+                        <div 
+                            className="prose prose-xl prose-invert max-w-none text-foreground/90 leading-relaxed mt-8 md:mt-0" 
+                            dangerouslySetInnerHTML={{ __html: activeThread.content }}
+                        />
                     </div>
-                    <div 
-                        className="prose prose-xl prose-invert max-w-none text-foreground/90 leading-relaxed mt-8 md:mt-0" 
-                        dangerouslySetInnerHTML={{ __html: activeThread.content }}
-                    />
                 </div>
             </div>
 
