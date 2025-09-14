@@ -51,17 +51,20 @@ const initialSpanishThread: (Omit<NarrativeThread, 'id'> & { id: string }) = {
     id: "hilo-1",
     campaignId: "2",
     authorId: "1", // Game Master
-    title: "El Ocaso en el Priorato",
+    title: "El Susurro del Viento Glacial",
     createdAt: new Date('2024-07-28T10:00:00Z').getTime(),
-    imageUrl: "https://picsum.photos/800/400?random=65",
-    imageAiHint: "fantasy monastery sunset",
-    audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+    imageUrl: "https://picsum.photos/seed/hellfrost/800/400",
+    imageAiHint: "frozen wasteland ruins",
+    audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
     content: `
         <p>
-            El sol poniente teñía de naranja y púrpura las antiguas piedras del Priorato del Ocaso. Una quietud antinatural se había apoderado del lugar, un silencio que pesaba más que la ausencia de sonido.
+            Un viento gélido, cargado con el lamento de espíritus olvidados, azota los páramos congelados. La nieve, tan fina como el polvo de huesos, se arremolina y descubre los contornos de unas ruinas antiguas, un esqueleto de piedra negra contra el lienzo gris del cielo. Este es el Monasterio Olvidado de la Aguja Sombría, un lugar del que solo se habla en susurros.
         </p>
         <p>
-            En el centro del patio, una fuente que una vez manaba agua pura ahora borboteaba un lodo negruzco y corrupto. Un miasma vil flotaba en el aire. La puerta principal del santuario estaba entreabierta, invitando a la oscuridad interior.
+            El frío no es natural; se aferra a vosotros, denso y pesado, buscando robar el calor de vuestros corazones. El silencio es casi absoluto, roto solo por el crujido de la escarcha bajo vuestras botas y el latido ahogado de vuestros propios corazones. En el centro del patio en ruinas, una estatua de un guerrero sin nombre permanece cubierta de hielo, su mano extendida apuntando hacia una puerta de cripta, entreabierta y rezumando una oscuridad más fría que la propia ventisca.
+        </p>
+        <p>
+            Algo antiguo y malévolo duerme aquí. Y vuestra presencia lo está despertando.
         </p>
     `
 };
