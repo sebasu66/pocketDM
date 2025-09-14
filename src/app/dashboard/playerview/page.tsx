@@ -213,7 +213,7 @@ export default function PlayerViewPage() {
                 </div>
                 
                 {activeThreadIndex === narrativeThreads.length - 1 && canPlayerRespond && (
-                    <div className="p-4 md:p-0 sticky bottom-4">
+                    <div className="p-4 md:p-0">
                        <CommentForm onSubmit={handleAddComment} character={playerCharacter} t={t} />
                     </div>
                 )}
@@ -251,5 +251,3 @@ export default function PlayerViewPage() {
         </div>
     );
 }
-
-    
