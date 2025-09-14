@@ -53,8 +53,6 @@ const initialSpanishThread: (Omit<NarrativeThread, 'id'> & { id: string }) = {
     authorId: "1", // Game Master
     title: "El Susurro del Viento Glacial",
     createdAt: new Date('2024-07-28T10:00:00Z').getTime(),
-    imageUrl: "https://picsum.photos/seed/hellfrost/800/400",
-    imageAiHint: "frozen wasteland ruins",
     audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
     content: `
         <p>
