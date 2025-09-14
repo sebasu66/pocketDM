@@ -88,6 +88,8 @@ export default function PlayerViewPage() {
 
     const canGoNext = activeThreadIndex < narrativeThreads.length - 1;
     const canGoPrev = activeThreadIndex > 0;
+    
+    const imageUrl = activeThread.imageUrl || '/locations/default_location.jpg';
 
     return (
         <div 
@@ -118,7 +120,7 @@ export default function PlayerViewPage() {
                         <div 
                             className="relative aspect-[4/3] w-full md:w-1/2 md:float-right md:ml-8 md:mb-4 image-mask-squared"
                             style={{
-                                backgroundImage: `url(${activeThread.imageUrl || '/locations/default_location.jpg'})`
+                                backgroundImage: `url(${imageUrl})`
                             }}
                             data-ai-hint={activeThread.imageAiHint || "fantasy scene"}
                         >
