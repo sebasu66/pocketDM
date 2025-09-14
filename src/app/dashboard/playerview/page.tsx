@@ -162,7 +162,7 @@ export default function PlayerViewPage() {
 
     return (
         <div 
-            className="min-h-[calc(100vh-10rem)] w-full mx-auto max-w-7xl flex bg-stone-gradient"
+            className="min-h-[calc(100vh-10rem)] w-full mx-auto max-w-7xl flex"
         >
             <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
             
@@ -251,3 +251,5 @@ export default function PlayerViewPage() {
         </div>
     );
 }
+
+    
