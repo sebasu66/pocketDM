@@ -9,7 +9,7 @@ import type { NarrativeThread, EnrichedThread, Character } from '@/lib/firebase/
 import { getCommentsByThreadId, addNarrativeComment } from '@/lib/firebase/comments';
 import { getCharactersByCampaign } from '@/lib/firebase/characters';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ArrowLeft, ArrowRight, Menu } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Menu, User as UserIcon, X } from 'lucide-react';
 import { RusticIconButton } from '@/components/ui/rustic-icon-button';
 import { useI18n } from '@/context/i18n-context';
 import React from 'react';
@@ -20,6 +20,7 @@ import { ThreadComments } from './ThreadComments';
 import { getUserById } from '@/lib/auth';
 import { CommentForm } from './CommentForm';
 import { useToast } from '@/hooks/use-toast';
+import { CharacterSheet } from './CharacterSheet';
 
 export default function PlayerViewPage() {
     const { user, campaign, isLoading: isAuthLoading } = useAuth();
@@ -28,7 +29,8 @@ export default function PlayerViewPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [narrativeThreads, setNarrativeThreads] = useState<EnrichedThread[]>([]);
     const [activeThreadIndex, setActiveThreadIndex] = useState(0);
-    const [isSheetOpen, setIsSheetOpen] = React.useState(false);
+    const [isMenuSheetOpen, setIsMenuSheetOpen] = React.useState(false);
+    const [isCharacterSheetOpen, setIsCharacterSheetOpen] = React.useState(false);
     const [playerCharacter, setPlayerCharacter] = useState<Character | null>(null);
     const [activePlayers, setActivePlayers] = useState<Character[]>([]);
 
@@ -207,14 +209,16 @@ export default function PlayerViewPage() {
                 <Separator className="my-8 md:my-12 bg-border/50" />
 
                 <div className="p-4 md:p-0">
-                    <div>
+                    <div className="bg-background/50 p-4 md:p-8 rounded-lg">
                         <ThreadComments comments={activeThread.comments} t={t} />
                     </div>
                 </div>
                 
                 {activeThreadIndex === narrativeThreads.length - 1 && canPlayerRespond && (
-                    <div className="p-4 md:p-0">
-                       <CommentForm onSubmit={handleAddComment} character={playerCharacter} t={t} />
+                    <div className="p-4 md:p-0 mt-8">
+                        <div className='bg-card/50 backdrop-blur-lg rounded-lg'>
+                           <CommentForm onSubmit={handleAddComment} character={playerCharacter} t={t} />
+                        </div>
                     </div>
                 )}
             </div>
@@ -235,17 +239,46 @@ export default function PlayerViewPage() {
                 
                 <Separator orientation="vertical" className="h-6 bg-white/20" />
 
+                 <RusticIconButton
+                    tooltip={t('charactersViewEditSheet')}
+                    onClick={() => setIsCharacterSheetOpen(true)}
+                    className="text-white/90 hover:text-white"
+                    disabled={!playerCharacter}
+                >
+                    <UserIcon />
+                </RusticIconButton>
+
                 <RusticIconButton
                     tooltip="Toggle Menu"
-                    onClick={() => setIsSheetOpen(true)}
+                    onClick={() => setIsMenuSheetOpen(true)}
                     className="text-white/90 hover:text-white"
                 >
                     <Menu />
                 </RusticIconButton>
             </div>
-             <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+
+             <Sheet open={isMenuSheetOpen} onOpenChange={setIsMenuSheetOpen}>
                  <SheetContent side="right" className="p-0 w-80 bg-sidebar-gradient border-l-0 text-sidebar-foreground">
                     {/* Placeholder for sidebar content */}
+                 </SheetContent>
+            </Sheet>
+
+            <Sheet open={isCharacterSheetOpen} onOpenChange={setIsCharacterSheetOpen}>
+                 <SheetContent side="right" className="p-0 w-full md:w-1/3 lg:w-1/4 bg-sidebar-gradient border-l-0 text-sidebar-foreground">
+                    {playerCharacter && (
+                        <div className="relative h-full">
+                            <CharacterSheet character={playerCharacter} t={t} />
+                            <div className="absolute bottom-6 right-6">
+                                 <RusticIconButton
+                                    tooltip={t('charactersCancel')}
+                                    onClick={() => setIsCharacterSheetOpen(false)}
+                                    className="text-white/90 hover:text-white"
+                                >
+                                    <X />
+                                </RusticIconButton>
+                            </div>
+                        </div>
+                    )}
                  </SheetContent>
             </Sheet>
         </div>
