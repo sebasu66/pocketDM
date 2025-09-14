@@ -5,7 +5,9 @@ import { useEffect, useState, useMemo } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { db } from '@/lib/firebase/config';
 import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
-import type { NarrativeThread } from '@/lib/firebase/types';
+import type { NarrativeThread, EnrichedThread, EnrichedComment, Character } from '@/lib/firebase/types';
+import { getCommentsByThreadId } from '@/lib/firebase/comments';
+import { getCharactersByCampaign } from '@/lib/firebase/characters';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ArrowLeft, ArrowRight, Menu } from 'lucide-react';
 import { RusticIconButton } from '@/components/ui/rustic-icon-button';
@@ -14,12 +16,14 @@ import React from 'react';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Separator } from '@/components/ui/separator';
 import Image from 'next/image';
+import { ThreadComments } from './ThreadComments';
+import { getUserById } from '@/lib/auth';
 
 export default function PlayerViewPage() {
     const { campaign, isLoading: isAuthLoading } = useAuth();
     const { t } = useI18n();
     const [isLoading, setIsLoading] = useState(true);
-    const [narrativeThreads, setNarrativeThreads] = useState<NarrativeThread[]>([]);
+    const [narrativeThreads, setNarrativeThreads] = useState<EnrichedThread[]>([]);
     const [activeThreadIndex, setActiveThreadIndex] = useState(0);
     const [isSheetOpen, setIsSheetOpen] = React.useState(false);
 
@@ -33,11 +37,26 @@ export default function PlayerViewPage() {
             orderBy("createdAt", "asc") // Order chronologically
         );
 
-        const unsubscribe = onSnapshot(narrativeQuery, (snapshot) => {
+        const unsubscribe = onSnapshot(narrativeQuery, async (snapshot) => {
             if (!snapshot.empty) {
-                const threads = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
-                setNarrativeThreads(threads);
-                setActiveThreadIndex(threads.length - 1); // Start at the latest thread
+                const threadsFromDb = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
+                
+                const allCharacters = await getCharactersByCampaign(campaign.id);
+                
+                const enrichedThreads = await Promise.all(
+                    threadsFromDb.map(async (thread) => {
+                      const threadComments = await getCommentsByThreadId(thread.id);
+                      const enrichedComments = await Promise.all(threadComments.map(async (comment) => {
+                          const character = allCharacters.find(c => c.id === comment.characterId);
+                          const author = await getUserById(comment.authorId);
+                          return { ...comment, character: character || null, author: author! };
+                      }));
+                      return { ...thread, comments: enrichedComments };
+                    })
+                );
+
+                setNarrativeThreads(enrichedThreads);
+                setActiveThreadIndex(threadsFromDb.length - 1); // Start at the latest thread
             }
             setIsLoading(false);
         }, (error) => {
@@ -134,6 +153,12 @@ export default function PlayerViewPage() {
                             dangerouslySetInnerHTML={{ __html: activeThread.content }}
                         />
                     </div>
+                </div>
+
+                <Separator className="my-8 md:my-12 bg-border/50" />
+
+                <div className="p-4 md:p-0">
+                    <ThreadComments comments={activeThread.comments} t={t} />
                 </div>
             </div>
 
