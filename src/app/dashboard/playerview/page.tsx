@@ -109,7 +109,7 @@ export default function PlayerViewPage() {
     const canGoNext = activeThreadIndex < narrativeThreads.length - 1;
     const canGoPrev = activeThreadIndex > 0;
     
-    const imageUrl = activeThread.imageUrl || 'https://picsum.photos/seed/default/800/600';
+    const imageUrl = activeThread.imageUrl || '/locations/default_location.jpg';
 
     return (
         <div 
@@ -125,7 +125,7 @@ export default function PlayerViewPage() {
             
             <div className="flex-1 md:p-8 z-10">
                  
-                <div className="md:hidden text-center h-20 flex items-center justify-center bg-leather-column drop-shadow-2xl mb-8">
+                <div className="md:hidden text-center mb-8 h-20 flex items-center justify-center bg-leather-column drop-shadow-2xl">
                     <h2 className="font-body text-2xl text-foreground/80 uppercase tracking-widest">
                         {campaign?.title}
                     </h2>
@@ -194,3 +194,5 @@ export default function PlayerViewPage() {
         </div>
     );
 }
+
+    
