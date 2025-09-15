@@ -13,7 +13,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ['Cormorant Garamond', 'serif'],
+        body: ['IM Fell English', 'serif'],
         headline: ['Uncial Antiqua', 'cursive'],
         medieval: ['MedievalSharp', 'cursive'],
         code: ['Recursive', 'monospace'],
