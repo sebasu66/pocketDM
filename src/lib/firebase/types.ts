@@ -3,6 +3,7 @@
 
 
 
+
 export interface User {
     id: string;
     name: string;
@@ -31,6 +32,7 @@ export interface Character {
     name: string;
     description: string;
     portrait: string;
+    face?: string;
     aiHint: string;
     campaignId: string;
     userId: string;

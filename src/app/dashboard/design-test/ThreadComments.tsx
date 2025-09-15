@@ -62,6 +62,7 @@ export function ThreadComments({
                                 <FlippingAvatar
                                     playerImage={comment.author.avatar}
                                     characterImage={comment.character?.portrait || 'https://picsum.photos/100/100?random=1'}
+                                    characterFaceImage={comment.character?.face}
                                     playerHint="person face"
                                     characterHint="fantasy portrait"
                                     className="w-12 h-12 flex-shrink-0 border-2 border-primary/20"

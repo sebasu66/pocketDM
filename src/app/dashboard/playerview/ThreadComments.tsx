@@ -26,6 +26,7 @@ export function ThreadComments({ comments, t }: ThreadCommentsProps) {
                     <FlippingAvatar
                         playerImage={comment.author?.avatar || 'https://picsum.photos/100/100?random=1'}
                         characterImage={comment.character?.portrait || 'https://picsum.photos/100/100?random=1'}
+                        characterFaceImage={comment.character?.face}
                         playerHint="person face"
                         characterHint={comment.character?.aiHint || "fantasy portrait"}
                         className="w-12 h-12 md:w-16 md:h-16 flex-shrink-0"

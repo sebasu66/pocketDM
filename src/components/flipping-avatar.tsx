@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 interface FlippingAvatarProps {
   playerImage: string;
   characterImage: string;
+  characterFaceImage?: string;
   playerHint: string;
   characterHint: string;
   className?: string;
@@ -16,6 +17,7 @@ interface FlippingAvatarProps {
 export function FlippingAvatar({
   playerImage,
   characterImage,
+  characterFaceImage,
   playerHint,
   characterHint,
   className,
@@ -31,7 +33,7 @@ export function FlippingAvatar({
   }, []);
 
   return (
-    <div className={cn("w-12 h-12 perspective-1000", className)}>
+    <div className={cn("w-18 h-18 perspective-1000", className)}>
       <div
         className={cn(
           "relative w-full h-full transform-style-3d transition-transform duration-1000",
@@ -43,8 +45,8 @@ export function FlippingAvatar({
           <Image
             src={playerImage}
             alt="Player"
-            width={48}
-            height={48}
+            width={72}
+            height={72}
             className="w-full h-full object-cover"
             data-ai-hint={playerHint}
           />
@@ -52,10 +54,10 @@ export function FlippingAvatar({
         {/* Character Face */}
         <div className="absolute w-full h-full backface-hidden rotate-y-180 rounded-full overflow-hidden border-2 border-accent/50">
           <Image
-            src={characterImage}
+            src={characterFaceImage || characterImage}
             alt="Character"
-            width={48}
-            height={48}
+            width={72}
+            height={72}
             className="w-full h-full object-cover"
             data-ai-hint={characterHint}
           />
