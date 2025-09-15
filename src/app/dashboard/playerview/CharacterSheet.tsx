@@ -1,11 +1,11 @@
 
 "use client";
 
-import Image from "next/image";
 import { Sparkles } from "lucide-react";
 import type { Character } from "@/lib/firebase/types";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 
 interface CharacterSheetProps {
     character: Character;
@@ -18,12 +18,12 @@ export function CharacterSheet({ character, t }: CharacterSheetProps) {
         <ScrollArea className="h-full w-full">
             <div className="p-6 space-y-6 text-white">
                 <div className="relative aspect-[2/3] w-full rounded-lg overflow-hidden border-2 border-primary/30">
-                    <Image
-                        src={character.portrait}
+                    <ImageWithFallback
+                        baseSrc={`/characters/VisualPreset/${character.visualPreset}/portrait`}
                         alt={character.name}
                         fill
                         className="object-cover"
-                        data-ai-hint={character.aiHint}
+                        data-ai-hint="fantasy portrait"
                     />
                 </div>
                 <div>
@@ -63,10 +63,10 @@ export function CharacterSheet({ character, t }: CharacterSheetProps) {
 
                 <div className="space-y-4">
                     <h2 className="font-headline text-2xl tracking-wider">{t('charactersBehaviorProfile')}</h2>
-                    <BehaviorDetail label={t('charactersPosition')} value={`${character.position}/100`} description={`${t('charactersBackline')} <-> ${t('charactersFrontline')}`} />
-                    <BehaviorDetail label={t('charactersResolve')} value={`${character.resolve}/100`} description={`${t('charactersFlee')} <-> ${t('charactersFight')}`} />
-                    <BehaviorDetail label={t('charactersAltruism')} value={`${character.altruism}/100`} description={`${t('charactersSelfish')} <-> ${t('charactersGroupFirst')}`} />
-                    <BehaviorDetail label={t('charactersDiscipline')} value={`${character.discipline}/100`} description={`${t('charactersReckless')} <-> ${t('charactersTactical')}`} />
+                    <BehaviorDetail label={t('charactersPosition')} value={`${character.position || 0}/100`} description={`${t('charactersBackline')} <-> ${t('charactersFrontline')}`} />
+                    <BehaviorDetail label={t('charactersResolve')} value={`${character.resolve || 0}/100`} description={`${t('charactersFlee')} <-> ${t('charactersFight')}`} />
+                    <BehaviorDetail label={t('charactersAltruism')} value={`${character.altruism || 0}/100`} description={`${t('charactersSelfish')} <-> ${t('charactersGroupFirst')}`} />
+                    <BehaviorDetail label={t('charactersDiscipline')} value={`${character.discipline || 0}/100`} description={`${t('charactersReckless')} <-> ${t('charactersTactical')}`} />
                 </div>
                 
                 <div className="pb-20"></div>
@@ -94,5 +94,3 @@ const BehaviorDetail = ({ label, value, description }: {label: string, value: st
         <p className="text-xs text-white/60">{description}</p>
     </div>
 )
-
-    

@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
@@ -386,10 +385,10 @@ const CommentCard = ({ comment, isMaster, t }: { comment: EnrichedComment, isMas
             <div className="flex items-center gap-4">
             <FlippingAvatar
                 playerImage={comment.author?.avatar || 'https://picsum.photos/100/100?random=1'}
-                characterImage={comment.character?.portrait || 'https://picsum.photos/100/100?random=1'}
-                characterFaceImage={comment.character?.face}
+                characterImage={comment.character ? `/characters/VisualPreset/${comment.character.visualPreset}/portrait` : 'https://picsum.photos/100/100?random=1'}
+                characterFaceImage={comment.character ? `/characters/VisualPreset/${comment.character.visualPreset}/face` : undefined}
                 playerHint="person face"
-                characterHint={comment.character?.aiHint || "fantasy portrait"}
+                characterHint="fantasy portrait"
                 className="w-16 h-16 flex-shrink-0 border-2 border-primary/20"
             />
             <div className="flex-1">
@@ -569,5 +568,3 @@ function CommentForm({ onSubmit, character, t }: { onSubmit: (text: string, hidd
         </Card>
     );
 }
-
-    

@@ -25,10 +25,10 @@ export function ThreadComments({ comments, t }: ThreadCommentsProps) {
                 <div key={comment.id} className="flex gap-4 items-start">
                     <FlippingAvatar
                         playerImage={comment.author?.avatar || 'https://picsum.photos/100/100?random=1'}
-                        characterImage={comment.character?.portrait || 'https://picsum.photos/100/100?random=1'}
-                        characterFaceImage={comment.character?.face}
+                        characterImage={comment.character ? `/characters/VisualPreset/${comment.character.visualPreset}/portrait` : 'https://picsum.photos/100/100?random=1'}
+                        characterFaceImage={comment.character ? `/characters/VisualPreset/${comment.character.visualPreset}/face` : undefined}
                         playerHint="person face"
-                        characterHint={comment.character?.aiHint || "fantasy portrait"}
+                        characterHint={"fantasy portrait"}
                         className="w-12 h-12 md:w-16 md:h-16 flex-shrink-0"
                     />
                     <div className="flex-1 pt-1">

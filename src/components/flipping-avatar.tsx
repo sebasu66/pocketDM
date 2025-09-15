@@ -4,6 +4,7 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { ImageWithFallback } from "./ui/image-with-fallback";
 
 interface FlippingAvatarProps {
   playerImage: string;
@@ -32,6 +33,8 @@ export function FlippingAvatar({
     return () => clearInterval(interval);
   }, []);
 
+  const faceSrc = characterFaceImage || characterImage;
+
   return (
     <div className={cn("w-18 h-18 perspective-1000", className)}>
       <div
@@ -53,8 +56,8 @@ export function FlippingAvatar({
         </div>
         {/* Character Face */}
         <div className="absolute w-full h-full backface-hidden rotate-y-180 rounded-full overflow-hidden border-2 border-accent/50">
-          <Image
-            src={characterFaceImage || characterImage}
+           <ImageWithFallback
+            baseSrc={faceSrc}
             alt="Character"
             width={72}
             height={72}

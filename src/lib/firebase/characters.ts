@@ -3,6 +3,7 @@
 
 
 
+
 import { collection, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc, query, where } from "firebase/firestore"; 
 import { db } from "./config";
 import { Character } from "./types";
@@ -29,6 +30,7 @@ export const addCharacter = async (characterData: Omit<Character, 'id'>): Promis
         motto: "",
         conditionalRules: [{if: '', then: ''}, {if: '', then: ''}, {if: '', then: ''}],
         isActive: true,
+        visualPreset: 'default',
     };
     const newCharacter = { ...characterDefaults, ...characterData };
     const docRef = await addDoc(collection(db, CHARACTERS_COLLECTION), newCharacter);

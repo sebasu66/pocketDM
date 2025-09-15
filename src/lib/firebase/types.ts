@@ -4,6 +4,7 @@
 
 
 
+
 export interface User {
     id: string;
     name: string;
@@ -31,9 +32,7 @@ export interface Character {
     id: string;
     name: string;
     description: string;
-    portrait: string;
-    face?: string;
-    aiHint: string;
+    visualPreset: string;
     campaignId: string;
     userId: string;
     level: number;

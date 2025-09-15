@@ -61,8 +61,8 @@ export function ThreadComments({
                             <div className="flex items-center gap-3">
                                 <FlippingAvatar
                                     playerImage={comment.author.avatar}
-                                    characterImage={comment.character?.portrait || 'https://picsum.photos/100/100?random=1'}
-                                    characterFaceImage={comment.character?.face}
+                                    characterImage={comment.character ? `/characters/VisualPreset/${comment.character.visualPreset}/portrait` : 'https://picsum.photos/100/100?random=1'}
+                                    characterFaceImage={comment.character ? `/characters/VisualPreset/${comment.character.visualPreset}/face` : undefined}
                                     playerHint="person face"
                                     characterHint="fantasy portrait"
                                     className="w-12 h-12 flex-shrink-0 border-2 border-primary/20"
@@ -157,5 +157,3 @@ function CommentForm({ onSubmit, t }: { onSubmit: (text: string, hiddenText: str
         </div>
     );
 }
-
-    

@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
@@ -10,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { PlusCircle, Trash2, Sheet, Upload, Eye, EyeOff, Sparkles, HelpCircle, Save, X, User as UserIcon } from "lucide-react";
-import Image from "next/image";
 import type { Character, ConditionalRule } from "@/lib/firebase/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog";
@@ -35,6 +33,7 @@ import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/comp
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 import { getUserById } from "@/lib/auth";
 import { useI18n } from "@/context/i18n-context";
+import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 
 export default function CharactersPage() {
   const { campaign, user, isLoading: isAuthLoading } = useAuth();
@@ -89,8 +88,7 @@ export default function CharactersPage() {
     const newCharacterData = {
       name: formData.get("char-name") as string,
       description: formData.get("char-background") as string,
-      portrait: `/characters/new/portrait.png`,
-      aiHint: "fantasy portrait",
+      visualPreset: "default", // Default preset for new characters
       campaignId: campaign.id,
       userId: user.id,
       isActive: true,
@@ -177,18 +175,6 @@ export default function CharactersPage() {
     }
   };
 
-
-  const handlePortraitChange = () => {
-    if (editingCharacter) {
-      setEditingCharacter({
-        ...editingCharacter,
-        portrait: `/characters/${editingCharacter.id}/portrait.png?v=${Date.now()}`,
-        aiHint: "fantasy portrait",
-      });
-    }
-  };
-
-
   if (isLoading || isAuthLoading) {
     return (
         <Card>
@@ -228,7 +214,7 @@ export default function CharactersPage() {
                       <CardDescription className="flex items-center gap-2 pt-1"><UserIcon size={14}/> {char.playerName}</CardDescription>
                     </CardHeader>
                     <CardContent className="flex-grow flex flex-col justify-center items-center">
-                       <Image src={char.portrait} alt={char.name} width={200} height={300} className="w-48 h-72 object-cover rounded-lg border-2 border-primary/20" data-ai-hint={char.aiHint} />
+                       <ImageWithFallback baseSrc={`/characters/VisualPreset/${char.visualPreset}/portrait`} alt={char.name} width={200} height={300} className="w-48 h-72 object-cover rounded-lg border-2 border-primary/20" data-ai-hint="fantasy portrait" />
                     </CardContent>
                     <CardFooter className="flex justify-center gap-2">
                        <RusticIconButton tooltip={t('charactersViewEditSheet')} onClick={() => handleOpenSheet(char)}>
@@ -311,7 +297,7 @@ export default function CharactersPage() {
             </CardHeader>
             <CardContent className="grid md:grid-cols-3 gap-6">
                 <div className="md:col-span-1">
-                    <Image src={character.portrait} alt={character.name} width={400} height={600} className="w-full h-auto object-cover rounded-lg border-2 border-primary/20" data-ai-hint={character.aiHint} />
+                    <ImageWithFallback baseSrc={`/characters/VisualPreset/${character.visualPreset}/portrait`} alt={character.name} width={400} height={600} className="w-full h-auto object-cover rounded-lg border-2 border-primary/20" data-ai-hint="fantasy portrait" />
                 </div>
                 <div className="md:col-span-2 space-y-4">
                     <div>
@@ -407,17 +393,18 @@ export default function CharactersPage() {
                           <Input id="level" type="number" value={editingCharacter.level || 1} onChange={(e) => handleStatChange('level', e.target.value)} />
                       </div>
                       <div className="grid items-center gap-1.5">
+                          <Label htmlFor="visualPreset">Visual Preset</Label>
+                          <Input id="visualPreset" value={editingCharacter.visualPreset || ''} onChange={(e) => handleStatChange('visualPreset', e.target.value)} />
+                      </div>
+                      <div className="grid items-center gap-1.5">
                           <Label htmlFor="description">{t('charactersDescription')}</Label>
                           <Textarea id="description" value={editingCharacter.description} onChange={(e) => handleStatChange('description', e.target.value)} rows={5} />
                       </div>
                       <div className="flex flex-col items-center justify-start gap-4 pt-4">
                         <Label>{t('charactersPortraitLabel')}</Label>
                         <div className="relative w-48 h-72 bg-background rounded overflow-hidden">
-                            <Image src={editingCharacter.portrait} alt={editingCharacter.name} width={200} height={300} className="w-full h-full object-cover" data-ai-hint={editingCharacter.aiHint || 'fantasy portrait'} />
+                             <ImageWithFallback baseSrc={`/characters/VisualPreset/${editingCharacter.visualPreset}/portrait`} alt={editingCharacter.name} width={200} height={300} className="w-full h-full object-cover" data-ai-hint={'fantasy portrait'} />
                         </div>
-                        <RusticIconButton tooltip={t('charactersChangePortrait')} onClick={handlePortraitChange}>
-                            <Upload />
-                        </RusticIconButton>
                     </div>
                     </div>
                     
@@ -609,5 +596,3 @@ const ConditionalRuleInput = ({ index, rule, onChange, t }: { index: number, rul
         </div>
     )
 }
-
-    
