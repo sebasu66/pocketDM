@@ -13,7 +13,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ['Recursive', 'sans-serif'],
+        body: ['Cormorant Garamond', 'serif'],
         headline: ['Uncial Antiqua', 'cursive'],
         medieval: ['MedievalSharp', 'cursive'],
         code: ['Recursive', 'monospace'],
