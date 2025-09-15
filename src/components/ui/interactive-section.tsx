@@ -52,7 +52,7 @@ export function InteractiveSection({
                 <h2 className="font-medieval text-2xl uppercase tracking-widest text-foreground/90 absolute -top-2 left-2">
                     {title}
                 </h2>
-                <div className="pt-8">
+                <div>
                     {children}
                 </div>
             </div>
