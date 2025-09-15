@@ -596,3 +596,5 @@ const ConditionalRuleInput = ({ index, rule, onChange, t }: { index: number, rul
         </div>
     )
 }
+
+    

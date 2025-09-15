@@ -36,7 +36,7 @@ export function FlippingAvatar({
   const faceSrc = characterFaceImage || characterImage;
 
   return (
-    <div className={cn("w-18 h-18 perspective-1000", className)}>
+    <div className={cn("w-16 h-16 perspective-1000", className)}>
       <div
         className={cn(
           "relative w-full h-full transform-style-3d transition-transform duration-1000",
@@ -69,3 +69,5 @@ export function FlippingAvatar({
     </div>
   );
 }
+
+    

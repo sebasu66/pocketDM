@@ -94,3 +94,5 @@ const BehaviorDetail = ({ label, value, description }: {label: string, value: st
         <p className="text-xs text-white/60">{description}</p>
     </div>
 )
+
+    
