@@ -379,8 +379,8 @@ export default function PlayerViewPage() {
                     </div>
                 </div>
 
-                <div className="mt-8 md:mt-12">
-                    <InteractiveSection title={t('narrativePlayerResponses')}>
+                <div className="mt-12">
+                     <InteractiveSection title={t('narrativePlayerResponses')} backgroundColor="hsl(var(--secondary) / 0.5)">
                         <ThreadComments comments={activeThreadComments} t={t} />
                     </InteractiveSection>
                 </div>
@@ -396,6 +396,7 @@ export default function PlayerViewPage() {
                     <div className="p-4 md:p-0 mt-8">
                         <GmControls
                             isAITurn={isAITurn}
+                            isGenerating={handleGenerateNextPost}
                             isGenerating={isGenerating}
                             onGenerate={handleGenerateNextPost}
                             onRedo={handleRedo}
