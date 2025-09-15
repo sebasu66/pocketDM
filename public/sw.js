@@ -1,56 +1,69 @@
-// Basic service worker for PWA functionality
+'use strict';
+
+const CACHE_NAME = 'lore-weaver-cache-v1';
+const urlsToCache = [
+  '/',
+  '/dashboard',
+  '/dashboard/playerview',
+  '/manifest.json',
+  '/favicon.ico',
+  '/icons/icon-192x192.png',
+  '/icons/icon-512x512.png'
+];
 
 self.addEventListener('install', (event) => {
-  console.log('Service Worker: Installing...');
-  // Skip waiting to activate the new service worker immediately.
   self.skipWaiting();
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) => {
+        console.log('Opened cache');
+        return cache.addAll(urlsToCache);
+      })
+  );
 });
 
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker: Activating...');
-  // Take control of all clients as soon as the service worker activates.
-  event.waitUntil(self.clients.claim());
-});
-
-self.addEventListener('fetch', (event) => {
-  // For now, just pass through fetch requests.
-  // Caching strategies would be added here for offline support.
-  event.respondWith(fetch(event.request));
-});
-
-// Listener for push notifications
-self.addEventListener('push', (event) => {
-  console.log('Service Worker: Push Received.');
-  const pushData = event.data.json();
-
-  const title = pushData.title || 'Lore Weaver';
-  const options = {
-    body: pushData.body || 'A new chapter in your story awaits.',
-    icon: '/icons/icon-192x192.png',
-    badge: '/icons/icon-192x192.png'
-  };
-
-  event.waitUntil(self.registration.showNotification(title, options));
-});
-
-// Listener for notification clicks
-self.addEventListener('notificationclick', (event) => {
-  console.log('Service Worker: Notification clicked.');
-  event.notification.close();
-
-  // This example focuses the browser tab of the app, or opens a new one if not available.
+  const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
-      if (clientList.length > 0) {
-        let client = clientList[0];
-        for (let i = 0; i < clientList.length; i++) {
-          if (clientList[i].focused) {
-            client = clientList[i];
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheWhitelist.indexOf(cacheName) === -1) {
+            return caches.delete(cacheName);
           }
-        }
-        return client.focus();
-      }
-      return clients.openWindow('/');
+        })
+      );
     })
   );
+  return self.clients.claim();
+});
+
+
+self.addEventListener('fetch', (event) => {
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      caches.match(event.request)
+        .then((response) => {
+          return response || fetch(event.request);
+        })
+    );
+  }
+});
+
+self.addEventListener('push', (event) => {
+    const data = event.data ? event.data.json() : { title: 'New Lore!', body: 'A new chapter unfolds.', icon: '/icons/icon-192x192.png' };
+    const title = data.title || 'New Lore!';
+    const options = {
+        body: data.body || 'A new chapter unfolds.',
+        icon: data.icon || '/icons/icon-192x192.png',
+        badge: '/icons/icon-192x192.png'
+    };
+    event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+    event.waitUntil(
+        clients.openWindow('/')
+    );
 });
