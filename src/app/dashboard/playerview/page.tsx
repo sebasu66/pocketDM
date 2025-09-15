@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState, useMemo, useRef } from 'react';
@@ -27,6 +28,7 @@ import { AlertDialog, AlertDialogTrigger, AlertDialogAction, AlertDialogCancel, 
 import { generateStory } from '@/ai/flows/narrative-orchestrator';
 import { addNarrativeThread, deleteNarrativeThread, restartCampaignNarrative } from '@/lib/firebase/narrative';
 import { StoryInput } from '@/ai/flows/narrative-orchestrator';
+import { InteractiveSection } from '@/components/ui/interactive-section';
 
 
 export default function PlayerViewPage() {
@@ -392,9 +394,9 @@ export default function PlayerViewPage() {
                 <Separator className="my-8 md:my-12 bg-border/50" />
 
                 <div className="p-4 md:p-0">
-                    <div className="bg-transparent p-4 md:p-8 rounded-lg">
+                    <InteractiveSection title={t('narrativePlayerResponses')}>
                         <ThreadComments comments={activeThreadComments} t={t} />
-                    </div>
+                    </InteractiveSection>
                 </div>
                 
                 {canPlayerRespond && (
