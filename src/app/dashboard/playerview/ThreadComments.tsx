@@ -28,7 +28,7 @@ export function ThreadComments({ comments, t }: ThreadCommentsProps) {
                         characterFaceImage={comment.character ? `/characters/VisualPreset/${comment.character.visualPreset}/face` : undefined}
                         playerHint="person face"
                         characterHint={"fantasy portrait"}
-                        className="w-16 h-16 flex-shrink-0"
+                        className="w-24 h-24 flex-shrink-0"
                     />
                     <div className="flex-1 pt-1">
                         <p className="font-bold text-lg leading-tight">{comment.character?.name || comment.author?.name || 'Unknown'}</p>
