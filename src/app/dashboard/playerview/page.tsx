@@ -14,14 +14,12 @@ import { RusticIconButton } from '@/components/ui/rustic-icon-button';
 import { useI18n } from '@/context/i18n-context';
 import React from 'react';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
-import { Separator } from '@/components/ui/separator';
 import Image from 'next/image';
 import { ThreadComments } from './ThreadComments';
 import { getUserById } from '@/lib/auth';
 import { CommentForm } from './CommentForm';
 import { useToast } from '@/hooks/use-toast';
 import { CharacterSheet } from './CharacterSheet';
-import { TypingEffect } from '@/components/ui/typing-effect';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogTrigger, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
@@ -339,14 +337,6 @@ export default function PlayerViewPage() {
     const canGoPrev = activeThreadIndex < narrativeThreads.length - 1;
     
     const imageUrl = activeThread.imageUrl || '/locations/default_location.jpg';
-    
-    const renderContent = () => {
-        const isFirstThread = activeThreadIndex === 0;
-        if (isFirstThread) {
-            return <TypingEffect text={activeThread.content.replace(/<[^>]*>?/gm, '')} />;
-        }
-        return <div className="prose prose-xl prose-invert max-w-none text-foreground/90 leading-relaxed mt-8 md:mt-0" dangerouslySetInnerHTML={{ __html: activeThread.content }} />;
-    };
 
     return (
         <div 
@@ -373,9 +363,9 @@ export default function PlayerViewPage() {
                         {activeThread.title}
                     </h1>
 
-                    <div>
+                    <div className="prose prose-xl prose-invert max-w-none text-foreground/90 leading-relaxed">
                         <div 
-                            className="relative aspect-[4/3] md:w-3/5 image-mask-squared"
+                            className="relative aspect-[4/3] md:w-3/5 image-mask-squared float-left mr-8 mb-4"
                             data-ai-hint={activeThread.imageAiHint || "fantasy scene"}
                         >
                              <Image
@@ -385,20 +375,18 @@ export default function PlayerViewPage() {
                                 className="object-cover"
                             />
                         </div>
-                        <div className="prose prose-xl prose-invert max-w-none text-foreground/90 leading-relaxed mt-8 md:mt-0">
-                            {renderContent()}
-                        </div>
+                        <div dangerouslySetInnerHTML={{ __html: activeThread.content }} />
                     </div>
                 </div>
 
-                <div className="p-4 md:p-0 mt-8 md:mt-12">
+                <div className="mt-8 md:mt-12">
                     <InteractiveSection title={t('narrativePlayerResponses')}>
                         <ThreadComments comments={activeThreadComments} t={t} />
                     </InteractiveSection>
                 </div>
                 
                 {canPlayerRespond && (
-                    <div className="p-4 md:p-0 mt-8">
+                    <div className="mt-8">
                         <div className='backdrop-blur-lg rounded-lg'>
                            <CommentForm onSubmit={handleAddComment} character={playerCharacter} t={t} />
                         </div>
@@ -443,7 +431,7 @@ export default function PlayerViewPage() {
                     </RusticIconButton>
                 )}
                 
-                {(canGoPrev || canGoNext) && <Separator orientation="vertical" className="h-6 bg-white/20" />}
+                {(canGoPrev || canGoNext) && <div className="h-6 w-px bg-white/20" />}
 
                  <RusticIconButton
                     tooltip={t('charactersViewEditSheet')}
