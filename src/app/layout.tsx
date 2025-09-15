@@ -1,24 +1,33 @@
 
+"use client";
+
 import type { Metadata } from 'next';
 import { Toaster } from "@/components/ui/toaster"
 import { AuthProvider } from '@/context/auth-context';
 import { ThemeProvider } from '@/context/theme-context';
 import { I18nProvider } from '@/context/i18n-context';
 import './globals.css';
-
-export const metadata: Metadata = {
-  title: 'Lore Weaver',
-  description: 'Collaborative world-building for RPG campaigns',
-};
+import { useEffect } from 'react';
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then((registration) => console.log('Service Worker registered with scope:', registration.scope))
+        .catch((error) => console.error('Service Worker registration failed:', error));
+    }
+  }, []);
+
   return (
     <html lang="en" className="dark">
       <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#0B1113" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cormorant+Garamond:wght@400;700&family=Recursive:wght@400;700&family=Covered+By+Your+Grace&family=Merienda:wght@300;400;700&family=Uncial+Antiqua&display=swap" rel="stylesheet" />
