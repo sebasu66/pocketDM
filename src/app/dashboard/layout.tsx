@@ -67,12 +67,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   ];
 
   const narrativeNavItems = [
-    { href: "/dashboard/narrative", icon: ScrollText, label: t('sidebarThreads') },
+    { href: "/dashboard/playerview", icon: ScrollText, label: t('sidebarNarrative') },
     { href: "/dashboard/chat", icon: MessagesSquare, label: t('sidebarPlayerChat') },
   ];
 
   const designNavItems = [
-    { href: "/dashboard/playerview", icon: Newspaper, label: t('sidebarReaderView') },
+    
   ];
 
   const pageTitles: { [key: string]: string } = {
@@ -86,7 +86,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     "/dashboard/settings": t('pageTitleSettings'),
     "/dashboard/settings/apikeys": t('pageTitleAiSettings'),
     "/dashboard/integrations": t('pageTitleIntegrations'),
-    "/dashboard/playerview": t('pageTitleReaderView'),
+    "/dashboard/playerview": t('pageTitleNarrative'),
     "/dashboard/ai-log": t('pageTitleAiLog'),
   };
 

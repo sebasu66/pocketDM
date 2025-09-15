@@ -85,7 +85,7 @@ export default function HomePage() {
                            {t('playerDemoDescription')}
                         </CardDescription>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="space-y-2">
                         <Button className="w-full" onClick={() => handleQuickLogin("2")}>{t('playerDemoButton')} (Alice)</Button>
                         <Button className="w-full" onClick={() => handleQuickLogin("3")} disabled>{t('playerDemoButton')} (Bob - Inactive)</Button>
                     </CardContent>
