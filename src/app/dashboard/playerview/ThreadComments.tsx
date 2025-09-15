@@ -18,8 +18,8 @@ export function ThreadComments({ comments, t }: ThreadCommentsProps) {
     }
 
     return (
-        <div className="space-y-6">
-            <h2 className="text-3xl font-headline text-center uppercase tracking-widest">{t('narrativePlayerResponses')}</h2>
+        <div className="space-y-4">
+            <h2 className="text-2xl font-headline text-center uppercase tracking-widest pt-4">{t('narrativePlayerResponses')}</h2>
             {comments.map(comment => (
                 <div key={comment.id} className="flex gap-4 items-start">
                     <FlippingAvatar
