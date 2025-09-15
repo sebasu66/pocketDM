@@ -52,7 +52,7 @@ export default function DashboardPage() {
     <div className="space-y-8">
       <Card className="overflow-hidden">
         <div className="relative h-64 w-full">
-           <Image src={campaign.bannerUrl} alt="Campaign hero image" fill className="object-cover" data-ai-hint={campaign.bannerAiHint} />
+           <Image src={campaign.bannerUrl} alt="Campaign hero image" fill sizes="100vw" className="object-cover" data-ai-hint={campaign.bannerAiHint} />
            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
         </div>
         <CardHeader className="relative -mt-20 z-10 p-6">
@@ -99,5 +99,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-    

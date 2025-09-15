@@ -13,41 +13,54 @@ type ImageWithFallbackProps = Omit<ImageProps, 'src'> & {
 const extensions = ['png', 'jpg', 'webp'];
 
 export function ImageWithFallback({ baseSrc, fallbackSrc = 'https://picsum.photos/400/600', alt, ...props }: ImageWithFallbackProps) {
-  const [imgSrc, setImgSrc] = useState<string | null>(null);
-  const [error, setError] = useState<boolean>(false);
+  const [imgSrc, setImgSrc] = useState<string>(fallbackSrc);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true);
+    let isMounted = true;
     let found = false;
-    let attempts = 0;
 
-    const tryImage = (index: number) => {
-      if (index >= extensions.length) {
-        if (!found) {
-            setError(true);
+    const checkImage = async (path: string) => {
+        try {
+            const res = await fetch(path, { method: 'HEAD' });
+            if (res.ok) {
+                return true;
+            }
+            return false;
+        } catch (error) {
+            return false;
+        }
+    };
+    
+    const findImage = async () => {
+        for (const ext of extensions) {
+            const path = `${baseSrc}.${ext}`;
+            if (await checkImage(path)) {
+                if (isMounted) {
+                    setImgSrc(path);
+                    found = true;
+                }
+                break;
+            }
+        }
+        if (isMounted && !found) {
             setImgSrc(fallbackSrc);
         }
-        return;
-      }
-      
-      const path = `${baseSrc}.${extensions[index]}`;
-      const img = new window.Image();
-      img.src = path;
-      img.onload = () => {
-        if (!found) {
-          found = true;
-          setImgSrc(path);
+        if (isMounted) {
+             setIsLoading(false);
         }
-      };
-      img.onerror = () => {
-        tryImage(index + 1);
-      };
     };
 
-    tryImage(0);
+    findImage();
+
+    return () => {
+        isMounted = false;
+    };
     
   }, [baseSrc, fallbackSrc]);
 
-  if (!imgSrc) {
+  if (isLoading) {
     // You can return a loading skeleton here if you want
     return null; 
   }
@@ -57,13 +70,6 @@ export function ImageWithFallback({ baseSrc, fallbackSrc = 'https://picsum.photo
       {...props}
       src={imgSrc}
       alt={alt}
-      // If you want to handle errors on the Image component itself, though the effect above should handle it
-      onError={() => {
-        if (!error) { // prevent infinite loop
-            setError(true);
-            setImgSrc(fallbackSrc);
-        }
-      }}
     />
   );
 }

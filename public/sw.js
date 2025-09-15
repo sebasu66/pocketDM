@@ -1,69 +1,53 @@
-'use strict';
+// public/sw.js
 
-const CACHE_NAME = 'lore-weaver-cache-v1';
+const CACHE_NAME = 'lore-weaver-cache-v2';
 const urlsToCache = [
   '/',
-  '/dashboard',
-  '/dashboard/playerview',
-  '/manifest.json',
-  '/favicon.ico',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png'
+  '/manifest.json'
+  // Icons are often cached automatically by the browser when referenced in the manifest.
+  // No need to explicitly cache them unless issues arise.
 ];
 
-self.addEventListener('install', (event) => {
+self.addEventListener('install', event => {
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('Opened cache');
-        return cache.addAll(urlsToCache);
+      .then(cache => {
+        console.log('Opened cache and caching basic assets');
+        const cachePromises = urlsToCache.map(urlToCache => {
+            return cache.add(new Request(urlToCache, {cache: 'reload'})).catch(err => {
+                console.warn(`Failed to cache ${urlToCache}:`, err);
+            });
+        });
+        return Promise.all(cachePromises);
       })
   );
 });
 
-self.addEventListener('activate', (event) => {
-  const cacheWhitelist = [CACHE_NAME];
+self.addEventListener('activate', event => {
+  const currentCaches = [CACHE_NAME];
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
+    caches.keys().then(cacheNames => {
+      return cacheNames.filter(cacheName => !currentCaches.includes(cacheName));
+    }).then(cachesToDelete => {
+      return Promise.all(cachesToDelete.map(cacheToDelete => {
+        return caches.delete(cacheToDelete);
+      }));
     })
   );
-  return self.clients.claim();
 });
 
 
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
+  // We only want to handle navigation requests for offline support
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      caches.match(event.request)
-        .then((response) => {
-          return response || fetch(event.request);
-        })
+      fetch(event.request).catch(async () => {
+        const cache = await caches.open(CACHE_NAME);
+        // If the fetch fails, serve the offline page from the cache.
+        const cachedResponse = await cache.match('/');
+        return cachedResponse;
+      })
     );
   }
-});
-
-self.addEventListener('push', (event) => {
-    const data = event.data ? event.data.json() : { title: 'New Lore!', body: 'A new chapter unfolds.', icon: '/icons/icon-192x192.png' };
-    const title = data.title || 'New Lore!';
-    const options = {
-        body: data.body || 'A new chapter unfolds.',
-        icon: data.icon || '/icons/icon-192x192.png',
-        badge: '/icons/icon-192x192.png'
-    };
-    event.waitUntil(self.registration.showNotification(title, options));
-});
-
-self.addEventListener('notificationclick', (event) => {
-    event.notification.close();
-    event.waitUntil(
-        clients.openWindow('/')
-    );
 });

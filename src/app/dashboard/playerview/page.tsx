@@ -372,6 +372,7 @@ export default function PlayerViewPage() {
                                 src={imageUrl}
                                 alt={activeThread.title}
                                 fill
+                                sizes="(max-width: 768px) 100vw, 50vw"
                                 className="object-cover"
                             />
                         </div>
@@ -396,7 +397,6 @@ export default function PlayerViewPage() {
                     <div className="p-4 md:p-0 mt-8">
                         <GmControls
                             isAITurn={isAITurn}
-                            isGenerating={handleGenerateNextPost}
                             isGenerating={isGenerating}
                             onGenerate={handleGenerateNextPost}
                             onRedo={handleRedo}
@@ -571,5 +571,3 @@ const GmControls = ({ isAITurn, isGenerating, onGenerate, onRedo, onRestart, las
         </div>
     </div>
 );
-
-    
