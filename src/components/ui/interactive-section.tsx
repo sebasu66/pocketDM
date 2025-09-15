@@ -49,12 +49,10 @@ export function InteractiveSection({
         >
              {backgroundImage && <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />}
             <div className="relative z-10">
-                <h2 className="font-medieval text-2xl uppercase tracking-widest text-foreground/90 absolute -top-2 left-2">
+                <h2 className="font-medieval text-2xl uppercase tracking-widest text-foreground/90 mb-4">
                     {title}
                 </h2>
-                <div>
-                    {children}
-                </div>
+                {children}
             </div>
         </div>
     );
