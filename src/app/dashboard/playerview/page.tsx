@@ -391,9 +391,7 @@ export default function PlayerViewPage() {
                     </div>
                 </div>
 
-                <Separator className="my-8 md:my-12 bg-border/50" />
-
-                <div className="p-4 md:p-0">
+                <div className="p-4 md:p-0 mt-8 md:mt-12">
                     <InteractiveSection title={t('narrativePlayerResponses')}>
                         <ThreadComments comments={activeThreadComments} t={t} />
                     </InteractiveSection>
@@ -584,3 +582,5 @@ const GmControls = ({ isAITurn, isGenerating, onGenerate, onRedo, onRestart, las
         </div>
     </div>
 );
+
+    
