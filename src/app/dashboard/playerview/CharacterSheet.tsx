@@ -6,6 +6,7 @@ import type { Character } from "@/lib/firebase/types";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
+import { ReferenceItem } from "@/components/ui/ReferenceItem";
 
 interface CharacterSheetProps {
     character: Character;
@@ -28,7 +29,16 @@ export function CharacterSheet({ character, t }: CharacterSheetProps) {
                 </div>
                 <div>
                     <h1 className="text-4xl font-headline tracking-wider">{character.name}</h1>
-                    <p className="text-lg text-white/70">{t('charactersLevel')} {character.level} {character.class}</p>
+                    <p className="text-lg text-white/70">
+                        {t('charactersLevel')} {character.level}{' '}
+                        <ReferenceItem term={character.race || 'Unknown'} collection="razas">
+                            <span className="underline decoration-dotted cursor-pointer">{character.race}</span>
+                        </ReferenceItem>
+                        {' '}/{' '}
+                        <ReferenceItem term={character.class || 'Adventurer'} collection="characterCategories">
+                            <span className="underline decoration-dotted cursor-pointer">{character.class}</span>
+                        </ReferenceItem>
+                    </p>
                 </div>
 
                 <Separator className="bg-white/20" />
@@ -50,27 +60,78 @@ export function CharacterSheet({ character, t }: CharacterSheetProps) {
                 <div>
                     <h2 className="font-headline text-2xl tracking-wider mb-4">{t('charactersAttributes')}</h2>
                     <div className="grid grid-cols-3 gap-4">
-                        <StatDisplay label="STR" value={character.strength} />
-                        <StatDisplay label="DEX" value={character.dexterity} />
-                        <StatDisplay label="CON" value={character.constitution} />
-                        <StatDisplay label="INT" value={character.intelligence} />
-                        <StatDisplay label="WIS" value={character.wisdom} />
-                        <StatDisplay label="CHA" value={character.charisma} />
+                        <StatDisplay label="AGI" value={character.attributes?.agility} />
+                        <StatDisplay label="SMA" value={character.attributes?.smarts} />
+                        <StatDisplay label="SPI" value={character.attributes?.spirit} />
+                        <StatDisplay label="STR" value={character.attributes?.strength} />
+                        <StatDisplay label="VIG" value={character.attributes?.vigor} />
                     </div>
                 </div>
 
-                 <Separator className="bg-white/20" />
+                {character.skills && (
+                    <>
+                        <Separator className="bg-white/20" />
+                        <div>
+                            <h2 className="font-headline text-2xl tracking-wider mb-4">Habilidades</h2>
+                            <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                                {Object.entries(character.skills).map(([skill, value]) => (
+                                    <div key={skill} className="flex justify-between">
+                                        <ReferenceItem term={skill} collection="habilidades" />
+                                        <span>{value}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </>
+                )}
 
-                <div className="space-y-4">
-                    <h2 className="font-headline text-2xl tracking-wider">{t('charactersBehaviorProfile')}</h2>
-                    <BehaviorDetail label={t('charactersPosition')} value={`${character.position || 0}/100`} description={`${t('charactersBackline')} <-> ${t('charactersFrontline')}`} />
-                    <BehaviorDetail label={t('charactersResolve')} value={`${character.resolve || 0}/100`} description={`${t('charactersFlee')} <-> ${t('charactersFight')}`} />
-                    <BehaviorDetail label={t('charactersAltruism')} value={`${character.altruism || 0}/100`} description={`${t('charactersSelfish')} <-> ${t('charactersGroupFirst')}`} />
-                    <BehaviorDetail label={t('charactersDiscipline')} value={`${character.discipline || 0}/100`} description={`${t('charactersReckless')} <-> ${t('charactersTactical')}`} />
-                </div>
+                 {character.edges && character.edges.length > 0 && (
+                    <>
+                        <Separator className="bg-white/20" />
+                        <div>
+                            <h2 className="font-headline text-2xl tracking-wider mb-4">Ventajas</h2>
+                            <ul className="list-disc list-inside space-y-1 text-sm">
+                                {character.edges.map((edge) => (
+                                    <li key={edge}><ReferenceItem term={edge} collection="edges" /></li>
+                                ))}
+                            </ul>
+                        </div>
+                    </>
+                )}
                 
-                <div className="pb-20"></div>
+                {character.hindrances && character.hindrances.length > 0 && (
+                    <>
+                        <Separator className="bg-white/20" />
+                        <div>
+                            <h2 className="font-headline text-2xl tracking-wider mb-4">Desventajas</h2>
+                            <ul className="list-disc list-inside space-y-1 text-sm">
+                                {character.hindrances.map((hindrance) => (
+                                     <li key={hindrance}><ReferenceItem term={hindrance} collection="hindrances" /></li>
+                                ))}
+                            </ul>
+                        </div>
+                    </>
+                )}
 
+                {character.inventory && character.inventory.length > 0 && (
+                     <>
+                        <Separator className="bg-white/20" />
+                        <div>
+                            <h2 className="font-headline text-2xl tracking-wider mb-4">Inventario</h2>
+                            <ul className="list-disc list-inside space-y-1 text-sm">
+                                {character.inventory.map((item, index) => (
+                                    <li key={index}>
+                                        <ReferenceItem term={item.item} collection="hellfrost_items" />
+                                        {item.quantity > 1 && ` (x${item.quantity})`}
+                                        {item.notes && <span className="text-white/70 italic"> - {item.notes}</span>}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </>
+                )}
+
+                <div className="pb-20"></div>
 
             </div>
         </ScrollArea>
@@ -78,21 +139,9 @@ export function CharacterSheet({ character, t }: CharacterSheetProps) {
 }
 
 
-const StatDisplay = ({ label, value }: { label: string; value: number }) => (
+const StatDisplay = ({ label, value }: { label: string; value?: string | number }) => (
     <div className="flex flex-col items-center p-2 rounded-lg bg-black/20 border border-white/10">
         <span className="text-xs font-bold text-white/60">{label}</span>
-        <span className="text-2xl font-bold font-headline">{value || 0}</span>
+        <span className="text-2xl font-bold font-headline">{value || 'd4'}</span>
     </div>
 );
-
-const BehaviorDetail = ({ label, value, description }: {label: string, value: string, description: string}) => (
-    <div>
-        <div className="flex justify-between items-baseline">
-            <h4 className="font-bold">{label}</h4>
-            <p className="font-mono text-white/70">{value}</p>
-        </div>
-        <p className="text-xs text-white/60">{description}</p>
-    </div>
-)
-
-    
