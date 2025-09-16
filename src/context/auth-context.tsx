@@ -21,7 +21,7 @@ interface AuthContextType {
   updateCampaign: (campaign: Campaign) => Promise<void>;
   setActiveRole: (role: 'gm' | 'player') => void;
   isLoading: boolean;
-  setupSession: (user: User) => Promise<void>;
+  setupSession: (user: User | FirebaseAuthUser) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -37,8 +37,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsLoading(true);
       if (firebaseUser) {
         try {
-          const appUser = await findOrCreateUserFromOAuth(firebaseUser);
-          await setupSession(appUser);
+          await setupSession(firebaseUser);
         } catch (e) {
           console.error("Error during OAuth user processing", e);
           clearSession();
@@ -61,7 +60,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => unsubscribe();
   }, []);
 
-  const setupSession = async (loggedInUser: User) => {
+  const setupSession = async (userOrFirebaseUser: User | FirebaseAuthUser) => {
+    let loggedInUser: User;
+    if ('uid' in userOrFirebaseUser) { // It's a FirebaseAuthUser
+        loggedInUser = await findOrCreateUserFromOAuth(userOrFirebaseUser);
+    } else { // It's our app User
+        loggedInUser = userOrFirebaseUser;
+    }
+    
     if (loggedInUser.enabled) {
       setUser(loggedInUser);
       if (loggedInUser.campaignId) {
@@ -135,3 +141,5 @@ export const useAuth = () => {
   }
   return context;
 };
+
+    

@@ -124,15 +124,15 @@ export const createUser = async (input: CreateUserInput): Promise<User> => {
 };
 
 export const findOrCreateUserFromOAuth = async (firebaseUser: FirebaseAuthUser): Promise<User> => {
-    const userRef = doc(db, USERS_COLLECTION, firebaseUser.uid);
-    const docSnap = await getDoc(userRef);
+    // We can't just use firebaseUser.uid as it might not be what's in our db if they registered manually.
+    const appUser = await getUserByEmail(firebaseUser.email!);
 
-    if (docSnap.exists()) {
+    if (appUser) {
         // User exists, just return their data.
-        return { id: docSnap.id, ...docSnap.data() } as User;
+        return appUser as User;
     } else {
-        // This is a new user signing in via OAuth.
-        // Default to creating a GM with their own campaign.
+        // This is a new user signing in via OAuth for the first time.
+        // Default to creating a GM with their own campaign and dual roles for flexibility.
         const newCampaignId = await createNewCampaignForUser({
             id: firebaseUser.uid,
             name: firebaseUser.displayName || 'New GM'
@@ -148,7 +148,10 @@ export const findOrCreateUserFromOAuth = async (firebaseUser: FirebaseAuthUser):
             campaignId: newCampaignId, // Assign their newly created campaign
             enabled: true,
         };
-        await setDoc(userRef, newUser);
+        const newUserRef = doc(db, USERS_COLLECTION, firebaseUser.uid);
+        await setDoc(newUserRef, newUser);
         return newUser;
     }
 };
+
+    

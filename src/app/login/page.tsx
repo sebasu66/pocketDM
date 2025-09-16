@@ -21,6 +21,7 @@ type Step = 'check-email' | 'login' | 'register';
 export default function LoginPage() {
   const [step, setStep] = useState<Step>('check-email');
   const [isChecking, setIsChecking] = useState(false);
+  const [showPasswordLogin, setShowPasswordLogin] = useState(false);
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -29,7 +30,7 @@ export default function LoginPage() {
   const [isPlayer, setIsPlayer] = useState(true);
   const [secretCode, setSecretCode] = useState("");
   
-  const { login, user } = useAuth();
+  const { login, user, setupSession } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
@@ -39,8 +40,8 @@ export default function LoginPage() {
     const codeFromUrl = searchParams.get('secretCode');
     if (codeFromUrl) {
       setSecretCode(codeFromUrl);
-      setIsPlayer(true); // Default to player if there's a code
-      setIsGm(false); // Disable GM role if joining via invite
+      setIsPlayer(true); 
+      setIsGm(false);
     }
   }, [searchParams]);
 
@@ -116,11 +117,10 @@ export default function LoginPage() {
   
   const handleOAuthLogin = async () => {
     try {
-      await signInWithGoogle();
+      const firebaseUser = await signInWithGoogle();
+      await setupSession(firebaseUser);
       toast({ title: "Login Successful", description: "Redirecting to your dashboard..."});
-      setTimeout(() => {
-        router.push('/dashboard');
-      }, 1000);
+      router.push('/dashboard');
     } catch (error) {
       console.error("OAuth login error", error);
       toast({
@@ -152,18 +152,12 @@ export default function LoginPage() {
       case 'login':
         return (
            <div className="space-y-4 pt-4">
-            <CardDescription className="text-center">{t('loginSubtitle')}</CardDescription>
-            <div className="grid gap-2">
-              <Label htmlFor="login-email">{t('emailLabel')}</Label>
-              <Input id="login-email" type="email" value={email} disabled />
+            <CardDescription className="text-center">¡Bienvenido de nuevo! Te recuerdo.</CardDescription>
+             <div className="grid gap-2">
+                <Label htmlFor="login-email">{t('emailLabel')}</Label>
+                <Input id="login-email" type="email" value={email} disabled />
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="login-password">{t('passwordLabel')}</Label>
-              <Input id="login-password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleLogin()} autoFocus/>
-            </div>
-            <Button onClick={handleLogin} className="w-full">{t('loginButton')}</Button>
-            <Separator className="my-4" />
-            <p className="text-xs text-muted-foreground text-center">{t('registerOrSignInWith')}</p>
+
             <Button variant="outline" className="w-full" onClick={handleOAuthLogin}>
               <svg role="img" viewBox="0 0 24 24" className="mr-2 h-4 w-4">
                 <path
@@ -173,6 +167,21 @@ export default function LoginPage() {
               </svg>
               {t('loginWithGoogleButton')}
             </Button>
+            
+            <Separator className="my-4" />
+
+            {showPasswordLogin ? (
+                <div className="space-y-4">
+                    <div className="grid gap-2">
+                        <Label htmlFor="login-password">{t('passwordLabel')}</Label>
+                        <Input id="login-password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleLogin()} autoFocus/>
+                    </div>
+                    <Button onClick={handleLogin} className="w-full">{t('loginButton')}</Button>
+                </div>
+            ) : (
+                <Button variant="link" className="w-full" onClick={() => setShowPasswordLogin(true)}>¿Prefieres usar tu contraseña?</Button>
+            )}
+            
           </div>
         );
       case 'register':
@@ -242,6 +251,13 @@ export default function LoginPage() {
           </CardHeader>
           <CardContent>
             {renderStep()}
+             {step !== 'check-email' && (
+                <div className="mt-4 text-center">
+                    <Button variant="link" onClick={() => { setStep('check-email'); setPassword(''); setShowPasswordLogin(false); }}>
+                        Volver
+                    </Button>
+                </div>
+            )}
           </CardContent>
         </Card>
       </div>
