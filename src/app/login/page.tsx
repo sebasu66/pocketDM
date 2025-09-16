@@ -1,7 +1,6 @@
 
 "use client";
 
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -56,15 +55,15 @@ export default function LoginPage() {
 
   const handleRegister = async () => {
     if (!name || !email || !password) {
-        toast({ variant: "destructive", title: "Missing Fields", description: "Please fill out all required fields." });
+        toast({ variant: "destructive", title: t('registerMissingFields'), description: t('registerMissingFieldsDesc') });
         return;
     }
     if (!isGm && !isPlayer) {
-        toast({ variant: "destructive", title: "No Role Selected", description: "You must select at least one role (GM or Player)." });
+        toast({ variant: "destructive", title: t('registerNoRole'), description: t('registerNoRoleDesc') });
         return;
     }
     if (isPlayer && !secretCode && !isGm) {
-        toast({ variant: "destructive", title: "Secret Code Required", description: "As a player, you must provide a secret code to join a campaign." });
+        toast({ variant: "destructive", title: t('registerSecretCodeRequired'), description: t('registerSecretCodeRequiredDesc') });
         return;
     }
 
@@ -79,7 +78,7 @@ export default function LoginPage() {
     } catch (error: any) {
         toast({
             variant: "destructive",
-            title: "Registration Failed",
+            title: t('registerFailed'),
             description: error.message,
         });
     }
@@ -94,7 +93,7 @@ export default function LoginPage() {
       console.error("OAuth login error", error);
       toast({
         variant: "destructive",
-        title: "Login Failed",
+        title: t('loginFailedTitle'),
         description: "Could not log in with Google. Please try again.",
       });
     }
@@ -115,8 +114,8 @@ export default function LoginPage() {
           <CardContent>
             <Tabs defaultValue="login" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="login">Login</TabsTrigger>
-                <TabsTrigger value="register">Sign Up</TabsTrigger>
+                <TabsTrigger value="login">{t('loginButton')}</TabsTrigger>
+                <TabsTrigger value="register">{t('registerTitle')}</TabsTrigger>
               </TabsList>
               <TabsContent value="login" className="space-y-4 pt-4">
                 <CardDescription className="text-center">{t('loginSubtitle')}</CardDescription>
@@ -131,10 +130,10 @@ export default function LoginPage() {
                 <Button onClick={handleLogin} className="w-full">{t('loginButton')}</Button>
               </TabsContent>
               <TabsContent value="register" className="space-y-4 pt-4">
-                <CardDescription className="text-center">Create a new account to start your adventure.</CardDescription>
+                <CardDescription className="text-center">{t('registerDescription')}</CardDescription>
                 <div className="grid gap-2">
-                    <Label htmlFor="name">Name</Label>
-                    <Input id="name" placeholder="Your Name" required value={name} onChange={(e) => setName(e.target.value)} />
+                    <Label htmlFor="name">{t('registerNameLabel')}</Label>
+                    <Input id="name" placeholder={t('registerNamePlaceholder')} required value={name} onChange={(e) => setName(e.target.value)} />
                 </div>
                 <div className="grid gap-2">
                     <Label htmlFor="register-email">{t('emailLabel')}</Label>
@@ -145,30 +144,30 @@ export default function LoginPage() {
                     <Input id="register-password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
                 </div>
                 <div className="grid gap-2">
-                    <Label>Choose Your Role(s)</Label>
+                    <Label>{t('registerChooseRoleLabel')}</Label>
                     <div className="flex items-center space-x-4">
                         <div className="flex items-center space-x-2">
                             <Checkbox id="role-gm" checked={isGm} onCheckedChange={(c) => setIsGm(c as boolean)} />
-                            <Label htmlFor="role-gm" className="flex items-center gap-2"><Crown className="text-amber-400" /> Game Master</Label>
+                            <Label htmlFor="role-gm" className="flex items-center gap-2"><Crown className="text-amber-400" /> {t('registerRoleGmLabel')}</Label>
                         </div>
                         <div className="flex items-center space-x-2">
                             <Checkbox id="role-player" checked={isPlayer} onCheckedChange={(c) => setIsPlayer(c as boolean)}/>
-                            <Label htmlFor="role-player" className="flex items-center gap-2"><UserIcon /> Player</Label>
+                            <Label htmlFor="role-player" className="flex items-center gap-2"><UserIcon /> {t('registerRolePlayerLabel')}</Label>
                         </div>
                     </div>
                 </div>
                 {isPlayer && (
                     <div className="grid gap-2">
-                        <Label htmlFor="secret-code">Campaign Secret Code</Label>
-                        <Input id="secret-code" placeholder="Enter code from GM" required={isPlayer && !isGm} value={secretCode} onChange={(e) => setSecretCode(e.target.value)} />
+                        <Label htmlFor="secret-code">{t('registerSecretCodeLabel')}</Label>
+                        <Input id="secret-code" placeholder={t('registerSecretCodePlaceholder')} required={isPlayer && !isGm} value={secretCode} onChange={(e) => setSecretCode(e.target.value)} />
                     </div>
                 )}
-                <Button onClick={handleRegister} className="w-full">Sign Up</Button>
+                <Button onClick={handleRegister} className="w-full">{t('registerButton')}</Button>
               </TabsContent>
             </Tabs>
              <Separator className="my-4" />
             <div className="space-y-4 text-center">
-                 <p className="text-xs text-muted-foreground">Or sign in with</p>
+                 <p className="text-xs text-muted-foreground">{t('registerOrSignInWith')}</p>
                 <Button variant="outline" className="w-full" onClick={handleOAuthLogin}>
                   <svg role="img" viewBox="0 0 24 24" className="mr-2 h-4 w-4">
                     <path
@@ -176,7 +175,7 @@ export default function LoginPage() {
                       d="M12.48 10.92v3.28h7.84c-.24 1.84-.85 3.18-1.73 4.1-1.02 1.02-2.3 1.98-4.32 1.98-3.36 0-6.21-2.82-6.21-6.21s2.85-6.21 6.21-6.21c1.84 0 3.15.75 4.14 1.68l2.79-2.79C18.01 1.98 15.49 1 12.48 1 5.88 1 1 5.88 1 12.48s4.88 11.48 11.48 11.48c6.48 0 11.04-4.56 11.04-11.04 0-.75-.06-1.48-.18-2.16h-9.86z"
                     />
                   </svg>
-                  Login with Google
+                  {t('loginWithGoogleButton')}
                 </Button>
             </div>
           </CardContent>
@@ -185,3 +184,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+    

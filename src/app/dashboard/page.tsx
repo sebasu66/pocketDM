@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useI18n } from "@/context/i18n-context";
 import { useState, useEffect } from "react";
 import { generateNewSecretCode } from "@/lib/firebase/campaigns";
+import { Input } from "@/components/ui/input";
 
 const latestDevelopments = [
   {
@@ -39,7 +40,7 @@ export default function DashboardPage() {
   const [inviteLink, setInviteLink] = useState("");
 
   useEffect(() => {
-    if (campaign) {
+    if (campaign?.secretCode) {
       const origin = typeof window !== 'undefined' ? window.location.origin : '';
       setInviteLink(`${origin}/login?secretCode=${campaign.secretCode}`);
     }
@@ -52,20 +53,20 @@ export default function DashboardPage() {
   // If user has dual roles but hasn't selected one yet, show role selection screen.
   if (user.role.isGm && user.role.isPlayer && !activeRole) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-[calc(100vh-10rem)]">
         <Card className="max-w-md">
           <CardHeader>
-            <CardTitle className="font-headline text-2xl">Choose Your Role</CardTitle>
-            <CardDescription>You have both Game Master and Player privileges. How would you like to enter?</CardDescription>
+            <CardTitle className="font-headline text-2xl">{t('chooseRoleTitle')}</CardTitle>
+            <CardDescription>{t('chooseRoleDescription')}</CardDescription>
           </CardHeader>
           <CardContent className="grid grid-cols-2 gap-4">
             <Button variant="outline" className="h-24 flex-col gap-2" onClick={() => setActiveRole('gm')}>
               <Crown className="w-8 h-8 text-amber-400" />
-              <span>Game Master</span>
+              <span>{t('chooseRoleGm')}</span>
             </Button>
             <Button variant="outline" className="h-24 flex-col gap-2" onClick={() => setActiveRole('player')}>
                <UserIcon className="w-8 h-8" />
-              <span>Player</span>
+              <span>{t('chooseRolePlayer')}</span>
             </Button>
           </CardContent>
         </Card>
@@ -88,19 +89,26 @@ export default function DashboardPage() {
   const handleCopyToClipboard = (textToCopy: string) => {
     navigator.clipboard.writeText(textToCopy);
     toast({
-      title: t('dashboardCopied'),
-      description: "The text has been copied to your clipboard.",
+      title: t('dashboardCopied')
     });
   }
 
   const handleGenerateNewCode = async () => {
     if (campaign) {
-      const newCode = await generateNewSecretCode(campaign.id);
-      setCampaign({ ...campaign, secretCode: newCode });
-      toast({
-        title: "New Secret Code Generated",
-        description: "The invitation link has been updated.",
-      });
+      try {
+        const newCode = await generateNewSecretCode(campaign.id);
+        setCampaign({ ...campaign, secretCode: newCode });
+        toast({
+          title: "New Secret Code Generated",
+          description: "The invitation link has been updated.",
+        });
+      } catch (error) {
+        toast({
+          variant: 'destructive',
+          title: "Error",
+          description: "Could not generate a new secret code.",
+        });
+      }
     }
   };
 
@@ -138,8 +146,8 @@ export default function DashboardPage() {
       {isMaster && (
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 font-headline"><LinkIcon /> Invite Players</CardTitle>
-            <CardDescription>Share this link with your players to have them join your campaign. The secret code will expire automatically in 2 hours for security.</CardDescription>
+            <CardTitle className="flex items-center gap-2 font-headline"><LinkIcon /> {t('dashboardInvitePlayersTitle')}</CardTitle>
+            <CardDescription>{t('dashboardInvitePlayersDescription')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex gap-2 items-center p-2 rounded-md bg-muted">
@@ -147,7 +155,7 @@ export default function DashboardPage() {
               <Button variant="ghost" size="icon" onClick={() => handleCopyToClipboard(inviteLink)}>
                 <Copy />
               </Button>
-              <Button variant="ghost" size="icon" onClick={handleGenerateNewCode}>
+              <Button variant="ghost" size="icon" onClick={handleGenerateNewCode} title={t('dashboardInvitePlayersNewCode')}>
                 <RefreshCw />
               </Button>
             </div>
@@ -177,3 +185,5 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+    
