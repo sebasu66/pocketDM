@@ -12,12 +12,16 @@ import { useAuth } from "@/context/auth-context";
 import { getUserByEmail, checkPassword, signInWithGoogle, createUser } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
 import { useI18n } from "@/context/i18n-context";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Crown, User as UserIcon } from "lucide-react";
+import { Crown, User as UserIcon, Loader2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
+type Step = 'check-email' | 'login' | 'register';
+
 export default function LoginPage() {
+  const [step, setStep] = useState<Step>('check-email');
+  const [isChecking, setIsChecking] = useState(false);
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -25,7 +29,7 @@ export default function LoginPage() {
   const [isPlayer, setIsPlayer] = useState(true);
   const [secretCode, setSecretCode] = useState("");
   
-  const { login, user, setupSession } = useAuth();
+  const { login, user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
@@ -35,18 +39,37 @@ export default function LoginPage() {
     const codeFromUrl = searchParams.get('secretCode');
     if (codeFromUrl) {
       setSecretCode(codeFromUrl);
-      // Automatically check "Player" if a secret code is present
-      setIsPlayer(true);
+      setIsPlayer(true); // Default to player if there's a code
+      setIsGm(false); // Disable GM role if joining via invite
     }
   }, [searchParams]);
 
   useEffect(() => {
-    // If the user object becomes available after an auth flow, redirect.
     if (user) {
       router.push("/dashboard");
     }
   }, [user, router]);
-
+  
+  const handleEmailCheck = async () => {
+    if (!email) {
+      toast({ variant: 'destructive', title: 'Email is required' });
+      return;
+    }
+    setIsChecking(true);
+    try {
+      const existingUser = await getUserByEmail(email);
+      if (existingUser) {
+        setStep('login');
+      } else {
+        toast({ title: "No tengo recuerdos de ti", description: "¿Deseas unirte?" });
+        setStep('register');
+      }
+    } catch (error) {
+      toast({ variant: 'destructive', title: 'Error', description: 'Could not check email.' });
+    } finally {
+      setIsChecking(false);
+    }
+  };
 
   const handleLogin = async () => {
     const user = await getUserByEmail(email);
@@ -79,7 +102,7 @@ export default function LoginPage() {
         const newUser = await createUser({
             name, email, password,
             role: { isGm, isPlayer },
-            campaignSecret: isPlayer && !isGm ? secretCode : undefined
+            campaignSecret: isPlayer ? secretCode : undefined
         });
         await login(newUser.id);
     } catch (error: any) {
@@ -90,16 +113,11 @@ export default function LoginPage() {
         });
     }
   };
-
+  
   const handleOAuthLogin = async () => {
     try {
-      // The onAuthStateChanged listener in AuthProvider will handle everything,
-      // including user creation and session setup.
       await signInWithGoogle();
-      // After the popup closes, the onAuthStateChanged listener will fire,
-      // the user will be set in the context, and the useEffect above will redirect.
       toast({ title: "Login Successful", description: "Redirecting to your dashboard..."});
-      // A small delay to allow auth state to propagate before redirecting
       setTimeout(() => {
         router.push('/dashboard');
       }, 1000);
@@ -112,7 +130,104 @@ export default function LoginPage() {
       });
     }
   };
+  
+  const isInvite = !!searchParams.get('secretCode');
 
+  const renderStep = () => {
+    switch (step) {
+      case 'check-email':
+        return (
+          <div className="space-y-4 pt-4">
+            <CardDescription className="text-center">¿Nos conocemos? Introduce tu email para empezar.</CardDescription>
+            <div className="grid gap-2">
+              <Label htmlFor="check-email">Email</Label>
+              <Input id="check-email" type="email" placeholder="m@example.com" required value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleEmailCheck()} />
+            </div>
+            <Button onClick={handleEmailCheck} className="w-full" disabled={isChecking}>
+              {isChecking && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Continuar
+            </Button>
+          </div>
+        );
+      case 'login':
+        return (
+           <div className="space-y-4 pt-4">
+            <CardDescription className="text-center">{t('loginSubtitle')}</CardDescription>
+            <div className="grid gap-2">
+              <Label htmlFor="login-email">{t('emailLabel')}</Label>
+              <Input id="login-email" type="email" value={email} disabled />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="login-password">{t('passwordLabel')}</Label>
+              <Input id="login-password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleLogin()} autoFocus/>
+            </div>
+            <Button onClick={handleLogin} className="w-full">{t('loginButton')}</Button>
+            <Separator className="my-4" />
+            <p className="text-xs text-muted-foreground text-center">{t('registerOrSignInWith')}</p>
+            <Button variant="outline" className="w-full" onClick={handleOAuthLogin}>
+              <svg role="img" viewBox="0 0 24 24" className="mr-2 h-4 w-4">
+                <path
+                  fill="currentColor"
+                  d="M12.48 10.92v3.28h7.84c-.24 1.84-.85 3.18-1.73 4.1-1.02 1.02-2.3 1.98-4.32 1.98-3.36 0-6.21-2.82-6.21-6.21s2.85-6.21 6.21-6.21c1.84 0 3.15.75 4.14 1.68l2.79-2.79C18.01 1.98 15.49 1 12.48 1 5.88 1 1 5.88 1 12.48s4.88 11.48 11.48 11.48c6.48 0 11.04-4.56 11.04-11.04 0-.75-.06-1.48-.18-2.16h-9.86z"
+                />
+              </svg>
+              {t('loginWithGoogleButton')}
+            </Button>
+          </div>
+        );
+      case 'register':
+        return (
+          <div className="space-y-4 pt-4">
+            <CardDescription className="text-center">{t('registerDescription')}</CardDescription>
+            <div className="grid gap-2">
+                <Label htmlFor="name">{t('registerNameLabel')}</Label>
+                <Input id="name" placeholder={t('registerNamePlaceholder')} required value={name} onChange={(e) => setName(e.target.value)} autoFocus />
+            </div>
+            <div className="grid gap-2">
+                <Label htmlFor="register-email">{t('emailLabel')}</Label>
+                <Input id="register-email" type="email" value={email} disabled />
+            </div>
+            <div className="grid gap-2">
+                <Label htmlFor="register-password">{t('passwordLabel')}</Label>
+                <Input id="register-password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+            </div>
+            <div className="grid gap-2">
+                <Label>{t('registerChooseRoleLabel')}</Label>
+                <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-2">
+                        <Checkbox id="role-gm" checked={isGm} onCheckedChange={(c) => setIsGm(c as boolean)} disabled={isInvite} />
+                        <Label htmlFor="role-gm" className="flex items-center gap-2"><Crown className="text-amber-400" /> {t('registerRoleGmLabel')}</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <Checkbox id="role-player" checked={isPlayer} onCheckedChange={(c) => setIsPlayer(c as boolean)}/>
+                        <Label htmlFor="role-player" className="flex items-center gap-2"><UserIcon /> {t('registerRolePlayerLabel')}</Label>
+                    </div>
+                </div>
+            </div>
+            {isPlayer && (
+                <div className="grid gap-2">
+                    <Label htmlFor="secret-code">{t('registerSecretCodeLabel')}</Label>
+                    <Input id="secret-code" placeholder={t('registerSecretCodePlaceholder')} required={isPlayer} value={secretCode} onChange={(e) => setSecretCode(e.target.value)} disabled={isInvite} />
+                </div>
+            )}
+            <Button onClick={handleRegister} className="w-full">{t('registerButton')}</Button>
+             <Separator className="my-4" />
+            <p className="text-xs text-muted-foreground text-center">{t('registerOrSignInWith')}</p>
+            <Button variant="outline" className="w-full" onClick={handleOAuthLogin}>
+              <svg role="img" viewBox="0 0 24 24" className="mr-2 h-4 w-4">
+                <path
+                  fill="currentColor"
+                  d="M12.48 10.92v3.28h7.84c-.24 1.84-.85 3.18-1.73 4.1-1.02 1.02-2.3 1.98-4.32 1.98-3.36 0-6.21-2.82-6.21-6.21s2.85-6.21 6.21-6.21c1.84 0 3.15.75 4.14 1.68l2.79-2.79C18.01 1.98 15.49 1 12.48 1 5.88 1 1 5.88 1 12.48s4.88 11.48 11.48 11.48c6.48 0 11.04-4.56 11.04-11.04 0-.75-.06-1.48-.18-2.16h-9.86z"
+                />
+              </svg>
+              {t('loginWithGoogleButton')}
+            </Button>
+          </div>
+        );
+      default:
+        return null;
+    }
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-cover bg-center bg-no-repeat p-4" style={{backgroundImage: "url('https://picsum.photos/1920/1080?grayscale&blur=5&random=1')"}} data-ai-hint="fantasy landscape">
@@ -126,75 +241,12 @@ export default function LoginPage() {
             <CardTitle className="text-3xl font-headline">Lore Weaver</CardTitle>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="login" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="login">{t('loginButton')}</TabsTrigger>
-                <TabsTrigger value="register">{t('registerTitle')}</TabsTrigger>
-              </TabsList>
-              <TabsContent value="login" className="space-y-4 pt-4">
-                <CardDescription className="text-center">{t('loginSubtitle')}</CardDescription>
-                <div className="grid gap-2">
-                  <Label htmlFor="login-email">{t('emailLabel')}</Label>
-                  <Input id="login-email" type="email" placeholder="m@example.com" required value={email} onChange={(e) => setEmail(e.target.value)} />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="login-password">{t('passwordLabel')}</Label>
-                  <Input id="login-password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleLogin()} />
-                </div>
-                <Button onClick={handleLogin} className="w-full">{t('loginButton')}</Button>
-              </TabsContent>
-              <TabsContent value="register" className="space-y-4 pt-4">
-                <CardDescription className="text-center">{t('registerDescription')}</CardDescription>
-                <div className="grid gap-2">
-                    <Label htmlFor="name">{t('registerNameLabel')}</Label>
-                    <Input id="name" placeholder={t('registerNamePlaceholder')} required value={name} onChange={(e) => setName(e.target.value)} />
-                </div>
-                <div className="grid gap-2">
-                    <Label htmlFor="register-email">{t('emailLabel')}</Label>
-                    <Input id="register-email" type="email" placeholder="m@example.com" required value={email} onChange={(e) => setEmail(e.target.value)} />
-                </div>
-                <div className="grid gap-2">
-                    <Label htmlFor="register-password">{t('passwordLabel')}</Label>
-                    <Input id="register-password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
-                </div>
-                <div className="grid gap-2">
-                    <Label>{t('registerChooseRoleLabel')}</Label>
-                    <div className="flex items-center space-x-4">
-                        <div className="flex items-center space-x-2">
-                            <Checkbox id="role-gm" checked={isGm} onCheckedChange={(c) => setIsGm(c as boolean)} />
-                            <Label htmlFor="role-gm" className="flex items-center gap-2"><Crown className="text-amber-400" /> {t('registerRoleGmLabel')}</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <Checkbox id="role-player" checked={isPlayer} onCheckedChange={(c) => setIsPlayer(c as boolean)}/>
-                            <Label htmlFor="role-player" className="flex items-center gap-2"><UserIcon /> {t('registerRolePlayerLabel')}</Label>
-                        </div>
-                    </div>
-                </div>
-                {isPlayer && !isGm && (
-                    <div className="grid gap-2">
-                        <Label htmlFor="secret-code">{t('registerSecretCodeLabel')}</Label>
-                        <Input id="secret-code" placeholder={t('registerSecretCodePlaceholder')} required={isPlayer && !isGm} value={secretCode} onChange={(e) => setSecretCode(e.target.value)} />
-                    </div>
-                )}
-                <Button onClick={handleRegister} className="w-full">{t('registerButton')}</Button>
-              </TabsContent>
-            </Tabs>
-             <Separator className="my-4" />
-            <div className="space-y-4 text-center">
-                 <p className="text-xs text-muted-foreground">{t('registerOrSignInWith')}</p>
-                <Button variant="outline" className="w-full" onClick={handleOAuthLogin}>
-                  <svg role="img" viewBox="0 0 24 24" className="mr-2 h-4 w-4">
-                    <path
-                      fill="currentColor"
-                      d="M12.48 10.92v3.28h7.84c-.24 1.84-.85 3.18-1.73 4.1-1.02 1.02-2.3 1.98-4.32 1.98-3.36 0-6.21-2.82-6.21-6.21s2.85-6.21 6.21-6.21c1.84 0 3.15.75 4.14 1.68l2.79-2.79C18.01 1.98 15.49 1 12.48 1 5.88 1 1 5.88 1 12.48s4.88 11.48 11.48 11.48c6.48 0 11.04-4.56 11.04-11.04 0-.75-.06-1.48-.18-2.16h-9.86z"
-                    />
-                  </svg>
-                  {t('loginWithGoogleButton')}
-                </Button>
-            </div>
+            {renderStep()}
           </CardContent>
         </Card>
       </div>
     </div>
   );
 }
+
+    
