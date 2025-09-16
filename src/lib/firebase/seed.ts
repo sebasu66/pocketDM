@@ -27,7 +27,7 @@ const defaultSystemPromptEs = `Eres un maestro narrador y un creativo Dungeon Ma
 // --- Seeding Data ---
 
 const hellfrostGameData = {
-    conceptosWebApp: {
+  conceptos: {
     "introduccion_hellfrost": {
       "titulo": "Bienvenido a Hellfrost",
       "descripcion": "Hellfrost es un escenario de fantasía épica para el galardonado juego de rol Savage Worlds [1, 2]. El mundo de Rassilon está permanentemente cubierto de hielo y nieve, y las tierras templadas no escapan a la miseria de cosechas fallidas, inviernos mortales y el temido viento del Hellfrost [3, 4]. Además, hace apenas 30 años, la magia, que alguna vez fue el arma más potente de las razas civilizadas, comenzó a fallar repentinamente, un efecto de origen desconocido llamado 'El Sifonamiento' la ha convertido en un aliado impredecible [3, 4].",
@@ -140,223 +140,582 @@ const hellfrostGameData = {
     }
   },
     razas: {
-      "Engro": {
-        "descripcion": "Una raza diminuta de nómadas, que viajan por las Tierras del Hogar y el Hellfrost exterior en caravanas de colores brillantes [1]. Tienen una mala reputación, siendo considerados ladrones y mendigos por otras razas [1]. A pesar de ser despreciados, los engro son optimistas y de espíritu elevado, incluso ante el peligro [2]. Miden en promedio 90 cm (3') de altura y la mayoría vive unos 70 años, aunque se han registrado engro de 100 años [3]. Son religiosos por naturaleza, aunque rara vez participan en ceremonias organizadas, y la mayoría practica una forma de druidismo [4].",
-        "caracteristicas_raciales": [
-          "**Suerte:** Los engro roban un benny adicional por sesión de juego. Esto se puede combinar con los Filos Suerte y Gran Suerte [5].",
-          "**Forastero:** Los engro tienen la Desventaja Forastero entre todas las razas excepto la suya [5].",
-          "**Pequeño:** Los engro miden en promedio solo unos 90 cm (3') de altura. Su pequeño tamaño resta 1 a su Dureza y son de Tamaño –1 [5].",
-          "**Astuto:** La mayoría de los engro se ganan la vida operando al margen de la ley. Comienzan el juego con Abrir Cerraduras o Sigilo en d6. Esto no se puede cambiar más tarde [5].",
-          "**Espíritu:** Los engro son seres generalmente optimistas. Comienzan con un Espíritu d6 en lugar de un d4. Mediante avances y Filos, pueden tener un Espíritu máximo de d12+3 [6]."
-        ],
-        "nombres_ejemplo": {
-          "masculinos": ["Bertrem", "Jym", "Odbert", "Oxbow", "Rodgar"],
-          "femeninos": ["Daisy", "Foxglove", "Petunia", "Rose"],
-          "apellidos": "Los engro nunca han usado apellidos, creyendo que un nombre tiene poder [3]."
-        }
-      },
-      "Enano_Helado": {
-        "descripcion": "Aunque los enanos viven predominantemente en montañas, siempre lo hacen por encima de la línea de nieve [6]. Algunos han tallado complejos vastos en los lados de los glaciares. Son ligeramente xenófobos y sus hogares son fortalezas vastas con guardias y trampas ocultas [7]. Tienen pocos clérigos, que suelen seguir a Ertha o Tiw, pero han dominado el poder de las runas. Viven alrededor de 300 años, tienen cabello blanco, piel pálida y ojos negros. La mayoría mide 1.5 metros (5 pies) de altura, pero son criaturas fornidas [7]. Los hombres llevan barba, cuya longitud y número de trenzas determinan el estatus social y la profesión [8].",
-        "caracteristicas_raciales": [
-          "**Letargo por Calor:** Los enanos helados se vuelven letárgicos a temperaturas de 12°C (53°F) o más. Tienen –1 a todas las tiradas de rasgo en dichas temperaturas [9].",
-          "**Insular:** Los enanos helados se han mantenido apartados y rara vez se inmiscuyen en los asuntos de otras razas. Tienen –2 a Carisma al tratar con todas las demás razas [9].",
-          "**Visión en Baja Luz:** Los ojos de los enanos están acostumbrados a la penumbra del subsuelo. Ignoran las penalizaciones por oscuridad en todas las situaciones excepto en Oscuridad Total [9]."
-        ],
-        "nombres_ejemplo": {
-          "masculinos": ["Ari", "Bardi", "Geirstein", "Hord", "Ljot", "Olvir"],
-          "femeninos": ["Asleif", "Herdis", "Svala", "Thyra"],
-          "apellidos": "Los nombres de clan se forman con un descriptor seguido de un objeto (ej. Brighthammer, Foeaxe, Goldbeard, Steelhand) [8, 9]."
-        }
-      },
-      "Nacido_del_Hielo": {
-        "descripcion": "Hace un siglo no existían los nacidos del hielo; hoy son numerosos, aunque no tanto como otras razas. No evolucionaron, simplemente aparecieron. Pueden ser engendrados por cualquier raza, pero un apareamiento de nacidos del hielo siempre resulta en un hijo nacido del hielo [10]. Comparten la forma física de sus padres, pero carecen de sus cualidades raciales, poseyendo rasgos únicos. Todos tienen piel blanco-azulada, cabello blanco y ojos azul pálido, y su piel siempre está fría al tacto [11]. La mayoría se aventuran al Hellfrost, intentando comenzar una nueva vida lejos de los prejuicios [11].",
-        "caracteristicas_raciales": [
-          "**Forma Frígida:** Los nacidos del hielo tienen una forma innata limitada de hrimwisardry. Conocen los poderes: armadura (piel helada), protección ambiental (solo contra el frío), castigo (carámbanos crecen de las manos o un arma), y velocidad (pies con hielo). Pueden adquirir la habilidad Hrimwisardry sin tomar el Filo Trasfondo Arcano [12, 13].",
-          "**Letargo por Calor:** Los nacidos del hielo se vuelven letárgicos a temperaturas de 12°C (53°F) o más. Tienen –1 a todas las tiradas de rasgo en dichas temperaturas [14].",
-          "**Forastero:** Los nacidos del hielo son universalmente desconfiados fuera de los enclaves de nacidos del hielo [14].",
-          "**Alma de Invierno:** Los nacidos del hielo tienen +2 a las salvaciones de Vigor para resistir los efectos del clima frío, y +2 de Armadura para resistir los efectos de ataques de frío, hielo negro o hielo [14]."
-        ],
-        "nombres_ejemplo": {
-          "comunes": "Al nacer, generalmente reciben nombres de la cultura de sus padres, pero muchos rechazan los nombres familiares y adoptan nuevos nombres con un toque gélido (ej. Crinhelada, Filohielo, Manoescarcha, Caminanieves) [12]."
-        }
-      },
-      "Elfo_del_Hogar": {
-        "descripcion": "En el pasado distante, los elfos del hogar vivían en los bosques cálidos del mundo, actuando como jardineros y guardianes. Construían grandes Elfhomes de madera. Se consideran la primera creación de los dioses y eligieron seguir las enseñanzas de los dioses del bien [15]. Pueden vivir más de 500 años, son ligeramente más altos que los humanos pero más esbeltos, con cabello rubio o castaño claro y ojos verde pálido o marrones [16]. Las relaciones con los humanos son tensas [16].",
-        "caracteristicas_raciales": [
-          "**Ágil:** Los elfos del hogar son gráciles y ágiles. Comienzan con un d6 en Agilidad en lugar de un d4 [17].",
-          "**Torpe:** Los elfos del hogar tienen una aversión innata a los objetos mecánicos (incluidas las ballestas). Tienen la Desventaja Torpe [17].",
-          "**Nacido en el Bosque:** Los elfos del hogar no sufren penalizaciones por Terreno Difícil en bosques. Al usar el sistema de Ritmo de Viaje Terrestre, tratan dicho terreno como una categoría inferior [18].",
-          "**Visión en Baja Luz:** Los elfos del hogar tienen ojos de gato e ignoran las penalizaciones por iluminación en todas las situaciones excepto en Oscuridad Total [18].",
-          "**Reinos Naturales:** Los elfos del hogar que se convierten en druidas tratan los Elfhomes como zonas salvajes, no urbanas [18]."
-        ],
-        "nombres_ejemplo": {
-          "genero_neutro": ["Ailinnil", "Elleneirlir", "Lilime", "Melasion", "Niellan", "Sinrilli"],
-          "apellidos": "A menudo asociados con eventos naturales (ej. Corremas, Hojasusurro, Nieblamañana, Silbobrillo) [17]."
-        }
-      },
-      "Humano": {
-        "descripcion": "Los humanos son la raza más poblada en las Tierras del Hogar, aunque sus números han disminuido por la hambruna, enfermedades y ataques [18]. Hay cuatro ramas distintas de humanos: Anari, Finnar, Saxa y Tuomi. Cada cultura tiene numerosas subculturas [19].",
-        "culturas_humanas": {
-          "Anari": {
-            "descripcion": "Habitantes de ciudades y pueblos, se consideran culturalmente superiores [20]. Su antiguo imperio dominó el continente occidental, pero ahora es una raza fracturada [20]. Sus magos favorecen el elementalismo, excepto en la Magocracia, donde practican heahwisardry [21]. Miden en promedio 1.68 m (5’6”) y tienen piel más oscura, cabello castaño oscuro o negro, y ojos generalmente verdes o marrones [22].",
-            "nombres_ejemplo": {
-              "masculinos": ["Argius", "Bron", "Bovert", "Delbaeth", "Emeric", "Gaidon", "Garth", "Howel", "Patris", "Rochad", "Serin", "Thosa"],
-              "femeninos": ["Aife", "Armide", "Branwen", "Elianor", "Emer", "Liaze", "Lusiane", "Tangwenn Ursanne"],
-              "apellidos": "Tradicionalmente formados añadiendo 'ap-' al nombre del padre. Actualmente, muchos adoptan su oficio como apellido o crean nuevos nombres [22]."
-            }
-          },
-          "Finnar": {
-            "descripcion": "Prefieren vivir en tiendas de fieltro, cálidas y fácilmente transportables por renos. Son extremadamente pragmáticos, un hábito vital para sobrevivir en los páramos helados [23]. Los magos finnar suelen aprender magia de la canción o hrimwisardry [24]. Tienden a ser bajos para los humanos, promediando 1.68 m (5’6”), con cabello oscuro y piel morena, curtida por el viento [24].",
-            "nombres_ejemplo": {
-              "masculinos": ["Arto", "Kaiju", "Konsta", "Taneli", "Tove", "Vilho"],
-              "femeninos": ["Esko", "Hannu", "Kaari", "Merja", "Pirkka", "Tyko"],
-              "apellidos": ["Aho", "Hietanen", "Jarnefelt", "Paatalo", "Petelius", "Stenvall", "Utrio", "Waltari"]
-            }
-          },
-          "Saxa": {
-            "descripcion": "Un pueblo clannish que vive principalmente en pequeñas granjas y aldeas. Su cultura se basa en juramentos de amistad y lealtad, y el principio de hospitalidad [25, 26]. Los magos saxa prefieren la magia de la canción [26]. Miden poco menos de 1.83 m (6 pies) de altura, tienen cabello castaño o rubio, ojos azules o verde claro, y piel pálida [27]. Los hombres usan bigotes y barbas, y llevan el cabello largo [28].",
-            "nombres_ejemplo": {
-              "masculinos": ["Agdi", "Cynric", "Edwin", "Gautrek", "Leofric", "Penda", "Runolf", "Seaxwulf", "Skuli", "Wiglaf"],
-              "femeninos": ["Aalfwynn", "Eadgifu", "Gytha", "Isgerrd", "Skjalf", "Thorgerd", "Wulfwynn", "Yrsa"],
-              "apellidos": "Los saxa añaden los sufijos '-sunu' ('hijo') o '-sdohtor' ('hija') al nombre de su padre [28]."
-            }
-          },
-          "Tuomi": {
-            "descripcion": "La cultura humana menos numerosa, confinada a las Battlelands y Drachenlands. Son una cultura guerrera orgullosa que prefiere resolver disputas con sangre [29]. Tiw, el dios de la guerra, es muy favorecido entre las tribus [30]. Miden alrededor de 1.63 m (5’4”) de altura. Ambos sexos llevan el cabello largo y a menudo lo tiñen. Usan glasto y henna para crear tatuajes elaborados, algunos de los cuales tienen poder mágico [30, 31].",
-            "nombres_ejemplo": {
-              "masculinos": ["Achivir", "Arcois", "Bili", "Brude", "Canaul", "Gart", "Volas"],
-              "femeninos": ["Aniel", "Bannatia", "Breth", "Cailis", "Ila", "Olfinecta", "Tamia"],
-              "apellidos": "Usan apodos en lugar de apellidos y siempre añaden el nombre de su tribu después [31]."
-            }
-          }
+        Engro: {
+            descripcion: "Una raza diminuta de nómadas, que viajan por las Tierras del Hogar y el Hellfrost exterior en caravanas de colores brillantes [1]. Tienen una mala reputación, siendo considerados ladrones y mendigos por otras razas [1]. A pesar de ser despreciados, los engro son optimistas y de espíritu elevado, incluso ante el peligro [2]. Miden en promedio 90 cm (3') de altura y la mayoría vive unos 70 años, aunque se han registrado engro de 100 años [3]. Son religiosos por naturaleza, aunque rara vez participan en ceremonias organizadas, y la mayoría practica una forma de druidismo [4].",
+            caracteristicas_raciales: [
+                "**Suerte:** Los engro roban un benny adicional por sesión de juego. Esto se puede combinar con los Filos Suerte y Gran Suerte [5].",
+                "**Forastero:** Los engro tienen la Desventaja Forastero entre todas las razas excepto la suya [5].",
+                "**Pequeño:** Los engro miden en promedio solo unos 90 cm (3') de altura. Su pequeño tamaño resta 1 a su Dureza y son de Tamaño –1 [5].",
+                "**Astuto:** La mayoría de los engro se ganan la vida operando al margen de la ley. Comienzan el juego con Abrir Cerraduras o Sigilo en d6. Esto no se puede cambiar más tarde [5].",
+                "**Espíritu:** Los engro son seres generalmente optimistas. Comienzan con un Espíritu d6 en lugar de un d4. Mediante avances y Filos, pueden tener un Espíritu máximo de d12+3 [6].",
+            ],
+            nombres_ejemplo: {
+                masculinos: ["Bertrem", "Jym", "Odbert", "Oxbow", "Rodgar"],
+                femeninos: ["Daisy", "Foxglove", "Petunia", "Rose"],
+                apellidos: "Los engro nunca han usado apellidos, creyendo que un nombre tiene poder [3].",
+            },
         },
-        "caracteristicas_raciales": [
-          "**Diversos:** Los humanos de cualquier cultura comienzan el juego con un Filo gratuito de su elección o 2 puntos de habilidad adicionales [32]."
-        ]
-      },
-      "Elfo_de_la_Taiga": {
-        "descripcion": "En el pasado distante, varias tribus élficas se dirigieron al norte para establecer Elfhomes en la gran taiga. Vivieron en relativo aislamiento y con el tiempo, casi todos los lazos con sus primos del sur se olvidaron [32]. Desde la Guerra de la Ventisca, han visto su hábitat natural disminuir. Tienen cabello blanco y piel azul claro, siendo por lo demás similares a los elfos del hogar en esperanza de vida [33].",
-        "caracteristicas_raciales": [
-          "**Ágil:** Los elfos de la taiga son gráciles y ágiles. Comienzan con un d6 en Agilidad en lugar de un d4 [34].",
-          "**Torpe:** Los elfos de la taiga tienen una aversión innata a los objetos mecánicos (incluidas las ballestas). Tienen la Desventaja Torpe [35].",
-          "**Nacido en el Bosque:** Los elfos de la taiga no sufren penalizaciones por Terreno Difícil en bosques. Al usar el sistema de Ritmo de Viaje Terrestre, tratan dicho terreno como una categoría inferior [35].",
-          "**Letargo por Calor:** Los elfos de la taiga se vuelven letárgicos a temperaturas de 12°C (53°F) o más. Tienen –1 a todas las tiradas de rasgo en dichas temperaturas [35].",
-          "**Insular:** Los elfos de la taiga rara vez se inmiscuyen en los asuntos de otras razas. Tienen –2 a Carisma al tratar con todas las razas excepto los elfos [35].",
-          "**Visión en Baja Luz:** Al igual que sus parientes templados, los elfos de la taiga tienen ojos de gato e ignoran las penalizaciones por iluminación en todas las situaciones excepto en Oscuridad Total [36].",
-          "**Reinos Naturales:** Los elfos de la taiga que se convierten en druidas tratan los Elfhomes como zonas salvajes, no urbanas [36].",
-          "**Alma de Invierno:** Los elfos de la taiga tienen +2 a las salvaciones de Vigor para resistir los efectos del clima frío, y +2 de Armadura para resistir los efectos de ataques de frío, hielo negro o hielo [36]."
-        ],
-        "nombres_ejemplo": {
-          "simples": "Los elfos de la taiga usan un solo nombre, que suele (pero no siempre) tener un elemento invernal o natural (ej. Jineteescarcha, Crinhelada, Brillohielo, Ojosnocturnos, Tejeombra, Correnieve) [34]."
-        }
-      }
+        "Enano de Escarcha": {
+            descripcion: "Aunque los enanos viven predominantemente en montañas, siempre lo hacen por encima de la línea de nieve [6]. Algunos han tallado complejos vastos en los lados de los glaciares. Son ligeramente xenófobos y sus hogares son fortalezas vastas con guardias y trampas ocultas [7]. Tienen pocos clérigos, que suelen seguir a Ertha o Tiw, pero han dominado el poder de las runas. Viven alrededor de 300 años, tienen cabello blanco, piel pálida y ojos negros. La mayoría mide 1.5 metros (5 pies) de altura, pero son criaturas fornidas [7]. Los hombres llevan barba, cuya longitud y número de trenzas determinan el estatus social y la profesión [8].",
+            caracteristicas_raciales: [
+                "**Letargo por Calor:** Los enanos helados se vuelven letárgicos a temperaturas de 12°C (53°F) o más. Tienen –1 a todas las tiradas de rasgo en dichas temperaturas [9].",
+                "**Insular:** Los enanos helados se han mantenido apartados y rara vez se inmiscuyen en los asuntos de otras razas. Tienen –2 a Carisma al tratar con todas las demás razas [9].",
+                "**Visión en Baja Luz:** Los ojos de los enanos están acostumbrados a la penumbra del subsuelo. Ignoran las penalizaciones por oscuridad en todas las situaciones excepto en Oscuridad Total [9].",
+            ],
+            nombres_ejemplo: {
+                masculinos: ["Ari", "Bardi", "Geirstein", "Hord", "Ljot", "Olvir"],
+                femeninos: ["Asleif", "Herdis", "Svala", "Thyra"],
+                apellidos: "Los nombres de clan se forman con un descriptor seguido de un objeto (ej. Brighthammer, Foeaxe, Goldbeard, Steelhand) [8, 9].",
+            },
+        },
+        "Nacido del Hielo": {
+            descripcion: "Hace un siglo no existían los nacidos del hielo; hoy son numerosos, aunque no tanto como otras razas. No evolucionaron, simplemente aparecieron. Pueden ser engendrados por cualquier raza, pero un apareamiento de nacidos del hielo siempre resulta en un hijo nacido del hielo [10]. Comparten la forma física de sus padres, pero carecen de sus cualidades raciales, poseyendo rasgos únicos. Todos tienen piel blanco-azulada, cabello blanco y ojos azul pálido, y su piel siempre está fría al tacto [11]. La mayoría se aventuran al Hellfrost, intentando comenzar una nueva vida lejos de los prejuicios [11].",
+            caracteristicas_raciales: [
+                "**Forma Frígida:** Los nacidos del hielo tienen una forma innata limitada de hrimwisardry. Conocen los poderes: armadura (piel helada), protección ambiental (solo contra el frío), castigo (carámbanos crecen de las manos o un arma), y velocidad (pies con hielo). Pueden adquirir la habilidad Hrimwisardry sin tomar el Filo Trasfondo Arcano [12, 13].",
+                "**Letargo por Calor:** Los nacidos del hielo se vuelven letárgicos a temperaturas de 12°C (53°F) o más. Tienen –1 a todas las tiradas de rasgo en dichas temperaturas [14].",
+                "**Forastero:** Los nacidos del hielo son universalmente desconfiados fuera de los enclaves de nacidos del hielo [14].",
+                "**Alma de Invierno:** Los nacidos del hielo tienen +2 a las salvaciones de Vigor para resistir los efectos del clima frío, y +2 de Armadura para resistir los efectos de ataques de frío, hielo negro o hielo [14].",
+            ],
+            nombres_ejemplo: {
+                comunes: "Al nacer, generalmente reciben nombres de la cultura de sus padres, pero muchos rechazan los nombres familiares y adoptan nuevos nombres con un toque gélido (ej. Crinhelada, Filohielo, Manoescarcha, Caminanieves) [12].",
+            },
+        },
+        "Elfo del Hogar": {
+            descripcion: "En el pasado distante, los elfos del hogar vivían en los bosques cálidos del mundo, actuando como jardineros y guardianes. Construían grandes Elfhomes de madera. Se consideran la primera creación de los dioses y eligieron seguir las enseñanzas de los dioses del bien [15]. Pueden vivir más de 500 años, son ligeramente más altos que los humanos pero más esbeltos, con cabello rubio o castaño claro y ojos verde pálido o marrones [16]. Las relaciones con los humanos son tensas [16].",
+            caracteristicas_raciales: [
+                "**Ágil:** Los elfos del hogar son gráciles y ágiles. Comienzan con un d6 en Agilidad en lugar de un d4 [17].",
+                "**Torpe:** Los elfos del hogar tienen una aversión innata a los objetos mecánicos (incluidas las ballestas). Tienen la Desventaja Torpe [17].",
+                "**Nacido en el Bosque:** Los elfos del hogar no sufren penalizaciones por Terreno Difícil en bosques. Al usar el sistema de Ritmo de Viaje Terrestre, tratan dicho terreno como una categoría inferior [18].",
+                "**Visión en Baja Luz:** Los elfos del hogar tienen ojos de gato e ignoran las penalizaciones por iluminación en todas las situaciones excepto en Oscuridad Total [18].",
+                "**Reinos Naturales:** Los elfos del hogar que se convierten en druidas tratan los Elfhomes como zonas salvajes, no urbanas [18].",
+            ],
+            nombres_ejemplo: {
+                "genero_neutro": ["Ailinnil", "Elleneirlir", "Lilime", "Melasion", "Niellan", "Sinrilli"],
+                apellidos: "A menudo asociados con eventos naturales (ej. Corremas, Hojasusurro, Nieblamañana, Silbobrillo) [17].",
+            },
+        },
+        Humano: {
+            descripcion: "Los humanos son la raza más poblada en las Tierras del Hogar, aunque sus números han disminuido por la hambruna, enfermedades y ataques [18]. Hay cuatro ramas distintas de humanos: Anari, Finnar, Saxa y Tuomi. Cada cultura tiene numerosas subculturas [19].",
+            culturas_humanas: {
+                Anari: {
+                    descripcion: "Habitantes de ciudades y pueblos, se consideran culturalmente superiores [20]. Su antiguo imperio dominó el continente occidental, pero ahora es una raza fracturada [20]. Sus magos favorecen el elementalismo, excepto en la Magocracia, donde practican heahwisardry [21]. Miden en promedio 1.68 m (5’6”) y tienen piel más oscura, cabello castaño oscuro o negro, y ojos generalmente verdes o marrones [22].",
+                    nombres_ejemplo: {
+                        masculinos: ["Argius", "Bron", "Bovert", "Delbaeth", "Emeric", "Gaidon", "Garth", "Howel", "Patris", "Rochad", "Serin", "Thosa"],
+                        femeninos: ["Aife", "Armide", "Branwen", "Elianor", "Emer", "Liaze", "Lusiane", "Tangwenn Ursanne"],
+                        apellidos: "Tradicionalmente formados añadiendo 'ap-' al nombre del padre. Actualmente, muchos adoptan su oficio como apellido o crean nuevos nombres [22].",
+                    },
+                },
+                Finnar: {
+                    descripcion: "Prefieren vivir en tiendas de fieltro, cálidas y fácilmente transportables por renos. Son extremadamente pragmáticos, un hábito vital para sobrevivir en los páramos helados [23]. Los magos finnar suelen aprender magia de la canción o hrimwisardry [24]. Tienden a ser bajos para los humanos, promediando 1.68 m (5’6”), con cabello oscuro y piel morena, curtida por el viento [24].",
+                    nombres_ejemplo: {
+                        masculinos: ["Arto", "Kaiju", "Konsta", "Taneli", "Tove", "Vilho"],
+                        femeninos: ["Esko", "Hannu", "Kaari", "Merja", "Pirkka", "Tyko"],
+                        apellidos: ["Aho", "Hietanen", "Jarnefelt", "Paatalo", "Petelius", "Stenvall", "Utrio", "Waltari"],
+                    },
+                },
+                Saxa: {
+                    descripcion: "Un pueblo clannish que vive principalmente en pequeñas granjas y aldeas. Su cultura se basa en juramentos de amistad y lealtad, y el principio de hospitalidad [25, 26]. Los magos saxa prefieren la magia de la canción [26]. Miden poco menos de 1.83 m (6 pies) de altura, tienen cabello castaño o rubio, ojos azules o verde claro, y piel pálida [27]. Los hombres usan bigotes y barbas, y llevan el cabello largo [28].",
+                    nombres_ejemplo: {
+                        masculinos: ["Agdi", "Cynric", "Edwin", "Gautrek", "Leofric", "Penda", "Runolf", "Seaxwulf", "Skuli", "Wiglaf"],
+                        femeninos: ["Aalfwynn", "Eadgifu", "Gytha", "Isgerrd", "Skjalf", "Thorgerd", "Wulfwynn", "Yrsa"],
+                        apellidos: "Los saxa añaden los sufijos '-sunu' ('hijo') o '-sdohtor' ('hija') al nombre de su padre [28].",
+                    },
+                },
+                Tuomi: {
+                    descripcion: "La cultura humana menos numerosa, confinada a las Battlelands y Drachenlands. Son una cultura guerrera orgullosa que prefiere resolver disputas con sangre [29]. Tiw, el dios de la guerra, es muy favorecido entre las tribus [30]. Miden alrededor de 1.63 m (5’4”) de altura. Ambos sexos llevan el cabello largo y a menudo lo tiñen. Usan glasto y henna para crear tatuajes elaborados, algunos de los cuales tienen poder mágico [30, 31].",
+                    nombres_ejemplo: {
+                        masculinos: ["Achivir", "Arcois", "Bili", "Brude", "Canaul", "Gart", "Volas"],
+                        femeninos: ["Aniel", "Bannatia", "Breth", "Cailis", "Ila", "Olfinecta", "Tamia"],
+                        apellidos: "Usan apodos en lugar de apellidos y siempre añaden el nombre de su tribu después [31].",
+                    },
+                },
+            },
+            caracteristicas_raciales: [
+                "**Diversos:** Los humanos de cualquier cultura comienzan el juego con un Filo gratuito de su elección o 2 puntos de habilidad adicionales [32].",
+            ],
+        },
+        "Elfo de la Taiga": {
+            descripcion: "En el pasado distante, varias tribus élficas se dirigieron al norte para establecer Elfhomes en la gran taiga. Vivieron en relativo aislamiento y con el tiempo, casi todos los lazos con sus primos del sur se olvidaron [32]. Desde la Guerra de la Ventisca, han visto su hábitat natural disminuir. Tienen cabello blanco y piel azul claro, siendo por lo demás similares a los elfos del hogar en esperanza de vida [33].",
+            caracteristicas_raciales: [
+                "**Ágil:** Los elfos de la taiga son gráciles y ágiles. Comienzan con un d6 en Agilidad en lugar de un d4 [34].",
+                "**Torpe:** Los elfos de la taiga tienen una aversión innata a los objetos mecánicos (incluidas las ballestas). Tienen la Desventaja Torpe [35].",
+                "**Nacido en el Bosque:** Los elfos de la taiga no sufren penalizaciones por Terreno Difícil en bosques. Al usar el sistema de Ritmo de Viaje Terrestre, tratan dicho terreno como una categoría inferior [35].",
+                "**Letargo por Calor:** Los elfos de la taiga se vuelven letárgicos a temperaturas de 12°C (53°F) o más. Tienen –1 a todas las tiradas de rasgo en dichas temperaturas [35].",
+                "**Insular:** Los elfos de la taiga rara vez se inmiscuyen en los asuntos de otras razas. Tienen –2 a Carisma al tratar con todas las razas excepto los elfos [35].",
+                "**Visión en Baja Luz:** Al igual que sus parientes templados, los elfos de la taiga tienen ojos de gato e ignoran las penalizaciones por iluminación en todas las situaciones excepto en Oscuridad Total [36].",
+                "**Reinos Naturales:** Los elfos de la taiga que se convierten en druidas tratan los Elfhomes como zonas salvajes, no urbanas [36].",
+                "**Alma de Invierno:** Los elfos de la taiga tienen +2 a las salvaciones de Vigor para resistir los efectos del clima frío, y +2 de Armadura para resistir los efectos de ataques de frío, hielo negro o hielo [36].",
+            ],
+            nombres_ejemplo: {
+                simples: "Los elfos de la taiga usan un solo nombre, que suele (pero no siempre) tener un elemento invernal o natural (ej. Jineteescarcha, Crinhelada, Brillohielo, Ojosnocturnos, Tejeombra, Correnieve) [34].",
+            },
+        },
     },
-    "categorias_personaje": {
-      "Vengador": {
-        "descripcion": "Los habitantes del Hellfrost, bandidos u orcos han arrebatado todo lo que el héroe amaba. La venganza es lo único que lo mantiene en pie [37]."
-      },
-      "Bandido": {
-        "descripcion": "Ante la escasez de alimentos, algunas personas han recurrido a tomar lo que quieren por la fuerza o la amenaza de violencia [37]."
-      },
-      "Bailarín_de_Espadas": {
-        "descripcion": "Guerreros elfos hábiles en el uso de dos hojas. Sus movimientos parecen espontáneos pero son como pasos de baile bien ensayados para los no-elfos [37]."
-      },
-      "Porra": {
-        "descripcion": "Guerreros engro altamente entrenados en el uso de la honda. Sirven como una especie de policía, pero solo en la sociedad engro [38]."
-      },
-      "Ciudadano": {
-        "descripcion": "Héroes que surgen de personas comunes, como una viuda que busca venganza o un hijo de granjero que busca aventura [38]."
-      },
-      "Druida": {
-        "descripcion": "Solo los elfos y los engro entienden cómo canalizar energía de plantas y animales. Son fuertes en la naturaleza, pero sufren dificultades en entornos urbanos [38]."
-      },
-      "Elementalista": {
-        "descripcion": "Magos que obtienen su poder a través de los reinos elementales. Un elementalista que ha dominado los cuatro elementos es conocido como arkhwisard (archimago) [39]."
-      },
-      "Explorador": {
-        "descripcion": "Viajeros que recorren las tierras, corrigiendo mapas antiguos y detallando las nuevas maravillas del mundo casi congelado [39]."
-      },
-      "Luchador": {
-        "descripcion": "Puede ser desde mercenarios endurecidos y guardaespaldas hasta jóvenes granjeros que buscan defender sus hogares [39]."
-      },
-      "Heahwisard_Mago_Superior": {
-        "descripcion": "Magos que obtienen energías mágicas a través de sus bastones, y son extremadamente débiles mágicamente sin ellos. También son la nobleza gobernante de las tierras conocidas como la Magocracia [40]."
-      },
-      "Sanador": {
-        "descripcion": "Personas que se esfuerzan por detener la marea de miseria con cataplasmas y ungüentos. Las Hermanas de la Misericordia son la única organización no religiosa jurada a este servicio [40]."
-      },
-      "Caballero_del_Hogar": {
-        "descripcion": "Dedicados a la defensa de las Tierras del Hogar contra las depredaciones de los habitantes del Hellfrost. Operan solo en las regiones más frías, custodiando caminos y pasos de montaña [40]."
-      },
-      "Heraldo": {
-        "descripcion": "Sirven a los nobles como diplomáticos y mensajeros. Un ataque contra un heraldo es un ataque contra su señor [41]."
-      },
-      "Hrimwisard_Mago_de_Escarcha": {
-        "descripcion": "Magos que tejen poderosos hechizos extrayendo energías mágicas que se encuentran en el Hellfrost a través de sus cuerpos. Cuanto más frío hace, más poderosos efectos pueden invocar [41]."
-      },
-      "Manipulador_de_Hielo": {
-        "descripcion": "Marineros hábiles en el pilotaje de barcos de hielo, que se deslizan sobre el hielo y la nieve con patines y esquís largos [41]."
-      },
-      "Mercenario_del_Gremio_de_Hierro": {
-        "descripcion": "Aunque existen muchas compañías mercenarias, el Gremio de Hierro solo contrata tropas para comerciantes que requieren protección [42]."
-      },
-      "Trabajador_Itinerante": {
-        "descripcion": "Vagabundos que ofrecen sus servicios en granjas y aldeas por todo Rassilon, como sanadores, herreros o sacerdotes. Los soldados itinerantes son mercenarios [42]."
-      },
-      "Caballero_Hrafn_Cuervo": {
-        "descripcion": "La Orden de los Caballeros Hrafn se dedica a la perfección del liderazgo militar. Se preocupan poco por la política y contratan a sus miembros para servir a nobles [42, 43]."
-      },
-      "Guardián_del_Saber": {
-        "descripcion": "Dedicados a encontrar y preservar el conocimiento, se esfuerzan por evitar que se olvide [43]."
-      },
-      "Mensajero": {
-        "descripcion": "Parte jinete, explorador y guerrero, cuya vida es difícil, pero puede ser gratificante. La comunicación está limitada por la velocidad del caballo y el coraje del jinete [43]."
-      },
-      "Noble": {
-        "descripcion": "La nobleza permanece en la cima de la escala social. Muchas tierras ancestrales se han perdido, lo que obliga a los hijos más jóvenes a buscar fortuna a través de la aventura [43]."
-      },
-      "Forajido": {
-        "descripcion": "Marginados por actividades criminales o falsas acusaciones. A diferencia de los bandidos que atacan a los débiles, los forajidos son simplemente parias y aún pueden ser héroes honorables [44]."
-      },
-      "Paladín": {
-        "descripcion": "Mientras los sacerdotes guardan las almas de los fieles, los paladines guardan su carne. Algunos residen permanentemente en templos, otros viajan realizando hazañas en nombre de su deidad [44]."
-      },
-      "Sacerdote": {
-        "descripcion": "Existen muchos dioses adorados en Rassilon. Los sacerdotes forman el brazo espiritual de su fe [45]."
-      },
-      "Guardabosques_Ranger": {
-        "descripcion": "Operan en la naturaleza como exploradores, espías, exploradores y soldados. A menudo patrullan las Tierras del Hogar para combatir los males que allí residen [45]."
-      },
-      "Refugiado": {
-        "descripcion": "El héroe puede haber perdido su hogar por ataques de bestias del Hellfrost, huido por malas cosechas o tenido su hogar enterrado bajo la nieve. No tiene un hogar propio y debe sobrevivir con su ingenio y la generosidad de otros [45]."
-      },
-      "Reliqus": {
-        "descripcion": "Miembro del Relicario, una organización dedicada a localizar, estudiar y proteger objetos mágicos. Algunos identifican reliquias por sus marcas, otros buscan magia antigua en criptas y templos [46, 47]."
-      },
-      "Guardián_de_Caminos": {
-        "descripcion": "Un grupo de hombres y mujeres que se han encargado de proteger los caminos y salvaguardar a los viajeros en Rassilon [46]."
-      },
-      "Mago_Rúnico": {
-        "descripcion": "Encontrado solo entre los enanos, los magos rúnicos concentran las energías mágicas del mundo a través de runas talladas [46]."
-      },
-      "Explorador_Scout": {
-        "descripcion": "Trabajan para comerciantes (vigilando bandidos u orcos), como tropas de reconocimiento independientes para compañías mercenarias, y como guías para grupos de aventureros en los páramos congelados [48]."
-      },
-      "Skald": {
-        "descripcion": "Hechiceros que realizan su magia a través del poder de la canción. También conocen música, historias y poemas, y son bienvenidos en la mayoría de los asentamientos [48, 49]."
-      },
-      "Ladrón": {
-        "descripcion": "Aprovechan a quienes tienen algo de valor. Algunos son tipos al estilo Robin Hood, otros buscan su propio beneficio [49]."
-      },
-      "Trampero": {
-        "descripcion": "Se ganan la vida cazando osos y lobos para vender sus pieles (necesarias para sobrevivir). Están curtidos a la intemperie y a menudo encuentran ruinas mientras cazan [49]."
-      },
-      "Guardián_del_Bosque": {
-        "descripcion": "Una organización principalmente élfica, dedicada a proteger los bosques de Rassilon. Son tiradores expertos y saben cómo hablar con bestias mundanas [50]."
-      },
-      "Leñador": {
-        "descripcion": "Almas resistentes que viajan al Bosque Congelado para recolectar valiosa madera de hielo, que los enanos utilizan en sus forjas de hielo negro [50]."
-      }
-    }
-  }
-}
+    characterCategories: {
+        Vengador: {
+            descripcion: "Los habitantes del Hellfrost, bandidos u orcos han arrebatado todo lo que el héroe amaba. La venganza es lo único que lo mantiene en pie [37].",
+        },
+        Bandido: {
+            descripcion: "Ante la escasez de alimentos, algunas personas han recurrido a tomar lo que quieren por la fuerza o la amenaza de violencia [37].",
+        },
+        "Bailarín de Espadas": {
+            descripcion: "Guerreros elfos hábiles en el uso de dos hojas. Sus movimientos parecen espontáneos pero son como pasos de baile bien ensayados para los no-elfos [37].",
+        },
+        Porra: {
+            descripcion: "Guerreros engro altamente entrenados en el uso de la honda. Sirven como una especie de policía, pero solo en la sociedad engro [38].",
+        },
+        Ciudadano: {
+            descripcion: "Héroes que surgen de personas comunes, como una viuda que busca venganza o un hijo de granjero que busca aventura [38].",
+        },
+        Druida: {
+            descripcion: "Solo los elfos y los engro entienden cómo canalizar energía de plantas y animales. Son fuertes en la naturaleza, pero sufren dificultades en entornos urbanos [38].",
+        },
+        Elementalista: {
+            descripcion: "Magos que obtienen su poder a través de los reinos elementales. Un elementalista que ha dominado los cuatro elementos es conocido como arkhwisard (archimago) [39].",
+        },
+        Explorador: {
+            descripcion: "Viajeros que recorren las tierras, corrigiendo mapas antiguos y detallando las nuevas maravillas del mundo casi congelado [39].",
+        },
+        Luchador: {
+            descripcion: "Puede ser desde mercenarios endurecidos y guardaespaldas hasta jóvenes granjeros que buscan defender sus hogares [39].",
+        },
+        "Heahwisard (Mago Superior)": {
+            descripcion: "Magos que obtienen energías mágicas a través de sus bastones, y son extremadamente débiles mágicamente sin ellos. También son la nobleza gobernante de las tierras conocidas como la Magocracia [40].",
+        },
+        Sanador: {
+            descripcion: "Personas que se esfuerzan por detener la marea de miseria con cataplasmas y ungüentos. Las Hermanas de la Misericordia son la única organización no religiosa jurada a este servicio [40].",
+        },
+        "Caballero del Hogar": {
+            descripcion: "Dedicados a la defensa de las Tierras del Hogar contra las depredaciones de los habitantes del Hellfrost. Operan solo en las regiones más frías, custodiando caminos y pasos de montaña [40].",
+        },
+        Heraldo: {
+            descripcion: "Sirven a los nobles como diplomáticos y mensajeros. Un ataque contra un heraldo es un ataque contra su señor [41].",
+        },
+        "Hrimwisard (Mago de Escarcha)": {
+            descripcion: "Magos que tejen poderosos hechizos extrayendo energías mágicas que se encuentran en el Hellfrost a través de sus cuerpos. Cuanto más frío hace, más poderosos efectos pueden invocar [41].",
+        },
+        "Manipulador de Hielo": {
+            descripcion: "Marineros hábiles en el pilotaje de barcos de hielo, que se deslizan sobre el hielo y la nieve con patines y esquís largos [41].",
+        },
+        "Mercenario del Gremio de Hierro": {
+            descripcion: "Aunque existen muchas compañías mercenarias, el Gremio de Hierro solo contrata tropas para comerciantes que requieren protección [42].",
+        },
+        "Trabajador Itinerante": {
+            descripcion: "Vagabundos que ofrecen sus servicios en granjas y aldeas por todo Rassilon, como sanadores, herreros o sacerdotes. Los soldados itinerantes son mercenarios [42].",
+        },
+        "Caballero Hrafn (Cuervo)": {
+            descripcion: "La Orden de los Caballeros Hrafn se dedica a la perfección del liderazgo militar. Se preocupan poco por la política y contratan a sus miembros para servir a nobles [42, 43].",
+        },
+        "Guardián del Saber": {
+            descripcion: "Dedicados a encontrar y preservar el conocimiento, se esfuerzan por evitar que se olvide [43].",
+        },
+        Mensajero: {
+            descripcion: "Parte jinete, explorador y guerrero, cuya vida es difícil, pero puede ser gratificante. La comunicación está limitada por la velocidad del caballo y el coraje del jinete [43].",
+        },
+        Noble: {
+            descripcion: "La nobleza permanece en la cima de la escala social. Muchas tierras ancestrales se han perdido, lo que obliga a los hijos más jóvenes a buscar fortuna a través de la aventura [43].",
+        },
+        Forajido: {
+            descripcion: "Marginados por actividades criminales o falsas acusaciones. A diferencia de los bandidos que atacan a los débiles, los forajidos son simplemente parias y aún pueden ser héroes honorables [44].",
+        },
+        Paladín: {
+            descripcion: "Mientras los sacerdotes guardan las almas de los fieles, los paladines guardan su carne. Algunos residen permanentemente en templos, otros viajan realizando hazañas en nombre de su deidad [44].",
+        },
+        Sacerdote: {
+            descripcion: "Existen muchos dioses adorados en Rassilon. Los sacerdotes forman el brazo espiritual de su fe [45].",
+        },
+        "Guardabosques (Ranger)": {
+            descripcion: "Operan en la naturaleza como exploradores, espías, exploradores y soldados. A menudo patrullan las Tierras del Hogar para combatir los males que allí residen [45].",
+        },
+        Refugiado: {
+            descripcion: "El héroe puede haber perdido su hogar por ataques de bestias del Hellfrost, huido por malas cosechas o tenido su hogar enterrado bajo la nieve. No tiene un hogar propio y debe sobrevivir con su ingenio y la generosidad de otros [45].",
+        },
+        Reliqus: {
+            descripcion: "Miembro del Relicario, una organización dedicada a localizar, estudiar y proteger objetos mágicos. Algunos identifican reliquias por sus marcas, otros buscan magia antigua en criptas y templos [46, 47].",
+        },
+        "Guardián de Caminos": {
+            descripcion: "Un grupo de hombres y mujeres que se han encargado de proteger los caminos y salvaguardar a los viajeros en Rassilon [46].",
+        },
+        "Mago Rúnico": {
+            descripcion: "Encontrado solo entre los enanos, los magos rúnicos concentran las energías mágicas del mundo a través de runas talladas [46].",
+        },
+        "Explorador (Scout)": {
+            descripcion: "Trabajan para comerciantes (vigilando bandidos u orcos), como tropas de reconocimiento independientes para compañías mercenarias, y como guías para grupos de aventureros en los páramos congelados [48].",
+        },
+        Skald: {
+            descripcion: "Hechiceros que realizan su magia a través del poder de la canción. También conocen música, historias y poemas, y son bienvenidos en la mayoría de los asentamientos [48, 49].",
+        },
+        Ladrón: {
+            descripcion: "Aprovechan a quienes tienen algo de valor. Algunos son tipos al estilo Robin Hood, otros buscan su propio beneficio [49].",
+        },
+        Trampero: {
+            descripcion: "Se ganan la vida cazando osos y lobos para vender sus pieles (necesarias para sobrevivir). Están curtidos a la intemperie y a menudo encuentran ruinas mientras cazan [49].",
+        },
+        "Guardián del Bosque": {
+            descripcion: "Una organización principalmente élfica, dedicada a proteger los bosques de Rassilon. Son tiradores expertos y saben cómo hablar con bestias mundanas [50].",
+        },
+        Leñador: {
+            descripcion: "Almas resistentes que viajan al Bosque Congelado para recolectar valiosa madera de hielo, que los enanos utilizan en sus forjas de hielo negro [50].",
+        },
+    },
+    habilidades: {
+        generales: "Todas las habilidades estándar de Savage Worlds, excepto Conducir (Driving) y Pilotar (Piloting). Montar (Riding) ahora cubre el control de vehículos tirados por animales.",
+        arcanas: {
+            Druidismo: { basado_en: "Astucia" },
+            Elementalismo: { basado_en: "Astucia" },
+            "Magia Superior (Heahwisardry)": { basado_en: "Astucia" },
+            "Magia de Escarcha (Hrimwisardry)": { basado_en: "Astucia" },
+            "Magia Rúnica (Rune Magic)": { basado_en: "Astucia", especial: "una por cada runa" },
+            "Magia de la Canción (Song Magic)": { basado_en: "Astucia" },
+        },
+        conocimiento: {
+            Alquimia: "Cubre la creación de pociones mágicas, pergaminos y otros objetos temporales, así como pociones herbales mundanas.",
+            Arcanos: "El estudio de asuntos arcanos y ocultos, desde los diversos tipos de magia hasta alfabetos rúnicos místicos, el conocimiento de los reinos elementales o el Abismo.",
+            Área: "El estudio de una región determinada, su gente, lugares y costumbres. Cuanto mayor sea el área cubierta por la habilidad, mayor será la penalización que el GM debe imponer para información específica. El conocimiento del dominio de origen de un personaje se cubre con Conocimiento General.",
+            Batalla: "La aplicación práctica de tácticas y estrategia, así como la logística y el reclutamiento. También cubre el conocimiento de batallas famosas, tácticas y generales.",
+            Oficio: "Cada oficio, como la carpintería, la alfarería, la herrería y el tejido, es una habilidad de conocimiento separada. Un artesano puede usar Conocimiento General para tasar bienes similares a su especialidad de Oficio.",
+            Folklore: "Cubre las leyendas, historias y poemas, además de chismes conocidos. El conocimiento del folklore dentro de la región de origen de un personaje se cubre con Conocimiento General.",
+            Heráldica: "Conocimiento de los escudos de armas, estandartes y diseños de escudos de las casas nobles, clanes y religiones de Rassilon. El conocimiento de los nobles y diseños heráldicos dentro de la región de origen de un personaje se cubre con Conocimiento General.",
+            Historia: "Estudio de los principales eventos históricos desde la Guerra de la Ventisca (Blizzard War). El conocimiento de eventos anteriores al desastre siempre incurre en una penalización, que va de –1 a –6, dependiendo del grado de información que se busca.",
+            Ley: "Una comprensión de las principales leyes de cada reino. El conocimiento de las leyes dentro de la región de origen de un personaje se cubre con Conocimiento General.",
+            Monstruos: "Se divide en tipos específicos de monstruos, como demonios, hadas, gigantes, gólems, orcos o muertos vivientes.",
+            Religión: "El estudio de las diversas deidades y su clero. Clérigos y paladines pueden usar Conocimiento General para asuntos relacionados con su propia fe.",
+            Adivinanzas: "Los concursos de adivinanzas son una forma popular de entretenimiento entre las razas civilizadas.",
+            "Artillería de Asedio": "Se utiliza para disparar balistas, catapultas y otras armas de asedio.",
+        },
+    },
+    edges: {
+        prohibidas: [
+            "As del Aire (Ace)",
+            "Fondo Arcano (Psiónica, Superpoderes o Ciencia Extraña)",
+            "Puntos de Poder (Power Points)",
+            "Recarga Rápida (Rapid Recharge)",
+            "Mago (Wizard)",
+            "Drenar Alma (Soul Drain)",
+        ],
+        alteradas: {
+            Noble: "Requiere permiso del GM para estatus más alto.",
+            "Guerrero Sagrado (Holy Warrior)": "Solo para sacerdotes.",
+            "Campeón (Champion)": "Solo para paladines.",
+        },
+        trasfondo: {
+            "Fondo Arcano (Milagros)": {
+                requisitos: "Novato",
+                descripcion: "Obtiene automáticamente Conexiones con su fe y la desventaja Órdenes. Solo se puede tener un Fondo Arcano.",
+            },
+            Biblioteca: {
+                requisitos: "Novato, Rico o Guardián del Saber, no Analfabeto",
+                descripcion: "Posee tomos de saber, con puntos de bonificación para distribuir entre ellos (máx. +3 por tomo).",
+            },
+            Lingüista: {
+                requisitos: "Novato, Astucia d6+, no Analfabeto",
+                descripcion: "Conoce un número de idiomas igual a su dado de Astucia.",
+            },
+            "Familia Antigua": {
+                requisitos: "Novato, Fondo Arcano (Heahwisardry)",
+                descripcion: "+2 a Conocimiento (Arcanos) y comienza como Mago-Barón.",
+            },
+            Rico: {
+                descripcion: "3x dinero inicial, 5,000 gs/año.",
+            },
+            "Muy Rico": {
+                descripcion: "5x dinero inicial, 15,000 gs/año.",
+            },
+            Styrimathr: {
+                requisitos: "Novato, Navegación d8+",
+                descripcion: "Posee un barco (smabyrding) sin aparejo de hielo.",
+            },
+        },
+        combate: {
+            Valeroso: {
+                requisitos: "Novato, Agallas d8+",
+                descripcion: "+2 a Agallas y -2 a tiradas en la Tabla de Pánico.",
+            },
+            "Doble Disparo": {
+                requisitos: "Experimentado, Elfo, Disparar d8+",
+                descripcion: "Dispara dos flechas al mismo objetivo con –2 a Disparar.",
+            },
+            "Cazagigantes Mejorado": {
+                requisitos: "Heroico, Cazagigantes",
+                descripcion: "Ignora Armadura o Tamaño de criaturas 3+ tamaños más grandes.",
+            },
+            "Disparo Poderoso": {
+                requisitos: "Veterano, Fuerza d8+, Disparar d10+",
+                descripcion: "El daño del arco es Fuerza+d6.",
+            },
+            "Maestro de Armas de Gran Tamaño": {
+                requisitos: "Veterano, Fuerza d10+, Pelear d10+, Tamaño +0 o mayor",
+                descripcion: "Usa armas a dos manos con una sola mano.",
+            },
+            Escaramuza: {
+                requisitos: "Experimentado, Engro, Agilidad d8+",
+                descripcion: "Oponentes de tamaño humano o mayor tienen –1 a ataques contra el engro.",
+            },
+            "Muro de Escudos": {
+                requisitos: "Experimentado, Bloquear, escudo mediano/grande",
+                descripcion: "Defiende a un compañero adyacente con un escudo.",
+            },
+            "Caminante de Nieve": {
+                requisitos: "Novato, Agilidad d6+",
+                descripcion: "Se mueve fácilmente sobre nieve y hielo.",
+            },
+            "Romper Mejorado": {
+                requisitos: "Veterano, Romper",
+                descripcion: "Ignora 2 puntos de armadura.",
+            },
+            "Muro de Acero": {
+                requisitos: "Veterano, Agilidad d8+, Pelear d8+, Notar d8+",
+                descripcion: "Los oponentes no obtienen bonificación por Superioridad Numérica.",
+            },
+            "Grito de Guerra": {
+                requisitos: "Experimentado, Enano Helado o Saxa, Intimidación d8+",
+                descripcion: "Tirada de Intimidación contra todos en una Plantilla de Ráfaga Grande.",
+            },
+        },
+        discipulo: [
+            "Discípulo de Dargar",
+            "Discípulo de Eira",
+            "Discípulo de Eostre MadredelAnimales",
+            "Discípulo de Eostre MadredelasPlantas",
+            "Discípulo de Ertha",
+            "Discípulo de Freo",
+            "Discípulo de Hela",
+            "Discípulo de Hoenir",
+            "Discípulo de Hothar",
+            "Discípulo de Kenaz",
+            "Discípulo de Maera",
+            "Discípulo de Neorthe",
+            "Discípulo de Niht",
+            "Discípulo de las Nornas",
+            "Discípulo de Rigr",
+            "Discípulo de Scaetha",
+            "Discípulo de Sigel",
+            "Discípulo de Thrym",
+            "Discípulo de Thunor",
+            "Discípulo de Tiw",
+            "Discípulo de Ullr",
+            "Discípulo del Inconocible",
+            "Discípulo de Vali",
+            "Discípulo de Var",
+        ],
+        liderazgo: {
+            "Unos Cuantos Hombres Buenos": {
+                requisitos: "Heroico, Astucia d8+, Conocimiento (Batalla) d10+, Mando, Inspirar",
+                descripcion: "Añade un token al ejército en Batallas Masivas.",
+            },
+            "Presencia de Mando": {
+                requisitos: "Novato, Mando",
+                descripcion: "Radio de mando de 10” en lugar de 5”.",
+            },
+            "Fuego Coordinado": {
+                requisitos: "Veterano, Astucia d6+, Disparar d8+, Lanzar d8+, Mando",
+                descripcion: "Tropas de misiles disparan como una unidad única.",
+            },
+            "¡Grita Estragos!": {
+                requisitos: "Veterano, Espíritu d8+, Conocimiento (Batalla) d10+, Mando, Fervor",
+                descripcion: "En Batallas Masivas, si una carga tiene éxito, el enemigo pierde un token extra.",
+            },
+            "Muerte Antes que la Deshonra": {
+                requisitos: "Veterano, Espíritu d8+, Conocimiento (Batalla) d8+, Mando, Mantener la Línea",
+                descripcion: "En Batallas Masivas, +2 a tiradas de Moral.",
+            },
+            Fanatismo: {
+                requisitos: "Experimentado, Mando, Fervor",
+                descripcion: "Tropas bajo mando añaden +2 a Agallas y restan 2 a tiradas de Pánico.",
+            },
+            Rompeasedios: {
+                requisitos: "Experimentado, Astucia d8+, Conocimiento (Batalla) d8+",
+                descripcion: "En Batallas Masivas, reduce el Bono de Asedio enemigo en 1.",
+            },
+            "Mentalidad de Asedio": {
+                requisitos: "Experimentado, Astucia d8+, Conocimiento (Batalla) d8+",
+                descripcion: "En Batallas Masivas, aumenta el Bono de Asedio propio en +1.",
+            },
+            Táctico: {
+                requisitos: "Wild Card, Experimentado, Astucia d8+, Conocimiento (Batalla) d6+, Mando",
+                descripcion: "Recibe cartas de iniciativa adicionales al inicio del combate.",
+            },
+        },
+        legendarias: {
+            Seguidores: "Los seguidores deben estar directamente relacionados con el rol del héroe.",
+            Compañero: "El compañero debe estar directamente relacionado con el rol del héroe.",
+        },
+        poder: {
+            Alquimia: {
+                requisitos: "Experimentado, Fondo Arcano, habilidad arcana d6+, Conocimiento (Alquimia) d6+",
+                descripcion: "Permite crear dispositivos alquímicos.",
+            },
+            "Aumento de Bastón": {
+                requisitos: "Experimentado, Fondo Arcano (Heahwisardry), Heahwisardry d8+, Conocimiento (Arcanos) d8+",
+                descripcion: "Encanta el bastón con habilidades como Aura, Daño, Desviar o Almacenar Hechizo.",
+            },
+            "Combinar Hechizos": {
+                requisitos: "Heroico, Fondo Arcano, habilidad arcana d10+, Conocimiento (Arcanos) d10+",
+                descripcion: "Lanza dos hechizos simultáneamente al mismo objetivo.",
+            },
+            Concentración: {
+                requisitos: "Experimentado, Fondo Arcano, Astucia d6+, Espíritu d6+, Vigor d6+",
+                descripcion: "+2 para resistir interrupción de conjuros.",
+            },
+            "Concentración Mejorada": {
+                requisitos: "Veterano, Concentración",
+                descripcion: "Bono de resistencia a interrupción aumenta a +4.",
+            },
+            "Maestría Elemental": {
+                requisitos: "Experimentado, Fondo Arcano (Elementalismo)",
+                descripcion: "Aprende un nuevo elemento con penalización a las tiradas de Elementalismo.",
+            },
+            Foco: {
+                requisitos: "Experimentado, Fondo Arcano, Espíritu d6+, habilidad arcana d8+",
+                descripcion: "Tirada de Espíritu a –2 para recuperarse de Sacudido por fallo de conjuro.",
+            },
+            "Foco Mejorado": {
+                requisitos: "Heroico, Foco",
+                descripcion: "La tirada de recuperación no tiene penalización.",
+            },
+            Hellfreeze: {
+                requisitos: "Veterano, Fondo Arcano (frío/fuego frío/hielo), habilidad arcana d10+, Conocimiento (Arcanos) d10+",
+                descripcion: "Causa daño normal a criaturas con Resistencia (Frío) y mitad de daño a las con Inmunidad (Frío).",
+            },
+            "Percepción Rúnica": {
+                requisitos: "Novato, Fondo Arcano (Magia Rúnica), Conocimiento (Arcanos) d8+, habilidad de runa específica d8+",
+                descripcion: "+1 a la tirada de habilidad arcana al lanzar hechizos de una runa específica.",
+            },
+            "Sutileza de Hechizo": {
+                requisitos: "Novato, Fondo Arcano (excepto Magia Rúnica), habilidad arcana d8+, Conocimiento (Arcanos) d8+",
+                descripcion: "Aplica mejoras a un hechizo conocido (Arcana o Selectiva).",
+            },
+        },
+        profesionales: {
+            "Porra (Bludgeoner)": {
+                requisitos: "Novato, Engro, Espíritu d8+, Fuerza d6+, Intimidación d6+, Disparar d8+",
+                descripcion: "Aumenta el alcance y daño de la honda. +1 Carisma con engros.",
+            },
+            "Legionario Gris (Grey Legionary)": {
+                requisitos: "Novato, Espíritu d8+, Pelear d8+, Disparar o Lanzar d6+",
+                descripcion: "Inmune a Intimidación y Miedo.",
+            },
+            "Ladrón de Gremio (Guild Thief)": {
+                requisitos: "Novato, Ladrón, debe conocer Fingerspeak",
+                descripcion: "+2 a Callejear en país de origen. Wild Die d8 en Trepar, Abrir Cerraduras o Sigilo (urbano).",
+            },
+            "Caballero del Hogar (Hearth Knight)": {
+                requisitos: "Novato, Espíritu d8+, Vigor d8+, Pelear d6+, Montar d6+, Supervivencia d8+",
+                descripcion: "+1 Parada y +2 a Disparos Apuntados contra monstruos con Inmunidad/Resistencia al frío. +2 a Supervivencia bajo cero.",
+            },
+            "Magia de Setos (Hedge Magic)": {
+                requisitos: "Novato, Astucia d8+, Conocimiento (Alquimia) d6+, Supervivencia d6+",
+                descripcion: "Crea remedios herbales.",
+            },
+            "Guerrero Sagrado/Impío (Holy/Unholy Warrior)": {
+                requisitos: "Novato, Fondo Arcano (Milagros), Espíritu d8+, Fe d6+",
+                descripcion: "Fallo en tirada de Fe resulta en Sacudido; 1 en dado de Fe causa Fatiga.",
+            },
+            "Mercenario del Gremio de Hierro (Iron Guild Mercenary)": {
+                requisitos: "Novato, Fuerza d8+, Espíritu d6+, Pelear d6+",
+                descripcion: "+1 adicional a Ataque por Superioridad Numérica. Comienza con equipo del Gremio.",
+            },
+            "Caballero Hrafn (Knight Hrafn)": {
+                requisitos: "Novato, Astucia d6+, Espíritu d6+, Conocimiento (Batalla) d8+, Mando, otra Ventaja de Liderazgo",
+                descripcion: "Radio de mando aumentado. +1 a Conocimiento (Batalla). Ignora requisitos de Rango para Ventajas de Liderazgo.",
+            },
+            "Guardián del Saber (Lorekeeper)": {
+                requisitos: "Novato, Astucia d8+, Investigación d6+, no Analfabeto",
+                descripcion: "+2 a Conocimiento General y Conocimiento relacionadas con reliquias.",
+            },
+            "Reliqus (Reliquary)": {
+                requisitos: "Novato, Agilidad d8+, Abrir Cerraduras d6+, Notar d6+",
+                descripcion: "+2 a Notar para trampas/puertas ocultas y para desactivarlas. Nunca es Sorprendido por una trampa.",
+            },
+            "Guardián de Caminos (Roadwarden)": {
+                requisitos: "Novato, Vigor d6+, Pelear d8+, Montar d6+, Supervivencia d6+, Rastrear d6+",
+                descripcion: "+2 a Supervivencia y Rastrear. +2 a Notar para detectar emboscadas, trampas y armas ocultas.",
+            },
+            "Hermana de la Misericordia (Sister of Mercy)": {
+                requisitos: "Novato, Curar d8+, debe ser mujer, debe tener Desventaja Pacifista",
+                descripcion: "+2 a Curar y +1 a Carisma.",
+            },
+            "Guardián del Bosque (Wood Warden)": {
+                requisitos: "Novato, Disparar d8+, Fondo Arcano (Druidismo) o Ventaja Leñador",
+                descripcion: "Puede hablar con bestias y aprende el poder Amigo Bestia.",
+            },
+        },
+        sociales: {
+            "Maestro Narrador": {
+                requisitos: "Experimentado, Astucia d8+, Conocimiento (Folklore) d8+, Persuasión d8+",
+                descripcion: "Tira d8 en lugar de d6 para Premios de Gloria Variables.",
+            },
+            "Narrador Legendario": {
+                requisitos: "Heroico, Maestro Narrador",
+                descripcion: "+1d8 de Gloria por cada raise después del primero para Premios de Gloria Variables.",
+            },
+        },
+        "wild_card": {
+            "Sobrecarga de Poder": {
+                requisitos: "Wild Card, Experimentado, Fondo Arcano, habilidad arcana d10+",
+                descripcion: "Duplica el daño total al hacer un ataque con habilidad arcana exitoso.",
+            },
+        },
+    },
+    hindrances: {
+        "Aprendiz/Novicio": {
+            nivel: "Menor/Mayor",
+            descripcion: "Menor: habilidad arcana no superior a d6. Mayor: un poder inicial menos.",
+        },
+        "Oveja Negra": {
+            nivel: "Menor",
+            descripcion: "Solo para nobles de la Magocracia que rechazan la heahwisardry. –2 Carisma con heahwisards.",
+        },
+        "Sangre Fría": {
+            nivel: "Menor",
+            descripcion: "–2 a tiradas de Vigor para resistir el frío.",
+        },
+        "Maldito por los Dioses": {
+            nivel: "Mayor",
+            descripcion: "Hechizos beneficiosos de clérigos de un dios ofendido fallan; hechizos dañinos causan +2 de daño extra.",
+        },
+        "Prohibición Mágica": {
+            nivel: "Mayor",
+            descripcion: "No puede detectar ni usar reliquias, pociones o pergaminos. No puede tomar Fondos Arcanos (Magia).",
+        },
+        "Debilidad Nigromántica": {
+            nivel: "Menor/Mayor",
+            descripcion: "Menor: –2 para resistir ataques especiales de no muertos. Mayor: penalización de –4.",
+        },
+        Órdenes: {
+            nivel: "Menor",
+            descripcion: "Debe seguir órdenes de un poder superior (noble, gremio, etc.).",
+        },
+    },
+    items: {
+        materiales_especiales: {
+            black_ice: {
+                nombre: "Hielo Negro",
+                descripcion: "Se encuentra en las profundidades de glaciares antiguos o en los páramos del Hellfrost. Puede trabajarse como metal, pero solo en una fragua de fuego frío (se derrite con llamas normales). Se usa para crear armaduras y armas, así como artículos mundanos.",
+                costo_multiplicador: "10 veces el costo de los artículos normales.",
+                disponibilidad: "Especial (S) - solo con permiso del GM.",
+                notas: [
+                    "**Derretimiento:** El hielo negro es muy susceptible al calor y se derrite rápidamente a temperaturas por encima del punto de congelación.",
+                    "**Ataques de Calor y Fuego:** El hielo negro sometido a un ataque basado en calor o fuego pierde +1 de Armadura o dado de daño por cada herida que sufre el usuario, derritiéndose por completo cuando la protección o el dado de daño llegan a cero. Por ejemplo, un hechizo de explosión de fuego que inflige 2 heridas derretiría por completo la armadura de malla de hielo negro (+2 Armadura) y reduciría permanentemente una espada larga de hielo negro de Fuerza+d10 a Fuerza+d6.",
+                    "Las armas y armaduras de hielo negro que comienzan a derretirse no pueden repararse. Si una espada larga se reduce a Fuerza+d6, siempre causará ese daño.",
+                ],
+                fuente: "[1, 2]",
+            },
+            maerathril: {
+                nombre: "Maerathril (Metal Lunar)",
+                descripcion: "Metal blanco, excepcionalmente ligero y con propiedades antimágicas. Puede trabajarse en fraguas normales o de fuego frío.",
+                costo_multiplicador: "100 veces el costo de los artículos normales.",
+                disponibilidad: "Especial (S) - solo con permiso del GM.",
+                notas: [
+                    "**Armadura:** Las camisas de malla, cotas de malla y corseletes de placa de Maerathril otorgan los beneficios de la Ventaja Resistencia Arcana (+2) al usuario. Si el usuario ya tiene esta Ventaja o la versión Mejorada, los beneficios se acumulan (otorgando un posible bono total de +6). Los hechiceros (no clérigos) que usan armaduras de Maerathril sufren una penalización de –2 a sus tiradas de habilidad arcana.",
+                    "**Peso:** La armadura de Maerathril pesa la mitad que la armadura normal.",
+                    "**Armas:** Las armas de Maerathril 'lanzan' automáticamente Disipar cada vez que golpean a un enemigo con un hechizo lanzado sobre él. El ataque no necesita causar daño para que este efecto ocurra y puede usarse con un Ataque de Toque. La habilidad arcana del arma es equivalente a su dado de daño completo (d4 para una daga, d10 para una espada a dos manos, etc.). Las armas de Maerathril tienen –2 en su tirada de disipar al afectar poderes milagrosos. Todos los poderes activos son afectados. Solo se realiza una tirada de habilidad arcana por el arma y el objetivo.",
+                ],
+                fuente: "[3-5]",
+            },
+            star_metal: {
+                nombre: "Metal Estelar",
+                descripcion: "En raras ocasiones, una estrella cae a la tierra, dejando un núcleo humeante de metal estelar. Se trabaja como metal normal (incluso en fraguas de fuego frío). Es excepcionalmente fuerte y bueno para perforar materiales.",
+                costo_multiplicador: "50 veces el costo de los artículos normales.",
+                disponibilidad: "Especial (S) - solo con permiso del GM.",
+                notas
