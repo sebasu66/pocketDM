@@ -1,11 +1,4 @@
 
-
-
-
-
-
-
-
 export interface User {
     id: string;
     name: string;
@@ -98,14 +91,14 @@ export interface Skill {
     id: string;
     name: string;
     description: string;
-    attribute: string; // e.g., "Agility", "Smarts"
+    attribute: string; // e.g., "Agilidad", "Astucia"
 }
 
 export interface Hindrance {
     id: string;
     name: string;
     description: string;
-    level: 'Major' | 'Minor';
+    level: 'Mayor' | 'Menor' | 'Menor/Mayor';
 }
 
 export interface Attribute {
@@ -118,7 +111,7 @@ export interface Edge {
     id: string;
     name: string;
     description: string;
-    category: 'Background' | 'Combat' | 'Leadership' | 'Power' | 'Professional' | 'Social' | 'Weird';
+    category: 'Background' | 'Combat' | 'Leadership' | 'Power' | 'Professional' | 'Social' | 'Weird' | 'Legendary';
     requirements: string;
 }
 

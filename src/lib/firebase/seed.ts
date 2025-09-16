@@ -249,6 +249,102 @@ const hellfrostData = {
   }
 };
 
+const hellfrostGameData = {
+    skills: [
+        { name: "Montar", attribute: "Agilidad", description: "Cubre el control de vehículos tirados por animales." },
+        { name: "Druidismo", attribute: "Astucia", description: "Habilidad arcana para el Fondo Arcano de Druida." },
+        { name: "Elementalismo", attribute: "Astucia", description: "Habilidad arcana para el Fondo Arcano de Elementalista." },
+        { name: "Magia Superior", attribute: "Astucia", description: "Habilidad arcana para el Fondo Arcano de Heahwisardry." },
+        { name المراوغة: "Magia de Escarcha", attribute: "Astucia", description: "Habilidad arcana para el Fondo Arcano de Hrimwisardry." },
+        { name: "Magia Rúnica", attribute: "Astucia", description: "Habilidad arcana especial, una por cada runa." },
+        { name: "Magia de la Canción", attribute: "Astucia", description: "Habilidad arcana para el Fondo Arcano de Song Magic." },
+        { name: "Alquimia", attribute: "Astucia", description: "Creación de pociones mágicas, pergaminos y otros objetos temporales." },
+        { name: "Arcanos", attribute: "Astucia", description: "Estudio de asuntos arcanos y ocultos." },
+        { name: "Área", attribute: "Astucia", description: "Estudio de una región determinada, su gente, lugares y costumbres." },
+        { name: "Batalla", attribute: "Astucia", description: "Aplicación práctica de tácticas y estrategia." },
+        { name: "Oficio", attribute: "Astucia", description: "Habilidad de conocimiento separada para cada oficio (carpintería, herrería, etc.)." },
+        { name: "Folklore", attribute: "Astucia", description: "Conocimiento de leyendas, historias, poemas y chismes." },
+        { name: "Heráldica", attribute: "Astucia", description: "Conocimiento de escudos de armas, estandartes y diseños heráldicos." },
+        { name: "Historia", attribute: "Astucia", description: "Estudio de los principales eventos históricos desde la Guerra de la Ventisca." },
+        { name: "Ley", attribute: "Astucia", description: "Comprensión de las principales leyes de cada reino." },
+        { name: "Monstruos", attribute: "Astucia", description: "Dividido en tipos específicos de monstruos (demonios, gigantes, etc.)." },
+        { name: "Religión", attribute: "Astucia", description: "Estudio de las diversas deidades y su clero." },
+        { name: "Adivinanzas", attribute: "Astucia", description: "Habilidad para participar en concursos de adivinanzas." },
+        { name: "Artillería de Asedio", attribute: "Astucia", description: "Se utiliza para disparar balistas, catapultas y otras armas de asedio." }
+    ],
+    edges: [
+        // Background Edges
+        { name: "Fondo Arcano (Milagros)", category: "Background", requirements: "Novato", description: "Otorga la ventaja Conexiones con la fe específica y la desventaja Órdenes." },
+        { name: "Biblioteca", category: "Background", requirements: "Novato, Rico o Guardián del Saber, no Analfabeto", description: "Posee tomos de saber con bonificaciones a habilidades de Conocimiento." },
+        { name: "Lingüista", category: "Background", requirements: "Novato, Astucia d6+, no Analfabeto", description: "Conoce un número de idiomas igual a su dado de Astucia." },
+        { name: "Noble", category: "Background", requirements: "Novato", description: "Posee el título noble más bajo y gobierna una pequeña aldea." },
+        { name: "Familia Antigua", category: "Background", requirements: "Novato, Fondo Arcano (Heahwisardry)", description: "Proviene de una familia influyente en la Magocracia. +2 a Conocimiento (Arcanos)." },
+        { name: "Rico", category: "Background", requirements: "Novato", description: "Comienza con 3x dinero inicial y un ingreso anual de 5,000 escudos de oro." },
+        { name: "Muy Rico", category: "Background", requirements: "Novato, Rico", description: "Comienza con 5x dinero inicial y un ingreso de 15,000 escudos de oro." },
+        { name: "Styrimathr", category: "Background", requirements: "Novato, Navegación d8+", description: "Posee un barco (smabyrding)." },
+        // Combat Edges
+        { name: "Valeroso", category: "Combat", requirements: "Novato, Agallas d8+", description: "+2 a todas las tiradas de Agallas y -2 a las tiradas en la Tabla de Pánico." },
+        { name: "Doble Disparo", category: "Combat", requirements: "Experimentado, Elfo, Disparar d8+", description: "Dispara dos flechas al mismo objetivo con -2 a Disparar. Ambas causan daño." },
+        { name: "Cazagigantes Mejorado", category: "Combat", requirements: "Heroico, Cazagigantes", description: "Ignora la Armadura o el Tamaño de criaturas tres tamaños más grandes." },
+        { name: "Disparo Poderoso", category: "Combat", requirements: "Veterano, Fuerza d8+, Disparar d10+", description: "El daño del arco se calcula como Fuerza+d6." },
+        { name: "Maestro de Armas de Gran Tamaño", category: "Combat", requirements: "Veterano, Fuerza d10+, Pelear d10+", description: "Usa armas a dos manos con una sola mano." },
+        { name: "Escaramuza", category: "Combat", requirements: "Experimentado, Engro, Agilidad d8+", description: "Oponentes de tamaño humano o mayor tienen -1 para atacarte." },
+        { name: "Muro de Escudos", category: "Combat", requirements: "Experimentado, Bloquear", description: "Defiende a un compañero adyacente con un escudo mediano o grande." },
+        { name: "Caminante de Nieve", category: "Combat", requirements: "Novato, Agilidad d6+", description: "Se mueve fácilmente sobre nieve y hielo." },
+        { name: "Romper Mejorado", category: "Combat", requirements: "Veterano, Romper", description: "Ignora 2 puntos de armadura." },
+        { name: "Muro de Acero", category: "Combat", requirements: "Veterano, Agilidad d8+, Pelear d8+, Notar d8+", description: "Los oponentes no obtienen bonificación por Superioridad Numérica." },
+        { name: "Grito de Guerra", category: "Combat", requirements: "Experimentado, Enano Helado o Saxa, Intimidación d8+", description: "Permite una tirada de Intimidación contra todos en una Plantilla de Ráfaga Grande." },
+        // Disciple Edges
+        { name: "Discípulo de Hela", category: "Leadership", requirements: "Experimentado, Fondo Arcano (Milagros), Astucia d8+, Fe d8+", description: "+1 a todas las tiradas de Fe. Los zombies creados con dos raises son permanentes." },
+        // ... (Other Disciple edges can be added here)
+        // Leadership Edges
+        { name: "Unos Cuantos Hombres Buenos", category: "Leadership", requirements: "Heroico, Astucia d8+, Conocimiento (Batalla) d10+, Mando, Inspirar", description: "Añade un token al total de tu ejército en Batallas Masivas." },
+        { name: "Presencia de Mando", category: "Leadership", requirements: "Novato, Mando", description: "Radio de mando de 10” en lugar de 5”." },
+        { name: "Fuego Coordinado", category: "Leadership", requirements: "Veterano, Astucia d6+, Disparar d8+, Lanzar d8+, Mando", description: "Tropas de misiles pueden disparar como una unidad en tu acción." },
+        { name: "¡Grita Estragos!", category: "Leadership", requirements: "Veterano, Espíritu d8+, Conocimiento (Batalla) d10+, Mando, Fervor", description: "En Batallas Masivas, una carga exitosa causa una pérdida de token extra." },
+        { name: "Muerte Antes que la Deshonra", category: "Leadership", requirements: "Veterano, Espíritu d8+, Conocimiento (Batalla) d8+, Mando, Mantener la Línea", description: "+2 a las tiradas de Moral en Batallas Masivas." },
+        { name: "Fanatismo", category: "Leadership", requirements: "Experimentado, Mando, Fervor", description: "Tropas bajo tu mando añaden +2 a Agallas y -2 a Pánico." },
+        { name: "Rompeasedios", category: "Leadership", requirements: "Experimentado, Astucia d8+, Conocimiento (Batalla) d8+", description: "Reduce la Bonificación de Asedio enemiga en 1." },
+        { name: "Mentalidad de Asedio", category: "Leadership", requirements: "Experimentado, Astucia d8+, Conocimiento (Batalla) d8+", description: "Aumenta tu Bonificación de Asedio en +1." },
+        { name: "Táctico", category: "Leadership", requirements: "Wild Card, Experimentado, Astucia d8+, Conocimiento (Batalla) d6+, Mando", description: "Gana cartas de iniciativa adicionales al inicio del combate." },
+        // Legendary Edges
+        { name: "Seguidores", category: "Legendary", requirements: "Legendario", description: "Ganas seguidores leales." },
+        { name: "Compañero", category: "Legendary", requirements: "Legendario", description: "Ganas un compañero Wild Card." },
+        // Power Edges
+        { name: "Alquimia", category: "Power", requirements: "Experimentado, Fondo Arcano, hab. arcana d6+, Conocimiento (Alquimia) d6+", description: "Crea dispositivos alquímicos." },
+        { name: "Aumento de Bastón", category: "Power", requirements: "Experimentado, Fondo Arcano (Heahwisardry), Heahwisardry d8+", description: "Encanta tu bastón con nuevas habilidades." },
+        { name: "Combinar Hechizos", category: "Power", requirements: "Heroico, Fondo Arcano, hab. arcana d10+", description: "Lanza dos hechizos diferentes simultáneamente." },
+        { name: "Concentración", category: "Power", requirements: "Experimentado, Fondo Arcano, Astucia d6+", description: "+2 para resistir la interrupción de hechizos." },
+        { name: "Concentración Mejorada", category: "Power", requirements: "Veterano, Concentración", description: "El bono de resistencia a la interrupción aumenta a +4." },
+        { name: "Maestría Elemental", category: "Power", requirements: "Experimentado, Fondo Arcano (Elementalismo)", description: "Aprende un nuevo elemento con una penalización." },
+        { name: "Foco", category: "Power", requirements: "Experimentado, Fondo Arcano, Espíritu d6+", description: "Tirada de Espíritu a -2 para recuperarte de Shaken por fallo de hechizo." },
+        { name: "Foco Mejorado", category: "Power", requirements: "Heroico, Foco", description: "La tirada de recuperación de Foco no tiene penalización." },
+        { name: "Hellfreeze", category: "Power", requirements: "Veterano, Fondo Arcano (frío), hab. arcana d10+", description: "Tus hechizos de frío dañan a criaturas resistentes o inmunes." },
+        { name: "Percepción Rúnica", category: "Power", requirements: "Novato, Fondo Arcano (Magia Rúnica), hab. de runa d8+", description: "+1 a tu habilidad arcana al usar hechizos de una runa específica." },
+        { name: "Sutileza de Hechizo", category: "Power", requirements: "Novato, Fondo Arcano, hab. arcana d8+", description: "Mejora un hechizo con opciones como Arcana o Selectiva." },
+        // Professional Edges
+        { name: "Guardián del Bosque", category: "Professional", requirements: "Novato, Disparar d8+, Fondo Arcano (Druidismo) o Ventaja Leñador", description: "Habla con bestias y aprende el poder Amigo Bestia." },
+        { name: "Magia de Setos", category: "Professional", requirements: "Novato, Astucia d8+, Conocimiento (Alquimia) d6+", description: "Identifica plantas y crea remedios herbales." },
+        { name: "Guerrero Sagrado/Impío", category: "Professional", requirements: "Novato, Fondo Arcano (Milagros), Espíritu d8+", description: "Si fallas una tirada de Fe, quedas Sacudido." },
+        { name: "Reliquus", category: "Professional", requirements: "Novato, Agilidad d8+, Abrir Cerraduras d6+", description: "+2 a Notar para trampas y puertas ocultas. Nunca te sorprenden." },
+        { name: "Guardián de Caminos", category: "Professional", requirements: "Novato, Vigor d6+, Pelear d8+", description: "+2 a Supervivencia y Rastrear. +2 a Notar para detectar emboscadas." },
+        // Social Edges
+        { name: "Maestro Narrador", category: "Social", requirements: "Experimentado, Astucia d8+, Conocimiento (Folklore) d8+", description: "Usa d8 para Premios de Gloria Variables." },
+        { name: "Narrador Legendario", category: "Social", requirements: "Heroico, Maestro Narrador", description: "Gana +1d8 de Gloria por cada raise en la tirada de narración." },
+        // Wild Card Edges
+        { name: "Sobrecarga de Poder", category: "Wild Card", requirements: "Wild Card, Experimentado, Fondo Arcano, hab. arcana d10+", description: "Duplica el daño total de un ataque arcano exitoso." }
+    ],
+    hindrances: [
+        { name: "Aprendiz/Novicio", level: "Menor/Mayor", description: "Menor: habilidad arcana no superior a d6. Mayor: un poder inicial menos." },
+        { name: "Oveja Negra", level: "Menor", description: "Ex noble de la Magocracia que rechazó la heahwisardry. -2 Carisma con heahwisards." },
+        { name: "Sangre Fría", level: "Menor", description: "-2 a las tiradas de Vigor para resistir el clima frío." },
+        { name: "Maldito por los Dioses", level: "Mayor", description: "Un dios te ha maldecido. Hechizos beneficiosos de sus clérigos fallan, los dañinos causan +2 de daño." },
+        { name: "Prohibición Mágica", level: "Mayor", description: "No puedes usar ni ser afectado por magia, pociones o pergaminos." },
+        { name: "Debilidad Nigromántica", level: "Menor/Mayor", description: "Menor: -2 para resistir ataques especiales de muertos vivientes. Mayor: la penalización es -4." },
+        { name: "Órdenes", level: "Menor", description: "Sirves a un poder superior y debes seguir sus órdenes." }
+    ]
+};
+
 export const initialThread: (Omit<NarrativeThread, 'id'> & { id: string }) = {
     id: "thread-1",
     campaignId: "1",
@@ -491,19 +587,28 @@ async function seedDatabase() {
     }
     console.log("HellFrost character categories queued for seeding.");
     
-    // Add placeholders for the other collections until data is provided
-    const placeholders = {
-        habilidades: { name: 'Placeholder Skill', description: 'This is a placeholder.', attribute: 'Agility' } as Omit<Skill, 'id'>,
-        hindrances: { name: 'Placeholder Hindrance', description: 'This is a placeholder.', level: 'Minor' } as Omit<Hindrance, 'id'>,
-        caracteristicas: { name: 'Placeholder Attribute', description: 'This is a placeholder.' } as Omit<Attribute, 'id'>,
-        edges: { name: 'Placeholder Edge', description: 'This is a placeholder.', category: 'Background', requirements: 'Novice' } as Omit<Edge, 'id'>,
-    };
+    // Add skills, edges, hindrances, and attributes
+    hellfrostGameData.skills.forEach(skill => {
+        const skillRef = doc(collection(db, "habilidades"));
+        batch.set(skillRef, skill);
+    });
+    console.log("HellFrost skills queued for seeding.");
 
-    batch.set(doc(collection(db, "habilidades")), placeholders.habilidades);
-    batch.set(doc(collection(db, "hindrances")), placeholders.hindrances);
-    batch.set(doc(collection(db, "caracteristicas")), placeholders.caracteristicas);
-    batch.set(doc(collection(db, "edges")), placeholders.edges);
-    console.log("HellFrost placeholder collections queued for seeding.");
+    hellfrostGameData.edges.forEach(edge => {
+        const edgeRef = doc(collection(db, "edges"));
+        batch.set(edgeRef, edge);
+    });
+    console.log("HellFrost edges queued for seeding.");
+
+    hellfrostGameData.hindrances.forEach(hindrance => {
+        const hindranceRef = doc(collection(db, "hindrances"));
+        batch.set(hindranceRef, hindrance);
+    });
+    console.log("HellFrost hindrances queued for seeding.");
+
+    // Add placeholder for 'caracteristicas' as it's not in the provided data
+    batch.set(doc(collection(db, "caracteristicas")), { name: 'Placeholder Attribute', description: 'This is a placeholder.' });
+    console.log("HellFrost placeholder attributes queued for seeding.");
 
 
     // Commit the batch
@@ -524,5 +629,3 @@ export async function runSeed() {
     seeded = true;
     await seedDatabase();
 }
-
-    
