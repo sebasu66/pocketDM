@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import Link from "next/link";
@@ -30,6 +29,7 @@ import {
   SheetHeader
 } from "@/components/ui/sheet"
 import {
+  Sidebar,
   SidebarProvider,
   SidebarHeader,
   SidebarContent,
