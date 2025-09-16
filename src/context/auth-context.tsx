@@ -36,6 +36,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsLoading(true);
       if (firebaseUser) {
         try {
+          // This handles both initial sign-in and subsequent visits for OAuth users
           const appUser = await findOrCreateUserFromOAuth(firebaseUser);
           await setupSession(appUser);
         } catch (e) {
@@ -43,6 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           clearSession();
         }
       } else {
+        // Fallback to manual login session from localStorage
         const storedUserId = localStorage.getItem('userId');
         if (storedUserId) {
             const loggedInUser = await getUserById(storedUserId);
@@ -63,8 +65,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const setupSession = async (loggedInUser: User) => {
     if (loggedInUser.enabled) {
       setUser(loggedInUser);
-      const campaignData = await getCampaign(loggedInUser.campaignId);
-      setCampaign(campaignData);
+      if (loggedInUser.campaignId) {
+        const campaignData = await getCampaign(loggedInUser.campaignId);
+        setCampaign(campaignData);
+      }
       
       // Set active role
       if (loggedInUser.role.isGm && !loggedInUser.role.isPlayer) {

@@ -85,7 +85,9 @@ export const createUser = async (input: CreateUserInput): Promise<User> => {
 
     // 3. Handle GM Role
     if (role.isGm) {
-        const newCampaignId = await createNewCampaignForUser({ id: '', name });
+        // Create a temporary user ID for the new campaign owner
+        const tempUserId = doc(collection(db, 'users')).id;
+        const newCampaignId = await createNewCampaignForUser({ id: tempUserId, name });
         // If the user is ONLY a GM, this is their campaign. If they are also a player, they join another campaign but still get their own.
         if (!campaignId) {
             campaignId = newCampaignId;
@@ -116,10 +118,24 @@ export const createUser = async (input: CreateUserInput): Promise<User> => {
 
     await setDoc(newUserRef, finalUserData);
 
+    // If GM, update campaign with final user ID
+    if (role.isGm) {
+        const campaignsRef = collection(db, "campaigns");
+        const q = query(campaignsRef, where("ownerId", "==", newUserRef.id));
+        const campaignSnapshot = await getDocs(q);
+        if (!campaignSnapshot.empty) {
+            const campaignDoc = campaignSnapshot.docs[0];
+            await updateDoc(campaignDoc.ref, { ownerId: newUser.id });
+        }
+    }
+
+
     return newUser;
 };
 
 export const findOrCreateUserFromOAuth = async (firebaseUser: FirebaseAuthUser): Promise<User> => {
+    // Note: Firestore doesn't allow custom IDs with signInWithPopupRedirect, so we must use the UID from Firebase Auth.
+    // To keep consistency, we'll use the UID as the document ID for OAuth users.
     const userRef = doc(db, USERS_COLLECTION, firebaseUser.uid);
     const docSnap = await getDoc(userRef);
 
@@ -133,7 +149,7 @@ export const findOrCreateUserFromOAuth = async (firebaseUser: FirebaseAuthUser):
             id: firebaseUser.uid,
             name: firebaseUser.displayName || 'New Player',
             email: firebaseUser.email || '',
-            role: { isGm: false, isPlayer: true }, // Default to player
+            role: { isGm: false, isPlayer: true }, // Default to player for simple OAuth
             avatar: firebaseUser.photoURL || `https://picsum.photos/seed/${firebaseUser.uid}/100/100`,
             campaignId: '1', // Default campaign ID for OAuth quick-join
             enabled: true,

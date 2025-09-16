@@ -16,6 +16,7 @@ import { useI18n } from "@/context/i18n-context";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Crown, User as UserIcon } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -84,6 +85,22 @@ export default function LoginPage() {
     }
   };
 
+  const handleOAuthLogin = async () => {
+    try {
+      await signInWithGoogle();
+      // The onAuthStateChanged listener in AuthProvider will handle the redirect
+      router.push('/dashboard');
+    } catch (error) {
+      console.error("OAuth login error", error);
+      toast({
+        variant: "destructive",
+        title: "Login Failed",
+        description: "Could not log in with Google. Please try again.",
+      });
+    }
+  };
+
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-cover bg-center bg-no-repeat p-4" style={{backgroundImage: "url('https://picsum.photos/1920/1080?grayscale&blur=5&random=1')"}} data-ai-hint="fantasy landscape">
       <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
@@ -101,7 +118,7 @@ export default function LoginPage() {
                 <TabsTrigger value="login">Login</TabsTrigger>
                 <TabsTrigger value="register">Sign Up</TabsTrigger>
               </TabsList>
-              <TabsContent value="login" className="space-y-4">
+              <TabsContent value="login" className="space-y-4 pt-4">
                 <CardDescription className="text-center">{t('loginSubtitle')}</CardDescription>
                 <div className="grid gap-2">
                   <Label htmlFor="login-email">{t('emailLabel')}</Label>
@@ -113,7 +130,7 @@ export default function LoginPage() {
                 </div>
                 <Button onClick={handleLogin} className="w-full">{t('loginButton')}</Button>
               </TabsContent>
-              <TabsContent value="register" className="space-y-4">
+              <TabsContent value="register" className="space-y-4 pt-4">
                 <CardDescription className="text-center">Create a new account to start your adventure.</CardDescription>
                 <div className="grid gap-2">
                     <Label htmlFor="name">Name</Label>
@@ -149,6 +166,19 @@ export default function LoginPage() {
                 <Button onClick={handleRegister} className="w-full">Sign Up</Button>
               </TabsContent>
             </Tabs>
+             <Separator className="my-4" />
+            <div className="space-y-4 text-center">
+                 <p className="text-xs text-muted-foreground">Or sign in with</p>
+                <Button variant="outline" className="w-full" onClick={handleOAuthLogin}>
+                  <svg role="img" viewBox="0 0 24 24" className="mr-2 h-4 w-4">
+                    <path
+                      fill="currentColor"
+                      d="M12.48 10.92v3.28h7.84c-.24 1.84-.85 3.18-1.73 4.1-1.02 1.02-2.3 1.98-4.32 1.98-3.36 0-6.21-2.82-6.21-6.21s2.85-6.21 6.21-6.21c1.84 0 3.15.75 4.14 1.68l2.79-2.79C18.01 1.98 15.49 1 12.48 1 5.88 1 1 5.88 1 12.48s4.88 11.48 11.48 11.48c6.48 0 11.04-4.56 11.04-11.04 0-.75-.06-1.48-.18-2.16h-9.86z"
+                    />
+                  </svg>
+                  Login with Google
+                </Button>
+            </div>
           </CardContent>
         </Card>
       </div>
