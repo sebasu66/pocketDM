@@ -3,8 +3,10 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User, Campaign } from '@/lib/firebase/types';
-import { getUserById, updateUser as updateDbUser } from '@/lib/auth';
+import { getUserById, updateUser as updateDbUser, findOrCreateUserFromOAuth } from '@/lib/auth';
 import { getCampaign, updateCampaign as updateDbCampaign } from '@/lib/firebase/campaigns';
+import { onAuthStateChanged, User as FirebaseAuthUser } from 'firebase/auth';
+import { auth } from '@/lib/firebase/config';
 
 interface AuthContextType {
   user: User | null;
@@ -24,23 +26,43 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const initializeAuth = async () => {
-      try {
-        const storedUserId = localStorage.getItem('userId');
-        if (storedUserId) {
-          const loggedInUser = await getUserById(storedUserId);
-          if (loggedInUser) {
-            setUser(loggedInUser);
-            const campaignData = await getCampaign(loggedInUser.campaignId);
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: FirebaseAuthUser | null) => {
+      if (firebaseUser) {
+        setIsLoading(true);
+        try {
+          // Find user in Firestore or create them if they don't exist
+          const appUser = await findOrCreateUserFromOAuth(firebaseUser);
+          setUser(appUser);
+          if (appUser.campaignId) {
+            const campaignData = await getCampaign(appUser.campaignId);
             setCampaign(campaignData);
           }
+           localStorage.setItem('userId', appUser.id);
+        } catch (e) {
+          console.error("Error during OAuth user processing", e);
+          setUser(null);
+          setCampaign(null);
         }
-      } catch (e) {
-        console.error("Could not access local storage or fetch data", e);
+      } else {
+        // Handle manual login from local storage if no Firebase auth state
+        const storedUserId = localStorage.getItem('userId');
+        if (storedUserId) {
+            const loggedInUser = await getUserById(storedUserId);
+             if (loggedInUser) {
+                setUser(loggedInUser);
+                const campaignData = await getCampaign(loggedInUser.campaignId);
+                setCampaign(campaignData);
+            }
+        } else {
+            setUser(null);
+            setCampaign(null);
+        }
       }
       setIsLoading(false);
-    };
-    initializeAuth();
+    });
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
   }, []);
 
   const login = async (userId: string) => {
@@ -61,9 +83,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = () => {
     try {
+      auth.signOut();
       localStorage.removeItem('userId');
     } catch (e) {
-      console.error("Could not access local storage", e);
+      console.error("Could not access local storage or sign out", e);
     }
     setUser(null);
     setCampaign(null);

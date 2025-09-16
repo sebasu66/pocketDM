@@ -10,10 +10,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/logo";
 import { useAuth } from "@/context/auth-context";
-import { getUserByEmail, checkPassword } from "@/lib/auth";
+import { getUserByEmail, checkPassword, signInWithGoogle, signInWithFacebook, signInWithApple } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
 import { useI18n } from "@/context/i18n-context";
 import { cn } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -27,11 +28,7 @@ export default function LoginPage() {
     const user = await getUserByEmail(email);
     if (user && checkPassword(user, password)) {
       await login(user.id);
-      if (user.role === 'player') {
-        router.push("/dashboard/playerview");
-      } else {
-        router.push("/dashboard");
-      }
+      router.push("/dashboard");
     } else {
       toast({
         variant: "destructive",
@@ -40,6 +37,31 @@ export default function LoginPage() {
       });
     }
   };
+
+  const handleOAuthLogin = async (provider: 'google' | 'facebook' | 'apple') => {
+    try {
+      let authUser;
+      if (provider === 'google') {
+        authUser = await signInWithGoogle();
+      } else if (provider === 'facebook') {
+        authUser = await signInWithFacebook();
+      } else {
+        authUser = await signInWithApple();
+      }
+      
+      // The onAuthStateChanged listener in AuthProvider will handle the rest.
+      router.push('/dashboard');
+
+    } catch (error: any) {
+      console.error(`${provider} sign in error`, error);
+      toast({
+        variant: "destructive",
+        title: `Login with ${provider} Failed`,
+        description: error.message || "An unknown error occurred.",
+      });
+    }
+  };
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-cover bg-center bg-no-repeat p-4" style={{backgroundImage: "url('https://picsum.photos/1920/1080?grayscale&blur=5&random=1')"}} data-ai-hint="fantasy landscape">
@@ -92,8 +114,18 @@ export default function LoginPage() {
                 <Button onClick={handleLogin} type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
                   {t('loginButton')}
                 </Button>
-              <Button variant="outline" className="w-full">
+              <div className="relative my-2">
+                <Separator />
+                <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-2 text-xs text-muted-foreground">OR CONTINUE WITH</span>
+              </div>
+              <Button variant="outline" className="w-full" onClick={() => handleOAuthLogin('google')}>
                 {t('loginWithGoogleButton')}
+              </Button>
+               <Button variant="outline" className="w-full" onClick={() => handleOAuthLogin('facebook')}>
+                Login with Facebook
+              </Button>
+               <Button variant="outline" className="w-full" onClick={() => handleOAuthLogin('apple')}>
+                Login with Apple
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">
