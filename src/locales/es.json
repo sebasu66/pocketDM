@@ -153,7 +153,14 @@
     "charactersChooseArchetypeDesc": "Selecciona un arquetipo inicial para tu héroe. Esto determinará tus estadísticas, habilidades y equipo iniciales.",
     "charactersFinalize": "Finaliza tu Personaje",
     "charactersFinalizeDesc": "Dale un nombre y una historia a tu nuevo héroe. El trasfondo está pre-rellenado desde el arquetipo, pero siéntete libre de personalizarlo.",
-
+    "characterSkills": "Habilidades",
+    "characterEdges": "Ventajas",
+    "characterHindrances": "Desventajas",
+    "characterInventory": "Inventario",
+    "charactersChoose": "Elegir",
+    "charactersBack": "Volver",
+    "charactersCreating": "Creando...",
+    "characterVisualPreset": "Preset Visual",
 
     "chatTitle": "Chat de Jugadores",
     "chatDescription": "Aquí es donde los jugadores pueden comunicarse libremente fuera del juego e intentar hacer planes.",

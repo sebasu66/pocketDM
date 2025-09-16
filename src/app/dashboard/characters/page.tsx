@@ -39,6 +39,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { CharacterSheet } from "../playerview/CharacterSheet";
 import { GameModal, GameModalContent, GameModalHeader, GameModalTitle } from "@/components/ui/game-modal";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { ReferenceItem } from "@/components/ui/ReferenceItem";
 
 const archetypesList = Object.values(seedArchetypes);
 
@@ -110,6 +112,8 @@ export default function CharactersPage() {
             campaignId: campaign.id,
             userId: user.id,
             archetypeId: selectedArchetype.id,
+            location_cell_id: "C6", // Default starting location
+            visualPreset: selectedArchetype.visualPreset,
         };
 
         await addCharacter(newCharacterData);
@@ -328,29 +332,65 @@ export default function CharactersPage() {
       ) : (
         <Card>
             <CardHeader>
-                <CardTitle className="font-headline">{creationStep === 0 ? t('charactersChooseArchetype') : t('charactersFinalize')}</CardTitle>
+                <CardTitle className="font-headline text-2xl">{creationStep === 0 ? t('charactersChooseArchetype') : t('charactersFinalize')}</CardTitle>
                 <CardDescription>{creationStep === 0 ? t('charactersChooseArchetypeDesc') : t('charactersFinalizeDesc')}</CardDescription>
             </CardHeader>
             <CardContent>
                 {creationStep === 0 && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {archetypesList.map(arch => (
-                            <Card key={arch.id} className="hover:border-primary transition-colors flex flex-col">
-                                <CardHeader>
-                                    <CardTitle>{arch.name}</CardTitle>
-                                    <CardDescription>{arch.race}</CardDescription>
-                                </CardHeader>
-                                <CardContent className="flex-grow">
-                                    <p className="text-sm text-muted-foreground">{arch.description}</p>
-                                </CardContent>
-                                <CardFooter>
-                                    <Button onClick={() => handleSelectArchetype(arch)} className="w-full">
-                                        Choose <ArrowRight />
-                                    </Button>
-                                </CardFooter>
-                            </Card>
-                        ))}
-                    </div>
+                    <Carousel
+                        opts={{
+                            align: "start",
+                        }}
+                        className="w-full"
+                    >
+                        <CarouselContent>
+                            {archetypesList.map((arch) => (
+                                <CarouselItem key={arch.id} className="md:basis-1/2 lg:basis-1/3">
+                                    <div className="p-1">
+                                        <Card className="h-full flex flex-col">
+                                            <CardHeader>
+                                                <CardTitle className="font-headline">{arch.name}</CardTitle>
+                                                <CardDescription>{arch.race}</CardDescription>
+                                            </CardHeader>
+                                            <CardContent className="flex-grow space-y-4">
+                                                <div className="relative aspect-[3/4] w-full rounded-md overflow-hidden">
+                                                    <ImageWithFallback 
+                                                        baseSrc={`/characters/VisualPreset/${arch.visualPreset}/portrait`} 
+                                                        alt={arch.name}
+                                                        fill
+                                                        className="object-cover"
+                                                        data-ai-hint="fantasy portrait"
+                                                    />
+                                                </div>
+                                                <p className="text-sm text-muted-foreground">{arch.description}</p>
+                                                <ScrollArea className="h-48 text-xs">
+                                                    <h4 className="font-bold mb-1">{t('charactersAttributes')}</h4>
+                                                    <div className="flex gap-2">
+                                                        {Object.entries(arch.attributes).map(([key, value]) => <Badge key={key} variant="secondary">{key.toUpperCase()}: {value}</Badge>)}
+                                                    </div>
+                                                    <h4 className="font-bold mt-2 mb-1">{t('characterSkills')}</h4>
+                                                     <ul>{Object.entries(arch.skills).map(([key, value]) => <li key={key}>{key}: {value}</li>)}</ul>
+                                                    <h4 className="font-bold mt-2 mb-1">{t('characterEdges')}</h4>
+                                                     <ul>{arch.edges.map((edge) => <li key={edge}>{edge}</li>)}</ul>
+                                                     <h4 className="font-bold mt-2 mb-1">{t('characterHindrances')}</h4>
+                                                     <ul>{arch.hindrances.map((hindrance) => <li key={hindrance}>{hindrance}</li>)}</ul>
+                                                    <h4 className="font-bold mt-2 mb-1">{t('characterInventory')}</h4>
+                                                    <ul>{arch.inventory.map((item) => <li key={item.item}>{item.item} (x{item.quantity})</li>)}</ul>
+                                                </ScrollArea>
+                                            </CardContent>
+                                            <CardFooter>
+                                                <Button onClick={() => handleSelectArchetype(arch)} className="w-full">
+                                                    {t('charactersChoose')} <ArrowRight />
+                                                </Button>
+                                            </CardFooter>
+                                        </Card>
+                                    </div>
+                                </CarouselItem>
+                            ))}
+                        </CarouselContent>
+                        <CarouselPrevious />
+                        <CarouselNext />
+                    </Carousel>
                 )}
                  {creationStep === 1 && selectedArchetype && (
                     <div className="grid md:grid-cols-2 gap-8">
@@ -364,16 +404,16 @@ export default function CharactersPage() {
                                 <Textarea id="char-background" value={newCharBackground} onChange={(e) => setNewCharBackground(e.target.value)} rows={8} placeholder={t('charactersBackgroundPlaceholder')} required/>
                             </div>
                             <div className="flex gap-4">
-                                <Button type="button" variant="outline" onClick={() => setCreationStep(0)}>Back</Button>
+                                <Button type="button" variant="outline" onClick={() => setCreationStep(0)}>{t('charactersBack')}</Button>
                                 <Button type="submit" disabled={isCreating}>
-                                    {isCreating ? 'Creating...' : t('charactersCreateButton')}
+                                    {isCreating ? t('charactersCreating') : t('charactersCreateButton')}
                                 </Button>
                             </div>
                         </form>
                         <div className="space-y-4">
                            <Card>
                                 <CardHeader>
-                                    <CardTitle>{selectedArchetype.name}</CardTitle>
+                                    <CardTitle className="font-headline">{selectedArchetype.name}</CardTitle>
                                     <CardDescription>{selectedArchetype.race}</CardDescription>
                                 </CardHeader>
                                 <CardContent>
@@ -417,7 +457,7 @@ export default function CharactersPage() {
                           <Input id="level" type="number" value={editingCharacter.level || 1} onChange={(e) => handleStatChange('level', e.target.value)} />
                       </div>
                       <div className="grid items-center gap-1.5">
-                          <Label htmlFor="visualPreset">Visual Preset</Label>
+                          <Label htmlFor="visualPreset">{t('characterVisualPreset')}</Label>
                           <Input id="visualPreset" value={editingCharacter.visualPreset || ''} onChange={(e) => handleStatChange('visualPreset', e.target.value)} />
                       </div>
                       <div className="grid items-center gap-1.5">
