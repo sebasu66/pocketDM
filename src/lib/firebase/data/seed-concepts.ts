@@ -114,4 +114,5 @@ export const conceptosWebApp = {
       "organizaciones_general": "El manual describe varias organizaciones en las Tierras del Hogar y el Hellfrost, a las que los personajes pueden unirse [100]. Estas incluyen los 'Bludgeoners' (guerreros engro que protegen sus caravanas) [100], la 'Convocación de Elementalistas' (que unificó a los elementalistas bajo leyes comunes) [101], los 'Caballeros Hrafn' (una orden de estrategas y tácticos mercenarios) [102], los 'Lorekeepers' (dedicados a preservar el conocimiento) [103], el 'Relicario' (busca y protege artefactos mágicos permanentes) [104], la 'Hermandad de la Misericordia' (sanadoras no religiosas) [105], y los 'Wood Wardens' (organización élfica que protege los bosques) [106]."
     }
   }
-}
+
+    

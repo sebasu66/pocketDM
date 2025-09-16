@@ -176,4 +176,7 @@ export const runSeed = async () => {
         await batch.commit();
         console.log("Database seeded successfully!");
 
-    } catch
+    } catch (error) {
+        console.error("Error seeding database:", error);
+    }
+};
