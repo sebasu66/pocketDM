@@ -229,5 +229,3 @@ export interface Concepto {
 export type NarrativeCommentWithAuthor = NarrativeComment & { author: User };
 export type EnrichedComment = NarrativeComment & {
     author: User;
-    character: Character | null;
-};

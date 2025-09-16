@@ -1,237 +1,11 @@
 
 // THIS SCRIPT IS FOR DEMO PURPOSES ONLY
-// It contains all the initial data needed to seed the Firestore database.
+// It contains the initial reference data needed to seed the Firestore database.
 
-export const initialUsers = [
-    { id: "1", name: "Game Master", email: "gm@example.com", password: "password", role: "master", avatar: "https://picsum.photos/seed/gm/100/100", campaignId: "1" },
-    { id: "2", name: "Alice", email: "alice@example.com", password: "password", role: "player", avatar: "https://picsum.photos/seed/alice/100/100", campaignId: "1" },
-    { id: "3", name: "Bob", email: "bob@example.com", password: "password", role: "player", avatar: "https://picsum.photos/seed/bob/100/100", campaignId: "1" },
-    { id: "4", name: "Carlos", email: "carlos@example.com", password: "password", role: "player", avatar: "https://picsum.photos/seed/carlos/100/100", campaignId: "1" },
-    { id: "5", name: "Diana", email: "diana@example.com", password: "password", role: "player", avatar: "https://picsum.photos/seed/diana/100/100", campaignId: "1" },
-];
-
-export const initialCampaigns = [
-    { 
-        id: "1", 
-        title: "The Frozen Reach", 
-        description: "A campaign set in the northern territories of Rassilon, where the biting winds of the Hellfrost are a constant threat and ancient evils stir beneath the ice.",
-        bannerUrl: "https://picsum.photos/seed/campaign1/1200/400",
-        bannerAiHint: "frozen landscape fantasy",
-        systemPrompt: "You are a master storyteller and creative Dungeon Master for a tabletop role-playing game. Your task is to weave a compelling and collaborative narrative.\n\n- **Analyze the History**: Carefully read the narrative history provided, which includes your previous posts and the players' actions.\n- **Consult Character Data**: Use the available tools to look up information about the player characters. Refer to them by name and incorporate their unique backstories and abilities into the narrative.\n- **Drive the Story Forward**: Write the next post in the story. It should be a direct continuation of the events, reacting to player choices and introducing new challenges, characters, or plot developments.\n- **Be Evocative**: Use descriptive language to paint a vivid picture of the world, its inhabitants, and the atmosphere.\n- **Maintain Tone**: Adhere to the established tone of the campaign (e.g., epic fantasy, gritty noir, lighthearted adventure)."
-    }
-];
-
-export const archetypes = {
-  "avenger": {
-    "name": "Vengador",
-    "race": "Humano (Saxa)",
-    "description": "Tu familia fue masacrada por orcos del Hellfrost. Juraste venganza eterna contra esas bestias, viajando por las tierras heladas para cazarlas y fortalecerte contra amenazas mayores.",
-    "attributes": { "agility": "d6", "smarts": "d4", "spirit": "d6", "strength": "d8", "vigor": "d8" },
-    "skills": { "fighting": "d8", "guts": "d6", "intimidation": "d6", "notice": "d6", "riding": "d4", "survival": "d6", "throwing": "d6" },
-    "edges": ["Berserk", "Venganza"],
-    "hindrances": ["Vengativo (Mayor)", "Enemigo (Menor: tribu Orco)"],
-    "inventory": [
-      { "item": "Espada Larga", "quantity": 1, "notes": "Fuerza+d8" },
-      { "item": "Escudo Mediano", "quantity": 1, "notes": "+1 Parada" },
-      { "item": "Cota de Malla", "quantity": 1, "notes": "+2 Armadura" },
-      { "item": "Daga", "quantity": 1, "notes": "Fuerza+d4" },
-      { "item": "Capa de Invierno", "quantity": 1, "notes": "+2 vs frío" },
-      { "item": "Mochila", "quantity": 1, "notes": "General" }
-    ],
-    "generalBackground": "Tu familia fue masacrada por orcos del Hellfrost. Juraste venganza eterna contra esas bestias, viajando por las tierras heladas para cazarlas y fortalecerte contra amenazas mayores.",
-    "glory": 0,
-    "derived": { "pace": 6, "parry": 7, "toughness": 7, "charisma": 0 },
-    "arcane": null, "religion": null
-  },
-  "bladedancer": {
-    "name": "Bailarín de Cuchillas",
-    "race": "Elfo de la Taiga",
-    "description": "Como guardián de los bosques de la taiga, dominas el baile de las espadas para defender la naturaleza contra invasores. Tu gracia élfica te hace letal en combates cercanos, pero el calor te debilita.",
-    "attributes": { "agility": "d8", "smarts": "d6", "spirit": "d6", "strength": "d6", "vigor": "d6" },
-    "skills": { "fighting": "d8", "notice": "d6", "stealth": "d6", "survival": "d6", "throwing": "d4", "tracking": "d4" },
-    "edges": ["Dos Puños", "Bailarín de Cuchillas"],
-    "hindrances": ["Torpe", "Insular"],
-    "inventory": [
-      { "item": "Dos Espadas Cortas", "quantity": 2, "notes": "Fuerza+d6 cada una" },
-      { "item": "Armadura de Cuero", "quantity": 1, "notes": "+1 Armadura" },
-      { "item": "Arco", "quantity": 1, "notes": "2d6" },
-      { "item": "Carjaj (Flechas)", "quantity": 20, "notes": "Munición" },
-      { "item": "Capa de Invierno", "quantity": 1, "notes": "+2 vs frío" },
-      { "item": "Mochila", "quantity": 1, "notes": "General" }
-    ],
-    "generalBackground": "Como guardián de los bosques de la taiga, dominas el baile de las espadas para defender la naturaleza contra invasores. Tu gracia élfica te hace letal en combates cercanos, pero el calor te debilita.",
-    "glory": 0,
-    "derived": { "pace": 6, "parry": 6, "toughness": 5, "charisma": -2 },
-    "arcane": null, "religion": null
-  },
-  "druid": {
-    "name": "Druida",
-    "race": "Elfo del Hogar",
-    "description": "Conectado con la naturaleza, manipulas plantas y animales para proteger los bosques. Eres fuerte en la naturaleza, pero sufres en entornos urbanos donde la magia natural se debilita.",
-    "attributes": { "agility": "d6", "smarts": "d8", "spirit": "d6", "strength": "d4", "vigor": "d6" },
-    "skills": { "druidism": "d6", "healing": "d6", "notice": "d6", "survival": "d8", "tracking": "d6" },
-    "edges": ["Trasfondo Arcano (Druidismo)", "Vínculo Animal"],
-    "hindrances": ["Torpe", "Insular"],
-    "inventory": [
-      { "item": "Báculo", "quantity": 1, "notes": "Fuerza+d4" },
-      { "item": "Kit de Hierbas", "quantity": 1, "notes": "Herramientas de curación" },
-      { "item": "Armadura de Cuero", "quantity": 1, "notes": "+1 Armadura" },
-      { "item": "Honda", "quantity": 1, "notes": "Fuerza+d4" },
-      { "item": "Equipo de Invierno", "quantity": 1, "notes": "+2 vs frío" },
-      { "item": "Mochila (Hierbas/Pociones)", "quantity": 1, "notes": "Suministros" }
-    ],
-    "generalBackground": "Conectado con la naturaleza, manipulas plantas y animales para proteger los bosques. Eres fuerte en la naturaleza, pero sufres en entornos urbanos donde la magia natural se debilita.",
-    "glory": 0,
-    "derived": { "pace": 6, "parry": 4, "toughness": 5, "charisma": -2 },
-    "arcane": { "type": "Druidismo", "skill": "d6", "powers": ["enmarañar", "amigo animal"] },
-    "religion": null
-  },
-  "elementalist": {
-    "name": "Elementalista",
-    "race": "Humano (Anari)",
-    "description": "Maestro de los elementos, comienzas con fuego para combatir el frío del Hellfrost. Como miembro de la Convocatoria, buscas equilibrio, pero tu arrogancia te hace subestimar peligros.",
-    "attributes": { "agility": "d4", "smarts": "d8", "spirit": "d6", "strength": "d4", "vigor": "d6" },
-    "skills": { "elementalism": "d6", "knowledge (arcana)": "d8", "notice": "d6", "survival": "d4", "persuasion": "d4" },
-    "edges": ["Trasfondo Arcano (Elementalismo - Fuego)", "Nuevo Poder"],
-    "hindrances": ["Curioso (Menor)", "Arrogante (Mayor)"],
-    "inventory": [
-      { "item": "Báculo", "quantity": 1, "notes": "Fuerza+d4" },
-      { "item": "Túnicas", "quantity": 1, "notes": "+1 vs magia" },
-      { "item": "Herramientas Alquímicas", "quantity": 1, "notes": "Componentes" },
-      { "item": "Daga", "quantity": 1, "notes": "Fuerza+d4" },
-      { "item": "Mochila (Libros)", "quantity": 1, "notes": "Saber arcano" }
-    ],
-    "generalBackground": "Maestro de los elementos, comienzas con fuego para combatir el frío del Hellfrost. Como miembro de la Convocatoria, buscas equilibrio, pero tu arrogancia te hace subestimar peligros.",
-    "glory": 0,
-    "derived": { "pace": 6, "parry": 4, "toughness": 5, "charisma": -2 },
-    "arcane": { "type": "Elementalismo (Fuego)", "skill": "d6", "powers": ["proyectil", "castigo divino"] },
-    "religion": null
-  },
-  "hearth_knight": {
-    "name": "Caballero del Hogar",
-    "race": "Nacido de Escarcha",
-    "description": "Montado en su corcel bajo un cielo grisáceo, el Caballero del Hogar es un baluarte contra las hordas del Hellfrost, su armadura reflejando el brillo del hielo. Nacido de la escarcha, este guerrero protege las Tierras del Hogar con un juramento sagrado, enfrentando dragones y gigantes con una determinación que resuena como el viento helado. Su deber lo ata, pero el calor lo debilita.",
-    "attributes": { "agility": "d6", "smarts": "d6", "spirit": "d6", "strength": "d8", "vigor": "d8" },
-    "skills": { "fighting": "d8", "riding": "d6", "survival": "d8", "notice": "d6", "guts": "d6" },
-    "edges": ["Caballero del Hogar", "Alma de Invierno"],
-    "hindrances": ["Órdenes", "Letargo por Calor"],
-    "inventory": [
-      { "item": "Hacha de Batalla", "quantity": 1, "notes": "Fuerza+d8" },
-      { "item": "Escudo Mediano", "quantity": 1, "notes": "+1 Parada" },
-      { "item": "Cota de Malla", "quantity": 1, "notes": "+2 Armadura" },
-      { "item": "Caballo", "quantity": 1, "notes": "Montura" },
-      { "item": "Equipo de Invierno", "quantity": 1, "notes": "+2 vs frío" }
-    ],
-    "generalBackground": "Juraste defender las Tierras del Hogar contra bestias del Hellfrost, guiado por un código de honor que te impulsa a proteger a los inocentes en las tierras heladas.",
-    "glory": 0,
-    "derived": { "pace": 6, "parry": 6, "toughness": 7, "charisma": 0 },
-    "arcane": null, "religion": null
-  },
-  "hrimwisard": {
-    "name": "Hrimwisard",
-    "race": "Humano (Finnar)",
-    "description": "En las llanuras nevadas del Hellfrost exterior, el Hrimwisard canaliza el frío como un maestro del hielo, sus hechizos brillando con un fulgor glacial. Este nómada Finnar, forjado por el viento cortante, encuentra su fuerza en el invierno eterno, pero su aislamiento lo marca como un extraño entre los civilizados, siempre buscando el siguiente horizonte helado.",
-    "attributes": { "agility": "d4", "smarts": "d8", "spirit": "d6", "strength": "d4", "vigor": "d8" },
-    "skills": { "hrimwisardry": "d6", "notice": "d6", "survival": "d8", "knowledge (arcana)": "d6" },
-    "edges": ["Trasfondo Arcano (Hrimwisardry)", "Alma de Invierno"],
-    "hindrances": ["Forastero", "Curioso"],
-    "inventory": [
-      { "item": "Báculo", "quantity": 1, "notes": "Fuerza+d4" },
-      { "item": "Túnicas de Invierno", "quantity": 1, "notes": "+2 vs frío" },
-      { "item": "Daga", "quantity": 1, "notes": "Fuerza+d4" },
-      { "item": "Mochila", "quantity": 1, "notes": "Componentes" }
-    ],
-    "generalBackground": "Nómada finnar, canalizas el frío del Hellfrost para hechizos potentes en invierno, explorando las tierras heladas en busca de conocimiento arcano.",
-    "glory": 0,
-    "derived": { "pace": 6, "parry": 4, "toughness": 6, "charisma": -2 },
-    "arcane": { "type": "Hrimwisardry", "skill": "d6", "powers": ["armadura", "proyectil"] },
-    "religion": null
-  },
-  "knight_hrafn": {
-    "name": "Caballero Hrafn",
-    "race": "Humano (Anari)",
-    "description": "Con un estandarte ondeando bajo la nieve, el Caballero Hrafn lidera con la precisión de un estratega en un campo de batalla helado. Este humano Anari, desprovisto de ambiciones políticas, ofrece su genio táctico a nobles y ejércitos, su mente calculadora enfrentándose a las hordas oscuras como un faro de orden en el caos del Hellfrost.",
-    "attributes": { "agility": "d6", "smarts": "d8", "spirit": "d6", "strength": "d6", "vigor": "d6" },
-    "skills": { "knowledge (battle)": "d8", "fighting": "d6", "persuasion": "d6", "notice": "d6", "riding": "d6" },
-    "edges": ["Caballero Hrafn", "Mando"],
-    "hindrances": ["Órdenes", "Código de Honor"],
-    "inventory": [
-      { "item": "Espada Corta", "quantity": 1, "notes": "Fuerza+d6" },
-      { "item": "Armadura de Cuero", "quantity": 1, "notes": "+1 Armadura" },
-      { "item": "Caballo", "quantity": 1, "notes": "Montura" },
-      { "item": "Escudo", "quantity": 1, "notes": "+1 Parada" },
-      { "item": "Mochila", "quantity": 1, "notes": "Mapas y Tratados" }
-    ],
-    "generalBackground": "Estratega anari, lideras ejércitos con tácticas precisas, guiando a tus aliados a través de las batallas heladas del Hellfrost.",
-    "glory": 0,
-    "derived": { "pace": 6, "parry": 5, "toughness": 5, "charisma": 0 },
-    "arcane": null, "religion": null
-  },
-  "paladin": {
-    "name": "Paladín",
-    "race": "Humano (Saxa)",
-    "description": "Vestido con armadura resplandeciente, el Paladín de Tiw es un campeón divino, su espada bendecida cortando la oscuridad del Hellfrost. Este guerrero Saxa, guiado por el dios de la guerra, protege a los fieles con un juramento inquebrantable, su fe un escudo contra las abominaciones heladas que acechan en la noche.",
-    "attributes": { "agility": "d6", "smarts": "d4", "spirit": "d8", "strength": "d8", "vigor": "d8" },
-    "skills": { "faith": "d6", "fighting": "d8", "guts": "d6", "intimidation": "d6", "riding": "d4" },
-    "edges": ["Trasfondo Arcano (Milagros - Tiw)", "Campeón"],
-    "hindrances": ["Código de Honor", "Voto (Mayor: Servir a Tiw)"],
-    "inventory": [
-      { "item": "Espadón", "quantity": 1, "notes": "Fuerza+d10" },
-      { "item": "Armadura de Placas (Torso)", "quantity": 1, "notes": "+3 Armadura" },
-      { "item": "Símbolo Sagrado", "quantity": 1, "notes": "Foco Divino" },
-      { "item": "Caballo", "quantity": 1, "notes": "Montura" }
-    ],
-    "generalBackground": "Devoto de Tiw, luchas en batallas por honor y sangre, defendiendo la fe en las tierras heladas con tu espada bendita.",
-    "glory": 0,
-    "derived": { "pace": 5, "parry": 6, "toughness": 8, "charisma": 0 },
-    "arcane": { "type": "Milagros (Tiw)", "skill": "d6", "powers": ["armadura", "castigo divino"] },
-    "religion": { "god": "Tiw", "powers": ["armadura", "castigo divino"] }
-  },
-  "rune_mage": {
-    "name": "Mago Rúnico",
-    "race": "Enano de Hielo",
-    "description": "En las profundidades de las montañas heladas, el Mago Rúnico talla runas de poder en piedra, su martillo resonando como un eco del pasado enano. Este guerrero de escarcha protege las minas y forjas con magia antigua, su resistencia al frío un legado de su pueblo, aunque el calor lo traiciona fuera de su hogar subterráneo.",
-    "attributes": { "agility": "d4", "smarts": "d8", "spirit": "d6", "strength": "d6", "vigor": "d8" },
-    "skills": { "rune (armor-rune)": "d6", "knowledge (arcana)": "d6", "fighting": "d6", "notice": "d6", "survival": "d4" },
-    "edges": ["Trasfondo Arcano (Magia Rúnica)"],
-    "hindrances": ["Insular", "Letargo por Calor"],
-    "inventory": [
-      { "item": "Martillo", "quantity": 1, "notes": "Fuerza+d6" },
-      { "item": "Cota de Malla", "quantity": 1, "notes": "+2 Armadura" },
-      { "item": "Herramientas de Talla", "quantity": 1, "notes": "Creación de Runas" },
-      { "item": "Mochila", "quantity": 1, "notes": "Runas y Componentes" }
-    ],
-    "generalBackground": "Tallas runas en piedra para invocar magia ancestral, defendiendo las fortalezas enanas contra invasores del Hellfrost.",
-    "glory": 0,
-    "derived": { "pace": 5, "parry": 5, "toughness": 7, "charisma": -2 },
-    "arcane": { "type": "Magia Rúnica", "skill": "d6", "powers": ["armadura"] },
-    "religion": null
-  },
-  "skald": {
-    "name": "Skald",
-    "race": "Humano (Finnar)",
-    "description": "Bajo un cielo gris, el Skald teje magia con su voz, sus canciones resonando como un canto de guerra en las llanuras heladas. Este nómada Finnar inspira a los suyos con historias épicas, su curiosidad lo llevando a explorar ruinas ocultas bajo la nieve, aunque su destreza reside en el arte de la palabra más que en la espada.",
-    "attributes": { "agility": "d4", "smarts": "d6", "spirit": "d8", "strength": "d4", "vigor": "d6" },
-    "skills": { "song magic": "d6", "persuasion": "d8", "knowledge (folklore)": "d6", "notice": "d6", "survival": "d4" },
-    "edges": ["Trasfondo Arcano (Magia de Canción)", "Carisma +1 (de Skald)"],
-    "hindrances": ["Curioso", "Forastero"],
-    "inventory": [
-      { "item": "Laúd", "quantity": 1, "notes": "Instrumento" },
-      { "item": "Daga", "quantity": 1, "notes": "Fuerza+d4" },
-      { "item": "Armadura de Cuero", "quantity": 1, "notes": "+1 Armadura" },
-      { "item": "Mochila", "quantity": 1, "notes": "Libros de Poemas" }
-    ],
-    "generalBackground": "Nómada finnar, cantas épicas para invocar magia y entretener, preservando las leyendas del Hellfrost con cada nota.",
-    "glory": 0,
-    "derived": { "pace": 6, "parry": 4, "toughness": 5, "charisma": 1 },
-    "arcane": { "type": "Magia de Canción", "skill": "d6", "powers": ["potenciar rasgo", "inspirar"] },
-    "religion": null
-  }
-};
-
-export const hellfrostGameData = {
+export const hellfrostReferenceData = {
     "razas": {
         "Engro": {
+            "nombre": "Engro",
             "descripcion": "Una raza diminuta de nómadas, que viajan por las Tierras del Hogar y el Hellfrost exterior en caravanas de colores brillantes. Tienen una mala reputación, siendo considerados ladrones y mendigos por otras razas. A pesar de ser despreciados, los engro son optimistas y de espíritu elevado, incluso ante el peligro. Miden en promedio 90 cm (3') de altura y la mayoría vive unos 70 años, aunque se han registrado engro de 100 años. Son religiosos por naturaleza, aunque rara vez participan en ceremonias organizadas, y la mayoría practica una forma de druidismo.",
             "caracteristicas_raciales": [
                 "**Suerte:** Los engro roban un benny adicional por sesión de juego. Esto se puede combinar con los Filos Suerte y Gran Suerte.",
@@ -247,6 +21,7 @@ export const hellfrostGameData = {
             }
         },
         "Enano de Hielo": {
+            "nombre": "Enano de Hielo",
             "descripcion": "Aunque los enanos viven predominantemente en montañas, siempre lo hacen por encima de la línea de nieve. Algunos han tallado complejos vastos en los lados de los glaciares. Son ligeramente xenófobos y sus hogares son fortalezas vastas con guardias y trampas ocultas. Tienen pocos clérigos, que suelen seguir a Ertha o Tiw, pero han dominado el poder de las runas. Viven alrededor de 300 años, tienen cabello blanco, piel pálida y ojos negros. La mayoría mide 1.5 metros (5 pies) de altura, pero son criaturas fornidas. Los hombres llevan barba, cuya longitud y número de trenzas determinan el estatus social y la profesión.",
             "caracteristicas_raciales": [
                 "**Letargo por Calor:** Los enanos de hielo se vuelven letárgicos a temperaturas de 12°C (53°F) o más. Tienen –1 a todas las tiradas de rasgo en dichas temperaturas.",
@@ -260,6 +35,7 @@ export const hellfrostGameData = {
             }
         },
         "Nacido de Hielo": {
+            "nombre": "Nacido de Hielo",
             "descripcion": "Hace un siglo no existían los nacidos de hielo; hoy son numerosos, aunque no tanto como otras razas. No evolucionaron, simplemente aparecieron. Pueden ser engendrados por cualquier raza, pero un apareamiento de nacidos de hielo siempre resulta en un hijo nacido de hielo. Comparten la forma física de sus padres, pero carecen de sus cualidades raciales, poseyendo rasgos únicos. Todos tienen piel blanco-azulada, cabello blanco y ojos azul pálido, y su piel siempre está fría al tacto. La mayoría se aventuran al Hellfrost, intentando comenzar una nueva vida lejos de los prejuicios.",
             "caracteristicas_raciales": [
                 "**Forma Frígida:** Los nacidos de hielo tienen una forma innata limitada de hrimwisardry. Conocen los poderes: armadura (piel helada), protección ambiental (solo contra el frío), castigo (carámbanos crecen de las manos o un arma), y velocidad (pies con hielo). Pueden adquirir la habilidad Hrimwisardry sin tomar el Filo Trasfondo Arcano.",
@@ -272,6 +48,7 @@ export const hellfrostGameData = {
             }
         },
         "Elfo del Hogar": {
+            "nombre": "Elfo del Hogar",
             "descripcion": "En el pasado distante, los elfos del hogar vivían en los bosques cálidos del mundo, actuando como jardineros y guardianes. Construían grandes Elfhomes de madera. Se consideran la primera creación de los dioses y eligieron seguir las enseñanzas de los dioses del bien. Pueden vivir más de 500 años, son ligeramente más altos que los humanos pero más esbeltos, con cabello rubio o castaño claro y ojos verde pálido o marrones. Las relaciones con los humanos son tensas.",
             "caracteristicas_raciales": [
                 "**Ágil:** Los elfos del hogar son gráciles y ágiles. Comienzan con un d6 en Agilidad en lugar de un d4.",
@@ -286,6 +63,7 @@ export const hellfrostGameData = {
             }
         },
         "Humano": {
+            "nombre": "Humano",
             "descripcion": "Los humanos son la raza más poblada en las Tierras del Hogar, aunque sus números han disminuido por la hambruna, enfermedades y ataques. Hay cuatro ramas distintas de humanos: Anari, Finnar, Saxa y Tuomi. Cada cultura tiene numerosas subculturas.",
             "culturas_humanas": {
                 "Anari": { "descripcion": "Habitantes de ciudades y pueblos, se consideran culturalmente superiores. Su antiguo imperio dominó el continente occidental, pero ahora es una raza fracturada. Sus magos favorecen el elementalismo, excepto en la Magocracia, donde practican heahwisardry. Miden en promedio 1.68 m (5’6”) y tienen piel más oscura, cabello castaño oscuro o negro, y ojos generalmente verdes o marrones." },
@@ -296,6 +74,7 @@ export const hellfrostGameData = {
             "caracteristicas_raciales": ["**Diversos:** Los humanos de cualquier cultura comienzan el juego con un Filo gratuito de su elección o 2 puntos de habilidad adicionales."]
         },
         "Elfo de la Taiga": {
+            "nombre": "Elfo de la Taiga",
             "descripcion": "En el pasado distante, varias tribus élficas se dirigieron al norte para establecer Elfhomes en la gran taiga. Vivieron en relativo aislamiento y con el tiempo, casi todos los lazos con sus primos del sur se olvidaron. Desde la Guerra de la Ventisca, han visto su hábitat natural disminuir. Tienen cabello blanco y piel azul claro, siendo por lo demás similares a los elfos del hogar en esperanza de vida.",
             "caracteristicas_raciales": [
                 "**Ágil:** Los elfos de la taiga son gráciles y ágiles. Comienzan con un d6 en Agilidad en lugar de un d4.",
@@ -420,88 +199,499 @@ export const hellfrostGameData = {
       "Maestro Narrador": { "categoria": "Social", "requisitos": "Experimentado, Astucia d8+, Conocimiento (Folklore) d8+", "descripcion": "Otorga bonificaciones a la Gloria de la partida." },
       "Narrador Legendario": { "categoria": "Social", "requisitos": "Heroico, Maestro Narrador", "descripcion": "Mejora los bonos de Gloria." },
       "Sobrecarga de Poder": { "categoria": "Wild Card", "requisitos": "Wild Card, Experimentado, Fondo Arcano", "descripcion": "Duplica el daño de un ataque con habilidad arcana exitoso." }
-    },
-    "rassilon_grid_map_summary": [
-        { "id": "A1", "region_info": { "name": "The Hellfrost (The Core)", "climate": "Supernatural, extreme cold." } },
-        { "id": "A2", "region_info": { "name": "The Hellfrost (Inner Wastes)", "climate": "Extreme, supernatural cold." } },
-        { "id": "A3", "region_info": { "name": "The Hellfrost (Outer Wastes)", "climate": "Extreme cold, though slightly less severe than the inner wastes." } },
-        { "id": "A4", "region_info": { "name": "The Hellfrost (The Icewall - North)", "climate": "High Winterlands temperatures on the south side, supernatural cold on the north." } },
-        { "id": "A5", "region_info": { "name": "Unclaimed Lands (Northern Fringes)", "climate": "High Winterlands. Brutally long and cold winters." } },
-        { "id": "A6", "region_info": { "name": "Unclaimed Lands (Dwarven Hills)", "climate": "High Winterlands. Unpredictable weather patterns." } },
-        { "id": "A7", "region_info": { "name": "Unclaimed Lands (The Great Forest)", "climate": "High Winterlands. Dense forest provides some shelter." } },
-        { "id": "A8", "region_info": { "name": "Unclaimed Lands (Highwood Forest)", "climate": "High Winterlands. High altitude and mountainous terrain." } },
-        { "id": "A9", "region_info": { "name": "Unclaimed Lands (Frozen Forest)", "climate": "An unnatural, magical cold at a constant -40 degrees Fahrenheit." } },
-        { "id": "A10", "region_info": { "name": "Rimeholm (Jotunvalk Mountains)", "climate": "High Winterlands, though Hearthstones create a temperate microclimate in the core." } },
-        { "id": "B1", "region_info": { "name": "The Hellfrost (Icewall - North)", "climate": "The most extreme cold imaginable on Rassilon." } },
-        { "id": "B2", "region_info": { "name": "Glittersands", "climate": "High Winterlands, but markedly warmer, on par with Low Winterlands." } },
-        { "id": "B3", "region_info": { "name": "Unclaimed Lands (Frostwater Lake)", "climate": "High Winterlands. The lake freezes over in winter." } },
-        { "id": "B4", "region_info": { "name": "Unclaimed Lands (The Palisade)", "climate": "High Winterlands. Deep cold and heavy snow." } },
-        { "id": "B5", "region_info": { "name": "Hrimthyr Isle", "climate": "Permanently frozen. Volcanic activity does not warm the island." } },
-        { "id": "B6", "region_info": { "name": "Giant's Throne", "climate": "High Winterlands. High altitude ensures a brutally cold climate." } },
-        { "id": "B7", "region_info": { "name": "The Freelands (The Stone Forest)", "climate": "Low Winterlands. Dense forest provides some shelter." } },
-        { "id": "B8", "region_info": { "name": "The Freelands (Spyre & The Pinnacle)", "climate": "Low Winterlands. Elevated position makes it colder than surrounding hills." } },
-        { "id": "B9", "region_info": { "name": "The Freelands (Lesser Hills)", "climate": "Low Winterlands. Cold, windswept climate with significant winter snowfall." } },
-        { "id": "B10", "region_info": { "name": "Angarion (The Forest Heart)", "climate": "Hearthlands. Sheltered, stable microclimate." } },
-        { "id": "C1", "region_info": { "name": "The Hellfrost (Icewall - North)", "climate": "The absolute extreme of Rassilon's climate." } },
-        { "id": "C2", "region_info": { "name": "Unclaimed Lands (The Bleak Moor)", "climate": "High Winterlands. Exposed and windswept." } },
-        { "id": "C3", "region_info": { "name": "Unclaimed Lands (Frost Hills)", "climate": "High Winterlands. Bitter winds and deep, lasting snows." } },
-        { "id": "C4", "region_info": { "name": "The Battlelands (Calivar)", "climate": "Low Winterlands. Coastal location moderates temperature slightly." } },
-        { "id": "C5", "region_info": { "name": "The Battlelands (Jotungraef)", "climate": "Low Winterlands. Hills provide little shelter, vales are boggy." } },
-        { "id": "C6", "region_info": { "name": "Angmark (Leirvik)", "climate": "Hearthlands. Maritime climate with cool summers and cold, wet winters." } },
-        { "id": "C7", "region_info": { "name": "The Mistlands & Isles of the Seareavers", "climate": "Unnaturally damp and cold due to magical fog (Mistlands). Fierce sea storms (Isles)." } },
-        { "id": "C8", "region_info": { "name": "Alantaris Isle (Imperial City)", "climate": "Hearthlands. More temperate maritime climate than the mainland." } },
-        { "id": "C9", "region_info": { "name": "The Inner Sea (West)", "climate": "Maritime. Unpredictable weather with dense fogs and violent storms." } },
-        { "id": "C10", "region_info": { "name": "Angarion (Southern Border)", "climate": "Hearthlands. Slightly milder than the northern interior." } },
-        { "id": "D1", "region_info": { "name": "The Hellfrost (Icewall - North-East)", "climate": "The absolute extreme of Rassilon's climate." } },
-        { "id": "D2", "region_info": { "name": "Lakeland (Mere)", "climate": "High Winterlands. Long, brutal winters." } },
-        { "id": "D3", "region_info": { "name": "Lakeland (Vimmar)", "climate": "Low Winterlands. Harsh and unforgiving." } },
-        { "id": "D4", "region_info": { "name": "The Borderlands (Giantwatch)", "climate": "Low Winterlands. Long, cold winters with heavy snowfall." } },
-        { "id": "D5", "region_info": { "name": "The Borderlands (Hjorn & Ludogov)", "climate": "Low Winterlands. Harsh, with cold winters and short, cool summers." } },
-        { "id": "D6", "region_info": { "name": "The Freelands (The Citadel & Crase)", "climate": "Low Winterlands. High altitude ensures a cold, harsh climate." } },
-        { "id": "D7", "region_info": { "name": "The Withered Lands & Foulwater Swamp", "climate": "Unnatural. Perpetually shrouded in cold, damp fog." } },
-        { "id": "D8", "region_info": { "name": "Coglelund (Halfway)", "climate": "Hearthlands. Cold, windy winters and mild summers." } },
-        { "id": "D9", "region_info": { "name": "The Magocracy (Principality of Darovia)", "climate": "Hearthlands. More moderate coastal climate." } },
-        { "id": "D10", "region_info": { "name": "The Magocracy (Auldwood & Anselwood)", "climate": "Hearthlands. Cool, damp microclimate in the forests." } },
-        { "id": "E1", "region_info": { "name": "Unclaimed Lands (Far Northeast Coast)", "climate": "High Winterlands. Brutal storms from the Narfel Sea." } },
-        { "id": "E2", "region_info": { "name": "Unclaimed Lands (Sunken Realm Border)", "climate": "High Winterlands. Perpetually cold, with unusual mists and winds." } },
-        { "id": "E3", "region_info": { "name": "Drachenlands (The Giant's Steps)", "climate": "Low Winterlands. Colder and harsher at higher altitudes." } },
-        { "id": "E4", "region_info": { "name": "Drachenlands (Angrad)", "climate": "Low Winterlands. Long, cold winters." } },
-        { "id": "E5", "region_info": { "name": "The Freelands (Nara & Sanctuary)", "climate": "Hearthlands. Cool and temperate." } },
-        { "id": "E6", "region_info": { "name": "Royalmark (Hereford & Salnorr)", "climate": "Hearthlands. Overcast and dreary, with cold mists." } },
-        { "id": "E7", "region_info": { "name": "Royalmark (Ravensburg)", "climate": "Hearthlands. Sheltered position gives a stable, predictable climate." } },
-        { "id": "E8", "region_info": { "name": "Vestmark (Castle Hrafn)", "climate": "Hearthlands. Grim and overcast." } },
-        { "id": "E9", "region_info": { "name": "The Magocracy (Principality of Bremen)", "climate": "Hearthlands. Temperate climate." } },
-        { "id": "E10", "region_info": { "name": "The Magocracy (Principality of Hergenald)", "climate": "Hearthlands. Mild and pleasant southern coastal climate." } },
-        { "id": "F1", "region_info": { "name": "The Icebarrier (Northeast)", "climate": "High Winterlands. Alpine and extremely harsh." } },
-        { "id": "F2", "region_info": { "name": "Icedale Freeholds (The Icicle)", "climate": "High Winterlands. One of the coldest and most unforgiving cells." } },
-        { "id": "F3", "region_info": { "name": "Icedale Freeholds (Icedale)", "climate": "High Winterlands. Long, dark, and brutally cold winters." } },
-        { "id": "F4", "region_info": { "name": "Barony of Trond (Boarstream Border)", "climate": "Hearthlands. Cold winters and cool, breezy summers." } },
-        { "id": "F5", "region_info": { "name": "Barony of Trond (Trondavoe)", "climate": "Hearthlands. Maritime climate with cool summers and milder winters." } },
-        { "id": "F6", "region_info": { "name": "Heldalund (Held, Occupied)", "climate": "Low Winterlands. Cold and miserable, with a damp, chilling atmosphere." } },
-        { "id": "F7", "region_info": { "name": "Heldalund (Norvik)", "climate": "Low Winterlands. Exposed to the north, with harsh, long winters." } },
-        { "id": "F8", "region_info": { "name": "Barony of Cul", "climate": "Low Winterlands. Cold and harsh, long and severe winter." } },
-        { "id": "F9", "region_info": { "name": "Nordmark (Yorvik)", "climate": "Hearthlands. Cold, snowy winters and cool, short summers." } },
-        { "id": "F10", "region_info": { "name": "Crystalflow Confederacy (Bridgewater)", "climate": "Hearthlands. Temperate climate with cool summers and cold winters." } },
-        { "id": "G1", "region_info": { "name": "Unclaimed Lands (Far Northeast Coast)", "climate": "High Winterlands. Brutal storms from the Narfel Sea." } },
-        { "id": "G2", "region_info": { "name": "Unclaimed Lands (Sunken Realm Border)", "climate": "High Winterlands. Perpetually cold, with unusual mists and winds." } },
-        { "id": "G3", "region_info": { "name": "Sunken Realm", "climate": "High Winterlands. Perpetually cold and dark." } },
-        { "id": "G4", "region_info": { "name": "Liche Lands of Old (The Black Heath)", "climate": "Unnatural. Perpetually fog-shrouded and chillingly cold." } },
-        { "id": "G5", "region_info": { "name": "Seithrby & Liche Lands (Southern Border)", "climate": "Low Winterlands. Cold winters, but land is fertile enough for grazing." } },
-        { "id": "G6", "region_info": { "name": "Cairn Lands (Hergist)", "climate": "Hearthlands. Cool and temperate, but a supernatural chill in the hills." } },
-        { "id": "G7", "region_info": { "name": "Ostmark (Iarnsburg & The Grimwold)", "climate": "Hearthlands. High rainfall in the west, drier in the east." } },
-        { "id": "G8", "region_info": { "name": "Ostmark (Sandvik)", "climate": "Hearthlands. Maritime climate with mild winters and cool summers." } },
-        { "id": "G9", "region_info": { "name": "Veermark (The Grasslands)", "climate": "Hearthlands, but more extreme. Cold, windy winters and hot, dry summers." } },
-        { "id": "G10", "region_info": { "name": "Sutmark (The High Pass)", "climate": "Hearthlands, but warmer. Dry, bordering on arid." } }
-    ],
-    "conceptosWebApp": {
-        "introduccion_hellfrost": { "titulo": "Bienvenido a Hellfrost", "descripcion": "Un escenario de fantasía épica para Savage Worlds, donde Rassilon está cubierto de hielo y nieve, y la magia es impredecible." },
-        "el_mundo_de_rassilon": { "titulo": "Rassilon: La Tierra y sus Horrores", "descripcion": "Rassilon se divide en cinco regiones geográficas, desde el Hellfrost Profundo hasta las tierras civilizadas, cada una con sus propios peligros y culturas." },
-        "creacion_de_personajes": { "titulo": "Conceptos de Creación de Personajes", "descripcion": "Crear héroes en Hellfrost es sencillo, siguiendo una serie de pasos con la hoja de personaje." },
-        "magia_y_arcano": { "titulo": "La Magia en Hellfrost", "descripcion": "Rassilon es un mundo de magia, pero el Sifonamiento la ha vuelto peligrosa y poco fiable." },
-        "equipo_y_logistica": { "titulo": "Conceptos de Equipo y Logística", "descripcion": "El equipo se adquiere con escudos de oro, y la disponibilidad de los artículos varía según la región." },
-        "clima_y_ambiente": { "titulo": "Conceptos de Clima y Ambiente", "descripcion": "Hellfrost usa un sistema de 'niveles de temperatura' que afectan la supervivencia de los personajes." },
-        "la_gloria": { "titulo": "Concepto de la Gloria", "descripcion": "Un rasgo que mide las grandes hazañas de los héroes, otorgando bonificaciones especiales." },
-        "religion": { "titulo": "Conceptos Religiosos", "descripcion": "Los dioses de Rassilon son entidades poderosas pero limitadas, y el 'Pacto' impide su intervención directa." },
-        "vida_en_rassilon": { "titulo": "Conceptos de la Vida en Rassilon", "descripcion": "Detalles sobre el calendario, costumbres funerarias, comercio y organizaciones del mundo." }
     }
 };
+
+export const rassilonGridMapSummary = [
+    {
+        "id": "A1",
+        "region_info": {
+          "name": "El Hellfrost (El Núcleo)",
+          "climate": "Frío extremo y sobrenatural."
+        }
+      },
+      {
+        "id": "A2",
+        "region_info": {
+          "name": "El Hellfrost (Páramos Interiores)",
+          "climate": "Frío extremo y sobrenatural."
+        }
+      },
+      {
+        "id": "A3",
+        "region_info": {
+          "name": "El Hellfrost (Páramos Exteriores)",
+          "climate": "Frío extremo, aunque ligeramente menos severo que los páramos interiores."
+        }
+      },
+      {
+        "id": "A4",
+        "region_info": {
+          "name": "El Hellfrost (La Muralla de Hielo - Norte)",
+          "climate": "Temperaturas de las Tierras Altas de Invierno en el lado sur, frío sobrenatural en el norte."
+        }
+      },
+      {
+        "id": "A5",
+        "region_info": {
+          "name": "Tierras No Reclamadas (Márgenes del Norte)",
+          "climate": "Tierras Altas de Invierno. Inviernos brutalmente largos y fríos."
+        }
+      },
+      {
+        "id": "A6",
+        "region_info": {
+          "name": "Tierras No Reclamadas (Colinas Enanas)",
+          "climate": "Tierras Altas de Invierno. Patrones climáticos impredecibles."
+        }
+      },
+      {
+        "id": "A7",
+        "region_info": {
+          "name": "Tierras No Reclamadas (El Gran Bosque)",
+          "climate": "Tierras Altas de Invierno. El denso bosque proporciona algo de refugio."
+        }
+      },
+      {
+        "id": "A8",
+        "region_info": {
+          "name": "Tierras No Reclamadas (Bosque Alto)",
+          "climate": "Tierras Altas de Invierno. Gran altitud y terreno montañoso."
+        }
+      },
+      {
+        "id": "A9",
+        "region_info": {
+          "name": "Tierras No Reclamadas (Bosque Congelado)",
+          "climate": "Un frío mágico y antinatural a una constante de -40 grados Fahrenheit."
+        }
+      },
+      {
+        "id": "A10",
+        "region_info": {
+          "name": "Rimeholm (Montañas Jotunvalk)",
+          "climate": "Tierras Altas de Invierno, aunque las Piedras del Hogar crean un microclima templado en el núcleo."
+        }
+      },
+      {
+        "id": "B1",
+        "region_info": {
+          "name": "El Hellfrost (Muralla de Hielo - Norte)",
+          "climate": "El frío más extremo imaginable en Rassilon."
+        }
+      },
+      {
+        "id": "B2",
+        "region_info": {
+          "name": "Glittersands",
+          "climate": "Tierras Altas de Invierno, pero notablemente más cálido, a la par con las Tierras Bajas de Invierno."
+        }
+      },
+      {
+        "id": "B3",
+        "region_info": {
+          "name": "Tierras No Reclamadas (Lago Aguanieve)",
+          "climate": "Tierras Altas de Invierno. El lago se congela en invierno."
+        }
+      },
+      {
+        "id": "B4",
+        "region_info": {
+          "name": "Tierras No Reclamadas (La Empalizada)",
+          "climate": "Tierras Altas de Invierno. Frío intenso y nieve abundante."
+        }
+      },
+      {
+        "id": "B5",
+        "region_info": {
+          "name": "Isla Hrimthyr",
+          "climate": "Permanentemente congelada. La actividad volcánica no calienta la isla."
+        }
+      },
+      {
+        "id": "B6",
+        "region_info": {
+          "name": "Trono del Gigante",
+          "climate": "Tierras Altas de Invierno. La gran altitud asegura un clima brutalmente frío."
+        }
+      },
+      {
+        "id": "B7",
+        "region_info": {
+          "name": "Las Tierras Libres (El Bosque de Piedra)",
+          "climate": "Tierras Bajas de Invierno. El denso bosque proporciona algo de refugio."
+        }
+      },
+      {
+        "id": "B8",
+        "region_info": {
+          "name": "Las Tierras Libres (Spyre y El Pináculo)",
+          "climate": "Tierras Bajas de Invierno. La posición elevada lo hace más frío que las colinas circundantes."
+        }
+      },
+      {
+        "id": "B9",
+        "region_info": {
+          "name": "Las Tierras Libres (Colinas Menores)",
+          "climate": "Tierras Bajas de Invierno. Clima frío y ventoso con nevadas invernales significativas."
+        }
+      },
+      {
+        "id": "B10",
+        "region_info": {
+          "name": "Angarion (El Corazón del Bosque)",
+          "climate": "Tierras del Hogar. Microclima protegido y estable."
+        }
+      },
+      {
+        "id": "C1",
+        "region_info": {
+          "name": "El Hellfrost (Muralla de Hielo - Norte)",
+          "climate": "El extremo absoluto del clima de Rassilon."
+        }
+      },
+      {
+        "id": "C2",
+        "region_info": {
+          "name": "Tierras No Reclamadas (El Páramo Desolado)",
+          "climate": "Tierras Altas de Invierno. Expuesto y ventoso."
+        }
+      },
+      {
+        "id": "C3",
+        "region_info": {
+          "name": "Tierras No Reclamadas (Colinas de Escarcha)",
+          "climate": "Tierras Altas de Invierno. Vientos amargos y nieves profundas y duraderas."
+        }
+      },
+      {
+        "id": "C4",
+        "region_info": {
+          "name": "Las Tierras de Batalla (Calivar)",
+          "climate": "Tierras Bajas de Invierno. La ubicación costera modera ligeramente la temperatura."
+        }
+      },
+      {
+        "id": "C5",
+        "region_info": {
+          "name": "Las Tierras de Batalla (Jotungraef)",
+          "climate": "Tierras Bajas de Invierno. Las colinas ofrecen poco refugio, los valles son pantanosos."
+        }
+      },
+      {
+        "id": "C6",
+        "region_info": {
+          "name": "Angmark (Leirvik)",
+          "climate": "Tierras del Hogar. Clima marítimo con veranos frescos e inviernos fríos y húmedos."
+        }
+      },
+      {
+        "id": "C7",
+        "region_info": {
+          "name": "Las Tierras de Niebla y las Islas de los Saqueadores Marinos",
+          "climate": "Antinaturalmente húmedo y frío debido a la niebla mágica (Tierras de Niebla). Feroces tormentas marinas (Islas)."
+        }
+      },
+      {
+        "id": "C8",
+        "region_info": {
+          "name": "Isla Alantaris (Ciudad Imperial)",
+          "climate": "Tierras del Hogar. Clima marítimo más templado que el continente."
+        }
+      },
+      {
+        "id": "C9",
+        "region_info": {
+          "name": "El Mar Interior (Oeste)",
+          "climate": "Marítimo. Clima impredecible con densas nieblas y tormentas violentas."
+        }
+      },
+      {
+        "id": "C10",
+        "region_info": {
+          "name": "Angarion (Frontera Sur)",
+          "climate": "Tierras del Hogar. Ligeramente más suave que el interior del norte."
+        }
+      },
+      {
+        "id": "D1",
+        "region_info": {
+          "name": "El Hellfrost (Muralla de Hielo - Noreste)",
+          "climate": "El extremo absoluto del clima de Rassilon."
+        }
+      },
+      {
+        "id": "D2",
+        "region_info": {
+          "name": "Lakeland (Mere)",
+          "climate": "Tierras Altas de Invierno. Inviernos largos y brutales."
+        }
+      },
+      {
+        "id": "D3",
+        "region_info": {
+          "name": "Lakeland (Vimmar)",
+          "climate": "Tierras Bajas de Invierno. Duro e implacable."
+        }
+      },
+      {
+        "id": "D4",
+        "region_info": {
+          "name": "Las Tierras Fronterizas (Guardia del Gigante)",
+          "climate": "Tierras Bajas de Invierno. Inviernos largos y fríos con fuertes nevadas."
+        }
+      },
+      {
+        "id": "D5",
+        "region_info": {
+          "name": "Las Tierras Fronterizas (Hjorn y Ludogov)",
+          "climate": "Tierras Bajas de Invierno. Duro, con inviernos fríos y veranos cortos y frescos."
+        }
+      },
+      {
+        "id": "D6",
+        "region_info": {
+          "name": "Las Tierras Libres (La Ciudadela y Crase)",
+          "climate": "Tierras Bajas de Invierno. La gran altitud asegura un clima frío y duro."
+        }
+      },
+      {
+        "id": "D7",
+        "region_info": {
+          "name": "Las Tierras Marchitas y el Pantano de Aguas Fétidas",
+          "climate": "Antinatural. Perpetuamente envuelto en una niebla fría y húmeda."
+        }
+      },
+      {
+        "id": "D8",
+        "region_info": {
+          "name": "Coglelund (A Medio Camino)",
+          "climate": "Tierras del Hogar. Inviernos fríos y ventosos y veranos suaves."
+        }
+      },
+      {
+        "id": "D9",
+        "region_info": {
+          "name": "La Magocracia (Principado de Darovia)",
+          "climate": "Tierras del Hogar. Clima costero más moderado."
+        }
+      },
+      {
+        "id": "D10",
+        "region_info": {
+          "name": "La Magocracia (Auldwood y Anselwood)",
+          "climate": "Tierras del Hogar. Microclima fresco y húmedo en los bosques."
+        }
+      },
+      {
+        "id": "E1",
+        "region_info": {
+          "name": "Tierras No Reclamadas (Costa del Lejano Noreste)",
+          "climate": "Tierras Altas de Invierno. Tormentas brutales desde el Mar de Narfel."
+        }
+      },
+      {
+        "id": "E2",
+        "region_info": {
+          "name": "Tierras No Reclamadas (Frontera del Reino Hundido)",
+          "climate": "Tierras Altas de Invierno. Perpetuamente frío, con nieblas y vientos inusuales."
+        }
+      },
+      {
+        "id": "E3",
+        "region_info": {
+          "name": "Drachenlands (Los Pasos del Gigante)",
+          "climate": "Tierras Bajas de Invierno. Más frío y duro a mayor altitud."
+        }
+      },
+      {
+        "id": "E4",
+        "region_info": {
+          "name": "Drachenlands (Angrad)",
+          "climate": "Tierras Bajas de Invierno. Inviernos largos y fríos."
+        }
+      },
+      {
+        "id": "E5",
+        "region_info": {
+          "name": "Las Tierras Libres (Nara y Santuario)",
+          "climate": "Tierras del Hogar. Fresco y templado."
+        }
+      },
+      {
+        "id": "E6",
+        "region_info": {
+          "name": "Royalmark (Hereford y Salnorr)",
+          "climate": "Tierras del Hogar. Nublado y lúgubre, con nieblas frías."
+        }
+      },
+      {
+        "id": "E7",
+        "region_info": {
+          "name": "Royalmark (Ravensburgo)",
+          "climate": "Tierras del Hogar. La posición protegida le da un clima estable y predecible."
+        }
+      },
+      {
+        "id": "E8",
+        "region_info": {
+          "name": "Vestmark (Castillo Hrafn)",
+          "climate": "Tierras del Hogar. Sombrío y nublado."
+        }
+      },
+      {
+        "id": "E9",
+        "region_info": {
+          "name": "La Magocracia (Principado de Bremen)",
+          "climate": "Tierras del Hogar. Clima templado."
+        }
+      },
+      {
+        "id": "E10",
+        "region_info": {
+          "name": "La Magocracia (Principado de Hergenald)",
+          "climate": "Tierras del Hogar. Clima costero del sur suave y agradable."
+        }
+      },
+      {
+        "id": "F1",
+        "region_info": {
+          "name": "La Barrera de Hielo (Noreste)",
+          "climate": "Tierras Altas de Invierno. Alpino y extremadamente duro."
+        }
+      },
+      {
+        "id": "F2",
+        "region_info": {
+          "name": "Feudos de Icedale (El Carámbano)",
+          "climate": "Tierras Altas de Invierno. Una de las celdas más frías e implacables."
+        }
+      },
+      {
+        "id": "F3",
+        "region_info": {
+          "name": "Feudos de Icedale (Icedale)",
+          "climate": "Tierras Altas de Invierno. Inviernos largos, oscuros y brutalmente fríos."
+        }
+      },
+      {
+        "id": "F4",
+        "region_info": {
+          "name": "Baronía de Trond (Frontera de Boarstream)",
+          "climate": "Tierras del Hogar. Inviernos fríos y veranos frescos y ventosos."
+        }
+      },
+      {
+        "id": "F5",
+        "region_info": {
+          "name": "Baronía de Trond (Trondavoe)",
+          "climate": "Tierras del Hogar. Clima marítimo con veranos frescos e inviernos más suaves."
+        }
+      },
+      {
+        "id": "F6",
+        "region_info": {
+          "name": "Heldalund (Held, Ocupado)",
+          "climate": "Tierras Bajas de Invierno. Frío y miserable, con una atmósfera húmeda y escalofriante."
+        }
+      },
+      {
+        "id": "F7",
+        "region_info": {
+          "name": "Heldalund (Norvik)",
+          "climate": "Tierras Bajas de Invierno. Expuesto al norte, con inviernos duros y largos."
+        }
+      },
+      {
+        "id": "F8",
+        "region_info": {
+          "name": "Baronía de Cul",
+          "climate": "Tierras Bajas de Invierno. Frío y duro, invierno largo y severo."
+        }
+      },
+      {
+        "id": "F9",
+        "region_info": {
+          "name": "Nordmark (Yorvik)",
+          "climate": "Tierras del Hogar. Inviernos fríos y nevados y veranos frescos y cortos."
+        }
+      },
+      {
+        "id": "F10",
+        "region_info": {
+          "name": "Confederación Crystalflow (Bridgewater)",
+          "climate": "Tierras del Hogar. Clima templado con veranos frescos e inviernos fríos."
+        }
+      },
+      {
+        "id": "G1",
+        "region_info": {
+          "name": "Tierras No Reclamadas (Costa del Lejano Noreste)",
+          "climate": "Tierras Altas de Invierno. Tormentas brutales desde el Mar de Narfel."
+        }
+      },
+      {
+        "id": "G2",
+        "region_info": {
+          "name": "Tierras No Reclamadas (Frontera del Reino Hundido)",
+          "climate": "Tierras Altas de Invierno. Perpetuamente frío, con nieblas y vientos inusuales."
+        }
+      },
+      {
+        "id": "G3",
+        "region_info": {
+          "name": "Reino Hundido",
+          "climate": "Tierras Altas de Invierno. Perpetuamente frío y oscuro."
+        }
+      },
+      {
+        "id": "G4",
+        "region_info": {
+          "name": "Antiguas Tierras de los Liches (El Brezal Negro)",
+          "climate": "Antinatural. Perpetuamente envuelto en niebla y un frío escalofriante."
+        }
+      },
+      {
+        "id": "G5",
+        "region_info": {
+          "name": "Seithrby y Tierras de los Liches (Frontera Sur)",
+          "climate": "Tierras Bajas de Invierno. Inviernos fríos, pero la tierra es lo suficientemente fértil para el pastoreo."
+        }
+      },
+      {
+        "id": "G6",
+        "region_info": {
+          "name": "Tierras de los Túmulos (Hergist)",
+          "climate": "Tierras del Hogar. Fresco y templado, pero con un frío sobrenatural en las colinas."
+        }
+      },
+      {
+        "id": "G7",
+        "region_info": {
+          "name": "Ostmark (Iarnsburg y El Grimwold)",
+          "climate": "Tierras del Hogar. Altas precipitaciones en el oeste, más seco en el este."
+        }
+      },
+      {
+        "id": "G8",
+        "region_info": {
+          "name": "Ostmark (Sandvik)",
+          "climate": "Tierras del Hogar. Clima marítimo con inviernos suaves y veranos frescos."
+        }
+      },
+      {
+        "id": "G9",
+        "region_info": {
+          "name": "Veermark (Las Praderas)",
+          "climate": "Tierras del Hogar, pero más extremo. Inviernos fríos y ventosos y veranos calurosos y secos."
+        }
+      },
+      {
+        "id": "G10",
+        "region_info": {
+          "name": "Sutmark (El Paso Alto)",
+          "climate": "Tierras del Hogar, pero más cálido. Seco, rozando lo árido."
+        }
+      }
+];
+    

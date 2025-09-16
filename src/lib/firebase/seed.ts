@@ -3,7 +3,12 @@
 // It seeds the Firestore database with initial data so the app is usable.
 import { collection, writeBatch, doc, getDoc } from "firebase/firestore";
 import { db } from "./config";
-import { initialUsers, initialCampaigns, hellfrostGameData, archetypes } from "./seed-data";
+import { initialUsers, initialCampaigns } from "./data/seed-core";
+import { archetypes } from './data/seed-archetypes';
+import { hellfrostItems } from './data/seed-items';
+import { hellfrostSpells } from './data/seed-spells';
+import { hellfrostReferenceData, rassilonGridMapSummary } from './data/seed-reference';
+import { conceptosWebApp } from './data/seed-concepts';
 import { initialThread } from "./initial-thread";
 
 /**
@@ -25,7 +30,7 @@ const createCampaign = async (batch: any, campaignData: any) => {
     batch.set(threadRef, { ...initialThread, campaignId: campaignData.id });
 
     // Add map cells as a subcollection to the campaign
-    const mapCells = hellfrostGameData.rassilon_grid_map_summary;
+    const mapCells = rassilonGridMapSummary;
     for (const cell of mapCells) {
         const cellRef = doc(db, `campaigns/${campaignData.id}/mapCells`, cell.id);
         batch.set(cellRef, cell.region_info);
@@ -59,14 +64,14 @@ const createCharacterFromArchetype = (batch: any, characterData: any, selectedAr
  */
 const seedReferenceData = async (batch: any) => {
     const dataToSeed = [
-        { collectionName: 'razas', data: hellfrostGameData.razas },
-        { collectionName: 'characterCategories', data: hellfrostGameData.categorias_personaje },
-        { collectionName: 'habilidades', data: hellfrostGameData.habilidades },
-        { collectionName: 'edges', data: hellfrostGameData.edges },
-        { collectionName: 'hindrances', data: hellfrostGameData.hindrances },
-        { collectionName: 'hellfrost_items', data: hellfrostGameData.items },
-        { collectionName: 'conjuros', data: hellfrostGameData.conjuros },
-        { collectionName: 'conceptos', data: hellfrostGameData.conceptosWebApp },
+        { collectionName: 'razas', data: hellfrostReferenceData.razas },
+        { collectionName: 'characterCategories', data: hellfrostReferenceData.categorias_personaje },
+        { collectionName: 'habilidades', data: hellfrostReferenceData.habilidades },
+        { collectionName: 'edges', data: hellfrostReferenceData.edges },
+        { collectionName: 'hindrances', data: hellfrostReferenceData.hindrances },
+        { collectionName: 'hellfrost_items', data: hellfrostItems },
+        { collectionName: 'conjuros', data: hellfrostSpells.conjuros },
+        { collectionName: 'conceptos', data: conceptosWebApp },
         { collectionName: 'archetypes', data: archetypes },
     ];
 
@@ -171,8 +176,4 @@ export const runSeed = async () => {
         await batch.commit();
         console.log("Database seeded successfully!");
 
-    } catch (error) {
-        console.error("Error seeding database:", error);
-    }
-};
-
+    } catch
