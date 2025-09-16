@@ -1,10 +1,11 @@
 
+
 // THIS SCRIPT IS FOR DEMO PURPOSES ONLY
 // It seeds the Firestore database with initial data so the app is usable.
 // In a real application, you would have proper data management and user registration.
 import { collection, writeBatch, doc } from "firebase/firestore";
 import { db } from "./config";
-import { User, Campaign, Character, NarrativeThread, NarrativeComment, Race, CharacterCategory, Skill, Hindrance, Attribute, Edge, HellfrostItem, Conjuro } from "./types";
+import { User, Campaign, Character, NarrativeThread, NarrativeComment, Race, CharacterCategory, Skill, Hindrance, Attribute, Edge, HellfrostItem, Conjuro, Archetype } from "./types";
 
 const defaultSystemPrompt = `You are a master storyteller and creative Dungeon Master for a tabletop role-playing game. Your task is to weave a compelling and collaborative narrative.
 
@@ -357,4 +358,5 @@ const hellfrostGameData = {
         "descripcion": "Almas resistentes que viajan al Bosque Congelado para recolectar valiosa madera de hielo, que los enanos utilizan en sus forjas de hielo negro [50]."
       }
     }
+  }
 }

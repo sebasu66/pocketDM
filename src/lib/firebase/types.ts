@@ -1,4 +1,3 @@
-
 export interface User {
     id: string;
     name: string;
@@ -126,6 +125,54 @@ export interface HellfrostItem {
     notas?: string[] | string;
     fuente: string | string[];
     [key: string]: any; // For other properties like damage, range, etc.
+}
+
+export interface Conjuro {
+    id: string;
+    nombre: string;
+    rango: string;
+    alcance: string;
+    duracion: string;
+    trappings: string[];
+    efecto: string;
+}
+
+export interface Archetype {
+  id: string;
+  name: string;
+  race: string;
+  attributes: {
+    agility: string;
+    smarts: string;
+    spirit: string;
+    strength: string;
+    vigor: string;
+  };
+  skills: { [key: string]: string };
+  edges: string[];
+  hindrances: string[];
+  inventory: {
+    item: string;
+    quantity: number;
+    notes: string;
+  }[];
+  generalBackground: string;
+  glory: number;
+  derived: {
+    pace: number;
+    parry: number;
+    toughness: number;
+    charisma: number;
+  };
+  arcane: {
+    type: string;
+    skill: string;
+    powers: string[];
+  } | null;
+  religion: {
+    god: string;
+    powers: string[];
+  } | null;
 }
 
 
