@@ -27,13 +27,13 @@ export default function HomePage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center bg-no-repeat p-4" style={{backgroundImage: "url('https://picsum.photos/1920/1080?grayscale&blur=5&random=1')"}} data-ai-hint="fantasy landscape">
+    <div className="font-body flex flex-col items-center justify-center min-h-screen bg-cover bg-center bg-no-repeat p-4" style={{backgroundImage: "url('https://picsum.photos/1920/1080?grayscale&blur=5&random=1')"}} data-ai-hint="fantasy landscape">
       <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
       <div className="w-full max-w-4xl z-10 text-center text-white p-8">
         <div className="flex justify-center mb-6">
             <Logo className="w-24 h-24"/>
         </div>
-        <h1 className="text-6xl font-headline drop-shadow-lg">Lore Weaver</h1>
+        <h1 className="text-6xl font-medieval drop-shadow-lg">Adventure Engine</h1>
         <p className="text-xl text-white/80 mt-4 max-w-2xl mx-auto">
             {t('homeSubtitle')}
         </p>
@@ -96,3 +96,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+    
