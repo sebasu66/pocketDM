@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/logo";
 import { useAuth } from "@/context/auth-context";
-import { getUserByEmail, checkPassword, signInWithGoogle, signInWithFacebook, signInWithApple } from "@/lib/auth";
+import { getUserByEmail, checkPassword, signInWithGoogle } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
 import { useI18n } from "@/context/i18n-context";
 import { cn } from "@/lib/utils";
@@ -38,25 +38,16 @@ export default function LoginPage() {
     }
   };
 
-  const handleOAuthLogin = async (provider: 'google' | 'facebook' | 'apple') => {
+  const handleGoogleLogin = async () => {
     try {
-      let authUser;
-      if (provider === 'google') {
-        authUser = await signInWithGoogle();
-      } else if (provider === 'facebook') {
-        authUser = await signInWithFacebook();
-      } else {
-        authUser = await signInWithApple();
-      }
-      
+      await signInWithGoogle();
       // The onAuthStateChanged listener in AuthProvider will handle the rest.
       router.push('/dashboard');
-
     } catch (error: any) {
-      console.error(`${provider} sign in error`, error);
+      console.error(`Google sign in error`, error);
       toast({
         variant: "destructive",
-        title: `Login with ${provider} Failed`,
+        title: `Login with Google Failed`,
         description: error.message || "An unknown error occurred.",
       });
     }
@@ -118,14 +109,8 @@ export default function LoginPage() {
                 <Separator />
                 <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-2 text-xs text-muted-foreground">OR CONTINUE WITH</span>
               </div>
-              <Button variant="outline" className="w-full" onClick={() => handleOAuthLogin('google')}>
+              <Button variant="outline" className="w-full" onClick={handleGoogleLogin}>
                 {t('loginWithGoogleButton')}
-              </Button>
-               <Button variant="outline" className="w-full" onClick={() => handleOAuthLogin('facebook')}>
-                Login with Facebook
-              </Button>
-               <Button variant="outline" className="w-full" onClick={() => handleOAuthLogin('apple')}>
-                Login with Apple
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">

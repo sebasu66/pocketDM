@@ -2,7 +2,7 @@
 import { collection, query, where, getDocs, doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
 import { db, auth } from './firebase/config';
 import { User } from './firebase/types';
-import { GoogleAuthProvider, FacebookAuthProvider, OAuthProvider, signInWithPopup, User as FirebaseAuthUser } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, User as FirebaseAuthUser } from "firebase/auth";
 
 // Re-export User type for convenience
 export type { User };
@@ -10,22 +10,10 @@ export type { User };
 const USERS_COLLECTION = "users";
 
 const googleProvider = new GoogleAuthProvider();
-const facebookProvider = new FacebookAuthProvider();
-const appleProvider = new OAuthProvider('apple.com');
 
 
 export const signInWithGoogle = async (): Promise<FirebaseAuthUser> => {
     const result = await signInWithPopup(auth, googleProvider);
-    return result.user;
-};
-
-export const signInWithFacebook = async (): Promise<FirebaseAuthUser> => {
-    const result = await signInWithPopup(auth, facebookProvider);
-    return result.user;
-};
-
-export const signInWithApple = async (): Promise<FirebaseAuthUser> => {
-    const result = await signInWithPopup(auth, appleProvider);
     return result.user;
 };
 
