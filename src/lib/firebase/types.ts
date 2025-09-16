@@ -28,16 +28,20 @@ export interface Character {
     visualPreset: string;
     campaignId: string;
     userId: string;
-    level: number;
-    class: string;
-    strength: number;
-    dexterity: number;
-    constitution: number;
-    intelligence: number;
-    wisdom: number;
-    charisma: number;
     isActive: boolean;
     location_cell_id?: string;
+
+    // Copied from Archetype
+    race?: string;
+    level?: number;
+    class?: string;
+    strength?: number;
+    dexterity?: number;
+    constitution?: number;
+    intelligence?: number;
+    wisdom?: number;
+    charisma?: number;
+    
     // Behavior Profile
     position?: number;
     resolve?: number;
@@ -49,6 +53,40 @@ export interface Character {
     conditionalRules?: ConditionalRule[];
     archetype?: string;
     archetypeDescription?: string;
+
+    // Hellfrost specific from Archetype
+    attributes?: {
+        agility: string;
+        smarts: string;
+        spirit: string;
+        strength: string;
+        vigor: string;
+    };
+    skills?: { [key: string]: string };
+    edges?: string[];
+    hindrances?: string[];
+    inventory?: {
+        item: string;
+        quantity: number;
+        notes: string;
+    }[];
+    generalBackground?: string;
+    glory?: number;
+    derived?: {
+        pace: number;
+        parry: number;
+        toughness: number;
+        charisma: number;
+    };
+    arcane?: {
+        type: string;
+        skill: string;
+        powers: string[];
+    } | null;
+    religion?: {
+        god: string;
+        powers: string[];
+    } | null;
 }
 
 export interface NarrativeThread {
@@ -95,7 +133,7 @@ export interface Skill {
     id: string;
     name: string;
     description: string;
-    attribute: string; // e.g., "Agilidad", "Astucia"
+    base: string; 
 }
 
 export interface Hindrance {
@@ -145,8 +183,8 @@ export interface Conjuro {
 export interface Archetype {
   id: string;
   name: string;
-  race: string;
   description: string;
+  race: string;
   attributes: {
     agility: string;
     smarts: string;
@@ -189,4 +227,7 @@ export interface Concepto {
 
 // Helper types for API responses
 export type NarrativeCommentWithAuthor = NarrativeComment & { author: User };
-export type EnrichedComment = NarrativeComment
+export type EnrichedComment = NarrativeComment & {
+    author: User;
+    character: Character | null;
+};
