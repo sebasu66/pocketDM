@@ -338,45 +338,89 @@ export default function CharactersPage() {
             <CardContent>
                 {creationStep === 0 && (
                     <Carousel
-                        opts={{
-                            align: "start",
-                        }}
-                        className="w-full"
+                        opts={{ align: "start" }}
+                        className="w-full max-w-5xl mx-auto"
                     >
                         <CarouselContent>
                             {archetypesList.map((arch) => (
-                                <CarouselItem key={arch.id} className="md:basis-1/2 lg:basis-1/3">
+                                <CarouselItem key={arch.id}>
                                     <div className="p-1">
-                                        <Card className="h-full flex flex-col">
+                                        <Card className="h-full flex flex-col overflow-hidden">
                                             <CardHeader>
                                                 <CardTitle className="font-headline">{arch.name}</CardTitle>
                                                 <CardDescription>{arch.race}</CardDescription>
                                             </CardHeader>
-                                            <CardContent className="flex-grow space-y-4">
-                                                <div className="relative aspect-[3/4] w-full rounded-md overflow-hidden">
-                                                    <ImageWithFallback 
-                                                        baseSrc={`/characters/VisualPreset/${arch.visualPreset}/portrait`} 
-                                                        alt={arch.name}
-                                                        fill
-                                                        className="object-cover"
-                                                        data-ai-hint="fantasy portrait"
-                                                    />
-                                                </div>
-                                                <p className="text-sm text-muted-foreground">{arch.description}</p>
-                                                <ScrollArea className="h-48 text-xs">
-                                                    <h4 className="font-bold mb-1">{t('charactersAttributes')}</h4>
-                                                    <div className="flex gap-2">
-                                                        {Object.entries(arch.attributes).map(([key, value]) => <Badge key={key} variant="secondary">{key.toUpperCase()}: {value}</Badge>)}
+                                            <CardContent className="flex-grow">
+                                                <div className="grid md:grid-cols-2 gap-6">
+                                                    {/* Col 1: Image, Desc, Attributes */}
+                                                    <div className="space-y-4">
+                                                        <div className="relative aspect-[3/4] w-full rounded-md overflow-hidden">
+                                                            <ImageWithFallback 
+                                                                baseSrc={`/characters/VisualPreset/${arch.visualPreset}/portrait`} 
+                                                                alt={arch.name}
+                                                                fill
+                                                                className="object-cover"
+                                                                data-ai-hint="fantasy portrait"
+                                                            />
+                                                        </div>
+                                                        <p className="text-base text-muted-foreground">{arch.description}</p>
+                                                        <div>
+                                                            <h4 className="font-bold mb-2 text-lg">{t('charactersAttributes')}</h4>
+                                                            <div className="grid grid-cols-3 gap-2">
+                                                                {Object.entries(arch.attributes).map(([key, value]) => (
+                                                                    <div key={key} className="p-2 bg-muted/50 rounded-md text-center">
+                                                                        <p className="font-bold text-sm uppercase">{key}</p>
+                                                                        <p className="text-lg">{value}</p>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <h4 className="font-bold mt-2 mb-1">{t('characterSkills')}</h4>
-                                                     <ul>{Object.entries(arch.skills).map(([key, value]) => <li key={key}>{key}: {value}</li>)}</ul>
-                                                    <h4 className="font-bold mt-2 mb-1">{t('characterEdges')}</h4>
-                                                     <ul>{arch.edges.map((edge) => <li key={edge}>{edge}</li>)}</ul>
-                                                     <h4 className="font-bold mt-2 mb-1">{t('characterHindrances')}</h4>
-                                                     <ul>{arch.hindrances.map((hindrance) => <li key={hindrance}>{hindrance}</li>)}</ul>
-                                                    <h4 className="font-bold mt-2 mb-1">{t('characterInventory')}</h4>
-                                                    <ul>{arch.inventory.map((item) => <li key={item.item}>{item.item} (x{item.quantity})</li>)}</ul>
-                                                </ScrollArea>
+                                                    {/* Col 2: Skills, Edges, etc. */}
+                                                    <div className="space-y-4">
+                                                        <ScrollArea className="h-[60vh] p-4 border rounded-md">
+                                                            <div className="space-y-4 text-sm">
+                                                                <div>
+                                                                    <h4 className="font-bold mb-2 text-lg">{t('characterSkills')}</h4>
+                                                                    <ul>{Object.entries(arch.skills).map(([key, value]) => <li key={key}><span className="font-semibold capitalize">{key.replace(/_/g, ' ')}:</span> {value}</li>)}</ul>
+                                                                </div>
+                                                                <Separator/>
+                                                                <div>
+                                                                    <h4 className="font-bold mb-2 text-lg">{t('characterEdges')}</h4>
+                                                                    <ul className="list-disc pl-5">
+                                                                        {arch.edges.map((edge) => <li key={edge}>{edge}</li>)}
+                                                                    </ul>
+                                                                </div>
+                                                                <Separator/>
+                                                                <div>
+                                                                    <h4 className="font-bold mb-2 text-lg">{t('characterHindrances')}</h4>
+                                                                    <ul className="list-disc pl-5">
+                                                                        {arch.hindrances.map((hindrance) => <li key={hindrance}>{hindrance}</li>)}
+                                                                    </ul>
+                                                                </div>
+                                                                <Separator/>
+                                                                <div>
+                                                                    <h4 className="font-bold mb-2 text-lg">{t('characterInventory')}</h4>
+                                                                    <ul className="list-disc pl-5">
+                                                                        {arch.inventory.map((item) => <li key={item.item}>{item.item} (x{item.quantity})</li>)}
+                                                                    </ul>
+                                                                </div>
+                                                                {arch.arcane && (
+                                                                    <>
+                                                                        <Separator />
+                                                                        <div>
+                                                                            <h4 className="font-bold mb-2 text-lg">Hechizos</h4>
+                                                                            <p><span className="font-semibold">{arch.arcane.type}:</span> {arch.arcane.skill}</p>
+                                                                            <ul className="list-disc pl-5">
+                                                                                {arch.arcane.powers.map((power) => <li key={power} className="capitalize">{power}</li>)}
+                                                                            </ul>
+                                                                        </div>
+                                                                    </>
+                                                                )}
+                                                            </div>
+                                                        </ScrollArea>
+                                                    </div>
+                                                </div>
                                             </CardContent>
                                             <CardFooter>
                                                 <Button onClick={() => handleSelectArchetype(arch)} className="w-full">
@@ -388,8 +432,8 @@ export default function CharactersPage() {
                                 </CarouselItem>
                             ))}
                         </CarouselContent>
-                        <CarouselPrevious />
-                        <CarouselNext />
+                        <CarouselPrevious className="-left-12" />
+                        <CarouselNext className="-right-12" />
                     </Carousel>
                 )}
                  {creationStep === 1 && selectedArchetype && (
