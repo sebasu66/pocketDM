@@ -8,13 +8,18 @@ import { getCampaign, updateCampaign as updateDbCampaign } from '@/lib/firebase/
 import { onAuthStateChanged, User as FirebaseAuthUser } from 'firebase/auth';
 import { auth } from '@/lib/firebase/config';
 
+type ActiveRole = 'gm' | 'player' | null;
+
 interface AuthContextType {
   user: User | null;
   campaign: Campaign | null;
+  activeRole: ActiveRole;
   login: (userId: string) => Promise<void>;
   logout: () => void;
   updateUser: (user: User) => Promise<void>;
+  setCampaign: (campaign: Campaign) => void;
   updateCampaign: (campaign: Campaign) => Promise<void>;
+  setActiveRole: (role: 'gm' | 'player') => void;
   isLoading: boolean;
 }
 
@@ -24,72 +29,78 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [campaign, setCampaign] = useState<Campaign | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeRole, setActiveRoleState] = useState<ActiveRole>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: FirebaseAuthUser | null) => {
+      setIsLoading(true);
       if (firebaseUser) {
-        setIsLoading(true);
         try {
-          // Find user in Firestore or create them if they don't exist
           const appUser = await findOrCreateUserFromOAuth(firebaseUser);
-          setUser(appUser);
-          if (appUser.campaignId) {
-            const campaignData = await getCampaign(appUser.campaignId);
-            setCampaign(campaignData);
-          }
-           localStorage.setItem('userId', appUser.id);
+          await setupSession(appUser);
         } catch (e) {
           console.error("Error during OAuth user processing", e);
-          setUser(null);
-          setCampaign(null);
+          clearSession();
         }
       } else {
-        // Handle manual login from local storage if no Firebase auth state
         const storedUserId = localStorage.getItem('userId');
         if (storedUserId) {
             const loggedInUser = await getUserById(storedUserId);
-             if (loggedInUser) {
-                setUser(loggedInUser);
-                const campaignData = await getCampaign(loggedInUser.campaignId);
-                setCampaign(campaignData);
+            if (loggedInUser) {
+                await setupSession(loggedInUser);
+            } else {
+                clearSession();
             }
         } else {
-            setUser(null);
-            setCampaign(null);
+            clearSession();
         }
       }
       setIsLoading(false);
     });
-
-    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, []);
+
+  const setupSession = async (loggedInUser: User) => {
+    if (loggedInUser.enabled) {
+      setUser(loggedInUser);
+      const campaignData = await getCampaign(loggedInUser.campaignId);
+      setCampaign(campaignData);
+      
+      // Set active role
+      if (loggedInUser.role.isGm && !loggedInUser.role.isPlayer) {
+        setActiveRoleState('gm');
+      } else if (!loggedInUser.role.isGm && loggedInUser.role.isPlayer) {
+        setActiveRoleState('player');
+      } else {
+        // Dual role or no role, let them choose or reset
+        setActiveRoleState(null);
+      }
+      localStorage.setItem('userId', loggedInUser.id);
+    } else {
+      // Handle disabled user
+      clearSession();
+    }
+  };
+
+  const clearSession = () => {
+    setUser(null);
+    setCampaign(null);
+    setActiveRoleState(null);
+    localStorage.removeItem('userId');
+  };
 
   const login = async (userId: string) => {
     setIsLoading(true);
     const loggedInUser = await getUserById(userId);
     if (loggedInUser) {
-      try {
-        localStorage.setItem('userId', userId);
-        const campaignData = await getCampaign(loggedInUser.campaignId);
-        setUser(loggedInUser);
-        setCampaign(campaignData);
-      } catch (e) {
-        console.error("Could not access local storage or fetch data", e);
-      }
+      await setupSession(loggedInUser);
     }
     setIsLoading(false);
   };
 
   const logout = () => {
-    try {
-      auth.signOut();
-      localStorage.removeItem('userId');
-    } catch (e) {
-      console.error("Could not access local storage or sign out", e);
-    }
-    setUser(null);
-    setCampaign(null);
+    auth.signOut();
+    clearSession();
   };
   
   const updateUser = async (updatedUser: User) => {
@@ -104,8 +115,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setCampaign(updatedCampaign);
   };
 
+  const setActiveRole = (role: 'gm' | 'player') => {
+    if (user && user.role.isGm && user.role.isPlayer) {
+      setActiveRoleState(role);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, campaign, login, logout, isLoading, updateUser, updateCampaign }}>
+    <AuthContext.Provider value={{ user, campaign, setCampaign, activeRole, setActiveRole, login, logout, isLoading, updateUser, updateCampaign }}>
       {children}
     </AuthContext.Provider>
   );

@@ -23,12 +23,15 @@ const createCampaign = async (batch: any, campaignData: any, locale: 'en' | 'es'
         description: campaignData.description,
         bannerUrl: campaignData.bannerUrl,
         bannerAiHint: campaignData.bannerAiHint,
-        systemPrompt: campaignData.systemPrompt
+        systemPrompt: campaignData.systemPrompt,
+        enabled: true,
+        secretCode: Math.random().toString(36).substring(2, 8).toUpperCase(),
+        ownerId: '1' // Default GM for seed
     });
 
     // Add the initial narrative thread based on locale
     const initialThread = locale === 'es' ? initialThreadEs : initialThreadEn;
-    const threadRef = doc(collection(db, "narrativeThreads"));
+    const threadRef = doc(db, "narrativeThreads", `${campaignData.id}-1`);
     batch.set(threadRef, { ...initialThread, campaignId: campaignData.id });
 
     // Add map cells as a subcollection to the campaign
@@ -127,10 +130,11 @@ export const runSeed = async () => {
             batch.set(userRef, {
                 name: user.name,
                 email: user.email,
-                role: user.role,
+                role: { isGm: user.role === 'master', isPlayer: user.role === 'player' },
                 avatar: user.avatar,
                 campaignId: user.campaignId,
-                password: user.password
+                password: user.password,
+                enabled: true,
             });
         }
         

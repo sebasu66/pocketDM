@@ -3,9 +3,13 @@ export interface User {
     id: string;
     name: string;
     email: string;
-    role: "master" | "player";
+    role: {
+        isGm: boolean;
+        isPlayer: boolean;
+    };
     avatar: string;
     campaignId: string;
+    enabled: boolean;
 }
 
 export interface Campaign {
@@ -15,6 +19,9 @@ export interface Campaign {
     bannerUrl: string;
     bannerAiHint: string;
     systemPrompt?: string;
+    enabled: boolean;
+    secretCode: string;
+    ownerId: string;
 }
 
 export interface ConditionalRule {

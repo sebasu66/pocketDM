@@ -1,25 +1,26 @@
 
-import { collection, query, where, getDocs, doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, getDoc, updateDoc, setDoc, addDoc } from "firebase/firestore";
 import { db, auth } from './firebase/config';
 import { User } from './firebase/types';
 import { GoogleAuthProvider, signInWithPopup, User as FirebaseAuthUser } from "firebase/auth";
+import { createNewCampaignForUser } from "./firebase/campaigns";
 
 // Re-export User type for convenience
 export type { User };
 
 const USERS_COLLECTION = "users";
+const CAMPAIGNS_COLLECTION = "campaigns";
 
 const googleProvider = new GoogleAuthProvider();
-
 
 export const signInWithGoogle = async (): Promise<FirebaseAuthUser> => {
     const result = await signInWithPopup(auth, googleProvider);
     return result.user;
 };
 
-
 export const getUserByEmail = async (email: string): Promise<(User & { password?: string }) | undefined> => {
-    const q = query(collection(db, USERS_COLLECTION), where("email", "==", email));
+    if (!email) return undefined;
+    const q = query(collection(db, USERS_COLLECTION), where("email", "==", email.toLowerCase()));
     const querySnapshot = await getDocs(q);
     if (querySnapshot.empty) {
         return undefined;
@@ -43,11 +44,80 @@ export const checkPassword = (user: User & { password?: string }, pass: string):
   return user.password === pass;
 };
 
-// Mock update function
 export const updateUser = async (id: string, updatedData: Partial<User>): Promise<void> => {
     const userRef = doc(db, USERS_COLLECTION, id);
     await updateDoc(userRef, updatedData);
 }
+
+interface CreateUserInput {
+    name: string;
+    email: string;
+    password?: string; // Optional for OAuth
+    role: { isGm: boolean, isPlayer: boolean };
+    campaignSecret?: string; // Required if isPlayer is true
+}
+
+export const createUser = async (input: CreateUserInput): Promise<User> => {
+    const { name, email, password, role, campaignSecret } = input;
+
+    // 1. Check if user already exists
+    const existingUser = await getUserByEmail(email);
+    if (existingUser) {
+        throw new Error("A user with this email already exists.");
+    }
+
+    let campaignId = '';
+
+    // 2. Handle Player Role
+    if (role.isPlayer) {
+        if (!campaignSecret) {
+            throw new Error("A secret code is required to join a campaign as a player.");
+        }
+        const campaignsRef = collection(db, CAMPAIGNS_COLLECTION);
+        const q = query(campaignsRef, where("secretCode", "==", campaignSecret), where("enabled", "==", true));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            throw new Error("Invalid or expired secret code. Could not find an active campaign.");
+        }
+        campaignId = querySnapshot.docs[0].id;
+    }
+
+    // 3. Handle GM Role
+    if (role.isGm) {
+        const newCampaignId = await createNewCampaignForUser({ id: '', name });
+        // If the user is ONLY a GM, this is their campaign. If they are also a player, they join another campaign but still get their own.
+        if (!campaignId) {
+            campaignId = newCampaignId;
+        }
+    }
+    
+    if (!campaignId) {
+         throw new Error("Could not determine a campaign to assign to the user.");
+    }
+
+    // 4. Create User Document
+    const newUserRef = doc(collection(db, USERS_COLLECTION));
+    const newUser: User = {
+        id: newUserRef.id,
+        name,
+        email: email.toLowerCase(),
+        role,
+        avatar: `https://picsum.photos/seed/${newUserRef.id}/100/100`,
+        campaignId,
+        enabled: true,
+    };
+    
+    // Add password for manual auth
+    const finalUserData: any = { ...newUser };
+    if (password) {
+        finalUserData.password = password;
+    }
+
+    await setDoc(newUserRef, finalUserData);
+
+    return newUser;
+};
 
 export const findOrCreateUserFromOAuth = async (firebaseUser: FirebaseAuthUser): Promise<User> => {
     const userRef = doc(db, USERS_COLLECTION, firebaseUser.uid);
@@ -56,14 +126,17 @@ export const findOrCreateUserFromOAuth = async (firebaseUser: FirebaseAuthUser):
     if (docSnap.exists()) {
         return { id: docSnap.id, ...docSnap.data() } as User;
     } else {
-        // User does not exist, create a new one
+        // This flow is for users signing in via OAuth for the FIRST time.
+        // We will treat them as players joining the default campaign.
+        // The more detailed registration is for manual sign-ups.
         const newUser: User = {
             id: firebaseUser.uid,
             name: firebaseUser.displayName || 'New Player',
             email: firebaseUser.email || '',
-            role: 'player', // Default role for new sign-ups
+            role: { isGm: false, isPlayer: true }, // Default to player
             avatar: firebaseUser.photoURL || `https://picsum.photos/seed/${firebaseUser.uid}/100/100`,
-            campaignId: '1', // Default campaign ID
+            campaignId: '1', // Default campaign ID for OAuth quick-join
+            enabled: true,
         };
         await setDoc(userRef, newUser);
         return newUser;
