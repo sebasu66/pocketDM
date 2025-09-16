@@ -1,4 +1,5 @@
 
+
 import { collection, query, where, getDocs, doc, getDoc, updateDoc, setDoc, addDoc } from "firebase/firestore";
 import { db, auth } from './firebase/config';
 import { User } from './firebase/types';
@@ -69,7 +70,7 @@ export const createUser = async (input: CreateUserInput): Promise<User> => {
     let campaignId = '';
 
     // 2. Handle Player Role
-    if (role.isPlayer) {
+    if (role.isPlayer && !role.isGm) { // Only a player
         if (!campaignSecret) {
             throw new Error("A secret code is required to join a campaign as a player.");
         }
@@ -83,30 +84,31 @@ export const createUser = async (input: CreateUserInput): Promise<User> => {
         campaignId = querySnapshot.docs[0].id;
     }
 
-    // 3. Handle GM Role
+    // 3. Create User Document first to get an ID
+    const newUserRef = doc(collection(db, USERS_COLLECTION));
+    
+    // 4. Handle GM Role (always creates a new campaign)
     if (role.isGm) {
-        // Create a temporary user ID for the new campaign owner
-        const tempUserId = doc(collection(db, 'users')).id;
-        const newCampaignId = await createNewCampaignForUser({ id: tempUserId, name });
-        // If the user is ONLY a GM, this is their campaign. If they are also a player, they join another campaign but still get their own.
+        const newCampaignId = await createNewCampaignForUser({ id: newUserRef.id, name });
+        // If the user is ONLY a GM, this is their campaign. 
+        // If they are also a player joining another campaign, they still get their own.
         if (!campaignId) {
             campaignId = newCampaignId;
         }
     }
     
-    if (!campaignId) {
+    if (!campaignId && role.isPlayer) {
          throw new Error("Could not determine a campaign to assign to the user.");
     }
 
-    // 4. Create User Document
-    const newUserRef = doc(collection(db, USERS_COLLECTION));
+    // 5. Define New User Data
     const newUser: User = {
         id: newUserRef.id,
         name,
         email: email.toLowerCase(),
         role,
         avatar: `https://picsum.photos/seed/${newUserRef.id}/100/100`,
-        campaignId,
+        campaignId: campaignId, // Assign the determined campaign ID
         enabled: true,
     };
     
@@ -118,40 +120,32 @@ export const createUser = async (input: CreateUserInput): Promise<User> => {
 
     await setDoc(newUserRef, finalUserData);
 
-    // If GM, update campaign with final user ID
-    if (role.isGm) {
-        const campaignsRef = collection(db, "campaigns");
-        const q = query(campaignsRef, where("ownerId", "==", newUserRef.id));
-        const campaignSnapshot = await getDocs(q);
-        if (!campaignSnapshot.empty) {
-            const campaignDoc = campaignSnapshot.docs[0];
-            await updateDoc(campaignDoc.ref, { ownerId: newUser.id });
-        }
-    }
-
-
     return newUser;
 };
 
 export const findOrCreateUserFromOAuth = async (firebaseUser: FirebaseAuthUser): Promise<User> => {
-    // Note: Firestore doesn't allow custom IDs with signInWithPopupRedirect, so we must use the UID from Firebase Auth.
-    // To keep consistency, we'll use the UID as the document ID for OAuth users.
     const userRef = doc(db, USERS_COLLECTION, firebaseUser.uid);
     const docSnap = await getDoc(userRef);
 
     if (docSnap.exists()) {
+        // User exists, just return their data.
         return { id: docSnap.id, ...docSnap.data() } as User;
     } else {
-        // This flow is for users signing in via OAuth for the FIRST time.
-        // We will treat them as players joining the default campaign.
-        // The more detailed registration is for manual sign-ups.
+        // This is a new user signing in via OAuth.
+        // Default to creating a GM with their own campaign.
+        const newCampaignId = await createNewCampaignForUser({
+            id: firebaseUser.uid,
+            name: firebaseUser.displayName || 'New GM'
+        });
+
         const newUser: User = {
             id: firebaseUser.uid,
-            name: firebaseUser.displayName || 'New Player',
+            name: firebaseUser.displayName || 'New Adventurer',
             email: firebaseUser.email || '',
-            role: { isGm: false, isPlayer: true }, // Default to player for simple OAuth
+            // Default to both roles for flexibility
+            role: { isGm: true, isPlayer: true },
             avatar: firebaseUser.photoURL || `https://picsum.photos/seed/${firebaseUser.uid}/100/100`,
-            campaignId: '1', // Default campaign ID for OAuth quick-join
+            campaignId: newCampaignId, // Assign their newly created campaign
             enabled: true,
         };
         await setDoc(userRef, newUser);

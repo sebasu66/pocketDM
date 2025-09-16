@@ -25,7 +25,7 @@ export default function LoginPage() {
   const [isPlayer, setIsPlayer] = useState(true);
   const [secretCode, setSecretCode] = useState("");
   
-  const { login, user } = useAuth();
+  const { login, user, setupSession } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
@@ -35,6 +35,7 @@ export default function LoginPage() {
     const codeFromUrl = searchParams.get('secretCode');
     if (codeFromUrl) {
       setSecretCode(codeFromUrl);
+      // Automatically check "Player" if a secret code is present
       setIsPlayer(true);
     }
   }, [searchParams]);
@@ -51,7 +52,6 @@ export default function LoginPage() {
     const user = await getUserByEmail(email);
     if (user && checkPassword(user, password)) {
       await login(user.id);
-      router.push("/dashboard");
     } else {
       toast({
         variant: "destructive",
@@ -70,7 +70,7 @@ export default function LoginPage() {
         toast({ variant: "destructive", title: t('registerNoRole'), description: t('registerNoRoleDesc') });
         return;
     }
-    if (isPlayer && !secretCode && !isGm) {
+    if (isPlayer && !isGm && !secretCode) {
         toast({ variant: "destructive", title: t('registerSecretCodeRequired'), description: t('registerSecretCodeRequiredDesc') });
         return;
     }
@@ -79,10 +79,9 @@ export default function LoginPage() {
         const newUser = await createUser({
             name, email, password,
             role: { isGm, isPlayer },
-            campaignSecret: isPlayer ? secretCode : undefined
+            campaignSecret: isPlayer && !isGm ? secretCode : undefined
         });
         await login(newUser.id);
-        router.push("/dashboard");
     } catch (error: any) {
         toast({
             variant: "destructive",
@@ -99,6 +98,11 @@ export default function LoginPage() {
       await signInWithGoogle();
       // After the popup closes, the onAuthStateChanged listener will fire,
       // the user will be set in the context, and the useEffect above will redirect.
+      toast({ title: "Login Successful", description: "Redirecting to your dashboard..."});
+      // A small delay to allow auth state to propagate before redirecting
+      setTimeout(() => {
+        router.push('/dashboard');
+      }, 1000);
     } catch (error) {
       console.error("OAuth login error", error);
       toast({
@@ -166,7 +170,7 @@ export default function LoginPage() {
                         </div>
                     </div>
                 </div>
-                {isPlayer && (
+                {isPlayer && !isGm && (
                     <div className="grid gap-2">
                         <Label htmlFor="secret-code">{t('registerSecretCodeLabel')}</Label>
                         <Input id="secret-code" placeholder={t('registerSecretCodePlaceholder')} required={isPlayer && !isGm} value={secretCode} onChange={(e) => setSecretCode(e.target.value)} />

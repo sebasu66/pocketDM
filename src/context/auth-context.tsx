@@ -21,6 +21,7 @@ interface AuthContextType {
   updateCampaign: (campaign: Campaign) => Promise<void>;
   setActiveRole: (role: 'gm' | 'player') => void;
   isLoading: boolean;
+  setupSession: (user: User) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -36,7 +37,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsLoading(true);
       if (firebaseUser) {
         try {
-          // This handles both initial sign-in and subsequent visits for OAuth users
           const appUser = await findOrCreateUserFromOAuth(firebaseUser);
           await setupSession(appUser);
         } catch (e) {
@@ -44,7 +44,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           clearSession();
         }
       } else {
-        // Fallback to manual login session from localStorage
         const storedUserId = localStorage.getItem('userId');
         if (storedUserId) {
             const loggedInUser = await getUserById(storedUserId);
@@ -70,18 +69,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setCampaign(campaignData);
       }
       
-      // Set active role
       if (loggedInUser.role.isGm && !loggedInUser.role.isPlayer) {
         setActiveRoleState('gm');
       } else if (!loggedInUser.role.isGm && loggedInUser.role.isPlayer) {
         setActiveRoleState('player');
       } else {
-        // Dual role or no role, let them choose or reset
         setActiveRoleState(null);
       }
       localStorage.setItem('userId', loggedInUser.id);
     } else {
-      // Handle disabled user
       clearSession();
     }
   };
@@ -126,7 +122,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, campaign, setCampaign, activeRole, setActiveRole, login, logout, isLoading, updateUser, updateCampaign }}>
+    <AuthContext.Provider value={{ user, campaign, setCampaign, activeRole, setActiveRole, login, logout, isLoading, updateUser, updateCampaign, setupSession }}>
       {children}
     </AuthContext.Provider>
   );
