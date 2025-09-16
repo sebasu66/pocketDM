@@ -25,7 +25,7 @@ export default function LoginPage() {
   const [isPlayer, setIsPlayer] = useState(true);
   const [secretCode, setSecretCode] = useState("");
   
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
@@ -38,6 +38,14 @@ export default function LoginPage() {
       setIsPlayer(true);
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    // If the user object becomes available after an auth flow, redirect.
+    if (user) {
+      router.push("/dashboard");
+    }
+  }, [user, router]);
+
 
   const handleLogin = async () => {
     const user = await getUserByEmail(email);
@@ -86,11 +94,11 @@ export default function LoginPage() {
 
   const handleOAuthLogin = async () => {
     try {
+      // The onAuthStateChanged listener in AuthProvider will handle everything,
+      // including user creation and session setup.
       await signInWithGoogle();
-      // The onAuthStateChanged listener in AuthProvider will handle finding/creating the user.
-      // After the popup closes, the listener will fire and the context will redirect.
-      // We can push to dashboard optimistically.
-      router.push('/dashboard');
+      // After the popup closes, the onAuthStateChanged listener will fire,
+      // the user will be set in the context, and the useEffect above will redirect.
     } catch (error) {
       console.error("OAuth login error", error);
       toast({
