@@ -32,6 +32,7 @@
     "pageTitleIntegrations": "Integraciones",
     "pageTitleReaderView": "Vista de Lector",
     "pageTitleAiLog": "Registro de IA",
+    "pageTitleLore": "Conocimiento",
 
     "loadingCampaign": "Cargando tu campaña...",
     "sidebarWorld": "Mundo",
@@ -178,6 +179,11 @@
 
     "placesTitle": "Gestión de Lugares",
     "placesDescription": "Aquí es donde crearás y gestionarás ciudades, mazmorras y otras ubicaciones dentro de tu mundo.",
+    
+    "loreTitle": "Conocimiento y Reglas del Juego",
+    "loreDescription": "Busca en la enciclopedia de Hellfrost reglas, objetos, conjuros e información del mundo.",
+    "loreSearchPlaceholder": "Busca un concepto...",
+    "loreNoResults": "No se encontraron resultados.",
 
     "notFoundTitle": "Página No Encontrada",
     "notFoundDescription": "La página que buscas parece haberse perdido en el plano astral.",
@@ -225,7 +231,7 @@
     "narrativeGenerationFailed": "Falló la Generación de IA",
     "narrativeAddManually": "Añadir Manualmente",
     "narrativeNotImplemented": "Función No Implementada",
-    "narrativeNotImplementedDesc": "Añadir una publicación de narrativa manually aún no está disponible. Por favor, usa la función de generación de IA.",
+    "narrativeNotImplementedDesc": "Añadir una publicación de narrativa manualmente aún no está disponible. Por favor, usa la función de generación de IA.",
     "narrativeGenerateNext": "Generar Siguiente Post",
     "narrativeGenerating": "Generando...",
     "narrativeWaitingFor": "Esperando que {players} respondan.",

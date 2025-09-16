@@ -13,7 +13,7 @@ import { ArrowLeft, ArrowRight, Menu, User as UserIcon, X, Bot, Plus, FileText, 
 import { RusticIconButton } from '@/components/ui/rustic-icon-button';
 import { useI18n } from '@/context/i18n-context';
 import React from 'react';
-import { Sheet, SheetContent } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader } from '@/components/ui/sheet';
 import Image from 'next/image';
 import { ThreadComments } from './ThreadComments';
 import { getUserById } from '@/lib/auth';
@@ -27,6 +27,7 @@ import { generateStory } from '@/ai/flows/narrative-orchestrator';
 import { addNarrativeThread, deleteNarrativeThread, restartCampaignNarrative } from '@/lib/firebase/narrative';
 import { StoryInput } from '@/ai/flows/narrative-orchestrator';
 import { InteractiveSection } from '@/components/ui/interactive-section';
+import { PlayerSidebarContent } from '../layout';
 
 
 export default function PlayerViewPage() {
@@ -63,16 +64,11 @@ export default function PlayerViewPage() {
         const unsubscribe = onSnapshot(narrativeQuery, async (snapshot) => {
             const threadsFromDb = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
             
-            // This ensures we don't reset the view when a new thread is added in real-time
             if (isInitialLoad.current) {
                 setActiveThreadIndex(0);
                 isInitialLoad.current = false;
             } else {
-                 // If a new thread is added, it will be at the top.
-                 // We can optionally set the view to it. For now, let's stay on the current view.
-                 // If the number of threads changed, it means one was added/removed.
                  if(threadsFromDb.length !== narrativeThreads.length){
-                    // A thread was added, it's at index 0. Let's move to it.
                      setActiveThreadIndex(0);
                  }
             }
@@ -115,7 +111,6 @@ export default function PlayerViewPage() {
         const unsubscribe = onSnapshot(commentsQuery, async (snapshot) => {
             const commentsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as EnrichedComment));
             
-            // Create caches for user and character data to avoid re-fetching
             const characterCache: Record<string, Character> = {};
             const userCache: Record<string, User> = {};
 
@@ -146,12 +141,7 @@ export default function PlayerViewPage() {
 
     const lastThread = useMemo(() => narrativeThreads.length > 0 ? narrativeThreads[0] : null, [narrativeThreads]);
     
-    // This derived state will now depend on the comments of the *last* thread, not the active one.
     const playersWhoHaveCommentedOnLastThread = useMemo(() => {
-        // This is a bit tricky since we only fetch comments for the active thread.
-        // For simplicity, we'll assume for AI turn logic we need to know about the very last thread.
-        // A more robust solution might involve a separate query or restructuring.
-        // For now, this logic will be based on what's visible. If activeThread is last thread, it's accurate.
         if (activeThread?.id !== lastThread?.id) return new Set();
         return new Set(activeThreadComments.map(c => c.authorId));
     }, [activeThread, lastThread, activeThreadComments]);
@@ -160,8 +150,6 @@ export default function PlayerViewPage() {
 
     const allActivePlayersResponded = useMemo(() => {
         if (!lastThread || activePlayers.length === 0) return false;
-        // This logic is imperfect if not viewing the last thread.
-        // A better approach would be to fetch all comments or have a separate mechanism for this check.
         if (activeThread?.id !== lastThread?.id) return false;
         return activePlayers.every(p => playersWhoHaveCommentedOnLastThread.has(p.userId));
     }, [activePlayers, playersWhoHaveCommentedOnLastThread, lastThread, activeThread]);
@@ -169,8 +157,6 @@ export default function PlayerViewPage() {
     const isAITurn = useMemo(() => {
         if (!isMaster) return false;
         if (narrativeThreads.length === 0) return true;
-        // This should be based on the very last thread, not the one being viewed.
-        // The current implementation is a simplification.
         return allActivePlayersResponded;
     }, [isMaster, narrativeThreads.length, allActivePlayersResponded]);
 
@@ -454,7 +440,12 @@ export default function PlayerViewPage() {
 
              <Sheet open={isMenuSheetOpen} onOpenChange={setIsMenuSheetOpen}>
                  <SheetContent side="right" className="p-0 w-80 bg-sidebar-gradient border-l-0 text-sidebar-foreground">
-                    {/* Placeholder for sidebar content */}
+                    <SheetHeader className="p-4">
+                        <DialogTitle className="font-headline text-2xl text-white">{campaign?.title}</DialogTitle>
+                    </SheetHeader>
+                    <div className="p-2">
+                      <PlayerSidebarContent onClick={() => setIsMenuSheetOpen(false)} />
+                    </div>
                  </SheetContent>
             </Sheet>
 

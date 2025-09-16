@@ -221,6 +221,7 @@ export interface Archetype {
 
 export interface Concepto {
     id: string;
+    collection?: string;
     [key: string]: any;
 }
 
@@ -229,3 +230,5 @@ export interface Concepto {
 export type NarrativeCommentWithAuthor = NarrativeComment & { author: User };
 export type EnrichedComment = NarrativeComment & {
     author: User;
+    character?: Character | null;
+};

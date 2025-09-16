@@ -20,6 +20,7 @@ import {
   Layers,
   BrainCircuit,
   Newspaper,
+  Library,
 } from "lucide-react";
 
 import {
@@ -51,12 +52,8 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 import { useI18n } from "@/context/i18n-context";
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+export const GmSidebarContent = ({onClick}: {onClick?: () => void}) => {
   const pathname = usePathname() || "/dashboard";
-  const { user, campaign, isLoading } = useAuth();
-  const router = useRouter();
-  const [isSheetOpen, setIsSheetOpen] = React.useState(false);
-  const isMaster = user?.role === 'master';
   const { t } = useI18n();
 
   const worldNavItems = [
@@ -74,6 +71,111 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const designNavItems = [
     
   ];
+  
+  return (
+    <>
+      <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild isActive={pathname === '/dashboard'} tooltip={{ children: t('sidebarDashboard') }} onClick={onClick}>
+                <Link href="/dashboard">
+                    <Home />
+                    <span>{t('sidebarDashboard')}</span>
+                </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+
+      <SidebarGroup>
+        <SidebarGroupLabel>{t('sidebarWorld')}</SidebarGroupLabel>
+        <SidebarMenu>
+            {worldNavItems.map((item) => (
+            <SidebarMenuItem key={item.href}>
+                <SidebarMenuButton asChild isActive={pathname.startsWith(item.href)} tooltip={{ children: item.label }} onClick={onClick}>
+                    <Link href={item.href}>
+                        <item.icon />
+                        <span>{item.label}</span>
+                    </Link>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+            ))}
+        </SidebarMenu>
+      </SidebarGroup>
+      <SidebarGroup>
+        <SidebarGroupLabel>{t('sidebarNarrative')}</SidebarGroupLabel>
+          <SidebarMenu>
+            {narrativeNavItems.map((item) => (
+            <SidebarMenuItem key={item.href}>
+                  <SidebarMenuButton asChild isActive={pathname.startsWith(item.href)} tooltip={{ children: item.label }} onClick={onClick}>
+                    <Link href={item.href}>
+                        <item.icon />
+                        <span>{item.label}</span>
+                    </Link>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+            ))}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={pathname.startsWith('/dashboard/ai-log')} tooltip={{ children: t('sidebarAiLog') }} onClick={onClick}>
+                  <Link href="/dashboard/ai-log">
+                    <BrainCircuit />
+                    <span>{t('sidebarAiLog')}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroup>
+       <SidebarGroup>
+        <SidebarGroupLabel>{t('sidebarDesignSandbox')}</SidebarGroupLabel>
+          <SidebarMenu>
+            {designNavItems.map((item) => (
+            <SidebarMenuItem key={item.href}>
+                  <SidebarMenuButton asChild isActive={pathname.startsWith(item.href)} tooltip={{ children: item.label }} onClick={onClick}>
+                    <Link href={item.href}>
+                        <item.icon />
+                        <span>{item.label}</span>
+                    </Link>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+            ))}
+        </SidebarMenu>
+      </SidebarGroup>
+    </>
+  )
+};
+
+export const PlayerSidebarContent = ({onClick}: {onClick?: () => void}) => {
+  const pathname = usePathname() || "/dashboard/playerview";
+  const { t } = useI18n();
+
+  const navItems = [
+    { href: "/dashboard/playerview", icon: ScrollText, label: t('pageTitleNarrative') },
+    { href: "/dashboard/characters", icon: Users, label: t('pageTitleCharacters') },
+    { href: "/dashboard/lore", icon: Library, label: t('pageTitleLore') },
+  ];
+  
+  return (
+    <SidebarMenu>
+      {navItems.map((item) => (
+        <SidebarMenuItem key={item.href}>
+          <SidebarMenuButton asChild isActive={pathname.startsWith(item.href)} tooltip={{ children: item.label }} onClick={onClick}>
+            <Link href={item.href}>
+              <item.icon />
+              <span>{item.label}</span>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      ))}
+    </SidebarMenu>
+  )
+};
+
+
+export default function AppLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname() || "/dashboard";
+  const { user, campaign, isLoading } = useAuth();
+  const router = useRouter();
+  const [isSheetOpen, setIsSheetOpen] = React.useState(false);
+  const isMaster = user?.role === 'master';
+  const { t } = useI18n();
 
   const pageTitles: { [key: string]: string } = {
     "/dashboard": t('pageTitleDashboard'),
@@ -88,11 +190,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     "/dashboard/integrations": t('pageTitleIntegrations'),
     "/dashboard/playerview": t('pageTitleNarrative'),
     "/dashboard/ai-log": t('pageTitleAiLog'),
+    "/dashboard/lore": t('pageTitleLore'),
   };
 
   // --- DEMO ONLY: SEED DATABASE ---
-  // This is a temporary solution to seed the database for the demo.
-  // In a real application, this would be handled by a proper backend process.
   React.useEffect(() => {
     runSeed();
   }, []);
@@ -153,72 +254,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </div>
         </SidebarHeader>
         <SidebarContent className="p-2">
-           <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname === '/dashboard'} tooltip={{ children: t('sidebarDashboard') }} onClick={handleLinkClick}>
-                    <Link href="/dashboard">
-                        <Home />
-                        <span>{t('sidebarDashboard')}</span>
-                    </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-
-          <SidebarGroup>
-            <SidebarGroupLabel>{t('sidebarWorld')}</SidebarGroupLabel>
-            <SidebarMenu>
-                {worldNavItems.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton asChild isActive={pathname.startsWith(item.href)} tooltip={{ children: item.label }} onClick={handleLinkClick}>
-                        <Link href={item.href}>
-                            <item.icon />
-                            <span>{item.label}</span>
-                        </Link>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
-                ))}
-            </SidebarMenu>
-          </SidebarGroup>
-          <SidebarGroup>
-            <SidebarGroupLabel>{t('sidebarNarrative')}</SidebarGroupLabel>
-             <SidebarMenu>
-                {narrativeNavItems.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                     <SidebarMenuButton asChild isActive={pathname.startsWith(item.href)} tooltip={{ children: item.label }} onClick={handleLinkClick}>
-                        <Link href={item.href}>
-                            <item.icon />
-                            <span>{item.label}</span>
-                        </Link>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
-                ))}
-                {isMaster && (
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={pathname.startsWith('/dashboard/ai-log')} tooltip={{ children: t('sidebarAiLog') }} onClick={handleLinkClick}>
-                      <Link href="/dashboard/ai-log">
-                        <BrainCircuit />
-                        <span>{t('sidebarAiLog')}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )}
-            </SidebarMenu>
-          </SidebarGroup>
-          <SidebarGroup>
-            <SidebarGroupLabel>{t('sidebarDesignSandbox')}</SidebarGroupLabel>
-             <SidebarMenu>
-                {designNavItems.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                     <SidebarMenuButton asChild isActive={pathname.startsWith(item.href)} tooltip={{ children: item.label }} onClick={handleLinkClick}>
-                        <Link href={item.href}>
-                            <item.icon />
-                            <span>{item.label}</span>
-                        </Link>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
-                ))}
-            </SidebarMenu>
-          </SidebarGroup>
+           {isMaster ? <GmSidebarContent onClick={handleLinkClick} /> : <PlayerSidebarContent onClick={handleLinkClick} />}
         </SidebarContent>
         <SidebarFooter>
           <Separator className="my-2 bg-border/20" />
@@ -270,16 +306,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               {children}
             </main>
             
-            {pathname !== '/dashboard/playerview' && (
-              <RusticIconButton
-                  variant="incomplete"
-                  tooltip="Toggle Menu"
-                  onClick={() => setIsSheetOpen(true)}
-                  className="fixed bottom-6 right-6 h-16 w-16 text-white/90 hover:text-white z-30"
-              >
-                  <Menu size={28} />
-              </RusticIconButton>
-            )}
+            <RusticIconButton
+                variant="incomplete"
+                tooltip="Toggle Menu"
+                onClick={() => setIsSheetOpen(true)}
+                className="fixed bottom-6 right-6 h-16 w-16 text-white/90 hover:text-white z-30"
+            >
+                <Menu size={28} />
+            </RusticIconButton>
 
 
             <SheetContent side="right" className="p-0 w-80 bg-sidebar-gradient border-l-0 text-sidebar-foreground">

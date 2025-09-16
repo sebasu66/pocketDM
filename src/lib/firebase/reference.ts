@@ -1,5 +1,5 @@
 
-import { collection, doc, getDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, where, limit } from "firebase/firestore";
 import { db } from "./config";
 import { Concepto } from "./types";
 
@@ -19,3 +19,44 @@ export const getReferenceItem = async (collectionName: string, documentId: strin
         return null;
     }
 };
+
+export const searchReference = async (searchTerm: string): Promise<Concepto[]> => {
+    if (!searchTerm) return [];
+
+    const collectionsToSearch = [
+        'razas',
+        'characterCategories',
+        'habilidades',
+        'edges',
+        'hindrances',
+        'hellfrost_items',
+        'conjuros',
+        'conceptos',
+        'archetypes',
+    ];
+
+    try {
+        const lowercasedTerm = searchTerm.toLowerCase();
+        const results: Concepto[] = [];
+
+        for (const collectionName of collectionsToSearch) {
+            const q = query(
+                collection(db, collectionName),
+                where('name', '>=', lowercasedTerm),
+                where('name', '<=', lowercasedTerm + '\uf8ff'),
+                limit(5)
+            );
+            
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((doc) => {
+                results.push({ id: doc.id, collection: collectionName, ...doc.data() } as Concepto);
+            });
+        }
+        
+        return results;
+
+    } catch (error) {
+        console.error("Error searching reference:", error);
+        return [];
+    }
+}

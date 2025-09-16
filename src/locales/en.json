@@ -32,6 +32,7 @@
     "pageTitleIntegrations": "Integrations",
     "pageTitleReaderView": "Reader View",
     "pageTitleAiLog": "AI Log",
+    "pageTitleLore": "Lore",
 
     "loadingCampaign": "Loading your campaign...",
     "sidebarWorld": "World",
@@ -178,6 +179,11 @@
 
     "placesTitle": "Place Management",
     "placesDescription": "This is where you will create and manage cities, dungeons, and other locations within your world.",
+    
+    "loreTitle": "Game Lore & Rules",
+    "loreDescription": "Search the Hellfrost encyclopedia for rules, items, spells, and world information.",
+    "loreSearchPlaceholder": "Search for a concept...",
+    "loreNoResults": "No results found.",
 
     "notFoundTitle": "Page Not Found",
     "notFoundDescription": "The page you are looking for seems to have gotten lost in the astral plane.",
