@@ -87,7 +87,9 @@ export default function LoginPage() {
   const handleOAuthLogin = async () => {
     try {
       await signInWithGoogle();
-      // The onAuthStateChanged listener in AuthProvider will handle the redirect
+      // The onAuthStateChanged listener in AuthProvider will handle finding/creating the user.
+      // After the popup closes, the listener will fire and the context will redirect.
+      // We can push to dashboard optimistically.
       router.push('/dashboard');
     } catch (error) {
       console.error("OAuth login error", error);
@@ -184,5 +186,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-    
