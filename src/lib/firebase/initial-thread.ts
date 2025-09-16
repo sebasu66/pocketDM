@@ -1,4 +1,5 @@
 
+// This file is deprecated. Use data/initial-thread-en.ts or data/initial-thread-es.ts instead.
 import type { NarrativeThread } from "./types";
 
 export const initialThread: Omit<NarrativeThread, 'id' | 'campaignId'> = {

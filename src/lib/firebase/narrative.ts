@@ -2,7 +2,8 @@
 import { doc, getDoc, collection, addDoc, query, where, getDocs, orderBy, writeBatch, deleteDoc } from "firebase/firestore";
 import { db } from "./config";
 import { NarrativeThread } from "./types";
-import { initialThread } from "./initial-thread";
+import { initialThreadEn } from "./data/initial-thread-en";
+import { initialThreadEs } from "./data/initial-thread-es";
 
 const NARRATIVE_THREADS_COLLECTION = "narrativeThreads";
 
@@ -37,7 +38,7 @@ export const deleteNarrativeThread = async (threadId: string): Promise<void> => 
 };
 
 
-export const restartCampaignNarrative = async (campaignId: string): Promise<void> => {
+export const restartCampaignNarrative = async (campaignId: string, locale: 'en' | 'es' = 'en'): Promise<void> => {
     const batch = writeBatch(db);
 
     // Find all narrative threads for the campaign
@@ -68,7 +69,8 @@ export const restartCampaignNarrative = async (campaignId: string): Promise<void
         });
     }
 
-    // Add the initial thread back
+    // Add the initial thread back, localized
+    const initialThread = locale === 'es' ? initialThreadEs : initialThreadEn;
     const newThreadRef = doc(collection(db, NARRATIVE_THREADS_COLLECTION));
     batch.set(newThreadRef, { ...initialThread, campaignId });
 

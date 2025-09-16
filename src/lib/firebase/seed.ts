@@ -9,13 +9,14 @@ import { hellfrostItems } from './data/seed-items';
 import { hellfrostSpells } from './data/seed-spells';
 import { hellfrostReferenceData, rassilonGridMapSummary } from './data/seed-reference';
 import { conceptosWebApp } from './data/seed-concepts';
-import { initialThread } from "./initial-thread";
+import { initialThreadEn } from "./data/initial-thread-en";
+import { initialThreadEs } from "./data/initial-thread-es";
 
 /**
  * Creates a new campaign from scratch, including its map data and initial narrative thread.
  * This function is designed to be called when a new GM registers.
  */
-const createCampaign = async (batch: any, campaignData: any) => {
+const createCampaign = async (batch: any, campaignData: any, locale: 'en' | 'es' = 'en') => {
     const campaignRef = doc(db, "campaigns", campaignData.id);
     batch.set(campaignRef, {
         title: campaignData.title,
@@ -25,7 +26,8 @@ const createCampaign = async (batch: any, campaignData: any) => {
         systemPrompt: campaignData.systemPrompt
     });
 
-    // Add the initial narrative thread
+    // Add the initial narrative thread based on locale
+    const initialThread = locale === 'es' ? initialThreadEs : initialThreadEn;
     const threadRef = doc(collection(db, "narrativeThreads"));
     batch.set(threadRef, { ...initialThread, campaignId: campaignData.id });
 
@@ -33,7 +35,14 @@ const createCampaign = async (batch: any, campaignData: any) => {
     const mapCells = rassilonGridMapSummary;
     for (const cell of mapCells) {
         const cellRef = doc(db, `campaigns/${campaignData.id}/mapCells`, cell.id);
-        batch.set(cellRef, cell.region_info);
+        const regionInfoEs = {
+            ...cell.region_info,
+            // This is a placeholder for actual translation.
+            // In a real app, you'd pull this from a translation service or i18n files.
+            name: cell.region_info.name.replace("The Hellfrost", "El Hellfrost").replace("Unclaimed Lands", "Tierras No Reclamadas"),
+            background: `(ES) ${cell.region_info.background}`,
+        };
+        batch.set(cellRef, cell.region_info); // Sticking to original english data for map for now
     }
 };
 
@@ -79,7 +88,11 @@ const seedReferenceData = async (batch: any) => {
         for (const [docId, docData] of Object.entries(data)) {
             const formattedId = docId.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
             const docRef = doc(db, collectionName, formattedId);
-            batch.set(docRef, { name: docId.replace(/_/g, ' '), ...docData });
+            const finalDocData = {
+                ...docData,
+                name: (docData as any).nombre || docId.replace(/_/g, ' '),
+            };
+            batch.set(docRef, finalDocData);
         }
     }
 };
@@ -105,7 +118,7 @@ export const runSeed = async () => {
 
         // Create campaigns
         for (const campaign of initialCampaigns) {
-            await createCampaign(batch, campaign);
+            await createCampaign(batch, campaign, 'es'); // Default to spanish for demo
         }
 
         // Create users

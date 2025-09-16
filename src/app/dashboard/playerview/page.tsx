@@ -32,7 +32,7 @@ import { PlayerSidebarContent } from '../layout';
 
 export default function PlayerViewPage() {
     const { user, campaign, isLoading: isAuthLoading } = useAuth();
-    const { t } = useI18n();
+    const { t, locale } = useI18n();
     const { toast } = useToast();
     const [isLoading, setIsLoading] = useState(true);
     const [narrativeThreads, setNarrativeThreads] = useState<NarrativeThread[]>([]);
@@ -259,7 +259,7 @@ export default function PlayerViewPage() {
     setIsGenerating(true);
     toast({ title: t('narrativeRestarting'), description: t('narrativeRestartingDesc')});
     try {
-        await restartCampaignNarrative(campaign.id);
+        await restartCampaignNarrative(campaign.id, locale);
     } catch (error) {
         console.error("Error restarting campaign:", error);
         toast({ variant: "destructive", title: "Error", description: t('narrativeErrorRestart')});
