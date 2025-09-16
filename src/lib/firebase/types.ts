@@ -1,3 +1,4 @@
+
 export interface User {
     id: string;
     name: string;
@@ -99,6 +100,7 @@ export interface NarrativeThread {
     authorId: string; // User ID (always GM)
     campaignId: string;
     createdAt: number; // timestamp
+    characterFilterList?: string; // Comma-separated list of character IDs
 }
 
 export interface NarrativeComment {

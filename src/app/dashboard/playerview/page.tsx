@@ -35,7 +35,7 @@ export default function PlayerViewPage() {
     const { t, locale } = useI18n();
     const { toast } = useToast();
     const [isLoading, setIsLoading] = useState(true);
-    const [narrativeThreads, setNarrativeThreads] = useState<NarrativeThread[]>([]);
+    const [allNarrativeThreads, setAllNarrativeThreads] = useState<NarrativeThread[]>([]);
     const [activeThreadIndex, setActiveThreadIndex] = useState(0);
     const [isMenuSheetOpen, setIsMenuSheetOpen] = React.useState(false);
     const [isCharacterSheetOpen, setIsCharacterSheetOpen] = React.useState(false);
@@ -49,6 +49,18 @@ export default function PlayerViewPage() {
     const isMaster = user?.role === 'master';
     const [isGenerating, setIsGenerating] = useState(false);
     const [lastPrompt, setLastPrompt] = useState<any | null>(null);
+
+    // Filter threads based on characterFilterList
+    const narrativeThreads = useMemo(() => {
+        if (isMaster || !playerCharacter) {
+            return allNarrativeThreads;
+        }
+        return allNarrativeThreads.filter(thread => 
+            !thread.characterFilterList || 
+            thread.characterFilterList.split(',').includes(playerCharacter.id)
+        );
+    }, [allNarrativeThreads, playerCharacter, isMaster]);
+
 
     // Effect to fetch threads and characters
     useEffect(() => {
@@ -68,11 +80,11 @@ export default function PlayerViewPage() {
                 setActiveThreadIndex(0);
                 isInitialLoad.current = false;
             } else {
-                 if(threadsFromDb.length !== narrativeThreads.length){
+                 if(threadsFromDb.length !== allNarrativeThreads.length){
                      setActiveThreadIndex(0);
                  }
             }
-            setNarrativeThreads(threadsFromDb);
+            setAllNarrativeThreads(threadsFromDb);
 
             const allCharacters = await getCharactersByCampaign(campaign.id);
             setActivePlayers(allCharacters.filter(c => c.isActive));
