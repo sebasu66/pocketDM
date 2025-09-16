@@ -312,19 +312,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 variant="incomplete"
                 tooltip="Toggle Menu"
                 onClick={() => setIsSheetOpen(true)}
-                className="fixed bottom-6 right-6 h-16 w-16 text-white/90 hover:text-white z-30 lg:hidden"
+                className="fixed bottom-6 right-6 h-16 w-16 text-white/90 hover:text-white z-30"
             >
                 <Menu size={28} />
             </RusticIconButton>
-
-            <div className="hidden lg:block">
-                <Sidebar side="left" variant="sidebar" collapsible="icon">
-                    {sidebarContent}
-                </Sidebar>
-            </div>
-
-
-            <SheetContent side="left" className="p-0 w-80 bg-sidebar-gradient border-r-0 text-sidebar-foreground lg:hidden">
+            
+            <SheetContent side="right" className="p-0 w-80 bg-sidebar-gradient border-l-0 text-sidebar-foreground">
                 <SheetHeader>
                     <SheetTitle></SheetTitle>
                 </SheetHeader>
@@ -336,3 +329,5 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     </SidebarProvider>
   );
 }
+
+    
