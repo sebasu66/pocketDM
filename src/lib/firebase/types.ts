@@ -111,8 +111,21 @@ export interface Edge {
     id: string;
     name: string;
     description: string;
-    category: 'Background' | 'Combat' | 'Leadership' | 'Power' | 'Professional' | 'Social' | 'Weird' | 'Legendary';
+    category: string;
     requirements: string;
+}
+
+export interface HellfrostItem {
+    id: string;
+    nombre: string;
+    descripcion?: string;
+    costo_gs?: number | string;
+    costo_multiplicador?: string;
+    peso_lbs?: number | string;
+    disponibilidad: string;
+    notas?: string[] | string;
+    fuente: string | string[];
+    [key: string]: any; // For other properties like damage, range, etc.
 }
 
 
