@@ -1,4 +1,5 @@
 
+
 // THIS SCRIPT IS FOR DEMO PURPOSES ONLY
 // It seeds the Firestore database with initial data so the app is usable.
 import { collection, writeBatch, doc, getDoc } from "firebase/firestore";
