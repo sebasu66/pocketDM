@@ -37,6 +37,7 @@ export interface Character {
     wisdom: number;
     charisma: number;
     isActive: boolean;
+    location_cell_id?: string;
     // Behavior Profile
     position?: number;
     resolve?: number;
@@ -78,6 +79,10 @@ export interface Race {
     id: string;
     name: string;
     description: string;
+    caracteristicas_raciales: string[];
+    nombres_ejemplo: {
+        [key: string]: any;
+    };
 }
 
 export interface CharacterCategory {
@@ -141,6 +146,7 @@ export interface Archetype {
   id: string;
   name: string;
   race: string;
+  description: string;
   attributes: {
     agility: string;
     smarts: string;
@@ -175,12 +181,12 @@ export interface Archetype {
   } | null;
 }
 
+export interface Concepto {
+    id: string;
+    [key: string]: any;
+}
+
 
 // Helper types for API responses
 export type NarrativeCommentWithAuthor = NarrativeComment & { author: User };
-export type EnrichedComment = NarrativeCommentWithAuthor & {
-    character?: Character | null;
-};
-export type EnrichedThread = NarrativeThread & {
-    comments: EnrichedComment[];
-}
+export type EnrichedComment = NarrativeComment

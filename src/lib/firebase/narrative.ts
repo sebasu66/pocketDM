@@ -47,10 +47,9 @@ export const restartCampaignNarrative = async (campaignId: string): Promise<void
     );
     const threadsSnapshot = await getDocs(threadsQuery);
 
-    const threadIds = threadsSnapshot.docs.map(d => d.id);
+    if (!threadsSnapshot.empty) {
+        const threadIds = threadsSnapshot.docs.map(d => d.id);
 
-    // Delete all threads if they exist
-    if (threadIds.length > 0) {
         // Find all comments for those threads
         const commentsQuery = query(
             collection(db, "narrativeComments"),
@@ -72,8 +71,7 @@ export const restartCampaignNarrative = async (campaignId: string): Promise<void
     // Add the initial thread back
     const { id: _, ...threadData } = initialThread;
     const newThreadRef = doc(collection(db, NARRATIVE_THREADS_COLLECTION));
-    batch.set(newThreadRef, threadData);
+    batch.set(newThreadRef, { ...threadData, campaignId });
 
 
     await batch.commit();
-}
