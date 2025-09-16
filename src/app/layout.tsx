@@ -32,7 +32,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=MedievalSharp&family=Cormorant+Garamond:wght@400;700&family=Recursive:wght@400;700&family=Covered+By+Your+Grace&family=Merienda:wght@300;400;700&family=Uncial+Antiqua&display=swap" rel="stylesheet" />
       </head>
-      <body className="font-body antialiased">
+      <body className="font-serif antialiased">
         <ThemeProvider>
           <I18nProvider>
             <AuthProvider>
@@ -45,3 +45,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+    

@@ -27,7 +27,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="font-body flex flex-col items-center justify-center min-h-screen bg-cover bg-center bg-no-repeat p-4" style={{backgroundImage: "url('https://picsum.photos/1920/1080?grayscale&blur=5&random=1')"}} data-ai-hint="fantasy landscape">
+    <div className="font-serif flex flex-col items-center justify-center min-h-screen bg-cover bg-center bg-no-repeat p-4" style={{backgroundImage: "url('https://picsum.photos/1920/1080?grayscale&blur=5&random=1')"}} data-ai-hint="fantasy landscape">
       <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
       <div className="w-full max-w-4xl z-10 text-center text-white p-8">
         <div className="flex justify-center mb-6">

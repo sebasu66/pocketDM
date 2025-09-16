@@ -13,11 +13,12 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ['IM Fell English', 'serif'],
+        body: ['Cormorant Garamond', 'serif'],
         headline: ['Uncial Antiqua', 'cursive'],
-        medieval: ['MedievalSharp', 'cursive'],
+        medieval: ['Uncial Antiqua', 'cursive'],
         code: ['Recursive', 'monospace'],
         handwriting: ['var(--font-handwriting)', 'cursive'],
+        serif: ['Cormorant Garamond', 'serif'],
       },
       colors: {
         background: 'hsl(var(--background))',
@@ -112,3 +113,5 @@ export default {
     })
   ],
 } satisfies Config;
+
+    
