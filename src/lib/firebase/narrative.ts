@@ -2,7 +2,7 @@
 import { doc, getDoc, collection, addDoc, query, where, getDocs, orderBy, writeBatch, deleteDoc } from "firebase/firestore";
 import { db } from "./config";
 import { NarrativeThread } from "./types";
-import { initialThread } from "./seed";
+import { initialThread } from "./initial-thread";
 
 const NARRATIVE_THREADS_COLLECTION = "narrativeThreads";
 
@@ -69,9 +69,9 @@ export const restartCampaignNarrative = async (campaignId: string): Promise<void
     }
 
     // Add the initial thread back
-    const { id: _, ...threadData } = initialThread;
     const newThreadRef = doc(collection(db, NARRATIVE_THREADS_COLLECTION));
-    batch.set(newThreadRef, { ...threadData, campaignId });
+    batch.set(newThreadRef, { ...initialThread, campaignId });
 
 
     await batch.commit();
+}
