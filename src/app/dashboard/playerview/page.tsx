@@ -28,12 +28,14 @@ import { addNarrativeThread, deleteNarrativeThread, restartCampaignNarrative } f
 import { StoryInput } from '@/ai/flows/narrative-orchestrator';
 import { InteractiveSection } from '@/components/ui/interactive-section';
 import { GmSidebarContent, PlayerSidebarContent } from '../layout';
+import { useRouter } from 'next/navigation';
 
 
 export default function PlayerViewPage() {
     const { user, campaign, isLoading: isAuthLoading } = useAuth();
     const { t, locale } = useI18n();
     const { toast } = useToast();
+    const router = useRouter();
     const [isLoading, setIsLoading] = useState(true);
     const [allNarrativeThreads, setAllNarrativeThreads] = useState<NarrativeThread[]>([]);
     const [activeThreadIndex, setActiveThreadIndex] = useState(0);
@@ -92,6 +94,16 @@ export default function PlayerViewPage() {
             if (user) {
                 const userCharacter = allCharacters.find(c => c.userId === user.id);
                 setPlayerCharacter(userCharacter || null);
+
+                // Redirect if player has no character
+                if (!isMaster && !userCharacter && !isAuthLoading && user.role.isPlayer) {
+                    toast({
+                        title: "Character Needed",
+                        description: "You must create a character before viewing the narrative.",
+                        variant: "destructive"
+                    });
+                    router.push('/dashboard/characters');
+                }
             }
             
             setIsLoading(false);
@@ -101,7 +113,7 @@ export default function PlayerViewPage() {
         });
 
         return () => unsubscribe();
-    }, [campaign, user]);
+    }, [campaign, user, isMaster, router, isAuthLoading, toast]);
 
     const activeThread = useMemo(() => {
         return narrativeThreads.length > 0 ? narrativeThreads[activeThreadIndex] : null;
@@ -577,3 +589,5 @@ const GmControls = ({ isAITurn, isGenerating, onGenerate, onRedo, onRestart, las
         </div>
     </div>
 );
+
+    

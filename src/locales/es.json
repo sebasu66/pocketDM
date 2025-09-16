@@ -148,6 +148,12 @@
     "charactersRuleIfPlaceholder": "vida del personaje < 10%",
     "charactersRuleThenPlaceholder": "usar poción de vida",
     "charactersSaveChanges": "Guardar Cambios",
+    "charactersYourHero": "Tu Héroe",
+    "charactersChooseArchetype": "Elige tu Arquetipo",
+    "charactersChooseArchetypeDesc": "Selecciona un arquetipo inicial para tu héroe. Esto determinará tus estadísticas, habilidades y equipo iniciales.",
+    "charactersFinalize": "Finaliza tu Personaje",
+    "charactersFinalizeDesc": "Dale un nombre y una historia a tu nuevo héroe. El trasfondo está pre-rellenado desde el arquetipo, pero siéntete libre de personalizarlo.",
+
 
     "chatTitle": "Chat de Jugadores",
     "chatDescription": "Aquí es donde los jugadores pueden comunicarse libremente fuera del juego e intentar hacer planes.",

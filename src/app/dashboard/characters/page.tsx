@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { PlusCircle, Trash2, Sheet, Upload, Eye, EyeOff, Sparkles, HelpCircle, Save, X, User as UserIcon } from "lucide-react";
+import { PlusCircle, Trash2, Sheet, Upload, Eye, EyeOff, Sparkles, HelpCircle, Save, X, User as UserIcon, ArrowRight, BookOpen } from "lucide-react";
 import type { Character, ConditionalRule } from "@/lib/firebase/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog";
@@ -34,6 +34,13 @@ import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 import { getUserById } from "@/lib/auth";
 import { useI18n } from "@/context/i18n-context";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
+import { archetypes as seedArchetypes } from "@/lib/firebase/data/seed-archetypes";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import { CharacterSheet } from "../playerview/CharacterSheet";
+import { GameModal, GameModalContent, GameModalHeader, GameModalTitle } from "@/components/ui/game-modal";
+
+const archetypesList = Object.values(seedArchetypes);
 
 export default function CharactersPage() {
   const { campaign, user, isLoading: isAuthLoading } = useAuth();
@@ -44,6 +51,11 @@ export default function CharactersPage() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [editingCharacter, setEditingCharacter] = useState<Character | null>(null);
   const { t } = useI18n();
+  const [creationStep, setCreationStep] = useState(0);
+  const [selectedArchetype, setSelectedArchetype] = useState<any | null>(null);
+  const [newCharName, setNewCharName] = useState("");
+  const [newCharBackground, setNewCharBackground] = useState("");
+  const [isCreating, setIsCreating] = useState(false);
 
   const isMaster = user?.role === 'master';
 
@@ -80,27 +92,39 @@ export default function CharactersPage() {
     }
   }, [isAuthLoading, fetchCharacters]);
 
+  const handleSelectArchetype = (archetype: any) => {
+    setSelectedArchetype(archetype);
+    setCreationStep(1);
+    setNewCharBackground(archetype.generalBackground);
+  }
+
   const handleCreateCharacter = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!campaign || !user) return;
-
-    const formData = new FormData(event.currentTarget);
-    const newCharacterData = {
-      name: formData.get("char-name") as string,
-      description: formData.get("char-background") as string,
-      visualPreset: "default", // Default preset for new characters
-      campaignId: campaign.id,
-      userId: user.id,
-      isActive: true,
-    };
+    if (!campaign || !user || !selectedArchetype) return;
     
+    setIsCreating(true);
     try {
+        const newCharacterData: Partial<Character> = {
+            name: newCharName,
+            description: newCharBackground,
+            campaignId: campaign.id,
+            userId: user.id,
+            archetypeId: selectedArchetype.id,
+        };
+
         await addCharacter(newCharacterData);
         toast({ title: t('charactersCreated'), description: t('charactersCreatedDesc') });
         await fetchCharacters();
-        event.currentTarget.reset();
+        // Reset state
+        setCreationStep(0);
+        setSelectedArchetype(null);
+        setNewCharName("");
+        setNewCharBackground("");
+
     } catch (error) {
         toast({ variant: "destructive", title: t('charactersError'), description: t('charactersErrorCreate')});
+    } finally {
+        setIsCreating(false);
     }
   };
   
@@ -267,7 +291,7 @@ export default function CharactersPage() {
                              {character.isActive ? t('charactersActive') : t('charactersInactive')}
                            </Badge>
                         </div>
-                        <CardDescription>{t('charactersRosterDesc', { campaignTitle: campaign?.title })}</CardDescription>
+                        <CardDescription>{t('charactersYourHero')}</CardDescription>
                     </div>
                     <div className="flex gap-2">
                         <RusticIconButton tooltip={t('charactersViewEditSheet')} onClick={() => handleOpenSheet(character)}>
@@ -295,87 +319,87 @@ export default function CharactersPage() {
                     </div>
                 </div>
             </CardHeader>
-            <CardContent className="grid md:grid-cols-3 gap-6">
-                <div className="md:col-span-1">
-                    <ImageWithFallback baseSrc={`/characters/VisualPreset/${character.visualPreset}/portrait`} alt={character.name} width={400} height={600} className="w-full h-auto object-cover rounded-lg border-2 border-primary/20" data-ai-hint="fantasy portrait" />
-                </div>
-                <div className="md:col-span-2 space-y-4">
-                    <div>
-                        <h3 className="font-headline text-xl">{t('charactersDetails')}</h3>
-                         <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                            <span>{t('charactersLevel')} {character.level} {character.class}</span>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 className="font-headline text-xl">{t('charactersDescription')}</h3>
-                        <p className="text-muted-foreground">{character.description}</p>
-                    </div>
-                    {character.archetype && (
-                        <div>
-                            <h3 className="font-headline text-xl flex items-center gap-2"><Sparkles className="w-5 h-5 text-accent" />{t('charactersArchetype')}: {character.archetype}</h3>
-                            <p className="text-muted-foreground italic">"{character.archetypeDescription}"</p>
-                        </div>
-                    )}
-                    <div>
-                        <h3 className="font-headline text-xl">{t('charactersAttributes')}</h3>
-                        <div className="grid grid-cols-3 gap-4 pt-2">
-                            <StatDisplay label="STR" value={character.strength} />
-                            <StatDisplay label="DEX" value={character.dexterity} />
-                            <StatDisplay label="CON" value={character.constitution} />
-                            <StatDisplay label="INT" value={character.intelligence} />
-                            <StatDisplay label="WIS" value={character.wisdom} />
-                            <StatDisplay label="CHA" value={character.charisma} />
-                        </div>
-                    </div>
+            <CardContent>
+                <div className="h-[70vh] w-full">
+                    <CharacterSheet character={character} t={t} />
                 </div>
             </CardContent>
         </Card>
       ) : (
         <Card>
             <CardHeader>
-            <CardTitle className="font-headline">{t('charactersCreateTitle')}</CardTitle>
-            <CardDescription>{t('charactersCreateDesc')}</CardDescription>
+                <CardTitle className="font-headline">{creationStep === 0 ? t('charactersChooseArchetype') : t('charactersFinalize')}</CardTitle>
+                <CardDescription>{creationStep === 0 ? t('charactersChooseArchetypeDesc') : t('charactersFinalizeDesc')}</CardDescription>
             </CardHeader>
-            <CardContent className="grid md:grid-cols-2 gap-6">
-            <form onSubmit={handleCreateCharacter} className="space-y-4">
-                <div className="space-y-2">
-                <Label htmlFor="char-name">{t('charactersNameLabel')}</Label>
-                <Input id="char-name" name="char-name" placeholder={t('charactersNamePlaceholder')} required/>
-                </div>
-                <div className="space-y-2">
-                <Label htmlFor="char-background">{t('charactersBackgroundLabel')}</Label>
-                <Textarea id="char-background" name="char-background" rows={5} placeholder={t('charactersBackgroundPlaceholder')} required/>
-                </div>
-                <Button type="submit">
-                <PlusCircle />
-                {t('charactersCreateButton')}
-                </Button>
-            </form>
-            <div className="flex flex-col items-center justify-center bg-muted/50 rounded-lg p-4 text-center">
-                <p className="text-muted-foreground mb-2">{t('charactersPortraitLabel')}</p>
-                <div className="w-48 h-72 bg-background rounded overflow-hidden mb-4 flex items-center justify-center">
-                    <p className="text-xs text-muted-foreground p-2">{t('charactersPortraitDesc')}</p>
-                </div>
-                <RusticIconButton tooltip={t('charactersUploadImage')} disabled>
-                    <Upload />
-                </RusticIconButton>
-            </div>
+            <CardContent>
+                {creationStep === 0 && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {archetypesList.map(arch => (
+                            <Card key={arch.id} className="hover:border-primary transition-colors flex flex-col">
+                                <CardHeader>
+                                    <CardTitle>{arch.name}</CardTitle>
+                                    <CardDescription>{arch.race}</CardDescription>
+                                </CardHeader>
+                                <CardContent className="flex-grow">
+                                    <p className="text-sm text-muted-foreground">{arch.description}</p>
+                                </CardContent>
+                                <CardFooter>
+                                    <Button onClick={() => handleSelectArchetype(arch)} className="w-full">
+                                        Choose <ArrowRight />
+                                    </Button>
+                                </CardFooter>
+                            </Card>
+                        ))}
+                    </div>
+                )}
+                 {creationStep === 1 && selectedArchetype && (
+                    <div className="grid md:grid-cols-2 gap-8">
+                        <form onSubmit={handleCreateCharacter} className="space-y-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="char-name">{t('charactersNameLabel')}</Label>
+                                <Input id="char-name" value={newCharName} onChange={(e) => setNewCharName(e.target.value)} placeholder={t('charactersNamePlaceholder')} required/>
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="char-background">{t('charactersBackgroundLabel')}</Label>
+                                <Textarea id="char-background" value={newCharBackground} onChange={(e) => setNewCharBackground(e.target.value)} rows={8} placeholder={t('charactersBackgroundPlaceholder')} required/>
+                            </div>
+                            <div className="flex gap-4">
+                                <Button type="button" variant="outline" onClick={() => setCreationStep(0)}>Back</Button>
+                                <Button type="submit" disabled={isCreating}>
+                                    {isCreating ? 'Creating...' : t('charactersCreateButton')}
+                                </Button>
+                            </div>
+                        </form>
+                        <div className="space-y-4">
+                           <Card>
+                                <CardHeader>
+                                    <CardTitle>{selectedArchetype.name}</CardTitle>
+                                    <CardDescription>{selectedArchetype.race}</CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <ImageWithFallback baseSrc={`/characters/VisualPreset/${selectedArchetype.visualPreset}/portrait`} alt={selectedArchetype.name} width={200} height={300} className="w-48 h-72 object-cover rounded-lg border-2 border-primary/20 mx-auto" data-ai-hint="fantasy portrait" />
+                                </CardContent>
+                            </Card>
+                        </div>
+                    </div>
+                )}
             </CardContent>
         </Card>
       )}
-      <Dialog open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-        <DialogContent className="sm:max-w-4xl grid-rows-[auto,1fr,auto]">
-            <DialogHeader>
-                <DialogTitle className="font-headline">{t('charactersEditSheetTitle')}</DialogTitle>
+      <GameModal open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+        <GameModalContent className="max-w-4xl">
+            {editingCharacter && (
+              <>
+              <GameModalHeader>
+                <GameModalTitle>{t('charactersEditSheetTitle')}</GameModalTitle>
                 <DialogDescription>
                     {t('charactersEditSheetDesc')}
                 </DialogDescription>
-            </DialogHeader>
-            {editingCharacter && (
+              </GameModalHeader>
               <TooltipProvider>
                 <div className="grid md:grid-cols-3 gap-x-8 gap-y-6 py-4 overflow-y-auto max-h-[70vh] pr-4">
                     {/* Column 1: Core Info & Portrait */}
-                    <div className="space-y-4">
+                    <div className="space-y-4 text-black">
                       <div className="flex items-center space-x-2">
                         <Switch id="isActive" checked={editingCharacter.isActive} onCheckedChange={(c) => handleStatChange('isActive', c)} />
                         <Label htmlFor="isActive">{t('charactersIsActiveLabel')}</Label>
@@ -409,88 +433,19 @@ export default function CharactersPage() {
                     </div>
                     
                     {/* Column 2: Attributes & Behavior Profile */}
-                    <div className="space-y-6 md:col-span-2">
+                    <div className="space-y-6 md:col-span-2 text-black">
                         <div className="space-y-4">
                             <h3 className="font-headline text-lg">{t('charactersAttributes')}</h3>
-                            <div className="grid grid-cols-3 sm:grid-cols-6 gap-4">
-                                <AttributeInput label="STR" value={editingCharacter.strength} onChange={(e) => handleStatChange('strength', e.target.value)} />
-                                <AttributeInput label="DEX" value={editingCharacter.dexterity} onChange={(e) => handleStatChange('dexterity', e.target.value)} />
-                                <AttributeInput label="CON" value={editingCharacter.constitution} onChange={(e) => handleStatChange('constitution', e.target.value)} />
-                                <AttributeInput label="INT" value={editingCharacter.intelligence} onChange={(e) => handleStatChange('intelligence', e.target.value)} />
-                                <AttributeInput label="WIS" value={editingCharacter.wisdom} onChange={(e) => handleStatChange('wisdom', e.target.value)} />
-                                <AttributeInput label="CHA" value={editingCharacter.charisma} onChange={(e) => handleStatChange('charisma', e.target.value)} />
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                <AttributeInput label="AGI" value={editingCharacter.attributes?.agility} onChange={(e) => handleAttributeChange('agility', e.target.value)} />
+                                <AttributeInput label="SMA" value={editingCharacter.attributes?.smarts} onChange={(e) => handleAttributeChange('smarts', e.target.value)} />
+                                <AttributeInput label="SPI" value={editingCharacter.attributes?.spirit} onChange={(e) => handleAttributeChange('spirit', e.target.value)} />
+                                <AttributeInput label="STR" value={editingCharacter.attributes?.strength} onChange={(e) => handleAttributeChange('strength', e.target.value)} />
+                                <AttributeInput label="VIG" value={editingCharacter.attributes?.vigor} onChange={(e) => handleAttributeChange('vigor', e.target.value)} />
                             </div>
                         </div>
 
                         <div className="space-y-4 pt-4 border-t">
-                            <div className="flex justify-between items-center">
-                                <h3 className="font-headline text-lg">{t('charactersBehaviorProfile')}</h3>
-                                {editingCharacter.archetype && (
-                                     <div className="text-right">
-                                        <p className="font-bold text-accent flex items-center gap-2"><Sparkles className="w-4 h-4" /> {editingCharacter.archetype}</p>
-                                        <p className="text-xs text-muted-foreground">{editingCharacter.archetypeDescription}</p>
-                                     </div>
-                                )}
-                            </div>
-                             <div className="grid md:grid-cols-2 gap-x-8 gap-y-4">
-                                 <BehaviorSlider 
-                                     label={t('charactersPosition')}
-                                     value={editingCharacter.position || 50}
-                                     onValueChange={(v) => handleStatChange('position', v[0])}
-                                     minLabel={t('charactersBackline')}
-                                     maxLabel={t('charactersFrontline')}
-                                     tooltip={t('charactersPositionTooltip')}
-                                 />
-                                <BehaviorSlider 
-                                     label={t('charactersResolve')}
-                                     value={editingCharacter.resolve || 50}
-                                     onValueChange={(v) => handleStatChange('resolve', v[0])}
-                                     minLabel={t('charactersFlee')}
-                                     maxLabel={t('charactersFight')}
-                                     tooltip={t('charactersResolveTooltip')}
-                                 />
-                                 <BehaviorSlider 
-                                     label={t('charactersAltruism')}
-                                     value={editingCharacter.altruism || 50}
-                                     onValueChange={(v) => handleStatChange('altruism', v[0])}
-                                     minLabel={t('charactersSelfish')}
-                                     maxLabel={t('charactersGroupFirst')}
-                                     tooltip={t('charactersAltruismTooltip')}
-                                 />
-                                 <BehaviorSlider 
-                                     label={t('charactersDiscipline')}
-                                     value={editingCharacter.discipline || 50}
-                                     onValueChange={(v) => handleStatChange('discipline', v[0])}
-                                     minLabel={t('charactersReckless')}
-                                     maxLabel={t('charactersTactical')}
-                                     tooltip={t('charactersDisciplineTooltip')}
-                                 />
-                             </div>
-                        </div>
-                        <div className="space-y-4 pt-4 border-t">
-                            <h3 className="font-headline text-lg">{t('charactersBehaviorDetails')}</h3>
-                            <div className="grid md:grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <WithTooltip tooltip={t('charactersPreferredAttackTooltip')}>
-                                        <LabelWithInfo htmlFor="preferredAttack" label={t('charactersPreferredAttack')} />
-                                    </WithTooltip>
-                                    <Input id="preferredAttack" value={editingCharacter.preferredAttack || ''} onChange={(e) => handleStatChange('preferredAttack', e.target.value)} />
-                                </div>
-                                <div className="space-y-2">
-                                    <WithTooltip tooltip={t('charactersMostPreciousTooltip')}>
-                                      <LabelWithInfo htmlFor="mostPrecious" label={t('charactersMostPrecious')} />
-                                    </WithTooltip>
-                                    <Input id="mostPrecious" value={editingCharacter.mostPrecious || ''} onChange={(e) => handleStatChange('mostPrecious', e.target.value)} />
-                                </div>
-                                <div className="space-y-2 md:col-span-2">
-                                    <WithTooltip tooltip={t('charactersMottoTooltip')}>
-                                      <LabelWithInfo htmlFor="motto" label={t('charactersMotto')} />
-                                    </WithTooltip>
-                                    <Input id="motto" value={editingCharacter.motto || ''} onChange={(e) => handleStatChange('motto', e.target.value)} />
-                                </div>
-                            </div>
-                        </div>
-                         <div className="space-y-4 pt-4 border-t">
                              <WithTooltip tooltip={t('charactersConditionalRulesTooltip')}>
                                 <h3 className="font-headline text-lg flex items-center gap-2">{t('charactersConditionalRules')} <HelpCircle className="w-4 h-4 text-muted-foreground" /></h3>
                              </WithTooltip>
@@ -509,8 +464,9 @@ export default function CharactersPage() {
                     </div>
                 </div>
               </TooltipProvider>
+            </>
             )}
-            <DialogFooter>
+            <DialogFooter className="bg-stone-100/50 -mx-6 -mb-6 px-6 py-4 mt-6">
                  <DialogClose asChild>
                     <RusticIconButton tooltip={t('charactersCancel')} variant="incomplete">
                         <X />
@@ -520,10 +476,22 @@ export default function CharactersPage() {
                     <Save />
                 </RusticIconButton>
             </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        </GameModalContent>
+      </GameModal>
     </div>
   );
+  
+  function handleAttributeChange(attr: string, value: string) {
+    if (editingCharacter) {
+        setEditingCharacter({
+            ...editingCharacter,
+            attributes: {
+                ...editingCharacter.attributes,
+                [attr]: value,
+            } as any
+        });
+    }
+}
 }
 
 const WithTooltip = ({ children, tooltip }: { children: React.ReactNode, tooltip: string }) => (
@@ -542,41 +510,13 @@ const LabelWithInfo = ({ label, htmlFor }: { label: string, htmlFor: string }) =
     </div>
 );
 
-const StatDisplay = ({ label, value }: { label: string; value: number }) => (
-    <div className="flex flex-col items-center p-2 rounded-lg bg-muted/50 border">
-        <span className="text-xs font-bold text-muted-foreground">{label}</span>
-        <span className="text-2xl font-bold font-headline">{value || 0}</span>
-    </div>
-);
 
-const AttributeInput = ({ label, value, onChange }: { label: string; value: number; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) => (
+const AttributeInput = ({ label, value, onChange }: { label: string; value: string | undefined; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) => (
     <div className="space-y-2">
         <Label htmlFor={`attr-${label}`} className="text-center block">{label}</Label>
-        <Input id={`attr-${label}`} type="number" value={value || 0} onChange={onChange} className="text-center" />
+        <Input id={`attr-${label}`} value={value || 'd4'} onChange={onChange} className="text-center" />
     </div>
 );
-
-const BehaviorSlider = ({ label, value, onValueChange, minLabel, maxLabel, tooltip }: { label: string; value: number, onValueChange: (value: number[]) => void, minLabel: string, maxLabel: string, tooltip: string }) => (
-    <WithTooltip tooltip={tooltip}>
-        <div className="space-y-2">
-            <div className="flex justify-between items-baseline">
-                <Label className="flex items-center gap-2">{label} <HelpCircle className="w-4 h-4 text-muted-foreground" /></Label>
-                <span className="text-sm font-mono text-muted-foreground">{value}/100</span>
-            </div>
-            <Slider
-                defaultValue={[value]}
-                onValueChange={onValueChange}
-                max={100}
-                step={1}
-            />
-            <div className="flex justify-between text-xs text-muted-foreground">
-                <span>{minLabel}</span>
-                <span>{maxLabel}</span>
-            </div>
-        </div>
-    </WithTooltip>
-);
-
 
 const ConditionalRuleInput = ({ index, rule, onChange, t }: { index: number, rule: ConditionalRule, onChange: (index: number, part: 'if' | 'then', value: string) => void, t: (key: string) => string }) => {
     return (

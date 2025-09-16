@@ -148,6 +148,11 @@
     "charactersRuleIfPlaceholder": "character health < 10%",
     "charactersRuleThenPlaceholder": "use health potion",
     "charactersSaveChanges": "Save Changes",
+    "charactersYourHero": "Your Hero",
+    "charactersChooseArchetype": "Choose Your Archetype",
+    "charactersChooseArchetypeDesc": "Select a starting archetype for your hero. This will determine your initial stats, skills, and equipment.",
+    "charactersFinalize": "Finalize Your Character",
+    "charactersFinalizeDesc": "Give your new hero a name and a story. The background is pre-filled from the archetype, but feel free to customize it.",
 
     "chatTitle": "Player Chat",
     "chatDescription": "This is where players can communicate freely outside of the game and try to make plans.",

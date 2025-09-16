@@ -39,6 +39,7 @@ export interface Character {
     userId: string;
     isActive: boolean;
     location_cell_id?: string;
+    archetypeId?: string; // Helper for creation
 
     // Copied from Archetype
     race?: string;
@@ -193,6 +194,7 @@ export interface Conjuro {
 export interface Archetype {
   id: string;
   name: string;
+  visualPreset: string;
   description: string;
   race: string;
   attributes: {
@@ -242,3 +244,5 @@ export type EnrichedComment = NarrativeComment & {
     author: User;
     character?: Character | null;
 };
+
+    

@@ -1,20 +1,18 @@
 
 
-
-
-
-
 import { collection, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc, query, where } from "firebase/firestore"; 
 import { db } from "./config";
 import { Character } from "./types";
+import { archetypes } from "./data/seed-archetypes";
 
 const CHARACTERS_COLLECTION = "characters";
 
 // Create
-export const addCharacter = async (characterData: Omit<Character, 'id'>): Promise<string> => {
-    const characterDefaults = {
+export const addCharacter = async (characterData: Partial<Character>): Promise<string> => {
+    
+    let newCharacter: any = {
+        // Base defaults for any character
         level: 1,
-        class: "Adventurer",
         strength: 10,
         dexterity: 10,
         constitution: 10,
@@ -30,9 +28,23 @@ export const addCharacter = async (characterData: Omit<Character, 'id'>): Promis
         motto: "",
         conditionalRules: [{if: '', then: ''}, {if: '', then: ''}, {if: '', then: ''}],
         isActive: true,
-        visualPreset: 'default',
+        location_cell_id: "C6", // Default starting location
     };
-    const newCharacter = { ...characterDefaults, ...characterData };
+
+    // If an archetype is selected, merge its properties
+    if (characterData.archetypeId) {
+        const selectedArchetype = (archetypes as Record<string, any>)[characterData.archetypeId];
+        if (selectedArchetype) {
+            newCharacter = { ...newCharacter, ...selectedArchetype };
+        }
+    }
+
+    // Finally, overwrite with any specific data provided by the user
+    newCharacter = { ...newCharacter, ...characterData };
+    
+    // Remove archetypeId as it's not part of the Character model
+    delete newCharacter.archetypeId;
+    
     const docRef = await addDoc(collection(db, CHARACTERS_COLLECTION), newCharacter);
     return docRef.id;
 };
@@ -74,5 +86,7 @@ export const deleteCharacter = async (id: string): Promise<void> => {
     await deleteDoc(docRef);
 };
 
+
+    
 
     
