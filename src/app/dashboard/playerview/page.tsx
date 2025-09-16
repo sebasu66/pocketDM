@@ -13,7 +13,7 @@ import { ArrowLeft, ArrowRight, Menu, User as UserIcon, X, Bot, Plus, FileText, 
 import { RusticIconButton } from '@/components/ui/rustic-icon-button';
 import { useI18n } from '@/context/i18n-context';
 import React from 'react';
-import { Sheet, SheetContent, SheetHeader } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import Image from 'next/image';
 import { ThreadComments } from './ThreadComments';
 import { getUserById } from '@/lib/auth';
@@ -27,7 +27,7 @@ import { generateStory } from '@/ai/flows/narrative-orchestrator';
 import { addNarrativeThread, deleteNarrativeThread, restartCampaignNarrative } from '@/lib/firebase/narrative';
 import { StoryInput } from '@/ai/flows/narrative-orchestrator';
 import { InteractiveSection } from '@/components/ui/interactive-section';
-import { PlayerSidebarContent } from '../layout';
+import { GmSidebarContent, PlayerSidebarContent } from '../layout';
 
 
 export default function PlayerViewPage() {
@@ -441,10 +441,13 @@ export default function PlayerViewPage() {
              <Sheet open={isMenuSheetOpen} onOpenChange={setIsMenuSheetOpen}>
                  <SheetContent side="right" className="p-0 w-80 bg-sidebar-gradient border-l-0 text-sidebar-foreground">
                     <SheetHeader className="p-4">
-                        <DialogTitle className="font-headline text-2xl text-white">{campaign?.title}</DialogTitle>
+                        <SheetTitle className="font-headline text-2xl text-white">{campaign?.title}</SheetTitle>
                     </SheetHeader>
                     <div className="p-2">
-                      <PlayerSidebarContent onClick={() => setIsMenuSheetOpen(false)} />
+                       { isMaster ? 
+                         <GmSidebarContent onClick={() => setIsMenuSheetOpen(false)} /> : 
+                         <PlayerSidebarContent onClick={() => setIsMenuSheetOpen(false)} />
+                       }
                     </div>
                  </SheetContent>
             </Sheet>

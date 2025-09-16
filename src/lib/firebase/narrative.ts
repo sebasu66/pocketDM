@@ -40,35 +40,44 @@ export const deleteNarrativeThread = async (threadId: string): Promise<void> => 
 
 
 export const restartCampaignNarrative = async (campaignId: string, locale: 'en' | 'es' = 'en'): Promise<void> => {
-    const batch = writeBatch(db);
+    console.log(`[Narrative Service] Restarting campaign ${campaignId} in ${locale}.`);
 
-    // 1. Delete all comments associated with the campaign's threads
+    // 1. Get all threads for the campaign
     const threadsQuery = query(collection(db, NARRATIVE_THREADS_COLLECTION), where("campaignId", "==", campaignId));
     const threadsSnapshot = await getDocs(threadsQuery);
-    
-    // We need to fetch all comments for all threads.
-    // Firestore client-side SDK doesn't support collection group queries with complex `where` clauses or deleting collections directly.
-    // So we iterate.
+
     if (!threadsSnapshot.empty) {
+        console.log(`[Narrative Service] Found ${threadsSnapshot.docs.length} threads to delete.`);
+        // 2. For each thread, delete all its comments
         for (const threadDoc of threadsSnapshot.docs) {
             const commentsQuery = query(collection(db, COMMENTS_COLLECTION), where("threadId", "==", threadDoc.id));
             const commentsSnapshot = await getDocs(commentsQuery);
-            commentsSnapshot.forEach(commentDoc => {
-                batch.delete(commentDoc.ref);
-            });
+            if (!commentsSnapshot.empty) {
+                console.log(`[Narrative Service] Found ${commentsSnapshot.docs.length} comments for thread ${threadDoc.id}. Deleting...`);
+                const deleteCommentsBatch = writeBatch(db);
+                commentsSnapshot.forEach(commentDoc => {
+                    deleteCommentsBatch.delete(commentDoc.ref);
+                });
+                await deleteCommentsBatch.commit();
+                 console.log(`[Narrative Service] Deleted comments for thread ${threadDoc.id}.`);
+            }
         }
+
+        // 3. Once all comments are gone, delete all the threads
+        console.log(`[Narrative Service] Deleting all threads...`);
+        const deleteThreadsBatch = writeBatch(db);
+        threadsSnapshot.forEach(threadDoc => {
+            deleteThreadsBatch.delete(threadDoc.ref);
+        });
+        await deleteThreadsBatch.commit();
+        console.log(`[Narrative Service] All old threads deleted.`);
+    } else {
+        console.log(`[Narrative Service] No threads found for campaign ${campaignId}. Proceeding to create initial thread.`);
     }
 
-    // 2. Delete all the narrative threads themselves
-    threadsSnapshot.forEach(threadDoc => {
-        batch.delete(threadDoc.ref);
-    });
-
-    // 3. Add the new initial thread back, localized
+    // 4. Add the new initial thread back, localized
+    console.log(`[Narrative Service] Creating new initial thread in ${locale}.`);
     const initialThread = locale === 'es' ? initialThreadEs : initialThreadEn;
-    const newThreadRef = doc(collection(db, NARRATIVE_THREADS_COLLECTION));
-    batch.set(newThreadRef, { ...initialThread, campaignId });
-
-    // 4. Commit the entire batch operation
-    await batch.commit();
+    await addDoc(collection(db, NARRATIVE_THREADS_COLLECTION), { ...initialThread, campaignId });
+    console.log(`[Narrative Service] Campaign ${campaignId} restarted successfully.`);
 }

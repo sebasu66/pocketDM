@@ -26,6 +26,8 @@ import {
 import {
   Sheet,
   SheetContent,
+  SheetTitle,
+  SheetHeader
 } from "@/components/ui/sheet"
 import {
   SidebarProvider,
@@ -310,14 +312,23 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 variant="incomplete"
                 tooltip="Toggle Menu"
                 onClick={() => setIsSheetOpen(true)}
-                className="fixed bottom-6 right-6 h-16 w-16 text-white/90 hover:text-white z-30"
+                className="fixed bottom-6 right-6 h-16 w-16 text-white/90 hover:text-white z-30 lg:hidden"
             >
                 <Menu size={28} />
             </RusticIconButton>
 
+            <div className="hidden lg:block">
+                <Sidebar side="left" variant="sidebar" collapsible="icon">
+                    {sidebarContent}
+                </Sidebar>
+            </div>
 
-            <SheetContent side="right" className="p-0 w-80 bg-sidebar-gradient border-l-0 text-sidebar-foreground">
-               {sidebarContent}
+
+            <SheetContent side="left" className="p-0 w-80 bg-sidebar-gradient border-r-0 text-sidebar-foreground lg:hidden">
+                <SheetHeader>
+                    <SheetTitle></SheetTitle>
+                </SheetHeader>
+                {sidebarContent}
             </SheetContent>
           </Sheet>
         </div>
