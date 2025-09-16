@@ -4,7 +4,7 @@
 // In a real application, you would have proper data management and user registration.
 import { collection, writeBatch, doc } from "firebase/firestore";
 import { db } from "./config";
-import { User, Campaign, Character, NarrativeThread, NarrativeComment } from "./types";
+import { User, Campaign, Character, NarrativeThread, NarrativeComment, Race, CharacterCategory, Skill, Hindrance, Attribute, Edge } from "./types";
 
 const defaultSystemPrompt = `You are a master storyteller and creative Dungeon Master for a tabletop role-playing game. Your task is to weave a compelling and collaborative narrative.
 
@@ -251,6 +251,25 @@ async function seedDatabase() {
         batch.set(commentRef, commentData);
     });
     console.log("Narrative comments queued for seeding.");
+
+    // 6. HellFrost Game System Data
+    const hellfrostPlaceholders = {
+        razas: { name: 'Placeholder Race', description: 'This is a placeholder.' } as Omit<Race, 'id'>,
+        characterCategories: { name: 'Placeholder Category', description: 'This is a placeholder.' } as Omit<CharacterCategory, 'id'>,
+        habilidades: { name: 'Placeholder Skill', description: 'This is a placeholder.', attribute: 'Agility' } as Omit<Skill, 'id'>,
+        hindrances: { name: 'Placeholder Hindrance', description: 'This is a placeholder.', level: 'Minor' } as Omit<Hindrance, 'id'>,
+        caracteristicas: { name: 'Placeholder Attribute', description: 'This is a placeholder.' } as Omit<Attribute, 'id'>,
+        edges: { name: 'Placeholder Edge', description: 'This is a placeholder.', category: 'Background', requirements: 'Novice' } as Omit<Edge, 'id'>,
+    };
+
+    batch.set(doc(collection(db, "razas")), hellfrostPlaceholders.razas);
+    batch.set(doc(collection(db, "characterCategories")), hellfrostPlaceholders.characterCategories);
+    batch.set(doc(collection(db, "habilidades")), hellfrostPlaceholders.habilidades);
+    batch.set(doc(collection(db, "hindrances")), hellfrostPlaceholders.hindrances);
+    batch.set(doc(collection(db, "caracteristicas")), hellfrostPlaceholders.caracteristicas);
+    batch.set(doc(collection(db, "edges")), hellfrostPlaceholders.edges);
+    console.log("HellFrost game system collections queued for seeding with placeholders.");
+
 
     // Commit the batch
     try {

@@ -5,6 +5,7 @@
 
 
 
+
 export interface User {
     id: string;
     name: string;
@@ -77,6 +78,48 @@ export interface NarrativeComment {
     text: string;
     hiddenText?: string; // For GM-only notes
     createdAt: number; // timestamp
+}
+
+// --- HellFrost Game System Interfaces ---
+
+export interface Race {
+    id: string;
+    name: string;
+    description: string;
+}
+
+export interface CharacterCategory {
+    id: string;
+    name: string;
+    description: string;
+}
+
+export interface Skill {
+    id: string;
+    name: string;
+    description: string;
+    attribute: string; // e.g., "Agility", "Smarts"
+}
+
+export interface Hindrance {
+    id: string;
+    name: string;
+    description: string;
+    level: 'Major' | 'Minor';
+}
+
+export interface Attribute {
+    id: string;
+    name: string;
+    description: string;
+}
+
+export interface Edge {
+    id: string;
+    name: string;
+    description: string;
+    category: 'Background' | 'Combat' | 'Leadership' | 'Power' | 'Professional' | 'Social' | 'Weird';
+    requirements: string;
 }
 
 
