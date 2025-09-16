@@ -41,7 +41,7 @@ export const deleteNarrativeThread = async (threadId: string): Promise<void> => 
 export const restartCampaignNarrative = async (campaignId: string, locale: 'en' | 'es' = 'en'): Promise<void> => {
     const batch = writeBatch(db);
 
-    // Find all narrative threads for the campaign
+    // 1. Find all narrative threads for the campaign
     const threadsQuery = query(
         collection(db, NARRATIVE_THREADS_COLLECTION),
         where("campaignId", "==", campaignId)
@@ -51,29 +51,29 @@ export const restartCampaignNarrative = async (campaignId: string, locale: 'en' 
     if (!threadsSnapshot.empty) {
         const threadIds = threadsSnapshot.docs.map(d => d.id);
 
-        // Find all comments for those threads
-        const commentsQuery = query(
-            collection(db, "narrativeComments"),
-            where("threadId", "in", threadIds)
-        );
-        const commentsSnapshot = await getDocs(commentsQuery);
+        // 2. For each thread, find its comments and add them to the batch for deletion
+        for (const threadId of threadIds) {
+            const commentsQuery = query(
+                collection(db, "narrativeComments"),
+                where("threadId", "==", threadId)
+            );
+            const commentsSnapshot = await getDocs(commentsQuery);
+            commentsSnapshot.forEach(commentDoc => {
+                batch.delete(commentDoc.ref);
+            });
+        }
 
-        // Delete all comments
-        commentsSnapshot.forEach(doc => {
-            batch.delete(doc.ref);
-        });
-
-        // Delete all threads
-        threadsSnapshot.forEach(doc => {
-            batch.delete(doc.ref);
+        // 3. Add all threads to the batch for deletion
+        threadsSnapshot.forEach(threadDoc => {
+            batch.delete(threadDoc.ref);
         });
     }
 
-    // Add the initial thread back, localized
+    // 4. Add the new initial thread back, localized
     const initialThread = locale === 'es' ? initialThreadEs : initialThreadEn;
     const newThreadRef = doc(collection(db, NARRATIVE_THREADS_COLLECTION));
     batch.set(newThreadRef, { ...initialThread, campaignId });
 
-
+    // 5. Commit the entire batch operation
     await batch.commit();
 }
