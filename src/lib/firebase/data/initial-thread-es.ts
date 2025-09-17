@@ -24,5 +24,6 @@ export const initialThreadEs: Omit<NarrativeThread, 'id' | 'campaignId' | 'creat
 <p>Así que... ¿qué hacéis?</p>
   `,
     imageUrl: "https://picsum.photos/seed/ultima-oportunidad/800/400",
-    imageAiHint: "interior taberna fantasia"
+    imageAiHint: "interior taberna fantasia",
+    characterFilterList: ""
 };

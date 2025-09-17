@@ -24,5 +24,6 @@ export const initialThreadEn: Omit<NarrativeThread, 'id' | 'campaignId' | 'creat
 <p>So… what do you do?</p>
   `,
     imageUrl: "https://picsum.photos/seed/last-chance-tavern/800/400",
-    imageAiHint: "fantasy tavern interior"
+    imageAiHint: "fantasy tavern interior",
+    characterFilterList: ""
 };

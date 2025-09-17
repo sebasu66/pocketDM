@@ -45,6 +45,7 @@ export type NarrativeServiceInput = z.infer<typeof NarrativeServiceInputSchema>;
 
 const NarrativeServiceOutputSchema = z.object({
     nextPost: z.string().describe("The next post in the narrative, continuing the story."),
+    characterFilterList: z.string().optional().describe("A comma-separated list of character IDs who should see this post. If empty or omitted, all players can see it."),
 });
 export type NarrativeServiceOutput = z.infer<typeof NarrativeServiceOutputSchema>;
 

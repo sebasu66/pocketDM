@@ -240,12 +240,13 @@ export default function PlayerViewPage() {
 
         const result = await generateStory(storyInput);
 
-        const newThreadData = {
+        const newThreadData: Omit<NarrativeThread, 'id'> = {
             campaignId: campaign.id,
             authorId: user.id, 
             title: "The Story Continues...",
             createdAt: Date.now(),
             content: `<p>${result.nextPost.replace(/\\n/g, '</p><p>')}</p>`,
+            characterFilterList: result.characterFilterList || "",
         };
 
         await addNarrativeThread(newThreadData);
