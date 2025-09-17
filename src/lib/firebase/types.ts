@@ -14,7 +14,7 @@ export interface User {
 }
 
 export interface Campaign {
-    id: string;
+    id:string;
     title: string;
     description: string;
     bannerUrl: string;
@@ -40,6 +40,9 @@ export interface Character {
     isActive: boolean;
     location_cell_id?: string;
     archetypeId?: string; // Helper for creation
+
+    health?: number; // 0-100 percentage
+    gold?: number;
 
     // Copied from Archetype
     race?: string;

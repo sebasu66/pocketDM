@@ -1,12 +1,13 @@
 
 "use client";
 
-import { Sparkles } from "lucide-react";
+import { Sparkles, Coins, Heart } from "lucide-react";
 import type { Character } from "@/lib/firebase/types";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 import { ReferenceItem } from "@/components/ui/ReferenceItem";
+import { Progress } from "@/components/ui/progress";
 
 interface CharacterSheetProps {
     character: Character;
@@ -14,6 +15,8 @@ interface CharacterSheetProps {
 }
 
 export function CharacterSheet({ character, t }: CharacterSheetProps) {
+
+    const healthColor = character.health && character.health < 25 ? "bg-red-600" : character.health && character.health < 60 ? "bg-yellow-500" : "bg-green-500";
 
     return (
         <ScrollArea className="h-full w-full">
@@ -39,6 +42,17 @@ export function CharacterSheet({ character, t }: CharacterSheetProps) {
                             <span className="underline decoration-dotted cursor-pointer">{character.class}</span>
                         </ReferenceItem>
                     </p>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                        <Label className="flex items-center gap-1.5 text-sm font-bold text-white/70"><Heart size={14}/> Salud</Label>
+                        <Progress value={character.health || 100} className="h-3 [&>div]:bg-red-500" />
+                    </div>
+                    <div className="space-y-1">
+                         <Label className="flex items-center gap-1.5 text-sm font-bold text-white/70"><Coins size={14}/> Oro</Label>
+                         <p className="text-xl font-bold">{character.gold?.toLocaleString() || 0} gs</p>
+                    </div>
                 </div>
 
                 <Separator className="bg-white/20" />
@@ -145,3 +159,7 @@ const StatDisplay = ({ label, value }: { label: string; value?: string | number 
         <span className="text-2xl font-bold font-headline">{value || 'd4'}</span>
     </div>
 );
+
+const Label = ({ className, ...props }: React.ComponentProps<"label">) => (
+  <label className={className} {...props} />
+)

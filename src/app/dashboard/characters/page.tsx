@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { PlusCircle, Trash2, Sheet, Upload, Eye, EyeOff, Sparkles, HelpCircle, Save, X, User as UserIcon, ArrowRight, BookOpen } from "lucide-react";
+import { PlusCircle, Trash2, Sheet, Upload, Eye, EyeOff, Sparkles, HelpCircle, Save, X, User as UserIcon, ArrowRight, BookOpen, Heart, Coins } from "lucide-react";
 import type { Character, ConditionalRule } from "@/lib/firebase/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog";
@@ -173,7 +173,7 @@ export default function CharactersPage() {
   
   const handleStatChange = (stat: keyof Character, value: any) => {
     if (editingCharacter) {
-      const isNumeric = ['level', 'strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'].includes(stat as string);
+      const isNumeric = ['level', 'strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma', 'health', 'gold'].includes(stat as string);
       
       const newEditingCharacter = {
         ...editingCharacter,
@@ -488,6 +488,15 @@ export default function CharactersPage() {
                        <div className="grid items-center gap-1.5">
                           <Label htmlFor="level">{t('charactersLevelLabel')}</Label>
                           <Input id="level" type="number" value={editingCharacter.level || 1} onChange={(e) => handleStatChange('level', e.target.value)} />
+                      </div>
+                      <div className="grid items-center gap-1.5">
+                          <Label htmlFor="gold" className="flex items-center gap-2"><Coins /> Oro</Label>
+                          <Input id="gold" type="number" value={editingCharacter.gold || 0} onChange={(e) => handleStatChange('gold', e.target.value)} />
+                      </div>
+                      <div className="grid items-center gap-1.5">
+                          <Label htmlFor="health" className="flex items-center gap-2"><Heart /> Salud</Label>
+                          <Slider id="health" value={[editingCharacter.health || 100]} onValueChange={(v) => handleStatChange('health', v[0])} max={100} step={1} />
+                          <span className="text-sm text-center">{editingCharacter.health || 100}%</span>
                       </div>
                       <div className="grid items-center gap-1.5">
                           <Label htmlFor="visualPreset">{t('characterVisualPreset')}</Label>
