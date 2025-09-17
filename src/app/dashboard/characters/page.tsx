@@ -112,7 +112,7 @@ export default function CharactersPage() {
             campaignId: campaign.id,
             userId: user.id,
             archetypeId: selectedArchetype.id,
-            location_cell_id: "C6", // Default starting location
+            location_cell_id: "D5", // Default starting location
             visualPreset: selectedArchetype.visualPreset,
         };
 
@@ -537,8 +537,7 @@ export default function CharactersPage() {
                                 {[0, 1, 2].map(index => (
                                     <ConditionalRuleInput 
                                         key={index} 
-                                        index={index} 
-                                        rule={(editingCharacter.conditionalRules || [])[index]}
+                                        index={(editingCharacter.conditionalRules || [])[index]}
                                         onChange={handleConditionalRuleChange}
                                         t={t}
                                     />
