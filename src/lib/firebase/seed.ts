@@ -17,20 +17,20 @@ import { initialThreadEn } from "./data/initial-thread-en";
 import { initialThreadEs } from "./data/initial-thread-es";
 
 
-export const populateCampaignMapData = async (campaignId: string) => {
-    console.log(`[Seed] Starting to populate map data for campaign ${campaignId}.`);
+export const populateCampaignMapData = async (campaignId: string, log: (message: string) => void) => {
+    log(`[Seed] Starting to populate map data for campaign ${campaignId}.`);
 
     // Process each cell in its own batch to avoid oversized batches
     for (const cell of rassilonGridMapSummary) {
         const batch = writeBatch(db);
-        console.log(`[Seed] Processing cell ${cell.id} for campaign ${campaignId}...`);
+        log(`[Seed] Processing cell ${cell.id} for campaign ${campaignId}...`);
         
         const gridMapCellRef = doc(db, `campaigns/${campaignId}/gridMap`, cell.id);
         batch.set(gridMapCellRef, cell.region_info); 
 
         const localesForCell = (majorLocales as any)[cell.id];
         if (localesForCell && localesForCell.length > 0) {
-            console.log(`[Seed] Found ${localesForCell.length} locales for cell ${cell.id}. Queueing for write.`);
+            log(`[Seed] Found ${localesForCell.length} locales for cell ${cell.id}. Queueing for write.`);
             localesForCell.forEach((locale: any, index: number) => {
                 const localeRef = doc(db, `campaigns/${campaignId}/gridMap/${cell.id}/locales`, `${cell.id}-locale-${index}`);
                 batch.set(localeRef, locale);
@@ -39,7 +39,7 @@ export const populateCampaignMapData = async (campaignId: string) => {
 
         const npcsForCell = (notableNPCs as any)[cell.id];
         if (npcsForCell && npcsForCell.length > 0) {
-            console.log(`[Seed] Found ${npcsForCell.length} NPCs for cell ${cell.id}. Queueing for write.`);
+            log(`[Seed] Found ${npcsForCell.length} NPCs for cell ${cell.id}. Queueing for write.`);
             npcsForCell.forEach((npc: any, index: number) => {
                 const npcRef = doc(db, `campaigns/${campaignId}/gridMap/${cell.id}/npcs`, `${cell.id}-npc-${index}`);
                 batch.set(npcRef, npc);
@@ -48,7 +48,7 @@ export const populateCampaignMapData = async (campaignId: string) => {
 
         const hooksForCell = (adventureHooks as any)[cell.id];
         if (hooksForCell && hooksForCell.length > 0) {
-            console.log(`[Seed] Found ${hooksForCell.length} hooks for cell ${cell.id}. Queueing for write.`);
+            log(`[Seed] Found ${hooksForCell.length} hooks for cell ${cell.id}. Queueing for write.`);
             hooksForCell.forEach((hook: any, index: number) => {
                 const hookRef = doc(db, `campaigns/${campaignId}/gridMap/${cell.id}/hooks`, `${cell.id}-hook-${index}`);
                 batch.set(hookRef, hook);
@@ -56,9 +56,9 @@ export const populateCampaignMapData = async (campaignId: string) => {
         }
         
         await batch.commit();
-        console.log(`[Seed] Successfully committed batch for cell ${cell.id}.`);
+        log(`[Seed] Successfully committed batch for cell ${cell.id}.`);
     }
-    console.log(`[Seed] Finished populating all map data for campaign ${campaignId}.`);
+    log(`[Seed] Finished populating all map data for campaign ${campaignId}.`);
 };
 
 
@@ -234,10 +234,11 @@ export const runSeed = async () => {
         console.log("Core database data seeded successfully!");
         
         // Now, populate the map data in separate, smaller batches
-        await populateCampaignMapData(initialCampaigns[0].id);
+        await populateCampaignMapData(initialCampaigns[0].id, console.log);
 
 
     } catch (error) {
         console.error("Error seeding database:", error);
     }
 };
+
