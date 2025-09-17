@@ -7,7 +7,9 @@ import { archetypes } from './data/seed-archetypes';
 import { hellfrostItems } from './data/seed-items';
 import { hellfrostSpells } from './data/seed-spells';
 import { hellfrostReferenceData, rassilonGridMapSummary } from './data/seed-reference';
-import { rassilonGridMapDetails } from './data/seed-grid-details';
+import { majorLocales } from './data/seed-locales';
+import { notableNPCs } from './data/seed-npcs';
+import { adventureHooks } from './data/seed-hooks';
 import { conceptosWebApp } from './data/seed-concepts';
 import { initialThreadEn } from "./data/initial-thread-en";
 import { initialThreadEs } from "./data/initial-thread-es";
@@ -38,12 +40,34 @@ const createCampaign = async (batch: any, campaignData: any, locale: 'en' | 'es'
     for (const cell of rassilonGridMapSummary) {
         const cellRef = doc(db, `campaigns/${campaignData.id}/mapCells`, cell.id);
         batch.set(cellRef, cell.region_info);
-    }
-    
-    // Add grid map details as a subcollection to the campaign
-    for (const cell of rassilonGridMapDetails) {
-        const cellRef = doc(db, `campaigns/${campaignData.id}/gridMap`, cell.id);
-        batch.set(cellRef, cell.cell_details);
+        
+        const gridMapRef = doc(db, `campaigns/${campaignData.id}/gridMap`, cell.id);
+        batch.set(gridMapRef, {}); // Create the cell document in gridMap
+
+        // Add subcollections for details
+        const localesForCell = (majorLocales as any)[cell.id];
+        if (localesForCell) {
+            localesForCell.forEach((locale: any, index: number) => {
+                const localeRef = doc(db, `campaigns/${campaignData.id}/gridMap/${cell.id}/locales`, `${cell.id}-locale-${index}`);
+                batch.set(localeRef, locale);
+            });
+        }
+
+        const npcsForCell = (notableNPCs as any)[cell.id];
+        if (npcsForCell) {
+            npcsForCell.forEach((npc: any, index: number) => {
+                const npcRef = doc(db, `campaigns/${campaignData.id}/gridMap/${cell.id}/npcs`, `${cell.id}-npc-${index}`);
+                batch.set(npcRef, npc);
+            });
+        }
+
+        const hooksForCell = (adventureHooks as any)[cell.id];
+        if (hooksForCell) {
+            hooksForCell.forEach((hook: any, index: number) => {
+                const hookRef = doc(db, `campaigns/${campaignData.id}/gridMap/${cell.id}/hooks`, `${cell.id}-hook-${index}`);
+                batch.set(hookRef, hook);
+            });
+        }
     }
 };
 
@@ -157,7 +181,7 @@ export const runSeed = async () => {
             visualPreset: "preset_2",
             campaignId: bob.campaignId,
             userId: bob.id,
-isActive: false, // Inactive character
+            isActive: false, // Inactive character
             location_cell_id: "G5"
         }, archetypes.bladedancer);
 
@@ -195,3 +219,5 @@ isActive: false, // Inactive character
         console.error("Error seeding database:", error);
     }
 };
+
+    
