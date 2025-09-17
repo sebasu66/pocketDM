@@ -173,23 +173,12 @@ export default function CharactersPage() {
   
   const handleStatChange = (stat: keyof Character, value: any) => {
     if (editingCharacter) {
-      const isNumeric = ['level', 'strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma', 'position', 'resolve', 'altruism', 'discipline'].includes(stat as string);
+      const isNumeric = ['level', 'strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'].includes(stat as string);
       
       const newEditingCharacter = {
         ...editingCharacter,
         [stat]: isNumeric ? (typeof value === 'number' ? value : parseInt(value as string, 10) || 0) : value,
       };
-
-      if (['position', 'resolve', 'altruism', 'discipline'].includes(stat as string)) {
-          const archetype = getArchetype(
-              newEditingCharacter.position || 50,
-              newEditingCharacter.resolve || 50,
-              newEditingCharacter.altruism || 50,
-              newEditingCharacter.discipline || 50
-          );
-          newEditingCharacter.archetype = archetype.archetype;
-          newEditingCharacter.archetypeDescription = archetype.description;
-      }
       
       setEditingCharacter(newEditingCharacter);
     }

@@ -19,10 +19,6 @@ export const addCharacter = async (characterData: Partial<Character>): Promise<s
         intelligence: 10,
         wisdom: 10,
         charisma: 10,
-        position: 50,
-        resolve: 50,
-        altruism: 50,
-        discipline: 50,
         preferredAttack: "",
         mostPrecious: "",
         motto: "",
@@ -93,4 +89,5 @@ export const deleteCharacter = async (id: string): Promise<void> => {
     
 
     
+
 

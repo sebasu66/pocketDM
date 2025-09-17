@@ -53,10 +53,6 @@ export interface Character {
     charisma?: number;
     
     // Behavior Profile
-    position?: number;
-    resolve?: number;
-    altruism?: number;
-    discipline?: number;
     preferredAttack?: string;
     mostPrecious?: string;
     motto?: string;
