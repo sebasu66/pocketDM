@@ -99,7 +99,7 @@ const generateNarrativeFlow = ai.defineFlow(
                 ---
 
                 Based on this entire history, write the next logical and engaging post for the story.
-                Your response should be a compelling continuation of the events.
+                Your response should be a compelling continuation of the events. When appropriate, use the characterFilterList field to direct the narrative to specific characters.
             `,
             model: googleAI({apiKey}),
         });

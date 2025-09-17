@@ -147,7 +147,7 @@ export default function PlayerViewPage() {
 
                 let character = comment.characterId ? characterCache[comment.characterId] : undefined;
                 if(comment.characterId && !character) {
-                    const charFromDb = await getCharactersByCampaign(campaign!.id, comment.authorId);
+                    const charFromDb = await getCharactersByCampaign(campaign!.id, undefined, comment.characterId);
                     if(charFromDb.length > 0) {
                         character = charFromDb[0];
                         characterCache[comment.characterId] = character;
