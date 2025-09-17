@@ -17,7 +17,7 @@ export function CharacterSheet({ character, t }: CharacterSheetProps) {
 
     return (
         <ScrollArea className="h-full w-full">
-            <div className="p-6 space-y-6 text-white">
+            <div className="p-6 space-y-6 text-white max-w-md mx-auto">
                 <div className="relative aspect-[2/3] w-full rounded-lg overflow-hidden border-2 border-primary/30">
                     <ImageWithFallback
                         baseSrc={`/characters/VisualPreset/${character.visualPreset}/portrait`}
