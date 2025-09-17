@@ -36,15 +36,17 @@ const createCampaign = async (batch: any, campaignData: any, locale: 'en' | 'es'
     const threadRef = doc(db, "narrativeThreads", `${campaignData.id}-1`);
     batch.set(threadRef, { ...initialThread, campaignId: campaignData.id, createdAt: Date.now() });
 
-    // Add map cells summary as a subcollection to the campaign
+    // Add summary and detailed grid map data
     for (const cell of rassilonGridMapSummary) {
-        const cellRef = doc(db, `campaigns/${campaignData.id}/mapCells`, cell.id);
-        batch.set(cellRef, cell.region_info);
+        // Add summary to /mapCells
+        const cellSummaryRef = doc(db, `campaigns/${campaignData.id}/mapCells`, cell.id);
+        batch.set(cellSummaryRef, cell.region_info);
         
-        const gridMapRef = doc(db, `campaigns/${campaignData.id}/gridMap`, cell.id);
-        batch.set(gridMapRef, {}); // Create the cell document in gridMap
+        // Create the base document in /gridMap
+        const gridMapCellRef = doc(db, `campaigns/${campaignData.id}/gridMap`, cell.id);
+        batch.set(gridMapCellRef, {}); // Create the cell document itself to hold subcollections
 
-        // Add subcollections for details
+        // Add details to subcollections within /gridMap
         const localesForCell = (majorLocales as any)[cell.id];
         if (localesForCell) {
             localesForCell.forEach((locale: any, index: number) => {
@@ -219,5 +221,3 @@ export const runSeed = async () => {
         console.error("Error seeding database:", error);
     }
 };
-
-    

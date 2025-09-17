@@ -59,10 +59,11 @@ interface CreateUserInput {
     password?: string; // Optional for OAuth
     role: { isGm: boolean, isPlayer: boolean };
     campaignSecret?: string; // Required if isPlayer is true
+    uid?: string; // Optional for OAuth users
 }
 
 export const createUser = async (input: CreateUserInput): Promise<User> => {
-    const { name, email, password, role, campaignSecret } = input;
+    const { name, email, password, role, campaignSecret, uid } = input;
 
     // 1. Check if user already exists
     const existingUser = await getUserByEmail(email);
@@ -70,10 +71,19 @@ export const createUser = async (input: CreateUserInput): Promise<User> => {
         throw new Error("A user with this email already exists.");
     }
 
+    // 2. Determine User ID and Campaign ID
+    const userId = uid || doc(collection(db, USERS_COLLECTION)).id;
     let campaignId = '';
 
-    // 2. Handle Player Role
-    if (role.isPlayer && !role.isGm) { // Only a player
+    // 3. Handle GM Role (always creates a new campaign for the GM)
+    if (role.isGm) {
+        const locale = typeof window !== 'undefined' ? (localStorage.getItem('locale') as 'en' | 'es' | null) || 'en' : 'en';
+        // The new campaign ID will be the same as the user's ID
+        campaignId = await createNewCampaignForUser({ id: userId, name }, locale);
+    }
+    
+    // 4. Handle Player-only Role
+    if (role.isPlayer && !role.isGm) {
         if (!campaignSecret) {
             throw new Error("A secret code is required to join a campaign as a player.");
         }
@@ -86,37 +96,23 @@ export const createUser = async (input: CreateUserInput): Promise<User> => {
         }
         campaignId = querySnapshot.docs[0].id;
     }
-
-    // 3. Create User Document first to get an ID
-    const newUserRef = doc(collection(db, USERS_COLLECTION));
     
-    // 4. Handle GM Role (always creates a new campaign)
-    if (role.isGm) {
-        const locale = typeof window !== 'undefined' ? (localStorage.getItem('locale') as 'en' | 'es' | null) || 'en' : 'en';
-        const newCampaignId = await createNewCampaignForUser({ id: newUserRef.id, name }, locale);
-        // If the user is ONLY a GM, this is their campaign. 
-        // If they are also a player joining another campaign, they still get their own.
-        if (!campaignId) {
-            campaignId = newCampaignId;
-        }
-    }
-    
-    if (!campaignId && role.isPlayer) {
+    if (!campaignId) {
          throw new Error("Could not determine a campaign to assign to the user.");
     }
 
-    // 5. Define New User Data
+    // 5. Define and Save New User Data
+    const newUserRef = doc(db, USERS_COLLECTION, userId);
     const newUser: User = {
-        id: newUserRef.id,
+        id: userId,
         name,
         email: email.toLowerCase(),
         role,
-        avatar: `https://picsum.photos/seed/${newUserRef.id}/100/100`,
-        campaignId: campaignId, // Assign the determined campaign ID
+        avatar: `https://picsum.photos/seed/${userId}/100/100`,
+        campaignId: campaignId,
         enabled: true,
     };
     
-    // Add password for manual auth
     const finalUserData: any = { ...newUser };
     if (password) {
         finalUserData.password = password;
@@ -133,28 +129,14 @@ export const findOrCreateUserFromOAuth = async (firebaseUser: FirebaseAuthUser):
     if (appUser) {
         return appUser as User;
     } else {
-        const locale = typeof window !== 'undefined' ? (localStorage.getItem('locale') as 'en' | 'es' | null) || 'en' : 'en';
-        
         // This is a new user signing in via OAuth for the first time.
         // Default to creating a GM with their own campaign and dual roles for flexibility.
-        const newCampaignId = await createNewCampaignForUser(
-            { id: firebaseUser.uid, name: firebaseUser.displayName || 'New GM' },
-            locale
-        );
-
-        const newUser: User = {
-            id: firebaseUser.uid,
+        return await createUser({
+            uid: firebaseUser.uid,
             name: firebaseUser.displayName || 'New Adventurer',
-            email: firebaseUser.email || '',
-            // Default to both roles for flexibility
+            email: firebaseUser.email!,
             role: { isGm: true, isPlayer: true },
-            avatar: firebaseUser.photoURL || `https://picsum.photos/seed/${firebaseUser.uid}/100/100`,
-            campaignId: newCampaignId, // Assign their newly created campaign
-            enabled: true,
-        };
-        const newUserRef = doc(db, USERS_COLLECTION, firebaseUser.uid);
-        await setDoc(newUserRef, newUser);
-        return newUser;
+        });
     }
 };
 
