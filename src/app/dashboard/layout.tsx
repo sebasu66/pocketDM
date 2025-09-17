@@ -292,7 +292,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <header className="flex items-center justify-between p-4 border-b border-border/20 bg-background/80 backdrop-blur-sm sticky top-0 z-20">
               <div className="flex items-center gap-2">
                  <div className="flex items-center gap-2">
-                  <BookOpen />
+                    <RusticIconButton
+                        variant="incomplete"
+                        tooltip="Toggle Menu"
+                        onClick={() => setIsSheetOpen(true)}
+                        className="h-12 w-12 text-foreground/80 hover:text-foreground/100"
+                    >
+                        <Menu size={20} />
+                    </RusticIconButton>
                   <h2 className="text-2xl font-semibold font-headline">{pageTitles[pathname] || "Dashboard"}</h2>
                  </div>
               </div>
@@ -308,15 +315,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               {children}
             </main>
             
-            <RusticIconButton
-                variant="incomplete"
-                tooltip="Toggle Menu"
-                onClick={() => setIsSheetOpen(true)}
-                className="fixed bottom-6 right-6 h-16 w-16 text-white/90 hover:text-white z-30"
-            >
-                <Menu size={28} />
-            </RusticIconButton>
-            
             <SheetContent side="right" className="p-0 w-80 bg-sidebar-gradient border-l-0 text-sidebar-foreground">
                 <SheetHeader>
                     <SheetTitle></SheetTitle>
@@ -329,5 +327,3 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     </SidebarProvider>
   );
 }
-
-    

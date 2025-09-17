@@ -350,7 +350,7 @@ export default function PlayerViewPage() {
 
     return (
         <div 
-            className="min-h-[calc(100vh-10rem)] w-full mx-auto max-w-7xl flex"
+            className="w-full mx-auto max-w-7xl flex"
         >
             <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
             
@@ -360,7 +360,7 @@ export default function PlayerViewPage() {
                 </h2>
             </div>
             
-            <div className="flex-1 md:p-8 z-10 pb-20">
+            <div className="flex-1 md:p-8 z-10">
                  
                 <div className="md:hidden text-center h-20 flex items-center justify-center bg-leather-column drop-shadow-2xl mb-8">
                     <h2 className="font-body text-2xl text-foreground/80 uppercase tracking-widest">
@@ -368,7 +368,7 @@ export default function PlayerViewPage() {
                     </h2>
                 </div>
                 
-                <div className="p-4 md:p-0">
+                <div className="p-4 md:p-0 min-h-[calc(100vh-10rem)]">
                     <h1 className="text-4xl md:text-7xl font-headline uppercase tracking-widest text-center mb-8 md:mb-12">
                         {activeThread.title}
                     </h1>
