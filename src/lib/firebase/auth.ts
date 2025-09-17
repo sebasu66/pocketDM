@@ -1,10 +1,10 @@
 
 
 import { collection, query, where, getDocs, doc, getDoc, updateDoc, setDoc, addDoc, writeBatch, deleteDoc } from "firebase/firestore";
-import { db, auth } from './firebase/config';
+import { db, auth } from './config';
 import { User, Character, NarrativeComment } from './firebase/types';
 import { GoogleAuthProvider, signInWithPopup, User as FirebaseAuthUser } from "firebase/auth";
-import { createNewCampaignForUser } from "./firebase/campaigns";
+import { createNewCampaignForUser } from "./campaigns";
 
 // Re-export User type for convenience
 export type { User };
@@ -101,7 +101,7 @@ export const createUser = async (input: CreateUserInput): Promise<User> => {
         campaignId = querySnapshot.docs[0].id;
     }
     
-    if (!campaignId && !role.isPlayer) {
+    if (!campaignId) {
          throw new Error("Could not determine a campaign to assign to the user.");
     }
 
@@ -149,86 +149,72 @@ export const findOrCreateUserFromOAuth = async (firebaseUser: FirebaseAuthUser):
 export const deleteUserAndAssociatedData = async (user: User): Promise<void> => {
     const batch = writeBatch(db);
 
+    // --- GM DELETION LOGIC ---
     if (user.role.isGm) {
-        // --- GM DELETION ---
-        const campaignId = user.campaignId;
+        // 1. Find all campaigns owned by this GM
+        const campaignsQuery = query(collection(db, CAMPAIGNS_COLLECTION), where("ownerId", "==", user.id));
+        const campaignsSnapshot = await getDocs(campaignsQuery);
 
-        // 1. Get all characters in the campaign
-        const charactersQuery = query(collection(db, CHARACTERS_COLLECTION), where("campaignId", "==", campaignId));
-        const charactersSnapshot = await getDocs(charactersQuery);
-        const characterIds = charactersSnapshot.docs.map(d => d.id);
-        
-        // 2. Delete all characters in the campaign
-        charactersSnapshot.forEach(doc => batch.delete(doc.ref));
+        // 2. For each campaign, perform a full cascade delete
+        for (const campaignDoc of campaignsSnapshot.docs) {
+            const campaignId = campaignDoc.id;
 
-        // 3. Get and delete all comments associated with those characters
-        if (characterIds.length > 0) {
-            const commentsQuery = query(collection(db, COMMENTS_COLLECTION), where("characterId", "in", characterIds));
-            const commentsSnapshot = await getDocs(commentsQuery);
-            commentsSnapshot.forEach(doc => batch.delete(doc.ref));
-        }
+            // Delete characters in the campaign
+            const charactersQuery = query(collection(db, CHARACTERS_COLLECTION), where("campaignId", "==", campaignId));
+            const charactersSnapshot = await getDocs(charactersQuery);
+            const characterIds = charactersSnapshot.docs.map(d => d.id);
+            charactersSnapshot.forEach(doc => batch.delete(doc.ref));
 
-        // 4. Get and delete all narrative threads
-        const threadsQuery = query(collection(db, NARRATIVE_THREADS_COLLECTION), where("campaignId", "==", campaignId));
-        const threadsSnapshot = await getDocs(threadsQuery);
-        threadsSnapshot.forEach(doc => batch.delete(doc.ref));
-        
-        // 5. Delete map data (subcollections)
-        const gridMapQuery = query(collection(db, `campaigns/${campaignId}/gridMap`));
-        const gridMapSnapshot = await getDocs(gridMapQuery);
-        for (const cellDoc of gridMapSnapshot.docs) {
-             const localesQuery = query(collection(db, `campaigns/${campaignId}/gridMap/${cellDoc.id}/locales`));
-             const localesSnapshot = await getDocs(localesQuery);
-             localesSnapshot.forEach(lDoc => batch.delete(lDoc.ref));
-             
-             const npcsQuery = query(collection(db, `campaigns/${campaignId}/gridMap/${cellDoc.id}/npcs`));
-             const npcsSnapshot = await getDocs(npcsQuery);
-             npcsSnapshot.forEach(nDoc => batch.delete(nDoc.ref));
+            // Delete comments associated with those characters
+            if (characterIds.length > 0) {
+                const commentsQuery = query(collection(db, COMMENTS_COLLECTION), where("characterId", "in", characterIds));
+                const commentsSnapshot = await getDocs(commentsQuery);
+                commentsSnapshot.forEach(doc => batch.delete(doc.ref));
+            }
 
-             const hooksQuery = query(collection(db, `campaigns/${campaignId}/gridMap/${cellDoc.id}/hooks`));
-             const hooksSnapshot = await getDocs(hooksQuery);
-             hooksSnapshot.forEach(hDoc => batch.delete(hDoc.ref));
+            // Delete all narrative threads for the campaign
+            const threadsQuery = query(collection(db, NARRATIVE_THREADS_COLLECTION), where("campaignId", "==", campaignId));
+            const threadsSnapshot = await getDocs(threadsQuery);
+            threadsSnapshot.forEach(doc => batch.delete(doc.ref));
 
-             batch.delete(cellDoc.ref);
-        }
-        
-        const mapCellsQuery = query(collection(db, `campaigns/${campaignId}/mapCells`));
-        const mapCellsSnapshot = await getDocs(mapCellsQuery);
-        mapCellsSnapshot.forEach(cellDoc => batch.delete(cellDoc.ref));
+            // Delete gridMap subcollections
+            const gridMapQuery = query(collection(db, `campaigns/${campaignId}/gridMap`));
+            const gridMapSnapshot = await getDocs(gridMapQuery);
+            for (const cellDoc of gridMapSnapshot.docs) {
+                const localesQuery = query(collection(db, `campaigns/${campaignId}/gridMap/${cellDoc.id}/locales`));
+                const localesSnapshot = await getDocs(localesQuery);
+                localesSnapshot.forEach(lDoc => batch.delete(lDoc.ref));
+                
+                const npcsQuery = query(collection(db, `campaigns/${campaignId}/gridMap/${cellDoc.id}/npcs`));
+                const npcsSnapshot = await getDocs(npcsQuery);
+                npcsSnapshot.forEach(nDoc => batch.delete(nDoc.ref));
 
+                const hooksQuery = query(collection(db, `campaigns/${campaignId}/gridMap/${cellDoc.id}/hooks`));
+                const hooksSnapshot = await getDocs(hooksQuery);
+                hooksSnapshot.forEach(hDoc => batch.delete(hDoc.ref));
 
-        // 6. Delete the campaign itself
-        const campaignRef = doc(db, CAMPAIGNS_COLLECTION, campaignId);
-        batch.delete(campaignRef);
-
-    } else if (user.role.isPlayer) {
-        // --- PLAYER DELETION ---
-        
-        // 1. Find the user's character
-        const charactersQuery = query(collection(db, CHARACTERS_COLLECTION), where("userId", "==", user.id), where("campaignId", "==", user.campaignId));
-        const charactersSnapshot = await getDocs(charactersQuery);
-        
-        if (!charactersSnapshot.empty) {
-            const characterDoc = charactersSnapshot.docs[0];
-            const characterId = characterDoc.id;
-
-            // 2. Delete the character
-            batch.delete(characterDoc.ref);
-
-            // 3. Find and delete all comments by that character
-            const commentsQuery = query(collection(db, COMMENTS_COLLECTION), where("characterId", "==", characterId));
-            const commentsSnapshot = await getDocs(commentsQuery);
-            commentsSnapshot.forEach(commentDoc => batch.delete(commentDoc.ref));
+                batch.delete(cellDoc.ref);
+            }
+            
+            // Delete the campaign document itself
+            batch.delete(campaignDoc.ref);
         }
     }
 
-    // Finally, delete the user document itself
+    // --- PLAYER-ONLY DELETION LOGIC ---
+    // If the user is only a player, we only delete their user document.
+    // The character remains in the world for historical consistency.
+    // Their comments also remain.
+    // This block is implicitly handled by the final step, as no campaign/character deletion is triggered for player-only roles.
+
+    // Finally, delete the user document itself, regardless of role.
     const userRef = doc(db, USERS_COLLECTION, user.id);
     batch.delete(userRef);
 
-    // Commit all batched writes
+    // Commit all batched writes to Firestore
     await batch.commit();
 };
+
 
 
 

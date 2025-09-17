@@ -152,7 +152,7 @@ export const runCampaignSeedingTest = async () => {
 
         // 2. Populate its map data
         log('[TEST] Populating map data...');
-        await populateCampaignMapData(testCampaignId, log);
+        await populateCampaignMapData(testCampaignId);
 
         // 3. Verify the data
         log('[TEST] Verifying created data...');
@@ -202,4 +202,5 @@ export const runCampaignSeedingTest = async () => {
         await deleteCampaignForTest(testCampaignId, log);
     }
 };
+
 

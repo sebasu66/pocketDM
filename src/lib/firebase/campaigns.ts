@@ -26,7 +26,8 @@ export const updateCampaign = async (id: string, campaignData: Partial<Campaign>
 
 export const createNewCampaignForUser = async (user: {id: string, name: string}, locale: 'en' | 'es' = 'en'): Promise<string> => {
     const newCampaignId = user.id; // Use user ID as campaign ID for a clear link
-    console.log(`[Campaigns] Starting creation for new campaign with ID: ${newCampaignId} for user ${user.name} in locale '${locale}'.`);
+    const log = console.log; // Use console.log for logging
+    log(`[Campaigns] Starting creation for new campaign with ID: ${newCampaignId} for user ${user.name} in locale '${locale}'.`);
     
     const newCampaignRef = doc(db, "campaigns", newCampaignId);
 
@@ -49,15 +50,15 @@ export const createNewCampaignForUser = async (user: {id: string, name: string},
     // Create the campaign document and its initial thread in a batch
     const batch = writeBatch(db);
     batch.set(newCampaignRef, newCampaignData);
-    console.log(`[Campaigns] Campaign document for ${newCampaignId} queued for creation.`);
+    log(`[Campaigns] Campaign document for ${newCampaignId} queued for creation.`);
 
     const initialThread = locale === 'es' ? initialThreadEs : initialThreadEn;
     const threadRef = doc(db, "narrativeThreads", `${newCampaignId}-1`);
     batch.set(threadRef, { ...initialThread, campaignId: newCampaignId, createdAt: Date.now() });
-    console.log(`[Campaigns] Initial narrative thread for ${newCampaignId} queued for creation.`);
+    log(`[Campaigns] Initial narrative thread for ${newCampaignId} queued for creation.`);
     
     await batch.commit();
-    console.log(`[Campaigns] Initial campaign documents committed for ${newCampaignId}.`);
+    log(`[Campaigns] Initial campaign documents committed for ${newCampaignId}.`);
 
     // Populate the detailed map data in a separate, more robust process
     await populateCampaignMapData(newCampaignId);
@@ -70,4 +71,5 @@ export const generateNewSecretCode = async (campaignId: string): Promise<string>
     await updateCampaign(campaignId, { secretCode: newCode });
     return newCode;
 };
+
 
