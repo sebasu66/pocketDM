@@ -204,16 +204,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   }, []);
   // --- END DEMO ONLY ---
   
-  // --- START: Automated Tests ---
-    React.useEffect(() => {
-        // Run this only for the Game Master in a dev environment to avoid clutter
-        if (process.env.NODE_ENV === 'development' && user?.role === 'master') {
-             console.log("%c[AUTO-TEST] Running automated tests on app startup...", "color: blue; font-weight: bold;");
-             runCampaignSeedingTest();
-        }
-    }, [user]);
-    // --- END: Automated Tests ---
-
   React.useEffect(() => {
     if (!isLoading && !user) {
       router.push('/');
@@ -320,5 +310,3 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     </SidebarProvider>
   );
 }
-
-    
