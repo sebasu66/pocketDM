@@ -1,12 +1,14 @@
+// This is a basic service worker for a PWA.
 
 const CACHE_NAME = 'pocket-dm-cache-v1';
 const urlsToCache = [
   '/',
   '/login',
   '/dashboard',
-  '/manifest.json'
-  // Add other important assets and pages here
-  // Note: Icons and other assets requested by the manifest will be cached implicitly on install.
+  '/manifest.json',
+  '/favicon.ico',
+  // Add other important assets here that you want to cache
+  // Be careful not to cache everything, especially large or dynamic files.
 ];
 
 // Install a service worker
@@ -30,30 +32,10 @@ self.addEventListener('fetch', event => {
         if (response) {
           return response;
         }
-
-        // Clone the request because it's a one-time-use stream
-        const fetchRequest = event.request.clone();
-
-        return fetch(fetchRequest).then(
-          function(response) {
-            // Check if we received a valid response
-            if(!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-
-            // Clone the response because it's also a stream
-            const responseToCache = response.clone();
-
-            caches.open(CACHE_NAME)
-              .then(function(cache) {
-                cache.put(event.request, responseToCache);
-              });
-
-            return response;
-          }
-        );
-      })
-    );
+        return fetch(event.request);
+      }
+    )
+  );
 });
 
 // Update a service worker
@@ -68,6 +50,50 @@ self.addEventListener('activate', event => {
           }
         })
       );
+    })
+  );
+});
+
+
+// --- Push Notification Event Listeners ---
+
+self.addEventListener('push', event => {
+  const data = event.data ? event.data.json() : {
+    title: 'Pocket DM',
+    body: 'Something new has happened in your campaign!',
+    icon: '/icons/icon-192x192.png'
+  };
+
+  const options = {
+    body: data.body,
+    icon: data.icon,
+    badge: '/icons/icon-96x96.png',
+    vibrate: [200, 100, 200]
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(data.title, options)
+  );
+});
+
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+
+  event.waitUntil(
+    clients.matchAll({
+      type: 'window',
+      includeUncontrolled: true
+    }).then(clientList => {
+      if (clientList.length > 0) {
+        let client = clientList[0];
+        for (let i = 0; i < clientList.length; i++) {
+          if (clientList[i].focused) {
+            client = clientList[i];
+          }
+        }
+        return client.focus();
+      }
+      return clients.openWindow('/dashboard/playerview');
     })
   );
 });

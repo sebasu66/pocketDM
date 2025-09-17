@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -14,14 +13,21 @@ import { useAuth } from "@/context/auth-context";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { User } from '@/lib/firebase/types';
 import Link from 'next/link';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Bell, BellOff, Loader2 } from 'lucide-react';
 import { useI18n } from '@/context/i18n-context';
+import { usePushNotifications } from '@/hooks/use-push-notifications';
 
 export default function SettingsPage() {
   const { handwritingFont, setHandwritingFont } = useTheme();
   const { user: authUser, isLoading, updateUser: updateAuthUser } = useAuth();
   const [user, setUser] = useState<User | null>(null);
   const { t } = useI18n();
+  const {
+      isSubscribed,
+      subscribeToNotifications,
+      unsubscribeFromNotifications,
+      isLoading: isPushLoading,
+    } = usePushNotifications();
 
   useEffect(() => {
     if (authUser) {
@@ -111,6 +117,27 @@ export default function SettingsPage() {
           <CardDescription>{t('settingsAppDesc')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-1 divide-y divide-border/50">
+           <div className="space-y-2 pt-4">
+                <h4 className='font-medium'>Notificaciones Push</h4>
+                <div className="flex items-center justify-between rounded-lg p-3 -m-3">
+                    <p className="text-sm text-muted-foreground">
+                        Recibe notificaciones cuando la historia avance.
+                    </p>
+                    {isPushLoading ? (
+                        <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : isSubscribed ? (
+                        <Button variant="outline" onClick={unsubscribeFromNotifications}>
+                            <BellOff className="mr-2 h-4 w-4" />
+                            Desactivar
+                        </Button>
+                    ) : (
+                        <Button onClick={subscribeToNotifications}>
+                            <Bell className="mr-2 h-4 w-4" />
+                            Activar
+                        </Button>
+                    )}
+                </div>
+            </div>
           <div className="space-y-2 pt-4">
             <Label htmlFor="handwriting-font">{t('settingsHandwritingFont')}</Label>
             <Select value={handwritingFont} onValueChange={setHandwritingFont}>
@@ -145,5 +172,3 @@ export default function SettingsPage() {
     </div>
   );
 }
-
-    
