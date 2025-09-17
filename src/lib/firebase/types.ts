@@ -244,5 +244,3 @@ export type EnrichedComment = NarrativeComment & {
     author: User;
     character?: Character | null;
 };
-
-    

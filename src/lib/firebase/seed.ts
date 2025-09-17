@@ -33,20 +33,13 @@ const createCampaign = async (batch: any, campaignData: any, locale: 'en' | 'es'
     // Add the initial narrative thread based on locale
     const initialThread = locale === 'es' ? initialThreadEs : initialThreadEn;
     const threadRef = doc(db, "narrativeThreads", `${campaignData.id}-1`);
-    batch.set(threadRef, { ...initialThread, campaignId: campaignData.id });
+    batch.set(threadRef, { ...initialThread, campaignId: campaignData.id, createdAt: Date.now() });
 
     // Add map cells as a subcollection to the campaign
     const mapCells = rassilonGridMapSummary;
     for (const cell of mapCells) {
         const cellRef = doc(db, `campaigns/${campaignData.id}/mapCells`, cell.id);
-        const regionInfoEs = {
-            ...cell.region_info,
-            // This is a placeholder for actual translation.
-            // In a real app, you'd pull this from a translation service or i18n files.
-            name: cell.region_info.name.replace("The Hellfrost", "El Hellfrost").replace("Unclaimed Lands", "Tierras No Reclamadas"),
-            background: `(ES) ${cell.region_info.background}`,
-        };
-        batch.set(cellRef, cell.region_info); // Sticking to original english data for map for now
+        batch.set(cellRef, cell.region_info);
     }
 };
 
@@ -149,7 +142,7 @@ export const runSeed = async () => {
             campaignId: alice.campaignId,
             userId: alice.id,
             isActive: true,
-            location_cell_id: "C6"
+            location_cell_id: "G5"
         }, archetypes.avenger);
         
         const bob = initialUsers.find(u => u.id === '3')!;
@@ -160,8 +153,8 @@ export const runSeed = async () => {
             visualPreset: "preset_2",
             campaignId: bob.campaignId,
             userId: bob.id,
-            isActive: false, // Inactive character
-            location_cell_id: "C6"
+isActive: false, // Inactive character
+            location_cell_id: "G5"
         }, archetypes.bladedancer);
 
         const carlos = initialUsers.find(u => u.id === '4')!;
@@ -173,7 +166,7 @@ export const runSeed = async () => {
             campaignId: carlos.campaignId,
             userId: carlos.id,
             isActive: true,
-            location_cell_id: "C6"
+            location_cell_id: "G5"
         }, archetypes.paladin);
         
         const diana = initialUsers.find(u => u.id === '5')!;
@@ -185,7 +178,7 @@ export const runSeed = async () => {
             campaignId: diana.campaignId,
             userId: diana.id,
             isActive: true,
-            location_cell_id: "C6"
+            location_cell_id: "G5"
         }, archetypes.hrimwisard);
 
         // Mark seeding as complete

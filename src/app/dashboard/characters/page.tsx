@@ -112,7 +112,7 @@ export default function CharactersPage() {
             campaignId: campaign.id,
             userId: user.id,
             archetypeId: selectedArchetype.id,
-            location_cell_id: "D5", // Default starting location
+            location_cell_id: "G5", // Default starting location
             visualPreset: selectedArchetype.visualPreset,
         };
 
@@ -338,7 +338,7 @@ export default function CharactersPage() {
             <CardContent>
                 {creationStep === 0 && (
                     <Carousel
-                        opts={{ align: "start" }}
+                        opts={{ align: "start", basis: 'full' }}
                         className="w-full max-w-5xl mx-auto"
                     >
                         <CarouselContent>
@@ -619,5 +619,3 @@ const ConditionalRuleInput = ({ index, rule, onChange, t }: { index: number, rul
         </div>
     )
 }
-
-    
