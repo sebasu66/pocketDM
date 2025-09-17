@@ -170,8 +170,8 @@ export function UserNav() {
                     <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
                     <AlertDialogDescription>
                         Esta acción es irreversible. {isMaster ? 
-                        "Como Game Master, esto eliminará permanentemente tu cuenta, tu campaña, todos los hilos narrativos, y TODOS los personajes (incluidos los de otros jugadores) asociados a esta campaña." : 
-                        "Esto eliminará permanentemente tu cuenta, tu personaje y todos tus comentarios."}
+                        "Como Game Master, esto eliminará permanentemente tu cuenta y todas las campañas de las que eres propietario, incluyendo todos los personajes (incluso los de otros jugadores), hilos narrativos y comentarios asociados." : 
+                        "Esto eliminará permanentemente tu cuenta. Tu personaje permanecerá en la campaña por consistencia histórica, pero tu acceso será revocado."}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
