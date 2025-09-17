@@ -1,11 +1,11 @@
 
 
-import { doc, getDoc, updateDoc, setDoc, collection } from "firebase/firestore"; 
+import { doc, getDoc, updateDoc, setDoc, collection, writeBatch } from "firebase/firestore"; 
 import { db } from "./config";
 import { Campaign } from "./types";
 import { initialThreadEn } from "./data/initial-thread-en";
 import { initialThreadEs } from "./data/initial-thread-es";
-import { rassilonGridMapSummary } from "./data/seed-reference";
+import { populateCampaignMapData } from "./seed";
 
 export const getCampaign = async (id: string): Promise<Campaign | null> => {
     console.log(`Fetching campaign with id: ${id}`);
@@ -26,6 +26,8 @@ export const updateCampaign = async (id: string, campaignData: Partial<Campaign>
 
 export const createNewCampaignForUser = async (user: {id: string, name: string}, locale: 'en' | 'es' = 'en'): Promise<string> => {
     const newCampaignId = user.id; // Use user ID as campaign ID for a clear link
+    console.log(`[Campaigns] Starting creation for new campaign with ID: ${newCampaignId} for user ${user.name} in locale '${locale}'.`);
+    
     const newCampaignRef = doc(db, "campaigns", newCampaignId);
 
     const defaultSystemPromptEs = `<prompt>Eres un maestro narrador y un creativo Dungeon Master para un juego de rol de mesa, el sistema es "savage worlds", la ambientacion: "hellfrost", el modo de juego es "west march" (el mapa se divide en casillas cuadradas preestablecidas en el rango A0 a G10, debes consultar la descripcion de cada celda del mapa un la coleccion anidada "gridMap·", los personajes siempre empiezan su campaña en "Aslov" enla celda G5, la ubicacion en el mapa de cada personaje se guarda en character.location_cell_id , debes consultar esta propiedad asi como las demas propìedades del character, para poder dirigir el juego con coherencia asi como tambien actualizar sus estadisticas cuando sea necesario ( su inventario,  sus puntos de experiencia, su nivel, su salud, su celda del mapa actual, su dinero, etc. actualizar el character es tu responsabilidad, es la unica forma de hacerlo.
@@ -44,19 +46,24 @@ export const createNewCampaignForUser = async (user: {id: string, name: string},
         ownerId: user.id,
     };
 
-    await setDoc(newCampaignRef, newCampaignData);
+    const batch = writeBatch(db);
+
+    // Set Campaign Document
+    batch.set(newCampaignRef, newCampaignData);
+    console.log(`[Campaigns] Campaign document for ${newCampaignId} queued for creation.`);
 
     // Create the initial narrative thread for the new campaign
     const initialThread = locale === 'es' ? initialThreadEs : initialThreadEn;
     const threadRef = doc(db, "narrativeThreads", `${newCampaignId}-1`);
-    await setDoc(threadRef, { ...initialThread, campaignId: newCampaignId, createdAt: Date.now() });
+    batch.set(threadRef, { ...initialThread, campaignId: newCampaignId, createdAt: Date.now() });
+    console.log(`[Campaigns] Initial narrative thread for ${newCampaignId} queued for creation.`);
     
-    // Add map cells as a subcollection to the campaign
-    const mapCells = rassilonGridMapSummary;
-    for (const cell of mapCells) {
-        const cellRef = doc(db, `campaigns/${newCampaignId}/mapCells`, cell.id);
-        await setDoc(cellRef, cell.region_info);
-    }
+    // Add map cells and their detailed subcollections
+    await populateCampaignMapData(batch, newCampaignId);
+
+    // Commit all writes
+    await batch.commit();
+    console.log(`[Campaigns] Batch committed. Campaign ${newCampaignId} and all its data should be created.`);
 
     return newCampaignId;
 }
@@ -66,4 +73,3 @@ export const generateNewSecretCode = async (campaignId: string): Promise<string>
     await updateCampaign(campaignId, { secretCode: newCode });
     return newCode;
 };
-

@@ -1,4 +1,5 @@
 
+
 // THIS SCRIPT IS FOR DEMO PURPOSES ONLY
 // It seeds the Firestore database with initial data so the app is usable.
 import { collection, writeBatch, doc, getDoc } from "firebase/firestore";
@@ -14,6 +15,53 @@ import { adventureHooks } from './data/seed-hooks';
 import { conceptosWebApp } from './data/seed-concepts';
 import { initialThreadEn } from "./data/initial-thread-en";
 import { initialThreadEs } from "./data/initial-thread-es";
+
+
+export const populateCampaignMapData = async (batch: any, campaignId: string) => {
+    console.log(`[Seed] Starting to populate map data for campaign ${campaignId}.`);
+
+    for (const cell of rassilonGridMapSummary) {
+        console.log(`[Seed] Processing cell ${cell.id} for campaign ${campaignId}...`);
+        
+        // Add summary to /mapCells
+        const cellSummaryRef = doc(db, `campaigns/${campaignId}/mapCells`, cell.id);
+        batch.set(cellSummaryRef, cell.region_info);
+        
+        // Create the base document in /gridMap
+        const gridMapCellRef = doc(db, `campaigns/${campaignId}/gridMap`, cell.id);
+        batch.set(gridMapCellRef, {}); // Create the cell document itself to hold subcollections
+
+        // Add details to subcollections within /gridMap
+        const localesForCell = (majorLocales as any)[cell.id];
+        if (localesForCell && localesForCell.length > 0) {
+            console.log(`[Seed] Found ${localesForCell.length} locales for cell ${cell.id}. Queueing for write.`);
+            localesForCell.forEach((locale: any, index: number) => {
+                const localeRef = doc(db, `campaigns/${campaignId}/gridMap/${cell.id}/locales`, `${cell.id}-locale-${index}`);
+                batch.set(localeRef, locale);
+            });
+        }
+
+        const npcsForCell = (notableNPCs as any)[cell.id];
+        if (npcsForCell && npcsForCell.length > 0) {
+            console.log(`[Seed] Found ${npcsForCell.length} NPCs for cell ${cell.id}. Queueing for write.`);
+            npcsForCell.forEach((npc: any, index: number) => {
+                const npcRef = doc(db, `campaigns/${campaignId}/gridMap/${cell.id}/npcs`, `${cell.id}-npc-${index}`);
+                batch.set(npcRef, npc);
+            });
+        }
+
+        const hooksForCell = (adventureHooks as any)[cell.id];
+        if (hooksForCell && hooksForCell.length > 0) {
+            console.log(`[Seed] Found ${hooksForCell.length} hooks for cell ${cell.id}. Queueing for write.`);
+            hooksForCell.forEach((hook: any, index: number) => {
+                const hookRef = doc(db, `campaigns/${campaignId}/gridMap/${cell.id}/hooks`, `${cell.id}-hook-${index}`);
+                batch.set(hookRef, hook);
+            });
+        }
+    }
+    console.log(`[Seed] Finished queueing all map data writes for campaign ${campaignId}.`);
+};
+
 
 /**
  * Creates a new campaign from scratch, including its map data and initial narrative thread.
@@ -37,41 +85,7 @@ const createCampaign = async (batch: any, campaignData: any, locale: 'en' | 'es'
     const threadRef = doc(db, "narrativeThreads", `${campaignData.id}-1`);
     batch.set(threadRef, { ...initialThread, campaignId: campaignData.id, createdAt: Date.now() });
 
-    // Add summary and detailed grid map data
-    for (const cell of rassilonGridMapSummary) {
-        // Add summary to /mapCells
-        const cellSummaryRef = doc(db, `campaigns/${campaignData.id}/mapCells`, cell.id);
-        batch.set(cellSummaryRef, cell.region_info);
-        
-        // Create the base document in /gridMap
-        const gridMapCellRef = doc(db, `campaigns/${campaignData.id}/gridMap`, cell.id);
-        batch.set(gridMapCellRef, {}); // Create the cell document itself to hold subcollections
-
-        // Add details to subcollections within /gridMap
-        const localesForCell = (majorLocales as any)[cell.id];
-        if (localesForCell) {
-            localesForCell.forEach((locale: any, index: number) => {
-                const localeRef = doc(db, `campaigns/${campaignData.id}/gridMap/${cell.id}/locales`, `${cell.id}-locale-${index}`);
-                batch.set(localeRef, locale);
-            });
-        }
-
-        const npcsForCell = (notableNPCs as any)[cell.id];
-        if (npcsForCell) {
-            npcsForCell.forEach((npc: any, index: number) => {
-                const npcRef = doc(db, `campaigns/${campaignData.id}/gridMap/${cell.id}/npcs`, `${cell.id}-npc-${index}`);
-                batch.set(npcRef, npc);
-            });
-        }
-
-        const hooksForCell = (adventureHooks as any)[cell.id];
-        if (hooksForCell) {
-            hooksForCell.forEach((hook: any, index: number) => {
-                const hookRef = doc(db, `campaigns/${campaignData.id}/gridMap/${cell.id}/hooks`, `${cell.id}-hook-${index}`);
-                batch.set(hookRef, hook);
-            });
-        }
-    }
+    await populateCampaignMapData(batch, campaignData.id);
 };
 
 /**
@@ -222,4 +236,3 @@ export const runSeed = async () => {
         console.error("Error seeding database:", error);
     }
 };
-
