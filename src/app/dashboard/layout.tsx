@@ -20,6 +20,7 @@ import {
   BrainCircuit,
   Newspaper,
   Library,
+  Beaker,
 } from "lucide-react";
 
 import {
@@ -193,6 +194,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     "/dashboard/playerview": t('pageTitleNarrative'),
     "/dashboard/ai-log": t('pageTitleAiLog'),
     "/dashboard/lore": t('pageTitleLore'),
+    "/dashboard/dev-test": "Dev Test Page",
   };
 
   // --- DEMO ONLY: SEED DATABASE ---
@@ -262,6 +264,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Separator className="my-2 bg-border/20" />
           <SidebarMenu>
              {isMaster && (
+               <>
                 <SidebarMenuItem>
                     <SidebarMenuButton asChild isActive={pathname.startsWith('/dashboard/integrations')} tooltip={{ children: t('sidebarIntegrations') }} onClick={handleLinkClick}>
                     <Link href="/dashboard/integrations">
@@ -270,6 +273,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     </Link>
                     </SidebarMenuButton>
                 </SidebarMenuItem>
+                 <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={pathname.startsWith('/dashboard/dev-test')} tooltip={{ children: 'Dev Test Page' }} onClick={handleLinkClick}>
+                    <Link href="/dashboard/dev-test">
+                        <Beaker />
+                        <span>Dev Test Page</span>
+                    </Link>
+                    </SidebarMenuButton>
+                </SidebarMenuItem>
+               </>
               )}
             <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname.startsWith('/dashboard/settings')} tooltip={{ children: t('sidebarSettings') }} onClick={handleLinkClick}>

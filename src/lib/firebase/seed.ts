@@ -25,13 +25,9 @@ export const populateCampaignMapData = async (campaignId: string) => {
         const batch = writeBatch(db);
         console.log(`[Seed] Processing cell ${cell.id} for campaign ${campaignId}...`);
         
-        // Create the base document in /gridMap to hold subcollections
         const gridMapCellRef = doc(db, `campaigns/${campaignId}/gridMap`, cell.id);
-        
-        // We set the summary data directly on the cell document itself.
         batch.set(gridMapCellRef, cell.region_info); 
 
-        // Add details to subcollections within /gridMap/{cell.id}
         const localesForCell = (majorLocales as any)[cell.id];
         if (localesForCell && localesForCell.length > 0) {
             console.log(`[Seed] Found ${localesForCell.length} locales for cell ${cell.id}. Queueing for write.`);
@@ -59,7 +55,6 @@ export const populateCampaignMapData = async (campaignId: string) => {
             });
         }
         
-        // Commit the batch for the current cell
         await batch.commit();
         console.log(`[Seed] Successfully committed batch for cell ${cell.id}.`);
     }
@@ -89,8 +84,6 @@ const createCampaign = async (batch: any, campaignData: any, locale: 'en' | 'es'
     const threadRef = doc(db, "narrativeThreads", `${campaignData.id}-1`);
     batch.set(threadRef, { ...initialThread, campaignId: campaignData.id, createdAt: Date.now() });
 
-    // The map data will be populated separately to avoid a massive single batch
-    // await populateCampaignMapData(batch, campaignData.id);
 };
 
 /**
@@ -248,4 +241,3 @@ export const runSeed = async () => {
         console.error("Error seeding database:", error);
     }
 };
-
