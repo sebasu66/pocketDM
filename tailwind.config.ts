@@ -13,12 +13,12 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ['Cormorant Garamond', 'serif'],
+        body: ['IM Fell English', 'serif'],
         headline: ['Uncial Antiqua', 'cursive'],
         medieval: ['Uncial Antiqua', 'cursive'],
         code: ['Recursive', 'monospace'],
         handwriting: ['var(--font-handwriting)', 'cursive'],
-        serif: ['Cormorant Garamond', 'serif'],
+        serif: ['IM Fell English', 'serif'],
       },
       colors: {
         background: 'hsl(var(--background))',
@@ -99,19 +99,28 @@ export default {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
+       textShadow: {
+        DEFAULT: '0 2px 4px rgba(0, 0, 0, 0.5)',
+        md: '0 3px 6px rgba(0, 0, 0, 0.5)',
+        lg: '0 5px 10px rgba(0, 0, 0, 0.5)',
+      },
     },
   },
   plugins: [
     require('tailwindcss-animate'),
     require('@tailwindcss/typography'),
-    plugin(function ({ addUtilities }) {
+    plugin(function ({ addUtilities, theme }) {
       addUtilities({
         '.text-indent-2em': {
           textIndent: '2em',
         },
-      })
+      });
+      const textShadowUtilities = Object.entries(theme('textShadow')).map(([key, value]) => ({
+        [`.text-shadow${key === 'DEFAULT' ? '' : `-${key}`}`]: {
+          textShadow: value as string,
+        },
+      }));
+      addUtilities(textShadowUtilities);
     })
   ],
 } satisfies Config;
-
-    
