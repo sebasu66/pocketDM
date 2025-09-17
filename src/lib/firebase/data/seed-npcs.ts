@@ -6,7 +6,7 @@ export const notableNPCs = {
         {
             "name": "Príncipe Cortahielo",
             "title": "Heredero de Rimeholm",
-            "description": "Un guerrero de renombre que culpa a las razas del hogar por el gran invierno. Si se convierte en rey, es probable que sumerja la región en la guerra."
+            "description": "Un renombrado guerrero que culpa a las razas del hogar por el gran invierno. Si se convierte en rey, es probable que hunda la región en la guerra."
         },
         {
             "name": "Príncipe Ojosnocturnos",
