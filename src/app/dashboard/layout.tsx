@@ -54,6 +54,7 @@ import { runSeed } from "@/lib/firebase/seed";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 import { useI18n } from "@/context/i18n-context";
+import { runCampaignSeedingTest } from "@/lib/firebase/narrative";
 
 export const GmSidebarContent = ({onClick}: {onClick?: () => void}) => {
   const pathname = usePathname() || "/dashboard";
@@ -203,27 +204,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   }, []);
   // --- END DEMO ONLY ---
   
-  // --- START: Firestore Connection Test ---
-  React.useEffect(() => {
-    const verifyConnection = async () => {
-      console.log("%cFirestore: Attempting to verify connection...", "color: yellow; font-weight: bold;");
-      try {
-        const testDocRef = doc(db, 'users', '1');
-        const docSnap = await getDoc(testDocRef);
-        if (docSnap.exists()) {
-          console.log("%cFirestore: Connection verified successfully!", "color: lightgreen; font-weight: bold;");
-          console.log("Firestore: Fetched test document data:", docSnap.data());
-        } else {
-           console.error("%cFirestore: Connection test failed. Test document 'users/1' does not exist.", "color: orange; font-weight: bold;");
+  // --- START: Automated Tests ---
+    React.useEffect(() => {
+        // Run this only for the Game Master in a dev environment to avoid clutter
+        if (process.env.NODE_ENV === 'development' && user?.role === 'master') {
+             console.log("%c[AUTO-TEST] Running automated tests on app startup...", "color: blue; font-weight: bold;");
+             runCampaignSeedingTest();
         }
-      } catch (error) {
-        console.error("%cFirestore: Connection verification failed:", "color: red; font-weight: bold;", error);
-      }
-    };
-    
-    verifyConnection();
-  }, []);
-  // --- END: Firestore Connection Test ---
+    }, [user]);
+    // --- END: Automated Tests ---
 
   React.useEffect(() => {
     if (!isLoading && !user) {
@@ -270,14 +259,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     <Link href="/dashboard/integrations">
                         <Workflow />
                         <span>{t('sidebarIntegrations')}</span>
-                    </Link>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
-                 <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={pathname.startsWith('/dashboard/dev-test')} tooltip={{ children: 'Dev Test Page' }} onClick={handleLinkClick}>
-                    <Link href="/dashboard/dev-test">
-                        <Beaker />
-                        <span>Dev Test Page</span>
                     </Link>
                     </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -339,3 +320,5 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     </SidebarProvider>
   );
 }
+
+    
