@@ -71,8 +71,11 @@ export const createUser = async (input: CreateUserInput): Promise<User> => {
         throw new Error("A user with this email already exists.");
     }
 
-    // 2. Determine User ID and Campaign ID
-    const userId = uid || doc(collection(db, "users")).id;
+    // 2. Generate a readable, unique user ID
+    const formattedName = name.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 15);
+    const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+    const userId = uid || `${formattedName}-${randomSuffix}`;
+    
     let campaignId = '';
 
     // 3. Handle GM Role: Create a new campaign using the GM's user ID as the campaign ID
@@ -129,13 +132,13 @@ export const findOrCreateUserFromOAuth = async (firebaseUser: FirebaseAuthUser):
         return appUser as User;
     } else {
         // This is a new user signing in via OAuth for the first time.
-        // Create a user with dual roles and their own campaign by default.
-        // This unified flow prevents duplicate campaigns.
+        // We call the main createUser function to ensure consistent logic.
+        // By default, a new OAuth user gets dual roles and their own campaign.
         return await createUser({
             uid: firebaseUser.uid,
             name: firebaseUser.displayName || 'New Adventurer',
             email: firebaseUser.email!,
-            role: { isGm: true, isPlayer: true }, // Default to dual role
+            role: { isGm: true, isPlayer: true },
         });
     }
 };
@@ -199,4 +202,5 @@ export const deleteUserAndAssociatedData = async (user: User): Promise<void> => 
     // Commit all batched writes
     await batch.commit();
 };
+
 
