@@ -1,5 +1,3 @@
-
-
 // THIS SCRIPT IS FOR DEMO PURPOSES ONLY
 // It seeds the Firestore database with initial data so the app is usable.
 import { collection, writeBatch, doc, getDoc } from "firebase/firestore";
@@ -9,6 +7,7 @@ import { archetypes } from './data/seed-archetypes';
 import { hellfrostItems } from './data/seed-items';
 import { hellfrostSpells } from './data/seed-spells';
 import { hellfrostReferenceData, rassilonGridMapSummary } from './data/seed-reference';
+import { rassilonGridMapDetails } from './data/seed-grid-details';
 import { conceptosWebApp } from './data/seed-concepts';
 import { initialThreadEn } from "./data/initial-thread-en";
 import { initialThreadEs } from "./data/initial-thread-es";
@@ -35,11 +34,16 @@ const createCampaign = async (batch: any, campaignData: any, locale: 'en' | 'es'
     const threadRef = doc(db, "narrativeThreads", `${campaignData.id}-1`);
     batch.set(threadRef, { ...initialThread, campaignId: campaignData.id, createdAt: Date.now() });
 
-    // Add map cells as a subcollection to the campaign
-    const mapCells = rassilonGridMapSummary;
-    for (const cell of mapCells) {
+    // Add map cells summary as a subcollection to the campaign
+    for (const cell of rassilonGridMapSummary) {
         const cellRef = doc(db, `campaigns/${campaignData.id}/mapCells`, cell.id);
         batch.set(cellRef, cell.region_info);
+    }
+    
+    // Add grid map details as a subcollection to the campaign
+    for (const cell of rassilonGridMapDetails) {
+        const cellRef = doc(db, `campaigns/${campaignData.id}/gridMap`, cell.id);
+        batch.set(cellRef, cell.cell_details);
     }
 };
 
