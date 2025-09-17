@@ -42,59 +42,7 @@ export default function HomePage() {
                 <Link href="/login">{t('goToLoginButton')}</Link>
             </Button>
         </div>
-
-        <div className="grid md:grid-cols-2 gap-8 mt-16 text-left">
-            <Card className="bg-card/50 backdrop-blur-lg">
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2 font-headline">
-                        <Crown className="text-amber-400" />
-                        {t('gmDemoTitle')}
-                    </CardTitle>
-                    <CardDescription>
-                        {t('gmDemoDescription')}
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <Button className="w-full" onClick={() => handleQuickLogin("1")}>{t('gmDemoButton')}</Button>
-                </CardContent>
-            </Card>
-             {locale === 'es' ? (
-                <Card className="bg-card/50 backdrop-blur-lg">
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2 font-headline">
-                           <User />
-                            {t('playerDemoTitle')}
-                        </CardTitle>
-                        <CardDescription>
-                           {t('playerDemoDescription')}
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-2">
-                         <Button className="w-full" onClick={() => handleQuickLogin("4")}>{t('playerDemoButton')} (Carlos)</Button>
-                         <Button className="w-full" onClick={() => handleQuickLogin("5")}>{t('playerDemoButton')} (Diana)</Button>
-                    </CardContent>
-                </Card>
-             ) : (
-                <Card className="bg-card/50 backdrop-blur-lg">
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2 font-headline">
-                           <User />
-                            {t('playerDemoTitle')}
-                        </CardTitle>
-                        <CardDescription>
-                           {t('playerDemoDescription')}
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-2">
-                        <Button className="w-full" onClick={() => handleQuickLogin("2")}>{t('playerDemoButton')} (Alice)</Button>
-                        <Button className="w-full" onClick={() => handleQuickLogin("3")} disabled>{t('playerDemoButton')} (Bob - Inactive)</Button>
-                    </CardContent>
-                </Card>
-             )}
-        </div>
       </div>
     </div>
   );
 }
-
-    
