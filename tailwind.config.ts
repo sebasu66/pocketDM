@@ -15,7 +15,7 @@ export default {
       fontFamily: {
         body: ['IM Fell English', 'serif'],
         headline: ['Uncial Antiqua', 'cursive'],
-        medieval: ['Uncial Antiqua', 'cursive'],
+        medieval: ['MedievalSharp', 'cursive'],
         code: ['Recursive', 'monospace'],
         handwriting: ['var(--font-handwriting)', 'cursive'],
         serif: ['IM Fell English', 'serif'],
