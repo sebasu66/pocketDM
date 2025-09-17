@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -29,7 +28,9 @@ export default function HomePage() {
 
         <div className="flex items-center gap-4">
             <Logo className="w-16 h-16 hidden md:block"/>
-            <h1 className="text-6xl md:text-8xl font-body font-bold drop-shadow-lg text-shadow">Pocket DM</h1>
+            <h1 className="text-6xl md:text-8xl font-bold drop-shadow-lg text-shadow">
+                <span className="font-body">Pocket</span> <span className="font-medieval">DM</span>
+            </h1>
         </div>
         
         <p className="text-xl md:text-2xl text-white/80 mt-4 max-w-3xl mx-auto drop-shadow-md">
@@ -45,5 +46,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-    
