@@ -89,7 +89,8 @@ export const createUser = async (input: CreateUserInput): Promise<User> => {
     
     // 4. Handle GM Role (always creates a new campaign)
     if (role.isGm) {
-        const newCampaignId = await createNewCampaignForUser({ id: newUserRef.id, name });
+        const locale = typeof window !== 'undefined' ? (localStorage.getItem('locale') as 'en' | 'es' | null) || 'en' : 'en';
+        const newCampaignId = await createNewCampaignForUser({ id: newUserRef.id, name }, locale);
         // If the user is ONLY a GM, this is their campaign. 
         // If they are also a player joining another campaign, they still get their own.
         if (!campaignId) {
@@ -124,19 +125,19 @@ export const createUser = async (input: CreateUserInput): Promise<User> => {
 };
 
 export const findOrCreateUserFromOAuth = async (firebaseUser: FirebaseAuthUser): Promise<User> => {
-    // We can't just use firebaseUser.uid as it might not be what's in our db if they registered manually.
     const appUser = await getUserByEmail(firebaseUser.email!);
 
     if (appUser) {
-        // User exists, just return their data.
         return appUser as User;
     } else {
+        const locale = typeof window !== 'undefined' ? (localStorage.getItem('locale') as 'en' | 'es' | null) || 'en' : 'en';
+        
         // This is a new user signing in via OAuth for the first time.
         // Default to creating a GM with their own campaign and dual roles for flexibility.
-        const newCampaignId = await createNewCampaignForUser({
-            id: firebaseUser.uid,
-            name: firebaseUser.displayName || 'New GM'
-        });
+        const newCampaignId = await createNewCampaignForUser(
+            { id: firebaseUser.uid, name: firebaseUser.displayName || 'New GM' },
+            locale
+        );
 
         const newUser: User = {
             id: firebaseUser.uid,
@@ -153,5 +154,3 @@ export const findOrCreateUserFromOAuth = async (firebaseUser: FirebaseAuthUser):
         return newUser;
     }
 };
-
-    

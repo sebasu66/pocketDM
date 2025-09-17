@@ -4,6 +4,7 @@ import { doc, getDoc, updateDoc, setDoc, collection } from "firebase/firestore";
 import { db } from "./config";
 import { Campaign } from "./types";
 import { initialThreadEn } from "./data/initial-thread-en";
+import { initialThreadEs } from "./data/initial-thread-es";
 
 export const getCampaign = async (id: string): Promise<Campaign | null> => {
     console.log(`Fetching campaign with id: ${id}`);
@@ -22,7 +23,7 @@ export const updateCampaign = async (id: string, campaignData: Partial<Campaign>
     await updateDoc(docRef, campaignData);
 }
 
-export const createNewCampaignForUser = async (user: {id: string, name: string}): Promise<string> => {
+export const createNewCampaignForUser = async (user: {id: string, name: string}, locale: 'en' | 'es' = 'en'): Promise<string> => {
     const newCampaignRef = doc(collection(db, "campaigns"));
     const newCampaignId = newCampaignRef.id;
 
@@ -40,9 +41,9 @@ export const createNewCampaignForUser = async (user: {id: string, name: string})
     await setDoc(newCampaignRef, newCampaignData);
 
     // Create the initial narrative thread for the new campaign
-    const initialThreadData = { ...initialThreadEn, campaignId: newCampaignId };
+    const initialThreadData = locale === 'es' ? initialThreadEs : initialThreadEn;
     const threadRef = doc(db, "narrativeThreads", `${newCampaignId}-1`);
-    await setDoc(threadRef, initialThreadData);
+    await setDoc(threadRef, { ...initialThreadData, campaignId: newCampaignId, createdAt: Date.now() });
 
     return newCampaignId;
 }

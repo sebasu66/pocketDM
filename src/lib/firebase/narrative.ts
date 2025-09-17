@@ -87,7 +87,7 @@ export const restartCampaignNarrative = async (campaignId: string, locale: 'en' 
     const initialThread = locale === 'es' ? initialThreadEs : initialThreadEn;
     const firstThreadId = `${campaignId}-1`;
     const threadRef = doc(db, NARRATIVE_THREADS_COLLECTION, firstThreadId);
-    await setDoc(threadRef, { ...initialThread, campaignId });
+    await setDoc(threadRef, { ...initialThread, campaignId, createdAt: Date.now() });
 
     console.log(`[Narrative Service] Campaign ${campaignId} restarted successfully with initial thread ID ${firstThreadId}.`);
 }
