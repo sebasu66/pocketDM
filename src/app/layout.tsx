@@ -6,23 +6,14 @@ import { Toaster } from "@/components/ui/toaster"
 import { AuthProvider } from '@/context/auth-context';
 import { ThemeProvider } from '@/context/theme-context';
 import { I18nProvider } from '@/context/i18n-context';
+import { ServiceWorkerRegistrar } from '@/components/service-worker-registrar';
 import './globals.css';
-import { useEffect } from 'react';
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register('/sw.js')
-        .then((registration) => console.log('Service Worker registered with scope:', registration.scope))
-        .catch((error) => console.error('Service Worker registration failed:', error));
-    }
-  }, []);
-
   return (
     <html lang="en" className="dark">
       <head>
@@ -38,6 +29,7 @@ export default function RootLayout({
             <AuthProvider>
               {children}
               <Toaster />
+              <ServiceWorkerRegistrar />
             </AuthProvider>
           </I18nProvider>
         </ThemeProvider>
@@ -45,5 +37,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-    

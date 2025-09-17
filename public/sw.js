@@ -1,53 +1,73 @@
-// public/sw.js
 
-const CACHE_NAME = 'lore-weaver-cache-v2';
+const CACHE_NAME = 'pocket-dm-cache-v1';
 const urlsToCache = [
   '/',
+  '/login',
+  '/dashboard',
   '/manifest.json'
-  // Icons are often cached automatically by the browser when referenced in the manifest.
-  // No need to explicitly cache them unless issues arise.
+  // Add other important assets and pages here
+  // Note: Icons and other assets requested by the manifest will be cached implicitly on install.
 ];
 
+// Install a service worker
 self.addEventListener('install', event => {
-  self.skipWaiting();
+  // Perform install steps
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Opened cache and caching basic assets');
-        const cachePromises = urlsToCache.map(urlToCache => {
-            return cache.add(new Request(urlToCache, {cache: 'reload'})).catch(err => {
-                console.warn(`Failed to cache ${urlToCache}:`, err);
-            });
-        });
-        return Promise.all(cachePromises);
+      .then(function(cache) {
+        console.log('Opened cache');
+        return cache.addAll(urlsToCache);
       })
   );
 });
 
-self.addEventListener('activate', event => {
-  const currentCaches = [CACHE_NAME];
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return cacheNames.filter(cacheName => !currentCaches.includes(cacheName));
-    }).then(cachesToDelete => {
-      return Promise.all(cachesToDelete.map(cacheToDelete => {
-        return caches.delete(cacheToDelete);
-      }));
-    })
-  );
-});
-
-
+// Cache and return requests
 self.addEventListener('fetch', event => {
-  // We only want to handle navigation requests for offline support
-  if (event.request.mode === 'navigate') {
-    event.respondWith(
-      fetch(event.request).catch(async () => {
-        const cache = await caches.open(CACHE_NAME);
-        // If the fetch fails, serve the offline page from the cache.
-        const cachedResponse = await cache.match('/');
-        return cachedResponse;
+  event.respondWith(
+    caches.match(event.request)
+      .then(function(response) {
+        // Cache hit - return response
+        if (response) {
+          return response;
+        }
+
+        // Clone the request because it's a one-time-use stream
+        const fetchRequest = event.request.clone();
+
+        return fetch(fetchRequest).then(
+          function(response) {
+            // Check if we received a valid response
+            if(!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
+            }
+
+            // Clone the response because it's also a stream
+            const responseToCache = response.clone();
+
+            caches.open(CACHE_NAME)
+              .then(function(cache) {
+                cache.put(event.request, responseToCache);
+              });
+
+            return response;
+          }
+        );
       })
     );
-  }
+});
+
+// Update a service worker
+self.addEventListener('activate', event => {
+  const cacheWhitelist = [CACHE_NAME];
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheWhitelist.indexOf(cacheName) === -1) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
 });
