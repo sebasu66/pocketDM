@@ -25,19 +25,45 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
 } from "@/components/ui/dropdown-menu"
-import { LogOut, User, Settings, KeyRound, Crown, Home, Globe } from "lucide-react"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { LogOut, User, Settings, KeyRound, Crown, Home, Globe, Trash2 } from "lucide-react"
 import { Skeleton } from "./ui/skeleton";
 import { useI18n } from "@/context/i18n-context";
+import { deleteUserAndAssociatedData } from "@/lib/auth";
+import { useToast } from "@/hooks/use-toast";
 
 export function UserNav() {
   const { user, logout, isLoading } = useAuth();
   const router = useRouter();
+  const { toast } = useToast();
   const { locale, setLocale, t } = useI18n();
-  const isMaster = user?.role === 'master';
+  const isMaster = user?.role.isGm;
 
   const handleLogout = () => {
     logout();
     router.push("/");
+  };
+  
+  const handleDeleteAccount = async () => {
+    if (!user) return;
+    try {
+        await deleteUserAndAssociatedData(user);
+        toast({ title: "Cuenta eliminada", description: "Tu cuenta y todos tus datos han sido eliminados." });
+        logout(); // This will clear session and redirect
+    } catch (error) {
+        console.error("Error deleting account:", error);
+        toast({ variant: "destructive", title: "Error", description: "No se pudo eliminar la cuenta." });
+    }
   };
 
   if (isLoading) {
@@ -75,7 +101,7 @@ export function UserNav() {
                 <span>Game Master</span>
             </DropdownMenuItem>
            )}
-           {user.role === 'player' && (
+           {user.role.isPlayer && (
              <DropdownMenuItem>
                 <User className="mr-2 h-4 w-4" />
                 <span>Player</span>
@@ -128,6 +154,35 @@ export function UserNav() {
             <LogOut className="mr-2 h-4 w-4" />
             <span>Log out</span>
         </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <AlertDialog>
+            <AlertDialogTrigger asChild>
+                <DropdownMenuItem
+                    onSelect={(e) => e.preventDefault()}
+                    className="text-red-500 focus:text-red-500 focus:bg-red-500/10"
+                >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    <span>Eliminar Cuenta</span>
+                </DropdownMenuItem>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        Esta acción es irreversible. {isMaster ? 
+                        "Como Game Master, esto eliminará permanentemente tu cuenta, tu campaña, todos los hilos narrativos, y TODOS los personajes (incluidos los de otros jugadores) asociados a esta campaña." : 
+                        "Esto eliminará permanentemente tu cuenta, tu personaje y todos tus comentarios."}
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDeleteAccount} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                        Sí, eliminar mi cuenta
+                    </AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+
       </DropdownMenuContent>
     </DropdownMenu>
   )
