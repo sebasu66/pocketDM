@@ -25,7 +25,7 @@ function LoginPageSkeleton() {
                 <div className="flex justify-center mb-4">
                 <Logo className="w-16 h-16"/>
                 </div>
-                <CardTitle className="text-3xl font-medieval">Adventure Engine</CardTitle>
+                <CardTitle className="text-3xl font-body">Pocket DM</CardTitle>
             </CardHeader>
             <CardContent>
                 <div className="space-y-4 pt-4">
@@ -37,3 +37,5 @@ function LoginPageSkeleton() {
         </Card>
     )
 }
+
+    
