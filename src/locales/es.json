@@ -10,7 +10,7 @@
     "goHomeLink": "Volver al inicio",
     "loginFailedTitle": "Inicio de sesión fallido",
     "loginFailedDescription": "Correo electrónico o contraseña no válidos.",
-    "homeSubtitle": "Tu plataforma todo en uno para la construcción colaborativa de mundos de TTRPG, gestión de personajes y narración de historias.",
+    "homeSubtitle": "tu dungeon master 24/7",
     "goToLoginButton": "Ir a la página de inicio de sesión",
     "gmDemoTitle": "Demo del Game Master",
     "gmDemoDescription": "Inicia sesión como Game Master para controlar el mundo. Edita campañas, crea monstruos y guía la narrativa.",
@@ -319,5 +319,3 @@
     "registerSecretCodeRequiredDesc": "Como jugador, debes proporcionar un código secreto para unirte a una campaña.",
     "registerFailed": "Falló el Registro"
 }
-
-    

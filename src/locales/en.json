@@ -10,7 +10,7 @@
     "goHomeLink": "Go back to Home",
     "loginFailedTitle": "Login Failed",
     "loginFailedDescription": "Invalid email or password.",
-    "homeSubtitle": "Your all-in-one platform for collaborative TTRPG world-building, character management, and narrative storytelling.",
+    "homeSubtitle": "your 24/7 dungeon master",
     "goToLoginButton": "Go to Login Page",
     "gmDemoTitle": "Game Master Demo",
     "gmDemoDescription": "Log in as the Game Master to control the world. Edit campaigns, create monsters, and guide the narrative.",
@@ -319,5 +319,3 @@
     "registerSecretCodeRequiredDesc": "As a player, you must provide a secret code to join a campaign.",
     "registerFailed": "Registration Failed"
 }
-
-    
