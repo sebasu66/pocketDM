@@ -72,18 +72,16 @@ export const createUser = async (input: CreateUserInput): Promise<User> => {
     }
 
     // 2. Determine User ID and Campaign ID
-    const userId = uid || doc(collection(db, USERS_COLLECTION)).id;
+    const userId = uid || doc(collection(db, "users")).id;
     let campaignId = '';
 
-    // 3. Handle GM Role (always creates a new campaign for the GM)
+    // 3. Handle GM Role: Create a new campaign using the GM's user ID as the campaign ID
     if (role.isGm) {
         const locale = typeof window !== 'undefined' ? (localStorage.getItem('locale') as 'en' | 'es' | null) || 'en' : 'en';
         // The new campaign ID will be the same as the user's ID
         campaignId = await createNewCampaignForUser({ id: userId, name }, locale);
-    }
-    
+    } else if (role.isPlayer) {
     // 4. Handle Player-only Role
-    if (role.isPlayer && !role.isGm) {
         if (!campaignSecret) {
             throw new Error("A secret code is required to join a campaign as a player.");
         }
@@ -127,15 +125,17 @@ export const findOrCreateUserFromOAuth = async (firebaseUser: FirebaseAuthUser):
     const appUser = await getUserByEmail(firebaseUser.email!);
 
     if (appUser) {
+        // If user exists, just return them.
         return appUser as User;
     } else {
         // This is a new user signing in via OAuth for the first time.
-        // Default to creating a GM with their own campaign and dual roles for flexibility.
+        // Create a user with dual roles and their own campaign by default.
+        // This unified flow prevents duplicate campaigns.
         return await createUser({
             uid: firebaseUser.uid,
             name: firebaseUser.displayName || 'New Adventurer',
             email: firebaseUser.email!,
-            role: { isGm: true, isPlayer: true },
+            role: { isGm: true, isPlayer: true }, // Default to dual role
         });
     }
 };
@@ -199,3 +199,4 @@ export const deleteUserAndAssociatedData = async (user: User): Promise<void> => 
     // Commit all batched writes
     await batch.commit();
 };
+
