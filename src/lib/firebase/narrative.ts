@@ -52,14 +52,14 @@ export const deleteNarrativeThread = async (threadId: string): Promise<void> => 
 export const restartCampaignNarrative = async (campaignId: string, locale: 'en' | 'es' = 'en'): Promise<void> => {
     console.log(`[Narrative Service] Restarting campaign ${campaignId} in ${locale}.`);
 
+    const batch = writeBatch(db);
     // 1. Get all threads for the campaign to delete their comments
     const threadsQuery = query(collection(db, NARRATIVE_THREADS_COLLECTION), where("campaignId", "==", campaignId));
     const threadsSnapshot = await getDocs(threadsQuery);
 
     if (!threadsSnapshot.empty) {
         console.log(`[Narrative Service] Found ${threadsSnapshot.docs.length} threads. Preparing to delete comments and threads.`);
-        const batch = writeBatch(db);
-
+        
         // 2. For each thread, find and queue deletion of all its comments
         for (const threadDoc of threadsSnapshot.docs) {
             const commentsQuery = query(collection(db, COMMENTS_COLLECTION), where("threadId", "==", threadDoc.id));
@@ -73,11 +73,6 @@ export const restartCampaignNarrative = async (campaignId: string, locale: 'en' 
             // Also queue the thread itself for deletion
             batch.delete(threadDoc.ref);
         }
-
-        // 3. Commit all deletions (comments and threads) in one batch
-        await batch.commit();
-        console.log(`[Narrative Service] All old threads and comments for campaign ${campaignId} deleted.`);
-
     } else {
         console.log(`[Narrative Service] No threads found for campaign ${campaignId}. Proceeding to create initial thread.`);
     }
@@ -87,7 +82,10 @@ export const restartCampaignNarrative = async (campaignId: string, locale: 'en' 
     const initialThread = locale === 'es' ? initialThreadEs : initialThreadEn;
     const firstThreadId = `${campaignId}-1`;
     const threadRef = doc(db, NARRATIVE_THREADS_COLLECTION, firstThreadId);
-    await setDoc(threadRef, { ...initialThread, campaignId, createdAt: Date.now() });
+    batch.set(threadRef, { ...initialThread, campaignId, createdAt: Date.now() });
 
+    // 5. Commit all deletions and the new thread creation
+    await batch.commit();
     console.log(`[Narrative Service] Campaign ${campaignId} restarted successfully with initial thread ID ${firstThreadId}.`);
 }
+

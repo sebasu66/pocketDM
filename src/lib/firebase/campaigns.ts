@@ -45,25 +45,22 @@ export const createNewCampaignForUser = async (user: {id: string, name: string},
         secretCode: Math.random().toString(36).substring(2, 8).toUpperCase(),
         ownerId: user.id,
     };
-
+    
+    // Create the campaign document and its initial thread in a batch
     const batch = writeBatch(db);
-
-    // Set Campaign Document
     batch.set(newCampaignRef, newCampaignData);
     console.log(`[Campaigns] Campaign document for ${newCampaignId} queued for creation.`);
 
-    // Create the initial narrative thread for the new campaign
     const initialThread = locale === 'es' ? initialThreadEs : initialThreadEn;
     const threadRef = doc(db, "narrativeThreads", `${newCampaignId}-1`);
     batch.set(threadRef, { ...initialThread, campaignId: newCampaignId, createdAt: Date.now() });
     console.log(`[Campaigns] Initial narrative thread for ${newCampaignId} queued for creation.`);
     
-    // Add map cells and their detailed subcollections
-    await populateCampaignMapData(batch, newCampaignId);
-
-    // Commit all writes
     await batch.commit();
-    console.log(`[Campaigns] Batch committed. Campaign ${newCampaignId} and all its data should be created.`);
+    console.log(`[Campaigns] Initial campaign documents committed for ${newCampaignId}.`);
+
+    // Populate the detailed map data in a separate, more robust process
+    await populateCampaignMapData(newCampaignId);
 
     return newCampaignId;
 }
@@ -73,3 +70,4 @@ export const generateNewSecretCode = async (campaignId: string): Promise<string>
     await updateCampaign(campaignId, { secretCode: newCode });
     return newCode;
 };
+

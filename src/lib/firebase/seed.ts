@@ -17,21 +17,21 @@ import { initialThreadEn } from "./data/initial-thread-en";
 import { initialThreadEs } from "./data/initial-thread-es";
 
 
-export const populateCampaignMapData = async (batch: any, campaignId: string) => {
+export const populateCampaignMapData = async (campaignId: string) => {
     console.log(`[Seed] Starting to populate map data for campaign ${campaignId}.`);
 
+    // Process each cell in its own batch to avoid oversized batches
     for (const cell of rassilonGridMapSummary) {
+        const batch = writeBatch(db);
         console.log(`[Seed] Processing cell ${cell.id} for campaign ${campaignId}...`);
         
-        // Add summary to /mapCells
-        const cellSummaryRef = doc(db, `campaigns/${campaignId}/mapCells`, cell.id);
-        batch.set(cellSummaryRef, cell.region_info);
-        
-        // Create the base document in /gridMap
+        // Create the base document in /gridMap to hold subcollections
         const gridMapCellRef = doc(db, `campaigns/${campaignId}/gridMap`, cell.id);
-        batch.set(gridMapCellRef, {}); // Create the cell document itself to hold subcollections
+        
+        // We set the summary data directly on the cell document itself.
+        batch.set(gridMapCellRef, cell.region_info); 
 
-        // Add details to subcollections within /gridMap
+        // Add details to subcollections within /gridMap/{cell.id}
         const localesForCell = (majorLocales as any)[cell.id];
         if (localesForCell && localesForCell.length > 0) {
             console.log(`[Seed] Found ${localesForCell.length} locales for cell ${cell.id}. Queueing for write.`);
@@ -58,8 +58,12 @@ export const populateCampaignMapData = async (batch: any, campaignId: string) =>
                 batch.set(hookRef, hook);
             });
         }
+        
+        // Commit the batch for the current cell
+        await batch.commit();
+        console.log(`[Seed] Successfully committed batch for cell ${cell.id}.`);
     }
-    console.log(`[Seed] Finished queueing all map data writes for campaign ${campaignId}.`);
+    console.log(`[Seed] Finished populating all map data for campaign ${campaignId}.`);
 };
 
 
@@ -85,7 +89,8 @@ const createCampaign = async (batch: any, campaignData: any, locale: 'en' | 'es'
     const threadRef = doc(db, "narrativeThreads", `${campaignData.id}-1`);
     batch.set(threadRef, { ...initialThread, campaignId: campaignData.id, createdAt: Date.now() });
 
-    await populateCampaignMapData(batch, campaignData.id);
+    // The map data will be populated separately to avoid a massive single batch
+    // await populateCampaignMapData(batch, campaignData.id);
 };
 
 /**
@@ -153,20 +158,22 @@ export const runSeed = async () => {
         }
 
         console.log("Seeding database...");
-        const batch = writeBatch(db);
+        
+        // Batch for core data (users, campaign doc, etc.)
+        const coreBatch = writeBatch(db);
 
         // Seed reference data first
-        await seedReferenceData(batch);
+        await seedReferenceData(coreBatch);
 
         // Create campaigns
         for (const campaign of initialCampaigns) {
-            await createCampaign(batch, campaign, 'es'); // Default to spanish for demo
+            await createCampaign(coreBatch, campaign, 'es'); // Default to spanish for demo
         }
 
         // Create users
         for (const user of initialUsers) {
             const userRef = doc(db, "users", user.id);
-            batch.set(userRef, {
+            coreBatch.set(userRef, {
                 name: user.name,
                 email: user.email,
                 role: { isGm: user.role === 'master', isPlayer: user.role === 'player' },
@@ -179,7 +186,7 @@ export const runSeed = async () => {
         
         // Create characters for the seeded users from archetypes
         const alice = initialUsers.find(u => u.id === '2')!;
-        createCharacterFromArchetype(batch, {
+        createCharacterFromArchetype(coreBatch, {
             id: "1",
             name: "Grom Hellscream",
             description: "A stoic warrior from the north, seeking redemption for his clan's past.",
@@ -191,7 +198,7 @@ export const runSeed = async () => {
         }, archetypes.avenger);
         
         const bob = initialUsers.find(u => u.id === '3')!;
-        createCharacterFromArchetype(batch, {
+        createCharacterFromArchetype(coreBatch, {
             id: "2",
             name: "Elara Nightwind",
             description: "A graceful but deadly elf, she dances with blades to protect the ancient forests.",
@@ -203,7 +210,7 @@ export const runSeed = async () => {
         }, archetypes.bladedancer);
 
         const carlos = initialUsers.find(u => u.id === '4')!;
-        createCharacterFromArchetype(batch, {
+        createCharacterFromArchetype(coreBatch, {
             id: "3",
             name: "Kaelen",
             description: "Un paladín devoto de Tiw, dios de la guerra. Lucha por el honor y la justicia en las tierras heladas.",
@@ -215,7 +222,7 @@ export const runSeed = async () => {
         }, archetypes.paladin);
         
         const diana = initialUsers.find(u => u.id === '5')!;
-        createCharacterFromArchetype(batch, {
+        createCharacterFromArchetype(coreBatch, {
             id: "4",
             name: "Seraphina",
             description: "Una hechicera que domina el poder del hielo, nacida en las salvajes tierras del norte.",
@@ -227,12 +234,18 @@ export const runSeed = async () => {
         }, archetypes.hrimwisard);
 
         // Mark seeding as complete
-        batch.set(seedStateRef, { isSeeded: true });
+        coreBatch.set(seedStateRef, { isSeeded: true });
+        
+        // Commit the core data first
+        await coreBatch.commit();
+        console.log("Core database data seeded successfully!");
+        
+        // Now, populate the map data in separate, smaller batches
+        await populateCampaignMapData(initialCampaigns[0].id);
 
-        await batch.commit();
-        console.log("Database seeded successfully!");
 
     } catch (error) {
         console.error("Error seeding database:", error);
     }
 };
+
