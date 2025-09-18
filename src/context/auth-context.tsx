@@ -3,7 +3,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User, Campaign } from '@/lib/firebase/types';
-import { getUserById, updateUser as updateDbUser, findOrCreateUserFromOAuth } from '@/lib/auth';
+import { getUserById, updateUser as updateDbUser, findOrCreateUserFromOAuth } from '@/lib/firebase/auth';
 import { getCampaign, updateCampaign as updateDbCampaign } from '@/lib/firebase/campaigns';
 import { onAuthStateChanged, User as FirebaseAuthUser } from 'firebase/auth';
 import { auth } from '@/lib/firebase/config';

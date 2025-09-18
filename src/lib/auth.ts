@@ -219,6 +219,3 @@ export const deleteUserAndAssociatedData = async (user: User): Promise<void> => 
     // Commit all batched writes to Firestore
     await batch.commit();
 };
-
-
-
