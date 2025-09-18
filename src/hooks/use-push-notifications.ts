@@ -6,7 +6,7 @@ import { useToast } from './use-toast';
 
 // IMPORTANTE: Reemplaza esta cadena con la clave pública VAPID real de la configuración de tu proyecto de Firebase.
 // Consola de Firebase > Configuración del Proyecto > Cloud Messaging > Certificados de Web Push
-const VAPID_PUBLIC_KEY = "YOUR_VAPID_PUBLIC_KEY_HERE";
+const VAPID_PUBLIC_KEY = "BFvO2NYPqQpGskfG2vyTc_5PHu-h_pfGZCO3vdtooWQR4R3Y5a8OZoAGQVry7RZKdnvzkhvwB2l7RTCmCZRnU1I";
 
 function urlBase64ToUint8Array(base64String: string) {  
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
