@@ -2,11 +2,11 @@
 // It contains the initial user and campaign data needed to seed the Firestore database.
 
 export const initialUsers = [
-    { id: "1", name: "Game Master", email: "gm@example.com", password: "password", role: "master", avatar: "https://picsum.photos/seed/gm/100/100", campaignId: "1" },
-    { id: "2", name: "Alice", email: "alice@example.com", password: "password", role: "player", avatar: "https://picsum.photos/seed/alice/100/100", campaignId: "1" },
-    { id: "3", name: "Bob", email: "bob@example.com", password: "password", role: "player", avatar: "https://picsum.photos/seed/bob/100/100", campaignId: "1" },
-    { id: "4", name: "Carlos", email: "carlos@example.com", password: "password", role: "player", avatar: "https://picsum.photos/seed/carlos/100/100", campaignId: "1" },
-    { id: "5", name: "Diana", email: "diana@example.com", password: "password", role: "player", avatar: "https://picsum.photos/seed/diana/100/100", campaignId: "1" },
+    { id: "1", name: "Game Master", email: "gm@example.com", password: "password", role: "master", avatar: "/ui/avatar/avatar.jpg", campaignId: "1" },
+    { id: "2", name: "Alice", email: "alice@example.com", password: "password", role: "player", avatar: "/ui/avatar/avatar.jpg", campaignId: "1" },
+    { id: "3", name: "Bob", email: "bob@example.com", password: "password", role: "player", avatar: "/ui/avatar/avatar.jpg", campaignId: "1" },
+    { id: "4", name: "Carlos", email: "carlos@example.com", password: "password", role: "player", avatar: "/ui/avatar/avatar.jpg", campaignId: "1" },
+    { id: "5", name: "Diana", email: "diana@example.com", password: "password", role: "player", avatar: "/ui/avatar/avatar.jpg", campaignId: "1" },
 ];
 
 export const initialCampaigns = [

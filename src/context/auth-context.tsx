@@ -16,6 +16,7 @@ interface AuthContextType {
   activeRole: ActiveRole;
   logout: () => void;
   updateUser: (user: User) => Promise<void>;
+  setUser: (user: User) => void;
   setCampaign: (campaign: Campaign) => void;
   updateCampaign: (campaign: Campaign) => Promise<void>;
   setActiveRole: (role: 'gm' | 'player') => void;
@@ -101,7 +102,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, campaign, setCampaign, activeRole, setActiveRole, logout, isLoading, updateUser, updateCampaign, setupSession }}>
+    <AuthContext.Provider value={{ user, campaign, setCampaign, activeRole, setActiveRole, logout, isLoading, updateUser, updateCampaign, setupSession, setUser }}>
       {children}
     </AuthContext.Provider>
   );

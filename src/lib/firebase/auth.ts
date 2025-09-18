@@ -100,7 +100,7 @@ export const createUserInFirestore = async (input: CreateUserInput): Promise<Use
         name,
         email: email.toLowerCase(),
         role,
-        avatar: `https://picsum.photos/seed/${userId}/100/100`,
+        avatar: '/ui/avatar/avatar.jpg',
         campaignId: campaignId,
         enabled: true,
     };
