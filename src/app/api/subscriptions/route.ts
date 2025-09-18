@@ -1,14 +1,15 @@
 // src/app/api/subscriptions/route.ts
 import { NextResponse } from 'next/server';
-// In a real app, you would import your DB functions here
-// e.g., import { saveSubscription, deleteSubscription } from '@/lib/firebase/subscriptions';
+// En una aplicación real, aquí importarías tus funciones de base de datos
+// Por ejemplo: import { saveSubscription, deleteSubscription } from '@/lib/firebase/subscriptions';
 
 export async function POST(request: Request) {
   try {
     const subscription = await request.json();
+    // En una aplicación real, guardarías la suscripción en la base de datos,
+    // asociándola con el usuario que ha iniciado sesión.
     console.log('Received subscription to save:', subscription);
     
-    // TODO: Save the subscription to the database, associated with the logged-in user
     // await saveSubscription(userId, subscription);
     
     return NextResponse.json({ success: true, message: 'Subscription saved.' }, { status: 201 });
@@ -22,9 +23,10 @@ export async function POST(request: Request) {
 export async function DELETE(request: Request) {
   try {
     const { endpoint } = await request.json();
+    // En una aplicación real, buscarías la suscripción en la base de datos por su 'endpoint'
+    // y la eliminarías.
     console.log('Received request to delete subscription for endpoint:', endpoint);
     
-    // TODO: Find the subscription in the database by its endpoint and delete it
     // await deleteSubscription(endpoint);
     
     return NextResponse.json({ success: true, message: 'Subscription deleted.' }, { status: 200 });

@@ -4,7 +4,8 @@
 import { useState, useEffect } from 'react';
 import { useToast } from './use-toast';
 
-// IMPORTANT: Replace this with your actual VAPID public key
+// IMPORTANTE: Reemplaza esta cadena con la clave pública VAPID real de la configuración de tu proyecto de Firebase.
+// Consola de Firebase > Configuración del Proyecto > Cloud Messaging > Certificados de Web Push
 const VAPID_PUBLIC_KEY = "YOUR_VAPID_PUBLIC_KEY_HERE";
 
 function urlBase64ToUint8Array(base64String: string) {  
@@ -51,6 +52,12 @@ export const usePushNotifications = () => {
             return;
         }
 
+        if (VAPID_PUBLIC_KEY === "YOUR_VAPID_PUBLIC_KEY_HERE") {
+            toast({ variant: 'destructive', title: 'VAPID Key Not Configured', description: 'The VAPID public key is missing from the application code.' });
+            console.error("VAPID public key is not configured. Please add it to src/hooks/use-push-notifications.ts");
+            return;
+        }
+        
         const registration = await navigator.serviceWorker.ready;
         
         const permission = await window.Notification.requestPermission();
@@ -65,7 +72,6 @@ export const usePushNotifications = () => {
                 applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
             });
             
-            // TODO: Send subscription to your backend
             await fetch('/api/subscriptions', {
                 method: 'POST',
                 body: JSON.stringify(sub),
@@ -90,7 +96,6 @@ export const usePushNotifications = () => {
         try {
             await subscription.unsubscribe();
 
-            // TODO: Send request to your backend to delete the subscription
             await fetch('/api/subscriptions', {
                 method: 'DELETE',
                 body: JSON.stringify({ endpoint: subscription.endpoint }),
