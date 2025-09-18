@@ -9,19 +9,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/logo";
 import { useAuth } from "@/context/auth-context";
-import { getUserByEmail, checkPassword, signInWithGoogle, createUser } from "@/lib/auth";
+import { getUserByEmail, signInWithGoogle, createUserInFirestore } from "@/lib/firebase/auth";
 import { useToast } from "@/hooks/use-toast";
 import { useI18n } from "@/context/i18n-context";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Crown, User as UserIcon, Loader2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, User as FirebaseAuthUser } from "firebase/auth";
+import { auth } from "@/lib/firebase/config";
 
 type Step = 'check-email' | 'login' | 'register';
 
 export function LoginCard() {
   const [step, setStep] = useState<Step>('check-email');
   const [isChecking, setIsChecking] = useState(false);
-  const [showPasswordLogin, setShowPasswordLogin] = useState(false);
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,7 +31,7 @@ export function LoginCard() {
   const [isPlayer, setIsPlayer] = useState(true);
   const [secretCode, setSecretCode] = useState("");
   
-  const { login, user, setupSession } = useAuth();
+  const { user, setupSession } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
@@ -73,15 +74,20 @@ export function LoginCard() {
   };
 
   const handleLogin = async () => {
-    const user = await getUserByEmail(email);
-    if (user && checkPassword(user, password)) {
-      await login(user.id);
-    } else {
-      toast({
-        variant: "destructive",
-        title: t('loginFailedTitle'),
-        description: t('loginFailedDescription'),
-      });
+    setIsChecking(true);
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        await setupSession(userCredential.user);
+        toast({ title: "Login Successful", description: "Redirecting to your dashboard..."});
+    } catch (error) {
+        console.error("Login error", error);
+        toast({
+            variant: "destructive",
+            title: t('loginFailedTitle'),
+            description: t('loginFailedDescription'),
+        });
+    } finally {
+        setIsChecking(false);
     }
   };
 
@@ -99,28 +105,34 @@ export function LoginCard() {
         return;
     }
 
+    setIsChecking(true);
     try {
-        const newUser = await createUser({
-            name, email, password,
-            role: { isGm, isPlayer },
-            campaignSecret: isPlayer ? secretCode : undefined
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        await createUserInFirestore({
+            uid: userCredential.user.uid,
+            name, email,
+            role: { isGm, isPlayer } ,
+            campaignSecret: isPlayer ? secretCode : undefined,
         });
-        await login(newUser.id);
+        await setupSession(userCredential.user);
+        toast({ title: "Registration Successful", description: "Redirecting to your dashboard..."});
     } catch (error: any) {
         toast({
             variant: "destructive",
             title: t('registerFailed'),
             description: error.message,
         });
+    } finally {
+        setIsChecking(false);
     }
   };
   
   const handleOAuthLogin = async () => {
+    setIsChecking(true);
     try {
       const firebaseUser = await signInWithGoogle();
       await setupSession(firebaseUser);
       toast({ title: "Login Successful", description: "Redirecting to your dashboard..."});
-      router.push('/dashboard');
     } catch (error) {
       console.error("OAuth login error", error);
       toast({
@@ -128,6 +140,8 @@ export function LoginCard() {
         title: t('loginFailedTitle'),
         description: "Could not log in with Google. Please try again.",
       });
+    } finally {
+        setIsChecking(false);
     }
   };
   
@@ -157,8 +171,19 @@ export function LoginCard() {
                 <Label htmlFor="login-email">{t('emailLabel')}</Label>
                 <Input id="login-email" type="email" value={email} disabled />
             </div>
+            <div className="grid gap-2">
+                <Label htmlFor="login-password">{t('passwordLabel')}</Label>
+                <Input id="login-password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleLogin()} autoFocus/>
+            </div>
+            <Button onClick={handleLogin} className="w-full" disabled={isChecking}>
+                {isChecking && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {t('loginButton')}
+            </Button>
+            
+            <Separator className="my-4" />
 
-            <Button variant="outline" className="w-full" onClick={handleOAuthLogin}>
+            <Button variant="outline" className="w-full" onClick={handleOAuthLogin} disabled={isChecking}>
+              {isChecking && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               <svg role="img" viewBox="0 0 24 24" className="mr-2 h-4 w-4">
                 <path
                   fill="currentColor"
@@ -167,21 +192,6 @@ export function LoginCard() {
               </svg>
               {t('loginWithGoogleButton')}
             </Button>
-            
-            <Separator className="my-4" />
-
-            {showPasswordLogin ? (
-                <div className="space-y-4">
-                    <div className="grid gap-2">
-                        <Label htmlFor="login-password">{t('passwordLabel')}</Label>
-                        <Input id="login-password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleLogin()} autoFocus/>
-                    </div>
-                    <Button onClick={handleLogin} className="w-full">{t('loginButton')}</Button>
-                </div>
-            ) : (
-                <Button variant="link" className="w-full" onClick={() => setShowPasswordLogin(true)}>¿Prefieres usar tu contraseña?</Button>
-            )}
-            
           </div>
         );
       case 'register':
@@ -194,7 +204,7 @@ export function LoginCard() {
             </div>
             <div className="grid gap-2">
                 <Label htmlFor="register-email">{t('emailLabel')}</Label>
-                <Input id="register-email" type="email" value={email} disabled />
+                <Input id="register-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div className="grid gap-2">
                 <Label htmlFor="register-password">{t('passwordLabel')}</Label>
@@ -219,10 +229,14 @@ export function LoginCard() {
                     <Input id="secret-code" placeholder={t('registerSecretCodePlaceholder')} required={isPlayer} value={secretCode} onChange={(e) => setSecretCode(e.target.value)} disabled={isInvite} />
                 </div>
             )}
-            <Button onClick={handleRegister} className="w-full">{t('registerButton')}</Button>
+            <Button onClick={handleRegister} className="w-full" disabled={isChecking}>
+                {isChecking && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {t('registerButton')}
+            </Button>
              <Separator className="my-4" />
             <p className="text-xs text-muted-foreground text-center">{t('registerOrSignInWith')}</p>
-            <Button variant="outline" className="w-full" onClick={handleOAuthLogin}>
+            <Button variant="outline" className="w-full" onClick={handleOAuthLogin} disabled={isChecking}>
+              {isChecking && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               <svg role="img" viewBox="0 0 24 24" className="mr-2 h-4 w-4">
                 <path
                   fill="currentColor"
@@ -251,7 +265,7 @@ export function LoginCard() {
         {renderStep()}
           {step !== 'check-email' && (
             <div className="mt-4 text-center">
-                <Button variant="link" onClick={() => { setStep('check-email'); setPassword(''); setShowPasswordLogin(false); }}>
+                <Button variant="link" onClick={() => { setStep('check-email'); setPassword(''); }}>
                     Volver
                 </Button>
             </div>

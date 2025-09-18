@@ -14,14 +14,13 @@ interface AuthContextType {
   user: User | null;
   campaign: Campaign | null;
   activeRole: ActiveRole;
-  login: (userId: string) => Promise<void>;
   logout: () => void;
   updateUser: (user: User) => Promise<void>;
   setCampaign: (campaign: Campaign) => void;
   updateCampaign: (campaign: Campaign) => Promise<void>;
   setActiveRole: (role: 'gm' | 'player') => void;
   isLoading: boolean;
-  setupSession: (user: User | FirebaseAuthUser) => Promise<void>;
+  setupSession: (user: FirebaseAuthUser) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -39,36 +38,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         try {
           await setupSession(firebaseUser);
         } catch (e) {
-          console.error("Error during OAuth user processing", e);
-          clearSession();
+          console.error("Error during user session setup", e);
+          await clearSession();
         }
       } else {
-        const storedUserId = localStorage.getItem('userId');
-        if (storedUserId) {
-            const loggedInUser = await getUserById(storedUserId);
-            if (loggedInUser) {
-                await setupSession(loggedInUser);
-            } else {
-                clearSession();
-            }
-        } else {
-            clearSession();
-        }
+        await clearSession();
       }
       setIsLoading(false);
     });
     return () => unsubscribe();
   }, []);
 
-  const setupSession = async (userOrFirebaseUser: User | FirebaseAuthUser) => {
-    let loggedInUser: User;
-    if ('uid' in userOrFirebaseUser) { // It's a FirebaseAuthUser
-        loggedInUser = await findOrCreateUserFromOAuth(userOrFirebaseUser);
-    } else { // It's our app User
-        loggedInUser = userOrFirebaseUser;
-    }
+  const setupSession = async (firebaseUser: FirebaseAuthUser) => {
+    const loggedInUser = await findOrCreateUserFromOAuth(firebaseUser);
     
-    if (loggedInUser.enabled) {
+    if (loggedInUser && loggedInUser.enabled) {
       setUser(loggedInUser);
       if (loggedInUser.campaignId) {
         const campaignData = await getCampaign(loggedInUser.campaignId);
@@ -80,33 +64,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       } else if (!loggedInUser.role.isGm && loggedInUser.role.isPlayer) {
         setActiveRoleState('player');
       } else {
-        setActiveRoleState(null);
+        setActiveRoleState(null); // Let user with dual roles choose
       }
-      localStorage.setItem('userId', loggedInUser.id);
     } else {
-      clearSession();
+      await clearSession();
     }
   };
 
-  const clearSession = () => {
+  const clearSession = async () => {
     setUser(null);
     setCampaign(null);
     setActiveRoleState(null);
-    localStorage.removeItem('userId');
-  };
-
-  const login = async (userId: string) => {
-    setIsLoading(true);
-    const loggedInUser = await getUserById(userId);
-    if (loggedInUser) {
-      await setupSession(loggedInUser);
-    }
-    setIsLoading(false);
   };
 
   const logout = async () => {
     await auth.signOut();
-    clearSession();
+    await clearSession();
   };
   
   const updateUser = async (updatedUser: User) => {
@@ -128,7 +101,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, campaign, setCampaign, activeRole, setActiveRole, login, logout, isLoading, updateUser, updateCampaign, setupSession }}>
+    <AuthContext.Provider value={{ user, campaign, setCampaign, activeRole, setActiveRole, logout, isLoading, updateUser, updateCampaign, setupSession }}>
       {children}
     </AuthContext.Provider>
   );
@@ -141,5 +114,3 @@ export const useAuth = () => {
   }
   return context;
 };
-
-    
