@@ -59,7 +59,7 @@ export function LoginCard() {
     }
     setIsChecking(true);
     try {
-      const existingUser = await getUserByEmail(email);
+      const existingUser = await getUserByEmail(email.toLowerCase());
       if (existingUser) {
         setStep('login');
       } else {
