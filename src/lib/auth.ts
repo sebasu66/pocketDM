@@ -1,11 +1,10 @@
 
 
 import { collection, query, where, getDocs, doc, getDoc, updateDoc, setDoc, addDoc, writeBatch, deleteDoc } from "firebase/firestore";
-import { getFirestore } from "firebase/firestore";
-import { getAuth, GoogleAuthProvider, signInWithPopup, User as FirebaseAuthUser } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, User as FirebaseAuthUser } from "firebase/auth";
 import { User, Character, NarrativeComment } from './firebase/types';
 import { createNewCampaignForUser } from "./firebase/campaigns";
-import { app, db, auth } from "./firebase/config";
+import { db, auth } from "./firebase/config";
 
 
 // Re-export User type for convenience
@@ -52,32 +51,22 @@ export const updateUser = async (id: string, updatedData: Partial<User>): Promis
 }
 
 interface CreateUserInput {
+    uid: string;
     name: string;
     email: string;
     role: { isGm: boolean, isPlayer: boolean };
     campaignSecret?: string;
-    uid: string; // UID from Firebase Auth is mandatory
 }
 
 export const createUser = async (input: CreateUserInput): Promise<User> => {
     const { uid, name, email, role, campaignSecret } = input;
     
-    // 1. Check if user already exists
-    const existingUser = await getUserById(uid);
-    if (existingUser) {
-        // This case can happen with OAuth if the user exists but setupSession failed before.
-        // Or if there's a race condition. We'll just return the existing user.
-        return existingUser;
-    }
-
     let campaignId = '';
 
-    // 2. Handle GM Role: Create a new campaign for the user.
     if (role.isGm) {
         const locale = typeof window !== 'undefined' ? (localStorage.getItem('locale') as 'en' | 'es' | null) || 'en' : 'en';
         campaignId = await createNewCampaignForUser({ id: uid, name }, locale);
     } else if (role.isPlayer) {
-    // 3. Handle Player-only Role: Find the campaign via secret code.
         if (!campaignSecret) {
             throw new Error("A secret code is required to join a campaign as a player.");
         }
@@ -95,7 +84,6 @@ export const createUser = async (input: CreateUserInput): Promise<User> => {
          throw new Error("Could not determine a campaign to assign to the user.");
     }
 
-    // 4. Define and Save New User Data using the UID as the document ID
     const newUserRef = doc(db, USERS_COLLECTION, uid);
     const newUser: User = {
         id: uid,
@@ -112,22 +100,22 @@ export const createUser = async (input: CreateUserInput): Promise<User> => {
     return newUser;
 };
 
-export const findOrCreateUser = async (firebaseUser: FirebaseAuthUser): Promise<User> => {
+export const findOrCreateUser = async (firebaseUser: FirebaseAuthUser, extraData: { name?: string; role?: {isGm: boolean, isPlayer: boolean}, campaignSecret?: string} = {}): Promise<User> => {
     const appUser = await getUserById(firebaseUser.uid);
 
     if (appUser) {
-        // If user profile exists, just return it.
         return appUser;
-    } else {
-        // This is a new user signing in via OAuth for the first time.
-        // We call the main createUser function to ensure consistent logic.
-        return await createUser({
-            uid: firebaseUser.uid,
-            name: firebaseUser.displayName || 'New Adventurer',
-            email: firebaseUser.email!,
-            role: { isGm: true, isPlayer: true }, // Default to dual roles for new OAuth users
-        });
     }
+
+    const { name, role, campaignSecret } = extraData;
+
+    return await createUser({
+        uid: firebaseUser.uid,
+        name: name || firebaseUser.displayName || 'New Adventurer',
+        email: firebaseUser.email!,
+        role: role || { isGm: true, isPlayer: true }, 
+        campaignSecret: campaignSecret
+    });
 };
 
 export const deleteUserAndAssociatedData = async (user: User): Promise<void> => {
@@ -168,7 +156,6 @@ export const deleteUserAndAssociatedData = async (user: User): Promise<void> => 
 
     await batch.commit();
 
-    // Finally, delete the user from Firebase Auth
     const currentUser = auth.currentUser;
     if (currentUser && currentUser.uid === user.id) {
         await currentUser.delete();

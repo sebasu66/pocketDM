@@ -21,7 +21,7 @@ interface AuthContextType {
   updateCampaign: (campaign: Campaign) => Promise<void>;
   setActiveRole: (role: 'gm' | 'player') => void;
   isLoading: boolean;
-  setupSession: (user: FirebaseAuthUser) => Promise<void>;
+  setupSession: (user: FirebaseAuthUser, extraData?: { name?: string; role?: { isGm: boolean; isPlayer: boolean; }, campaignSecret?: string}) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -51,8 +51,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const setupSession = async (firebaseUser: FirebaseAuthUser) => {
-    const loggedInUser = await findOrCreateUser(firebaseUser);
+  const setupSession = async (firebaseUser: FirebaseAuthUser, extraData: { name?: string; role?: { isGm: boolean; isPlayer: boolean; }, campaignSecret?: string} = {}) => {
+    const loggedInUser = await findOrCreateUser(firebaseUser, extraData);
     
     if (loggedInUser && loggedInUser.enabled) {
       setUser(loggedInUser);

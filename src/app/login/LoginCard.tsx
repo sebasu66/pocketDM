@@ -9,15 +9,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/logo";
 import { useAuth } from "@/context/auth-context";
-import { getUserByEmail, signInWithGoogle, createUser } from "@/lib/auth";
+import { getUserByEmail, signInWithGoogle } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
 import { useI18n } from "@/context/i18n-context";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Crown, User as UserIcon, Loader2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
-import { getAuth } from "firebase/auth";
-import { app } from "@/lib/firebase/config";
+import { auth } from "@/lib/firebase/config";
 
 type Step = 'check-email' | 'login' | 'register';
 
@@ -37,7 +36,6 @@ export function LoginCard() {
   const searchParams = useSearchParams();
   const { toast } = useToast();
   const { t } = useI18n();
-  const auth = getAuth(app);
 
   useEffect(() => {
     const codeFromUrl = searchParams.get('secretCode');
@@ -110,13 +108,11 @@ export function LoginCard() {
     setIsChecking(true);
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        await createUser({
-            uid: userCredential.user.uid, // Use the UID from Firebase Auth
-            name, email,
-            role: { isGm, isPlayer } ,
+        await setupSession(userCredential.user, {
+            name,
+            role: { isGm, isPlayer },
             campaignSecret: isPlayer ? secretCode : undefined,
         });
-        await setupSession(userCredential.user);
         toast({ title: "Registration Successful", description: "Redirecting to your dashboard..."});
     } catch (error: any) {
         toast({
