@@ -1,4 +1,3 @@
-
 // Import the functions you need from the SDKs you need
 import { initializeApp, getApp, getApps, type FirebaseApp } from "firebase/app";
 import { getFirestore, type Firestore } from "firebase/firestore";
@@ -9,7 +8,6 @@ const firebaseConfig = {
   apiKey: "AIzaSyAa6pJKmrxl65X-DeCrUclDdlLvZSGk32g",
   authDomain: "lore-weaver-rt9pc.firebaseapp.com",
   projectId: "lore-weaver-rt9pc",
-  storageBucket: "lore-weaver-rt9pc.appspot.com",
   messagingSenderId: "9043819570",
   appId: "1:9043819570:web:d20e4928ab338405d2d02b"
 };
