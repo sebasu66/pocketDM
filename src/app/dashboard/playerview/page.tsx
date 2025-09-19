@@ -428,29 +428,12 @@ export default function PlayerViewPage() {
                     </InteractiveSection>
                 </div>
                 
-                {canPlayerRespond && (
-                    <div className="mt-8">
-                        <div className='backdrop-blur-lg rounded-lg'>
-                           <CommentForm onSubmit={handleAddComment} character={playerCharacter} t={t} />
-                        </div>
+                <div className="mt-8">
+                    <div className='backdrop-blur-lg rounded-lg'>
+                       <CommentForm onSubmit={handleAddComment} character={playerCharacter} t={t} />
                     </div>
-                )}
-                 {isMaster && activeThreadIndex === 0 && (
-                    <div className="p-4 md:p-0 mt-8">
-                        <GmControls
-                            isAITurn={isAITurn}
-                            isGenerating={isGenerating}
-                            onGenerate={handleGenerateNextPost}
-                            onRedo={handleRedo}
-                            onRestart={handleRestart}
-                            lastPrompt={lastPrompt}
-                            activePlayers={activePlayers}
-                            commentingPlayers={playersWhoHaveCommentedOnLastThread}
-                            hasThreads={narrativeThreads.length > 0}
-                            t={t}
-                        />
-                    </div>
-                )}
+                </div>
+
                 <div className="h-24" />
             </div>
 
@@ -622,3 +605,6 @@ const GmControls = ({ isAITurn, isGenerating, onGenerate, onRedo, onRestart, las
     </div>
 );
 
+
+
+    
