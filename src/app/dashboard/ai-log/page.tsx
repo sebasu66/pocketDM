@@ -14,7 +14,7 @@ import { getCommentsByThreadId } from '@/lib/firebase/comments';
 import { getCharactersByCampaign } from '@/lib/firebase/characters';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Bot, TestTube2 } from 'lucide-react';
-import { getUserByEmail } from '@/lib/auth';
+import { getUserByEmail } from '@/lib/firebase/auth';
 import { useI18n } from '@/context/i18n-context';
 
 type LogEntry = {
@@ -237,4 +237,3 @@ export default function AiLogPage() {
         </div>
     );
 }
-

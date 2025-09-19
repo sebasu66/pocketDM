@@ -108,16 +108,11 @@ export function LoginCard() {
     setIsChecking(true);
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        // Create user in Firestore with all details
-        await createUser({
-            uid: userCredential.user.uid,
+        await setupSession(userCredential.user, {
             name,
-            email,
             role: { isGm, isPlayer },
-            campaignSecret: isPlayer ? secretCode : undefined,
+            campaignSecret: isPlayer ? secretCode : undefined
         });
-        // Setup session which will fetch the newly created user
-        await setupSession(userCredential.user);
         toast({ title: "Registration Successful", description: "Redirecting to your dashboard..."});
     } catch (error: any) {
         toast({
