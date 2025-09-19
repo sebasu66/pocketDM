@@ -46,6 +46,7 @@ export type NarrativeServiceInput = z.infer<typeof NarrativeServiceInputSchema>;
 const NarrativeServiceOutputSchema = z.object({
     nextPost: z.string().describe("The next post in the narrative, continuing the story."),
     characterFilterList: z.string().optional().describe("A comma-separated list of character IDs who should see this post. If empty or omitted, all players can see it."),
+    audioUrl: z.string().optional().describe("The public URL of the generated audio file for this narrative post."),
 });
 export type NarrativeServiceOutput = z.infer<typeof NarrativeServiceOutputSchema>;
 
@@ -54,7 +55,10 @@ const generateNarrativeFlow = ai.defineFlow(
     {
         name: 'generateNarrativeFlow',
         inputSchema: NarrativeServiceInputSchema,
-        outputSchema: NarrativeServiceOutputSchema,
+        outputSchema: z.object({
+            nextPost: z.string(),
+            characterFilterList: z.string().optional(),
+        }),
     },
     async (input) => {
       try {
@@ -72,7 +76,10 @@ const generateNarrativeFlow = ai.defineFlow(
                 systemPrompt: z.string(),
                 narrativeState: NarrativeStateSchema
             }) },
-            output: { schema: NarrativeServiceOutputSchema },
+            output: { schema: z.object({
+                nextPost: z.string().describe("The next post in the narrative, continuing the story."),
+                characterFilterList: z.string().optional().describe("A comma-separated list of character IDs who should see this post. If empty or omitted, all players can see it."),
+            }) },
             prompt: `
                 {{systemPrompt}}
 
@@ -101,6 +108,7 @@ const generateNarrativeFlow = ai.defineFlow(
 
                 Based on this entire history, write the next logical and engaging post for the story.
                 Your response should be a compelling continuation of the events. When appropriate, use the characterFilterList field to direct the narrative to specific characters.
+                The post should be just the narrative text, without any titles or headers.
             `,
             model: googleAI({apiKey}),
         });

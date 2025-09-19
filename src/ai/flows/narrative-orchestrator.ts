@@ -12,8 +12,13 @@
  */
 
 import { z } from 'zod';
-import { generateNarrative } from '@/ai/services/narrative-generator';
+import { generateNarrative, NarrativeServiceOutput } from '@/ai/services/narrative-generator';
 import { getWorldState } from '@/lib/firebase/world-state';
+import { generateAudio } from '@/ai/flows/tts-flow';
+import { getStorage } from 'firebase-admin/storage';
+import { initializeApp, getApps, App } from 'firebase-admin/app';
+import { admin } from '@/lib/firebase/admin-config';
+
 
 const StoryInputSchema = z.object({
   campaignId: z.string().describe("The ID of the current campaign."),
@@ -22,36 +27,68 @@ const StoryInputSchema = z.object({
 });
 export type StoryInput = z.infer<typeof StoryInputSchema>;
 
-const StoryOutputSchema = z.object({
-    nextPost: z.string().describe("The next post in the narrative, continuing the story."),
-});
-export type StoryOutput = z.infer<typeof StoryOutputSchema>;
+export type StoryOutput = NarrativeServiceOutput;
 
+const uploadAudioToStorage = async (audioDataUri: string, campaignId: string, threadId: string): Promise<string> => {
+    const bucket = getStorage(admin).bucket();
+    const file = bucket.file(`campaigns/${campaignId}/narrative/${threadId}.wav`);
+    
+    const base64Data = audioDataUri.split(';base64,').pop();
+    if (!base64Data) {
+        throw new Error('Invalid audio data URI');
+    }
+    
+    const buffer = Buffer.from(base64Data, 'base64');
+    
+    await file.save(buffer, {
+        metadata: {
+            contentType: 'audio/wav',
+        },
+    });
+
+    // Make the file public and get the URL
+    await file.makePublic();
+    return file.publicUrl();
+}
 
 export async function generateStory(input: StoryInput): Promise<StoryOutput> {
     try {
         console.log(`[Orchestrator] Starting story generation for campaign: ${input.campaignId}`);
 
-        // 1. Use the DB Interaction Service to get the world state
-        console.log(`[Orchestrator] Fetching world state from database...`);
+        // 1. Fetch world state
+        console.log(`[Orchestrator] Fetching world state...`);
         const narrativeState = await getWorldState(input.campaignId);
-        console.log(`[Orchestrator] Successfully fetched world state.`);
-
-        // 2. Use the AI Interaction Service to generate the narrative
-        console.log(`[Orchestrator] Passing world state to AI service...`);
-        const result = await generateNarrative({
+        
+        // 2. Generate narrative text
+        console.log(`[Orchestrator] Generating narrative text...`);
+        const narrativeResult = await generateNarrative({
             apiKey: input.apiKey,
             systemPrompt: input.systemPrompt,
             campaignId: input.campaignId,
             narrativeState: narrativeState,
         });
-        console.log(`[Orchestrator] Received response from AI service.`);
+        
+        // 3. Generate audio from the narrative text
+        console.log(`[Orchestrator] Generating audio for narrative...`);
+        const plainTextNarrative = narrativeResult.nextPost.replace(/<[^>]*>?/gm, '');
+        const audioResult = await generateAudio(plainTextNarrative);
 
-        return result;
+        // 4. Upload audio to Firebase Storage
+        console.log(`[Orchestrator] Uploading audio to storage...`);
+        const threadId = `thread-${Date.now()}`;
+        const publicAudioUrl = await uploadAudioToStorage(audioResult.audioDataUri, input.campaignId, threadId);
+        console.log(`[Orchestrator] Audio uploaded to ${publicAudioUrl}`);
+
+        // 5. Combine results and return
+        const finalResult: StoryOutput = {
+            ...narrativeResult,
+            audioUrl: publicAudioUrl,
+        };
+
+        return finalResult;
 
     } catch (error: any) {
         console.error("[Orchestrator] Error during story generation:", error);
-        // Re-throw the error with a more specific message so the client can catch it
         throw new Error(`Story generation failed: ${error.message}`);
     }
 }

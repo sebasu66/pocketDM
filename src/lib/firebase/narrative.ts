@@ -7,6 +7,8 @@ import { initialThreadEn } from "./data/initial-thread-en";
 import { initialThreadEs } from "./data/initial-thread-es";
 import { populateCampaignMapData } from "./seed";
 import { rassilonGridMapSummary } from "./data/seed-reference";
+import { getStorage } from "firebase-admin/storage";
+import { admin } from "./admin-config";
 
 const NARRATIVE_THREADS_COLLECTION = "narrativeThreads";
 const COMMENTS_COLLECTION = "narrativeComments";
@@ -50,6 +52,24 @@ export const addNarrativeThread = async (threadData: Omit<NarrativeThread, 'id'>
 
 export const deleteNarrativeThread = async (threadId: string): Promise<void> => {
     const docRef = doc(db, NARRATIVE_THREADS_COLLECTION, threadId);
+    const thread = await docRef.get();
+    const threadData = thread.data() as NarrativeThread;
+    
+    // Delete associated audio file from storage if it exists
+    if (threadData.audioUrl) {
+        try {
+            const bucket = getStorage(admin).bucket();
+            const url = new URL(threadData.audioUrl);
+            const path = decodeURIComponent(url.pathname.substring(url.pathname.indexOf('/o/') + 3));
+            const file = bucket.file(path);
+            await file.delete();
+            console.log(`[Narrative Service] Deleted audio file: ${path}`);
+        } catch (error) {
+            console.error(`[Narrative Service] Failed to delete audio file for thread ${threadId}:`, error);
+            // We don't re-throw, as we still want to delete the database entry.
+        }
+    }
+    
     await deleteDoc(docRef);
 };
 
@@ -58,15 +78,18 @@ export const restartCampaignNarrative = async (campaignId: string, locale: 'en' 
     console.log(`[Narrative Service] Restarting campaign ${campaignId} in ${locale}.`);
 
     const batch = writeBatch(db);
-    // 1. Get all threads for the campaign to delete their comments
+    // 1. Get all threads for the campaign to delete their comments and audio
     const threadsQuery = query(collection(db, NARRATIVE_THREADS_COLLECTION), where("campaignId", "==", campaignId));
     const threadsSnapshot = await getDocs(threadsQuery);
 
     if (!threadsSnapshot.empty) {
         console.log(`[Narrative Service] Found ${threadsSnapshot.docs.length} threads. Preparing to delete comments and threads.`);
         
-        // 2. For each thread, find and queue deletion of all its comments
+        const bucket = getStorage(admin).bucket();
+
+        // 2. For each thread, find and queue deletion of all its comments and audio
         for (const threadDoc of threadsSnapshot.docs) {
+            // Delete comments
             const commentsQuery = query(collection(db, COMMENTS_COLLECTION), where("threadId", "==", threadDoc.id));
             const commentsSnapshot = await getDocs(commentsQuery);
             if (!commentsSnapshot.empty) {
@@ -75,7 +98,22 @@ export const restartCampaignNarrative = async (campaignId: string, locale: 'en' 
                     batch.delete(commentDoc.ref);
                 });
             }
-            // Also queue the thread itself for deletion
+            
+            // Delete audio file
+            const threadData = threadDoc.data() as NarrativeThread;
+            if (threadData.audioUrl) {
+                try {
+                     const url = new URL(threadData.audioUrl);
+                     const path = decodeURIComponent(url.pathname.substring(url.pathname.indexOf('/o/') + 3));
+                     const file = bucket.file(path);
+                     await file.delete(); // Note: this is not batched
+                     console.log(`[Narrative Service] Deleted audio file: ${path}`);
+                } catch(error) {
+                    console.error(`Failed to delete audio file during restart: ${threadData.audioUrl}`, error);
+                }
+            }
+
+            // Queue the thread itself for deletion
             batch.delete(threadDoc.ref);
         }
     } else {

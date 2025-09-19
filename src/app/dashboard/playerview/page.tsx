@@ -9,7 +9,7 @@ import type { NarrativeThread, Character, EnrichedComment, User } from '@/lib/fi
 import { addNarrativeComment, getCommentsByThreadId } from '@/lib/firebase/comments';
 import { getCharactersByCampaign } from '@/lib/firebase/characters';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ArrowLeft, ArrowRight, Menu, User as UserIcon, X, Bot, Plus, FileText, RotateCcw, Trash2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Menu, User as UserIcon, X, Bot, Plus, FileText, RotateCcw, Trash2, Volume2 } from 'lucide-react';
 import { RusticIconButton } from '@/components/ui/rustic-icon-button';
 import { useI18n } from '@/context/i18n-context';
 import React from 'react';
@@ -25,7 +25,7 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 import { AlertDialog, AlertDialogTrigger, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { generateStory } from '@/ai/flows/narrative-orchestrator';
 import { addNarrativeThread, deleteNarrativeThread, restartCampaignNarrative } from '@/lib/firebase/narrative';
-import { StoryInput } from '@/ai/flows/narrative-orchestrator';
+import { StoryInput, StoryOutput } from '@/ai/flows/narrative-orchestrator';
 import { InteractiveSection } from '@/components/ui/interactive-section';
 import { GmSidebarContent, PlayerSidebarContent } from '../layout';
 import { useRouter } from 'next/navigation';
@@ -238,15 +238,16 @@ export default function PlayerViewPage() {
 
         setLastPrompt(storyInput);
 
-        const result = await generateStory(storyInput);
+        const result: StoryOutput = await generateStory(storyInput);
 
         const newThreadData: Omit<NarrativeThread, 'id'> = {
             campaignId: campaign.id,
             authorId: user.id, 
             title: "The Story Continues...",
             createdAt: Date.now(),
-            content: `<p>${result.nextPost.replace(/\\n/g, '</p><p>')}</p>`,
+            content: `<p>${result.nextPost.replace(/\n/g, '</p><p>')}</p>`,
             characterFilterList: result.characterFilterList || "",
+            audioUrl: result.audioUrl,
         };
 
         await addNarrativeThread(newThreadData);
@@ -370,9 +371,18 @@ export default function PlayerViewPage() {
                 </div>
                 
                 <div className="p-4 md:p-0 min-h-[calc(100vh-10rem)]">
-                    <h1 className="text-4xl md:text-7xl font-headline uppercase tracking-widest text-center mb-8 md:mb-12">
-                        {activeThread.title}
-                    </h1>
+                    <div className="text-center mb-8 md:mb-12">
+                        <h1 className="text-4xl md:text-7xl font-headline uppercase tracking-widest">
+                            {activeThread.title}
+                        </h1>
+                        {activeThread.audioUrl && (
+                             <div className="mt-4 flex justify-center">
+                                <audio controls src={activeThread.audioUrl} className="w-full max-w-md">
+                                    Your browser does not support the audio element.
+                                </audio>
+                             </div>
+                        )}
+                    </div>
 
                     <div className="prose prose-xl prose-invert max-w-none text-foreground/90 leading-relaxed">
                         <div 
