@@ -107,7 +107,7 @@ export interface NarrativeThread {
     authorId: string; // User ID (always GM)
     campaignId: string;
     createdAt: number; // timestamp
-    characterFilterList?: string; // Comma-separated list of character IDs
+    characterFilterList?: string[]; // Array of character IDs
 }
 
 export interface NarrativeComment {

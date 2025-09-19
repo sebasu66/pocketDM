@@ -59,10 +59,12 @@ export default function PlayerViewPage() {
             return allNarrativeThreads;
         }
         return allNarrativeThreads.filter(thread => {
-            if (!thread.characterFilterList || typeof thread.characterFilterList !== 'string') {
-                return true; // Show if filter is missing, null, or not a string
+            // If the filter list is empty or doesn't exist, show the thread to everyone.
+            if (!thread.characterFilterList || !Array.isArray(thread.characterFilterList) || thread.characterFilterList.length === 0) {
+                return true;
             }
-            return thread.characterFilterList.split(',').includes(playerCharacter.id);
+            // If it's an array, check if the player's character ID is included.
+            return thread.characterFilterList.includes(playerCharacter.id);
         });
     }, [allNarrativeThreads, playerCharacter, isMaster]);
 
@@ -116,7 +118,7 @@ export default function PlayerViewPage() {
         });
 
         return () => unsubscribe();
-    }, [campaign, user, isMaster, router, isAuthLoading, toast]);
+    }, [campaign, user, isMaster, router, isAuthLoading, toast, allNarrativeThreads.length]);
 
     const activeThread = useMemo(() => {
         return narrativeThreads.length > 0 ? narrativeThreads[activeThreadIndex] : null;
@@ -606,6 +608,7 @@ const GmControls = ({ isAITurn, isGenerating, onGenerate, onRedo, onRestart, las
         </div>
     </div>
 );
+
 
 
 
