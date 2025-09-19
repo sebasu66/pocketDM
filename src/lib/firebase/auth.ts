@@ -102,13 +102,15 @@ export const findOrCreateUser = async (firebaseUser: FirebaseAuthUser, extraData
         return appUser;
     }
 
-    const { name, role, campaignSecret } = extraData;
+    // Default role for new OAuth users is GM and Player, so they get their own campaign.
+    const role = extraData.role || { isGm: true, isPlayer: true };
+    const { name, campaignSecret } = extraData;
 
     return await createUser({
         uid: firebaseUser.uid,
         name: name || firebaseUser.displayName || 'New Adventurer',
         email: firebaseUser.email!,
-        role: role || { isGm: false, isPlayer: true }, 
+        role, 
         campaignSecret: campaignSecret
     });
 };

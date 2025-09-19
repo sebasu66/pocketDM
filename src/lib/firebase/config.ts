@@ -5,10 +5,13 @@ import { getAuth, type Auth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAa6pJKmrxl65X-DeCrUclDdlLvZSGk32g",
+    apiKey: "AIzaSyAa6pJKmrxl65X-DeCrUclDdlLvZSGk32g",
   authDomain: "lore-weaver-rt9pc.firebaseapp.com",
   projectId: "lore-weaver-rt9pc",
-  appId: "1:9043819570:web:d20e4928ab338405d2d02b"
+  storageBucket: "lore-weaver-rt9pc.firebasestorage.app",
+  messagingSenderId: "9043819570",
+  appId: "1:9043819570:web:d20e4928ab338405d2d02b",
+  measurementId: "G-KRHEWVBV1G"
 };
 
 // Initialize Firebase
