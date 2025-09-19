@@ -5,7 +5,7 @@ import { getFirestore } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider, signInWithPopup, User as FirebaseAuthUser } from "firebase/auth";
 import { User, Character, NarrativeComment } from './firebase/types';
 import { createNewCampaignForUser } from "./firebase/campaigns";
-import { app, auth } from "./config";
+import { app, db, auth } from "./firebase/config";
 
 
 // Re-export User type for convenience
@@ -16,7 +16,6 @@ const CHARACTERS_COLLECTION = "characters";
 const NARRATIVE_THREADS_COLLECTION = "narrativeThreads";
 const COMMENTS_COLLECTION = "narrativeComments";
 const CAMPAIGNS_COLLECTION = "campaigns";
-const db = getFirestore(app);
 
 
 const googleProvider = new GoogleAuthProvider();
