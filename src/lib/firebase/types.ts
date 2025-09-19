@@ -218,12 +218,12 @@ export interface Archetype {
     toughness: number;
     charisma: number;
   };
-  arcane: {
+  arcane?: {
     type: string;
     skill: string;
     powers: string[];
   } | null;
-  religion: {
+  religion?: {
     god: string;
     powers: string[];
   } | null;
@@ -242,4 +242,3 @@ export type EnrichedComment = NarrativeComment & {
     author: User;
     character?: Character | null;
 };
-
