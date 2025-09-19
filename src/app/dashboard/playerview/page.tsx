@@ -58,10 +58,12 @@ export default function PlayerViewPage() {
         if (isMaster || !playerCharacter) {
             return allNarrativeThreads;
         }
-        return allNarrativeThreads.filter(thread => 
-            !thread.characterFilterList || 
-            thread.characterFilterList.split(',').includes(playerCharacter.id)
-        );
+        return allNarrativeThreads.filter(thread => {
+            if (!thread.characterFilterList || typeof thread.characterFilterList !== 'string') {
+                return true; // Show if filter is missing, null, or not a string
+            }
+            return thread.characterFilterList.split(',').includes(playerCharacter.id);
+        });
     }, [allNarrativeThreads, playerCharacter, isMaster]);
 
 
@@ -607,4 +609,3 @@ const GmControls = ({ isAITurn, isGenerating, onGenerate, onRedo, onRestart, las
 
 
 
-    

@@ -13,7 +13,7 @@ type ImageWithFallbackProps = Omit<ImageProps, 'src'> & {
 const extensions = ['png', 'jpg', 'webp'];
 
 export function ImageWithFallback({ baseSrc, fallbackSrc = 'https://picsum.photos/400/600', alt, ...props }: ImageWithFallbackProps) {
-  const [imgSrc, setImgSrc] = useState<string>(fallbackSrc);
+  const [imgSrc, setImgSrc] = useState<string>(baseSrc); // Start with the preferred source
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -34,16 +34,26 @@ export function ImageWithFallback({ baseSrc, fallbackSrc = 'https://picsum.photo
     };
     
     const findImage = async () => {
-        for (const ext of extensions) {
-            const path = `${baseSrc}.${ext}`;
-            if (await checkImage(path)) {
-                if (isMounted) {
-                    setImgSrc(path);
-                    found = true;
+        // First try the baseSrc as is, in case it already has an extension
+        if (await checkImage(baseSrc)) {
+            if (isMounted) {
+                setImgSrc(baseSrc);
+                found = true;
+            }
+        } else {
+            // If not, try with extensions
+            for (const ext of extensions) {
+                const path = `${baseSrc}.${ext}`;
+                if (await checkImage(path)) {
+                    if (isMounted) {
+                        setImgSrc(path);
+                        found = true;
+                    }
+                    break;
                 }
-                break;
             }
         }
+
         if (isMounted && !found) {
             setImgSrc(fallbackSrc);
         }
@@ -70,6 +80,10 @@ export function ImageWithFallback({ baseSrc, fallbackSrc = 'https://picsum.photo
       {...props}
       src={imgSrc}
       alt={alt}
+      onError={() => {
+        // Final fallback in case the found image fails to load
+        setImgSrc(fallbackSrc);
+      }}
     />
   );
 }

@@ -58,6 +58,7 @@ export function FlippingAvatar({
         <div className="absolute w-full h-full backface-hidden rotate-y-180 rounded-full overflow-hidden border-2 border-accent/50">
            <ImageWithFallback
             baseSrc={faceSrc}
+            fallbackSrc={characterImage}
             alt="Character"
             width={72}
             height={72}
@@ -69,5 +70,3 @@ export function FlippingAvatar({
     </div>
   );
 }
-
-    
