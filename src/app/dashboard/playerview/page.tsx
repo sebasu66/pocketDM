@@ -45,7 +45,6 @@ export default function PlayerViewPage() {
     const [activePlayers, setActivePlayers] = useState<Character[]>([]);
     const [activeThreadComments, setActiveThreadComments] = useState<EnrichedComment[]>([]);
     
-    const pageEndRef = useRef<HTMLDivElement>(null);
     const audioRef = useRef<HTMLAudioElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const isInitialLoad = useRef(true);
@@ -318,14 +317,6 @@ export default function PlayerViewPage() {
         setIsGenerating(false);
     }
   }
-     useEffect(() => {
-        if (activeThreadIndex === 0) {
-            setTimeout(() => {
-                pageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-            }, 500);
-        }
-    }, [activeThreadComments, activeThreadIndex]);
-
 
     if (isAuthLoading || isLoading) {
         return (
@@ -460,7 +451,7 @@ export default function PlayerViewPage() {
                         />
                     </div>
                 )}
-                <div ref={pageEndRef} />
+                <div className="h-24" />
             </div>
 
             <div className="fixed bottom-6 right-6 z-30 flex h-14 items-center gap-2 rounded-full bg-black/20 p-2 backdrop-blur-sm">
@@ -630,3 +621,4 @@ const GmControls = ({ isAITurn, isGenerating, onGenerate, onRedo, onRestart, las
         </div>
     </div>
 );
+
