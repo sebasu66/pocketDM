@@ -1,5 +1,4 @@
 
-
 export interface User {
     id: string;
     name: string;
@@ -243,3 +242,5 @@ export type EnrichedComment = NarrativeComment & {
     author: User;
     character?: Character | null;
 };
+
+    

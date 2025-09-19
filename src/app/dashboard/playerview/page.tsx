@@ -16,7 +16,7 @@ import React from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import Image from 'next/image';
 import { ThreadComments } from './ThreadComments';
-import { getUserById } from '@/lib/auth';
+import { getUserById } from '@/lib/firebase/auth';
 import { CommentForm } from './CommentForm';
 import { useToast } from '@/hooks/use-toast';
 import { CharacterSheet } from './CharacterSheet';
@@ -48,7 +48,7 @@ export default function PlayerViewPage() {
     const pageEndRef = useRef<HTMLDivElement>(null);
     const isInitialLoad = useRef(true);
 
-    const isMaster = user?.role === 'master';
+    const isMaster = user?.role.isGm;
     const [isGenerating, setIsGenerating] = useState(false);
     const [lastPrompt, setLastPrompt] = useState<any | null>(null);
 
@@ -376,11 +376,11 @@ export default function PlayerViewPage() {
                             {activeThread.title}
                         </h1>
                         {activeThread.audioUrl && (
-                             <div className="mt-4 flex justify-center">
+                            <div className="mt-4 flex justify-center">
                                 <audio controls src={activeThread.audioUrl} className="w-full max-w-md">
-                                    Your browser does not support the audio element.
+                                    {t('narrativeAudioNotSupported')}
                                 </audio>
-                             </div>
+                            </div>
                         )}
                     </div>
 
@@ -600,3 +600,5 @@ const GmControls = ({ isAITurn, isGenerating, onGenerate, onRedo, onRestart, las
         </div>
     </div>
 );
+
+    
