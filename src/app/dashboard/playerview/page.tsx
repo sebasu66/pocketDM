@@ -9,7 +9,7 @@ import type { NarrativeThread, Character, EnrichedComment, User } from '@/lib/fi
 import { addNarrativeComment, getCommentsByThreadId } from '@/lib/firebase/comments';
 import { getCharactersByCampaign } from '@/lib/firebase/characters';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ArrowLeft, ArrowRight, Menu, User as UserIcon, X, Bot, Plus, FileText, RotateCcw, Trash2, Volume2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Menu, User as UserIcon, X, Bot, Plus, FileText, RotateCcw, Trash2, Play, Pause } from 'lucide-react';
 import { RusticIconButton } from '@/components/ui/rustic-icon-button';
 import { useI18n } from '@/context/i18n-context';
 import React from 'react';
@@ -32,7 +32,7 @@ import { useRouter } from 'next/navigation';
 
 
 export default function PlayerViewPage() {
-    const { user, campaign, isLoading: isAuthLoading } = useAuth();
+    const { user, campaign, isLoading: isAuthLoading, activeRole } = useAuth();
     const { t, locale } = useI18n();
     const { toast } = useToast();
     const router = useRouter();
@@ -46,9 +46,11 @@ export default function PlayerViewPage() {
     const [activeThreadComments, setActiveThreadComments] = useState<EnrichedComment[]>([]);
     
     const pageEndRef = useRef<HTMLDivElement>(null);
+    const audioRef = useRef<HTMLAudioElement>(null);
+    const [isPlaying, setIsPlaying] = useState(false);
     const isInitialLoad = useRef(true);
 
-    const isMaster = user?.role.isGm;
+    const isMaster = activeRole === 'gm';
     const [isGenerating, setIsGenerating] = useState(false);
     const [lastPrompt, setLastPrompt] = useState<any | null>(null);
 
@@ -118,6 +120,15 @@ export default function PlayerViewPage() {
     const activeThread = useMemo(() => {
         return narrativeThreads.length > 0 ? narrativeThreads[activeThreadIndex] : null;
     }, [narrativeThreads, activeThreadIndex]);
+    
+    // Effect to reset audio when thread changes
+    useEffect(() => {
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.currentTime = 0;
+            setIsPlaying(false);
+        }
+    }, [activeThread]);
 
     // Effect to fetch comments for the active thread
     useEffect(() => {
@@ -215,7 +226,7 @@ export default function PlayerViewPage() {
     };
     
     const handleGenerateNextPost = async () => {
-      if (!campaign || !user || user.role !== 'master') return;
+      if (!campaign || !user || !isMaster) return;
 
       setIsGenerating(true);
       toast({ title: t('narrativeThinking'), description: t('narrativeThinkingDesc') });
@@ -262,7 +273,22 @@ export default function PlayerViewPage() {
       } finally {
         setIsGenerating(false);
       }
-  }
+    }
+    
+    const togglePlayPause = () => {
+        if (audioRef.current) {
+            if (isPlaying) {
+                audioRef.current.pause();
+            } else {
+                audioRef.current.play();
+            }
+            setIsPlaying(!isPlaying);
+        }
+    };
+
+    const handleAudioEnded = () => {
+        setIsPlaying(false);
+    };
 
    const handleRedo = async () => {
     if (!lastThread) return;
@@ -375,10 +401,15 @@ export default function PlayerViewPage() {
                             {activeThread.title}
                         </h1>
                         {activeThread.audioUrl && (
-                            <div className="mt-4 flex justify-center">
-                                <audio controls src={activeThread.audioUrl} className="w-full max-w-md">
-                                    {t('narrativeAudioNotSupported')}
-                                </audio>
+                            <div className="mt-4 flex justify-center items-center">
+                                <audio ref={audioRef} src={activeThread.audioUrl} onEnded={handleAudioEnded} />
+                                <RusticIconButton
+                                    tooltip={isPlaying ? 'Pausar' : 'Reproducir'}
+                                    onClick={togglePlayPause}
+                                    className="w-24 h-24 text-white/90 hover:text-white"
+                                >
+                                    {isPlaying ? <Pause size={48} /> : <Play size={48} />}
+                                </RusticIconButton>
                             </div>
                         )}
                     </div>
