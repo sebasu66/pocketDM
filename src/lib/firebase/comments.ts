@@ -20,7 +20,7 @@ export const getCommentsByThreadId = async (threadId: string): Promise<Narrative
     const commentsWithAuthors = await Promise.all(
         comments.map(async (comment) => {
             const author = await getUserById(comment.authorId);
-            const finalAuthor = author || { id: 'unknown', name: 'Unknown Author', email: '', role: 'player', avatar: '', campaignId: '' };
+            const finalAuthor = author || { id: 'unknown', name: 'Unknown Author', email: '', role: { isGm: false, isPlayer: true }, avatar: '', campaignId: '', enabled: true };
             return { ...comment, author: finalAuthor };
         })
     );
