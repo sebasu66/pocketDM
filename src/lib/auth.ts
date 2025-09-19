@@ -1,5 +1,3 @@
-
-
 import { collection, query, where, getDocs, doc, getDoc, updateDoc, setDoc, addDoc, writeBatch, deleteDoc } from "firebase/firestore";
 import { GoogleAuthProvider, signInWithPopup, User as FirebaseAuthUser } from "firebase/auth";
 import { User, Character, NarrativeComment } from './firebase/types';
