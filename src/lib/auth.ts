@@ -1,10 +1,12 @@
 
 
 import { collection, query, where, getDocs, doc, getDoc, updateDoc, setDoc, addDoc, writeBatch, deleteDoc } from "firebase/firestore";
-import { db, auth } from './firebase/config';
+import { getFirestore } from "firebase/firestore";
+import { getAuth, GoogleAuthProvider, signInWithPopup, User as FirebaseAuthUser } from "firebase/auth";
 import { User, Character, NarrativeComment } from './firebase/types';
-import { GoogleAuthProvider, signInWithPopup, User as FirebaseAuthUser } from "firebase/auth";
 import { createNewCampaignForUser } from "./firebase/campaigns";
+import { app } from "./firebase/config";
+
 
 // Re-export User type for convenience
 export type { User };
@@ -14,6 +16,9 @@ const CHARACTERS_COLLECTION = "characters";
 const NARRATIVE_THREADS_COLLECTION = "narrativeThreads";
 const COMMENTS_COLLECTION = "narrativeComments";
 const CAMPAIGNS_COLLECTION = "campaigns";
+const db = getFirestore(app);
+const auth = getAuth(app);
+
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -22,7 +27,7 @@ export const signInWithGoogle = async (): Promise<FirebaseAuthUser> => {
     return result.user;
 };
 
-export const getUserByEmail = async (email: string): Promise<(User & { password?: string }) | undefined> => {
+export const getUserByEmail = async (email: string): Promise<User | undefined> => {
     if (!email) return undefined;
     const q = query(collection(db, USERS_COLLECTION), where("email", "==", email.toLowerCase()));
     const querySnapshot = await getDocs(q);
@@ -30,23 +35,18 @@ export const getUserByEmail = async (email: string): Promise<(User & { password?
         return undefined;
     }
     const userDoc = querySnapshot.docs[0];
-    return { id: userDoc.id, ...userDoc.data() } as User & { password?: string };
+    return { id: userDoc.id, ...userDoc.data() } as User;
 };
 
-export const getUserById = async (id: string): Promise<(User & { password?: string }) | undefined> => {
+export const getUserById = async (id: string): Promise<User | undefined> => {
     const docRef = doc(db, USERS_COLLECTION, id);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-        return { id: docSnap.id, ...docSnap.data() } as User & { password?: string };
+        return { id: docSnap.id, ...docSnap.data() } as User;
     }
     return undefined;
 }
 
-// In a real app, never handle passwords in plaintext on the client.
-// This is a mock implementation for demo purposes.
-export const checkPassword = (user: User & { password?: string }, pass: string): boolean => {
-  return user.password === pass;
-};
 
 export const updateUser = async (id: string, updatedData: Partial<User>): Promise<void> => {
     const userRef = doc(db, USERS_COLLECTION, id);
@@ -56,38 +56,30 @@ export const updateUser = async (id: string, updatedData: Partial<User>): Promis
 interface CreateUserInput {
     name: string;
     email: string;
-    password?: string; // Optional for OAuth
     role: { isGm: boolean, isPlayer: boolean };
-    campaignSecret?: string; // Required if isPlayer is true
-    uid?: string; // Optional for OAuth users
+    campaignSecret?: string;
+    uid: string; // UID from Firebase Auth is mandatory
 }
 
 export const createUser = async (input: CreateUserInput): Promise<User> => {
-    const { name, email, password, role, campaignSecret, uid } = input;
-
-    // 1. Check if user already exists
-    const existingUser = await getUserByEmail(email);
-    if (existingUser) {
-        throw new Error("A user with this email already exists.");
-    }
-
-    // 2. Generate a readable, unique user ID
-    let userId = uid;
-    if (!userId) {
-        const formattedName = name.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 15);
-        const randomSuffix = Math.floor(1000 + Math.random() * 9000);
-        userId = `${formattedName}-${randomSuffix}`;
-    }
+    const { uid, name, email, role, campaignSecret } = input;
     
+    // 1. Check if user already exists
+    const existingUser = await getUserById(uid);
+    if (existingUser) {
+        // This case can happen with OAuth if the user exists but setupSession failed before.
+        // Or if there's a race condition. We'll just return the existing user.
+        return existingUser;
+    }
+
     let campaignId = '';
 
-    // 3. Handle GM Role: Create a new campaign using the GM's user ID as the campaign ID
+    // 2. Handle GM Role: Create a new campaign for the user.
     if (role.isGm) {
         const locale = typeof window !== 'undefined' ? (localStorage.getItem('locale') as 'en' | 'es' | null) || 'en' : 'en';
-        // The new campaign ID will be the same as the user's ID
-        campaignId = await createNewCampaignForUser({ id: userId, name }, locale);
+        campaignId = await createNewCampaignForUser({ id: uid, name }, locale);
     } else if (role.isPlayer) {
-    // 4. Handle Player-only Role
+    // 3. Handle Player-only Role: Find the campaign via secret code.
         if (!campaignSecret) {
             throw new Error("A secret code is required to join a campaign as a player.");
         }
@@ -101,47 +93,41 @@ export const createUser = async (input: CreateUserInput): Promise<User> => {
         campaignId = querySnapshot.docs[0].id;
     }
     
-    if (!campaignId && !role.isPlayer) {
+    if (!campaignId && role.isPlayer) {
          throw new Error("Could not determine a campaign to assign to the user.");
     }
 
-    // 5. Define and Save New User Data
-    const newUserRef = doc(db, USERS_COLLECTION, userId);
+    // 4. Define and Save New User Data using the UID as the document ID
+    const newUserRef = doc(db, USERS_COLLECTION, uid);
     const newUser: User = {
-        id: userId,
+        id: uid,
         name,
         email: email.toLowerCase(),
         role,
-        avatar: `https://picsum.photos/seed/${userId}/100/100`,
+        avatar: '/ui/avatar/avatar.jpg',
         campaignId: campaignId,
         enabled: true,
     };
     
-    const finalUserData: any = { ...newUser };
-    if (password) {
-        finalUserData.password = password;
-    }
-
-    await setDoc(newUserRef, finalUserData);
+    await setDoc(newUserRef, newUser);
 
     return newUser;
 };
 
-export const findOrCreateUserFromOAuth = async (firebaseUser: FirebaseAuthUser): Promise<User> => {
-    const appUser = await getUserByEmail(firebaseUser.email!);
+export const findOrCreateUser = async (firebaseUser: FirebaseAuthUser): Promise<User> => {
+    const appUser = await getUserById(firebaseUser.uid);
 
     if (appUser) {
-        // If user exists, just return them.
-        return appUser as User;
+        // If user profile exists, just return it.
+        return appUser;
     } else {
         // This is a new user signing in via OAuth for the first time.
         // We call the main createUser function to ensure consistent logic.
-        // By default, a new OAuth user gets dual roles and their own campaign.
         return await createUser({
             uid: firebaseUser.uid,
             name: firebaseUser.displayName || 'New Adventurer',
             email: firebaseUser.email!,
-            role: { isGm: true, isPlayer: true },
+            role: { isGm: true, isPlayer: true }, // Default to dual roles for new OAuth users
         });
     }
 };
@@ -149,73 +135,46 @@ export const findOrCreateUserFromOAuth = async (firebaseUser: FirebaseAuthUser):
 export const deleteUserAndAssociatedData = async (user: User): Promise<void> => {
     const batch = writeBatch(db);
 
-    // --- GM DELETION LOGIC ---
     if (user.role.isGm) {
-        // 1. Find all campaigns owned by this GM
         const campaignsQuery = query(collection(db, CAMPAIGNS_COLLECTION), where("ownerId", "==", user.id));
         const campaignsSnapshot = await getDocs(campaignsQuery);
 
-        // 2. For each campaign, perform a full cascade delete
         for (const campaignDoc of campaignsSnapshot.docs) {
             const campaignId = campaignDoc.id;
 
-            // Delete characters in the campaign
             const charactersQuery = query(collection(db, CHARACTERS_COLLECTION), where("campaignId", "==", campaignId));
             const charactersSnapshot = await getDocs(charactersQuery);
             const characterIds = charactersSnapshot.docs.map(d => d.id);
             charactersSnapshot.forEach(doc => batch.delete(doc.ref));
 
-            // Delete comments associated with those characters
             if (characterIds.length > 0) {
                 const commentsQuery = query(collection(db, COMMENTS_COLLECTION), where("characterId", "in", characterIds));
                 const commentsSnapshot = await getDocs(commentsQuery);
                 commentsSnapshot.forEach(doc => batch.delete(doc.ref));
             }
 
-            // Delete all narrative threads for the campaign
             const threadsQuery = query(collection(db, NARRATIVE_THREADS_COLLECTION), where("campaignId", "==", campaignId));
             const threadsSnapshot = await getDocs(threadsQuery);
             threadsSnapshot.forEach(doc => batch.delete(doc.ref));
-
-            // Delete gridMap subcollections
-            const gridMapQuery = query(collection(db, `campaigns/${campaignId}/gridMap`));
-            const gridMapSnapshot = await getDocs(gridMapQuery);
-            for (const cellDoc of gridMapSnapshot.docs) {
-                const localesQuery = query(collection(db, `campaigns/${campaignId}/gridMap/${cellDoc.id}/locales`));
-                const localesSnapshot = await getDocs(localesQuery);
-                localesSnapshot.forEach(lDoc => batch.delete(lDoc.ref));
-                
-                const npcsQuery = query(collection(db, `campaigns/${campaignId}/gridMap/${cellDoc.id}/npcs`));
-                const npcsSnapshot = await getDocs(npcsQuery);
-                npcsSnapshot.forEach(nDoc => batch.delete(nDoc.ref));
-
-                const hooksQuery = query(collection(db, `campaigns/${campaignId}/gridMap/${cellDoc.id}/hooks`));
-                const hooksSnapshot = await getDocs(hooksQuery);
-                hooksSnapshot.forEach(hDoc => batch.delete(hDoc.ref));
-
-                batch.delete(cellDoc.ref);
-            }
             
-            // Delete mapCells collection
             const mapCellsQuery = query(collection(db, `campaigns/${campaignId}/mapCells`));
             const mapCellsSnapshot = await getDocs(mapCellsQuery);
             mapCellsSnapshot.forEach(cellDoc => batch.delete(cellDoc.ref));
-            
-            // Delete the campaign document itself
+
             batch.delete(campaignDoc.ref);
         }
     }
 
-    // --- PLAYER-ONLY DELETION LOGIC ---
-    // If the user is only a player, we only delete their user document.
-    // The character remains in the world for historical consistency.
-    // Their comments also remain.
-    // This block is implicitly handled by the final step, as no campaign/character deletion is triggered for player-only roles.
-
-    // Finally, delete the user document itself, regardless of role.
     const userRef = doc(db, USERS_COLLECTION, user.id);
     batch.delete(userRef);
 
-    // Commit all batched writes to Firestore
     await batch.commit();
+
+    // Finally, delete the user from Firebase Auth
+    const currentUser = auth.currentUser;
+    if (currentUser && currentUser.uid === user.id) {
+        await currentUser.delete();
+    }
 };
+
+    
