@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/logo";
 import { useAuth } from "@/context/auth-context";
-import { getUserByEmail, signInWithGoogle } from "@/lib/auth";
+import { getUserByEmail, signInWithGoogle, createUser } from "@/lib/firebase/auth";
 import { useToast } from "@/hooks/use-toast";
 import { useI18n } from "@/context/i18n-context";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -108,11 +108,16 @@ export function LoginCard() {
     setIsChecking(true);
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        await setupSession(userCredential.user, {
+        // Create user in Firestore with all details
+        await createUser({
+            uid: userCredential.user.uid,
             name,
+            email,
             role: { isGm, isPlayer },
             campaignSecret: isPlayer ? secretCode : undefined,
         });
+        // Setup session which will fetch the newly created user
+        await setupSession(userCredential.user);
         toast({ title: "Registration Successful", description: "Redirecting to your dashboard..."});
     } catch (error: any) {
         toast({

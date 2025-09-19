@@ -1,5 +1,3 @@
-
-
 import { collection, query, where, getDocs, doc, getDoc, updateDoc, setDoc, addDoc, writeBatch, deleteDoc } from "firebase/firestore";
 import { db, auth } from './config';
 import { User } from './types';
@@ -48,22 +46,16 @@ export const updateUser = async (id: string, updatedData: Partial<User>): Promis
 }
 
 interface CreateUserInput {
+    uid: string;
     name: string;
     email: string;
     role: { isGm: boolean, isPlayer: boolean };
     campaignSecret?: string;
-    uid: string; // UID from Firebase Auth is mandatory
 }
 
-export const createUserInFirestore = async (input: CreateUserInput): Promise<User> => {
+export const createUser = async (input: CreateUserInput): Promise<User> => {
     const { uid, name, email, role, campaignSecret } = input;
     
-    // Check if user profile already exists in Firestore.
-    const existingUser = await getUserById(uid);
-    if (existingUser) {
-        return existingUser; // Return existing user if found
-    }
-
     let campaignId = '';
 
     if (role.isGm) {
@@ -97,34 +89,28 @@ export const createUserInFirestore = async (input: CreateUserInput): Promise<Use
         campaignId: campaignId,
         enabled: true,
     };
-
+    
     await setDoc(newUserRef, newUser);
+
     return newUser;
 };
 
-export const findOrCreateUser = async (firebaseUser: FirebaseAuthUser): Promise<User> => {
+export const findOrCreateUser = async (firebaseUser: FirebaseAuthUser, extraData: { name?: string; role?: {isGm: boolean, isPlayer: boolean}, campaignSecret?: string} = {}): Promise<User> => {
     const appUser = await getUserById(firebaseUser.uid);
 
     if (appUser) {
-        // If user profile exists, just return it.
         return appUser;
-    } else {
-        // This is a new user signing in for the first time.
-        // It's assumed that the registration flow has already been completed,
-        // so we fetch the data again. This case handles OAuth where the user
-        // might not have a profile yet. In a real app, you might redirect
-        // to a profile completion page. For now, we'll try to create one.
-        
-        // This part is a fallback, the primary creation happens in LoginCard.tsx
-        console.warn("User profile not found in Firestore, attempting to create one for OAuth user.");
-        return await createUserInFirestore({
-            uid: firebaseUser.uid,
-            name: firebaseUser.displayName || 'New Adventurer',
-            email: firebaseUser.email!,
-            // Defaulting role for OAuth users, might need a registration flow.
-            role: { isGm: true, isPlayer: true },
-        });
     }
+
+    const { name, role, campaignSecret } = extraData;
+
+    return await createUser({
+        uid: firebaseUser.uid,
+        name: name || firebaseUser.displayName || 'New Adventurer',
+        email: firebaseUser.email!,
+        role: role || { isGm: false, isPlayer: true }, 
+        campaignSecret: campaignSecret
+    });
 };
 
 export const deleteUserAndAssociatedData = async (user: User): Promise<void> => {
@@ -165,7 +151,6 @@ export const deleteUserAndAssociatedData = async (user: User): Promise<void> => 
 
     await batch.commit();
 
-    // Finally, delete the user from Firebase Auth
     const currentUser = auth.currentUser;
     if (currentUser && currentUser.uid === user.id) {
         await currentUser.delete();
