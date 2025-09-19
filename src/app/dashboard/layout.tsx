@@ -97,7 +97,7 @@ export const GmSidebarContent = ({onClick}: {onClick?: () => void}) => {
                 <SidebarMenuButton asChild isActive={pathname.startsWith(item.href)} tooltip={{ children: item.label }} onClick={onClick}>
                     <Link href={item.href}>
                         <item.icon />
-                        <span>{item.label}</span>
+                        <span>{t('sidebarCharacters')}</span>
                     </Link>
                 </SidebarMenuButton>
             </SidebarMenuItem>
@@ -204,12 +204,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   }, []);
   // --- END DEMO ONLY ---
   
-  React.useEffect(() => {
-    if (!isLoading && !user) {
-      router.push('/');
-    }
-  }, [isLoading, user, router]);
-
   if (isLoading || !user || !campaign) {
     return (
        <div className="flex items-center justify-center min-h-screen">
