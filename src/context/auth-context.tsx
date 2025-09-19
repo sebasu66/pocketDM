@@ -3,7 +3,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User, Campaign } from '@/lib/firebase/types';
-import { getUserById, updateUser as updateDbUser, findOrCreateUserFromOAuth } from '@/lib/firebase/auth';
+import { findOrCreateUser, updateUser as updateDbUser } from '@/lib/firebase/auth';
 import { getCampaign, updateCampaign as updateDbCampaign } from '@/lib/firebase/campaigns';
 import { onAuthStateChanged, User as FirebaseAuthUser } from 'firebase/auth';
 import { auth } from '@/lib/firebase/config';
@@ -48,10 +48,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsLoading(false);
     });
     return () => unsubscribe();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const setupSession = async (firebaseUser: FirebaseAuthUser) => {
-    const loggedInUser = await findOrCreateUserFromOAuth(firebaseUser);
+    const loggedInUser = await findOrCreateUser(firebaseUser);
     
     if (loggedInUser && loggedInUser.enabled) {
       setUser(loggedInUser);

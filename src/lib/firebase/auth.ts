@@ -3,7 +3,7 @@
 import { collection, query, where, getDocs, doc, getDoc, updateDoc, setDoc, addDoc, writeBatch, deleteDoc } from "firebase/firestore";
 import { db, auth } from './config';
 import { User } from './types';
-import { GoogleAuthProvider, signInWithPopup, User as FirebaseAuthUser, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, User as FirebaseAuthUser } from "firebase/auth";
 import { createNewCampaignForUser } from "./campaigns";
 
 // Re-export User type for convenience
@@ -50,23 +50,16 @@ export const updateUser = async (id: string, updatedData: Partial<User>): Promis
 interface CreateUserInput {
     name: string;
     email: string;
-    password?: string;
     role: { isGm: boolean, isPlayer: boolean };
     campaignSecret?: string;
-    uid?: string;
+    uid: string; // UID from Firebase Auth is mandatory
 }
 
 export const createUserInFirestore = async (input: CreateUserInput): Promise<User> => {
-    const { name, email, role, campaignSecret, uid } = input;
-
-    // Use the Firebase Auth UID as the document ID in Firestore.
-    const userId = uid;
-    if (!userId) {
-        throw new Error("A unique user ID (UID) from Firebase Auth is required to create a user profile.");
-    }
+    const { uid, name, email, role, campaignSecret } = input;
     
     // Check if user profile already exists in Firestore.
-    const existingUser = await getUserById(userId);
+    const existingUser = await getUserById(uid);
     if (existingUser) {
         return existingUser; // Return existing user if found
     }
@@ -75,7 +68,7 @@ export const createUserInFirestore = async (input: CreateUserInput): Promise<Use
 
     if (role.isGm) {
         const locale = typeof window !== 'undefined' ? (localStorage.getItem('locale') as 'en' | 'es' | null) || 'en' : 'en';
-        campaignId = await createNewCampaignForUser({ id: userId, name }, locale);
+        campaignId = await createNewCampaignForUser({ id: uid, name }, locale);
     } else if (role.isPlayer) {
         if (!campaignSecret) {
             throw new Error("A secret code is required to join a campaign as a player.");
@@ -94,9 +87,9 @@ export const createUserInFirestore = async (input: CreateUserInput): Promise<Use
          throw new Error("Could not determine a campaign to assign to the user.");
     }
 
-    const newUserRef = doc(db, USERS_COLLECTION, userId);
+    const newUserRef = doc(db, USERS_COLLECTION, uid);
     const newUser: User = {
-        id: userId,
+        id: uid,
         name,
         email: email.toLowerCase(),
         role,
@@ -109,16 +102,26 @@ export const createUserInFirestore = async (input: CreateUserInput): Promise<Use
     return newUser;
 };
 
-export const findOrCreateUserFromOAuth = async (firebaseUser: FirebaseAuthUser): Promise<User> => {
+export const findOrCreateUser = async (firebaseUser: FirebaseAuthUser): Promise<User> => {
     const appUser = await getUserById(firebaseUser.uid);
 
     if (appUser) {
+        // If user profile exists, just return it.
         return appUser;
     } else {
+        // This is a new user signing in for the first time.
+        // It's assumed that the registration flow has already been completed,
+        // so we fetch the data again. This case handles OAuth where the user
+        // might not have a profile yet. In a real app, you might redirect
+        // to a profile completion page. For now, we'll try to create one.
+        
+        // This part is a fallback, the primary creation happens in LoginCard.tsx
+        console.warn("User profile not found in Firestore, attempting to create one for OAuth user.");
         return await createUserInFirestore({
             uid: firebaseUser.uid,
             name: firebaseUser.displayName || 'New Adventurer',
             email: firebaseUser.email!,
+            // Defaulting role for OAuth users, might need a registration flow.
             role: { isGm: true, isPlayer: true },
         });
     }
