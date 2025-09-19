@@ -8,7 +8,6 @@ const firebaseConfig = {
   apiKey: "AIzaSyAa6pJKmrxl65X-DeCrUclDdlLvZSGk32g",
   authDomain: "lore-weaver-rt9pc.firebaseapp.com",
   projectId: "lore-weaver-rt9pc",
-  messagingSenderId: "9043819570",
   appId: "1:9043819570:web:d20e4928ab338405d2d02b"
 };
 
