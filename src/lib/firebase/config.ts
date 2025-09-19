@@ -1,12 +1,10 @@
-
 // Import the functions you need from the SDKs you need
-import { initializeApp, getApp, getApps, FirebaseApp } from "firebase/app";
-import { getFirestore, Firestore } from "firebase/firestore";
-import { getAuth, Auth } from "firebase/auth";
-import { getStorage, FirebaseStorage } from "firebase/storage";
+import { initializeApp, getApp, getApps } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyAa6pJKmrxl65X-DeCrUclDdlLvZSGk32g",
   authDomain: "lore-weaver-rt9pc.firebaseapp.com",
@@ -18,6 +16,7 @@ const firebaseConfig = {
 
 // Initialize Firebase for SSR
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+
 const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
