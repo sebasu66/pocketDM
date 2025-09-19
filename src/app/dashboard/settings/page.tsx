@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -5,7 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTheme } from "@/context/theme-context";
@@ -13,22 +13,17 @@ import { useAuth } from "@/context/auth-context";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { User } from '@/lib/firebase/types';
 import Link from 'next/link';
-import { ChevronRight, Bell, BellOff, Loader2, Camera, Upload } from 'lucide-react';
+import { ChevronRight, Bell, BellOff, Loader2 } from 'lucide-react';
 import { useI18n } from '@/context/i18n-context';
 import { usePushNotifications } from '@/hooks/use-push-notifications';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { CameraCapture } from '@/components/camera-capture';
 import { useToast } from '@/hooks/use-toast';
 
 export default function SettingsPage() {
   const { handwritingFont, setHandwritingFont } = useTheme();
-  const { user: authUser, isLoading, updateUser: updateAuthUser, setUser: setAuthUser } = useAuth();
+  const { user: authUser, isLoading, updateUser: updateAuthUser } = useAuth();
   const [user, setUser] = useState<User | null>(null);
   const { toast } = useToast();
   const { t } = useI18n();
-  const [isUploading, setIsUploading] = useState(false);
-  const [isAvatarDialogOpen, setIsAvatarDialogOpen] = useState(false);
-  const [cameraMode, setCameraMode] = useState(false);
 
   const {
       isSubscribed,
@@ -50,57 +45,6 @@ export default function SettingsPage() {
     }
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      handleImageUpload(file);
-    }
-  };
-
-  const handleImageUpload = async (image: File | Blob | string) => {
-    if (!user) return;
-    setIsUploading(true);
-
-    const formData = new FormData();
-    if (typeof image === 'string') {
-      const blob = await (await fetch(image)).blob();
-      formData.append('file', blob, 'avatar.png');
-    } else {
-      formData.append('file', image);
-    }
-    formData.append('userId', user.id);
-
-    try {
-      const response = await fetch('/api/avatar/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to upload image');
-      }
-
-      const { url } = await response.json();
-      
-      const updatedUser = { ...user, avatar: url };
-      setUser(updatedUser);
-      setAuthUser(updatedUser);
-      await updateAuthUser(updatedUser);
-
-      toast({ title: 'Avatar updated!' });
-    } catch (error) {
-      toast({ variant: 'destructive', title: 'Upload failed', description: 'Could not update your avatar.' });
-    } finally {
-      setIsUploading(false);
-      setIsAvatarDialogOpen(false);
-      setCameraMode(false);
-    }
-  };
-  
-  const handleOpenFileDialog = () => {
-    document.getElementById('avatar-upload')?.click();
-  };
-
   if (isLoading || !user) {
     return (
       <div className="max-w-3xl mx-auto space-y-8">
@@ -113,7 +57,6 @@ export default function SettingsPage() {
              <div className="flex items-center gap-6">
                 <div className="flex flex-col items-center gap-2">
                     <Skeleton className="h-24 w-24 rounded-full" />
-                    <Skeleton className="h-8 w-24" />
                 </div>
                 <div className="grid gap-4 flex-1">
                     <Skeleton className="h-14 w-full" />
@@ -144,31 +87,6 @@ export default function SettingsPage() {
                 <AvatarImage src={user.avatar} alt="User Avatar" data-ai-hint="person portrait" />
                 <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
               </Avatar>
-               <Dialog open={isAvatarDialogOpen} onOpenChange={setIsAvatarDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button variant="outline" size="sm">{t('settingsChangePicture')}</Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Update Avatar</DialogTitle>
-                  </DialogHeader>
-                  {cameraMode ? (
-                    <CameraCapture onCapture={handleImageUpload} onBack={() => setCameraMode(false)} />
-                  ) : (
-                    <div className="grid grid-cols-2 gap-4 pt-4">
-                      <Button variant="outline" onClick={handleOpenFileDialog} disabled={isUploading}>
-                        <Upload className="mr-2" />
-                        {isUploading ? "Uploading..." : "Upload Photo"}
-                      </Button>
-                      <Button variant="outline" onClick={() => setCameraMode(true)}>
-                        <Camera className="mr-2" />
-                        Use Camera
-                      </Button>
-                      <input id="avatar-upload" type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
-                    </div>
-                  )}
-                </DialogContent>
-              </Dialog>
             </div>
             <div className="grid gap-4 flex-1">
               <div className="grid gap-2">
