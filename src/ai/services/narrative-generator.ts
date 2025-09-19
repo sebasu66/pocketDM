@@ -46,7 +46,6 @@ export type NarrativeServiceInput = z.infer<typeof NarrativeServiceInputSchema>;
 const NarrativeServiceOutputSchema = z.object({
     nextPost: z.string().describe("The next post in the narrative, continuing the story."),
     characterFilterList: z.string().optional().describe("A comma-separated list of character IDs who should see this post. If empty or omitted, all players can see it."),
-    audioUrl: z.string().optional().describe("The public URL of the generated audio file for this narrative post."),
 });
 export type NarrativeServiceOutput = z.infer<typeof NarrativeServiceOutputSchema>;
 
@@ -55,10 +54,7 @@ const generateNarrativeFlow = ai.defineFlow(
     {
         name: 'generateNarrativeFlow',
         inputSchema: NarrativeServiceInputSchema,
-        outputSchema: z.object({
-            nextPost: z.string(),
-            characterFilterList: z.string().optional(),
-        }),
+        outputSchema: NarrativeServiceOutputSchema,
     },
     async (input) => {
       try {

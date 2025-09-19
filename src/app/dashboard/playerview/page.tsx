@@ -247,7 +247,6 @@ export default function PlayerViewPage() {
             createdAt: Date.now(),
             content: `<p>${result.nextPost.replace(/\n/g, '</p><p>')}</p>`,
             characterFilterList: result.characterFilterList || "",
-            audioUrl: result.audioUrl,
         };
 
         await addNarrativeThread(newThreadData);
@@ -600,5 +599,3 @@ const GmControls = ({ isAITurn, isGenerating, onGenerate, onRedo, onRestart, las
         </div>
     </div>
 );
-
-    
