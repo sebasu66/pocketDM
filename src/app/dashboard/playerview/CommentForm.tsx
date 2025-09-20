@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -5,28 +6,26 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { MessageSquareQuote, Lock, Send } from "lucide-react";
+import { MessageSquareQuote, Send } from "lucide-react";
 import type { Character } from "@/lib/firebase/types";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 
 interface CommentFormProps {
-    onSubmit: (text: string, hiddenText: string) => Promise<void>;
+    onSubmit: (text: string) => Promise<void>;
     character: Character | null;
     t: (key: string) => string;
 }
 
 export function CommentForm({ onSubmit, character, t }: CommentFormProps) {
     const [text, setText] = useState("");
-    const [hiddenText, setHiddenText] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!text || isSubmitting) return;
         setIsSubmitting(true);
-        await onSubmit(text, hiddenText);
+        await onSubmit(text);
         setText("");
-        setHiddenText("");
         setIsSubmitting(false);
     };
 
@@ -53,20 +52,6 @@ export function CommentForm({ onSubmit, character, t }: CommentFormProps) {
                             required
                             rows={5}
                             className="bg-background/50"
-                        />
-                    </div>
-                    <div className="space-y-2">
-                         <Label htmlFor="hidden-text" className="flex items-center gap-2">
-                            <Lock />
-                           {t('narrativeHiddenThoughts')}
-                        </Label>
-                        <Textarea
-                            id="hidden-text"
-                            value={hiddenText}
-                            onChange={(e) => setHiddenText(e.target.value)}
-                            placeholder={t('narrativeHiddenThoughtsPlaceholder')}
-                             rows={3}
-                             className="bg-background/50"
                         />
                     </div>
                     <div className="flex justify-end">

@@ -208,7 +208,7 @@ export default function PlayerViewPage() {
         setActiveThreadIndex(prev => Math.max(0, prev - 1));
     };
     
-    const handleAddComment = async (text: string, hiddenText: string) => {
+    const handleAddComment = async (text: string) => {
         if (!user || !playerCharacter || !lastThread) return;
         
         const commentData = {
@@ -216,7 +216,6 @@ export default function PlayerViewPage() {
             authorId: user.id,
             characterId: playerCharacter.id,
             text,
-            hiddenText,
             createdAt: Date.now(),
         };
 
@@ -260,7 +259,7 @@ export default function PlayerViewPage() {
             title: "The Story Continues...",
             createdAt: Date.now(),
             content: `<p>${result.nextPost.replace(/\n/g, '</p><p>')}</p>`,
-            characterFilterList: result.characterFilterList || "",
+            characterFilterList: result.characterFilterList || [],
         };
 
         await addNarrativeThread(newThreadData);
@@ -433,9 +432,11 @@ export default function PlayerViewPage() {
                 </div>
                 
                 <div className="mt-8">
-                    <div className='backdrop-blur-lg rounded-lg'>
-                       <CommentForm onSubmit={handleAddComment} character={playerCharacter} t={t} />
-                    </div>
+                    {canPlayerRespond && (
+                        <div className='backdrop-blur-lg rounded-lg'>
+                           <CommentForm onSubmit={handleAddComment} character={playerCharacter} t={t} />
+                        </div>
+                    )}
                 </div>
 
                 <div className="h-24" />
@@ -608,6 +609,7 @@ const GmControls = ({ isAITurn, isGenerating, onGenerate, onRedo, onRestart, las
         </div>
     </div>
 );
+
 
 
 

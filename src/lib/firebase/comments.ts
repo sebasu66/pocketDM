@@ -1,8 +1,9 @@
 
+
 import { query, collection, where, getDocs, orderBy, addDoc } from "firebase/firestore";
 import { db } from "./config";
 import { NarrativeComment, User } from "./types";
-import { getUserById } from "../auth";
+import { getUserById } from "./auth";
 
 export type NarrativeCommentWithAuthor = NarrativeComment & { author: User };
 
