@@ -17,7 +17,7 @@ export default function HomePage() {
       <div className="absolute inset-0 bg-background/70 backdrop-blur-sm" />
       
       <div className="z-10 flex flex-col items-center text-center text-white">
-        <div className="relative w-[512px] h-[512px] md:w-[640px] md:h-[640px] -mb-16">
+        <div className="relative w-[1024px] h-[1024px] md:w-[1280px] md:h-[1280px] -mb-32">
             <DmAnimation />
         </div>
 
