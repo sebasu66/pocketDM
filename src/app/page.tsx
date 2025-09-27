@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
 import { useI18n } from "@/context/i18n-context";
 import Image from "next/image";
+import { DmAnimation } from "@/components/DmAnimation";
 
 export default function HomePage() {
   const { t } = useI18n();
@@ -17,14 +18,7 @@ export default function HomePage() {
       
       <div className="z-10 flex flex-col items-center text-center text-white">
         <div className="relative w-64 h-64 md:w-80 md:h-80 -mb-8">
-            <Image 
-                src="https://picsum.photos/seed/narrator/500/500" 
-                alt="The Narrator"
-                fill
-                className="object-contain drop-shadow-[0_8px_8px_rgba(0,0,0,0.7)]"
-                data-ai-hint="old wizard narrator"
-                priority
-            />
+            <DmAnimation />
         </div>
 
         <div className="flex items-center gap-4">
