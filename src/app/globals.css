@@ -234,6 +234,9 @@
     .slideshow-image:nth-child(3) { animation-delay: 16s; }
     .slideshow-image:nth-child(4) { animation-delay: 24s; }
 
+    .particle {
+      animation: particleAnimation 30s linear infinite;
+    }
 
   #particles-js {
     position: fixed;
@@ -254,7 +257,9 @@
 
   @keyframes particleAnimation {
     0% { transform: translateY(100vh); opacity: 0; }
-    100% { transform: translateY(-100vh); opacity: 1; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-10vh) translateX(50px); opacity: 0; }
   }
   
   @keyframes dm-fade-in {
@@ -264,5 +269,24 @@
 
   .animate-dm-fade-in {
     animation: dm-fade-in 1s ease-in-out;
+  }
+
+  @keyframes ethereal-float {
+      0%, 100% { 
+          transform: translateY(0px) translateX(0px) rotate(0deg);
+      }
+      25% { 
+          transform: translateY(-5px) translateX(2px) rotate(0.1deg);
+      }
+      50% { 
+          transform: translateY(-2px) translateX(-2px) rotate(0deg);
+      }
+      75% { 
+          transform: translateY(5px) translateX(1px) rotate(-0.1deg);
+      }
+  }
+
+  .animate-ethereal-float {
+      animation: ethereal-float 15s ease-in-out infinite;
   }
 }

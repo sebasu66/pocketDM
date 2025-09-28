@@ -11,7 +11,7 @@ const images = [
     'https://picsum.photos/seed/bg4/1920/1080'
 ];
 
-const particles = Array.from({ length: 50 });
+const particlesCount = 50;
 
 export function BackgroundSlideshow() {
     const [isClient, setIsClient] = useState(false);
@@ -38,7 +38,7 @@ export function BackgroundSlideshow() {
     }
 
     return (
-        <div className="fixed inset-0 z-0 overflow-hidden">
+        <div className="fixed inset-0 z-0 overflow-hidden" id="particles-js">
              <div className="slideshow">
                 {images.map((src, index) => (
                     <div
@@ -48,19 +48,19 @@ export function BackgroundSlideshow() {
                             backgroundImage: `url(${src})`,
                             animationDelay: `${index * 8}s` 
                         }}
+                        data-ai-hint="fantasy landscape"
                     />
                 ))}
             </div>
             <div className="absolute inset-0 z-10 pointer-events-none">
-                {particles.map((_, i) => (
+                {Array.from({ length: particlesCount }).map((_, i) => (
                     <div
                         key={i}
-                        className="absolute bg-white/30 rounded-full"
+                        className="absolute bg-white/30 rounded-full particle"
                         style={{
                             width: `${Math.random() * 3}px`,
                             height: `${Math.random() * 3}px`,
                             left: `${Math.random() * 100}%`,
-                            animation: `particleAnimation ${Math.random() * 20 + 10}s linear infinite`,
                             animationDelay: `-${Math.random() * 30}s`,
                         }}
                     />

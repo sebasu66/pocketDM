@@ -13,16 +13,15 @@ export default function HomePage() {
   const { t } = useI18n();
 
   return (
-    <div className="font-serif flex flex-col items-center justify-center min-h-screen p-4 overflow-hidden">
+    <div className="font-serif flex flex-col items-center justify-center min-h-screen p-4 overflow-hidden bg-[radial-gradient(ellipse_at_center,_#1a1a2e_0%,_#16213e_50%,_#0f0f23_100%)]">
       <BackgroundSlideshow />
-      <div className="absolute inset-0 bg-background/70 backdrop-blur-sm" />
       
-      <div className="z-10 flex flex-col items-center text-center text-white">
-        <div className="relative w-[50vh] h-[50vh] md:w-[65vh] md:h-[65vh] -mb-12">
+      <div className="z-10 flex flex-col items-center text-center text-white animate-dm-fade-in">
+        <div className="relative w-[50vh] h-[50vh] md:w-[65vh] md:h-[65vh] -mb-12 animate-ethereal-float">
             <DmAnimation />
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 animate-ethereal-float" style={{ animationDelay: '0.5s' }}>
             <Logo className="w-16 h-16 hidden md:block"/>
             <h1 className="text-6xl md:text-8xl font-bold drop-shadow-lg text-shadow">
                 <span className="font-serif">Pocket</span> <span className="font-headline">DM</span>
