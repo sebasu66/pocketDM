@@ -7,13 +7,14 @@ import { Logo } from "@/components/logo";
 import { useI18n } from "@/context/i18n-context";
 import Image from "next/image";
 import { DmAnimation } from "@/components/DmAnimation";
+import { BackgroundSlideshow } from "@/components/ui/background-slideshow";
 
 export default function HomePage() {
   const { t } = useI18n();
 
   return (
     <div className="font-serif flex flex-col items-center justify-center min-h-screen p-4 overflow-hidden">
-      <div className="bg-slideshow" />
+      <BackgroundSlideshow />
       <div className="absolute inset-0 bg-background/70 backdrop-blur-sm" />
       
       <div className="z-10 flex flex-col items-center text-center text-white">
