@@ -1,0 +1,20 @@
+{
+  "backgrounds": [
+    {
+      "src": "https://picsum.photos/seed/fantasy-castle/1920/1080",
+      "hint": "fantasy castle"
+    },
+    {
+      "src": "https://picsum.photos/seed/enchanted-forest/1920/1080",
+      "hint": "enchanted forest"
+    },
+    {
+      "src": "https://picsum.photos/seed/ruined-city/1920/1080",
+      "hint": "ruined city"
+    },
+    {
+      "src": "https://picsum.photos/seed/mountain-pass/1920/1080",
+      "hint": "mountain pass"
+    }
+  ]
+}

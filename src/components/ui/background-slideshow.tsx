@@ -3,14 +3,9 @@
 
 import React, { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
+import imageData from '@/lib/placeholder-images.json';
 
-const images = [
-    'https://picsum.photos/seed/fantasy-castle/1920/1080',
-    'https://picsum.photos/seed/enchanted-forest/1920/1080',
-    'https://picsum.photos/seed/ruined-city/1920/1080',
-    'https://picsum.photos/seed/mountain-pass/1920/1080',
-];
-
+const { backgrounds } = imageData;
 const particlesCount = 50;
 
 export function BackgroundSlideshow() {
@@ -28,7 +23,7 @@ export function BackgroundSlideshow() {
                     <div
                         className="slideshow-image"
                         style={{
-                            backgroundImage: `url(${images[0]})`,
+                            backgroundImage: `url(${backgrounds[0].src})`,
                             opacity: 1, // Show only the first image statically
                         }}
                     />
@@ -40,15 +35,15 @@ export function BackgroundSlideshow() {
     return (
         <div className="fixed inset-0 z-0 overflow-hidden" id="particles-js">
              <div className="slideshow">
-                {images.map((src, index) => (
+                {backgrounds.map((image, index) => (
                     <div
-                        key={src}
+                        key={image.src}
                         className="slideshow-image"
                         style={{
-                            backgroundImage: `url(${src})`,
+                            backgroundImage: `url(${image.src})`,
                             animationDelay: `${index * 8}s` 
                         }}
-                        data-ai-hint="fantasy landscape"
+                        data-ai-hint={image.hint}
                     />
                 ))}
             </div>
