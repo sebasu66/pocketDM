@@ -51,10 +51,10 @@ export function BackgroundSlideshow() {
                 {Array.from({ length: particlesCount }).map((_, i) => (
                     <div
                         key={i}
-                        className="absolute bg-white/30 rounded-full particle"
+                        className="absolute bg-white/60 rounded-full particle"
                         style={{
-                            width: `${Math.random() * 3}px`,
-                            height: `${Math.random() * 3}px`,
+                            width: `${Math.random() * 5}px`,
+                            height: `${Math.random() * 5}px`,
                             left: `${Math.random() * 100}%`,
                             animationDelay: `-${Math.random() * 30}s`,
                         }}
