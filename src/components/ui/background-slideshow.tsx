@@ -5,10 +5,10 @@ import React, { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 const images = [
-    '/ui/home/DM_frames/front-1.png',
-    '/ui/home/DM_frames/front-2.png',
-    '/ui/home/DM_frames/front-3.png',
-    '/ui/home/DM_frames/front-4.png',
+    'https://picsum.photos/seed/fantasy-castle/1920/1080',
+    'https://picsum.photos/seed/enchanted-forest/1920/1080',
+    'https://picsum.photos/seed/ruined-city/1920/1080',
+    'https://picsum.photos/seed/mountain-pass/1920/1080',
 ];
 
 const particlesCount = 50;
