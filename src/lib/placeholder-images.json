@@ -1,20 +1,28 @@
 {
   "backgrounds": [
     {
-      "src": "/monsters/dire-wolf.png",
-      "hint": "dire wolf monster"
+      "src": "/locations/back_alley.png",
+      "hint": "fantasy alley"
     },
     {
-      "src": "/monsters/human-spawn.png",
-      "hint": "zombie monster"
+      "src": "/locations/blacksmith_interior.png",
+      "hint": "fantasy blacksmith"
     },
     {
-      "src": "/ui/backgrounds/red-column-bkg.jpg",
-      "hint": "leather texture"
+      "src": "/locations/frozen_forest_a.png",
+      "hint": "frozen forest"
     },
     {
-      "src": "/ui/backgrounds/parchment.jpg",
-      "hint": "parchment paper"
+      "src": "/locations/mountain_houses_night_snowy.png",
+      "hint": "snowy mountains"
+    },
+    {
+      "src": "/locations/tabern_interior.png",
+      "hint": "fantasy tavern"
+    },
+    {
+      "src": "/locations/town_dock_dayTime.png",
+      "hint": "fantasy dock"
     }
   ]
 }
