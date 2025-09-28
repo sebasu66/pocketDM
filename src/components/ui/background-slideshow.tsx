@@ -1,13 +1,14 @@
+
 "use client";
 
 import React, { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 const images = [
-    '/locations/default_location.jpg',
-    '/locations/fantasy-castle.jpg',
-    '/locations/enchanted-forest.jpg',
-    '/locations/ruined-city.jpg'
+    'https://picsum.photos/seed/bg1/1920/1080',
+    'https://picsum.photos/seed/bg2/1920/1080',
+    'https://picsum.photos/seed/bg3/1920/1080',
+    'https://picsum.photos/seed/bg4/1920/1080'
 ];
 
 const particles = Array.from({ length: 50 });
@@ -20,7 +21,20 @@ export function BackgroundSlideshow() {
     }, []);
 
     if (!isClient) {
-        return null;
+        // Render a static fallback on the server to prevent hydration mismatch
+        return (
+             <div className="fixed inset-0 z-0 overflow-hidden">
+                 <div className="slideshow">
+                    <div
+                        className="slideshow-image"
+                        style={{
+                            backgroundImage: `url(${images[0]})`,
+                            opacity: 1, // Show only the first image statically
+                        }}
+                    />
+                </div>
+            </div>
+        );
     }
 
     return (
