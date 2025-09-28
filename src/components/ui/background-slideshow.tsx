@@ -1,14 +1,6 @@
-
 "use client";
 
 import React, { useEffect, useState } from 'react';
-
-const images = [
-    '/locations/default_location.jpg',
-    '/locations/fantasy-castle.jpg',
-    '/locations/enchanted-forest.jpg',
-    '/locations/mountain-pass.jpg',
-];
 
 const particles = Array.from({ length: 50 });
 
@@ -25,10 +17,7 @@ export function BackgroundSlideshow() {
 
     return (
         <div className="fixed inset-0 z-0 overflow-hidden">
-            <div className="absolute inset-0 bg-slideshow" style={{ backgroundImage: `url(${images[0]})` }} />
-            <div className="absolute inset-0 bg-slideshow" style={{ backgroundImage: `url(${images[1]})`, animationDelay: '8s' }} />
-            <div className="absolute inset-0 bg-slideshow" style={{ backgroundImage: `url(${images[2]})`, animationDelay: '16s' }} />
-            <div className="absolute inset-0 bg-slideshow" style={{ backgroundImage: `url(${images[3]})`, animationDelay: '24s' }} />
+            <div className="bg-slideshow" />
             <div className="absolute inset-0 z-10 pointer-events-none">
                 {particles.map((_, i) => (
                     <div
