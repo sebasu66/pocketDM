@@ -1,6 +1,14 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
+import { cn } from '@/lib/utils';
+
+const images = [
+    '/locations/default_location.jpg',
+    '/locations/fantasy-castle.jpg',
+    '/locations/enchanted-forest.jpg',
+    '/locations/ruined-city.jpg'
+];
 
 const particles = Array.from({ length: 50 });
 
@@ -12,12 +20,23 @@ export function BackgroundSlideshow() {
     }, []);
 
     if (!isClient) {
-        return null; // Render nothing on the server to avoid hydration mismatch
+        return null;
     }
 
     return (
         <div className="fixed inset-0 z-0 overflow-hidden">
-            <div className="bg-slideshow" />
+             <div className="slideshow">
+                {images.map((src, index) => (
+                    <div
+                        key={src}
+                        className="slideshow-image"
+                        style={{
+                            backgroundImage: `url(${src})`,
+                            animationDelay: `${index * 8}s` 
+                        }}
+                    />
+                ))}
+            </div>
             <div className="absolute inset-0 z-10 pointer-events-none">
                 {particles.map((_, i) => (
                     <div
