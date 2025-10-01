@@ -6,17 +6,19 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { MessageSquareQuote, Send } from "lucide-react";
-import type { Character } from "@/lib/firebase/types";
+import { MessageSquareQuote, Send, Zap } from "lucide-react";
+import type { Character, QuickOption } from "@/lib/firebase/types";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
+import { Separator } from "@/components/ui/separator";
 
 interface CommentFormProps {
     onSubmit: (text: string) => Promise<void>;
     character: Character | null;
+    quickOptions: QuickOption[];
     t: (key: string) => string;
 }
 
-export function CommentForm({ onSubmit, character, t }: CommentFormProps) {
+export function CommentForm({ onSubmit, character, quickOptions, t }: CommentFormProps) {
     const [text, setText] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -29,6 +31,14 @@ export function CommentForm({ onSubmit, character, t }: CommentFormProps) {
         setIsSubmitting(false);
     };
 
+    const handleQuickOptionClick = async (option: QuickOption) => {
+        if (isSubmitting) return;
+        const commentText = `${option.action} (${option.skill})`;
+        setIsSubmitting(true);
+        await onSubmit(commentText);
+        setIsSubmitting(false);
+    }
+
     return (
         <Card className="bg-stone-gradient border-0">
             <CardHeader>
@@ -37,7 +47,31 @@ export function CommentForm({ onSubmit, character, t }: CommentFormProps) {
                 </CardTitle>
                 <CardDescription className="text-center">{t('narrativeYourTurnDesc')}</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
+                {quickOptions && quickOptions.length > 0 && (
+                    <div className="space-y-2">
+                        <Label className="flex items-center gap-2"><Zap size={16} /> Opciones Rápidas</Label>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            {quickOptions.map((option, index) => (
+                                <Button 
+                                    key={index} 
+                                    variant="outline" 
+                                    className="h-auto whitespace-normal text-left justify-start"
+                                    onClick={() => handleQuickOptionClick(option)}
+                                    disabled={isSubmitting}
+                                >
+                                    <div className="flex flex-col">
+                                        <span>{option.action}</span>
+                                        <span className="text-xs text-muted-foreground">Habilidad: {option.skill} | Probabilidad: {option.successChance}</span>
+                                    </div>
+                                </Button>
+                            ))}
+                        </div>
+                         <Separator className="my-4" />
+                    </div>
+                )}
+
+
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor="comment-text" className="flex items-center gap-2">

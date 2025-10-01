@@ -97,6 +97,12 @@ export interface Character {
     } | null;
 }
 
+export interface QuickOption {
+    action: string;
+    skill: string;
+    successChance: string;
+}
+
 export interface NarrativeThread {
     id: string;
     title: string;
@@ -108,6 +114,7 @@ export interface NarrativeThread {
     campaignId: string;
     createdAt: number; // timestamp
     characterFilterList?: string[]; // Array of character IDs
+    quickOptions?: QuickOption[];
 }
 
 export interface NarrativeComment {

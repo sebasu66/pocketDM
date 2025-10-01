@@ -4,7 +4,7 @@
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { db } from '@/lib/firebase/config';
-import { collection, query, where, onSnapshot, writeBatch, doc } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, writeBatch, doc, getCountFromServer } from 'firebase/firestore';
 import type { NarrativeThread, Character, EnrichedComment, User } from '@/lib/firebase/types';
 import { addNarrativeComment, getCommentsByThreadId } from '@/lib/firebase/comments';
 import { getCharactersByCampaign } from '@/lib/firebase/characters';
@@ -83,18 +83,20 @@ export default function PlayerViewPage() {
             const threadsFromDb = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
             // Sort client-side
             threadsFromDb.sort((a, b) => b.createdAt - a.createdAt);
-
+            
             const oldThreadCount = allNarrativeThreads.length;
             
+            setAllNarrativeThreads(threadsFromDb);
+
             if (isInitialLoad.current) {
                 setActiveThreadIndex(0);
                 isInitialLoad.current = false;
             } else {
-                 if(threadsFromDb.length > oldThreadCount){
+                 if(threadsFromDb.length !== oldThreadCount){
                      setActiveThreadIndex(0);
                  }
             }
-            setAllNarrativeThreads(threadsFromDb);
+
 
             const allCharacters = await getCharactersByCampaign(campaign.id);
             setActivePlayers(allCharacters.filter(c => c.isActive));
@@ -143,42 +145,9 @@ export default function PlayerViewPage() {
             return;
         };
 
-        const commentsQuery = query(
-            collection(db, "narrativeComments"),
-            where("threadId", "==", activeThread.id)
-        );
+        getCommentsByThreadId(activeThread.id).then(setActiveThreadComments);
 
-        const unsubscribe = onSnapshot(commentsQuery, async (snapshot) => {
-            const commentsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as EnrichedComment));
-            commentsData.sort((a,b) => a.createdAt - b.createdAt);
-            
-            const characterCache: Record<string, Character> = {};
-            const userCache: Record<string, User> = {};
-
-            const enrichedComments = await Promise.all(commentsData.map(async (comment) => {
-                let author = userCache[comment.authorId];
-                if (!author) {
-                    author = (await getUserById(comment.authorId))!;
-                    if(author) userCache[comment.authorId] = author;
-                }
-
-                let character = comment.characterId ? characterCache[comment.characterId] : undefined;
-                if(comment.characterId && !character) {
-                    const charFromDb = await getCharactersByCampaign(campaign!.id, undefined, comment.characterId);
-                    if(charFromDb.length > 0) {
-                        character = charFromDb[0];
-                        characterCache[comment.characterId] = character;
-                    }
-                }
-                
-                return { ...comment, author: author!, character: character || null };
-            }));
-
-            setActiveThreadComments(enrichedComments);
-        });
-
-        return () => unsubscribe();
-    }, [activeThread, campaign]);
+    }, [activeThread]);
 
     const lastThread = useMemo(() => narrativeThreads.length > 0 ? narrativeThreads[0] : null, [narrativeThreads]);
     
@@ -437,7 +406,12 @@ export default function PlayerViewPage() {
                 <div className="mt-8">
                     {canPlayerRespond && (
                         <div className='backdrop-blur-lg rounded-lg'>
-                           <CommentForm onSubmit={handleAddComment} character={playerCharacter} t={t} />
+                           <CommentForm 
+                                onSubmit={handleAddComment} 
+                                character={playerCharacter} 
+                                quickOptions={activeThread.quickOptions || []}
+                                t={t} 
+                            />
                         </div>
                     )}
                 </div>
@@ -612,13 +586,3 @@ const GmControls = ({ isAITurn, isGenerating, onGenerate, onRedo, onRestart, las
         </div>
     </div>
 );
-
-
-
-
-
-
-
-    
-
-    
