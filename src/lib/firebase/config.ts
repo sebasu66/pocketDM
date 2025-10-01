@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp, getApp, getApps, type FirebaseApp } from "firebase/app";
-import { getFirestore, type Firestore } from "firebase/firestore";
+import { getFirestore, initializeFirestore, type Firestore } from "firebase/firestore";
 import { getAuth, type Auth } from "firebase/auth";
 
 // Your web app's Firebase configuration
@@ -16,7 +16,12 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app: FirebaseApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
-const db: Firestore = getFirestore(app);
+
+// Initialize Firestore with long polling to prevent timeout issues
+const db: Firestore = initializeFirestore(app, {
+  experimentalForceLongPolling: true,
+});
+
 const auth: Auth = getAuth(app);
 
 export { app, db, auth };
