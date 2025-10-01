@@ -4,7 +4,7 @@
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { db } from '@/lib/firebase/config';
-import { collection, query, where, orderBy, onSnapshot, writeBatch, doc } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, writeBatch, doc } from 'firebase/firestore';
 import type { NarrativeThread, Character, EnrichedComment, User } from '@/lib/firebase/types';
 import { addNarrativeComment, getCommentsByThreadId } from '@/lib/firebase/comments';
 import { getCharactersByCampaign } from '@/lib/firebase/characters';
@@ -76,12 +76,14 @@ export default function PlayerViewPage() {
 
         const narrativeQuery = query(
             collection(db, "narrativeThreads"),
-            where("campaignId", "==", campaign.id),
-            orderBy("createdAt", "desc")
+            where("campaignId", "==", campaign.id)
         );
 
         const unsubscribe = onSnapshot(narrativeQuery, async (snapshot) => {
             const threadsFromDb = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
+            // Sort client-side
+            threadsFromDb.sort((a, b) => b.createdAt - a.createdAt);
+
             const oldThreadCount = allNarrativeThreads.length;
             
             if (isInitialLoad.current) {
@@ -119,7 +121,7 @@ export default function PlayerViewPage() {
         });
 
         return () => unsubscribe();
-    }, [campaign, user, isMaster, router, isAuthLoading, toast]);
+    }, [campaign, user, isMaster, router, isAuthLoading, toast, allNarrativeThreads.length]);
 
     const activeThread = useMemo(() => {
         return narrativeThreads.length > 0 ? narrativeThreads[activeThreadIndex] : null;
@@ -143,12 +145,12 @@ export default function PlayerViewPage() {
 
         const commentsQuery = query(
             collection(db, "narrativeComments"),
-            where("threadId", "==", activeThread.id),
-            orderBy("createdAt", "asc")
+            where("threadId", "==", activeThread.id)
         );
 
         const unsubscribe = onSnapshot(commentsQuery, async (snapshot) => {
             const commentsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as EnrichedComment));
+            commentsData.sort((a,b) => a.createdAt - b.createdAt);
             
             const characterCache: Record<string, Character> = {};
             const userCache: Record<string, User> = {};
@@ -616,5 +618,7 @@ const GmControls = ({ isAITurn, isGenerating, onGenerate, onRedo, onRestart, las
 
 
 
+
+    
 
     

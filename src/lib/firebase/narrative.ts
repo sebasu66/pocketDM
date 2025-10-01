@@ -1,6 +1,6 @@
 
 
-import { doc, getDoc, collection, addDoc, query, where, getDocs, orderBy, writeBatch, deleteDoc, setDoc,getCountFromServer } from "firebase/firestore";
+import { doc, getDoc, collection, addDoc, query, where, getDocs, writeBatch, deleteDoc, setDoc,getCountFromServer } from "firebase/firestore";
 import { db } from "./config";
 import { NarrativeThread, Campaign } from "./types";
 import { initialThreadEn } from "./data/initial-thread-en";
@@ -17,11 +17,13 @@ const DEV_LOG_COLLECTION = "devLog";
 export const getNarrativeThreadsByCampaign = async (campaignId: string): Promise<NarrativeThread[]> => {
     const q = query(
         collection(db, NARRATIVE_THREADS_COLLECTION),
-        where("campaignId", "==", campaignId),
-        orderBy("createdAt", "asc")
+        where("campaignId", "==", campaignId)
     );
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
+    const threads = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
+    // Sort client-side
+    threads.sort((a, b) => a.createdAt - b.createdAt);
+    return threads;
 };
 
 
@@ -203,3 +205,5 @@ export const runCampaignSeedingTest = async () => {
 };
 
 
+
+    

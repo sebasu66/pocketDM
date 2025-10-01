@@ -27,6 +27,8 @@ export async function getWorldState(campaignId: string) {
 
         // 2. Fetch all narrative threads for the campaign
         const allThreads = await getNarrativeThreadsByCampaign(campaignId);
+        // Sort threads client-side
+        allThreads.sort((a, b) => a.createdAt - b.createdAt);
         console.log(`[DB Service] Found ${allThreads.length} narrative threads.`);
 
         // 3. For each thread, fetch its comments and enrich them
@@ -67,3 +69,5 @@ export async function getWorldState(campaignId: string) {
         throw new Error(`Failed to get world state from database: ${error.message}`);
     }
 }
+
+    

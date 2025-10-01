@@ -1,6 +1,6 @@
 
 
-import { query, collection, where, getDocs, orderBy, addDoc } from "firebase/firestore";
+import { query, collection, where, getDocs, addDoc } from "firebase/firestore";
 import { db } from "./config";
 import { NarrativeComment, User } from "./types";
 import { getUserById } from "./auth";
@@ -12,11 +12,13 @@ const COMMENTS_COLLECTION = "narrativeComments";
 export const getCommentsByThreadId = async (threadId: string): Promise<NarrativeCommentWithAuthor[]> => {
     const q = query(
         collection(db, COMMENTS_COLLECTION), 
-        where("threadId", "==", threadId),
-        orderBy("createdAt", "asc")
+        where("threadId", "==", threadId)
     );
     const querySnapshot = await getDocs(q);
     const comments = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeComment));
+
+    // Sort client-side
+    comments.sort((a, b) => a.createdAt - b.createdAt);
 
     const commentsWithAuthors = await Promise.all(
         comments.map(async (comment) => {
@@ -34,3 +36,5 @@ export const addNarrativeComment = async (commentData: Omit<NarrativeComment, 'i
     const docRef = await addDoc(collection(db, COMMENTS_COLLECTION), commentData);
     return docRef.id;
 }
+
+    
