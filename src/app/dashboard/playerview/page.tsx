@@ -82,12 +82,13 @@ export default function PlayerViewPage() {
 
         const unsubscribe = onSnapshot(narrativeQuery, async (snapshot) => {
             const threadsFromDb = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
+            const oldThreadCount = allNarrativeThreads.length;
             
             if (isInitialLoad.current) {
                 setActiveThreadIndex(0);
                 isInitialLoad.current = false;
             } else {
-                 if(threadsFromDb.length !== allNarrativeThreads.length){
+                 if(threadsFromDb.length > oldThreadCount){
                      setActiveThreadIndex(0);
                  }
             }
@@ -118,7 +119,7 @@ export default function PlayerViewPage() {
         });
 
         return () => unsubscribe();
-    }, [campaign, user, isMaster, router, isAuthLoading, toast, allNarrativeThreads.length]);
+    }, [campaign, user, isMaster, router, isAuthLoading, toast]);
 
     const activeThread = useMemo(() => {
         return narrativeThreads.length > 0 ? narrativeThreads[activeThreadIndex] : null;
@@ -614,3 +615,6 @@ const GmControls = ({ isAITurn, isGenerating, onGenerate, onRedo, onRestart, las
 
 
 
+
+
+    
