@@ -31,21 +31,32 @@ export const getNarrativeThreadById = async (id: string): Promise<NarrativeThrea
     const docRef = doc(db, NARRATIVE_THREADS_COLLECTION, id);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-        return { id: docSnap.id, ...docSnap.data() } as NarrativeThread;
+        const data = docSnap.data();
+        // Handle mapping of "narrative" to "content"
+        if (data.narrative && !data.content) {
+            data.content = data.narrative;
+            delete data.narrative;
+        }
+        return { id: docSnap.id, ...data } as NarrativeThread;
     }
     return null;
 }
 
-export const addNarrativeThread = async (threadData: Omit<NarrativeThread, 'id'>): Promise<string> => {
-    // Get the current number of threads for the campaign to create a sequential ID
+export const addNarrativeThread = async (threadData: Partial<Omit<NarrativeThread, 'id'>>): Promise<string> => {
     const threadsQuery = query(collection(db, NARRATIVE_THREADS_COLLECTION), where("campaignId", "==", threadData.campaignId));
     const snapshot = await getCountFromServer(threadsQuery);
     const newThreadNumber = snapshot.data().count + 1;
     const newThreadId = `${threadData.campaignId}-${newThreadNumber}`;
 
-    // Use setDoc with the custom ID
     const threadRef = doc(db, NARRATIVE_THREADS_COLLECTION, newThreadId);
-    await setDoc(threadRef, threadData);
+    
+    // Ensure createdAt is set
+    const finalThreadData = {
+        ...threadData,
+        createdAt: threadData.createdAt || Date.now()
+    };
+    
+    await setDoc(threadRef, finalThreadData);
     
     return newThreadId;
 };
@@ -204,6 +215,3 @@ export const runCampaignSeedingTest = async () => {
     }
 };
 
-
-
-    

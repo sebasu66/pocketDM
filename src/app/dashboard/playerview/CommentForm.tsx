@@ -83,13 +83,12 @@ export function CommentForm({ onSubmit, character, quickOptions, t }: CommentFor
                             value={text}
                             onChange={(e) => setText(e.target.value)}
                             placeholder={t('narrativePublicResponsePlaceholder')}
-                            required
                             rows={5}
                             className="bg-background/50"
                         />
                     </div>
                     <div className="flex justify-end">
-                        <RusticIconButton tooltip={isSubmitting ? t('narrativePosting') : t('narrativePostResponse')} disabled={isSubmitting} type="submit" className="text-foreground">
+                        <RusticIconButton tooltip={isSubmitting ? t('narrativePosting') : t('narrativePostResponse')} disabled={isSubmitting || !text} type="submit" className="text-foreground">
                             <Send />
                         </RusticIconButton>
                     </div>
