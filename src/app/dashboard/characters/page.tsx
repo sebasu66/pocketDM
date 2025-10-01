@@ -112,7 +112,7 @@ export default function CharactersPage() {
             campaignId: campaign.id,
             userId: user.id,
             archetypeId: selectedArchetype.id,
-            location_cell_id: "G5", // Default starting location
+            location_cell_id: "A1", // Default starting location
             visualPreset: selectedArchetype.visualPreset,
         };
 

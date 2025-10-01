@@ -26,7 +26,7 @@ export const addCharacter = async (characterData: Partial<Character>): Promise<s
         motto: "",
         conditionalRules: [{if: '', then: ''}, {if: '', then: ''}, {if: '', then: ''}],
         isActive: true,
-        location_cell_id: "G5", // Default starting location
+        location_cell_id: "A1", // Default starting location
     };
 
     // If an archetype is selected, merge its properties
@@ -91,6 +91,7 @@ export const deleteCharacter = async (id: string): Promise<void> => {
     
 
     
+
 
 
 

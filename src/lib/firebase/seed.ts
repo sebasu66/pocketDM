@@ -185,7 +185,7 @@ export const runSeed = async () => {
             campaignId: alice.campaignId,
             userId: alice.id,
             isActive: true,
-            location_cell_id: "G5"
+            location_cell_id: "A1"
         }, archetypes.avenger);
         
         const bob = initialUsers.find(u => u.id === '3')!;
@@ -197,7 +197,7 @@ export const runSeed = async () => {
             campaignId: bob.campaignId,
             userId: bob.id,
             isActive: false, // Inactive character
-            location_cell_id: "G5"
+            location_cell_id: "A1"
         }, archetypes.bladedancer);
 
         const carlos = initialUsers.find(u => u.id === '4')!;
@@ -209,7 +209,7 @@ export const runSeed = async () => {
             campaignId: carlos.campaignId,
             userId: carlos.id,
             isActive: true,
-            location_cell_id: "G5"
+            location_cell_id: "A1"
         }, archetypes.paladin);
         
         const diana = initialUsers.find(u => u.id === '5')!;
@@ -221,7 +221,7 @@ export const runSeed = async () => {
             campaignId: diana.campaignId,
             userId: diana.id,
             isActive: true,
-            location_cell_id: "G5"
+            location_cell_id: "A1"
         }, archetypes.hrimwisard);
 
         // Mark seeding as complete
@@ -239,5 +239,6 @@ export const runSeed = async () => {
         console.error("Error seeding database:", error);
     }
 };
+
 
 
