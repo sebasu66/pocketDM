@@ -197,12 +197,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     "/dashboard/lore": t('pageTitleLore'),
     "/dashboard/dev-test": "Dev Test Page",
   };
-
-  // --- DEMO ONLY: SEED DATABASE ---
-  React.useEffect(() => {
-    runSeed();
-  }, []);
-  // --- END DEMO ONLY ---
   
   if (isLoading || !user || !campaign) {
     return (

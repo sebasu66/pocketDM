@@ -8,12 +8,21 @@ import { ThemeProvider } from '@/context/theme-context';
 import { I18nProvider } from '@/context/i18n-context';
 import { ServiceWorkerRegistrar } from '@/components/service-worker-registrar';
 import './globals.css';
+import React from 'react';
+import { runSeed } from '@/lib/firebase/seed';
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  // --- DEMO ONLY: SEED DATABASE ---
+  React.useEffect(() => {
+    runSeed();
+  }, []);
+  // --- END DEMO ONLY ---
+  
   return (
     <html lang="en" className="dark">
       <head>
