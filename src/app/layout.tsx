@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
-        {/* <link rel="manifest" href="/manifest.json" /> */}
+        <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#0B1113" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -29,7 +29,7 @@ export default function RootLayout({
             <AuthProvider>
               {children}
               <Toaster />
-              {/* <ServiceWorkerRegistrar /> */}
+              <ServiceWorkerRegistrar />
             </AuthProvider>
           </I18nProvider>
         </ThemeProvider>
