@@ -1,3 +1,4 @@
+
 import { collection, query, where, getDocs, doc, getDoc, updateDoc, setDoc, addDoc, writeBatch, deleteDoc } from "firebase/firestore";
 import { GoogleAuthProvider, signInWithPopup, User as FirebaseAuthUser } from "firebase/auth";
 import { User, Character, NarrativeComment } from './firebase/types';
@@ -10,8 +11,6 @@ export type { User };
 
 const USERS_COLLECTION = "users";
 const CHARACTERS_COLLECTION = "characters";
-const NARRATIVE_THREADS_COLLECTION = "narrativeThreads";
-const COMMENTS_COLLECTION = "narrativeComments";
 const CAMPAIGNS_COLLECTION = "campaigns";
 
 
@@ -119,43 +118,75 @@ export const findOrCreateUser = async (firebaseUser: FirebaseAuthUser, extraData
 export const deleteUserAndAssociatedData = async (user: User): Promise<void> => {
     const batch = writeBatch(db);
 
-    if (user.role.isGm) {
-        const campaignsQuery = query(collection(db, CAMPAIGNS_COLLECTION), where("ownerId", "==", user.id));
-        const campaignsSnapshot = await getDocs(campaignsQuery);
+    if (user.role.isGm && user.campaignId) {
+        console.log(`User is GM. Preparing to delete campaign ${user.campaignId}`);
+        const campaignId = user.campaignId;
 
-        for (const campaignDoc of campaignsSnapshot.docs) {
-            const campaignId = campaignDoc.id;
-
-            const charactersQuery = query(collection(db, CHARACTERS_COLLECTION), where("campaignId", "==", campaignId));
-            const charactersSnapshot = await getDocs(charactersQuery);
-            const characterIds = charactersSnapshot.docs.map(d => d.id);
+        // Delete all characters associated with the campaign
+        const charactersQuery = query(collection(db, CHARACTERS_COLLECTION), where("campaignId", "==", campaignId));
+        const charactersSnapshot = await getDocs(charactersQuery);
+        if (!charactersSnapshot.empty) {
+            console.log(`Found ${charactersSnapshot.size} characters to delete.`);
             charactersSnapshot.forEach(doc => batch.delete(doc.ref));
+        }
 
-            if (characterIds.length > 0) {
-                const commentsQuery = query(collection(db, COMMENTS_COLLECTION), where("characterId", "in", characterIds));
-                const commentsSnapshot = await getDocs(commentsQuery);
-                commentsSnapshot.forEach(doc => batch.delete(doc.ref));
-            }
-
-            const threadsQuery = query(collection(db, NARRATIVE_THREADS_COLLECTION), where("campaignId", "==", campaignId));
-            const threadsSnapshot = await getDocs(threadsQuery);
+        // Delete all threads in the subcollection
+        const threadsRef = collection(db, `campaigns/${campaignId}/threads`);
+        const threadsSnapshot = await getDocs(threadsRef);
+        if (!threadsSnapshot.empty) {
+            console.log(`Found ${threadsSnapshot.size} threads to delete.`);
             threadsSnapshot.forEach(doc => batch.delete(doc.ref));
-            
-            const mapCellsQuery = query(collection(db, `campaigns/${campaignId}/mapCells`));
-            const mapCellsSnapshot = await getDocs(mapCellsQuery);
-            mapCellsSnapshot.forEach(cellDoc => batch.delete(cellDoc.ref));
+        }
+        
+        // Delete all map data in subcollections
+        const gridMapQuery = query(collection(db, `campaigns/${campaignId}/gridMap`));
+        const gridMapSnapshot = await getDocs(gridMapQuery);
+        for (const cellDoc of gridMapSnapshot.docs) {
+             const localesQuery = query(collection(db, `campaigns/${campaignId}/gridMap/${cellDoc.id}/locales`));
+             const localesSnapshot = await getDocs(localesQuery);
+             localesSnapshot.forEach(lDoc => batch.delete(lDoc.ref));
+             
+             const npcsQuery = query(collection(db, `campaigns/${campaignId}/gridMap/${cellDoc.id}/npcs`));
+             const npcsSnapshot = await getDocs(npcsQuery);
+             npcsSnapshot.forEach(nDoc => batch.delete(nDoc.ref));
 
-            batch.delete(campaignDoc.ref);
+             const hooksQuery = query(collection(db, `campaigns/${campaignId}/gridMap/${cellDoc.id}/hooks`));
+             const hooksSnapshot = await getDocs(hooksQuery);
+             hooksSnapshot.forEach(hDoc => batch.delete(hDoc.ref));
+             
+             batch.delete(cellDoc.ref);
+        }
+        console.log(`Cleaned up map data for campaign ${campaignId}.`);
+
+        // Finally, delete the campaign document itself
+        const campaignRef = doc(db, CAMPAIGNS_COLLECTION, campaignId);
+        batch.delete(campaignRef);
+        console.log(`Campaign document ${campaignId} queued for deletion.`);
+        
+    } else if (user.role.isPlayer) {
+        // If user is just a player, delete their character(s) from the campaign
+        const charactersQuery = query(collection(db, CHARACTERS_COLLECTION), where("userId", "==", user.id), where("campaignId", "==", user.campaignId));
+        const charactersSnapshot = await getDocs(charactersQuery);
+         if (!charactersSnapshot.empty) {
+            console.log(`User is Player. Found ${charactersSnapshot.size} character(s) to delete.`);
+            charactersSnapshot.forEach(doc => batch.delete(doc.ref));
         }
     }
 
+
+    // Delete the user document
     const userRef = doc(db, USERS_COLLECTION, user.id);
     batch.delete(userRef);
+    console.log(`User document ${user.id} queued for deletion.`);
 
     await batch.commit();
+    console.log("Firestore batch commit successful.");
 
     const currentUser = auth.currentUser;
     if (currentUser && currentUser.uid === user.id) {
         await currentUser.delete();
+        console.log("Firebase Auth user deleted successfully.");
     }
 };
+
+    
