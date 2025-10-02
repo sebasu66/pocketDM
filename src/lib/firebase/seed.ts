@@ -2,7 +2,7 @@
 
 // THIS SCRIPT IS FOR DEMO PURPOSES ONLY
 // It seeds the Firestore database with initial data so the app is usable.
-import { collection, writeBatch, doc, getDoc } from "firebase/firestore";
+import { collection, writeBatch, doc, getDoc, Timestamp } from "firebase/firestore";
 import { db } from "./config";
 import { initialUsers, initialCampaigns } from "./data/seed-core";
 import { archetypes } from './data/seed-archetypes';
@@ -80,7 +80,7 @@ const createCampaign = async (batch: any, campaignData: any, locale: 'en' | 'es'
     // Add the initial narrative thread based on locale
     const initialThread = locale === 'es' ? initialThreadEs : initialThreadEn;
     const threadRef = doc(collection(db, "campaigns", campaignData.id, "threads"));
-    batch.set(threadRef, { ...initialThread, narrative: initialThread.narrative, comments: [], createdAt: new Date().toISOString() });
+    batch.set(threadRef, { ...initialThread, comments: [], createdAt: Timestamp.now() });
 };
 
 /**
@@ -238,8 +238,3 @@ export const runSeed = async () => {
         console.error("Error seeding database:", error);
     }
 };
-
-
-
-
-

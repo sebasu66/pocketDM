@@ -1,5 +1,5 @@
 
-import { doc, updateDoc, arrayUnion, getDoc } from "firebase/firestore";
+import { doc, updateDoc, arrayUnion, getDoc, Timestamp } from "firebase/firestore";
 import { db } from "./config";
 import type { NarrativeComment, NarrativeThread } from "./types";
 import { v4 as uuidv4 } from 'uuid';
@@ -22,7 +22,7 @@ export const addCommentToThread = async (
     const newComment: NarrativeComment = {
         ...commentData,
         id: uuidv4(),
-        createdAt: new Date().toISOString(),
+        createdAt: Timestamp.now(),
     };
 
     await updateDoc(threadRef, {

@@ -1,6 +1,6 @@
 
 
-import { doc, getDoc, updateDoc, setDoc, collection, writeBatch, addDoc } from "firebase/firestore"; 
+import { doc, getDoc, updateDoc, setDoc, collection, writeBatch, addDoc, Timestamp } from "firebase/firestore"; 
 import { db } from "./config";
 import { Campaign, NarrativeThread } from "./types";
 import { initialThreadEn } from "./data/initial-thread-en";
@@ -57,8 +57,7 @@ export const createNewCampaignForUser = async (user: {id: string, name: string},
     // Explicitly type the object to match NarrativeThread structure
     const initialThreadDoc: Omit<NarrativeThread, 'id'> = {
         ...initialThread,
-        narrative: initialThread.narrative, // Map content to narrative
-        createdAt: new Date().toISOString(),
+        createdAt: Timestamp.now(),
         comments: [], // Initialize with empty comments
     };
 
@@ -76,5 +75,3 @@ export const generateNewSecretCode = async (campaignId: string): Promise<string>
     await updateCampaign(campaignId, { secretCode: newCode });
     return newCode;
 };
-
-    

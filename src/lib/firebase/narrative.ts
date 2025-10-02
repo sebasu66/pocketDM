@@ -1,5 +1,5 @@
 
-import { doc, getDoc, collection, addDoc, query, where, getDocs, writeBatch, deleteDoc, setDoc, getCountFromServer, orderBy } from "firebase/firestore";
+import { doc, getDoc, collection, addDoc, query, where, getDocs, writeBatch, deleteDoc, setDoc, getCountFromServer, orderBy, Timestamp } from "firebase/firestore";
 import { db } from "./config";
 import { NarrativeThread, Campaign, NarrativeComment } from "./types";
 import { initialThreadEn } from "./data/initial-thread-en";
@@ -33,14 +33,14 @@ export const getNarrativeThreadById = async (campaignId: string, threadId: strin
     return null;
 }
 
-export const addNarrativeThread = async (campaignId: string, threadData: Partial<Omit<NarrativeThread, 'id' | 'comments'>>): Promise<string> => {
+export const addNarrativeThread = async (campaignId: string, threadData: Partial<Omit<NarrativeThread, 'id' | 'comments' | 'createdAt'>>): Promise<string> => {
     const threadsRef = collection(db, CAMPAIGNS_COLLECTION, campaignId, THREADS_SUBCOLLECTION);
     
     const finalThreadData: Omit<NarrativeThread, 'id'> = {
         title: threadData.title || "Untitled",
         narrative: threadData.narrative || "",
         authorId: threadData.authorId || "unknown",
-        createdAt: new Date().toISOString(),
+        createdAt: Timestamp.now(),
         comments: [], // Start with an empty comments array
         ...threadData
     };
@@ -78,7 +78,7 @@ export const restartCampaignNarrative = async (campaignId: string, locale: 'en' 
     const newThreadRef = doc(threadsRef); // Auto-generate ID for the new thread
     batch.set(newThreadRef, { 
         ...initialThreadData, 
-        createdAt: new Date().toISOString(),
+        createdAt: Timestamp.now(),
         comments: [] 
     });
     

@@ -1,4 +1,6 @@
 
+import { Timestamp } from "firebase/firestore";
+
 export interface User {
     id: string;
     name: string;
@@ -108,7 +110,7 @@ export interface NarrativeComment {
     authorId: string;
     characterId: string;
     text: string;
-    createdAt: string; // ISO 8601 date string
+    createdAt: Timestamp;
     hiddenText?: string;
 }
 
@@ -117,7 +119,7 @@ export interface NarrativeThread {
     title: string;
     narrative: string; // Renamed from 'content'
     authorId: string; // User ID (always GM)
-    createdAt: string; // ISO 8601 date string
+    createdAt: Timestamp;
     
     // Optional fields from the new structure
     audioUrl?: string;

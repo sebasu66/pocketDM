@@ -1,4 +1,5 @@
 
+import { Timestamp } from "firebase/firestore";
 import type { NarrativeThread } from "../types";
 
 // This object represents the data for a thread, but doesn't perfectly match the final DB schema

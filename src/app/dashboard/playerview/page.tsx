@@ -4,7 +4,7 @@
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { db } from '@/lib/firebase/config';
-import { collection, query, where, onSnapshot, doc, Unsubscribe } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, doc, Unsubscribe, orderBy, Timestamp } from 'firebase/firestore';
 import type { NarrativeThread, Character, EnrichedComment, User, NarrativeComment } from '@/lib/firebase/types';
 import { addCommentToThread } from '@/lib/firebase/comments';
 import { getCharactersByCampaign } from '@/lib/firebase/characters';
@@ -69,7 +69,10 @@ export default function PlayerViewPage() {
 
     const enrichedComments = useMemo(() => {
         if (!activeThread?.comments) return [];
-        return activeThread.comments.map(comment => {
+        // Sort comments by createdAt before enriching
+        const sortedComments = [...activeThread.comments].sort((a, b) => a.createdAt.toMillis() - b.createdAt.toMillis());
+        
+        return sortedComments.map(comment => {
             const author = null; // We'd need to fetch users if we want the full User object
             const character = allCharacters.find(c => c.id === comment.characterId);
             return {
@@ -124,6 +127,11 @@ export default function PlayerViewPage() {
                     setIsLoading(false);
                 }, (error) => {
                     console.error("Failed to fetch narrative threads:", error);
+                    toast({
+                        variant: "destructive",
+                        title: "Error de Conexión",
+                        description: "No se pudieron cargar los hilos narrativos. Verifica la consola para más detalles."
+                    });
                     setIsLoading(false);
                 });
     
@@ -463,5 +471,3 @@ const GmControls = ({ onRestart, hasThreads, t }: {
         </div>
     </div>
 );
-
-    
