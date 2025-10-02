@@ -19,6 +19,10 @@
     "playerDemoDescription": "Log in as a player to create your character, interact with the story, and uncover secrets.",
     "playerDemoButton": "Quick Login as Player",
 
+    "quickLoginTitle": "Quick Start (Demo)",
+    "gmLoginButton": "Enter as GM",
+    "playerLoginButton": "Enter as Player",
+
     "pageTitleDashboard": "Campaign Dashboard",
     "pageTitleCharacters": "Characters",
     "pageTitlePlaces": "Places",
@@ -319,3 +323,5 @@
     "registerSecretCodeRequiredDesc": "As a player, you must provide a secret code to join a campaign.",
     "registerFailed": "Registration Failed"
 }
+
+    

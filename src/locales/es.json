@@ -19,6 +19,10 @@
     "playerDemoDescription": "Inicia sesión como jugador para crear tu personaje, interactuar con la historia y descubrir secretos.",
     "playerDemoButton": "Inicio de sesión rápido como Jugador",
 
+    "quickLoginTitle": "Inicio Rápido (Demo)",
+    "gmLoginButton": "Entrar como GM",
+    "playerLoginButton": "Entrar como Jugador",
+
     "pageTitleDashboard": "Panel de Campaña",
     "pageTitleCharacters": "Personajes",
     "pageTitlePlaces": "Lugares",
@@ -319,3 +323,5 @@
     "registerSecretCodeRequiredDesc": "Como jugador, debes proporcionar un código secreto para unirte a una campaña.",
     "registerFailed": "Falló el Registro"
 }
+
+    

@@ -91,6 +91,27 @@ export function LoginCard() {
     }
   };
 
+  const handleQuickLogin = async (role: 'gm' | 'player') => {
+    const demoEmail = role === 'gm' ? 'gm@example.com' : 'alice@example.com';
+    const demoPassword = 'password';
+    
+    setIsChecking(true);
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, demoEmail, demoPassword);
+        await setupSession(userCredential.user);
+        toast({ title: "Quick Login Successful", description: "Redirecting to your dashboard..."});
+    } catch (error) {
+        console.error("Quick login error", error);
+        toast({
+            variant: "destructive",
+            title: t('loginFailedTitle'),
+            description: t('loginFailedDescription'),
+        });
+    } finally {
+        setIsChecking(false);
+    }
+  };
+
   const handleRegister = async () => {
     if (!name || !email || !password) {
         toast({ variant: "destructive", title: t('registerMissingFields'), description: t('registerMissingFieldsDesc') });
@@ -149,17 +170,33 @@ export function LoginCard() {
     switch (step) {
       case 'check-email':
         return (
-          <div className="space-y-4 pt-4">
-            <CardDescription className="text-center">¿Nos conocemos? Introduce tu email para empezar.</CardDescription>
-            <div className="grid gap-2">
-              <Label htmlFor="check-email">Email</Label>
-              <Input id="check-email" type="email" placeholder="m@example.com" required value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleEmailCheck()} />
+          <>
+            <div className="space-y-4 pt-4">
+              <CardDescription className="text-center">¿Nos conocemos? Introduce tu email para empezar.</CardDescription>
+              <div className="grid gap-2">
+                <Label htmlFor="check-email">Email</Label>
+                <Input id="check-email" type="email" placeholder="m@example.com" required value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleEmailCheck()} />
+              </div>
+              <Button onClick={handleEmailCheck} className="w-full" disabled={isChecking}>
+                {isChecking && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Continuar
+              </Button>
             </div>
-            <Button onClick={handleEmailCheck} className="w-full" disabled={isChecking}>
-              {isChecking && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Continuar
-            </Button>
-          </div>
+
+            <Separator className="my-6" />
+            
+            <div className="space-y-4">
+                <CardDescription className="text-center">{t('quickLoginTitle')}</CardDescription>
+                <div className="grid grid-cols-2 gap-4">
+                    <Button variant="secondary" onClick={() => handleQuickLogin('gm')} disabled={isChecking}>
+                        <Crown className="mr-2"/> {t('gmLoginButton')}
+                    </Button>
+                     <Button variant="secondary" onClick={() => handleQuickLogin('player')} disabled={isChecking}>
+                        <UserIcon className="mr-2"/> {t('playerLoginButton')}
+                    </Button>
+                </div>
+            </div>
+          </>
         );
       case 'login':
         return (
@@ -272,3 +309,5 @@ export function LoginCard() {
     </Card>
   );
 }
+
+    
