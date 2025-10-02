@@ -57,12 +57,10 @@ export const createNewCampaignForUser = async (user: {id: string, name: string},
     // Explicitly type the object to match NarrativeThread structure
     const initialThreadDoc: Omit<NarrativeThread, 'id'> = {
         ...initialThread,
-        narrative: initialThread.content, // Map content to narrative
+        narrative: initialThread.narrative, // Map content to narrative
         createdAt: new Date().toISOString(),
         comments: [], // Initialize with empty comments
     };
-    // remove the old content property
-    delete (initialThreadDoc as any).content;
 
     await addDoc(threadsCollectionRef, initialThreadDoc);
     log(`[Campaigns] Initial narrative thread for ${newCampaignId} created.`);
@@ -78,3 +76,5 @@ export const generateNewSecretCode = async (campaignId: string): Promise<string>
     await updateCampaign(campaignId, { secretCode: newCode });
     return newCode;
 };
+
+    
