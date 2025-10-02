@@ -23,9 +23,7 @@ import { CharacterSheet } from './CharacterSheet';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogTrigger, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
-import { generateStory } from '@/ai/flows/narrative-orchestrator';
 import { addNarrativeThread, deleteNarrativeThread, restartCampaignNarrative } from '@/lib/firebase/narrative';
-import { StoryInput, StoryOutput } from '@/ai/flows/narrative-orchestrator';
 import { InteractiveSection } from '@/components/ui/interactive-section';
 import { GmSidebarContent, PlayerSidebarContent } from '../layout';
 import { useRouter } from 'next/navigation';
@@ -49,8 +47,6 @@ export default function PlayerViewPage() {
     const isInitialLoad = useRef(true);
 
     const isMaster = activeRole === 'gm';
-    const [isGenerating, setIsGenerating] = useState(false);
-    const [lastPrompt, setLastPrompt] = useState<any | null>(null);
 
     const activePlayers = useMemo(() => allCharacters.filter(c => c.isActive), [allCharacters]);
 
@@ -170,12 +166,6 @@ export default function PlayerViewPage() {
         return activePlayers.every(p => playersWhoHaveCommentedOnLastThread.has(p.userId));
     }, [activePlayers, playersWhoHaveCommentedOnLastThread, lastThread]);
 
-    const isAITurn = useMemo(() => {
-        if (!isMaster) return false;
-        if (allNarrativeThreads.length === 0) return true;
-        return allActivePlayersResponded;
-    }, [isMaster, allNarrativeThreads.length, allActivePlayersResponded]);
-
     const canPlayerRespond = !isMaster && playerCharacter?.isActive && lastThread && !hasPlayerResponded && activeThreadIndex === 0;
 
     const handlePrev = () => {
@@ -201,54 +191,6 @@ export default function PlayerViewPage() {
         }
     };
     
-    const handleGenerateNextPost = async () => {
-      if (!campaign || !user || !isMaster) return;
-
-      setIsGenerating(true);
-      toast({ title: t('narrativeThinking'), description: t('narrativeThinkingDesc') });
-
-      try {
-        const apiKey = localStorage.getItem('gemini_api_key');
-        const systemPrompt = campaign.systemPrompt;
-
-        if (!apiKey) {
-            toast({ variant: "destructive", title: t('narrativeApiKeyNotFound'), description: t('narrativeApiKeyNotFoundDesc') });
-            setIsGenerating(false);
-            return;
-        }
-        
-        const storyInput: StoryInput = {
-            campaignId: campaign.id,
-            systemPrompt: systemPrompt || "You are a master storyteller.",
-            apiKey: apiKey,
-        };
-
-        setLastPrompt(storyInput);
-
-        const result: StoryOutput = await generateStory(storyInput);
-
-        const newThreadData: Partial<Omit<NarrativeThread, 'id'>> = {
-            title: "The Story Continues...",
-            narrative: `<p>${result.nextPost.replace(/\n/g, '</p><p>')}</p>`,
-            authorId: user.id,
-            characterFilterList: result.characterFilterList || [],
-        };
-
-        await addNarrativeThread(campaign.id, newThreadData);
-        toast({ title: t('narrativeStoryUpdated'), description: t('narrativeStoryUpdatedDesc') });
-
-      } catch (error: any) {
-        console.error("Error generating story:", error);
-        toast({ 
-            variant: "destructive", 
-            title: t('narrativeGenerationFailed'), 
-            description: `An error occurred: ${error.message || String(error)}`
-        });
-      } finally {
-        setIsGenerating(false);
-      }
-    }
-    
     const togglePlayPause = () => {
         if (audioRef.current) {
             if (isPlaying) {
@@ -264,34 +206,14 @@ export default function PlayerViewPage() {
         setIsPlaying(false);
     };
 
-   const handleRedo = async () => {
-    if (!lastThread || !campaign) return;
-    setIsGenerating(true);
-    try {
-        await deleteNarrativeThread(campaign.id, lastThread.id);
-        // The onSnapshot listener will handle the UI update.
-        // We add a small delay to ensure the generation starts after the state has settled.
-        setTimeout(() => {
-            handleGenerateNextPost();
-        }, 500);
-    } catch (error) {
-        console.error("Error redoing generation:", error);
-        toast({ variant: "destructive", title: "Error", description: t('narrativeErrorRedo')});
-        setIsGenerating(false);
-    }
-  }
-
   const handleRestart = async () => {
     if (!campaign) return;
-    setIsGenerating(true);
     toast({ title: t('narrativeRestarting'), description: t('narrativeRestartingDesc')});
     try {
         await restartCampaignNarrative(campaign.id, locale);
     } catch (error) {
         console.error("Error restarting campaign:", error);
         toast({ variant: "destructive", title: "Error", description: t('narrativeErrorRestart')});
-    } finally {
-        setIsGenerating(false);
     }
   }
 
@@ -321,14 +243,7 @@ export default function PlayerViewPage() {
                  {isMaster && (
                     <div className="mt-8">
                         <GmControls
-                            isAITurn={isAITurn}
-                            isGenerating={isGenerating}
-                            onGenerate={handleGenerateNextPost}
-                            onRedo={handleRedo}
                             onRestart={handleRestart}
-                            lastPrompt={lastPrompt}
-                            activePlayers={activePlayers}
-                            commentingPlayers={playersWhoHaveCommentedOnLastThread}
                             hasThreads={narrativeThreads.length > 0}
                             t={t}
                         />
@@ -498,76 +413,36 @@ export default function PlayerViewPage() {
 }
 
 
-const GmControls = ({ isAITurn, isGenerating, onGenerate, onRedo, onRestart, lastPrompt, activePlayers, commentingPlayers, hasThreads, t }: { 
-    isAITurn: boolean;
-    isGenerating: boolean;
-    onGenerate: () => void;
-    onRedo: () => void;
+const GmControls = ({ onRestart, hasThreads, t }: { 
     onRestart: () => void;
-    lastPrompt: any;
-    activePlayers: Character[];
-    commentingPlayers: Set<string>;
     hasThreads: boolean;
     t: (key: string) => string
 }) => (
     <div className="p-4 rounded-lg bg-card/50 backdrop-blur-sm sticky bottom-4 space-y-4">
-        <div className="flex gap-2">
-            <Button onClick={onGenerate} disabled={!isAITurn || isGenerating} className="flex-1">
-                <Bot className="mr-2"/>
-                {isGenerating ? t('narrativeGenerating') : t('narrativeGenerateNext')}
-            </Button>
-            <Dialog>
-                <DialogTrigger asChild>
-                    <RusticIconButton tooltip={t('narrativeAddManually')} className="text-white/90 hover:text-white">
-                        <Plus size={24} />
-                    </RusticIconButton>
-                </DialogTrigger>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>{t('narrativeNotImplemented')}</DialogTitle>
-                        <DialogDescription>
-                            {t('narrativeNotImplementedDesc')}
-                        </DialogDescription>
-                    </DialogHeader>
-                </DialogContent>
-            </Dialog>
-        </div>
         <div className="flex justify-between items-center">
-            {!isAITurn && hasThreads && (
-                <p className="text-sm text-white/60 self-center">
-                    {t('narrativeWaitingFor', { players: activePlayers.filter(p => !commentingPlayers.has(p.userId)).map(p => p.name).join(', ') })}
-                </p>
-            )}
+             <p className="text-sm text-white/60 self-center">
+                Waiting for player actions or new remote narrative posts.
+            </p>
             <div className="flex gap-2 ml-auto">
                 <Dialog>
                     <DialogTrigger asChild>
-                        <Button variant="outline" size="sm" disabled={!lastPrompt}>
-                            <FileText className="mr-2"/> {t('narrativeViewPrompt')}
+                         <Button variant="outline" size="sm">
+                            <Plus className="mr-2"/> Add Manual Post
                         </Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-3xl">
+                    <DialogContent>
                         <DialogHeader>
-                            <DialogTitle className="font-headline">{t('narrativeLastPrompt')}</DialogTitle>
-                            <DialogDescription>{t('narrativeLastPromptDesc')}</DialogDescription>
+                            <DialogTitle>{t('narrativeNotImplemented')}</DialogTitle>
+                            <DialogDescription>
+                                {t('narrativeNotImplementedDesc')}
+                            </DialogDescription>
                         </DialogHeader>
-                        <div className="space-y-4 max-h-[60vh] overflow-y-auto p-4 bg-muted/50 rounded-md">
-                            <div>
-                                <h4 className="font-bold text-lg">{t('narrativeSystemPrompt')}</h4>
-                                <pre className="text-xs whitespace-pre-wrap font-mono bg-background/50 p-2 rounded">{lastPrompt?.systemPrompt}</pre>
-                            </div>
-                            <div>
-                                <h4 className="font-bold text-lg">{t('narrativeCampaignId')}</h4>
-                                <pre className="text-xs whitespace-pre-wrap font-mono bg-background/50 p-2 rounded">{lastPrompt?.campaignId}</pre>
-                            </div>
-                        </div>
                     </DialogContent>
                 </Dialog>
-                <Button variant="outline" size="sm" onClick={onRedo} disabled={isGenerating || !hasThreads}>
-                    <RotateCcw className="mr-2"/> {t('narrativeRedo')}
-                </Button>
+                
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
-                        <Button variant="destructive" size="sm" disabled={isGenerating || !hasThreads}>
+                        <Button variant="destructive" size="sm" disabled={!hasThreads}>
                             <Trash2 className="mr-2"/> {t('narrativeRestart')}
                         </Button>
                     </AlertDialogTrigger>
@@ -588,3 +463,5 @@ const GmControls = ({ isAITurn, isGenerating, onGenerate, onRedo, onRestart, las
         </div>
     </div>
 );
+
+    
