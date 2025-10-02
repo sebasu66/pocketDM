@@ -103,138 +103,34 @@ export interface QuickOption {
     successChance: string;
 }
 
+export interface NarrativeComment {
+    id: string;
+    authorId: string;
+    characterId: string;
+    text: string;
+    createdAt: string; // ISO 8601 date string
+    hiddenText?: string;
+}
+
 export interface NarrativeThread {
     id: string;
     title: string;
-    content: string; // Can contain HTML
+    narrative: string; // Renamed from 'content'
+    authorId: string; // User ID (always GM)
+    createdAt: string; // ISO 8601 date string
+    
+    // Optional fields from the new structure
+    audioUrl?: string;
     imageUrl?: string;
     imageAiHint?: string;
-    audioUrl?: string;
-    authorId: string; // User ID (always GM)
-    campaignId: string;
-    createdAt: number; // timestamp
-    characterFilterList?: string[]; // Array of character IDs
     quickOptions?: QuickOption[];
+    characterFilterList?: string[];
+    is_independent?: boolean;
+
+    // Nested comments
+    comments: NarrativeComment[];
 }
 
-export interface NarrativeComment {
-    id:string;
-    threadId: string;
-    authorId: string; // User ID
-    characterId?: string; // Character ID if posted in-character
-    text: string;
-    hiddenText?: string; // For GM-only notes
-    createdAt: number; // timestamp
-}
-
-// --- HellFrost Game System Interfaces ---
-
-export interface Race {
-    id: string;
-    name: string;
-    description: string;
-    caracteristicas_raciales: string[];
-    nombres_ejemplo: {
-        [key: string]: any;
-    };
-}
-
-export interface CharacterCategory {
-    id: string;
-    name: string;
-    description: string;
-}
-
-export interface Skill {
-    id: string;
-    name: string;
-    description: string;
-    base: string; 
-}
-
-export interface Hindrance {
-    id: string;
-    name: string;
-    description: string;
-    level: 'Mayor' | 'Menor' | 'Menor/Mayor';
-}
-
-export interface Attribute {
-    id: string;
-    name: string;
-    description: string;
-}
-
-export interface Edge {
-    id: string;
-    name: string;
-    description: string;
-    category: string;
-    requirements: string;
-}
-
-export interface HellfrostItem {
-    id: string;
-    nombre: string;
-    descripcion?: string;
-    costo_gs?: number | string;
-    costo_multiplicador?: string;
-    peso_lbs?: number | string;
-    disponibilidad: string;
-    notas?: string[] | string;
-    fuente: string | string[];
-    [key: string]: any; // For other properties like damage, range, etc.
-}
-
-export interface Conjuro {
-    id: string;
-    nombre: string;
-    rango: string;
-    alcance: string;
-    duracion: string;
-    trappings: string[];
-    efecto: string;
-}
-
-export interface Archetype {
-  id: string;
-  name: string;
-  visualPreset: string;
-  description: string;
-  race: string;
-  attributes: {
-    agility: string;
-    smarts: string;
-    spirit: string;
-    strength: string;
-    vigor: string;
-  };
-  skills: { [key: string]: string };
-  edges: string[];
-  hindrances: string[];
-  inventory: {
-    item: string;
-    quantity: number;
-    notes: string;
-  }[];
-  generalBackground: string;
-  glory: number;
-  derived: {
-    pace: number;
-    parry: number;
-    toughness: number;
-    charisma: number;
-  };
-  arcane?: {
-    type: string;
-    skill: string;
-    powers: string[];
-  } | null;
-  religion?: {
-    god: string;
-    powers: string[];
-  } | null;
-}
 
 export interface Concepto {
     id: string;

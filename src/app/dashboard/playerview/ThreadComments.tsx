@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { EnrichedComment } from '@/lib/firebase/types';
@@ -43,5 +44,3 @@ export function ThreadComments({ comments, t }: ThreadCommentsProps) {
         </div>
     );
 }
-
-    

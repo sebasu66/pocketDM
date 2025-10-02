@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -21,8 +22,8 @@ export function CommentForm({ onSubmit, character, quickOptions, t }: CommentFor
     const [text, setText] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleSubmit = async (e?: React.FormEvent) => {
+        e?.preventDefault();
         if (!text || isSubmitting) return;
         setIsSubmitting(true);
         await onSubmit(text);
@@ -102,5 +103,3 @@ export function CommentForm({ onSubmit, character, quickOptions, t }: CommentFor
         </Card>
     );
 }
-
-    

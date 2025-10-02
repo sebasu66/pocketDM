@@ -1,6 +1,9 @@
+
 import type { NarrativeThread } from "../types";
 
-export const initialThreadEn: Omit<NarrativeThread, 'id' | 'campaignId' | 'createdAt'> = {
+// This object represents the data for a thread, but doesn't perfectly match the final DB schema
+// The 'content' property will be mapped to 'narrative' during seeding.
+export const initialThreadEn: Omit<NarrativeThread, 'id' | 'createdAt' | 'comments' | 'narrative'> & { content: string } = {
     title: "The Last Chance",
     authorId: "1", // GM User ID
     content: `
@@ -25,5 +28,5 @@ export const initialThreadEn: Omit<NarrativeThread, 'id' | 'campaignId' | 'creat
   `,
     imageUrl: "https://picsum.photos/seed/last-chance-tavern/800/400",
     imageAiHint: "fantasy tavern interior",
-    characterFilterList: ""
+    characterFilterList: []
 };

@@ -1,11 +1,12 @@
+
 "use client";
 
-import { useEffect, useState, useMemo, useRef } from 'react';
+import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { db } from '@/lib/firebase/config';
-import { collection, query, where, onSnapshot, writeBatch, doc, getCountFromServer } from 'firebase/firestore';
-import type { NarrativeThread, Character, EnrichedComment, User } from '@/lib/firebase/types';
-import { addNarrativeComment, getCommentsByThreadId } from '@/lib/firebase/comments';
+import { collection, query, where, onSnapshot, doc, Unsubscribe } from 'firebase/firestore';
+import type { NarrativeThread, Character, EnrichedComment, User, NarrativeComment } from '@/lib/firebase/types';
+import { addCommentToThread } from '@/lib/firebase/comments';
 import { getCharactersByCampaign } from '@/lib/firebase/characters';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ArrowLeft, ArrowRight, Menu, User as UserIcon, X, Bot, Plus, FileText, RotateCcw, Trash2, Play, Pause } from 'lucide-react';
@@ -41,8 +42,7 @@ export default function PlayerViewPage() {
     const [isMenuSheetOpen, setIsMenuSheetOpen] = React.useState(false);
     const [isCharacterSheetOpen, setIsCharacterSheetOpen] = React.useState(false);
     const [playerCharacter, setPlayerCharacter] = useState<Character | null>(null);
-    const [activePlayers, setActivePlayers] = useState<Character[]>([]);
-    const [activeThreadComments, setActiveThreadComments] = useState<EnrichedComment[]>([]);
+    const [allCharacters, setAllCharacters] = useState<Character[]>([]);
     
     const audioRef = useRef<HTMLAudioElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -51,6 +51,8 @@ export default function PlayerViewPage() {
     const isMaster = activeRole === 'gm';
     const [isGenerating, setIsGenerating] = useState(false);
     const [lastPrompt, setLastPrompt] = useState<any | null>(null);
+
+    const activePlayers = useMemo(() => allCharacters.filter(c => c.isActive), [allCharacters]);
 
     // Filter threads based on characterFilterList
     const narrativeThreads = useMemo(() => {
@@ -65,95 +67,85 @@ export default function PlayerViewPage() {
         });
     }, [allNarrativeThreads, playerCharacter, isMaster]);
 
+    const activeThread = useMemo(() => {
+        return narrativeThreads.length > 0 ? narrativeThreads[activeThreadIndex] : null;
+    }, [narrativeThreads, activeThreadIndex]);
 
-    // Effect to fetch threads and characters
+    const enrichedComments = useMemo(() => {
+        if (!activeThread?.comments) return [];
+        return activeThread.comments.map(comment => {
+            const author = null; // We'd need to fetch users if we want the full User object
+            const character = allCharacters.find(c => c.id === comment.characterId);
+            return {
+                ...comment,
+                author: { id: comment.authorId, name: character?.name || 'Unknown', email: '', role: { isGm: false, isPlayer: true }, avatar: '', campaignId: '', enabled: true },
+                character
+            };
+        });
+    }, [activeThread, allCharacters]);
+
+    // Effect to fetch characters and set up thread listener
     useEffect(() => {
-        if (!campaign) return;
-        setIsLoading(true);
-
-        const narrativeQuery = query(
-            collection(db, "narrativeThreads"),
-            where("campaignId", "==", campaign.id)
-        );
-
-        const unsubscribe = onSnapshot(narrativeQuery, async (snapshot) => {
-            const oldThreadCount = allNarrativeThreads.length;
-            const threadsFromDb = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
-            threadsFromDb.sort((a, b) => b.createdAt - a.createdAt);
-            
-            setAllNarrativeThreads(threadsFromDb);
-
-            if (isInitialLoad.current) {
-                setActiveThreadIndex(0);
-                isInitialLoad.current = false;
-            } else if (threadsFromDb.length > oldThreadCount) {
-                // If a new thread is added, jump to it
-                setActiveThreadIndex(0);
-            }
-
-            const allCharacters = await getCharactersByCampaign(campaign.id);
-            setActivePlayers(allCharacters.filter(c => c.isActive));
-
-            if (user) {
-                const userCharacter = allCharacters.find(c => c.userId === user.id);
-                setPlayerCharacter(userCharacter || null);
-
-                if (!isMaster && !userCharacter && !isAuthLoading && user.role.isPlayer) {
+        if (!campaign || !user) return;
+        let unsubscribe: Unsubscribe | undefined;
+    
+        const setup = async () => {
+            setIsLoading(true);
+            try {
+                const characters = await getCharactersByCampaign(campaign.id);
+                setAllCharacters(characters);
+    
+                const userChar = characters.find(c => c.userId === user.id);
+                setPlayerCharacter(userChar || null);
+    
+                if (!isMaster && !userChar && !isAuthLoading && user.role.isPlayer) {
                     toast({
                         title: "Character Needed",
                         description: "You must create a character before viewing the narrative.",
                         variant: "destructive"
                     });
                     router.push('/dashboard/characters');
+                    return;
                 }
-            }
-            
-            setIsLoading(false);
-        }, (error) => {
-            console.error("Failed to fetch narrative threads:", error);
-            setIsLoading(false);
-        });
-
-        return () => unsubscribe();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [campaign, user, isMaster, router, isAuthLoading, toast]);
-
-    const activeThread = useMemo(() => {
-        return narrativeThreads.length > 0 ? narrativeThreads[activeThreadIndex] : null;
-    }, [narrativeThreads, activeThreadIndex]);
     
-    // Effect to fetch comments for the active thread in real-time
-    useEffect(() => {
-        if (!activeThread) {
-            setActiveThreadComments([]);
-            return;
+                const threadsQuery = query(
+                    collection(db, "campaigns", campaign.id, "threads"),
+                    orderBy("createdAt", "desc")
+                );
+    
+                unsubscribe = onSnapshot(threadsQuery, (snapshot) => {
+                    const oldThreadCount = allNarrativeThreads.length;
+                    const threadsFromDb = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
+                    
+                    setAllNarrativeThreads(threadsFromDb);
+    
+                    if (isInitialLoad.current) {
+                        setActiveThreadIndex(0);
+                        isInitialLoad.current = false;
+                    } else if (threadsFromDb.length > oldThreadCount) {
+                        setActiveThreadIndex(0);
+                    }
+                    setIsLoading(false);
+                }, (error) => {
+                    console.error("Failed to fetch narrative threads:", error);
+                    setIsLoading(false);
+                });
+    
+            } catch (error) {
+                console.error("Error setting up playerview:", error);
+                setIsLoading(false);
+            }
         };
-
-        const commentsQuery = query(
-            collection(db, "narrativeComments"),
-            where("threadId", "==", activeThread.id)
-        );
-
-        const unsubscribeComments = onSnapshot(commentsQuery, async (snapshot) => {
-            const commentsFromDb = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeComment));
-            commentsFromDb.sort((a, b) => a.createdAt - b.createdAt);
-
-            const enriched = await Promise.all(
-                commentsFromDb.map(async (comment) => {
-                    const author = await getUserById(comment.authorId);
-                    const character = playerCharacter?.id === comment.characterId ? playerCharacter : (await getCharactersByCampaign(campaign!.id, undefined, comment.characterId))[0];
-                    return { 
-                        ...comment, 
-                        author: author || { id: 'unknown', name: 'Unknown Author', email: '', role: { isGm: false, isPlayer: true }, avatar: '', campaignId: '', enabled: true },
-                        character: character || null
-                    };
-                })
-            );
-            setActiveThreadComments(enriched);
-        });
-
-        return () => unsubscribeComments();
-    }, [activeThread, playerCharacter, campaign]);
+    
+        setup();
+    
+        return () => {
+            if (unsubscribe) {
+                unsubscribe();
+            }
+        };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [campaign?.id, user?.id]);
     
     // Effect to reset audio when thread changes
     useEffect(() => {
@@ -164,26 +156,25 @@ export default function PlayerViewPage() {
         }
     }, [activeThread]);
 
-    const lastThread = useMemo(() => narrativeThreads.length > 0 ? narrativeThreads[0] : null, [narrativeThreads]);
+    const lastThread = useMemo(() => allNarrativeThreads.length > 0 ? allNarrativeThreads[0] : null, [allNarrativeThreads]);
     
     const playersWhoHaveCommentedOnLastThread = useMemo(() => {
-        if (!lastThread || activeThread?.id !== lastThread?.id) return new Set();
-        return new Set(activeThreadComments.map(c => c.authorId));
-    }, [activeThread, lastThread, activeThreadComments]);
+        if (!lastThread) return new Set();
+        return new Set(lastThread.comments.map(c => c.authorId));
+    }, [lastThread]);
     
     const hasPlayerResponded = user ? playersWhoHaveCommentedOnLastThread.has(user.id) : false;
 
     const allActivePlayersResponded = useMemo(() => {
         if (!lastThread || activePlayers.length === 0) return false;
-        if (activeThread?.id !== lastThread?.id) return false;
         return activePlayers.every(p => playersWhoHaveCommentedOnLastThread.has(p.userId));
-    }, [activePlayers, playersWhoHaveCommentedOnLastThread, lastThread, activeThread]);
+    }, [activePlayers, playersWhoHaveCommentedOnLastThread, lastThread]);
 
     const isAITurn = useMemo(() => {
         if (!isMaster) return false;
-        if (narrativeThreads.length === 0) return true;
+        if (allNarrativeThreads.length === 0) return true;
         return allActivePlayersResponded;
-    }, [isMaster, narrativeThreads.length, allActivePlayersResponded]);
+    }, [isMaster, allNarrativeThreads.length, allActivePlayersResponded]);
 
     const canPlayerRespond = !isMaster && playerCharacter?.isActive && lastThread && !hasPlayerResponded && activeThreadIndex === 0;
 
@@ -196,18 +187,14 @@ export default function PlayerViewPage() {
     };
     
     const handleAddComment = async (text: string) => {
-        if (!user || !playerCharacter || !lastThread) return;
+        if (!user || !playerCharacter || !lastThread || !campaign) return;
         
-        const commentData = {
-            threadId: lastThread.id,
+        try {
+          await addCommentToThread(campaign.id, lastThread.id, {
             authorId: user.id,
             characterId: playerCharacter.id,
             text,
-            createdAt: Date.now(),
-        };
-
-        try {
-          await addNarrativeComment(commentData);
+          });
           toast({ title: t('narrativeResponsePosted'), description: t('narrativeResponsePostedDesc')});
         } catch (error) {
           toast({ variant: "destructive", title: "Error", description: t('narrativeErrorPost')});
@@ -240,16 +227,14 @@ export default function PlayerViewPage() {
 
         const result: StoryOutput = await generateStory(storyInput);
 
-        const newThreadData: Omit<NarrativeThread, 'id'> = {
-            campaignId: campaign.id,
-            authorId: user.id, 
+        const newThreadData: Partial<Omit<NarrativeThread, 'id'>> = {
             title: "The Story Continues...",
-            createdAt: Date.now(),
-            content: `<p>${result.nextPost.replace(/\n/g, '</p><p>')}</p>`,
+            narrative: `<p>${result.nextPost.replace(/\n/g, '</p><p>')}</p>`,
+            authorId: user.id,
             characterFilterList: result.characterFilterList || [],
         };
 
-        await addNarrativeThread(newThreadData);
+        await addNarrativeThread(campaign.id, newThreadData);
         toast({ title: t('narrativeStoryUpdated'), description: t('narrativeStoryUpdatedDesc') });
 
       } catch (error: any) {
@@ -280,10 +265,12 @@ export default function PlayerViewPage() {
     };
 
    const handleRedo = async () => {
-    if (!lastThread) return;
+    if (!lastThread || !campaign) return;
     setIsGenerating(true);
     try {
-        await deleteNarrativeThread(lastThread.id);
+        await deleteNarrativeThread(campaign.id, lastThread.id);
+        // The onSnapshot listener will handle the UI update.
+        // We add a small delay to ensure the generation starts after the state has settled.
         setTimeout(() => {
             handleGenerateNextPost();
         }, 500);
@@ -408,13 +395,13 @@ export default function PlayerViewPage() {
                                 className="object-cover"
                             />
                         </div>
-                        <div dangerouslySetInnerHTML={{ __html: activeThread.content }} />
+                        <div dangerouslySetInnerHTML={{ __html: activeThread.narrative }} />
                     </div>
                 </div>
 
                 <div className="mt-12">
-                     <InteractiveSection title={t('narrativePlayerResponses')} backgroundColor="hsl(var(--secondary) / 0.5)">
-                        <ThreadComments comments={activeThreadComments} t={t} />
+                    <InteractiveSection title={t('narrativePlayerResponses')} backgroundColor="hsl(var(--secondary) / 0.5)">
+                        <ThreadComments comments={enrichedComments} t={t} />
                     </InteractiveSection>
                 </div>
                 
@@ -601,5 +588,3 @@ const GmControls = ({ isAITurn, isGenerating, onGenerate, onRedo, onRestart, las
         </div>
     </div>
 );
-
-    

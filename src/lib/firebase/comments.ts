@@ -1,40 +1,53 @@
 
-
-import { query, collection, where, getDocs, addDoc } from "firebase/firestore";
+import { doc, updateDoc, arrayUnion, getDoc } from "firebase/firestore";
 import { db } from "./config";
-import { NarrativeComment, User } from "./types";
-import { getUserById } from "./auth";
+import type { NarrativeComment, NarrativeThread } from "./types";
+import { v4 as uuidv4 } from 'uuid';
 
-export type NarrativeCommentWithAuthor = NarrativeComment & { author: User };
-
-const COMMENTS_COLLECTION = "narrativeComments";
-
-export const getCommentsByThreadId = async (threadId: string): Promise<NarrativeCommentWithAuthor[]> => {
-    const q = query(
-        collection(db, COMMENTS_COLLECTION), 
-        where("threadId", "==", threadId)
-    );
-    const querySnapshot = await getDocs(q);
-    const comments = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeComment));
-
-    // Sort client-side
-    comments.sort((a, b) => a.createdAt - b.createdAt);
-
-    const commentsWithAuthors = await Promise.all(
-        comments.map(async (comment) => {
-            const author = await getUserById(comment.authorId);
-            const finalAuthor = author || { id: 'unknown', name: 'Unknown Author', email: '', role: { isGm: false, isPlayer: true }, avatar: '', campaignId: '', enabled: true };
-            return { ...comment, author: finalAuthor };
-        })
-    );
+/**
+ * Adds a new comment to the `comments` array of a specific thread document.
+ * @param campaignId The ID of the campaign containing the thread.
+ * @param threadId The ID of the thread to add the comment to.
+ * @param commentData The comment data to add (authorId, text, etc.).
+ * @returns The newly created comment object with its generated ID and ISO timestamp.
+ */
+export const addCommentToThread = async (
+    campaignId: string,
+    threadId: string,
+    commentData: Omit<NarrativeComment, 'id' | 'createdAt'>
+): Promise<NarrativeComment> => {
     
-    return commentsWithAuthors;
+    const threadRef = doc(db, "campaigns", campaignId, "threads", threadId);
+
+    const newComment: NarrativeComment = {
+        ...commentData,
+        id: uuidv4(),
+        createdAt: new Date().toISOString(),
+    };
+
+    await updateDoc(threadRef, {
+        comments: arrayUnion(newComment)
+    });
+
+    return newComment;
 };
 
+/**
+ * Retrieves all comments for a given thread by fetching the thread document.
+ * This function is less efficient than getting comments directly from the thread object
+ * but can be useful if you only have the IDs.
+ * @param campaignId The ID of the campaign.
+ * @param threadId The ID of the thread.
+ * @returns An array of comments for that thread.
+ */
+export const getCommentsByThreadId = async (campaignId: string, threadId: string): Promise<NarrativeComment[]> => {
+    const threadRef = doc(db, "campaigns", campaignId, "threads", threadId);
+    const docSnap = await getDoc(threadRef);
 
-export const addNarrativeComment = async (commentData: Omit<NarrativeComment, 'id'>): Promise<string> => {
-    const docRef = await addDoc(collection(db, COMMENTS_COLLECTION), commentData);
-    return docRef.id;
-}
-
+    if (docSnap.exists()) {
+        const threadData = docSnap.data() as NarrativeThread;
+        return threadData.comments || [];
+    }
     
+    return [];
+};

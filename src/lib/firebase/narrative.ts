@@ -1,68 +1,57 @@
 
-
-import { doc, getDoc, collection, addDoc, query, where, getDocs, writeBatch, deleteDoc, setDoc,getCountFromServer } from "firebase/firestore";
+import { doc, getDoc, collection, addDoc, query, where, getDocs, writeBatch, deleteDoc, setDoc, getCountFromServer, orderBy } from "firebase/firestore";
 import { db } from "./config";
-import { NarrativeThread, Campaign } from "./types";
+import { NarrativeThread, Campaign, NarrativeComment } from "./types";
 import { initialThreadEn } from "./data/initial-thread-en";
 import { initialThreadEs } from "./data/initial-thread-es";
 import { populateCampaignMapData } from "./seed";
 import { rassilonGridMapSummary } from "./data/seed-reference";
 
-const NARRATIVE_THREADS_COLLECTION = "narrativeThreads";
-const COMMENTS_COLLECTION = "narrativeComments";
-const CAMPAIGNS_COLLECTION = "campaigns";
-const CHARACTERS_COLLECTION = "characters";
 const DEV_LOG_COLLECTION = "devLog";
+const CAMPAIGNS_COLLECTION = "campaigns";
+const THREADS_SUBCOLLECTION = "threads";
+
 
 export const getNarrativeThreadsByCampaign = async (campaignId: string): Promise<NarrativeThread[]> => {
-    const q = query(
-        collection(db, NARRATIVE_THREADS_COLLECTION),
-        where("campaignId", "==", campaignId)
-    );
+    const threadsRef = collection(db, CAMPAIGNS_COLLECTION, campaignId, THREADS_SUBCOLLECTION);
+    const q = query(threadsRef, orderBy("createdAt", "desc"));
+    
     const querySnapshot = await getDocs(q);
     const threads = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
-    // Sort client-side
-    threads.sort((a, b) => a.createdAt - b.createdAt);
+    
     return threads;
 };
 
 
-export const getNarrativeThreadById = async (id: string): Promise<NarrativeThread | null> => {
-    const docRef = doc(db, NARRATIVE_THREADS_COLLECTION, id);
+export const getNarrativeThreadById = async (campaignId: string, threadId: string): Promise<NarrativeThread | null> => {
+    const docRef = doc(db, CAMPAIGNS_COLLECTION, campaignId, THREADS_SUBCOLLECTION, threadId);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
         const data = docSnap.data();
-        // Handle mapping of "narrative" to "content"
-        if (data.narrative && !data.content) {
-            data.content = data.narrative;
-            delete data.narrative;
-        }
         return { id: docSnap.id, ...data } as NarrativeThread;
     }
     return null;
 }
 
-export const addNarrativeThread = async (threadData: Partial<Omit<NarrativeThread, 'id'>>): Promise<string> => {
-    const threadsQuery = query(collection(db, NARRATIVE_THREADS_COLLECTION), where("campaignId", "==", threadData.campaignId));
-    const snapshot = await getCountFromServer(threadsQuery);
-    const newThreadNumber = snapshot.data().count + 1;
-    const newThreadId = `${threadData.campaignId}-${newThreadNumber}`;
-
-    const threadRef = doc(db, NARRATIVE_THREADS_COLLECTION, newThreadId);
+export const addNarrativeThread = async (campaignId: string, threadData: Partial<Omit<NarrativeThread, 'id' | 'comments'>>): Promise<string> => {
+    const threadsRef = collection(db, CAMPAIGNS_COLLECTION, campaignId, THREADS_SUBCOLLECTION);
     
-    // Ensure createdAt is set
-    const finalThreadData = {
-        ...threadData,
-        createdAt: threadData.createdAt || Date.now()
+    const finalThreadData: Omit<NarrativeThread, 'id'> = {
+        title: threadData.title || "Untitled",
+        narrative: threadData.narrative || "",
+        authorId: threadData.authorId || "unknown",
+        createdAt: new Date().toISOString(),
+        comments: [], // Start with an empty comments array
+        ...threadData
     };
     
-    await setDoc(threadRef, finalThreadData);
-    
-    return newThreadId;
+    const docRef = await addDoc(threadsRef, finalThreadData);
+    return docRef.id;
 };
 
-export const deleteNarrativeThread = async (threadId: string): Promise<void> => {
-    const docRef = doc(db, NARRATIVE_THREADS_COLLECTION, threadId);
+
+export const deleteNarrativeThread = async (campaignId: string, threadId: string): Promise<void> => {
+    const docRef = doc(db, CAMPAIGNS_COLLECTION, campaignId, THREADS_SUBCOLLECTION, threadId);
     await deleteDoc(docRef);
 };
 
@@ -71,50 +60,40 @@ export const restartCampaignNarrative = async (campaignId: string, locale: 'en' 
     console.log(`[Narrative Service] Restarting campaign ${campaignId} in ${locale}.`);
 
     const batch = writeBatch(db);
-    // 1. Get all threads for the campaign
-    const threadsQuery = query(collection(db, NARRATIVE_THREADS_COLLECTION), where("campaignId", "==", campaignId));
-    const threadsSnapshot = await getDocs(threadsQuery);
+    const threadsRef = collection(db, CAMPAIGNS_COLLECTION, campaignId, THREADS_SUBCOLLECTION);
+    const threadsSnapshot = await getDocs(threadsRef);
 
     if (!threadsSnapshot.empty) {
-        console.log(`[Narrative Service] Found ${threadsSnapshot.docs.length} threads. Preparing to delete comments and threads.`);
-        // 2. For each thread, find and queue deletion of all its comments
-        for (const threadDoc of threadsSnapshot.docs) {
-            const commentsQuery = query(collection(db, COMMENTS_COLLECTION), where("threadId", "==", threadDoc.id));
-            const commentsSnapshot = await getDocs(commentsQuery);
-            if (!commentsSnapshot.empty) {
-                console.log(`[Narrative Service] Queueing ${commentsSnapshot.docs.length} comments for deletion for thread ${threadDoc.id}.`);
-                commentsSnapshot.forEach(commentDoc => {
-                    batch.delete(commentDoc.ref);
-                });
-            }
-            // 3. Queue the thread itself for deletion
+        console.log(`[Narrative Service] Found ${threadsSnapshot.docs.length} threads. Queueing for deletion.`);
+        threadsSnapshot.forEach(threadDoc => {
             batch.delete(threadDoc.ref);
-        }
+        });
     } else {
-        console.log(`[Narrative Service] No threads found for campaign ${campaignId}. Proceeding to create initial thread.`);
+        console.log(`[Narrative Service] No threads found for campaign ${campaignId}.`);
     }
 
-    // 4. Add the new initial thread back, localized
+    // Add the new initial thread back, localized
     console.log(`[Narrative Service] Creating new initial thread in ${locale}.`);
-    const initialThread = locale === 'es' ? initialThreadEs : initialThreadEn;
-    const firstThreadId = `${campaignId}-1`;
-    const threadRef = doc(db, NARRATIVE_THREADS_COLLECTION, firstThreadId);
-    batch.set(threadRef, { ...initialThread, campaignId, createdAt: Date.now() });
-
-    // 5. Commit all deletions and the new thread creation
+    const initialThreadData = locale === 'es' ? initialThreadEs : initialThreadEn;
+    const newThreadRef = doc(threadsRef); // Auto-generate ID for the new thread
+    batch.set(newThreadRef, { 
+        ...initialThreadData, 
+        createdAt: new Date().toISOString(),
+        comments: [] 
+    });
+    
     await batch.commit();
-    console.log(`[Narrative Service] Campaign ${campaignId} restarted successfully with initial thread ID ${firstThreadId}.`);
+    console.log(`[Narrative Service] Campaign ${campaignId} restarted successfully.`);
 }
-
 
 // --- TEST UTILITIES ---
 
 const deleteCampaignForTest = async (campaignId: string, log: (message: string) => void) => {
     log(`[TEST] Deleting test campaign: ${campaignId}`);
     const batch = writeBatch(db);
-
-    const threadsQuery = query(collection(db, NARRATIVE_THREADS_COLLECTION), where("campaignId", "==", campaignId));
-    const threadsSnapshot = await getDocs(threadsQuery);
+    
+    const threadsRef = collection(db, `campaigns/${campaignId}/threads`);
+    const threadsSnapshot = await getDocs(threadsRef);
     threadsSnapshot.forEach(doc => batch.delete(doc.ref));
 
     const gridMapQuery = query(collection(db, `campaigns/${campaignId}/gridMap`));
@@ -153,7 +132,6 @@ export const runCampaignSeedingTest = async () => {
     log(`[TEST] Starting test with campaign ID: ${testCampaignId}`);
 
     try {
-        // 1. Create a test campaign
         log('[TEST] Creating test campaign document...');
         const campaignRef = doc(db, CAMPAIGNS_COLLECTION, testCampaignId);
         await setDoc(campaignRef, {
@@ -162,11 +140,9 @@ export const runCampaignSeedingTest = async () => {
             enabled: true,
         });
 
-        // 2. Populate its map data
         log('[TEST] Populating map data...');
         await populateCampaignMapData(testCampaignId);
 
-        // 3. Verify the data
         log('[TEST] Verifying created data...');
         const gridMapQuery = query(collection(db, `campaigns/${testCampaignId}/gridMap`));
         const gridMapSnapshot = await getDocs(gridMapQuery);
@@ -177,7 +153,6 @@ export const runCampaignSeedingTest = async () => {
             throw new Error(`Verification failed: Expected ${rassilonGridMapSummary.length} map cells, but found ${cellCount}.`);
         }
 
-        // Verify subcollections in a sample cell
         const sampleCellId = 'A10';
         const localesQuery = query(collection(db, `campaigns/${testCampaignId}/gridMap/${sampleCellId}/locales`));
         const npcsQuery = query(collection(db, `campaigns/${testCampaignId}/gridMap/${sampleCellId}/npcs`));
@@ -210,8 +185,6 @@ export const runCampaignSeedingTest = async () => {
             log: logMessages
         });
     } finally {
-        // 4. Clean up
         await deleteCampaignForTest(testCampaignId, log);
     }
 };
-
