@@ -53,13 +53,10 @@ export const getCharacters = async (): Promise<Character[]> => {
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Character));
 };
 
-export const getCharactersByCampaign = async (campaignId: string, userId?: string, characterId?: string): Promise<Character[]> => {
+export const getCharactersByCampaign = async (campaignId: string, userId?: string): Promise<Character[]> => {
     let q = query(collection(db, CHARACTERS_COLLECTION), where("campaignId", "==", campaignId));
     if (userId) {
         q = query(q, where("userId", "==", userId));
-    }
-    if (characterId) {
-         q = query(q, where("id", "==", characterId));
     }
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Character));
@@ -91,6 +88,7 @@ export const deleteCharacter = async (id: string): Promise<void> => {
     
 
     
+
 
 
 

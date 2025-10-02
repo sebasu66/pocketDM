@@ -80,7 +80,7 @@ const createCampaign = async (batch: any, campaignData: any, locale: 'en' | 'es'
     // Add the initial narrative thread based on locale
     const initialThread = locale === 'es' ? initialThreadEs : initialThreadEn;
     const threadRef = doc(collection(db, "campaigns", campaignData.id, "threads"));
-    batch.set(threadRef, { ...initialThread, comments: [], createdAt: new Date().toISOString() });
+    batch.set(threadRef, { ...initialThread, narrative: initialThread.narrative, comments: [], createdAt: new Date().toISOString() });
 };
 
 /**
@@ -238,6 +238,7 @@ export const runSeed = async () => {
         console.error("Error seeding database:", error);
     }
 };
+
 
 
 
