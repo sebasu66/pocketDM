@@ -26,7 +26,7 @@ const CommentSchema = z.object({
 
 const ThreadSchema = z.object({
   title: z.string(),
-  content: z.string(),
+  narrative: z.string(),
   comments: z.array(CommentSchema),
 });
 
@@ -93,7 +93,7 @@ const generateNarrativeFlow = ai.defineFlow(
                 {{#each narrativeState.threads}}
                 ---
                 ### GM Post: {{this.title}}
-                {{{this.content}}}
+                {{{this.narrative}}}
 
                 **Player Responses:**
                 {{#each this.comments}}

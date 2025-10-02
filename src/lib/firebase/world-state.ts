@@ -8,8 +8,8 @@
  */
 
 import { getCharactersByCampaign } from '@/lib/firebase/characters';
-import { getCommentsByThreadId } from '@/lib/firebase/comments';
 import { getNarrativeThreadsByCampaign } from '@/lib/firebase/narrative';
+import { getUserById } from '@/lib/firebase/auth';
 
 /**
  * Fetches the complete narrative and character state for a given campaign.
@@ -27,17 +27,14 @@ export async function getWorldState(campaignId: string) {
 
         // 2. Fetch all narrative threads for the campaign
         const allThreads = await getNarrativeThreadsByCampaign(campaignId);
-        // Sort threads client-side
-        allThreads.sort((a, b) => a.createdAt - b.createdAt);
         console.log(`[DB Service] Found ${allThreads.length} narrative threads.`);
-
-        // 3. For each thread, fetch its comments and enrich them
+        
+        // 3. Enrich threads with comments and author names
         const threadsWithComments = await Promise.all(allThreads.map(async (thread) => {
-            const comments = await getCommentsByThreadId(thread.id);
-            const enrichedComments = await Promise.all(comments.map(async (comment) => {
+            const enrichedComments = await Promise.all((thread.comments || []).map(async (comment) => {
                 const character = allCharacters.find(c => c.id === comment.characterId);
-                // Use character name if available, otherwise fall back to the user's name
-                const authorName = character?.name || comment.author.name || 'Unknown';
+                const user = await getUserById(comment.authorId);
+                const authorName = character?.name || user?.name || 'Unknown';
                 return {
                     authorName: authorName,
                     text: comment.text,
@@ -45,7 +42,7 @@ export async function getWorldState(campaignId: string) {
             }));
             return {
                 title: thread.title,
-                content: thread.content,
+                narrative: thread.narrative,
                 comments: enrichedComments,
             };
         }));
@@ -57,7 +54,7 @@ export async function getWorldState(campaignId: string) {
                 id: c.id,
                 name: c.name,
                 description: c.description,
-                class: c.class,
+                class: c.class || 'Adventurer',
             })),
             threads: threadsWithComments,
         };
@@ -69,5 +66,3 @@ export async function getWorldState(campaignId: string) {
         throw new Error(`Failed to get world state from database: ${error.message}`);
     }
 }
-
-    
