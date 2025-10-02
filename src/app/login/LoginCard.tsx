@@ -9,13 +9,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/logo";
 import { useAuth } from "@/context/auth-context";
-import { getUserByEmail, signInWithGoogle, createUser } from "@/lib/firebase/auth";
+import { getUserByEmail, signInWithGoogle, createUser, getUserById } from "@/lib/firebase/auth";
 import { useToast } from "@/hooks/use-toast";
 import { useI18n } from "@/context/i18n-context";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Crown, User as UserIcon, Loader2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInAnonymously } from "firebase/auth";
 import { auth } from "@/lib/firebase/config";
 
 type Step = 'check-email' | 'login' | 'register';
@@ -31,7 +31,7 @@ export function LoginCard() {
   const [isPlayer, setIsPlayer] = useState(true);
   const [secretCode, setSecretCode] = useState("");
   
-  const { user, setupSession } = useAuth();
+  const { user, setupSession, setUser, setCampaign, setActiveRole } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
@@ -92,20 +92,34 @@ export function LoginCard() {
   };
 
   const handleQuickLogin = async (role: 'gm' | 'player') => {
-    const demoEmail = role === 'gm' ? 'gm@example.com' : 'alice@example.com';
-    const demoPassword = 'password';
-    
     setIsChecking(true);
     try {
-        const userCredential = await signInWithEmailAndPassword(auth, demoEmail, demoPassword);
-        await setupSession(userCredential.user);
-        toast({ title: "Quick Login Successful", description: "Redirecting to your dashboard..."});
-    } catch (error) {
+        // Ensure we have an anonymous session first
+        if (!auth.currentUser) {
+            await signInAnonymously(auth);
+        }
+
+        const demoUserId = role === 'gm' ? '1' : '2'; // GM is ID '1', Alice (player) is ID '2'
+        const demoUser = await getUserById(demoUserId);
+
+        if (demoUser) {
+            setUser(demoUser);
+             if (demoUser.role.isGm && !demoUser.role.isPlayer) {
+                setActiveRole('gm');
+            } else {
+                setActiveRole('player');
+            }
+            toast({ title: `Logged in as ${demoUser.name}`, description: "Redirecting to dashboard..." });
+        } else {
+            throw new Error("Demo user not found in database. Please seed the database first.");
+        }
+
+    } catch (error: any) {
         console.error("Quick login error", error);
         toast({
             variant: "destructive",
-            title: t('loginFailedTitle'),
-            description: t('loginFailedDescription'),
+            title: "Quick Login Failed",
+            description: error.message,
         });
     } finally {
         setIsChecking(false);

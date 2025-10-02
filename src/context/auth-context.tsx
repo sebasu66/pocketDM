@@ -36,11 +36,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: FirebaseAuthUser | null) => {
       setIsLoading(true);
       if (firebaseUser) {
-        try {
-          await setupSession(firebaseUser);
-        } catch (e) {
-          console.error("Error during user session setup", e);
-          await clearSession();
+        // If there's already a user in context, don't automatically overwrite it.
+        // This is important for the "impersonation" quick login feature.
+        if (!user) {
+            try {
+              await setupSession(firebaseUser);
+            } catch (e) {
+              console.error("Error during user session setup", e);
+              await clearSession();
+            }
         }
       } else {
         await clearSession();
@@ -51,15 +55,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    // When the user object changes (e.g., via quick login), load their campaign.
+    const loadCampaign = async () => {
+      if (user && user.campaignId) {
+        const campaignData = await getCampaign(user.campaignId);
+        setCampaign(campaignData);
+      } else {
+        setCampaign(null);
+      }
+    };
+    loadCampaign();
+  }, [user]);
+
+
   const setupSession = async (firebaseUser: FirebaseAuthUser, extraData: { name?: string; role?: { isGm: boolean; isPlayer: boolean; }, campaignSecret?: string} = {}) => {
     const loggedInUser = await findOrCreateUser(firebaseUser, extraData);
     
     if (loggedInUser && loggedInUser.enabled) {
       setUser(loggedInUser);
-      if (loggedInUser.campaignId) {
-        const campaignData = await getCampaign(loggedInUser.campaignId);
-        setCampaign(campaignData);
-      }
       
       if (loggedInUser.role.isGm && !loggedInUser.role.isPlayer) {
         setActiveRoleState('gm');
@@ -80,7 +94,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = async () => {
-    await auth.signOut();
+    // Only sign out if the user is not anonymous. This preserves the anonymous session
+    // for quick login, but logs out real users.
+    if (auth.currentUser && !auth.currentUser.isAnonymous) {
+        await auth.signOut();
+    }
     await clearSession();
   };
   
@@ -116,3 +134,5 @@ export const useAuth = () => {
   }
   return context;
 };
+
+    
