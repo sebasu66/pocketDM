@@ -10,7 +10,7 @@ const CHARACTERS_COLLECTION = "characters";
 // Create
 export const addCharacter = async (characterData: Partial<Character>): Promise<string> => {
     
-    let newCharacter: any = {
+    let baseCharacter: any = {
         // Base defaults for any character
         level: 1,
         strength: 10,
@@ -26,24 +26,24 @@ export const addCharacter = async (characterData: Partial<Character>): Promise<s
         motto: "",
         conditionalRules: [{if: '', then: ''}, {if: '', then: ''}, {if: '', then: ''}],
         isActive: true,
-        location_cell_id: "A1", // Default starting location
+        location_cell_id: "A1",
     };
 
-    // If an archetype is selected, merge its properties
+    // If an archetype is selected, merge its properties first
     if (characterData.archetypeId) {
         const selectedArchetype = (archetypes as Record<string, any>)[characterData.archetypeId];
         if (selectedArchetype) {
-            newCharacter = { ...newCharacter, ...selectedArchetype };
+            baseCharacter = { ...baseCharacter, ...selectedArchetype };
         }
     }
 
-    // Finally, overwrite with any specific data provided by the user
-    newCharacter = { ...newCharacter, ...characterData };
+    // Finally, overwrite with any specific data provided by the user, ensuring campaignId and userId are preserved.
+    const finalCharacter = { ...baseCharacter, ...characterData };
     
-    // Remove archetypeId as it's not part of the Character model
-    delete newCharacter.archetypeId;
+    // Remove archetypeId as it's not part of the Character model before saving
+    delete finalCharacter.archetypeId;
     
-    const docRef = await addDoc(collection(db, CHARACTERS_COLLECTION), newCharacter);
+    const docRef = await addDoc(collection(db, CHARACTERS_COLLECTION), finalCharacter);
     return docRef.id;
 };
 
@@ -88,6 +88,7 @@ export const deleteCharacter = async (id: string): Promise<void> => {
     
 
     
+
 
 
 
