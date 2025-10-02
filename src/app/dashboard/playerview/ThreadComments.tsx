@@ -1,4 +1,3 @@
-
 "use client";
 
 import type { EnrichedComment } from '@/lib/firebase/types';
@@ -11,11 +10,7 @@ interface ThreadCommentsProps {
 
 export function ThreadComments({ comments, t }: ThreadCommentsProps) {
     if (!comments || comments.length === 0) {
-        return (
-            <div className="text-center text-foreground/60 italic py-8">
-                <p>{t('narrativeNoResponses')}</p>
-            </div>
-        );
+        return null;
     }
 
     return (
@@ -48,3 +43,5 @@ export function ThreadComments({ comments, t }: ThreadCommentsProps) {
         </div>
     );
 }
+
+    

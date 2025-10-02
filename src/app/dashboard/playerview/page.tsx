@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState, useMemo, useRef } from 'react';
@@ -59,11 +58,9 @@ export default function PlayerViewPage() {
             return allNarrativeThreads;
         }
         return allNarrativeThreads.filter(thread => {
-            // If the filter list is empty or doesn't exist, show the thread to everyone.
             if (!thread.characterFilterList || !Array.isArray(thread.characterFilterList) || thread.characterFilterList.length === 0) {
                 return true;
             }
-            // If it's an array, check if the player's character ID is included.
             return thread.characterFilterList.includes(playerCharacter.id);
         });
     }, [allNarrativeThreads, playerCharacter, isMaster]);
@@ -80,23 +77,19 @@ export default function PlayerViewPage() {
         );
 
         const unsubscribe = onSnapshot(narrativeQuery, async (snapshot) => {
-            const threadsFromDb = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
-            // Sort client-side
-            threadsFromDb.sort((a, b) => b.createdAt - a.createdAt);
-            
             const oldThreadCount = allNarrativeThreads.length;
+            const threadsFromDb = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
+            threadsFromDb.sort((a, b) => b.createdAt - a.createdAt);
             
             setAllNarrativeThreads(threadsFromDb);
 
             if (isInitialLoad.current) {
                 setActiveThreadIndex(0);
                 isInitialLoad.current = false;
-            } else {
-                 if(threadsFromDb.length !== oldThreadCount){
-                     setActiveThreadIndex(0);
-                 }
+            } else if (threadsFromDb.length > oldThreadCount) {
+                // If a new thread is added, jump to it
+                setActiveThreadIndex(0);
             }
-
 
             const allCharacters = await getCharactersByCampaign(campaign.id);
             setActivePlayers(allCharacters.filter(c => c.isActive));
@@ -105,7 +98,6 @@ export default function PlayerViewPage() {
                 const userCharacter = allCharacters.find(c => c.userId === user.id);
                 setPlayerCharacter(userCharacter || null);
 
-                // Redirect if player has no character
                 if (!isMaster && !userCharacter && !isAuthLoading && user.role.isPlayer) {
                     toast({
                         title: "Character Needed",
@@ -123,11 +115,45 @@ export default function PlayerViewPage() {
         });
 
         return () => unsubscribe();
-    }, [campaign, user, isMaster, router, isAuthLoading, toast, allNarrativeThreads.length]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [campaign, user, isMaster, router, isAuthLoading, toast]);
 
     const activeThread = useMemo(() => {
         return narrativeThreads.length > 0 ? narrativeThreads[activeThreadIndex] : null;
     }, [narrativeThreads, activeThreadIndex]);
+    
+    // Effect to fetch comments for the active thread in real-time
+    useEffect(() => {
+        if (!activeThread) {
+            setActiveThreadComments([]);
+            return;
+        };
+
+        const commentsQuery = query(
+            collection(db, "narrativeComments"),
+            where("threadId", "==", activeThread.id)
+        );
+
+        const unsubscribeComments = onSnapshot(commentsQuery, async (snapshot) => {
+            const commentsFromDb = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeComment));
+            commentsFromDb.sort((a, b) => a.createdAt - b.createdAt);
+
+            const enriched = await Promise.all(
+                commentsFromDb.map(async (comment) => {
+                    const author = await getUserById(comment.authorId);
+                    const character = playerCharacter?.id === comment.characterId ? playerCharacter : (await getCharactersByCampaign(campaign!.id, undefined, comment.characterId))[0];
+                    return { 
+                        ...comment, 
+                        author: author || { id: 'unknown', name: 'Unknown Author', email: '', role: { isGm: false, isPlayer: true }, avatar: '', campaignId: '', enabled: true },
+                        character: character || null
+                    };
+                })
+            );
+            setActiveThreadComments(enriched);
+        });
+
+        return () => unsubscribeComments();
+    }, [activeThread, playerCharacter, campaign]);
     
     // Effect to reset audio when thread changes
     useEffect(() => {
@@ -138,21 +164,10 @@ export default function PlayerViewPage() {
         }
     }, [activeThread]);
 
-    // Effect to fetch comments for the active thread
-    useEffect(() => {
-        if (!activeThread) {
-            setActiveThreadComments([]);
-            return;
-        };
-
-        getCommentsByThreadId(activeThread.id).then(setActiveThreadComments);
-
-    }, [activeThread]);
-
     const lastThread = useMemo(() => narrativeThreads.length > 0 ? narrativeThreads[0] : null, [narrativeThreads]);
     
     const playersWhoHaveCommentedOnLastThread = useMemo(() => {
-        if (activeThread?.id !== lastThread?.id) return new Set();
+        if (!lastThread || activeThread?.id !== lastThread?.id) return new Set();
         return new Set(activeThreadComments.map(c => c.authorId));
     }, [activeThread, lastThread, activeThreadComments]);
     
@@ -586,3 +601,5 @@ const GmControls = ({ isAITurn, isGenerating, onGenerate, onRedo, onRestart, las
         </div>
     </div>
 );
+
+    

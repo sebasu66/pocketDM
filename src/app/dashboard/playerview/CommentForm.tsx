@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -31,16 +30,15 @@ export function CommentForm({ onSubmit, character, quickOptions, t }: CommentFor
         setIsSubmitting(false);
     };
 
-    const handleQuickOptionClick = async (option: QuickOption) => {
-        if (isSubmitting) return;
+    const handleQuickOptionClick = (option: QuickOption) => {
         const commentText = `${option.action} (${option.skill})`;
-        setIsSubmitting(true);
-        await onSubmit(commentText);
-        setIsSubmitting(false);
+        setText(commentText);
     }
+    
+    const canSubmit = text.length >= 5;
 
     return (
-        <Card className="bg-stone-gradient border-0">
+        <Card className="bg-stone-gradient border-0 relative">
             <CardHeader>
                 <CardTitle className="font-headline text-3xl uppercase tracking-widest text-center">
                     {t('narrativeYourTurn').replace('{characterName}', character?.name || 'Adventurer')}
@@ -71,7 +69,6 @@ export function CommentForm({ onSubmit, character, quickOptions, t }: CommentFor
                     </div>
                 )}
 
-
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor="comment-text" className="flex items-center gap-2">
@@ -87,13 +84,23 @@ export function CommentForm({ onSubmit, character, quickOptions, t }: CommentFor
                             className="bg-background/50"
                         />
                     </div>
-                    <div className="flex justify-end">
-                        <RusticIconButton tooltip={isSubmitting ? t('narrativePosting') : t('narrativePostResponse')} disabled={isSubmitting || !text} type="submit" className="text-foreground">
-                            <Send />
-                        </RusticIconButton>
-                    </div>
                 </form>
             </CardContent>
+            
+            {canSubmit && (
+                 <div className="absolute -right-8 bottom-1/2 translate-y-1/2">
+                    <RusticIconButton 
+                        tooltip={isSubmitting ? t('narrativePosting') : t('narrativePostResponse')} 
+                        disabled={isSubmitting} 
+                        onClick={handleSubmit} 
+                        className="text-foreground w-24 h-24"
+                    >
+                        <Send size={32} />
+                    </RusticIconButton>
+                </div>
+            )}
         </Card>
     );
 }
+
+    
