@@ -2,11 +2,11 @@
 import type { NarrativeThread } from "../types";
 
 // This object represents the data for a thread, but doesn't perfectly match the final DB schema
-// The 'content' property will be mapped to 'narrative' during seeding.
-export const initialThreadEn: Omit<NarrativeThread, 'id' | 'createdAt' | 'comments' | 'narrative'> & { content: string } = {
+// The 'narrative' property will be used during seeding.
+export const initialThreadEn: Omit<NarrativeThread, 'id' | 'createdAt' | 'comments'> = {
     title: "The Last Chance",
     authorId: "1", // GM User ID
-    content: `
+    narrative: `
 <p>The wind has teeth this far north. It’s a bitter, relentless thing that scours the plains and finds every gap in your cloak, a constant reminder that you’ve reached the edge of the world. Before you, huddled behind a formidable stone wall, is the city of Aslov—the last bastion of civilization before the endless, monster-haunted wastes of the Borderlands. They call it the City of Shattered Hope. After weeks on the road, it is your sanctuary.</p>
 
 <p>Whatever your reasons for coming here—be it the lure of fortune, the escape from a past you’d rather forget, or the noble desire to hold back the encroaching darkness—you find yourself pushing through the heavy wooden door of the city’s most famous tavern: The Last Chance.</p>

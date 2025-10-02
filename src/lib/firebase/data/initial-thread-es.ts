@@ -2,11 +2,11 @@
 import type { NarrativeThread } from "../types";
 
 // This object represents the data for a thread, but doesn't perfectly match the final DB schema
-// The 'content' property will be mapped to 'narrative' during seeding.
-export const initialThreadEs: Omit<NarrativeThread, 'id' | 'createdAt' | 'comments' | 'narrative'> & { content: string } = {
+// The 'narrative' property will be used during seeding.
+export const initialThreadEs: Omit<NarrativeThread, 'id' | 'createdAt' | 'comments'> = {
     title: "La Última Oportunidad",
     authorId: "1", // GM User ID
-    content: `
+    narrative: `
 <p>El viento tiene dientes tan al norte. Es una fuerza amarga e implacable que azota las llanuras y encuentra cada rendija en tu capa, un recordatorio constante de que has llegado al borde del mundo. Ante ti, acurrucada tras una formidable muralla de piedra, se encuentra la ciudad de Aslov: el último bastión de la civilización antes de los interminables páramos de las Tierras Fronterizas, infestados de monstruos. La llaman la Ciudad de la Esperanza Rota. Después de semanas de viaje, es tu santuario.</p>
 
 <p>Cualesquiera que sean tus razones para venir aquí —ya sea la promesa de fortuna, la huida de un pasado que preferirías olvidar o el noble deseo de contener la oscuridad que avanza— te encuentras empujando la pesada puerta de madera de la taberna más famosa de la ciudad: La Última Oportunidad.</p>
