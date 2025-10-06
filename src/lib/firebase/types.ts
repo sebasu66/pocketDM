@@ -24,7 +24,15 @@ export interface Campaign {
     enabled: boolean;
     secretCode: string;
     ownerId: string;
-    status?: 'initializing' | 'processing' | 'active' | 'failed';  // Campaign lifecycle status
+    status?: 'initializing' | 'processing' | 'ready' | 'generating_narrative' | 'active' | 'failed' | 'narrative_failed';
+    // Campaign lifecycle:
+    // - initializing: Just created, waiting for orchestrator
+    // - processing: Orchestrator creating Docker infrastructure
+    // - ready: Infrastructure ready, waiting for first character
+    // - generating_narrative: First character created, generating intro
+    // - active: Fully active with narrative
+    // - failed: Infrastructure creation failed
+    // - narrative_failed: Infrastructure OK but narrative failed
     locale?: 'en' | 'es';  // Campaign language
 }
 
