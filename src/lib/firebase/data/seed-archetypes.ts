@@ -5,7 +5,7 @@
 export const archetypes = {
   avenger: {
     id: "avenger",
-    visualPreset: "preset_1",
+    visualPreset: "avenger",
     name: "Vengador",
     race: "Humano (Saxa)",
     description: "Tu familia fue masacrada por orcos del Hellfrost. Juraste venganza eterna contra esas bestias, viajando por las tierras heladas para cazarlas y fortalecerte contra amenazas mayores.",
@@ -28,7 +28,7 @@ export const archetypes = {
   },
   bladedancer: {
     id: "bladedancer",
-    visualPreset: "preset_2",
+    visualPreset: "bladedancer",
     name: "Bailarín de Cuchillas",
     race: "Elfo de la Taiga",
     description: "Como guardián de los bosques de la taiga, dominas el baile de las espadas para defender la naturaleza contra invasores. Tu gracia élfica te hace letal en combates cercanos, pero el calor te debilita.",
@@ -51,7 +51,7 @@ export const archetypes = {
   },
   druid: {
     id: "druid",
-    visualPreset: "preset_4",
+    visualPreset: "druid",
     name: "Druida",
     race: "Elfo del Hogar",
     description: "Conectado con la naturaleza, manipulas plantas y animales para proteger los bosques. Eres fuerte en la naturaleza, pero sufres en entornos urbanos donde la magia natural se debilita.",
@@ -75,7 +75,7 @@ export const archetypes = {
   },
   elementalist: {
     id: "elementalist",
-    visualPreset: "preset_5",
+    visualPreset: "elementalist",
     name: "Elementalista",
     race: "Humano (Anari)",
     description: "Maestro de los elementos, comienzas con fuego para combatir el frío del Hellfrost. Como miembro de la Convocatoria, buscas equilibrio, pero tu arrogancia te hace subestimar peligros.",
@@ -98,7 +98,7 @@ export const archetypes = {
   },
   hearth_knight: {
     id: "hearth_knight",
-    visualPreset: "preset_6",
+    visualPreset: "hearth_knight",
     name: "Caballero del Hogar",
     race: "Nacido de Escarcha",
     description: "Montado en su corcel bajo un cielo grisáceo, el Caballero del Hogar es un baluarte contra las hordas del Hellfrost, su armadura reflejando el brillo del hielo. Nacido de la escarcha, este guerrero protege las Tierras del Hogar con un juramento sagrado, enfrentando dragones y gigantes con una determinación que resuena como el viento helado. Su deber lo ata, pero el calor lo debilita.",
@@ -120,7 +120,7 @@ export const archetypes = {
   },
   hrimwisard: {
     id: "hrimwisard",
-    visualPreset: "preset_4",
+    visualPreset: "hrimwisard",
     name: "Hrimwisard",
     race: "Humano (Finnar)",
     description: "En las llanuras nevadas del Hellfrost exterior, el Hrimwisard canaliza el frío como un maestro del hielo, sus hechizos brillando con un fulgor glacial. Este nómada Finnar, forjado por el viento cortante, encuentra su fuerza en el invierno eterno, pero su aislamiento lo marca como un extraño entre los civilizados, siempre buscando el siguiente horizonte helado.",
@@ -142,7 +142,7 @@ export const archetypes = {
   },
   knight_hrafn: {
     id: "knight_hrafn",
-    visualPreset: "preset_7",
+    visualPreset: "knight_hrafn",
     name: "Caballero Hrafn",
     race: "Humano (Anari)",
     description: "Con un estandarte ondeando bajo la nieve, el Caballero Hrafn lidera con la precisión de un estratega en un campo de batalla helado. Este humano Anari, desprovisto de ambiciones políticas, ofrece su genio táctico a nobles y ejércitos, su mente calculadora enfrentándose a las hordas oscuras como un faro de orden en el caos del Hellfrost.",
@@ -164,7 +164,7 @@ export const archetypes = {
   },
   paladin: {
     id: "paladin",
-    visualPreset: "preset_3",
+    visualPreset: "paladin",
     name: "Paladín",
     race: "Humano (Saxa)",
     description: "Vestido con armadura resplandeciente, el Paladín de Tiw es un campeón divino, su espada bendecida cortando la oscuridad del Hellfrost. Este guerrero Saxa, guiado por el dios de la guerra, protege a los fieles con un juramento inquebrantable, su fe un escudo contra las abominaciones heladas que acechan en la noche.",
@@ -186,7 +186,7 @@ export const archetypes = {
   },
   rune_mage: {
     id: "rune_mage",
-    visualPreset: "preset_8",
+    visualPreset: "rune_mage",
     name: "Mago Rúnico",
     race: "Enano de Hielo",
     description: "En las profundidades de las montañas heladas, el Mago Rúnico talla runas de poder en piedra, su martillo resonando como un eco del pasado enano. Este guerrero de escarcha protege las minas y forjas con magia antigua, su resistencia al frío un legado de su pueblo, aunque el calor lo traiciona fuera de su hogar subterráneo.",
@@ -208,7 +208,7 @@ export const archetypes = {
   },
   skald: {
     id: "skald",
-    visualPreset: "preset_9",
+    visualPreset: "skald",
     name: "Skald",
     race: "Humano (Finnar)",
     description: "Bajo un cielo gris, el Skald teje magia con su voz, sus canciones resonando como un canto de guerra en las llanuras heladas. Este nómada Finnar inspira a los suyos con historias épicas, su curiosidad lo llevando a explorar ruinas ocultas bajo la nieve, aunque su destreza reside en el arte de la palabra más que en la espada.",
