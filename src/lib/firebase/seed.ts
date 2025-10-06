@@ -130,7 +130,6 @@ export const runSeed = async () => {
                 role: { isGm: user.role === 'master', isPlayer: user.role === 'player' },
                 avatar: user.avatar,
                 campaignId: user.campaignId,
-                password: user.password,
                 enabled: true,
             });
         }
