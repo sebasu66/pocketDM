@@ -1,24 +1,31 @@
 
 // Basic service worker for PWA installation and offline capabilities
 
-const CACHE_NAME = 'pocket-dm-cache-v1';
+const CACHE_NAME = 'pocket-dm-cache-v2';
 const urlsToCache = [
   '/',
   '/login',
-  '/dashboard',
-  '/styles/globals.css'
-  // Add other important assets here.
-  // Be careful with caching too much, especially during development.
+  '/dashboard'
+  // Minimal caching - only HTML routes
 ];
 
 self.addEventListener('install', event => {
-  // Perform install steps
+  // Perform install steps with error handling
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
         console.log('Opened cache');
-        return cache.addAll(urlsToCache);
+        // Cache URLs individually to avoid complete failure if one fails
+        return Promise.allSettled(
+          urlsToCache.map(url =>
+            cache.add(url).catch(err => {
+              console.warn(`Failed to cache ${url}:`, err);
+              return null;
+            })
+          )
+        );
       })
+      .then(() => self.skipWaiting())
   );
 });
 
@@ -68,5 +75,6 @@ self.addEventListener('activate', event => {
         })
       );
     })
+    .then(() => self.clients.claim())
   );
 });
