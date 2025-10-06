@@ -1,53 +1,74 @@
 
-import { doc, updateDoc, arrayUnion, getDoc, Timestamp } from "firebase/firestore";
+import { doc, addDoc, collection, getDocs, Timestamp, query, where, onSnapshot, Unsubscribe } from "firebase/firestore";
 import { db } from "./config";
-import type { NarrativeComment, NarrativeThread } from "./types";
 import { v4 as uuidv4 } from 'uuid';
 
-/**
- * Adds a new comment to the `comments` array of a specific thread document.
- * @param campaignId The ID of the campaign containing the thread.
- * @param threadId The ID of the thread to add the comment to.
- * @param commentData The comment data to add (authorId, text, etc.).
- * @returns The newly created comment object with its generated ID and ISO timestamp.
- */
-export const addCommentToThread = async (
-    campaignId: string,
-    threadId: string,
-    commentData: Omit<NarrativeComment, 'id' | 'createdAt'>
-): Promise<NarrativeComment> => {
-    
-    const threadRef = doc(db, "campaigns", campaignId, "threads", threadId);
+export interface CharacterComment {
+    id?: string;
+    character_id: string;
+    player_id: string;
+    text: string;
+    timestamp: Timestamp;
+    current_node_id?: string;
+    location_id?: string;
+    status: 'pending' | 'processing' | 'completed' | 'failed';
+    dm_response_node_id?: string;
+    processed_at?: Timestamp;
+    error_message?: string;
+    retry_count?: number;
+}
 
-    const newComment: NarrativeComment = {
+/**
+ * Adds a new comment to character_comments collection for DM processing
+ * @param commentData The comment data to add
+ * @returns The newly created comment document ID
+ */
+export const addCharacterComment = async (
+    commentData: Omit<CharacterComment, 'id' | 'timestamp' | 'status'>
+): Promise<string> => {
+
+    const commentsRef = collection(db, "character_comments");
+
+    const newComment: Omit<CharacterComment, 'id'> = {
         ...commentData,
-        id: uuidv4(),
-        createdAt: Timestamp.now(),
+        timestamp: Timestamp.now(),
+        status: 'pending',
+        retry_count: 0
     };
 
-    await updateDoc(threadRef, {
-        comments: arrayUnion(newComment)
-    });
+    const docRef = await addDoc(commentsRef, newComment);
 
-    return newComment;
+    return docRef.id;
 };
 
 /**
- * Retrieves all comments for a given thread by fetching the thread document.
- * This function is less efficient than getting comments directly from the thread object
- * but can be useful if you only have the IDs.
- * @param campaignId The ID of the campaign.
- * @param threadId The ID of the thread.
- * @returns An array of comments for that thread.
+ * Listen to a specific character comment for status changes
+ * @param commentId The comment ID to listen to
+ * @param callback Function to call when comment updates
+ * @returns Unsubscribe function
  */
-export const getCommentsByThreadId = async (campaignId: string, threadId: string): Promise<NarrativeComment[]> => {
-    const threadRef = doc(db, "campaigns", campaignId, "threads", threadId);
-    const docSnap = await getDoc(threadRef);
+export const listenToCommentStatus = (
+    commentId: string,
+    callback: (comment: CharacterComment) => void
+): Unsubscribe => {
+    const commentRef = doc(db, "character_comments", commentId);
 
-    if (docSnap.exists()) {
-        const threadData = docSnap.data() as NarrativeThread;
-        return threadData.comments || [];
-    }
-    
-    return [];
+    return onSnapshot(commentRef, (snapshot) => {
+        if (snapshot.exists()) {
+            callback({ id: snapshot.id, ...snapshot.data() } as CharacterComment);
+        }
+    });
+};
+
+/**
+ * Get all comments for a specific character
+ * @param characterId The character ID
+ * @returns Array of comments
+ */
+export const getCharacterComments = async (characterId: string): Promise<CharacterComment[]> => {
+    const commentsRef = collection(db, "character_comments");
+    const q = query(commentsRef, where("character_id", "==", characterId));
+
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as CharacterComment));
 };

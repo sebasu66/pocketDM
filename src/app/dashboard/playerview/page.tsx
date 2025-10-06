@@ -1,30 +1,26 @@
 
 "use client";
 
-import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { useAuth } from '@/context/auth-context';
-import { db } from '@/lib/firebase/config';
-import { collection, query, where, onSnapshot, doc, Unsubscribe, orderBy, Timestamp } from 'firebase/firestore';
-import type { NarrativeThread, Character, EnrichedComment, User, NarrativeComment } from '@/lib/firebase/types';
-import { addCommentToThread } from '@/lib/firebase/comments';
+import { Unsubscribe } from 'firebase/firestore';
+import type { Character } from '@/lib/firebase/types';
+import { addCharacterComment } from '@/lib/firebase/comments';
+import { listenToCharacterNarrative, getLatestNarrativeNode, NarrativeNode } from '@/lib/firebase/narrative';
 import { getCharactersByCampaign } from '@/lib/firebase/characters';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ArrowLeft, ArrowRight, Menu, User as UserIcon, X, Bot, Plus, FileText, RotateCcw, Trash2, Play, Pause } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Menu, User as UserIcon, X, Plus, Trash2, Play, Pause } from 'lucide-react';
 import { RusticIconButton } from '@/components/ui/rustic-icon-button';
 import { useI18n } from '@/context/i18n-context';
 import React from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import Image from 'next/image';
-import { ThreadComments } from './ThreadComments';
-import { getUserById } from '@/lib/firebase/auth';
 import { CommentForm } from './CommentForm';
 import { useToast } from '@/hooks/use-toast';
 import { CharacterSheet } from './CharacterSheet';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogTrigger, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
-import { addNarrativeThread, deleteNarrativeThread, restartCampaignNarrative } from '@/lib/firebase/narrative';
-import { InteractiveSection } from '@/components/ui/interactive-section';
 import { GmSidebarContent, PlayerSidebarContent } from '../layout';
 import { useRouter } from 'next/navigation';
 
@@ -35,8 +31,8 @@ export default function PlayerViewPage() {
     const { toast } = useToast();
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(true);
-    const [allNarrativeThreads, setAllNarrativeThreads] = useState<NarrativeThread[]>([]);
-    const [activeThreadIndex, setActiveThreadIndex] = useState(0);
+    const [narrativeNodes, setNarrativeNodes] = useState<NarrativeNode[]>([]);
+    const [activeNodeIndex, setActiveNodeIndex] = useState(0);
     const [isMenuSheetOpen, setIsMenuSheetOpen] = React.useState(false);
     const [isCharacterSheetOpen, setIsCharacterSheetOpen] = React.useState(false);
     const [playerCharacter, setPlayerCharacter] = useState<Character | null>(null);
@@ -50,53 +46,24 @@ export default function PlayerViewPage() {
 
     const activePlayers = useMemo(() => allCharacters.filter(c => c.isActive), [allCharacters]);
 
-    // Filter threads based on characterFilterList
-    const narrativeThreads = useMemo(() => {
-        if (isMaster || !playerCharacter) {
-            return allNarrativeThreads;
-        }
-        return allNarrativeThreads.filter(thread => {
-            if (!thread.characterFilterList || !Array.isArray(thread.characterFilterList) || thread.characterFilterList.length === 0) {
-                return true;
-            }
-            return thread.characterFilterList.includes(playerCharacter.id);
-        });
-    }, [allNarrativeThreads, playerCharacter, isMaster]);
+    const activeNode = useMemo(() => {
+        return narrativeNodes.length > 0 ? narrativeNodes[activeNodeIndex] : null;
+    }, [narrativeNodes, activeNodeIndex]);
 
-    const activeThread = useMemo(() => {
-        return narrativeThreads.length > 0 ? narrativeThreads[activeThreadIndex] : null;
-    }, [narrativeThreads, activeThreadIndex]);
-
-    const enrichedComments = useMemo(() => {
-        if (!activeThread?.comments) return [];
-        // Sort comments by createdAt before enriching
-        const sortedComments = [...activeThread.comments].sort((a, b) => a.createdAt.toMillis() - b.createdAt.toMillis());
-        
-        return sortedComments.map(comment => {
-            const author = null; // We'd need to fetch users if we want the full User object
-            const character = allCharacters.find(c => c.id === comment.characterId);
-            return {
-                ...comment,
-                author: { id: comment.authorId, name: character?.name || 'Unknown', email: '', role: { isGm: false, isPlayer: true }, avatar: '', campaignId: '', enabled: true },
-                character
-            };
-        });
-    }, [activeThread, allCharacters]);
-
-    // Effect to fetch characters and set up thread listener
+    // Effect to fetch characters and set up narrative listener
     useEffect(() => {
         if (!campaign || !user) return;
         let unsubscribe: Unsubscribe | undefined;
-    
+
         const setup = async () => {
             setIsLoading(true);
             try {
                 const characters = await getCharactersByCampaign(campaign.id);
                 setAllCharacters(characters);
-    
+
                 const userChar = characters.find(c => c.userId === user.id);
                 setPlayerCharacter(userChar || null);
-    
+
                 if (!isMaster && !userChar && !isAuthLoading && user.role.isPlayer) {
                     toast({
                         title: "Character Needed",
@@ -106,43 +73,42 @@ export default function PlayerViewPage() {
                     router.push('/dashboard/characters');
                     return;
                 }
-    
-                const threadsQuery = query(
-                    collection(db, "campaigns", campaign.id, "threads"),
-                    orderBy("createdAt", "desc")
-                );
-    
-                unsubscribe = onSnapshot(threadsQuery, (snapshot) => {
-                    const oldThreadCount = allNarrativeThreads.length;
-                    const threadsFromDb = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
-                    
-                    setAllNarrativeThreads(threadsFromDb);
-    
-                    if (isInitialLoad.current) {
-                        setActiveThreadIndex(0);
-                        isInitialLoad.current = false;
-                    } else if (threadsFromDb.length > oldThreadCount) {
-                        setActiveThreadIndex(0);
-                    }
+
+                // Listen to character_narrative for player's character
+                if (userChar) {
+                    unsubscribe = listenToCharacterNarrative(
+                        userChar.id,
+                        (nodes) => {
+                            const oldNodeCount = narrativeNodes.length;
+                            setNarrativeNodes(nodes);
+
+                            if (isInitialLoad.current) {
+                                setActiveNodeIndex(nodes.length - 1); // Show latest node
+                                isInitialLoad.current = false;
+                            } else if (nodes.length > oldNodeCount) {
+                                setActiveNodeIndex(nodes.length - 1); // Jump to new node
+                            }
+                            setIsLoading(false);
+                        },
+                        20 // Limit to 20 nodes
+                    );
+                } else {
                     setIsLoading(false);
-                }, (error) => {
-                    console.error("Failed to fetch narrative threads:", error);
-                    toast({
-                        variant: "destructive",
-                        title: "Error de Conexión",
-                        description: "No se pudieron cargar los hilos narrativos. Verifica la consola para más detalles."
-                    });
-                    setIsLoading(false);
-                });
-    
+                }
+
             } catch (error) {
                 console.error("Error setting up playerview:", error);
+                toast({
+                    variant: "destructive",
+                    title: "Error de Conexión",
+                    description: "No se pudieron cargar los nodos narrativos. Verifica la consola para más detalles."
+                });
                 setIsLoading(false);
             }
         };
-    
+
         setup();
-    
+
         return () => {
             if (unsubscribe) {
                 unsubscribe();
@@ -151,49 +117,43 @@ export default function PlayerViewPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [campaign?.id, user?.id]);
     
-    // Effect to reset audio when thread changes
+    // Effect to reset audio when node changes
     useEffect(() => {
         if (audioRef.current) {
             audioRef.current.pause();
             audioRef.current.currentTime = 0;
             setIsPlaying(false);
         }
-    }, [activeThread]);
+    }, [activeNode]);
 
-    const lastThread = useMemo(() => allNarrativeThreads.length > 0 ? allNarrativeThreads[0] : null, [allNarrativeThreads]);
-    
-    const playersWhoHaveCommentedOnLastThread = useMemo(() => {
-        if (!lastThread) return new Set();
-        return new Set(lastThread.comments.map(c => c.authorId));
-    }, [lastThread]);
-    
-    const hasPlayerResponded = user ? playersWhoHaveCommentedOnLastThread.has(user.id) : false;
+    const latestNode = useMemo(() => narrativeNodes.length > 0 ? narrativeNodes[narrativeNodes.length - 1] : null, [narrativeNodes]);
 
-    const allActivePlayersResponded = useMemo(() => {
-        if (!lastThread || activePlayers.length === 0) return false;
-        return activePlayers.every(p => playersWhoHaveCommentedOnLastThread.has(p.userId));
-    }, [activePlayers, playersWhoHaveCommentedOnLastThread, lastThread]);
-
-    const canPlayerRespond = !isMaster && playerCharacter?.isActive && lastThread && !hasPlayerResponded && activeThreadIndex === 0;
+    // Players can respond if they're on the latest node and their character is active
+    const canPlayerRespond = !isMaster && playerCharacter?.isActive && latestNode && activeNodeIndex === narrativeNodes.length - 1;
 
     const handlePrev = () => {
-        setActiveThreadIndex(prev => Math.min(narrativeThreads.length - 1, prev + 1));
+        setActiveNodeIndex(prev => Math.max(0, prev - 1));
     };
 
     const handleNext = () => {
-        setActiveThreadIndex(prev => Math.max(0, prev - 1));
+        setActiveNodeIndex(prev => Math.min(narrativeNodes.length - 1, prev + 1));
     };
     
     const handleAddComment = async (text: string) => {
-        if (!user || !playerCharacter || !lastThread || !campaign) return;
-        
+        if (!user || !playerCharacter || !latestNode) return;
+
         try {
-          await addCommentToThread(campaign.id, lastThread.id, {
-            authorId: user.id,
-            characterId: playerCharacter.id,
-            text,
+          await addCharacterComment({
+            character_id: playerCharacter.id,
+            player_id: user.id,
+            text: text,
+            current_node_id: latestNode.node_id,
+            location_id: playerCharacter.location_cell_id
           });
-          toast({ title: t('narrativeResponsePosted'), description: t('narrativeResponsePostedDesc')});
+          toast({
+            title: t('narrativeCommentSubmitted'),
+            description: t('waitingForDM')
+          });
         } catch (error) {
           toast({ variant: "destructive", title: "Error", description: t('narrativeErrorPost')});
         }
@@ -217,12 +177,8 @@ export default function PlayerViewPage() {
   const handleRestart = async () => {
     if (!campaign) return;
     toast({ title: t('narrativeRestarting'), description: t('narrativeRestartingDesc')});
-    try {
-        await restartCampaignNarrative(campaign.id, locale);
-    } catch (error) {
-        console.error("Error restarting campaign:", error);
-        toast({ variant: "destructive", title: "Error", description: t('narrativeErrorRestart')});
-    }
+    // TODO: Implement narrative restart for character_narrative structure
+    toast({ variant: "destructive", title: "Not Implemented", description: "Restart functionality needs to be updated for new architecture" });
   }
 
     if (isAuthLoading || isLoading) {
@@ -243,7 +199,7 @@ export default function PlayerViewPage() {
         );
     }
     
-    if (!activeThread) {
+    if (!activeNode) {
         return (
              <div className="min-h-[60vh] flex flex-col items-center justify-center text-center p-8">
                 <h1 className="text-4xl font-headline uppercase tracking-widest">{t('notFoundTitle')}</h1>
@@ -252,7 +208,7 @@ export default function PlayerViewPage() {
                     <div className="mt-8">
                         <GmControls
                             onRestart={handleRestart}
-                            hasThreads={narrativeThreads.length > 0}
+                            hasNodes={narrativeNodes.length > 0}
                             t={t}
                         />
                     </div>
@@ -261,10 +217,10 @@ export default function PlayerViewPage() {
         )
     }
 
-    const canGoNext = activeThreadIndex > 0;
-    const canGoPrev = activeThreadIndex < narrativeThreads.length - 1;
-    
-    const imageUrl = activeThread.imageUrl || '/locations/default_location.jpg';
+    const canGoNext = activeNodeIndex < narrativeNodes.length - 1;
+    const canGoPrev = activeNodeIndex > 0;
+
+    const imageUrl = '/locations/default_location.jpg'; // TODO: Get image from location data
 
     return (
         <div 
@@ -289,11 +245,11 @@ export default function PlayerViewPage() {
                 <div className="p-4 md:p-0 min-h-[calc(100vh-10rem)]">
                     <div className="text-center mb-8 md:mb-12">
                         <h1 className="text-4xl md:text-7xl font-headline uppercase tracking-widest">
-                            {activeThread.title}
+                            {activeNode.location.location_name}
                         </h1>
-                        {activeThread.audioUrl && (
+                        {activeNode.audio_url && activeNode.audio_status === 'ready' && (
                             <div className="mt-4 flex justify-center items-center">
-                                <audio ref={audioRef} src={activeThread.audioUrl} onEnded={handleAudioEnded} />
+                                <audio ref={audioRef} src={activeNode.audio_url} onEnded={handleAudioEnded} />
                                 <RusticIconButton
                                     tooltip={isPlaying ? 'Pausar' : 'Reproducir'}
                                     onClick={togglePlayPause}
@@ -306,36 +262,30 @@ export default function PlayerViewPage() {
                     </div>
 
                     <div className="prose prose-xl prose-invert max-w-none text-foreground/90 leading-relaxed">
-                        <div 
+                        <div
                             className="relative aspect-[4/3] md:w-3/5 image-mask-squared float-left mr-8 mb-4"
-                            data-ai-hint={activeThread.imageAiHint || "fantasy scene"}
+                            data-ai-hint="fantasy scene"
                         >
                              <Image
                                 src={imageUrl}
-                                alt={activeThread.title}
+                                alt={activeNode.location.location_name}
                                 fill
                                 sizes="(max-width: 768px) 100vw, 50vw"
                                 className="object-cover"
                             />
                         </div>
-                        <div dangerouslySetInnerHTML={{ __html: activeThread.narrative }} />
+                        <div dangerouslySetInnerHTML={{ __html: activeNode.narrative_html }} />
                     </div>
                 </div>
 
-                <div className="mt-12">
-                    <InteractiveSection title={t('narrativePlayerResponses')} backgroundColor="hsl(var(--secondary) / 0.5)">
-                        <ThreadComments comments={enrichedComments} t={t} />
-                    </InteractiveSection>
-                </div>
-                
                 <div className="mt-8">
                     {canPlayerRespond && (
                         <div className='backdrop-blur-lg rounded-lg'>
-                           <CommentForm 
-                                onSubmit={handleAddComment} 
-                                character={playerCharacter} 
-                                quickOptions={activeThread.quickOptions || []}
-                                t={t} 
+                           <CommentForm
+                                onSubmit={handleAddComment}
+                                character={playerCharacter}
+                                quickOptions={activeNode.quick_options.map(opt => opt.text)}
+                                t={t}
                             />
                         </div>
                     )}
@@ -421,9 +371,9 @@ export default function PlayerViewPage() {
 }
 
 
-const GmControls = ({ onRestart, hasThreads, t }: { 
+const GmControls = ({ onRestart, hasNodes, t }: {
     onRestart: () => void;
-    hasThreads: boolean;
+    hasNodes: boolean;
     t: (key: string) => string
 }) => (
     <div className="p-4 rounded-lg bg-card/50 backdrop-blur-sm sticky bottom-4 space-y-4">
@@ -447,10 +397,10 @@ const GmControls = ({ onRestart, hasThreads, t }: {
                         </DialogHeader>
                     </DialogContent>
                 </Dialog>
-                
+
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
-                        <Button variant="destructive" size="sm" disabled={!hasThreads}>
+                        <Button variant="destructive" size="sm" disabled={!hasNodes}>
                             <Trash2 className="mr-2"/> {t('narrativeRestart')}
                         </Button>
                     </AlertDialogTrigger>
