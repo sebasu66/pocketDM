@@ -6,8 +6,8 @@ Indicador visual en tiempo real del progreso de generación de narrativa.
 
 ```
 ┌─────────────────────────────────┐
-│ ✨ Generando narrativa...       │
-│    Kael                          │
+│ [🔄] Generando narrativa...     │
+│      Kael                        │
 └─────────────────────────────────┘
 ```
 
@@ -17,14 +17,17 @@ Aparece en la **esquina inferior izquierda** durante:
 
 ## Estados
 
-| Estado | Icono | Color | Descripción |
-|--------|-------|-------|-------------|
-| `idle` | ⏸️ | Gris | Sin actividad (no se muestra) |
-| `init` | 🔄 | Azul | Preparando generación |
-| `in_progress` | ✨ | Morado (pulsa) | Gemini generando |
-| `completed_no_tts` | 🎭 | Amarillo | Narrativa lista, generando audio |
-| `completed` | ✅ | Verde | Todo listo (se oculta en 5s) |
-| `error` | ❌ | Rojo | Error ocurrido |
+| Estado | Imagen | Animación | Descripción |
+|--------|--------|-----------|-------------|
+| `idle` | loading1.png | No | Sin actividad (no se muestra) |
+| `init` | loading1-4.png | Ciclo 300ms | Preparando generación |
+| `in_progress` | loading1-4.png | Ciclo 300ms | Gemini generando |
+| `completed_no_tts` | tts.png | No | Narrativa lista, generando audio |
+| `completed` | success.png | No | Todo listo (se oculta en 5s) |
+| `error` | error.png | No | Error ocurrido |
+
+**Imágenes**: Ubicadas en `public/ui/status/` con fondo transparente
+**Loading Animation**: Cicla entre loading1.png → loading2.png → loading3.png → loading4.png cada 300ms
 
 ## Uso
 
@@ -172,6 +175,24 @@ onSnapshot(
 <div className="fixed bottom-4 right-4 z-50">
 ```
 
+### Cambiar Velocidad de Animación
+
+```tsx
+// De 300ms a 500ms por frame:
+setInterval(() => {
+  setLoadingFrame((prev) => (prev % 4) + 1);
+}, 500); // Más lento
+```
+
+### Cambiar Tamaño de Imagen
+
+```tsx
+// De w-12 h-12 a w-16 h-16:
+<div className="relative w-16 h-16">
+  <Image src={imageSrc} alt={currentStatus} fill className="object-contain" />
+</div>
+```
+
 ### Cambiar Tiempo de Auto-Ocultado
 
 ```tsx
@@ -201,6 +222,16 @@ const CUSTOM_MESSAGES: Record<NarrativeStatus, string> = {
   error: 'Algo salió mal...',
 };
 ```
+
+### Usar Imágenes Personalizadas
+
+Reemplaza las imágenes en `public/ui/status/`:
+- `loading1.png` a `loading4.png`: Frames de animación de carga
+- `tts.png`: Estado generando audio
+- `success.png`: Estado completado
+- `error.png`: Estado de error
+
+Todas las imágenes deben tener fondo transparente (PNG con alpha)
 
 ## Testing
 
