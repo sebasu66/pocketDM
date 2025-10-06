@@ -8,56 +8,17 @@ import { initialUsers, initialCampaigns } from "./data/seed-core";
 import { archetypes } from './data/seed-archetypes';
 import { hellfrostItems } from './data/seed-items';
 import { hellfrostSpells } from './data/seed-spells';
-import { hellfrostReferenceData, rassilonGridMapSummary } from './data/seed-reference';
-import { majorLocales } from './data/seed-locales';
-import { notableNPCs } from './data/seed-npcs';
-import { adventureHooks } from './data/seed-hooks';
+import { hellfrostReferenceData } from './data/seed-reference';
+// Map-related imports removed - now handled by backend
+// import { rassilonGridMapSummary, majorLocales, notableNPCs, adventureHooks }
 import { conceptosWebApp } from './data/seed-concepts';
 import { initialThreadEn } from "./data/initial-thread-en";
 import { initialThreadEs } from "./data/initial-thread-es";
 
 
-export const populateCampaignMapData = async (campaignId: string) => {
-    const log = console.log;
-    log(`[Seed] Starting to populate map data for campaign ${campaignId}.`);
-
-    // Process each cell in its own batch to avoid oversized batches
-    for (const cell of rassilonGridMapSummary) {
-        const batch = writeBatch(db);
-        log(`[Seed] Processing cell ${cell.id} for campaign ${campaignId}...`);
-        
-        const gridMapCellRef = doc(db, `campaigns/${campaignId}/gridMap`, cell.id);
-        batch.set(gridMapCellRef, cell.region_info); 
-
-        const localesForCell = (majorLocales as any)[cell.id];
-        if (localesForCell && localesForCell.length > 0) {
-            localesForCell.forEach((locale: any, index: number) => {
-                const localeRef = doc(db, `campaigns/${campaignId}/gridMap/${cell.id}/locales`, `${cell.id}-locale-${index}`);
-                batch.set(localeRef, locale);
-            });
-        }
-
-        const npcsForCell = (notableNPCs as any)[cell.id];
-        if (npcsForCell && npcsForCell.length > 0) {
-            npcsForCell.forEach((npc: any, index: number) => {
-                const npcRef = doc(db, `campaigns/${campaignId}/gridMap/${cell.id}/npcs`, `${cell.id}-npc-${index}`);
-                batch.set(npcRef, npc);
-            });
-        }
-
-        const hooksForCell = (adventureHooks as any)[cell.id];
-        if (hooksForCell && hooksForCell.length > 0) {
-            hooksForCell.forEach((hook: any, index: number) => {
-                const hookRef = doc(db, `campaigns/${campaignId}/gridMap/${cell.id}/hooks`, `${cell.id}-hook-${index}`);
-                batch.set(hookRef, hook);
-            });
-        }
-        
-        await batch.commit();
-        log(`[Seed] Successfully committed batch for cell ${cell.id}.`);
-    }
-    log(`[Seed] Finished populating all map data for campaign ${campaignId}.`);
-};
+// MAP DATA SEEDING REMOVED
+// Map data (cells, locations, NPCs, hooks) is now seeded by the backend
+// Only character creation data (archetypes, races, skills, items) remains in frontend
 
 
 /**
@@ -229,9 +190,8 @@ export const runSeed = async () => {
         // Commit the core data first
         await coreBatch.commit();
         console.log("Core database data seeded successfully!");
-        
-        // Now, populate the map data in separate, smaller batches
-        await populateCampaignMapData(initialCampaigns[0].id);
+
+        // Map data seeding removed - now handled by backend
 
 
     } catch (error) {

@@ -30,6 +30,23 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('fetch', event => {
+  // Skip caching for:
+  // - Non-GET requests (POST, PUT, DELETE)
+  // - Chrome extensions
+  // - Firebase API calls
+  const url = new URL(event.request.url);
+
+  if (
+    event.request.method !== 'GET' ||
+    url.protocol === 'chrome-extension:' ||
+    url.hostname.includes('firebase') ||
+    url.hostname.includes('firestore') ||
+    url.hostname.includes('googleapis')
+  ) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then(response => {
@@ -45,15 +62,14 @@ self.addEventListener('fetch', event => {
               return response;
             }
 
-            // IMPORTANT: Clone the response. A response is a stream
-            // and because we want the browser to consume the response
-            // as well as the cache consuming the response, we need
-            // to clone it so we have two streams.
+            // Clone and cache the response
             const responseToCache = response.clone();
 
             caches.open(CACHE_NAME)
               .then(cache => {
-                cache.put(event.request, responseToCache);
+                cache.put(event.request, responseToCache).catch(err => {
+                  console.warn('Failed to cache:', event.request.url, err);
+                });
               });
 
             return response;

@@ -60,7 +60,7 @@ export const updateUser = async (id: string, updatedData: Partial<User>): Promis
 interface CreateUserInput {
     uid: string;
     name: string;
-    email: string;
+    email: string | null;
     role: { isGm: boolean, isPlayer: boolean };
     campaignSecret?: string;
 }
@@ -95,7 +95,7 @@ export const createUser = async (input: CreateUserInput): Promise<User> => {
     const newUser: User = {
         id: uid,
         name,
-        email: email.toLowerCase(),
+        email: email ? email.toLowerCase() : `anonymous-${uid}@demo.local`,
         role,
         avatar: '/ui/avatar/avatar.jpg',
         campaignId: campaignId,

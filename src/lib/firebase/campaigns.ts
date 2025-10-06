@@ -5,7 +5,7 @@ import { db } from "./config";
 import { Campaign, NarrativeThread } from "./types";
 import { initialThreadEn } from "./data/initial-thread-en";
 import { initialThreadEs } from "./data/initial-thread-es";
-import { populateCampaignMapData } from "./seed";
+// populateCampaignMapData removed - map data now seeded by backend
 
 export const getCampaign = async (id: string): Promise<Campaign | null> => {
     console.log(`Fetching campaign with id: ${id}`);
@@ -63,9 +63,8 @@ export const createNewCampaignForUser = async (user: {id: string, name: string},
 
     await addDoc(threadsCollectionRef, initialThreadDoc);
     log(`[Campaigns] Initial narrative thread for ${newCampaignId} created.`);
-    
-    // Populate the detailed map data
-    await populateCampaignMapData(newCampaignId);
+
+    // Map data population removed - now handled by backend during campaign setup
 
     return newCampaignId;
 }
