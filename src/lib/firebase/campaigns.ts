@@ -44,27 +44,19 @@ export const createNewCampaignForUser = async (user: {id: string, name: string},
         enabled: true,
         secretCode: Math.random().toString(36).substring(2, 8).toUpperCase(),
         ownerId: user.id,
+        status: 'initializing',  // Backend orchestrator will handle setup
+        locale: locale,
     };
-    
-    // Create the campaign document
+
+    // Create the campaign document with minimal data
+    // The backend orchestrator will:
+    // 1. Create Docker instance (PostgreSQL + Backend + TTS Worker)
+    // 2. Initialize PostgreSQL schema + SQLite world database
+    // 3. Generate personalized initial narrative with Gemini based on character
+    // 4. Update status to 'active'
     await setDoc(newCampaignRef, newCampaignData);
-    log(`[Campaigns] Campaign document for ${newCampaignId} created.`);
-
-    // Add the initial narrative thread as a subcollection document
-    const initialThread = locale === 'es' ? initialThreadEs : initialThreadEn;
-    const threadsCollectionRef = collection(db, "campaigns", newCampaignId, "threads");
-    
-    // Explicitly type the object to match NarrativeThread structure
-    const initialThreadDoc: Omit<NarrativeThread, 'id'> = {
-        ...initialThread,
-        createdAt: Timestamp.now(),
-        comments: [], // Initialize with empty comments
-    };
-
-    await addDoc(threadsCollectionRef, initialThreadDoc);
-    log(`[Campaigns] Initial narrative thread for ${newCampaignId} created.`);
-
-    // Map data population removed - now handled by backend during campaign setup
+    log(`[Campaigns] Campaign document for ${newCampaignId} created with status='initializing'.`);
+    log(`[Campaigns] Backend orchestrator will handle infrastructure setup and narrative generation.`);
 
     return newCampaignId;
 }

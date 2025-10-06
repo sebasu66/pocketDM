@@ -24,6 +24,8 @@ export interface Campaign {
     enabled: boolean;
     secretCode: string;
     ownerId: string;
+    status?: 'initializing' | 'processing' | 'active' | 'failed';  // Campaign lifecycle status
+    locale?: 'en' | 'es';  // Campaign language
 }
 
 export interface ConditionalRule {
