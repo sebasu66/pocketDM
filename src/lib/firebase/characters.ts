@@ -33,15 +33,19 @@ export const addCharacter = async (characterData: Partial<Character>): Promise<s
     if (characterData.archetypeId) {
         const selectedArchetype = (archetypes as Record<string, any>)[characterData.archetypeId];
         if (selectedArchetype) {
-            baseCharacter = { ...baseCharacter, ...selectedArchetype };
+            // Remove archetype's 'id' field to avoid conflicts with Firestore auto-generated ID
+            const { id, ...archetypeWithoutId } = selectedArchetype;
+            baseCharacter = { ...baseCharacter, ...archetypeWithoutId };
         }
     }
 
     // Finally, overwrite with any specific data provided by the user, ensuring campaignId and userId are preserved.
     const finalCharacter = { ...baseCharacter, ...characterData };
-    
+
     // Remove archetypeId as it's not part of the Character model before saving
     delete finalCharacter.archetypeId;
+    // Remove id if it came from archetype to let Firestore assign it
+    delete finalCharacter.id;
     
     const docRef = await addDoc(collection(db, CHARACTERS_COLLECTION), finalCharacter);
     return docRef.id;
