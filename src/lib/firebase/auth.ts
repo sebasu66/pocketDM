@@ -14,10 +14,22 @@ const CAMPAIGNS_COLLECTION = "campaigns";
 
 
 const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({
+    prompt: 'select_account'
+});
 
 export const signInWithGoogle = async (): Promise<FirebaseAuthUser> => {
-    const result = await signInWithPopup(auth, googleProvider);
-    return result.user;
+    try {
+        const result = await signInWithPopup(auth, googleProvider);
+        return result.user;
+    } catch (error: any) {
+        // If popup is blocked or fails, try redirect method
+        if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
+            console.warn('Popup blocked, using redirect method');
+            throw error; // Let caller handle
+        }
+        throw error;
+    }
 };
 
 export const getUserByEmail = async (email: string): Promise<User | undefined> => {
