@@ -66,3 +66,20 @@ export const generateNewSecretCode = async (campaignId: string): Promise<string>
     await updateCampaign(campaignId, { secretCode: newCode });
     return newCode;
 };
+
+/**
+ * Request campaign reset - sets flag for orchestrator to handle
+ * The orchestrator will:
+ * 1. Stop Docker containers
+ * 2. Clean up databases (PostgreSQL, SQLite)
+ * 3. Delete narrative nodes
+ * 4. Reset status to 'initializing'
+ * 5. Clear the toReset flag
+ */
+export const requestCampaignReset = async (campaignId: string): Promise<void> => {
+    console.log(`[Campaigns] Requesting reset for campaign: ${campaignId}`);
+    await updateCampaign(campaignId, {
+        toReset: true,
+        resetRequestedAt: Timestamp.now()
+    });
+};

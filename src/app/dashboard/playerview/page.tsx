@@ -9,7 +9,7 @@ import { addCharacterComment } from '@/lib/firebase/comments';
 import { listenToCharacterNarrative, getLatestNarrativeNode, NarrativeNode } from '@/lib/firebase/narrative';
 import { getCharactersByCampaign } from '@/lib/firebase/characters';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ArrowLeft, ArrowRight, Menu, User as UserIcon, X, Plus, Trash2, Play, Pause } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Menu, User as UserIcon, X, Plus, Trash2, Play, Pause, Wand2, Loader2, Volume2, AlertCircle } from 'lucide-react';
 import { RusticIconButton } from '@/components/ui/rustic-icon-button';
 import { useI18n } from '@/context/i18n-context';
 import React from 'react';
@@ -41,6 +41,7 @@ export default function PlayerViewPage() {
     const audioRef = useRef<HTMLAudioElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const isInitialLoad = useRef(true);
+    const [animationTick, setAnimationTick] = useState(0);
 
     const isMaster = activeRole === 'gm';
 
@@ -126,10 +127,58 @@ export default function PlayerViewPage() {
         }
     }, [activeNode]);
 
+    // Animation ticker for loading frames
+    useEffect(() => {
+        if (campaign?.status === 'initializing') {
+            const interval = setInterval(() => {
+                setAnimationTick(t => t + 1);
+            }, 500);
+            return () => clearInterval(interval);
+        }
+    }, [campaign?.status]);
+
     const latestNode = useMemo(() => narrativeNodes.length > 0 ? narrativeNodes[narrativeNodes.length - 1] : null, [narrativeNodes]);
 
     // Players can respond if they're on the latest node and their character is active
     const canPlayerRespond = !isMaster && playerCharacter?.isActive && latestNode && activeNodeIndex === narrativeNodes.length - 1;
+
+    // Process wiki tags [[term]] -> clickable links
+    const processWikiTags = (html: string): string => {
+        return html.replace(/\[\[([^\]]+)\]\]/g, (match, term) => {
+            return `<a href="#" class="wiki-link text-amber-400 hover:text-amber-300 underline decoration-dotted" data-wiki-term="${term}" title="Wiki: ${term}">${term}</a>`;
+        });
+    };
+
+    // Get status indicator based on campaign/node state
+    const getStatusIndicator = () => {
+        if (!activeNode) return null;
+
+        const audioStatus = activeNode.audio_status;
+        const campaignStatus = campaign?.status;
+
+        // Priority: audio_status first, then campaign status
+        if (audioStatus === 'pending') {
+            return { image: '/ui/status/tts.png', text: 'Generando audio...', className: 'animate-pulse' };
+        }
+        if (audioStatus === 'failed') {
+            return { image: '/ui/status/error.png', text: 'Error en audio', className: '' };
+        }
+        if (campaignStatus === 'initializing') {
+            // Cycle through loading animations
+            const loadingFrame = (animationTick % 4) + 1;
+            return { image: `/ui/status/loading${loadingFrame}.png`, text: 'Preparando...', className: '' };
+        }
+        if (campaignStatus === 'narrative_failed') {
+            return { image: '/ui/status/error.png', text: 'Error en narrativa', className: '' };
+        }
+        if (audioStatus === 'ready' && activeNode.audio_url) {
+            return { image: '/ui/status/success.png', text: 'Audio listo', className: '' };
+        }
+
+        return null; // No status to show when everything is ready
+    };
+
+    const statusIndicator = getStatusIndicator();
 
     const handlePrev = () => {
         setActiveNodeIndex(prev => Math.max(0, prev - 1));
@@ -247,6 +296,21 @@ export default function PlayerViewPage() {
                         <h1 className="text-4xl md:text-7xl font-headline uppercase tracking-widest">
                             {activeNode.location.location_name}
                         </h1>
+
+                        {/* Status Indicator */}
+                        {statusIndicator && (
+                            <div className={`flex items-center justify-center gap-3 mt-3 ${statusIndicator.className}`}>
+                                <Image
+                                    src={statusIndicator.image}
+                                    alt={statusIndicator.text}
+                                    width={32}
+                                    height={32}
+                                    className="object-contain"
+                                />
+                                <span className="text-sm font-medium text-foreground/80">{statusIndicator.text}</span>
+                            </div>
+                        )}
+
                         {activeNode.audio_url && activeNode.audio_status === 'ready' && (
                             <div className="mt-4 flex justify-center items-center">
                                 <audio ref={audioRef} src={activeNode.audio_url} onEnded={handleAudioEnded} />
@@ -274,7 +338,7 @@ export default function PlayerViewPage() {
                                 className="object-cover"
                             />
                         </div>
-                        <div dangerouslySetInnerHTML={{ __html: activeNode.narrative_html }} />
+                        <div dangerouslySetInnerHTML={{ __html: processWikiTags(activeNode.narrative_html) }} />
                     </div>
                 </div>
 
@@ -284,7 +348,16 @@ export default function PlayerViewPage() {
                            <CommentForm
                                 onSubmit={handleAddComment}
                                 character={playerCharacter}
-                                quickOptions={activeNode.quick_options.map(opt => opt.text)}
+                                quickOptions={activeNode.quick_options?.map(opt => {
+                                    // Only show skill/chance if they exist and aren't "-"
+                                    const hasSkill = opt.skill && opt.skill !== '-';
+                                    const hasChance = opt.success_chance && opt.success_chance !== '-';
+
+                                    if (hasSkill && hasChance) {
+                                        return `${opt.action} (${opt.skill}: ${opt.success_chance})`;
+                                    }
+                                    return opt.action;
+                                }) || []}
                                 t={t}
                             />
                         </div>

@@ -13,10 +13,22 @@ import { useAuth } from "@/context/auth-context";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { User } from '@/lib/firebase/types';
 import Link from 'next/link';
-import { ChevronRight, Bell, BellOff, Loader2 } from 'lucide-react';
+import { ChevronRight, Bell, BellOff, Loader2, RefreshCw, AlertTriangle } from 'lucide-react';
 import { useI18n } from '@/context/i18n-context';
 import { usePushNotifications } from '@/hooks/use-push-notifications';
 import { useToast } from '@/hooks/use-toast';
+import { requestCampaignReset } from '@/lib/firebase/campaigns';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function SettingsPage() {
   const { handwritingFont, setHandwritingFont } = useTheme();
@@ -24,6 +36,7 @@ export default function SettingsPage() {
   const [user, setUser] = useState<User | null>(null);
   const { toast } = useToast();
   const { t } = useI18n();
+  const [isResetting, setIsResetting] = useState(false);
 
   const {
       isSubscribed,
@@ -42,6 +55,35 @@ export default function SettingsPage() {
     if (user) {
       await updateAuthUser(user);
       toast({ title: "Profile Updated" });
+    }
+  };
+
+  const handleResetCampaign = async () => {
+    if (!user?.campaignId) {
+      toast({
+        title: "Error",
+        description: "No campaign found to reset",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsResetting(true);
+    try {
+      await requestCampaignReset(user.campaignId);
+      toast({
+        title: "Campaign Reset Requested",
+        description: "The system will reset your campaign shortly. You can create a new character once it's ready.",
+      });
+    } catch (error) {
+      console.error("Failed to reset campaign:", error);
+      toast({
+        title: "Reset Failed",
+        description: "Could not request campaign reset. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsResetting(false);
     }
   };
 
@@ -149,17 +191,81 @@ export default function SettingsPage() {
             </p>
           </div>
           {user.role.isGm && (
-            <div className='pt-4'>
+            <>
+              <div className='pt-4'>
                 <Link href="/dashboard/settings/apikeys" className="flex items-center justify-between rounded-lg p-3 -m-3 hover:bg-muted/50 transition-colors">
-                    <div>
-                        <h4 className='font-medium'>{t('settingsAiSettings')}</h4>
-                        <p className="text-sm text-muted-foreground">
-                            {t('settingsAiSettingsDesc')}
-                        </p>
-                    </div>
-                    <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                  <div>
+                    <h4 className='font-medium'>{t('settingsAiSettings')}</h4>
+                    <p className="text-sm text-muted-foreground">
+                      {t('settingsAiSettingsDesc')}
+                    </p>
+                  </div>
+                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
                 </Link>
-            </div>
+              </div>
+              <div className='pt-4'>
+                <div className="rounded-lg border border-destructive/50 bg-destructive/5 p-4">
+                  <div className="flex items-start gap-3">
+                    <AlertTriangle className="h-5 w-5 text-destructive mt-0.5" />
+                    <div className="flex-1">
+                      <h4 className='font-medium text-destructive'>Zona de Peligro</h4>
+                      <p className="text-sm text-muted-foreground mt-1 mb-3">
+                        Resetear la campaña eliminará TODOS los datos: narrativas, personajes, progreso. Esta acción no se puede deshacer.
+                      </p>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            disabled={isResetting}
+                          >
+                            {isResetting ? (
+                              <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Reseteando...
+                              </>
+                            ) : (
+                              <>
+                                <RefreshCw className="mr-2 h-4 w-4" />
+                                Resetear Campaña
+                              </>
+                            )}
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
+                            <AlertDialogDescription asChild>
+                              <div>
+                                <p>Esta acción no se puede deshacer. Esto eliminará permanentemente:</p>
+                                <ul className="list-disc list-inside mt-2 space-y-1">
+                                  <li>Todas las narrativas generadas</li>
+                                  <li>Todos los personajes</li>
+                                  <li>Todo el progreso de la campaña</li>
+                                  <li>Bases de datos (PostgreSQL y SQLite)</li>
+                                </ul>
+                                <p className="mt-3 font-semibold">
+                                  La campaña volverá al estado inicial y deberás crear un nuevo personaje para comenzar.
+                                </p>
+                              </div>
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={handleResetCampaign}
+                              className="bg-destructive hover:bg-destructive/90"
+                            >
+                              Sí, resetear campaña
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
           )}
         </CardContent>
       </Card>

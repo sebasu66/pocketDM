@@ -20,11 +20,11 @@ export interface NarrativeNode {
     audio_url: string | null;
     audio_status: 'pending' | 'ready' | 'failed';
 
-    // Quick Actions
+    // Quick Actions (with skill checks)
     quick_options: Array<{
-        text: string;
-        action_type: string;
-        icon?: string;
+        action: string;  // The action text in first person
+        skill: string;   // Skill name or "-"
+        success_chance: string;  // "FÁCIL", "PROBABLE", "DIFÍCIL", "MUY DIFÍCIL", "-"
     }>;
 
     // Who's Present
