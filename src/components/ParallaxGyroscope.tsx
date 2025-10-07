@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useCallback } from 'react';
-import { gsap } from 'gsap';
+import gsap from 'gsap';
 
 interface ParallaxGyroscopeProps {
   children: React.ReactNode;

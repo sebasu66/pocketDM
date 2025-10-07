@@ -2,7 +2,7 @@
 import { collection, query, where, getDocs, doc, getDoc, updateDoc, setDoc, addDoc, writeBatch, deleteDoc } from "firebase/firestore";
 import { db, auth } from './config';
 import { User, Character } from './types';
-import { GoogleAuthProvider, signInWithPopup, User as FirebaseAuthUser } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, signInWithRedirect, User as FirebaseAuthUser } from "firebase/auth";
 import { createNewCampaignForUser } from "./campaigns";
 
 // Re-export User type for convenience
@@ -18,17 +18,19 @@ googleProvider.setCustomParameters({
     prompt: 'select_account'
 });
 
-export const signInWithGoogle = async (): Promise<FirebaseAuthUser> => {
+export const signInWithGoogle = async (): Promise<FirebaseAuthUser | void> => {
     try {
         const result = await signInWithPopup(auth, googleProvider);
         return result.user;
     } catch (error: any) {
-        // If popup is blocked or fails, try redirect method
         if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
-            console.warn('Popup blocked, using redirect method');
-            throw error; // Let caller handle
+            console.warn('Popup blocked, falling back to redirect method.');
+            // Don't throw, just initiate the redirect. The result will be handled on page load.
+            await signInWithRedirect(auth, googleProvider);
+        } else {
+            console.error("Google sign-in error:", error);
+            throw error;
         }
-        throw error;
     }
 };
 
@@ -114,8 +116,11 @@ export const findOrCreateUser = async (firebaseUser: FirebaseAuthUser, extraData
         return appUser;
     }
 
-    // Default role for new OAuth users is GM and Player, so they get their own campaign.
-    const role = extraData.role || { isGm: true, isPlayer: true };
+    // Default role for new OAuth users is Player.
+    // If they have a secret code, they join a campaign. If not, maybe they are a GM?
+    // Let's refine this logic. If a secret code is present, they are a player. If not, we can assume GM for now.
+    const isPlayerWithCode = !!extraData.campaignSecret;
+    const role = extraData.role || { isGm: !isPlayerWithCode, isPlayer: isPlayerWithCode };
     const { name, campaignSecret } = extraData;
 
     return await createUser({
@@ -177,7 +182,7 @@ export const deleteUserAndAssociatedData = async (user: User): Promise<void> => 
         
     } else if (user.role.isPlayer) {
         // If user is just a player, delete their character(s) from the campaign
-        const charactersQuery = query(collection(db, CHARACTERS_COLLECTION), where("userId", "==", user.id), where("campaignId", "==", user.campaignId));
+        const charactersQuery = query(collection(db, CHARACTERS_COLLECTION), where("player_id", "==", user.id), where("campaignId", "==", user.campaignId));
         const charactersSnapshot = await getDocs(charactersQuery);
          if (!charactersSnapshot.empty) {
             console.log(`User is Player. Found ${charactersSnapshot.size} character(s) to delete.`);
