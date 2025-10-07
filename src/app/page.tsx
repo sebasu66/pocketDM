@@ -8,11 +8,7 @@ import { useI18n } from "@/context/i18n-context";
 import Image from "next/image";
 import { DmAnimation } from "@/components/DmAnimation";
 import { BackgroundSlideshow } from "@/components/ui/background-slideshow";
-import dynamic from 'next/dynamic';
-
-const ParallaxGyroscope = dynamic(() => import('@/components/ParallaxGyroscope').then(mod => mod.ParallaxGyroscope), {
-  ssr: false,
-});
+import { ParallaxGyroscope } from "@/components/ParallaxGyroscope";
 
 
 export default function HomePage() {
