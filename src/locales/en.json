@@ -282,6 +282,9 @@
     "narrativeHiddenThoughtsPlaceholder": "What is your character thinking? (optional, only visible to the GM)",
     "narrativePostResponse": "Post Response",
     "narrativePosting": "Posting...",
+    "narrativeYourAction": "Your Action",
+    "narrativeCommentSubmitted": "Comment Submitted!",
+    "waitingForDM": "Waiting for Game Master response...",
 
     "integrationsTitle": "Direct Database Integration",
     "integrationsDescription": "This guide explains how to connect an external AI agent or tool to your campaign by interacting directly with the Firestore database using the Firebase Admin SDK.",

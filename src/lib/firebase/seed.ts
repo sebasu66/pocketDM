@@ -60,7 +60,7 @@ const createCharacterFromArchetype = (batch: any, characterData: any, selectedAr
         campaignId: characterData.campaignId,
         userId: characterData.userId,
         isActive: characterData.isActive,
-        location_cell_id: characterData.location_cell_id, // Starting location
+        cell_id: characterData.cell_id, // Starting location
     };
     batch.set(charRef, newCharacter);
 };
@@ -144,9 +144,9 @@ export const runSeed = async () => {
             campaignId: alice.campaignId,
             userId: alice.id,
             isActive: true,
-            location_cell_id: "A1"
+            cell_id: "H1"
         }, archetypes.avenger);
-        
+
         const bob = initialUsers.find(u => u.id === '3')!;
         createCharacterFromArchetype(coreBatch, {
             id: "2",
@@ -156,7 +156,7 @@ export const runSeed = async () => {
             campaignId: bob.campaignId,
             userId: bob.id,
             isActive: false, // Inactive character
-            location_cell_id: "A1"
+            cell_id: "H1"
         }, archetypes.bladedancer);
 
         const carlos = initialUsers.find(u => u.id === '4')!;
@@ -168,9 +168,9 @@ export const runSeed = async () => {
             campaignId: carlos.campaignId,
             userId: carlos.id,
             isActive: true,
-            location_cell_id: "A1"
+            cell_id: "H1"
         }, archetypes.paladin);
-        
+
         const diana = initialUsers.find(u => u.id === '5')!;
         createCharacterFromArchetype(coreBatch, {
             id: "4",
@@ -180,7 +180,7 @@ export const runSeed = async () => {
             campaignId: diana.campaignId,
             userId: diana.id,
             isActive: true,
-            location_cell_id: "A1"
+            cell_id: "H1"
         }, archetypes.hrimwisard);
 
         // Mark seeding as complete

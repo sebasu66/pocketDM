@@ -26,7 +26,7 @@ export const addCharacter = async (characterData: Partial<Character>): Promise<s
         motto: "",
         conditionalRules: [{if: '', then: ''}, {if: '', then: ''}, {if: '', then: ''}],
         isActive: true,
-        location_cell_id: "A1",
+        cell_id: "H1", // Trondavoe - Starting port city
     };
 
     // If an archetype is selected, merge its properties first

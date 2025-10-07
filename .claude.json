@@ -1,0 +1,31 @@
+{
+  "project": {
+    "name": "PocketDM Frontend",
+    "description": "Next.js 15 frontend for DM Santa - Player narrative view and character management",
+    "context": {
+      "framework": "Next.js 15.3.3 with App Router",
+      "language": "TypeScript",
+      "ui": "Tailwind CSS + shadcn/ui",
+      "database": "Firebase/Firestore",
+      "key_features": [
+        "Player narrative view with real-time updates",
+        "Character creation and management",
+        "Quick action system for player decisions",
+        "Comment/action submission to backend",
+        "Optimistic UI updates"
+      ],
+      "architecture": "Client-side React with Firestore listeners"
+    }
+  },
+  "mcpServers": {
+    "memory-keeper-frontend": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["mcp-memory-keeper"],
+      "env": {
+        "MCP_MEMORY_STORAGE": "/mnt/e/pocketDM/.mcp-memory/frontend",
+        "MCP_MEMORY_CHANNEL": "frontend"
+      }
+    }
+  }
+}

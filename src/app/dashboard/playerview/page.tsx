@@ -19,6 +19,7 @@ import { CommentForm } from './CommentForm';
 import { useToast } from '@/hooks/use-toast';
 import { CharacterSheet } from './CharacterSheet';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogTrigger, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { GmSidebarContent, PlayerSidebarContent } from '../layout';
@@ -50,6 +51,10 @@ export default function PlayerViewPage() {
     const activeNode = useMemo(() => {
         return narrativeNodes.length > 0 ? narrativeNodes[activeNodeIndex] : null;
     }, [narrativeNodes, activeNodeIndex]);
+
+    const memoizedQuickOptions = useMemo(() => {
+        return activeNode?.quick_options || [];
+    }, [activeNode?.quick_options]);
 
     // Effect to fetch characters and set up narrative listener
     useEffect(() => {
@@ -145,7 +150,7 @@ export default function PlayerViewPage() {
     // Process wiki tags [[term]] -> clickable links
     const processWikiTags = (html: string): string => {
         return html.replace(/\[\[([^\]]+)\]\]/g, (match, term) => {
-            return `<a href="#" class="wiki-link text-amber-400 hover:text-amber-300 underline decoration-dotted" data-wiki-term="${term}" title="Wiki: ${term}">${term}</a>`;
+            return `<a href="#" class="wiki-link text-amber-400 hover:text-amber-300 underline decoration-dotted cursor-pointer" data-wiki-term="${term}" title="Wiki: ${term}" onclick="event.preventDefault(); alert('Wiki: ${term.replace(/'/g, "\\'")} - Funcionalidad próximamente');">${term}</a>`;
         });
     };
 
@@ -154,7 +159,13 @@ export default function PlayerViewPage() {
         if (!activeNode) return null;
 
         const audioStatus = activeNode.audio_status;
+        const audioUrl = activeNode.audio_url;
         const campaignStatus = campaign?.status;
+
+        // Fix: If has audio_url, treat as ready regardless of status
+        if (audioUrl && audioStatus !== 'failed') {
+            return null; // Audio ready, no indicator needed
+        }
 
         // Priority: audio_status first, then campaign status
         if (audioStatus === 'pending') {
@@ -170,9 +181,6 @@ export default function PlayerViewPage() {
         }
         if (campaignStatus === 'narrative_failed') {
             return { image: '/ui/status/error.png', text: 'Error en narrativa', className: '' };
-        }
-        if (audioStatus === 'ready' && activeNode.audio_url) {
-            return { image: '/ui/status/success.png', text: 'Audio listo', className: '' };
         }
 
         return null; // No status to show when everything is ready
@@ -197,8 +205,25 @@ export default function PlayerViewPage() {
             player_id: user.id,
             text: text,
             current_node_id: latestNode.node_id,
-            location_id: playerCharacter.location_cell_id
+            location_id: playerCharacter.cell_id
           });
+
+          // Optimistically update the latest node with the player's comment
+          setNarrativeNodes(prev => {
+            const updated = [...prev];
+            const latestIndex = updated.length - 1;
+            if (latestIndex >= 0) {
+              updated[latestIndex] = {
+                ...updated[latestIndex],
+                player_comment: {
+                  text: text,
+                  timestamp: { toMillis: () => Date.now() } as any
+                }
+              };
+            }
+            return updated;
+          });
+
           toast({
             title: t('narrativeCommentSubmitted'),
             description: t('waitingForDM')
@@ -343,21 +368,31 @@ export default function PlayerViewPage() {
                 </div>
 
                 <div className="mt-8">
-                    {canPlayerRespond && (
+                    {activeNode?.player_comment ? (
+                        <Card className="bg-stone-gradient border-0">
+                            <CardHeader>
+                                <CardTitle className="font-headline text-2xl uppercase tracking-widest text-center">
+                                    {t('narrativeYourAction')}
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="bg-background/30 rounded-lg p-4 border border-foreground/10">
+                                    <p className="text-foreground/90 italic">"{activeNode.player_comment.text}"</p>
+                                    <p className="text-xs text-foreground/50 mt-2">
+                                        {new Date(activeNode.player_comment.timestamp.toMillis()).toLocaleString()}
+                                    </p>
+                                </div>
+                                <p className="text-center text-sm text-foreground/60 mt-4">
+                                    {t('waitingForDM')}
+                                </p>
+                            </CardContent>
+                        </Card>
+                    ) : canPlayerRespond && (
                         <div className='backdrop-blur-lg rounded-lg'>
                            <CommentForm
                                 onSubmit={handleAddComment}
                                 character={playerCharacter}
-                                quickOptions={activeNode.quick_options?.map(opt => {
-                                    // Only show skill/chance if they exist and aren't "-"
-                                    const hasSkill = opt.skill && opt.skill !== '-';
-                                    const hasChance = opt.success_chance && opt.success_chance !== '-';
-
-                                    if (hasSkill && hasChance) {
-                                        return `${opt.action} (${opt.skill}: ${opt.success_chance})`;
-                                    }
-                                    return opt.action;
-                                }) || []}
+                                quickOptions={memoizedQuickOptions}
                                 t={t}
                             />
                         </div>

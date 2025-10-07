@@ -22,17 +22,33 @@ export function CommentForm({ onSubmit, character, quickOptions, t }: CommentFor
     const [text, setText] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = async (e?: React.FormEvent) => {
+    // Debug log
+    console.log('[CommentForm] quickOptions:', quickOptions);
+
+    const handleSubmit = async (e?: React.FormEvent | React.MouseEvent) => {
         e?.preventDefault();
-        if (!text || isSubmitting) return;
+        console.log('[CommentForm] handleSubmit called, text:', text, 'isSubmitting:', isSubmitting);
+        if (!text || isSubmitting) {
+            console.log('[CommentForm] Submit blocked - text empty or already submitting');
+            return;
+        }
         setIsSubmitting(true);
-        await onSubmit(text);
-        setText("");
-        setIsSubmitting(false);
+        console.log('[CommentForm] Calling onSubmit...');
+        try {
+            await onSubmit(text);
+            console.log('[CommentForm] onSubmit completed successfully');
+            setText("");
+        } catch (error) {
+            console.error('[CommentForm] onSubmit failed:', error);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
-    const handleQuickOptionClick = (option: QuickOption) => {
-        const commentText = `${option.action} (${option.skill})`;
+    const handleQuickOptionClick = (action: string, skill?: string) => {
+        console.log('[CommentForm] Quick option clicked:', { action, skill });
+        const commentText = skill && skill !== '-' ? `${action} (${skill})` : action;
+        console.log('[CommentForm] Setting text to:', commentText);
         setText(commentText);
     }
     
@@ -51,20 +67,42 @@ export function CommentForm({ onSubmit, character, quickOptions, t }: CommentFor
                     <div className="space-y-2">
                         <Label className="flex items-center gap-2"><Zap size={16} /> Opciones Rápidas</Label>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                            {quickOptions.map((option, index) => (
-                                <Button 
-                                    key={index} 
-                                    variant="outline" 
-                                    className="h-auto whitespace-normal text-left justify-start"
-                                    onClick={() => handleQuickOptionClick(option)}
-                                    disabled={isSubmitting}
-                                >
-                                    <div className="flex flex-col">
-                                        <span>{option.action}</span>
-                                        <span className="text-xs text-muted-foreground">Habilidad: {option.skill} | Probabilidad: {option.successChance}</span>
-                                    </div>
-                                </Button>
-                            ))}
+                            {quickOptions.map((option, index) => {
+                                // Bulletproof: handle undefined/null/string options
+                                if (!option) return null;
+
+                                const action = typeof option === 'string' ? option : (option.action || '');
+                                const skill = typeof option === 'object' ? (option.skill || '') : '';
+                                const successChance = typeof option === 'object' ? (option.success_chance || option.successChance || '') : '';
+
+                                // Skip if action is empty
+                                if (!action) return null;
+
+                                // Only show skill/chance if they exist and aren't "-"
+                                const hasSkill = skill && skill !== '-';
+                                const hasChance = successChance && successChance !== '-';
+
+                                return (
+                                    <Button
+                                        key={index}
+                                        variant="outline"
+                                        className="h-auto whitespace-normal text-left justify-start"
+                                        onClick={() => handleQuickOptionClick(action, skill)}
+                                        disabled={isSubmitting}
+                                    >
+                                        <div className="flex flex-col">
+                                            <span>{action}</span>
+                                            {(hasSkill || hasChance) && (
+                                                <span className="text-xs text-muted-foreground">
+                                                    {hasSkill && `${skill}`}
+                                                    {hasSkill && hasChance && ' • '}
+                                                    {hasChance && `${successChance}`}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </Button>
+                                );
+                            })}
                         </div>
                          <Separator className="my-4" />
                     </div>

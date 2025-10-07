@@ -38,8 +38,8 @@ function AnimatedImages() {
           sizes="(max-width: 768px) 50vh, 65vh"
           priority={index === 0}
           className={cn(
-            'absolute inset-0 object-contain drop-shadow-[0_8px_8px_rgba(0,0,0,0.7)] transition-opacity duration-1000 ease-in-out',
-            currentIndex === index ? 'opacity-100 animate-dm-fade-in' : 'opacity-0'
+            'absolute inset-0 object-contain drop-shadow-[0_8px_8px_rgba(0,0,0,0.7)] transition-opacity duration-500 ease-in-out',
+            currentIndex === index ? 'opacity-100' : 'opacity-0'
           )}
         />
       ))}

@@ -282,6 +282,9 @@
     "narrativeHiddenThoughtsPlaceholder": "¿Qué está pensando tu personaje? (opcional, solo visible para el GM)",
     "narrativePostResponse": "Publicar Respuesta",
     "narrativePosting": "Publicando...",
+    "narrativeYourAction": "Tu Acción",
+    "narrativeCommentSubmitted": "¡Comentario Enviado!",
+    "waitingForDM": "Esperando respuesta del Game Master...",
 
     "integrationsTitle": "Integración Directa de Base de Datos",
     "integrationsDescription": "Esta guía explica cómo conectar un agente de IA externo o una herramienta a tu campaña interactuando directamente con la base de datos de Firestore usando el SDK de Admin de Firebase.",

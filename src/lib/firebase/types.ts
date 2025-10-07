@@ -49,7 +49,7 @@ export interface Character {
     campaignId: string;
     userId: string;
     isActive: boolean;
-    location_cell_id?: string;
+    cell_id?: string;
     archetypeId?: string; // Helper for creation
 
     health?: number; // 0-100 percentage
