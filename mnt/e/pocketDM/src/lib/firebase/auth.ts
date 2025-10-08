@@ -2,7 +2,7 @@
 import { collection, query, where, getDocs, doc, getDoc, updateDoc, setDoc, addDoc, writeBatch, deleteDoc } from "firebase/firestore";
 import { db, auth } from './config';
 import { User, Character } from './types';
-import { GoogleAuthProvider, signInWithRedirect, getRedirectResult, User as FirebaseAuthUser } from "firebase/auth";
+import { GoogleAuthProvider, signInWithRedirect, getRedirectResult, User as FirebaseAuthUser, signInAnonymously } from "firebase/auth";
 import { createNewCampaignForUser } from "./campaigns";
 
 // Re-export User type for convenience
@@ -36,6 +36,22 @@ export const handleGoogleRedirectResult = async (): Promise<FirebaseAuthUser | n
         return null;
     }
 }
+
+/**
+ * Signs in a user without a password for development.
+ * This is insecure and should only be used in a controlled dev environment.
+ */
+export const signInDevUser = async (userId: string): Promise<void> => {
+    // For development, we can use anonymous sign-in to get a valid auth state,
+    // but we will manage user data separately based on the email/ID provided.
+    // This is a simplification; a real "passwordless" flow would use custom tokens.
+    if (!auth.currentUser) {
+        await signInAnonymously(auth);
+    }
+    // The actual user data is then fetched and set in the AuthContext,
+    // bypassing the need for a password here.
+};
+
 
 export const getUserByEmail = async (email: string): Promise<User | undefined> => {
     if (!email) return undefined;
