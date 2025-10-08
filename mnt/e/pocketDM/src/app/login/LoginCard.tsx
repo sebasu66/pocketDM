@@ -82,37 +82,6 @@ export function LoginCard() {
     }
   };
 
-  const handleQuickLogin = async (role: 'gm' | 'player') => {
-    setIsChecking(true);
-    try {
-        const demoUserId = role === 'gm' ? '1' : '2'; 
-        const demoUser = await getUserById(demoUserId);
-
-        if (demoUser) {
-            await signInDevUser(demoUserId);
-            const firebaseUser = auth.currentUser;
-            if (firebaseUser) {
-                await setupSession(firebaseUser);
-                toast({ title: `Logged in as ${demoUser.name}`, description: "Redirecting to dashboard..." });
-            } else {
-                throw new Error("Could not set up session for demo user.");
-            }
-        } else {
-            throw new Error("Demo user not found in database. Please seed the database first.");
-        }
-
-    } catch (error: any) {
-        console.error("Quick login error", error);
-        toast({
-            variant: "destructive",
-            title: "Quick Login Failed",
-            description: error.message,
-        });
-    } finally {
-        setIsChecking(false);
-    }
-  };
-
   const handleRegister = async () => {
     if (!name || !email) {
         toast({ variant: "destructive", title: t('registerMissingFields'), description: "Name and email are required." });
@@ -180,20 +149,6 @@ export function LoginCard() {
                 {isChecking && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Continuar
               </Button>
-            </div>
-
-            <Separator className="my-6" />
-            
-            <div className="space-y-4">
-                <CardDescription className="text-center">{t('quickLoginTitle')}</CardDescription>
-                <div className="grid grid-cols-2 gap-4">
-                    <Button variant="secondary" onClick={() => handleQuickLogin('gm')} disabled={isChecking}>
-                        <Crown className="mr-2"/> {t('gmLoginButton')}
-                    </Button>
-                     <Button variant="secondary" onClick={() => handleQuickLogin('player')} disabled={isChecking}>
-                        <UserIcon className="mr-2"/> {t('playerLoginButton')}
-                    </Button>
-                </div>
             </div>
           </>
         );
