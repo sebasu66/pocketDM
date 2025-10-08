@@ -98,7 +98,11 @@ export default function PlayerViewPage() {
                         },
                         20 // Limit to 20 nodes
                     );
+                } else if (isMaster) {
+                    // GM viewing without a character - show campaign status
+                    setIsLoading(false);
                 } else {
+                    // Player without character
                     setIsLoading(false);
                 }
 
