@@ -58,30 +58,41 @@ export default function PlayerViewPage() {
 
     // Effect to fetch characters and set up narrative listener
     useEffect(() => {
-        if (!campaign || !user) return;
+        console.log("[PlayerView] Setup effect triggered. campaign:", campaign?.id, "user:", user?.id);
+        if (!campaign || !user) {
+            console.log("[PlayerView] Missing campaign or user, skipping setup");
+            return;
+        }
         let unsubscribe: Unsubscribe | undefined;
 
         const setup = async () => {
+            console.log("[PlayerView] Starting setup...");
             setIsLoading(true);
             try {
                 const characters = await getCharactersByCampaign(campaign.id);
+                console.log("[PlayerView] Fetched characters:", characters.length);
                 setAllCharacters(characters);
 
                 const userChar = characters.find(c => c.userId === user.id);
+                console.log("[PlayerView] User character:", userChar?.name || "none", "userId match:", user.id);
                 setPlayerCharacter(userChar || null);
 
                 // Listen to character_narrative for player's character
                 if (userChar) {
+                    console.log("[PlayerView] Setting up narrative listener for character:", userChar.id);
                     unsubscribe = listenToCharacterNarrative(
                         userChar.id,
                         (nodes) => {
+                            console.log("[PlayerView] Narrative nodes updated:", nodes.length, "nodes");
                             const oldNodeCount = narrativeNodes.length;
                             setNarrativeNodes(nodes);
 
                             if (isInitialLoad.current) {
+                                console.log("[PlayerView] Initial load, showing latest node");
                                 setActiveNodeIndex(nodes.length - 1); // Show latest node
                                 isInitialLoad.current = false;
                             } else if (nodes.length > oldNodeCount) {
+                                console.log("[PlayerView] New node detected, jumping to latest");
                                 setActiveNodeIndex(nodes.length - 1); // Jump to new node
                             }
                             setIsLoading(false);
@@ -89,6 +100,7 @@ export default function PlayerViewPage() {
                         20 // Limit to 20 nodes
                     );
                 } else {
+                    console.log("[PlayerView] No character found, showing campaign status");
                     // No character - show campaign status for both GMs and Players
                     setIsLoading(false);
                 }
