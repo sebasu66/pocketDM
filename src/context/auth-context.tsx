@@ -102,16 +102,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (loggedInUser && loggedInUser.enabled) {
           setUser(loggedInUser);
           
-          if (loggedInUser.role.isGm && !loggedInUser.role.isPlayer) {
-            setActiveRoleState('gm');
-            console.log("[Auth] Role set to: 'gm'");
-          } else if (!loggedInUser.role.isGm && loggedInUser.role.isPlayer) {
-            setActiveRoleState('player');
-            console.log("[Auth] Role set to: 'player'");
-          } else {
-            setActiveRoleState(null);
-            console.log("[Auth] User has dual roles. Role set to: null (awaiting choice)");
-          }
+          // Since GMs are always players now, default to 'player' for all users
+          setActiveRoleState('player');
+          console.log("[Auth] Role set to: 'player'");
         } else {
           console.log("[Auth] Logged in user is disabled or not found. Clearing session.");
           await clearSession();
