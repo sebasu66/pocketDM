@@ -59,7 +59,8 @@ export const getCharacters = async (): Promise<Character[]> => {
 
 export const getCharactersByCampaign = async (campaignId: string, userId?: string): Promise<Character[]> => {
     console.log(`[Characters] Fetching characters for campaign ${campaignId}` + (userId ? ` and user ${userId}` : ''));
-    let q = query(collection(db, CHARACTERS_COLLECTION), where("campaignId", "==", campaignId));
+    // Fixed: Use snake_case 'campaign_id' to match Firestore schema
+    let q = query(collection(db, CHARACTERS_COLLECTION), where("campaign_id", "==", campaignId));
     if (userId) {
         // Corrected from 'userId' to 'player_id' to match new DB schema
         q = query(q, where("player_id", "==", userId));
