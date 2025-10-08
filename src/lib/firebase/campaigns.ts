@@ -8,14 +8,17 @@ import { initialThreadEs } from "./data/initial-thread-es";
 // populateCampaignMapData removed - map data now seeded by backend
 
 export const getCampaign = async (id: string): Promise<Campaign | null> => {
-    console.log(`Fetching campaign with id: ${id}`);
+    console.log(`[Campaigns] Fetching campaign with id: ${id}`);
     
     const docRef = doc(db, "campaigns", id);
     const docSnap = await getDoc(docRef);
+
     if (docSnap.exists() && docSnap.data().enabled) {
+        console.log(`[Campaigns] Found campaign: ${docSnap.data().title}`);
         return { id: docSnap.id, ...docSnap.data() } as Campaign;
     }
    
+    console.warn(`[Campaigns] Campaign with id ${id} not found or is disabled.`);
     return null;
 };
 

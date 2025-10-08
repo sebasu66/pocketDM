@@ -33,37 +33,47 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [activeRole, setActiveRoleState] = useState<ActiveRole>(null);
 
   useEffect(() => {
+    console.log("[Auth] AuthProvider mounted. Setting up listeners.");
     // This effect runs once on mount to check for a redirect result
     handleGoogleRedirectResult()
       .then(firebaseUser => {
         if (firebaseUser) {
+          console.log("[Auth] Handled Google redirect result. User found:", firebaseUser.uid);
           // If we get a user from redirect, set up the session
           return setupSession(firebaseUser);
         }
       })
       .catch(error => {
-        console.error("Error handling Google redirect:", error);
+        console.error("[Auth] Error handling Google redirect:", error);
       })
       .finally(() => {
         // After checking for redirect, set up the normal auth state listener
+        console.log("[Auth] Setting up onAuthStateChanged listener.");
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: FirebaseAuthUser | null) => {
+          console.log("[Auth] onAuthStateChanged triggered. Firebase user:", firebaseUser?.uid || "null");
           if (firebaseUser) {
             // If a user is logged in but not yet in our context state, set them up.
             // This handles normal session persistence.
             if (!user) {
+              console.log("[Auth] Context user not found, attempting session setup for:", firebaseUser.uid);
               try {
                 await setupSession(firebaseUser);
               } catch (e) {
-                console.error("Error during user session setup", e);
+                console.error("[Auth] Error during user session setup on auth state change", e);
                 await clearSession();
               }
             }
           } else {
+            console.log("[Auth] No Firebase user. Clearing session.");
             await clearSession();
           }
+          console.log("[Auth] Setting isLoading to false in onAuthStateChanged.");
           setIsLoading(false);
         });
-        return () => unsubscribe();
+        return () => {
+          console.log("[Auth] Unsubscribing from onAuthStateChanged.");
+          unsubscribe();
+        }
       });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -72,9 +82,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // When the user object changes (e.g., via quick login), load their campaign.
     const loadCampaign = async () => {
       if (user && user.campaignId) {
+        console.log(`[Auth] User object changed. Loading campaign ID: ${user.campaignId}`);
         const campaignData = await getCampaign(user.campaignId);
+        console.log(`[Auth] Campaign data loaded:`, campaignData ? campaignData.title : "null");
         setCampaign(campaignData);
+        if(!campaignData) {
+          console.error("[Auth] FAILED to load campaign data, but user has a campaignId. This will cause a hang.");
+        }
       } else {
+        console.log("[Auth] User object changed, but no user or campaignId. Clearing campaign.");
         setCampaign(null);
       }
     };
@@ -83,19 +99,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 
   const setupSession = async (firebaseUser: FirebaseAuthUser, extraData: { name?: string; role?: { isGm: boolean; isPlayer: boolean; }, campaignSecret?: string} = {}) => {
+    console.log("[Auth] setupSession started for user:", firebaseUser.uid);
     const loggedInUser = await findOrCreateUser(firebaseUser, extraData);
+    console.log("[Auth] findOrCreateUser returned:", loggedInUser);
     
     if (loggedInUser && loggedInUser.enabled) {
       setUser(loggedInUser);
       
       if (loggedInUser.role.isGm && !loggedInUser.role.isPlayer) {
         setActiveRoleState('gm');
+        console.log("[Auth] Role set to: 'gm'");
       } else if (!loggedInUser.role.isGm && loggedInUser.role.isPlayer) {
         setActiveRoleState('player');
+        console.log("[Auth] Role set to: 'player'");
       } else {
         setActiveRoleState(null); // Let user with dual roles choose
+        console.log("[Auth] User has dual roles. Role set to: null (awaiting choice)");
       }
     } else {
+      console.log("[Auth] Logged in user is disabled or not found. Clearing session.");
       await clearSession();
     }
   };
@@ -107,6 +129,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = async () => {
+    console.log("[Auth] logout called.");
     // Only sign out if the user is not anonymous. This preserves the anonymous session
     // for quick login, but logs out real users.
     if (auth.currentUser && !auth.currentUser.isAnonymous) {
@@ -129,6 +152,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const setActiveRole = (role: 'gm' | 'player') => {
     if (user && user.role.isGm && user.role.isPlayer) {
+      console.log(`[Auth] Manually setting active role to: ${role}`);
       setActiveRoleState(role);
     }
   };
