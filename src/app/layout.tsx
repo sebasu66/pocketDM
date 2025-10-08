@@ -6,7 +6,6 @@ import { Toaster } from "@/components/ui/toaster"
 import { AuthProvider } from '@/context/auth-context';
 import { ThemeProvider } from '@/context/theme-context';
 import { I18nProvider } from '@/context/i18n-context';
-import { ServiceWorkerRegistrar } from '@/components/service-worker-registrar';
 import './globals.css';
 import React from 'react';
 import { runSeed } from '@/lib/firebase/seed';
@@ -38,7 +37,6 @@ export default function RootLayout({
             <AuthProvider>
               {children}
               <Toaster />
-              {/* <ServiceWorkerRegistrar /> */}
             </AuthProvider>
           </I18nProvider>
         </ThemeProvider>
