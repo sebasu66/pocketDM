@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useCallback } from 'react';
-import gsap from 'gsap';
 
 interface ParallaxGyroscopeProps {
   children: React.ReactNode;
@@ -17,6 +16,7 @@ export function ParallaxGyroscope({
   const elementRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
+    const isInitialized = { current: false };
     const element = elementRef.current;
     if (!element) return;
 
@@ -24,51 +24,57 @@ export function ParallaxGyroscope({
     const finalIntensity = intensity * layerMultiplier;
     let cleanup: () => void = () => {};
 
-    if (typeof window !== 'undefined' && 'DeviceOrientationEvent' in window) {
-      const requestPermission = async () => {
-        if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
-          try {
-            const permission = await (DeviceOrientation-Event as any).requestPermission();
-            return permission === 'granted';
-          } catch (error) {
-            console.error('Error requesting DeviceOrientation permission:', error);
-            return false;
-          }
+    import('gsap').then(gsapModule => {
+      if (!isInitialized.current && elementRef.current) {
+        isInitialized.current = true;
+        const gsap = gsapModule.default;
+        if (typeof window !== 'undefined' && 'DeviceOrientationEvent' in window) {
+          const requestPermission = async () => {
+            if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
+              try {
+                const permission = await (DeviceOrientationEvent as any).requestPermission();
+                return permission === 'granted';
+              } catch (error) {
+                console.error('Error requesting DeviceOrientation permission:', error);
+                return false;
+              }
+            }
+            return true;
+          };
+
+          const handleOrientation = (event: DeviceOrientationEvent) => {
+            if (!element) return;
+            const beta = event.beta || 0;
+            const gamma = event.gamma || 0;
+            const x = (gamma / 90) * finalIntensity;
+            const y = (beta / 180) * finalIntensity;
+
+            gsap.to(element, { x, y, duration: 0.5, ease: 'power2.out', force3D: true });
+          };
+
+          requestPermission().then((granted) => {
+            if (granted) {
+              window.addEventListener('deviceorientation', handleOrientation, true);
+              cleanup = () => window.removeEventListener('deviceorientation', handleOrientation, true);
+            }
+          });
+
+        } else {
+          const handleMouseMove = (event: MouseEvent) => {
+            if (!element) return;
+            const { clientX, clientY } = event;
+            const { innerWidth, innerHeight } = window;
+            const x = ((clientX / innerWidth) - 0.5) * 2 * finalIntensity;
+            const y = ((clientY / innerHeight) - 0.5) * 2 * finalIntensity;
+
+            gsap.to(element, { x, y, duration: 0.8, ease: 'power2.out', force3D: true });
+          };
+
+          window.addEventListener('mousemove', handleMouseMove);
+          cleanup = () => window.removeEventListener('mousemove', handleMouseMove);
         }
-        return true;
-      };
-
-      const handleOrientation = (event: DeviceOrientationEvent) => {
-        if (!element) return;
-        const beta = event.beta || 0;
-        const gamma = event.gamma || 0;
-        const x = (gamma / 90) * finalIntensity;
-        const y = (beta / 180) * finalIntensity;
-
-        gsap.to(element, { x, y, duration: 0.5, ease: 'power2.out', force3D: true });
-      };
-
-      requestPermission().then((granted) => {
-        if (granted) {
-          window.addEventListener('deviceorientation', handleOrientation, true);
-          cleanup = () => window.removeEventListener('deviceorientation', handleOrientation, true);
-        }
-      });
-
-    } else {
-      const handleMouseMove = (event: MouseEvent) => {
-        if (!element) return;
-        const { clientX, clientY } = event;
-        const { innerWidth, innerHeight } = window;
-        const x = ((clientX / innerWidth) - 0.5) * 2 * finalIntensity;
-        const y = ((clientY / innerHeight) - 0.5) * 2 * finalIntensity;
-
-        gsap.to(element, { x, y, duration: 0.8, ease: 'power2.out', force3D: true });
-      };
-
-      window.addEventListener('mousemove', handleMouseMove);
-      cleanup = () => window.removeEventListener('mousemove', handleMouseMove);
-    }
+      }
+    });
 
     return () => {
         cleanup();
@@ -76,7 +82,7 @@ export function ParallaxGyroscope({
   }, [intensity, layer]);
 
   return (
-    <div ref={elementRef} style={{ willChange: 'transform' }}>
+    <div ref={elementRef} style={{ willChange: 'transform', zIndex: 10 }}>
       {children}
     </div>
   );
