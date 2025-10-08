@@ -555,7 +555,7 @@ export default function CharactersPage() {
                         <X />
                     </RusticIconButton>
                 </DialogClose>
-                <RusticIconButton tooltip={t('charactersSaveChanges')} onClick={handleSaveChanges}>
+                <RusticIconButton tooltip={t('charactersSaveChanges')} onClick={() => handleSaveChanges}>
                     <Save />
                 </RusticIconButton>
             </DialogFooter>
@@ -611,3 +611,5 @@ const ConditionalRuleInput = ({ index, rule, onChange, t }: { index: number, rul
         </div>
     )
 }
+
+    

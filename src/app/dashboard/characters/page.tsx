@@ -24,7 +24,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Badge } from "@/componentsui/badge";
+import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { getCharactersByCampaign, addCharacter, deleteCharacter, updateCharacter } from "@/lib/firebase/characters";
@@ -32,7 +32,7 @@ import { Slider } from "@/components/ui/slider";
 import { getArchetype } from "@/lib/archetypes";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
-import { getUserById } from "@/lib/auth";
+import { getUserById } from "@/lib/firebase/auth";
 import { useI18n } from "@/context/i18n-context";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 import { archetypes as seedArchetypes } from "@/lib/firebase/data/seed-archetypes";
@@ -71,7 +71,7 @@ export default function CharactersPage() {
           const charactersFromDb = await getCharactersByCampaign(campaign.id);
           const charactersWithPlayers = await Promise.all(
             charactersFromDb.map(async (char) => {
-              const player = await getUserById(char.userId);
+              const player = await getUserById(char.player_id);
               return { ...char, playerName: player?.name || t('charactersUnknownPlayer') };
             })
           );
@@ -111,10 +111,9 @@ export default function CharactersPage() {
         const newCharacterData: Partial<Character> = {
             name: newCharName,
             description: newCharBackground,
-            campaignId: campaign.id,
-            userId: user.id,
-            archetypeId: selectedArchetype.id,
-            cell_id: "H1", // Default starting location
+            campaign_id: campaign.id,
+            player_id: user.id,
+            archetypeId: selectedArchetype.id, // This is a temporary field for creation
             visualPreset: selectedArchetype.visualPreset,
         };
 
@@ -215,7 +214,7 @@ export default function CharactersPage() {
         <Card>
           <CardHeader>
             <CardTitle className="font-headline">{t('charactersRosterTitle')}</CardTitle>
-            <CardDescription>{t('charactersRosterDesc', { campaignTitle: campaign?.title })}</CardDescription>
+            <CardDescription>{t('charactersRosterDesc', { campaignTitle: campaign?.campaign_name })}</CardDescription>
           </CardHeader>
           <CardContent>
             {allCharacters.length > 0 ? (
@@ -537,7 +536,8 @@ export default function CharactersPage() {
                                 {[0, 1, 2].map(index => (
                                     <ConditionalRuleInput 
                                         key={index} 
-                                        index={(editingCharacter.conditionalRules || [])[index]}
+                                        index={index}
+                                        rule={(editingCharacter.conditionalRules || [])[index]}
                                         onChange={handleConditionalRuleChange}
                                         t={t}
                                     />
@@ -555,7 +555,7 @@ export default function CharactersPage() {
                         <X />
                     </RusticIconButton>
                 </DialogClose>
-                <RusticIconButton tooltip={t('charactersSaveChanges')} onClick={handleSaveChanges}>
+                <RusticIconButton tooltip={t('charactersSaveChanges')} onClick={() => handleSaveChanges}>
                     <Save />
                 </RusticIconButton>
             </DialogFooter>
@@ -585,14 +585,6 @@ const WithTooltip = ({ children, tooltip }: { children: React.ReactNode, tooltip
     </TooltipContent>
   </Tooltip>
 );
-
-const LabelWithInfo = ({ label, htmlFor }: { label: string, htmlFor: string }) => (
-    <div className="flex items-center gap-2">
-        <Label htmlFor={htmlFor}>{label}</Label>
-        <HelpCircle className="w-4 h-4 text-muted-foreground" />
-    </div>
-);
-
 
 const AttributeInput = ({ label, value, onChange }: { label: string; value: string | undefined; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) => (
     <div className="space-y-2">
