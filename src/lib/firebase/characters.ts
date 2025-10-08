@@ -58,12 +58,16 @@ export const getCharacters = async (): Promise<Character[]> => {
 };
 
 export const getCharactersByCampaign = async (campaignId: string, userId?: string): Promise<Character[]> => {
+    console.log(`[Characters] Fetching characters for campaign ${campaignId}` + (userId ? ` and user ${userId}` : ''));
     let q = query(collection(db, CHARACTERS_COLLECTION), where("campaignId", "==", campaignId));
     if (userId) {
-        q = query(q, where("userId", "==", userId));
+        // Corrected from 'userId' to 'player_id' to match new DB schema
+        q = query(q, where("player_id", "==", userId));
     }
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Character));
+    const characters = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Character));
+    console.log(`[Characters] Found ${characters.length} characters.`);
+    return characters;
 }
 
 export const getCharacter = async (id: string): Promise<Character | null> => {
@@ -92,6 +96,7 @@ export const deleteCharacter = async (id: string): Promise<void> => {
     
 
     
+
 
 
 
