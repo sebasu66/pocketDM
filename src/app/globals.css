@@ -249,8 +249,7 @@
   
     @keyframes slideshowFade {
       0% { opacity: 0; transform: scale(1.05); }
-      25% { opacity: 1; transform: scale(1.1); } /* Hold image */
-      50% { opacity: 1; transform: scale(1.1); }
+      25% { opacity: 1; transform: scale(1.1); }
       100% { opacity: 1; }
     }
 
