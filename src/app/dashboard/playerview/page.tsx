@@ -3,6 +3,7 @@
 
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { useAuth } from '@/context/auth-context';
+import { useCampaign } from '@/context/campaign-context';
 import { Unsubscribe } from 'firebase/firestore';
 import type { Character } from '@/lib/firebase/types';
 import { addCharacterComment } from '@/lib/firebase/comments';
@@ -27,7 +28,8 @@ import { useRouter } from 'next/navigation';
 
 
 export default function PlayerViewPage() {
-    const { user, campaign, isLoading: isAuthLoading, activeRole } = useAuth();
+    const { user, isLoading: isAuthLoading, activeRole } = useAuth();
+    const { campaign } = useCampaign();
     const { t, locale } = useI18n();
     const { toast } = useToast();
     const router = useRouter();
