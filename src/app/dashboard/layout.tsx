@@ -21,6 +21,7 @@ import {
   Newspaper,
   Library,
   Beaker,
+  Activity,
 } from "lucide-react";
 
 import {
@@ -190,6 +191,7 @@ const AppLayoutContent = ({ children }: { children: React.ReactNode }) => {
     "/dashboard/monsters": t('pageTitleMonsters'),
     "/dashboard/narrative": t('pageTitleNarrative'),
     "/dashboard/chat": t('pageTitleChat'),
+    "/dashboard/system-status": "System Status",
     "/dashboard/settings": t('pageTitleSettings'),
     "/dashboard/settings/apikeys": t('pageTitleAiSettings'),
     "/dashboard/integrations": t('pageTitleIntegrations'),
@@ -243,6 +245,14 @@ const AppLayoutContent = ({ children }: { children: React.ReactNode }) => {
                 </SidebarMenuItem>
                </>
               )}
+            <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={pathname.startsWith('/dashboard/system-status')} tooltip={{ children: 'System Status' }} onClick={handleLinkClick}>
+                  <Link href="/dashboard/system-status">
+                    <Activity />
+                    <span>System Status</span>
+                  </Link>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
             <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname.startsWith('/dashboard/settings')} tooltip={{ children: t('sidebarSettings') }} onClick={handleLinkClick}>
                   <Link href="/dashboard/settings">
