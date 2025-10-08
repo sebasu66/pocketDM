@@ -67,8 +67,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             console.log("[Auth] No Firebase user. Clearing session.");
             await clearSession();
           }
-          console.log("[Auth] Setting isLoading to false in onAuthStateChanged.");
-          setIsLoading(false);
+          // The loading state is now managed based on user and campaign state below.
         });
         return () => {
           console.log("[Auth] Unsubscribing from onAuthStateChanged.");
@@ -79,23 +78,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    // When the user object changes (e.g., via quick login), load their campaign.
     const loadCampaign = async () => {
-      if (user && user.campaignId) {
-        console.log(`[Auth] User object changed. Loading campaign ID: ${user.campaignId}`);
+      if (user && user.campaignId && !campaign) {
+        console.log(`[Auth] User object present. Loading campaign ID: ${user.campaignId}`);
         const campaignData = await getCampaign(user.campaignId);
-        console.log(`[Auth] Campaign data loaded:`, campaignData ? campaignData.title : "null");
-        setCampaign(campaignData);
-        if(!campaignData) {
-          console.error("[Auth] FAILED to load campaign data, but user has a campaignId. This will cause a hang.");
+        if (campaignData) {
+          console.log(`[Auth] Campaign data loaded:`, campaignData.title);
+          setCampaign(campaignData);
+        } else {
+          console.error(`[Auth] FAILED to load campaign data for campaignId: ${user.campaignId}. This might cause a hang if not resolved.`);
+          // This path can be hit if a new user/campaign is created and this effect runs before Firestore data is available.
+          // We don't clear the session here, we let it retry or resolve as data becomes available.
         }
-      } else {
-        console.log("[Auth] User object changed, but no user or campaignId. Clearing campaign.");
+      } else if (!user) {
+        console.log("[Auth] No user object. Clearing campaign.");
         setCampaign(null);
       }
     };
     loadCampaign();
-  }, [user]);
+  }, [user, campaign]);
+
+  useEffect(() => {
+    // isLoading should be true until we either have a user AND their campaign, or we know there's no user.
+    if (user && user.campaignId && campaign) {
+      setIsLoading(false);
+    } else if (user && !user.campaignId) { // User exists but has no campaign (edge case)
+      setIsLoading(false);
+    } else if (!user && auth.currentUser === null) { // No firebase user logged in
+       setIsLoading(false);
+    }
+  }, [user, campaign]);
 
 
   const setupSession = async (firebaseUser: FirebaseAuthUser, extraData: { name?: string; role?: { isGm: boolean; isPlayer: boolean; }, campaignSecret?: string} = {}) => {
@@ -130,12 +142,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = async () => {
     console.log("[Auth] logout called.");
-    // Only sign out if the user is not anonymous. This preserves the anonymous session
-    // for quick login, but logs out real users.
-    if (auth.currentUser && !auth.currentUser.isAnonymous) {
-        await auth.signOut();
+    if (auth.currentUser) {
+      await auth.signOut();
     }
     await clearSession();
+    setIsLoading(true); // Reset loading state for next login
   };
   
   const updateUser = async (updatedUser: User) => {

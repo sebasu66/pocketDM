@@ -2,12 +2,16 @@
 
 import { doc, getDoc, updateDoc, setDoc, collection, writeBatch, addDoc, Timestamp } from "firebase/firestore"; 
 import { db } from "./config";
-import { Campaign, NarrativeThread } from "./types";
+import { Campaign } from "./types";
 import { initialThreadEn } from "./data/initial-thread-en";
 import { initialThreadEs } from "./data/initial-thread-es";
 // populateCampaignMapData removed - map data now seeded by backend
 
 export const getCampaign = async (id: string): Promise<Campaign | null> => {
+    if (!id) {
+        console.warn("[Campaigns] getCampaign called with no ID.");
+        return null;
+    }
     console.log(`[Campaigns] Fetching campaign with id: ${id}`);
     
     const docRef = doc(db, "campaigns", id);
