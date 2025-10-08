@@ -94,6 +94,7 @@ export default function DashboardPage() {
         />
 
         {/* Panel 2: Adventure (Narrative) */}
+        {console.log("[Dashboard] Rendering Adventure panel. hasCharacter:", hasCharacter, "disabled:", !hasCharacter)}
         <AnimatedPanel
           title="Adventure"
           subtitle="Continue your epic journey"
