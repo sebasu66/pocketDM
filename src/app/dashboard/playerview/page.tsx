@@ -72,11 +72,12 @@ export default function PlayerViewPage() {
             setIsLoading(true);
             try {
                 const characters = await getCharactersByCampaign(campaign.id);
-                console.log("[PlayerView] Fetched characters:", characters.length);
+                console.log("[PlayerView] Fetched characters:", characters.length, characters);
                 setAllCharacters(characters);
 
-                const userChar = characters.find(c => c.userId === user.id);
-                console.log("[PlayerView] User character:", userChar?.name || "none", "userId match:", user.id);
+                const userChar = characters.find(c => c.player_id === user.id);
+                console.log("[PlayerView] Looking for player_id:", user.id);
+                console.log("[PlayerView] User character:", userChar?.name || "none");
                 setPlayerCharacter(userChar || null);
 
                 // Listen to character_narrative for player's character
