@@ -274,10 +274,70 @@ export default function PlayerViewPage() {
     }
     
     if (!activeNode) {
+        // Show animated status based on campaign status
+        const getCampaignStatusIndicator = () => {
+            const campaignStatus = campaign?.status;
+
+            if (campaignStatus === 'waiting_for_character') {
+                return {
+                    image: '/ui/status/loading1.png',
+                    text: 'Esperando creación de personaje...',
+                    className: 'animate-pulse'
+                };
+            }
+            if (campaignStatus === 'ready' || campaignStatus === 'initializing') {
+                // Cycle through loading animations
+                const loadingFrame = (animationTick % 4) + 1;
+                return {
+                    image: `/ui/status/loading${loadingFrame}.png`,
+                    text: 'Preparando campaña...',
+                    className: ''
+                };
+            }
+            if (campaignStatus === 'generating_narrative') {
+                const loadingFrame = (animationTick % 4) + 1;
+                return {
+                    image: `/ui/status/loading${loadingFrame}.png`,
+                    text: 'Generando narrativa inicial...',
+                    className: ''
+                };
+            }
+            if (campaignStatus === 'narrative_failed') {
+                return {
+                    image: '/ui/status/error.png',
+                    text: 'Error al generar narrativa',
+                    className: ''
+                };
+            }
+
+            // Default: waiting
+            return {
+                image: '/ui/status/loading1.png',
+                text: 'Iniciando campaña...',
+                className: 'animate-pulse'
+            };
+        };
+
+        const campaignStatusIndicator = getCampaignStatusIndicator();
+
         return (
              <div className="min-h-[60vh] flex flex-col items-center justify-center text-center p-8">
-                <h1 className="text-4xl font-headline uppercase tracking-widest">{t('notFoundTitle')}</h1>
+                <h1 className="text-4xl font-headline uppercase tracking-widest mb-6">{campaign?.title || t('notFoundTitle')}</h1>
+
+                {/* Animated Status Indicator */}
+                <div className={`flex flex-col items-center justify-center gap-6 my-8 ${campaignStatusIndicator.className}`}>
+                    <Image
+                        src={campaignStatusIndicator.image}
+                        alt={campaignStatusIndicator.text}
+                        width={200}
+                        height={200}
+                        className="object-contain"
+                    />
+                    <p className="text-xl font-medium text-foreground/80">{campaignStatusIndicator.text}</p>
+                </div>
+
                 <p className="mt-4 text-foreground/70">{t('narrativeNotStarted')}</p>
+
                  {isMaster && (
                     <div className="mt-8">
                         <GmControls
