@@ -29,10 +29,12 @@ export default function DashboardPage() {
       setIsCheckingCharacter(true);
       try {
         const characters = await getCharactersByCampaign(campaign.id, user.id);
+        const hasChar = characters.length > 0;
         console.log("[Dashboard] Characters found:", characters.length, characters);
         console.log("[Dashboard] User ID:", user.id);
         console.log("[Dashboard] Campaign ID:", campaign.id);
-        setHasCharacter(characters.length > 0);
+        console.log("[Dashboard] Setting hasCharacter to:", hasChar);
+        setHasCharacter(hasChar);
       } catch (error) {
         console.error("[Dashboard] Error checking character:", error);
       } finally {
@@ -131,7 +133,10 @@ export default function DashboardPage() {
             "/locations/adventure2.jpg",
             "/locations/adventure3.jpg"
           ]}
-          onClick={() => router.push("/dashboard/playerview")}
+          onClick={() => {
+            console.log("[Dashboard] Adventure panel clicked. hasCharacter:", hasCharacter);
+            router.push("/dashboard/playerview");
+          }}
           disabled={!hasCharacter}
           panelStyle="adventure"
           className="animate-fade-in animation-delay-100"
