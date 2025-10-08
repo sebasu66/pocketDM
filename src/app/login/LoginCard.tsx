@@ -31,7 +31,7 @@ export function LoginCard() {
   const [isPlayer, setIsPlayer] = useState(true);
   const [secretCode, setSecretCode] = useState("");
   
-  const { user, setupSession, setUser, setCampaign, setActiveRole } = useAuth();
+  const { user, setupSession, setUser, setActiveRole } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
@@ -163,9 +163,8 @@ export function LoginCard() {
   const handleOAuthLogin = async () => {
     setIsChecking(true);
     try {
-      const firebaseUser = await signInWithGoogle();
-      await setupSession(firebaseUser);
-      toast({ title: "Login Successful", description: "Redirecting to your dashboard..."});
+      // This function now just starts the redirect. The result is handled in AuthProvider.
+      await signInWithGoogle();
     } catch (error) {
       console.error("OAuth login error", error);
       toast({
@@ -173,8 +172,7 @@ export function LoginCard() {
         title: t('loginFailedTitle'),
         description: "Could not log in with Google. Please try again.",
       });
-    } finally {
-        setIsChecking(false);
+      setIsChecking(false);
     }
   };
   
@@ -323,5 +321,3 @@ export function LoginCard() {
     </Card>
   );
 }
-
-    

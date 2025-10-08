@@ -2,7 +2,7 @@
 import { collection, query, where, getDocs, doc, getDoc, updateDoc, setDoc, addDoc, writeBatch, deleteDoc } from "firebase/firestore";
 import { db, auth } from './config';
 import { User, Character } from './types';
-import { GoogleAuthProvider, signInWithPopup, signInWithRedirect, User as FirebaseAuthUser } from "firebase/auth";
+import { GoogleAuthProvider, signInWithRedirect, getRedirectResult, User as FirebaseAuthUser } from "firebase/auth";
 import { createNewCampaignForUser } from "./campaigns";
 
 // Re-export User type for convenience
@@ -18,21 +18,24 @@ googleProvider.setCustomParameters({
     prompt: 'select_account'
 });
 
-export const signInWithGoogle = async (): Promise<FirebaseAuthUser | void> => {
-    try {
-        const result = await signInWithPopup(auth, googleProvider);
-        return result.user;
-    } catch (error: any) {
-        if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
-            console.warn('Popup blocked, falling back to redirect method.');
-            // Don't throw, just initiate the redirect. The result will be handled on page load.
-            await signInWithRedirect(auth, googleProvider);
-        } else {
-            console.error("Google sign-in error:", error);
-            throw error;
-        }
-    }
+export const signInWithGoogle = async (): Promise<void> => {
+    // We will exclusively use redirect method for better cross-device compatibility
+    // The result will be handled by the AuthProvider on page load.
+    await signInWithRedirect(auth, googleProvider);
 };
+
+export const handleGoogleRedirectResult = async (): Promise<FirebaseAuthUser | null> => {
+    try {
+        const result = await getRedirectResult(auth);
+        if (result) {
+            return result.user;
+        }
+        return null;
+    } catch (error) {
+        console.error("Error handling Google redirect result:", error);
+        return null;
+    }
+}
 
 export const getUserByEmail = async (email: string): Promise<User | undefined> => {
     if (!email) return undefined;

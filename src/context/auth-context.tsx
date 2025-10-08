@@ -3,7 +3,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User, Campaign } from '@/lib/firebase/types';
-import { findOrCreateUser, updateUser as updateDbUser } from '@/lib/firebase/auth';
+import { findOrCreateUser, updateUser as updateDbUser, handleGoogleRedirectResult } from '@/lib/firebase/auth';
 import { getCampaign, updateCampaign as updateDbCampaign } from '@/lib/firebase/campaigns';
 import { onAuthStateChanged, User as FirebaseAuthUser } from 'firebase/auth';
 import { auth } from '@/lib/firebase/config';
@@ -33,25 +33,38 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [activeRole, setActiveRoleState] = useState<ActiveRole>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: FirebaseAuthUser | null) => {
-      setIsLoading(true);
-      if (firebaseUser) {
-        // If there's already a user in context, don't automatically overwrite it.
-        // This is important for the "impersonation" quick login feature.
-        if (!user) {
-            try {
-              await setupSession(firebaseUser);
-            } catch (e) {
-              console.error("Error during user session setup", e);
-              await clearSession();
-            }
+    // This effect runs once on mount to check for a redirect result
+    handleGoogleRedirectResult()
+      .then(firebaseUser => {
+        if (firebaseUser) {
+          // If we get a user from redirect, set up the session
+          return setupSession(firebaseUser);
         }
-      } else {
-        await clearSession();
-      }
-      setIsLoading(false);
-    });
-    return () => unsubscribe();
+      })
+      .catch(error => {
+        console.error("Error handling Google redirect:", error);
+      })
+      .finally(() => {
+        // After checking for redirect, set up the normal auth state listener
+        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: FirebaseAuthUser | null) => {
+          if (firebaseUser) {
+            // If a user is logged in but not yet in our context state, set them up.
+            // This handles normal session persistence.
+            if (!user) {
+              try {
+                await setupSession(firebaseUser);
+              } catch (e) {
+                console.error("Error during user session setup", e);
+                await clearSession();
+              }
+            }
+          } else {
+            await clearSession();
+          }
+          setIsLoading(false);
+        });
+        return () => unsubscribe();
+      });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -134,5 +147,3 @@ export const useAuth = () => {
   }
   return context;
 };
-
-    
