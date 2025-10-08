@@ -1,5 +1,4 @@
 
-
 import { doc, getDoc, updateDoc, setDoc, collection, writeBatch, addDoc, Timestamp } from "firebase/firestore"; 
 import { db } from "./config";
 import { Campaign } from "./types";
@@ -54,16 +53,9 @@ export const createNewCampaignForUser = async (user: {id: string, name: string},
         status: 'initializing',  // Backend orchestrator will handle setup
         locale: locale,
     };
-
-    // Create the campaign document with minimal data
-    // The backend orchestrator will:
-    // 1. Create Docker instance (PostgreSQL + Backend + TTS Worker)
-    // 2. Initialize PostgreSQL schema + SQLite world database
-    // 3. Generate personalized initial narrative with Gemini based on character
-    // 4. Update status to 'active'
+    
     await setDoc(newCampaignRef, newCampaignData);
     log(`[Campaigns] Campaign document for ${newCampaignId} created with status='initializing'.`);
-    log(`[Campaigns] Backend orchestrator will handle infrastructure setup and narrative generation.`);
 
     return newCampaignId;
 }
@@ -74,15 +66,6 @@ export const generateNewSecretCode = async (campaignId: string): Promise<string>
     return newCode;
 };
 
-/**
- * Request campaign reset - sets flag for orchestrator to handle
- * The orchestrator will:
- * 1. Stop Docker containers
- * 2. Clean up databases (PostgreSQL, SQLite)
- * 3. Delete narrative nodes
- * 4. Reset status to 'initializing'
- * 5. Clear the toReset flag
- */
 export const requestCampaignReset = async (campaignId: string): Promise<void> => {
     console.log(`[Campaigns] Requesting reset for campaign: ${campaignId}`);
     await updateCampaign(campaignId, {

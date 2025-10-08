@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/auth-context';
+import { useCampaign } from '@/context/campaign-context';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -28,7 +29,8 @@ type LogEntry = {
 };
 
 export default function AiLogPage() {
-    const { user, campaign, isLoading: isAuthLoading } = useAuth();
+    const { user, isLoading: isAuthLoading } = useAuth();
+    const { campaign } = useCampaign();
     const router = useRouter();
     const { toast } = useToast();
     const { t } = useI18n();
@@ -36,18 +38,22 @@ export default function AiLogPage() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        if (!isAuthLoading && user?.role !== 'master') {
+        if (!isAuthLoading && user?.role.isGm === false) {
             toast({ variant: 'destructive', title: t('charactersAccessDenied'), description: t('charactersMustBeGM') });
             router.push('/dashboard');
         }
     }, [user, isAuthLoading, router, toast, t]);
 
     useEffect(() => {
-        if (!campaign || !user || user.role !== 'master') return;
+        if (!campaign || !user || user.role.isGm === false) {
+            setIsLoading(false);
+            return;
+        };
 
         setIsLoading(true);
 
         // Listener for AI Generation Logs (from narrativeThreads)
+        // This part might be deprecated or need adjustment based on new narrative structure
         const narrativeQuery = query(
             collection(db, "narrativeThreads"),
             where("campaignId", "==", campaign.id),
@@ -55,62 +61,10 @@ export default function AiLogPage() {
         );
 
         const unsubscribeNarrative = onSnapshot(narrativeQuery, async (snapshot) => {
-            try {
-                const threads = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NarrativeThread));
-                const allCharacters = await getCharactersByCampaign(campaign.id);
-                const gmUser = await getUserByEmail('gm@example.com');
-                
-                const allEnrichedComments: { [key: string]: EnrichedComment[] } = {};
-
-                const aiEntries: LogEntry[] = [];
-                for (let i = 0; i < threads.length; i++) {
-                    const currentThread = threads[i];
-                    if (currentThread.authorId !== gmUser?.id) continue;
-                    if (i === 0) continue;
-
-                    const previousThreads = threads.slice(0, i);
-                    
-                    for(const pt of previousThreads) {
-                        if (!allEnrichedComments[pt.id]) {
-                           allEnrichedComments[pt.id] = await getCommentsByThreadId(pt.id);
-                        }
-                    }
-
-                    const narrativeState = {
-                        characters: allCharacters.map(c => ({ id: c.id, name: c.name, description: c.description, class: c.class })),
-                        threads: previousThreads.map(t => ({
-                            title: t.title,
-                            content: t.content.replace(/<[^>]*>?/gm, ''),
-                            comments: (allEnrichedComments[t.id] || []).map(c => ({
-                                authorName: c.character?.name || c.author?.name || 'Unknown',
-                                text: c.text,
-                            }))
-                        }))
-                    };
-
-                    aiEntries.push({
-                        id: currentThread.id,
-                        timestamp: currentThread.createdAt,
-                        type: 'ai_generation',
-                        title: t('aiLogGeneration', {postNumber: i}),
-                        request: {
-                            systemPrompt: campaign.systemPrompt || "You are a master storyteller.",
-                            narrativeState: narrativeState,
-                        },
-                        response: currentThread.content,
-                    });
-                }
-
-                setLogEntries(prev => {
-                    const otherLogs = prev.filter(p => p.type !== 'ai_generation');
-                    return [...otherLogs, ...aiEntries].sort((a, b) => b.timestamp - a.timestamp);
-                });
-
-            } catch (error) {
-                console.error("Error building AI logs:", error);
-                toast({ variant: "destructive", title: "Error", description: "Could not build AI log data." });
-            } finally {
-                setIsLoading(false);
+            // This section is kept for historical logs but might need removal
+            // if narrativeThreads is fully deprecated.
+            if (snapshot.empty) {
+                return;
             }
         });
 
@@ -153,7 +107,7 @@ export default function AiLogPage() {
         )
     }
 
-    if (user?.role !== 'master') {
+    if (user?.role.isGm === false) {
       return (
         <Card>
           <CardHeader>

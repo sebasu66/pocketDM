@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from '@/context/auth-context';
+import { useCampaign } from '@/context/campaign-context';
 import { useRouter } from 'next/navigation';
 import { useI18n } from '@/context/i18n-context';
 import Link from 'next/link';
@@ -19,14 +20,15 @@ const defaultSystemPromptEn = `You are a master storyteller and a creative Dunge
 
 export default function ApiKeysPage() {
     const { toast } = useToast();
-    const { user, campaign, updateCampaign, isLoading } = useAuth();
+    const { user, isLoading: isAuthLoading } = useAuth();
+    const { campaign, updateCampaign } = useCampaign();
     const router = useRouter();
     const [apiKey, setApiKey] = useState('');
     const [systemPrompt, setSystemPrompt] = useState('');
     const { t, locale } = useI18n();
 
     useEffect(() => {
-        if (!isLoading && user?.role !== 'master') {
+        if (!isAuthLoading && user?.role.isGm === false) {
           toast({
             variant: 'destructive',
             title: t('charactersAccessDenied'),
@@ -34,7 +36,7 @@ export default function ApiKeysPage() {
           });
           router.push('/dashboard/settings');
         }
-    }, [user, isLoading, router, toast, t]);
+    }, [user, isAuthLoading, router, toast, t]);
 
     useEffect(() => {
         const savedKey = localStorage.getItem('gemini_api_key');
@@ -59,7 +61,7 @@ export default function ApiKeysPage() {
         });
     };
 
-    if (isLoading || user?.role !== 'master') {
+    if (isAuthLoading || user?.role.isGm === false) {
       return (
         <Card>
           <CardHeader>

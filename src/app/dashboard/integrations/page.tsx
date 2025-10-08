@@ -8,9 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Copy, Database, Workflow, ShieldAlert } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
+import { useCampaign } from "@/context/campaign-context";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { useRouter } from "next/navigation";
 import { useI18n } from "@/context/i18n-context";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const getDbInstructions = (campaignId: string | undefined) => `
 ## Direct Database Integration Guide
@@ -159,12 +161,13 @@ addNarrativeThread(newThread)
 
 export default function IntegrationsPage() {
     const { toast } = useToast();
-    const { campaign, user, isLoading } = useAuth();
+    const { user, isLoading: isAuthLoading } = useAuth();
+    const { campaign } = useCampaign();
     const router = useRouter();
     const { t } = useI18n();
     
     React.useEffect(() => {
-      if (!isLoading && user?.role !== 'master') {
+      if (!isAuthLoading && user?.role.isGm === false) {
         toast({
           variant: 'destructive',
           title: t('charactersAccessDenied'),
@@ -172,18 +175,19 @@ export default function IntegrationsPage() {
         });
         router.push('/dashboard');
       }
-    }, [user, isLoading, router, toast, t]);
+    }, [user, isAuthLoading, router, toast, t]);
 
-    if (isLoading || user?.role !== 'master') {
+    if (isAuthLoading || user?.role.isGm === false) {
       return (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t('charactersAccessDenied')}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>{t('charactersMustBeGM')}</p>
-          </CardContent>
-        </Card>
+        <div className="max-w-4xl mx-auto space-y-8">
+            <Card>
+                <CardHeader>
+                    <Skeleton className="h-8 w-1/2" />
+                    <Skeleton className="h-4 w-3/4" />
+                </CardHeader>
+            </Card>
+            <Skeleton className="h-64 w-full" />
+        </div>
       );
     }
     
@@ -247,5 +251,3 @@ export default function IntegrationsPage() {
         </div>
     );
 }
-
-    

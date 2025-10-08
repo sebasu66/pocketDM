@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTheme } from "@/context/theme-context";
 import { useAuth } from "@/context/auth-context";
+import { useCampaign } from "@/context/campaign-context";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { User } from '@/lib/firebase/types';
 import Link from 'next/link';
@@ -33,6 +34,7 @@ import {
 export default function SettingsPage() {
   const { handwritingFont, setHandwritingFont } = useTheme();
   const { user: authUser, isLoading, updateUser: updateAuthUser } = useAuth();
+  const { campaign } = useCampaign();
   const [user, setUser] = useState<User | null>(null);
   const { toast } = useToast();
   const { t } = useI18n();
@@ -59,7 +61,7 @@ export default function SettingsPage() {
   };
 
   const handleResetCampaign = async () => {
-    if (!user?.campaignId) {
+    if (!campaign?.id) {
       toast({
         title: "Error",
         description: "No campaign found to reset",
@@ -70,7 +72,7 @@ export default function SettingsPage() {
 
     setIsResetting(true);
     try {
-      await requestCampaignReset(user.campaignId);
+      await requestCampaignReset(campaign.id);
       toast({
         title: "Campaign Reset Requested",
         description: "The system will reset your campaign shortly. You can create a new character once it's ready.",

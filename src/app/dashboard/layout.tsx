@@ -46,15 +46,15 @@ import { UserNav } from "@/components/user-nav";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/context/auth-context";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
-import { runSeed } from "@/lib/firebase/seed";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase/config";
 import { useI18n } from "@/context/i18n-context";
-import { runCampaignSeedingTest } from "@/lib/firebase/narrative";
+import { CampaignProvider, useCampaign } from "@/context/campaign-context";
+import { getCampaign } from "@/lib/firebase/campaigns";
+import type { Campaign } from "@/lib/firebase/types";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const GmSidebarContent = ({onClick}: {onClick?: () => void}) => {
   const pathname = usePathname() || "/dashboard";
@@ -173,12 +173,13 @@ export const PlayerSidebarContent = ({onClick}: {onClick?: () => void}) => {
 };
 
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+const AppLayoutContent = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname() || "/dashboard";
-  const { user, campaign, isLoading } = useAuth();
+  const { user, activeRole } = useAuth();
+  const { campaign, setCampaign } = useCampaign();
   const router = useRouter();
   const [isSheetOpen, setIsSheetOpen] = React.useState(false);
-  const isMaster = user?.role === 'master';
+  const isMaster = activeRole === 'gm';
   const { t } = useI18n();
 
   const pageTitles: { [key: string]: string } = {
@@ -198,7 +199,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     "/dashboard/dev-test": "Dev Test Page",
   };
   
-  if (isLoading || !user || !campaign) {
+  if (!campaign) {
     return (
        <div className="flex items-center justify-center min-h-screen">
           <div className="flex items-center gap-2">
@@ -296,5 +297,84 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
       </TooltipProvider>
     </SidebarProvider>
+  );
+}
+
+export default function AppLayout({ children }: { children: React.ReactNode }) {
+  const { user, isLoading: isAuthLoading } = useAuth();
+  const [campaign, setCampaign] = useState<Campaign | null>(null);
+  const [isCampaignLoading, setIsCampaignLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const loadCampaign = async () => {
+      if (user && user.campaignId) {
+        if (!campaign || campaign.id !== user.campaignId) {
+          console.log(`[DashboardLayout] User detected. Loading campaign ID: ${user.campaignId}`);
+          setIsCampaignLoading(true);
+          const campaignData = await getCampaign(user.campaignId);
+          if (campaignData) {
+            console.log(`[DashboardLayout] Campaign data loaded:`, campaignData.title);
+            setCampaign(campaignData);
+          } else {
+            console.error(`[DashboardLayout] FAILED to load campaign: ${user.campaignId}`);
+            // Handle failure, maybe redirect or show an error
+          }
+          setIsCampaignLoading(false);
+        }
+      } else if (user && !user.campaignId) {
+        // User is valid but has no campaign, might be an error or mid-creation
+        console.warn("[DashboardLayout] User has no campaignId.");
+        setIsCampaignLoading(false);
+      }
+    };
+    
+    if (!isAuthLoading) {
+      loadCampaign();
+    }
+  }, [user, isAuthLoading, campaign]);
+
+  if (isAuthLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+          <div className="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" className="w-8 h-8 animate-spin"><defs><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style={{ stopColor: "hsl(var(--accent))", stopOpacity: 1 }} /><stop offset="100%" style={{ stopColor: "hsl(var(--primary))", stopOpacity: 1 }} /></linearGradient></defs><path d="M20 80 C20 40, 40 20, 50 20 S80 40, 80 80 L60 80 C60 50, 50 40, 50 40 C50 40, 40 50, 40 80 Z" stroke="url(#grad1)" strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round" /><path d="M30 70 L70 70 M40 60 L60 60 M45 50 L55 50" stroke="hsl(var(--border))" strokeWidth="3" fill="none" strokeLinecap="round" /></svg>
+            <p className="text-muted-foreground">Authenticating...</p>
+          </div>
+       </div>
+    );
+  }
+
+  if (!user) {
+    // AuthProvider should handle redirection, but this is a fallback.
+    return null;
+  }
+  
+  if (isCampaignLoading && user.campaignId) {
+     return (
+      <div className="flex items-center justify-center min-h-screen">
+          <div className="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" className="w-8 h-8 animate-spin"><defs><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style={{ stopColor: "hsl(var(--accent))", stopOpacity: 1 }} /><stop offset="100%" style={{ stopColor: "hsl(var(--primary))", stopOpacity: 1 }} /></linearGradient></defs><path d="M20 80 C20 40, 40 20, 50 20 S80 40, 80 80 L60 80 C60 50, 50 40, 50 40 C50 40, 40 50, 40 80 Z" stroke="url(#grad1)" strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round" /><path d="M30 70 L70 70 M40 60 L60 60 M45 50 L55 50" stroke="hsl(var(--border))" strokeWidth="3" fill="none" strokeLinecap="round" /></svg>
+            <p className="text-muted-foreground">Loading campaign...</p>
+          </div>
+       </div>
+    );
+  }
+  
+  if (!campaign && user.campaignId) {
+     return (
+       <div className="flex flex-col items-center justify-center min-h-screen text-center">
+        <h2 className="text-xl font-bold">Campaign Not Found</h2>
+        <p className="text-muted-foreground">Could not load data for campaign ID: {user.campaignId}</p>
+        <p className="mt-4">This can happen if the campaign was recently created. Please try refreshing the page.</p>
+        <Button onClick={() => window.location.reload()} className="mt-4">Refresh</Button>
+      </div>
+    );
+  }
+
+  return (
+    <CampaignProvider campaign={campaign} setCampaign={setCampaign}>
+      <AppLayoutContent>{children}</AppLayoutContent>
+    </CampaignProvider>
   );
 }

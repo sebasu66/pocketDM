@@ -1,5 +1,4 @@
 
-
 // THIS SCRIPT IS FOR DEMO PURPOSES ONLY
 // It seeds the Firestore database with initial data so the app is usable.
 import { collection, writeBatch, doc, getDoc, Timestamp } from "firebase/firestore";
@@ -12,20 +11,13 @@ import { hellfrostReferenceData } from './data/seed-reference';
 // Map-related imports removed - now handled by backend
 // import { rassilonGridMapSummary, majorLocales, notableNPCs, adventureHooks }
 import { conceptosWebApp } from './data/seed-concepts';
-import { initialThreadEn } from "./data/initial-thread-en";
-import { initialThreadEs } from "./data/initial-thread-es";
-
-
-// MAP DATA SEEDING REMOVED
-// Map data (cells, locations, NPCs, hooks) is now seeded by the backend
-// Only character creation data (archetypes, races, skills, items) remains in frontend
-
 
 /**
- * Creates a new campaign from scratch, including its map data and initial narrative thread.
- * This function is designed to be called when a new GM registers.
+ * Creates a new campaign from scratch.
+ * NOTE: The initial narrative thread is no longer created here.
+ * The backend orchestrator is now responsible for generating the first narrative node.
  */
-const createCampaign = async (batch: any, campaignData: any, locale: 'en' | 'es' = 'en') => {
+const createCampaign = async (batch: any, campaignData: any) => {
     const campaignRef = doc(db, "campaigns", campaignData.id);
     batch.set(campaignRef, {
         title: campaignData.title,
@@ -37,11 +29,6 @@ const createCampaign = async (batch: any, campaignData: any, locale: 'en' | 'es'
         secretCode: Math.random().toString(36).substring(2, 8).toUpperCase(),
         ownerId: '1' // Default GM for seed
     });
-
-    // Add the initial narrative thread based on locale
-    const initialThread = locale === 'es' ? initialThreadEs : initialThreadEn;
-    const threadRef = doc(collection(db, "campaigns", campaignData.id, "threads"));
-    batch.set(threadRef, { ...initialThread, comments: [], createdAt: Timestamp.now() });
 };
 
 /**
@@ -104,24 +91,19 @@ export const runSeed = async () => {
         const seedStateSnap = await getDoc(seedStateRef);
 
         if (seedStateSnap.exists() && seedStateSnap.data().isSeeded) {
-            // console.log("Database has already been seeded. Skipping.");
             return;
         }
 
         console.log("Seeding database...");
         
-        // Batch for core data (users, campaign doc, etc.)
         const coreBatch = writeBatch(db);
 
-        // Seed reference data first
         await seedReferenceData(coreBatch);
 
-        // Create campaigns
         for (const campaign of initialCampaigns) {
-            await createCampaign(coreBatch, campaign, 'es'); // Default to spanish for demo
+            await createCampaign(coreBatch, campaign);
         }
 
-        // Create users
         for (const user of initialUsers) {
             const userRef = doc(db, "users", user.id);
             coreBatch.set(userRef, {
@@ -134,7 +116,6 @@ export const runSeed = async () => {
             });
         }
         
-        // Create characters for the seeded users from archetypes
         const alice = initialUsers.find(u => u.id === '2')!;
         createCharacterFromArchetype(coreBatch, {
             id: "1",
@@ -155,7 +136,7 @@ export const runSeed = async () => {
             visualPreset: "preset_2",
             campaignId: bob.campaignId,
             userId: bob.id,
-            isActive: false, // Inactive character
+            isActive: false,
             cell_id: "H1"
         }, archetypes.bladedancer);
 
@@ -183,15 +164,10 @@ export const runSeed = async () => {
             cell_id: "H1"
         }, archetypes.hrimwisard);
 
-        // Mark seeding as complete
         coreBatch.set(seedStateRef, { isSeeded: true });
         
-        // Commit the core data first
         await coreBatch.commit();
         console.log("Core database data seeded successfully!");
-
-        // Map data seeding removed - now handled by backend
-
 
     } catch (error) {
         console.error("Error seeding database:", error);

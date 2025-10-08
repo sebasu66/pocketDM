@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Star, ScrollText, Skull, Map, Copy, RefreshCw, Link as LinkIcon, User as UserIcon, Crown } from "lucide-react";
 import { useAuth } from "@/context/auth-context";
+import { useCampaign } from "@/context/campaign-context";
 import { useToast } from "@/hooks/use-toast";
 import { useI18n } from "@/context/i18n-context";
 import { useState, useEffect } from "react";
@@ -34,7 +35,8 @@ const latestDevelopments = [
 ];
 
 export default function DashboardPage() {
-  const { user, campaign, setCampaign, isLoading, setActiveRole, activeRole } = useAuth();
+  const { user, activeRole, setActiveRole } = useAuth();
+  const { campaign, setCampaign } = useCampaign();
   const { toast } = useToast();
   const { t } = useI18n();
   const [inviteLink, setInviteLink] = useState("");
@@ -46,12 +48,8 @@ export default function DashboardPage() {
     }
   }, [campaign]);
 
-  if (isLoading || !user) {
-    return null; // Or a loading state
-  }
-  
   // If user has dual roles but hasn't selected one yet, show role selection screen.
-  if (user.role.isGm && user.role.isPlayer && !activeRole) {
+  if (user && user.role.isGm && user.role.isPlayer && !activeRole) {
     return (
       <div className="flex items-center justify-center min-h-[calc(100vh-10rem)]">
         <Card className="max-w-md">
@@ -73,7 +71,6 @@ export default function DashboardPage() {
       </div>
     );
   }
-
 
   if (!campaign) {
     return (
@@ -185,5 +182,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-    

@@ -3,6 +3,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useAuth } from "@/context/auth-context";
+import { useCampaign } from "@/context/campaign-context";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,7 +24,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/componentsui/badge";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { getCharactersByCampaign, addCharacter, deleteCharacter, updateCharacter } from "@/lib/firebase/characters";
@@ -45,7 +46,8 @@ import { ReferenceItem } from "@/components/ui/ReferenceItem";
 const archetypesList = Object.values(seedArchetypes);
 
 export default function CharactersPage() {
-  const { campaign, user, isLoading: isAuthLoading } = useAuth();
+  const { user, isLoading: isAuthLoading, activeRole } = useAuth();
+  const { campaign } = useCampaign();
   const { toast } = useToast();
   const [character, setCharacter] = useState<Character | null>(null);
   const [allCharacters, setAllCharacters] = useState<(Character & { playerName: string })[]>([]);
@@ -59,7 +61,7 @@ export default function CharactersPage() {
   const [newCharBackground, setNewCharBackground] = useState("");
   const [isCreating, setIsCreating] = useState(false);
 
-  const isMaster = user?.role === 'master';
+  const isMaster = activeRole === 'gm';
 
   const fetchCharacters = useCallback(async () => {
     if (campaign && user) {
@@ -89,10 +91,10 @@ export default function CharactersPage() {
   }, [campaign, user, toast, isMaster, t]);
 
   useEffect(() => {
-    if (!isAuthLoading) {
+    if (!isAuthLoading && campaign) {
       fetchCharacters();
     }
-  }, [isAuthLoading, fetchCharacters]);
+  }, [isAuthLoading, fetchCharacters, campaign]);
 
   const handleSelectArchetype = (archetype: any) => {
     setSelectedArchetype(archetype);

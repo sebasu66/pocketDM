@@ -4,21 +4,18 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User, Campaign } from '@/lib/firebase/types';
 import { findOrCreateUser, updateUser as updateDbUser, handleGoogleRedirectResult } from '@/lib/firebase/auth';
-import { getCampaign, updateCampaign as updateDbCampaign } from '@/lib/firebase/campaigns';
 import { onAuthStateChanged, User as FirebaseAuthUser } from 'firebase/auth';
 import { auth } from '@/lib/firebase/config';
+import { usePathname, useRouter } from 'next/navigation';
 
 type ActiveRole = 'gm' | 'player' | null;
 
 interface AuthContextType {
   user: User | null;
-  campaign: Campaign | null;
   activeRole: ActiveRole;
-  logout: () => void;
+  logout: () => Promise<void>;
   updateUser: (user: User) => Promise<void>;
   setUser: (user: User) => void;
-  setCampaign: (campaign: Campaign) => void;
-  updateCampaign: (campaign: Campaign) => Promise<void>;
   setActiveRole: (role: 'gm' | 'player') => void;
   isLoading: boolean;
   setupSession: (user: FirebaseAuthUser, extraData?: { name?: string; role?: { isGm: boolean; isPlayer: boolean; }, campaignSecret?: string}) => Promise<void>;
@@ -28,137 +25,124 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [campaign, setCampaign] = useState<Campaign | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [activeRole, setActiveRoleState] = useState<ActiveRole>(null);
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
-    console.log("[Auth] AuthProvider mounted. Setting up listeners.");
-    // This effect runs once on mount to check for a redirect result
-    handleGoogleRedirectResult()
-      .then(firebaseUser => {
-        if (firebaseUser) {
-          console.log("[Auth] Handled Google redirect result. User found:", firebaseUser.uid);
-          // If we get a user from redirect, set up the session
-          return setupSession(firebaseUser);
+    console.log("[Auth] Provider mounted. Setting up Firebase auth listener.");
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: FirebaseAuthUser | null) => {
+      console.log("[Auth] onAuthStateChanged triggered. Firebase user:", firebaseUser?.uid || "null");
+      if (firebaseUser) {
+        if (!user || user.id !== firebaseUser.uid) {
+           console.log("[Auth] Context user doesn't match Firebase user. Setting up session for:", firebaseUser.uid);
+           await setupSession(firebaseUser);
+        } else {
+           console.log("[Auth] Context user already matches Firebase user. No session setup needed.");
+           setIsLoading(false);
         }
-      })
-      .catch(error => {
-        console.error("[Auth] Error handling Google redirect:", error);
-      })
-      .finally(() => {
-        // After checking for redirect, set up the normal auth state listener
-        console.log("[Auth] Setting up onAuthStateChanged listener.");
-        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: FirebaseAuthUser | null) => {
-          console.log("[Auth] onAuthStateChanged triggered. Firebase user:", firebaseUser?.uid || "null");
-          if (firebaseUser) {
-            // If a user is logged in but not yet in our context state, set them up.
-            // This handles normal session persistence.
-            if (!user) {
-              console.log("[Auth] Context user not found, attempting session setup for:", firebaseUser.uid);
-              try {
-                await setupSession(firebaseUser);
-              } catch (e) {
-                console.error("[Auth] Error during user session setup on auth state change", e);
-                await clearSession();
-              }
+      } else {
+        console.log("[Auth] No Firebase user. Clearing session and setting loading to false.");
+        await clearSession();
+        setIsLoading(false);
+      }
+    });
+
+    return () => {
+      console.log("[Auth] Unsubscribing from onAuthStateChanged.");
+      unsubscribe();
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  
+  useEffect(() => {
+    // This effect handles the result from a Google Sign-In redirect.
+    // It should only run once on initial load.
+    const handleRedirect = async () => {
+        try {
+            const firebaseUser = await handleGoogleRedirectResult();
+            if (firebaseUser) {
+                console.log("[Auth] Handled Google redirect. User found:", firebaseUser.uid);
+                // If a new user is found from redirect, setup their session.
+                // The onAuthStateChanged listener will handle persistence for existing users.
+                if (!user || user.id !== firebaseUser.uid) {
+                    await setupSession(firebaseUser);
+                }
             }
-          } else {
-            console.log("[Auth] No Firebase user. Clearing session.");
-            await clearSession();
-          }
-          // The loading state is now managed based on user and campaign state below.
-        });
-        return () => {
-          console.log("[Auth] Unsubscribing from onAuthStateChanged.");
-          unsubscribe();
+        } catch (error) {
+            console.error("[Auth] Error handling Google redirect:", error);
         }
-      });
+    };
+    handleRedirect();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    const loadCampaign = async () => {
-      if (user && user.campaignId && !campaign) {
-        console.log(`[Auth] User object present. Loading campaign ID: ${user.campaignId}`);
-        const campaignData = await getCampaign(user.campaignId);
-        if (campaignData) {
-          console.log(`[Auth] Campaign data loaded:`, campaignData.title);
-          setCampaign(campaignData);
-        } else {
-          console.error(`[Auth] FAILED to load campaign data for campaignId: ${user.campaignId}. This might cause a hang if not resolved.`);
-          // This path can be hit if a new user/campaign is created and this effect runs before Firestore data is available.
-          // We don't clear the session here, we let it retry or resolve as data becomes available.
+    // Redirect logic after user state changes
+    if (!isLoading) {
+        if (user && !pathname.startsWith('/dashboard')) {
+            console.log("[Auth] User is loaded and not on dashboard, redirecting to /dashboard");
+            router.push('/dashboard');
+        } else if (!user && pathname.startsWith('/dashboard')) {
+            console.log("[Auth] User is not loaded but is on dashboard, redirecting to /login");
+            router.push('/login');
         }
-      } else if (!user) {
-        console.log("[Auth] No user object. Clearing campaign.");
-        setCampaign(null);
-      }
-    };
-    loadCampaign();
-  }, [user, campaign]);
-
-  useEffect(() => {
-    // isLoading should be true until we either have a user AND their campaign, or we know there's no user.
-    if (user && user.campaignId && campaign) {
-      setIsLoading(false);
-    } else if (user && !user.campaignId) { // User exists but has no campaign (edge case)
-      setIsLoading(false);
-    } else if (!user && auth.currentUser === null) { // No firebase user logged in
-       setIsLoading(false);
     }
-  }, [user, campaign]);
+  }, [user, isLoading, pathname, router]);
 
 
   const setupSession = async (firebaseUser: FirebaseAuthUser, extraData: { name?: string; role?: { isGm: boolean; isPlayer: boolean; }, campaignSecret?: string} = {}) => {
+    setIsLoading(true);
     console.log("[Auth] setupSession started for user:", firebaseUser.uid);
-    const loggedInUser = await findOrCreateUser(firebaseUser, extraData);
-    console.log("[Auth] findOrCreateUser returned:", loggedInUser);
-    
-    if (loggedInUser && loggedInUser.enabled) {
-      setUser(loggedInUser);
-      
-      if (loggedInUser.role.isGm && !loggedInUser.role.isPlayer) {
-        setActiveRoleState('gm');
-        console.log("[Auth] Role set to: 'gm'");
-      } else if (!loggedInUser.role.isGm && loggedInUser.role.isPlayer) {
-        setActiveRoleState('player');
-        console.log("[Auth] Role set to: 'player'");
-      } else {
-        setActiveRoleState(null); // Let user with dual roles choose
-        console.log("[Auth] User has dual roles. Role set to: null (awaiting choice)");
-      }
-    } else {
-      console.log("[Auth] Logged in user is disabled or not found. Clearing session.");
-      await clearSession();
+    try {
+        const loggedInUser = await findOrCreateUser(firebaseUser, extraData);
+        console.log("[Auth] findOrCreateUser returned:", loggedInUser);
+        
+        if (loggedInUser && loggedInUser.enabled) {
+          setUser(loggedInUser);
+          
+          if (loggedInUser.role.isGm && !loggedInUser.role.isPlayer) {
+            setActiveRoleState('gm');
+            console.log("[Auth] Role set to: 'gm'");
+          } else if (!loggedInUser.role.isGm && loggedInUser.role.isPlayer) {
+            setActiveRoleState('player');
+            console.log("[Auth] Role set to: 'player'");
+          } else {
+            setActiveRoleState(null);
+            console.log("[Auth] User has dual roles. Role set to: null (awaiting choice)");
+          }
+        } else {
+          console.log("[Auth] Logged in user is disabled or not found. Clearing session.");
+          await clearSession();
+        }
+    } catch(error) {
+        console.error("[Auth] Error during setupSession:", error);
+        await clearSession();
+    } finally {
+        console.log("[Auth] setupSession finished. isLoading set to false.");
+        setIsLoading(false);
     }
   };
 
   const clearSession = async () => {
     setUser(null);
-    setCampaign(null);
     setActiveRoleState(null);
   };
 
   const logout = async () => {
     console.log("[Auth] logout called.");
     if (auth.currentUser) {
-      await auth.signOut();
+        await auth.signOut();
     }
     await clearSession();
-    setIsLoading(true); // Reset loading state for next login
+    router.push('/login'); // Redirect to login on logout.
   };
   
   const updateUser = async (updatedUser: User) => {
     if (!user) return;
     await updateDbUser(updatedUser.id, updatedUser);
     setUser(updatedUser);
-  };
-
-  const updateCampaign = async (updatedCampaign: Campaign) => {
-    if (!campaign) return;
-    await updateDbCampaign(updatedCampaign.id, updatedCampaign);
-    setCampaign(updatedCampaign);
   };
 
   const setActiveRole = (role: 'gm' | 'player') => {
@@ -169,7 +153,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, campaign, setCampaign, activeRole, setActiveRole, logout, isLoading, updateUser, updateCampaign, setupSession, setUser }}>
+    <AuthContext.Provider value={{ user, activeRole, setActiveRole, logout, isLoading, updateUser, setupSession, setUser }}>
       {children}
     </AuthContext.Provider>
   );
