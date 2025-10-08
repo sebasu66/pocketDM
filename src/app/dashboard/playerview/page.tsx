@@ -70,16 +70,6 @@ export default function PlayerViewPage() {
                 const userChar = characters.find(c => c.userId === user.id);
                 setPlayerCharacter(userChar || null);
 
-                if (!isMaster && !userChar && !isAuthLoading && user.role.isPlayer) {
-                    toast({
-                        title: "Character Needed",
-                        description: "You must create a character before viewing the narrative.",
-                        variant: "destructive"
-                    });
-                    router.push('/dashboard/characters');
-                    return;
-                }
-
                 // Listen to character_narrative for player's character
                 if (userChar) {
                     unsubscribe = listenToCharacterNarrative(
@@ -98,11 +88,8 @@ export default function PlayerViewPage() {
                         },
                         20 // Limit to 20 nodes
                     );
-                } else if (isMaster) {
-                    // GM viewing without a character - show campaign status
-                    setIsLoading(false);
                 } else {
-                    // Player without character
+                    // No character - show campaign status for both GMs and Players
                     setIsLoading(false);
                 }
 
@@ -342,13 +329,19 @@ export default function PlayerViewPage() {
 
                 <p className="mt-4 text-foreground/70">{t('narrativeNotStarted')}</p>
 
-                 {isMaster && (
+                {/* Show create character button if user has no character */}
+                {!playerCharacter && (
                     <div className="mt-8">
-                        <GmControls
-                            onRestart={handleRestart}
-                            hasNodes={narrativeNodes.length > 0}
-                            t={t}
-                        />
+                        <Button
+                            onClick={() => router.push('/dashboard/characters')}
+                            size="lg"
+                            className="bg-amber-600 hover:bg-amber-700 text-white"
+                        >
+                            {t('charactersCreate') || 'Create Character'}
+                        </Button>
+                        <p className="mt-3 text-sm text-foreground/60">
+                            {t('narrativeNeedCharacter') || 'You need a character to start your adventure'}
+                        </p>
                     </div>
                 )}
             </div>
