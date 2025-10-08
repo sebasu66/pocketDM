@@ -76,9 +76,24 @@ export function LoginCard() {
   const handleLogin = async () => {
     setIsChecking(true);
     try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        await setupSession(userCredential.user);
-        toast({ title: "Login Successful", description: "Redirecting to your dashboard..."});
+        // DEVELOPMENT MODE: Login without password
+        const existingUser = await getUserByEmail(email.toLowerCase());
+        if (existingUser) {
+            setUser(existingUser);
+            if (existingUser.role.isGm && !existingUser.role.isPlayer) {
+                setActiveRole('gm');
+            } else {
+                setActiveRole('player');
+            }
+            toast({ title: "Login Successful (Dev Mode)", description: "Redirecting to your dashboard..."});
+        } else {
+            throw new Error("User not found");
+        }
+
+        // PRODUCTION MODE: Uncomment this and remove the above
+        // const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        // await setupSession(userCredential.user);
+        // toast({ title: "Login Successful", description: "Redirecting to your dashboard..."});
     } catch (error) {
         console.error("Login error", error);
         toast({
@@ -213,20 +228,21 @@ export function LoginCard() {
       case 'login':
         return (
            <div className="space-y-4 pt-4">
-            <CardDescription className="text-center">¡Bienvenido de nuevo! Te recuerdo.</CardDescription>
+            <CardDescription className="text-center">¡Bienvenido de nuevo! Te recuerdo. (Dev Mode: sin password)</CardDescription>
              <div className="grid gap-2">
                 <Label htmlFor="login-email">{t('emailLabel')}</Label>
                 <Input id="login-email" type="email" value={email} disabled />
             </div>
-            <div className="grid gap-2">
+            {/* DEVELOPMENT MODE: Password field hidden */}
+            {/* <div className="grid gap-2">
                 <Label htmlFor="login-password">{t('passwordLabel')}</Label>
                 <Input id="login-password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleLogin()} autoFocus/>
-            </div>
+            </div> */}
             <Button onClick={handleLogin} className="w-full" disabled={isChecking}>
                 {isChecking && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {t('loginButton')}
             </Button>
-            
+
             <Separator className="my-4" />
 
             <Button variant="outline" className="w-full" onClick={handleOAuthLogin} disabled={isChecking}>
