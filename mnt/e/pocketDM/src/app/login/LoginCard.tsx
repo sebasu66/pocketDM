@@ -9,29 +9,28 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/logo";
 import { useAuth } from "@/context/auth-context";
-import { getUserByEmail, signInWithGoogle, createUser, getUserById, signInDevUser } from "@/lib/firebase/auth";
+import { getUserByEmail, signInWithGoogle, createUser, signInDevUser } from "@/lib/firebase/auth";
 import { useToast } from "@/hooks/use-toast";
 import { useI18n } from "@/context/i18n-context";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Crown, User as UserIcon, Loader2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInAnonymously } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase/config";
 
-type Step = 'check-email' | 'login' | 'register';
+type Step = 'check-email' | 'register';
 
 export function LoginCard() {
   const [step, setStep] = useState<Step>('check-email');
   const [isChecking, setIsChecking] = useState(false);
   
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [isGm, setIsGm] = useState(false);
   const [isPlayer, setIsPlayer] = useState(true);
   const [secretCode, setSecretCode] = useState("");
   
-  const { user, setupSession, setUser, setActiveRole } = useAuth();
+  const { user, setupSession } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
@@ -98,7 +97,7 @@ export function LoginCard() {
 
     setIsChecking(true);
     try {
-        // For dev mode, we create a dummy password. In a real app, you'd use the password state.
+        // For dev mode, we create a dummy password.
         const tempPassword = `dev_${Date.now()}`;
         const userCredential = await createUserWithEmailAndPassword(auth, email, tempPassword);
         await setupSession(userCredential.user, {
@@ -222,7 +221,7 @@ export function LoginCard() {
         {renderStep()}
           {step !== 'check-email' && (
             <div className="mt-4 text-center">
-                <Button variant="link" onClick={() => { setStep('check-email'); setPassword(''); }}>
+                <Button variant="link" onClick={() => { setStep('check-email'); }}>
                     Volver
                 </Button>
             </div>
@@ -231,3 +230,5 @@ export function LoginCard() {
     </Card>
   );
 }
+
+    
