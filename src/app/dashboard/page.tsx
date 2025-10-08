@@ -88,6 +88,8 @@ export default function DashboardPage() {
     );
   }
 
+  console.log("[Dashboard] RENDER - hasCharacter:", hasCharacter, "isCheckingCharacter:", isCheckingCharacter);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-background/80">
       {/* Campaign Title Header */}
