@@ -23,7 +23,7 @@ export default function HomePage() {
       <ParallaxGyroscope layer="foreground" intensity={25}>
          <div className="relative z-10 flex flex-col items-center text-center text-white animate-ethereal-float">
             <div className="relative w-[50vh] h-[50vh] md:w-[65vh] md:h-[65vh] -mb-12">
-                <div className="absolute inset-0 rounded-full bg-black/10 backdrop-blur-md z-9"
+                <div className="absolute inset-0 rounded-full bg-black/10 backdrop-blur-lg z-[9]"
                      style={{
                          boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.3), inset 0 1px 0 0 rgba(255,255,255,0.05)'
                      }}
