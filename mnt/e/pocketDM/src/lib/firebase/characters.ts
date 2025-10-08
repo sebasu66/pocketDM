@@ -95,5 +95,3 @@ export const deleteCharacter = async (id: string): Promise<void> => {
     const docRef = doc(db, CHARACTERS_COLLECTION, id);
     await deleteDoc(docRef);
 };
-
-    
