@@ -7,15 +7,13 @@ import { useCampaign } from "@/context/campaign-context";
 import { useI18n } from "@/context/i18n-context";
 import { getCharactersByCampaign } from "@/lib/firebase/characters";
 import { AnimatedPanel } from "./components/AnimatedPanel";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Crown, User as UserIcon, MessagesSquare, Settings } from "lucide-react";
+import { MessagesSquare, Settings } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { user, activeRole, setActiveRole } = useAuth();
+  const { user } = useAuth();
   const { campaign } = useCampaign();
   const { t } = useI18n();
   const [hasCharacter, setHasCharacter] = useState(false);
@@ -44,30 +42,6 @@ export default function DashboardPage() {
 
     checkCharacter();
   }, [campaign?.id, user?.id]);
-
-  // Role selection screen
-  if (user && user.role.isGm && user.role.isPlayer && !activeRole) {
-    return (
-      <div className="flex items-center justify-center min-h-[calc(100vh-10rem)]">
-        <Card className="max-w-md">
-          <CardHeader>
-            <CardTitle className="font-headline text-2xl">{t('chooseRoleTitle')}</CardTitle>
-            <CardDescription>{t('chooseRoleDescription')}</CardDescription>
-          </CardHeader>
-          <CardContent className="grid grid-cols-2 gap-4">
-            <Button variant="outline" className="h-24 flex-col gap-2" onClick={() => setActiveRole('gm')}>
-              <Crown className="w-8 h-8 text-amber-400" />
-              <span>{t('chooseRoleGm')}</span>
-            </Button>
-            <Button variant="outline" className="h-24 flex-col gap-2" onClick={() => setActiveRole('player')}>
-              <UserIcon className="w-8 h-8" />
-              <span>{t('chooseRolePlayer')}</span>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
 
   if (!campaign) {
     return (
