@@ -200,3 +200,5 @@ export const deleteUserAndAssociatedData = async (user: User): Promise<void> => 
         console.log("Firebase Auth user deleted successfully.");
     }
 };
+
+    
