@@ -9,7 +9,7 @@ const CHARACTERS_COLLECTION = "characters";
 
 // Create
 export const addCharacter = async (characterData: Partial<Character>): Promise<string> => {
-    
+
     let baseCharacter: any = {
         // Base defaults for any character
         level: 1,
@@ -46,9 +46,30 @@ export const addCharacter = async (characterData: Partial<Character>): Promise<s
     delete finalCharacter.archetypeId;
     // Remove id if it came from archetype to let Firestore assign it
     delete finalCharacter.id;
-    
+
     const docRef = await addDoc(collection(db, CHARACTERS_COLLECTION), finalCharacter);
-    return docRef.id;
+    const newCharId = docRef.id;
+
+    // ✅ If this is the first character, update campaign status to 'ready'
+    if (characterData.campaign_id) {
+        const { getCampaign, updateCampaign } = await import('./campaigns');
+        const campaign = await getCampaign(characterData.campaign_id);
+
+        if (campaign && campaign.status === 'waiting_for_character') {
+            await updateCampaign(campaign.id, {
+                status: 'ready',
+                character_ids: [newCharId]
+            });
+            console.log(`[Characters] Campaign ${campaign.id} status updated to 'ready'`);
+        } else if (campaign && campaign.character_ids) {
+            // Add to existing character_ids
+            await updateCampaign(campaign.id, {
+                character_ids: [...campaign.character_ids, newCharId]
+            });
+        }
+    }
+
+    return newCharId;
 };
 
 // Read

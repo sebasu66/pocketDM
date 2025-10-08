@@ -50,7 +50,8 @@ export const createNewCampaignForUser = async (user: {id: string, name: string},
         enabled: true,
         secretCode: Math.random().toString(36).substring(2, 8).toUpperCase(),
         ownerId: user.id,
-        status: 'initializing',  // Backend orchestrator will handle setup
+        status: 'waiting_for_character',  // Waiting for first character creation
+        character_ids: [],  // Will be populated when first character is created
         locale: locale,
     };
     

@@ -105,9 +105,21 @@ export default function CharactersPage() {
   const handleCreateCharacter = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!campaign || !user || !selectedArchetype) return;
-    
+
     setIsCreating(true);
     try {
+        // ✅ Validate: maximum 1 character per user
+        const existingChars = await getCharactersByCampaign(campaign.id, user.id);
+        if (existingChars.length > 0) {
+            toast({
+                variant: 'destructive',
+                title: 'Ya tienes un personaje',
+                description: 'Debes borrarlo antes de crear uno nuevo.'
+            });
+            setIsCreating(false);
+            return;
+        }
+
         const newCharacterData: Partial<Character> = {
             name: newCharName,
             description: newCharBackground,
