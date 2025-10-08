@@ -38,7 +38,7 @@ export default function RootLayout({
             <AuthProvider>
               {children}
               <Toaster />
-              <ServiceWorkerRegistrar />
+              {/* <ServiceWorkerRegistrar /> */}
             </AuthProvider>
           </I18nProvider>
         </ThemeProvider>
