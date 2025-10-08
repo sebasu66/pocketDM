@@ -8,7 +8,7 @@ import { Logo } from '@/components/logo';
 export default function LoginPageWrapper() {
   return (
     <div className="font-serif flex items-center justify-center min-h-screen bg-cover bg-center bg-no-repeat p-4" style={{backgroundImage: "url('https://picsum.photos/1920/1080?grayscale&blur=5&random=1')"}} data-ai-hint="fantasy landscape">
-      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-background/80 backdrop-blur-lg" />
       <div className="w-full max-w-lg z-10">
         <Suspense fallback={<LoginPageSkeleton />}>
           <LoginCard />
@@ -37,5 +37,3 @@ function LoginPageSkeleton() {
         </Card>
     )
 }
-
-    
