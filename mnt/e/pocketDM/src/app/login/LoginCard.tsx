@@ -134,79 +134,58 @@ export function LoginCard() {
   
   const isInvite = !!searchParams.get('secretCode');
 
-  const renderStep = () => {
-    switch (step) {
-      case 'check-email':
-        return (
-          <>
-            <div className="space-y-4 pt-4">
-              <CardDescription className="text-center">¿Nos conocemos? Introduce tu email para empezar.</CardDescription>
-              <div className="grid gap-2">
-                <Label htmlFor="check-email">Email</Label>
-                <Input id="check-email" type="email" placeholder="m@example.com" required value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleEmailCheck()} />
-              </div>
-              <Button onClick={handleEmailCheck} className="w-full" disabled={isChecking}>
-                {isChecking && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Continuar
-              </Button>
-            </div>
-             <Separator className="my-6" />
-            
-            <div className="space-y-2">
-                <CardDescription className="text-center text-xs">{t('registerOrSignInWith')}</CardDescription>
-                <Button variant="outline" className="w-full" onClick={handleOAuthLogin} disabled={isChecking}>
-                  {isChecking && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  <svg role="img" viewBox="0 0 24 24" className="mr-2 h-4 w-4">
-                    <path
-                      fill="currentColor"
-                      d="M12.48 10.92v3.28h7.84c-.24 1.84-.85 3.18-1.73 4.1-1.02 1.02-2.3 1.98-4.32 1.98-3.36 0-6.21-2.82-6.21-6.21s2.85-6.21 6.21-6.21c1.84 0 3.15.75 4.14 1.68l2.79-2.79C18.01 1.98 15.49 1 12.48 1 5.88 1 1 5.88 1 12.48s4.88 11.48 11.48 11.48c6.48 0 11.04-4.56 11.04-11.04 0-.75-.06-1.48-.18-2.16h-9.86z"
-                    />
-                  </svg>
-                  {t('loginWithGoogleButton')}
-                </Button>
-            </div>
-          </>
-        );
-      case 'register':
-        return (
-          <div className="space-y-4 pt-4">
-            <CardDescription className="text-center">{t('registerDescription')}</CardDescription>
-            <div className="grid gap-2">
-                <Label htmlFor="name">{t('registerNameLabel')}</Label>
-                <Input id="name" placeholder={t('registerNamePlaceholder')} required value={name} onChange={(e) => setName(e.target.value)} autoFocus />
-            </div>
-            <div className="grid gap-2">
-                <Label htmlFor="register-email">{t('emailLabel')}</Label>
-                <Input id="register-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-            </div>
-            <div className="grid gap-2">
-                <Label>{t('registerChooseRoleLabel')}</Label>
-                <div className="flex items-center space-x-4">
-                    <div className="flex items-center space-x-2">
-                        <Checkbox id="role-gm" checked={isGm} onCheckedChange={(c) => setIsGm(c as boolean)} disabled={isInvite} />
-                        <Label htmlFor="role-gm" className="flex items-center gap-2"><Crown className="text-amber-400" /> {t('registerRoleGmLabel')}</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <Checkbox id="role-player" checked={isPlayer} onCheckedChange={(c) => setIsPlayer(c as boolean)}/>
-                        <Label htmlFor="role-player" className="flex items-center gap-2"><UserIcon /> {t('registerRolePlayerLabel')}</Label>
-                    </div>
+  if (step === 'register') {
+    return (
+        <Card className="bg-card/80 backdrop-blur-lg">
+            <CardHeader className="text-center">
+                 <div className="flex justify-center mb-4">
+                    <Logo className="w-16 h-16"/>
                 </div>
-            </div>
-            {isPlayer && (
-                <div className="grid gap-2">
-                    <Label htmlFor="secret-code">{t('registerSecretCodeLabel')}</Label>
-                    <Input id="secret-code" placeholder={t('registerSecretCodePlaceholder')} required={isPlayer} value={secretCode} onChange={(e) => setSecretCode(e.target.value)} disabled={isInvite} />
+                <CardTitle className="text-3xl font-body">Pocket DM</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className="space-y-4 pt-4">
+                    <CardDescription className="text-center">{t('registerDescription')}</CardDescription>
+                    <div className="grid gap-2">
+                        <Label htmlFor="name">{t('registerNameLabel')}</Label>
+                        <Input id="name" placeholder={t('registerNamePlaceholder')} required value={name} onChange={(e) => setName(e.target.value)} autoFocus />
+                    </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="register-email">{t('emailLabel')}</Label>
+                        <Input id="register-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    </div>
+                    <div className="grid gap-2">
+                        <Label>{t('registerChooseRoleLabel')}</Label>
+                        <div className="flex items-center space-x-4">
+                            <div className="flex items-center space-x-2">
+                                <Checkbox id="role-gm" checked={isGm} onCheckedChange={(c) => setIsGm(c as boolean)} disabled={isInvite} />
+                                <Label htmlFor="role-gm" className="flex items-center gap-2"><Crown className="text-amber-400" /> {t('registerRoleGmLabel')}</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <Checkbox id="role-player" checked={isPlayer} onCheckedChange={(c) => setIsPlayer(c as boolean)}/>
+                                <Label htmlFor="role-player" className="flex items-center gap-2"><UserIcon /> {t('registerRolePlayerLabel')}</Label>
+                            </div>
+                        </div>
+                    </div>
+                    {isPlayer && (
+                        <div className="grid gap-2">
+                            <Label htmlFor="secret-code">{t('registerSecretCodeLabel')}</Label>
+                            <Input id="secret-code" placeholder={t('registerSecretCodePlaceholder')} required={isPlayer} value={secretCode} onChange={(e) => setSecretCode(e.target.value)} disabled={isInvite} />
+                        </div>
+                    )}
+                    <Button onClick={handleRegister} className="w-full" disabled={isChecking}>
+                        {isChecking && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        {t('registerButton')}
+                    </Button>
                 </div>
-            )}
-            <Button onClick={handleRegister} className="w-full" disabled={isChecking}>
-                {isChecking && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {t('registerButton')}
-            </Button>
-          </div>
-        );
-      default:
-        return null;
-    }
+                 <div className="mt-4 text-center">
+                    <Button variant="link" onClick={() => { setStep('check-email'); }}>
+                        Volver
+                    </Button>
+                </div>
+            </CardContent>
+        </Card>
+    );
   }
 
   return (
@@ -218,17 +197,33 @@ export function LoginCard() {
         <CardTitle className="text-3xl font-body">Pocket DM</CardTitle>
       </CardHeader>
       <CardContent>
-        {renderStep()}
-          {step !== 'check-email' && (
-            <div className="mt-4 text-center">
-                <Button variant="link" onClick={() => { setStep('check-email'); }}>
-                    Volver
-                </Button>
+        <div className="space-y-4 pt-4">
+            <CardDescription className="text-center">¿Nos conocemos? Introduce tu email para empezar.</CardDescription>
+            <div className="grid gap-2">
+            <Label htmlFor="check-email">Email</Label>
+            <Input id="check-email" type="email" placeholder="m@example.com" required value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleEmailCheck()} />
             </div>
-        )}
+            <Button onClick={handleEmailCheck} className="w-full" disabled={isChecking}>
+            {isChecking && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Continuar
+            </Button>
+        </div>
+        <Separator className="my-6" />
+        
+        <div className="space-y-2">
+            <CardDescription className="text-center text-xs">{t('registerOrSignInWith')}</CardDescription>
+            <Button variant="outline" className="w-full" onClick={handleOAuthLogin} disabled={isChecking}>
+                {isChecking && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                <svg role="img" viewBox="0 0 24 24" className="mr-2 h-4 w-4">
+                <path
+                    fill="currentColor"
+                    d="M12.48 10.92v3.28h7.84c-.24 1.84-.85 3.18-1.73 4.1-1.02 1.02-2.3 1.98-4.32 1.98-3.36 0-6.21-2.82-6.21-6.21s2.85-6.21 6.21-6.21c1.84 0 3.15.75 4.14 1.68l2.79-2.79C18.01 1.98 15.49 1 12.48 1 5.88 1 1 5.88 1 12.48s4.88 11.48 11.48 11.48c6.48 0 11.04-4.56 11.04-11.04 0-.75-.06-1.48-.18-2.16h-9.86z"
+                />
+                </svg>
+                {t('loginWithGoogleButton')}
+            </Button>
+        </div>
       </CardContent>
     </Card>
   );
 }
-
-    
