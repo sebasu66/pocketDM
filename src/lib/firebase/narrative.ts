@@ -1,47 +1,10 @@
-import { collection, query, orderBy, limit, onSnapshot, Unsubscribe, Timestamp, doc, updateDoc } from "firebase/firestore";
+
+import { collection, query, orderBy, limit, onSnapshot, Unsubscribe, Timestamp, doc, updateDoc, getDocs } from "firebase/firestore";
 import { db } from "./config";
+import type { NarrativeNode } from './types';
 
-export interface NarrativeNode {
-    node_id: string;
-    timestamp: Timestamp;
+export type { NarrativeNode };
 
-    // Location Context
-    location: {
-        location_id: string;
-        location_name: string;
-        cell_id: string;
-    };
-
-    // Narrative Content
-    narrative_html: string;
-    narrative_plain: string;
-
-    // Audio
-    audio_url: string | null;
-    audio_status: 'pending' | 'ready' | 'failed';
-
-    // Quick Actions (with skill checks)
-    quick_options: Array<{
-        action: string;  // The action text in first person
-        skill: string;   // Skill name or "-"
-        success_chance: string;  // "FÁCIL", "PROBABLE", "DIFÍCIL", "MUY DIFÍCIL", "-"
-    }>;
-
-    // Who's Present
-    visible_characters: string[];
-    visible_npcs: string[];
-    visible_monsters: string[];
-
-    // Player Interaction
-    player_comment: {
-        text: string;
-        timestamp: Timestamp;
-    } | null;
-
-    // Metadata
-    summary: string | null;
-    is_summarized: boolean;
-}
 
 /**
  * Listen to narrative nodes for a specific character (real-time)
@@ -55,6 +18,7 @@ export const listenToCharacterNarrative = (
     onUpdate: (nodes: NarrativeNode[]) => void,
     limitCount: number = 20
 ): Unsubscribe => {
+    console.log(`[Narrative] Setting up listener for character_narrative/${characterId}/nodes`);
     const nodesRef = collection(db, 'character_narrative', characterId, 'nodes');
 
     const q = query(
@@ -65,8 +29,11 @@ export const listenToCharacterNarrative = (
 
     return onSnapshot(q, (snapshot) => {
         const nodes = snapshot.docs.map(doc => doc.data() as NarrativeNode);
+        console.log(`[Narrative] Received ${nodes.length} nodes for character ${characterId}`);
         // Reverse to get chronological order (oldest first)
         onUpdate(nodes.reverse());
+    }, (error) => {
+        console.error(`[Narrative] Error listening to character ${characterId}:`, error);
     });
 };
 
@@ -92,28 +59,24 @@ export const addPlayerCommentToNode = async (
 };
 
 /**
- * Get the latest narrative node for a character
+ * Get the latest narrative node for a character.
+ * This is a one-time fetch, not a listener.
  * @param characterId The character ID
  * @returns The latest narrative node or null
  */
 export const getLatestNarrativeNode = async (characterId: string): Promise<NarrativeNode | null> => {
-    return new Promise((resolve) => {
-        const nodesRef = collection(db, 'character_narrative', characterId, 'nodes');
+    const nodesRef = collection(db, 'character_narrative', characterId, 'nodes');
+    const q = query(
+        nodesRef,
+        orderBy('timestamp', 'desc'),
+        limit(1)
+    );
 
-        const q = query(
-            nodesRef,
-            orderBy('timestamp', 'desc'),
-            limit(1)
-        );
+    const snapshot = await getDocs(q);
 
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            unsubscribe(); // Unsubscribe immediately after getting data
-
-            if (snapshot.empty) {
-                resolve(null);
-            } else {
-                resolve(snapshot.docs[0].data() as NarrativeNode);
-            }
-        });
-    });
+    if (snapshot.empty) {
+        return null;
+    } else {
+        return snapshot.docs[0].data() as NarrativeNode;
+    }
 };

@@ -25,15 +25,9 @@ export interface Campaign {
     secretCode: string;
     ownerId: string;
     status?: 'initializing' | 'processing' | 'ready' | 'generating_narrative' | 'active' | 'failed' | 'narrative_failed';
-    // Campaign lifecycle:
-    // - initializing: Just created, waiting for orchestrator
-    // - processing: Orchestrator creating Docker infrastructure
-    // - ready: Infrastructure ready, waiting for first character
-    // - generating_narrative: First character created, generating intro
-    // - active: Fully active with narrative
-    // - failed: Infrastructure creation failed
-    // - narrative_failed: Infrastructure OK but narrative failed
-    locale?: 'en' | 'es';  // Campaign language
+    locale?: 'en' | 'es';
+    toReset?: boolean;
+    resetRequestedAt?: Timestamp;
 }
 
 export interface ConditionalRule {
@@ -112,37 +106,46 @@ export interface Character {
 export interface QuickOption {
     action: string;
     skill: string;
-    successChance: string;
+    success_chance: string;
 }
 
-export interface NarrativeComment {
-    id: string;
-    authorId: string;
-    characterId: string;
-    text: string;
-    createdAt: Timestamp;
-    hiddenText?: string;
+export interface NarrativeNode {
+    node_id: string;
+    timestamp: Timestamp;
+
+    // Location Context
+    location: {
+        location_id: string;
+        location_name: string;
+        cell_id: string;
+    };
+
+    // Narrative Content
+    narrative_html: string;
+    narrative_plain: string;
+
+    // Audio
+    audio_url: string | null;
+    audio_status: 'pending' | 'ready' | 'failed';
+
+    // Quick Actions
+    quick_options: QuickOption[];
+
+    // Who's Present
+    visible_characters: string[];
+    visible_npcs: string[];
+    visible_monsters: string[];
+
+    // Player Interaction
+    player_comment: {
+        text: string;
+        timestamp: Timestamp;
+    } | null;
+
+    // Metadata
+    summary: string | null;
+    is_summarized: boolean;
 }
-
-export interface NarrativeThread {
-    id: string;
-    title: string;
-    narrative: string; // Renamed from 'content'
-    authorId: string; // User ID (always GM)
-    createdAt: Timestamp;
-    
-    // Optional fields from the new structure
-    audioUrl?: string;
-    imageUrl?: string;
-    imageAiHint?: string;
-    quickOptions?: QuickOption[];
-    characterFilterList?: string[];
-    is_independent?: boolean;
-
-    // Nested comments
-    comments: NarrativeComment[];
-}
-
 
 export interface Concepto {
     id: string;
@@ -152,8 +155,13 @@ export interface Concepto {
 
 
 // Helper types for API responses
-export type NarrativeCommentWithAuthor = NarrativeComment & { author: User };
-export type EnrichedComment = NarrativeComment & {
+export interface EnrichedComment {
+    id: string;
+    authorId: string;
+    characterId: string;
+    text: string;
+    createdAt: Timestamp;
+    hiddenText?: string;
     author: User;
     character?: Character | null;
 };

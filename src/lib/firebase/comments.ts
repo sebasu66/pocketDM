@@ -2,6 +2,10 @@
 import { doc, addDoc, collection, getDocs, Timestamp, query, where, onSnapshot, Unsubscribe } from "firebase/firestore";
 import { db } from "./config";
 import { v4 as uuidv4 } from 'uuid';
+import type { Character, User, EnrichedComment } from "./types";
+import { getCharacter } from "./characters";
+import { getUserById } from "./auth";
+
 
 export interface CharacterComment {
     id?: string;
@@ -72,3 +76,23 @@ export const getCharacterComments = async (characterId: string): Promise<Charact
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as CharacterComment));
 };
+
+// Functions below are deprecated and will be removed once playerview is fully refactored
+/**
+ * @deprecated Use CharacterComment functions instead.
+ */
+export interface OldNarrativeComment {
+    id: string;
+    authorId: string;
+    characterId: string;
+    text: string;
+    createdAt: Timestamp;
+    hiddenText?: string;
+}
+/**
+ * @deprecated This function is tied to the old data structure.
+ */
+export async function getCommentsByThreadId(threadId: string): Promise<EnrichedComment[]> {
+    console.warn("getCommentsByThreadId is deprecated");
+    return [];
+}
