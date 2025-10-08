@@ -21,7 +21,7 @@ export default function HomePage() {
 
       {/* Content with foreground parallax */}
       <ParallaxGyroscope layer="foreground" intensity={25}>
-         <div className="relative z-10 flex flex-col items-center text-center text-white">
+         <div className="relative z-10 flex flex-col items-center text-center text-white animate-ethereal-float">
             <div className="relative w-[50vh] h-[50vh] md:w-[65vh] md:h-[65vh] -mb-12">
                 <div className="absolute inset-0 rounded-full bg-black/10 backdrop-blur-md"
                      style={{

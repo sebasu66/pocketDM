@@ -251,7 +251,7 @@
       0% { opacity: 0; transform: scale(1.05); filter: blur(0px) brightness(1); }
       25% { opacity: 1; transform: scale(1.1); filter: blur(0px) brightness(1); } /* Hold image */
       50% { opacity: 1; transform: scale(1.1); filter: blur(16px) brightness(2.5); }
-      100% { opacity: 0; }
+      100% { opacity: 1; }
     }
 
 
@@ -274,15 +274,19 @@
   @keyframes ethereal-float {
       0%, 100% { 
           transform: translateY(0px) translateX(0px) rotate(0deg);
+          opacity: 1;
       }
       25% { 
           transform: translateY(-5px) translateX(2px) rotate(0.1deg);
+          opacity: 1;
       }
       50% { 
           transform: translateY(-2px) translateX(-2px) rotate(0deg);
+          opacity: 1;
       }
       75% { 
           transform: translateY(5px) translateX(1px) rotate(-0.1deg);
+          opacity: 1;
       }
   }
 
