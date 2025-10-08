@@ -55,6 +55,7 @@ import { CampaignProvider, useCampaign } from "@/context/campaign-context";
 import { getCampaign } from "@/lib/firebase/campaigns";
 import type { Campaign } from "@/lib/firebase/types";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
 
 export const GmSidebarContent = ({onClick}: {onClick?: () => void}) => {
   const pathname = usePathname() || "/dashboard";
@@ -309,21 +310,18 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     const loadCampaign = async () => {
       if (user && user.campaignId) {
         if (!campaign || campaign.id !== user.campaignId) {
-          console.log(`[DashboardLayout] User detected. Loading campaign ID: ${user.campaignId}`);
           setIsCampaignLoading(true);
           const campaignData = await getCampaign(user.campaignId);
           if (campaignData) {
-            console.log(`[DashboardLayout] Campaign data loaded:`, campaignData.campaign_name);
             setCampaign(campaignData);
           } else {
             console.error(`[DashboardLayout] FAILED to load campaign: ${user.campaignId}`);
-            // Handle failure, maybe redirect or show an error
           }
           setIsCampaignLoading(false);
+        } else {
+           setIsCampaignLoading(false);
         }
-      } else if (user && !user.campaignId) {
-        // User is valid but has no campaign, might be an error or mid-creation
-        console.warn("[DashboardLayout] User has no campaignId.");
+      } else if (!user) {
         setIsCampaignLoading(false);
       }
     };

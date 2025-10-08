@@ -15,12 +15,9 @@ export const getCampaign = async (id: string): Promise<Campaign | null> => {
 
     if (docSnap.exists()) {
         const data = docSnap.data();
-        console.log(`[Campaigns] Found campaign: ${data.campaign_name || data.title}`);
-        // Support both old and new data models for transition
+        console.log(`[Campaigns] Found campaign: ${data.campaign_name}`);
         return { 
             id: docSnap.id,
-            dm_id: data.dm_id,
-            campaign_name: data.campaign_name,
             ...data
          } as Campaign;
     }
@@ -54,7 +51,7 @@ export const createNewCampaignForUser = async (user: {id: string, name: string},
         world_seed: Math.random().toString(36).substring(2, 15),
         difficulty: 'normal',
         max_players: 4,
-        secretCode: Math.random().toString(36).substring(2, 8).toUpperCase(), // Legacy for player joining
+        secretCode: Math.random().toString(36).substring(2, 8).toUpperCase(),
     };
     
     await setDoc(newCampaignRef, newCampaignData);
@@ -71,8 +68,6 @@ export const generateNewSecretCode = async (campaignId: string): Promise<string>
 
 export const requestCampaignReset = async (campaignId: string): Promise<void> => {
     console.log(`[Campaigns] Requesting reset for campaign: ${campaignId}`);
-    // This functionality will need to be adapted for the new backend process.
-    // For now, it will set a flag that the backend can listen for.
     const campaignRef = doc(db, "campaigns", campaignId);
     await updateDoc(campaignRef, {
       status: "creating", // Re-trigger the creation process
