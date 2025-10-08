@@ -29,6 +29,9 @@ export default function DashboardPage() {
       setIsCheckingCharacter(true);
       try {
         const characters = await getCharactersByCampaign(campaign.id, user.id);
+        console.log("[Dashboard] Characters found:", characters.length, characters);
+        console.log("[Dashboard] User ID:", user.id);
+        console.log("[Dashboard] Campaign ID:", campaign.id);
         setHasCharacter(characters.length > 0);
       } catch (error) {
         console.error("[Dashboard] Error checking character:", error);
