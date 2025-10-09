@@ -120,18 +120,23 @@ export const findOrCreateUser = async (firebaseUser: FirebaseAuthUser, extraData
         return appUser;
     }
 
-    // Default role for new OAuth users is Player.
-    // If they have a secret code, they join a campaign. If not, maybe they are a GM?
-    // Let's refine this logic. If a secret code is present, they are a player. If not, we can assume GM for now.
-    const isPlayerWithCode = !!extraData.campaignSecret;
-    const role = extraData.role || { isGm: !isPlayerWithCode, isPlayer: isPlayerWithCode };
-    const { name, campaignSecret } = extraData;
+    // Use the provided role from extraData - this is critical for registration
+    // NEVER use default logic when role is explicitly provided
+    const { name, role, campaignSecret } = extraData;
+
+    if (!role) {
+        throw new Error("Role must be explicitly provided during user creation");
+    }
+
+    if (!name) {
+        throw new Error("Name must be explicitly provided during user creation");
+    }
 
     return await createUser({
         uid: firebaseUser.uid,
-        name: name || firebaseUser.displayName || 'New Adventurer',
+        name: name,
         email: firebaseUser.email!,
-        role, 
+        role,
         campaignSecret: campaignSecret
     });
 };
