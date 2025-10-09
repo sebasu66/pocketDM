@@ -6,7 +6,7 @@ import { useAuth } from '@/context/auth-context';
 import { useCampaign } from '@/context/campaign-context';
 import { Unsubscribe } from 'firebase/firestore';
 import type { Character } from '@/lib/firebase/types';
-import { addCharacterComment } from '@/lib/firebase/comments';
+import { addCharacterComment, listenToCharacterComments, CharacterComment } from '@/lib/firebase/comments';
 import { listenToCharacterNarrative, getLatestNarrativeNode, NarrativeNode } from '@/lib/firebase/narrative';
 import { getCharactersByCampaign } from '@/lib/firebase/characters';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -40,7 +40,8 @@ export default function PlayerViewPage() {
     const [isCharacterSheetOpen, setIsCharacterSheetOpen] = React.useState(false);
     const [playerCharacter, setPlayerCharacter] = useState<Character | null>(null);
     const [allCharacters, setAllCharacters] = useState<Character[]>([]);
-    
+    const [characterComments, setCharacterComments] = useState<CharacterComment[]>([]);
+
     const audioRef = useRef<HTMLAudioElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const isInitialLoad = useRef(true);
@@ -66,6 +67,7 @@ export default function PlayerViewPage() {
             return;
         }
         let unsubscribe: Unsubscribe | undefined;
+        let commentsUnsubscribe: Unsubscribe | undefined;
 
         const setup = async () => {
             console.log("[PlayerView] Starting setup...");
@@ -102,6 +104,16 @@ export default function PlayerViewPage() {
                         },
                         20 // Limit to 20 nodes
                     );
+
+                    // Listen to character_comments for the player's character
+                    console.log("[PlayerView] Setting up comments listener for character:", userChar.id);
+                    commentsUnsubscribe = listenToCharacterComments(
+                        userChar.id,
+                        (comments) => {
+                            console.log("[PlayerView] Character comments updated:", comments.length, "comments");
+                            setCharacterComments(comments);
+                        }
+                    );
                 } else {
                     console.log("[PlayerView] No character found, showing campaign status");
                     // No character - show campaign status for both GMs and Players
@@ -124,6 +136,9 @@ export default function PlayerViewPage() {
         return () => {
             if (unsubscribe) {
                 unsubscribe();
+            }
+            if (commentsUnsubscribe) {
+                commentsUnsubscribe();
             }
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps

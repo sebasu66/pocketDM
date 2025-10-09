@@ -77,6 +77,25 @@ export const getCharacterComments = async (characterId: string): Promise<Charact
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as CharacterComment));
 };
 
+/**
+ * Listen to all comments for a specific character
+ * @param characterId The character ID
+ * @param callback Function to call when comments update
+ * @returns Unsubscribe function
+ */
+export const listenToCharacterComments = (
+    characterId: string,
+    callback: (comments: CharacterComment[]) => void
+): Unsubscribe => {
+    const commentsRef = collection(db, "character_comments");
+    const q = query(commentsRef, where("character_id", "==", characterId));
+
+    return onSnapshot(q, (snapshot) => {
+        const comments = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as CharacterComment));
+        callback(comments);
+    });
+};
+
 // Functions below are deprecated and will be removed once playerview is fully refactored
 /**
  * @deprecated Use CharacterComment functions instead.
