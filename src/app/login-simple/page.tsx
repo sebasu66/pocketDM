@@ -40,34 +40,20 @@ export default function SimpleLoginPage() {
 
     setIsLoading(true);
     try {
-      // Development mode: Login without password
-      const existingUser = await getUserByEmail(email.toLowerCase());
+      // Development mode: Login with hardcoded password
+      const { signInWithEmailAndPassword } = await import("firebase/auth");
+      const { auth } = await import("@/lib/firebase/config");
 
-      if (existingUser) {
-        setUser(existingUser);
-        if (existingUser.role.isGm && !existingUser.role.isPlayer) {
-          setActiveRole('gm');
-        } else {
-          setActiveRole('player');
-        }
+      await signInWithEmailAndPassword(auth, email.toLowerCase(), "12345678");
 
-        toast({
-          title: locale === 'es' ? "¡Bienvenido!" : "Welcome back!",
-          description: locale === 'es'
-            ? "Redirigiendo al panel..."
-            : "Redirecting to dashboard..."
-        });
+      toast({
+        title: locale === 'es' ? "¡Bienvenido!" : "Welcome back!",
+        description: locale === 'es'
+          ? "Redirigiendo al panel..."
+          : "Redirecting to dashboard..."
+      });
 
-        router.push("/dashboard");
-      } else {
-        toast({
-          variant: "destructive",
-          title: locale === 'es' ? "Usuario no encontrado" : "User not found",
-          description: locale === 'es'
-            ? "No existe una cuenta con este email"
-            : "No account exists with this email"
-        });
-      }
+      router.push("/dashboard");
     } catch (error: any) {
       console.error("Login error:", error);
       toast({

@@ -66,7 +66,7 @@ export const updateUser = async (id: string, updatedData: Partial<User>): Promis
 interface CreateUserInput {
     uid: string;
     name: string;
-    email: string | null;
+    email?: string | null;
     role: { isGm: boolean, isPlayer: boolean };
     campaignSecret?: string;
 }

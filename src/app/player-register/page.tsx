@@ -63,13 +63,17 @@ export default function PlayerRegisterPage() {
 
     setIsLoading(true);
     try {
-      // Development mode: Create anonymous auth + Firestore user
-      const userCredential = await signInAnonymously(auth);
+      // Development mode: Create email/password auth with hardcoded password
+      const { createUserWithEmailAndPassword } = await import("firebase/auth");
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email.toLowerCase(),
+        "12345678" // Hardcoded dev password
+      );
 
       await setupSession(userCredential.user, {
         name: username,
         role: { isGm: false, isPlayer: true },
-        email: email.toLowerCase(),
         campaignSecret: campaignCode
       });
 
