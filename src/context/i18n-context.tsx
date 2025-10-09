@@ -20,36 +20,48 @@ const I18nContext = createContext<I18nContextType | undefined>(undefined);
 // Define your translations
 const translations: Record<Locale, Record<string, string>> = { en, es };
 
+// Detect initial locale before rendering to avoid flash
+const getInitialLocale = (): Locale => {
+  if (typeof window === 'undefined') return 'en'; // SSR fallback
+
+  try {
+    // Check localStorage first
+    const storedLocale = localStorage.getItem('locale') as Locale | null;
+    if (storedLocale && ['en', 'es'].includes(storedLocale)) {
+      return storedLocale;
+    }
+
+    // Fall back to browser language
+    const browserLang = navigator.language.split('-')[0];
+    if (browserLang === 'es') {
+      return 'es';
+    }
+  } catch (e) {
+    console.error("Could not detect initial locale", e);
+  }
+
+  return 'en';
+};
+
 export const I18nProvider = ({ children }: { children: ReactNode }) => {
-  const [locale, setLocale] = useState<Locale>('en');
+  const [locale, setLocaleState] = useState<Locale>(getInitialLocale);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
-    try {
-      const storedLocale = localStorage.getItem('locale') as Locale | null;
-      if (storedLocale && ['en', 'es'].includes(storedLocale)) {
-        setLocale(storedLocale);
-      } else {
-        const browserLang = navigator.language.split('-')[0];
-        if (browserLang === 'es') {
-          setLocale('es');
-        }
-      }
-    } catch (e) {
-      console.error("Could not access local storage or navigator for locale", e);
-    }
   }, []);
 
-  useEffect(() => {
+  // Update function that also saves to localStorage
+  const setLocale = useCallback((newLocale: Locale) => {
+    setLocaleState(newLocale);
     if (isMounted) {
       try {
-        localStorage.setItem('locale', locale);
+        localStorage.setItem('locale', newLocale);
       } catch (e) {
-        console.error("Could not access local storage for locale", e);
+        console.error("Could not save locale to localStorage", e);
       }
     }
-  }, [locale, isMounted]);
+  }, [isMounted]);
 
   const t = useCallback((key: string): string => {
     // Try to get the translation from the current locale

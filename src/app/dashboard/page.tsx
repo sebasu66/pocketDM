@@ -7,7 +7,7 @@ import { useCampaign } from "@/context/campaign-context";
 import { useI18n } from "@/context/i18n-context";
 import { getCharactersByCampaign } from "@/lib/firebase/characters";
 import { AnimatedPanel } from "./components/AnimatedPanel";
-import { MessagesSquare, Settings } from "lucide-react";
+import { MessagesSquare, Settings, Copy, Check, Users } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 
@@ -18,6 +18,8 @@ export default function DashboardPage() {
   const { t } = useI18n();
   const [hasCharacter, setHasCharacter] = useState(false);
   const [isCheckingCharacter, setIsCheckingCharacter] = useState(true);
+  const [copiedCode, setCopiedCode] = useState(false);
+  const [copiedLink, setCopiedLink] = useState(false);
 
   // Check if user has a character
   useEffect(() => {
@@ -42,6 +44,29 @@ export default function DashboardPage() {
 
     checkCharacter();
   }, [campaign?.id, user?.id]);
+
+  // Check if current user is GM
+  const isGM = user && campaign && user.id === campaign.ownerId;
+
+  // Generate invitation link
+  const invitationLink = typeof window !== 'undefined'
+    ? `${window.location.origin}/join?code=${campaign?.secretCode}`
+    : '';
+
+  // Copy functions
+  const copySecretCode = async () => {
+    if (campaign?.secretCode) {
+      await navigator.clipboard.writeText(campaign.secretCode);
+      setCopiedCode(true);
+      setTimeout(() => setCopiedCode(false), 2000);
+    }
+  };
+
+  const copyInvitationLink = async () => {
+    await navigator.clipboard.writeText(invitationLink);
+    setCopiedLink(true);
+    setTimeout(() => setCopiedLink(false), 2000);
+  };
 
   if (!campaign) {
     return (
@@ -75,6 +100,75 @@ export default function DashboardPage() {
           {campaign.description}
         </p>
       </div>
+
+      {/* GM-Only Invitation Section */}
+      {isGM && (
+        <div className="max-w-4xl mx-auto px-4 mb-8">
+          <div className="bg-amber-900/20 border border-amber-700/30 rounded-lg p-6 backdrop-blur-sm">
+            <div className="flex items-center gap-2 mb-4">
+              <Users className="w-5 h-5 text-amber-500" />
+              <h2 className="text-xl font-headline text-amber-400">Game Master Panel</h2>
+            </div>
+
+            <div className="space-y-4">
+              {/* Secret Code */}
+              <div>
+                <label className="block text-sm font-medium text-foreground/70 mb-2">
+                  Campaign Secret Code
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    readOnly
+                    value={campaign.secretCode}
+                    className="flex-1 bg-black/30 border border-foreground/20 rounded px-3 py-2 text-foreground/90 font-mono"
+                  />
+                  <button
+                    onClick={copySecretCode}
+                    className="p-2 bg-amber-700/30 hover:bg-amber-700/50 border border-amber-600/50 rounded transition-colors"
+                    title="Copy secret code"
+                  >
+                    {copiedCode ? (
+                      <Check className="w-5 h-5 text-green-400" />
+                    ) : (
+                      <Copy className="w-5 h-5 text-amber-400" />
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {/* Invitation Link */}
+              <div>
+                <label className="block text-sm font-medium text-foreground/70 mb-2">
+                  Invitation Link
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    readOnly
+                    value={invitationLink}
+                    className="flex-1 bg-black/30 border border-foreground/20 rounded px-3 py-2 text-foreground/90 text-sm"
+                  />
+                  <button
+                    onClick={copyInvitationLink}
+                    className="p-2 bg-amber-700/30 hover:bg-amber-700/50 border border-amber-600/50 rounded transition-colors"
+                    title="Copy invitation link"
+                  >
+                    {copiedLink ? (
+                      <Check className="w-5 h-5 text-green-400" />
+                    ) : (
+                      <Copy className="w-5 h-5 text-amber-400" />
+                    )}
+                  </button>
+                </div>
+                <p className="mt-2 text-xs text-foreground/50">
+                  Share this link with players to invite them to your campaign
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Main Panels Grid */}
       <div className="max-w-4xl mx-auto px-4 pb-12 space-y-6">

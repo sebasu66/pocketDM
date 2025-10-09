@@ -48,7 +48,7 @@ export default function HomePage() {
 
             <div className="mt-8">
                  <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-shadow">
-                    <Link href="/login">{t('goToLoginButton')}</Link>
+                    <Link href="/login-simple">{t('locale') === 'es' ? 'Entrar' : 'Enter'}</Link>
                 </Button>
             </div>
           </div>
