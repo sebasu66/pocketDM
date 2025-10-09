@@ -44,7 +44,55 @@ export interface Character {
     userId: string;
     isActive: boolean;
     cell_id?: string;
+    location_name?: string; // Populated from backend/locations table
     archetypeId?: string; // Helper for creation
+
+    // Enriched context from backend (synced after each narrative)
+    enriched_context?: {
+        location_name: string;
+        location_type?: string;
+        location_description?: string;
+        stats: {
+            experience_points: number;
+            rank: string;
+            wounds: number;
+            fatigue: number;
+            bennies: number;
+            glory: number;
+        };
+        inventory: Array<{
+            id: string;
+            name: string;
+            type: string;
+            description?: string;
+            quantity: number;
+            equipped: boolean;
+        }>;
+        active_quests: Array<{
+            id: string;
+            name: string;
+            description?: string;
+            status: string;
+            progress?: string;
+        }>;
+        known_npcs: Array<{
+            id: string;
+            name: string;
+            title?: string;
+            role?: string;
+            location?: string;
+        }>;
+        recent_narrative_summary: Array<{
+            text: string;
+            timestamp?: string;
+        }>;
+        current_objectives: Array<{
+            quest_id: string;
+            quest_name: string;
+            objective: string;
+        }>;
+        context_updated_at: string;
+    };
 
     health?: number; // 0-100 percentage
     gold?: number;

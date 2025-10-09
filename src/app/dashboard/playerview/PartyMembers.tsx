@@ -71,30 +71,16 @@ export function PartyMembers({ characters, currentCharacterId, t }: PartyMembers
                                     </div>
                                 )}
 
-                                {/* Health */}
-                                {member.health !== undefined && (
+                                {/* Health/Wounds */}
+                                {member.enriched_context?.stats && (
                                     <div className="flex items-center justify-between">
                                         <span className="text-foreground/60 flex items-center gap-1">
                                             <Heart className="w-4 h-4" />
-                                            {t('partyMemberHealth')}:
+                                            Heridas:
                                         </span>
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-20 h-2 bg-background/50 rounded-full overflow-hidden">
-                                                <div
-                                                    className={`h-full transition-all ${
-                                                        member.health > 60
-                                                            ? 'bg-green-500'
-                                                            : member.health > 30
-                                                            ? 'bg-yellow-500'
-                                                            : 'bg-red-500'
-                                                    }`}
-                                                    style={{ width: `${member.health}%` }}
-                                                />
-                                            </div>
-                                            <span className="text-foreground/90 font-medium w-10 text-right">
-                                                {member.health}%
-                                            </span>
-                                        </div>
+                                        <span className="text-foreground/90 font-medium">
+                                            {member.enriched_context.stats.wounds}/3
+                                        </span>
                                     </div>
                                 )}
 
@@ -106,11 +92,12 @@ export function PartyMembers({ characters, currentCharacterId, t }: PartyMembers
                                             {t('partyMemberLocation')}:
                                         </p>
                                         <p className="text-sm text-foreground/90 truncate">
-                                            {member.cell_id ? (
-                                                <>
-                                                    <span className="font-medium">{member.cell_id}</span>
-                                                    {/* TODO: Add location name from backend */}
-                                                </>
+                                            {member.enriched_context?.location_name ? (
+                                                <span className="font-medium">{member.enriched_context.location_name}</span>
+                                            ) : member.location_name ? (
+                                                <span className="font-medium">{member.location_name}</span>
+                                            ) : member.cell_id ? (
+                                                <span className="font-medium">{member.cell_id}</span>
                                             ) : (
                                                 <span className="italic">{t('partyMemberUnknownLocation')}</span>
                                             )}
