@@ -40,7 +40,7 @@ export function PartyMembers({ characters, currentCharacterId, t }: PartyMembers
                                 {member.visualPreset && (
                                     <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-amber-600 flex-shrink-0">
                                         <Image
-                                            src={member.visualPreset}
+                                            src={`/characters/VisualPreset/${member.visualPreset}/portrait.png`}
                                             alt={member.name}
                                             fill
                                             className="object-cover"
