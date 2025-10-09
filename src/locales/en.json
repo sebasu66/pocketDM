@@ -324,7 +324,15 @@
     "registerNoRoleDesc": "You must select at least one role (GM or Player).",
     "registerSecretCodeRequired": "Secret Code Required",
     "registerSecretCodeRequiredDesc": "As a player, you must provide a secret code to join a campaign.",
-    "registerFailed": "Registration Failed"
+    "registerFailed": "Registration Failed",
+
+    "partyMembersTitle": "Party Members",
+    "partyMembersEmpty": "No other party members at this time.",
+    "partyMemberLocation": "Location",
+    "partyMemberHealth": "Health",
+    "partyMemberClass": "Class",
+    "partyMemberLevel": "Level",
+    "partyMemberUnknownLocation": "Unknown location"
 }
 
     

@@ -324,7 +324,15 @@
     "registerNoRoleDesc": "Debes seleccionar al menos un rol (GM o Jugador).",
     "registerSecretCodeRequired": "Código Secreto Requerido",
     "registerSecretCodeRequiredDesc": "Como jugador, debes proporcionar un código secreto para unirte a una campaña.",
-    "registerFailed": "Falló el Registro"
+    "registerFailed": "Falló el Registro",
+
+    "partyMembersTitle": "Miembros del Grupo",
+    "partyMembersEmpty": "No hay otros miembros en tu grupo en este momento.",
+    "partyMemberLocation": "Ubicación",
+    "partyMemberHealth": "Salud",
+    "partyMemberClass": "Clase",
+    "partyMemberLevel": "Nivel",
+    "partyMemberUnknownLocation": "Ubicación desconocida"
 }
 
     

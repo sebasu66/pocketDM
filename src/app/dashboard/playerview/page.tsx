@@ -19,6 +19,7 @@ import Image from 'next/image';
 import { CommentForm } from './CommentForm';
 import { useToast } from '@/hooks/use-toast';
 import { CharacterSheet } from './CharacterSheet';
+import { PartyMembers } from './PartyMembers';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -485,6 +486,13 @@ export default function PlayerViewPage() {
                         </div>
                     )}
                 </div>
+
+                {/* Party Members Section */}
+                <PartyMembers
+                    characters={allCharacters}
+                    currentCharacterId={playerCharacter?.id}
+                    t={t}
+                />
 
                 <div className="h-24" />
             </div>
