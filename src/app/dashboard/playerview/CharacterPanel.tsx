@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Coins, Backpack, ScrollText } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { useEffect, useRef, useState } from "react";
 
 interface CharacterPanelProps {
   character: Character;
@@ -12,6 +13,10 @@ interface CharacterPanelProps {
 }
 
 export function CharacterPanel({ character, t }: CharacterPanelProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoError, setVideoError] = useState(false);
+  const [isVideoPaused, setIsVideoPaused] = useState(false);
+
   // Parse Savage Worlds attributes
   const attributes = character.attributes || {
     agility: 'd4',
@@ -24,12 +29,35 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
   // Parse skills
   const skills = character.skills || {};
 
-  // Parse inventory from enriched_context or fallback to character.inventory
-  const inventory = character.enriched_context?.inventory || character.inventory || [];
-  const equippedItems = inventory.filter((item: any) => item.equipped || item.is_equipped);
+  // Get inventory directly from character (Firestore data)
+  const inventory = character.inventory || [];
 
   // Money - using gold field
   const money = character.gold || 0;
+
+  // Video loop with 2-second pause
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || videoError) return;
+
+    const handleVideoEnd = () => {
+      setIsVideoPaused(true);
+      setTimeout(() => {
+        setIsVideoPaused(false);
+        video.currentTime = 0;
+        video.play().catch(err => {
+          console.error("Error playing video:", err);
+          setVideoError(true);
+        });
+      }, 2000); // 2 second pause
+    };
+
+    video.addEventListener('ended', handleVideoEnd);
+
+    return () => {
+      video.removeEventListener('ended', handleVideoEnd);
+    };
+  }, [videoError]);
 
   return (
     <div className="h-full w-full overflow-y-auto bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
@@ -44,20 +72,31 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-900" />
       </div>
 
-      {/* Character Portrait - Overlapping background */}
+      {/* Character Portrait - Video or Image Fallback */}
       <div className="relative -mt-24 md:-mt-32 px-4 md:px-6">
-        <div className="relative w-48 h-64 md:w-56 md:h-80 mx-auto rounded-lg overflow-hidden border-4 border-amber-700/50 shadow-2xl">
-          <Image
-            src={`/characters/VisualPreset/${character.visualPreset}/portrait.jpg`}
-            alt={character.name}
-            fill
-            className="object-cover"
-            onError={(e) => {
-              // Fallback to PNG if JPG fails
-              const target = e.target as HTMLImageElement;
-              target.src = `/characters/VisualPreset/${character.visualPreset}/portrait.png`;
-            }}
-          />
+        <div className="relative w-48 h-64 md:w-56 md:h-80 mx-auto rounded-lg overflow-hidden border-4 border-amber-700/50 shadow-2xl bg-black">
+          {!videoError ? (
+            <video
+              ref={videoRef}
+              className="w-full h-full object-cover"
+              autoPlay
+              muted
+              playsInline
+              onError={() => setVideoError(true)}
+            >
+              <source
+                src={`/characters/VisualPreset/${character.visualPreset}/${character.visualPreset}_live.mp4`}
+                type="video/mp4"
+              />
+            </video>
+          ) : (
+            <Image
+              src={`/characters/VisualPreset/${character.visualPreset}/portrait.jpg`}
+              alt={character.name}
+              fill
+              className="object-cover"
+            />
+          )}
         </div>
 
         {/* Character Name */}
@@ -140,29 +179,33 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
                 <Backpack size={18} />
                 {t('characterInventory')}
               </h3>
-              {equippedItems.length > 0 ? (
-                <div className="space-y-2">
-                  {equippedItems.slice(0, 5).map((item: any, index: number) => (
+              {inventory.length > 0 ? (
+                <div className="space-y-2 max-h-64 overflow-y-auto">
+                  {inventory.map((item: any, index: number) => (
                     <div
                       key={index}
                       className="bg-amber-900/10 rounded px-3 py-2 border border-amber-900/20"
                     >
-                      <div className="text-sm font-medium text-stone-900">
-                        {item.custom_name || item.name}
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <div className="text-sm font-medium text-stone-900">
+                            {item.item || item.name || 'Item'}
+                          </div>
+                          {item.notes && (
+                            <div className="text-xs text-stone-600 mt-1">{item.notes}</div>
+                          )}
+                        </div>
+                        {item.quantity > 1 && (
+                          <div className="text-xs bg-amber-900/20 px-2 py-1 rounded ml-2">
+                            x{item.quantity}
+                          </div>
+                        )}
                       </div>
-                      {item.category && (
-                        <div className="text-xs text-stone-600">{item.category}</div>
-                      )}
                     </div>
                   ))}
-                  {equippedItems.length > 5 && (
-                    <p className="text-xs text-stone-600 text-center mt-2">
-                      +{equippedItems.length - 5} más...
-                    </p>
-                  )}
                 </div>
               ) : (
-                <p className="text-sm text-stone-600 italic">Sin objetos equipados</p>
+                <p className="text-sm text-stone-600 italic">Sin objetos en inventario</p>
               )}
             </div>
           </div>

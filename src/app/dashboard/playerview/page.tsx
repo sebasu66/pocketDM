@@ -41,7 +41,7 @@ export default function PlayerViewPage() {
     const [activeNodeIndex, setActiveNodeIndex] = useState(0);
     const [isMenuSheetOpen, setIsMenuSheetOpen] = React.useState(false);
     const [isCharacterSheetOpen, setIsCharacterSheetOpen] = React.useState(false);
-    const [isCharacterPanelOpen, setIsCharacterPanelOpen] = React.useState(false);
+    const [currentPanel, setCurrentPanel] = useState<'character' | 'narrative' | 'map'>('narrative');
     const [playerCharacter, setPlayerCharacter] = useState<Character | null>(null);
     const [allCharacters, setAllCharacters] = useState<Character[]>([]);
     const [characterComments, setCharacterComments] = useState<CharacterComment[]>([]);
@@ -388,37 +388,27 @@ export default function PlayerViewPage() {
     const imageUrl = '/locations/default_location.jpg'; // TODO: Get image from location data
 
     return (
-        <div
-            className="w-full h-screen flex overflow-hidden"
-        >
+        <div className="w-full h-screen flex overflow-hidden">
             <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
 
-            {/* Character Panel - Left Side (Desktop: fixed width, Mobile: slide-in) */}
-            {playerCharacter && (
-                <>
-                    {/* Desktop: Fixed column */}
-                    <div className="hidden lg:block w-80 xl:w-96 min-w-[320px] max-w-[400px] h-full z-20 bg-slate-900 shadow-2xl overflow-hidden">
+            {/* Desktop: Side-by-side panels */}
+            <div className="hidden lg:flex w-full h-full">
+                {/* Character Panel - Left Side (Desktop) */}
+                {playerCharacter && (
+                    <div className="w-80 xl:w-96 min-w-[320px] max-w-[400px] h-full z-20 bg-slate-900 shadow-2xl overflow-hidden">
                         <CharacterPanel character={playerCharacter} t={t} />
                     </div>
+                )}
 
-                    {/* Mobile: Slide-in Sheet */}
-                    <Sheet open={isCharacterPanelOpen} onOpenChange={setIsCharacterPanelOpen}>
-                        <SheetContent side="left" className="p-0 w-80 bg-slate-900 border-r-0">
-                            <CharacterPanel character={playerCharacter} t={t} />
-                        </SheetContent>
-                    </Sheet>
-                </>
-            )}
+                {/* Campaign Title Column */}
+                <div className="flex items-center justify-center p-4 z-10 bg-leather-column drop-shadow-2xl">
+                    <h2 className="font-headline text-2xl text-foreground/80 [writing-mode:vertical-rl] rotate-180 uppercase tracking-widest">
+                        {campaign?.title}
+                    </h2>
+                </div>
 
-            {/* Campaign Title Column (Desktop only) */}
-            <div className="hidden md:flex items-center justify-center p-4 z-10 bg-leather-column drop-shadow-2xl">
-                <h2 className="font-headline text-2xl text-foreground/80 [writing-mode:vertical-rl] rotate-180 uppercase tracking-widest">
-                    {campaign?.title}
-                </h2>
-            </div>
-
-            {/* Main Narrative Panel */}
-            <div className="flex-1 md:p-8 z-10 overflow-y-auto min-w-0">
+                {/* Main Narrative Panel */}
+                <div className="flex-1 md:p-8 z-10 overflow-y-auto min-w-0">
                  
                 <div className="md:hidden text-center h-20 flex items-center justify-center bg-leather-column drop-shadow-2xl mb-8">
                     <h2 className="font-body text-2xl text-foreground/80 uppercase tracking-widest">
@@ -525,20 +515,171 @@ export default function PlayerViewPage() {
                 />
 
                 <div className="h-24" />
+                </div>
             </div>
 
-            {/* Mobile Character Panel Toggle Button (Bottom Left) */}
-            {playerCharacter && (
-                <div className="lg:hidden fixed bottom-6 left-6 z-30">
-                    <RusticIconButton
-                        tooltip="Character Panel"
-                        onClick={() => setIsCharacterPanelOpen(true)}
-                        className="text-white/90 hover:text-white bg-black/40 backdrop-blur-sm"
-                    >
-                        <UserIcon />
-                    </RusticIconButton>
+            {/* Mobile: Swipe horizontal between panels */}
+            <div className="lg:hidden w-full h-full flex overflow-x-hidden relative">
+                {/* Mobile Campaign Title Header */}
+                <div className="absolute top-0 left-0 right-0 z-20 text-center h-16 flex items-center justify-center bg-leather-column drop-shadow-2xl">
+                    <h2 className="font-body text-xl text-foreground/80 uppercase tracking-widest">
+                        {campaign?.title}
+                    </h2>
                 </div>
-            )}
+
+                {/* Swipeable Container */}
+                <div
+                    className="flex transition-transform duration-300 ease-out h-full w-full pt-16"
+                    style={{
+                        transform: currentPanel === 'character' ? 'translateX(0%)' :
+                                   currentPanel === 'narrative' ? 'translateX(-100%)' :
+                                   'translateX(-200%)',
+                        width: '300%' // 3 panels
+                    }}
+                >
+                    {/* Character Panel */}
+                    {playerCharacter && (
+                        <div className="w-1/3 h-full overflow-y-auto">
+                            <CharacterPanel character={playerCharacter} t={t} />
+                        </div>
+                    )}
+
+                    {/* Narrative Panel (duplicated content from desktop) */}
+                    <div className="w-1/3 h-full overflow-y-auto p-4">
+                        <div className="min-h-[calc(100vh-10rem)]">
+                            <div className="text-center mb-8">
+                                <h1 className="text-3xl md:text-5xl font-headline uppercase tracking-widest">
+                                    {activeNode.location.location_name}
+                                </h1>
+
+                                {statusIndicator && (
+                                    <div className={`flex items-center justify-center gap-3 mt-3 ${statusIndicator.className}`}>
+                                        <Image
+                                            src={statusIndicator.image}
+                                            alt={statusIndicator.text}
+                                            width={32}
+                                            height={32}
+                                            className="object-contain"
+                                        />
+                                        <span className="text-sm font-medium text-foreground/80">{statusIndicator.text}</span>
+                                    </div>
+                                )}
+
+                                {activeNode.audio_url && activeNode.audio_status === 'ready' && (
+                                    <div className="mt-4 flex justify-center items-center">
+                                        <audio ref={audioRef} src={activeNode.audio_url} onEnded={handleAudioEnded} />
+                                        <RusticIconButton
+                                            tooltip={isPlaying ? 'Pausar' : 'Reproducir'}
+                                            onClick={togglePlayPause}
+                                            className="w-20 h-20 text-white/90 hover:text-white"
+                                        >
+                                            {isPlaying ? <Pause size={36} /> : <Play size={36} />}
+                                        </RusticIconButton>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="prose prose-lg prose-invert max-w-none text-foreground/90 leading-relaxed">
+                                <div
+                                    className="relative aspect-[4/3] w-full image-mask-squared float-left mr-4 mb-4"
+                                    data-ai-hint="fantasy scene"
+                                >
+                                    <Image
+                                        src={imageUrl}
+                                        alt={activeNode.location.location_name}
+                                        fill
+                                        sizes="100vw"
+                                        className="object-cover"
+                                    />
+                                </div>
+                                <div dangerouslySetInnerHTML={{ __html: processWikiTags(activeNode.narrative_html) }} />
+                            </div>
+
+                            <div className="mt-8">
+                                {activeNode?.player_comment ? (
+                                    <Card className="bg-stone-gradient border-0">
+                                        <CardHeader>
+                                            <CardTitle className="font-headline text-xl uppercase tracking-widest text-center">
+                                                {t('narrativeYourAction')}
+                                            </CardTitle>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <div className="bg-background/30 rounded-lg p-4 border border-foreground/10">
+                                                <p className="text-foreground/90 italic">"{activeNode.player_comment.text}"</p>
+                                                <p className="text-xs text-foreground/50 mt-2">
+                                                    {new Date(activeNode.player_comment.timestamp.toMillis()).toLocaleString()}
+                                                </p>
+                                            </div>
+                                            <p className="text-center text-sm text-foreground/60 mt-4">
+                                                {t('waitingForDM')}
+                                            </p>
+                                        </CardContent>
+                                    </Card>
+                                ) : canPlayerRespond && (
+                                    <div className='backdrop-blur-lg rounded-lg'>
+                                        <CommentForm
+                                            onSubmit={handleAddComment}
+                                            character={playerCharacter}
+                                            quickOptions={memoizedQuickOptions}
+                                            t={t}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+
+                            {playerCharacter && (
+                                <CharacterContext
+                                    character={playerCharacter}
+                                    t={t}
+                                />
+                            )}
+
+                            <PartyMembers
+                                characters={allCharacters}
+                                currentCharacterId={playerCharacter?.id}
+                                t={t}
+                            />
+
+                            <div className="h-24" />
+                        </div>
+                    </div>
+
+                    {/* Map Panel (placeholder for now) */}
+                    <div className="w-1/3 h-full overflow-y-auto p-4 flex items-center justify-center">
+                        <div className="text-center">
+                            <h2 className="text-2xl font-headline text-foreground/80">MAP</h2>
+                            <p className="text-foreground/60 mt-2">Próximamente</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Panel Navigation Indicators */}
+                <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-30 flex gap-2">
+                    {playerCharacter && (
+                        <button
+                            onClick={() => setCurrentPanel('character')}
+                            className={`w-2 h-2 rounded-full transition-all ${
+                                currentPanel === 'character' ? 'bg-amber-400 w-6' : 'bg-white/30'
+                            }`}
+                            aria-label="Character panel"
+                        />
+                    )}
+                    <button
+                        onClick={() => setCurrentPanel('narrative')}
+                        className={`w-2 h-2 rounded-full transition-all ${
+                            currentPanel === 'narrative' ? 'bg-amber-400 w-6' : 'bg-white/30'
+                        }`}
+                        aria-label="Narrative panel"
+                    />
+                    <button
+                        onClick={() => setCurrentPanel('map')}
+                        className={`w-2 h-2 rounded-full transition-all ${
+                            currentPanel === 'map' ? 'bg-amber-400 w-6' : 'bg-white/30'
+                        }`}
+                        aria-label="Map panel"
+                    />
+                </div>
+            </div>
 
             {/* Bottom Right Controls */}
             <div className="fixed bottom-6 right-6 z-30 flex h-14 items-center gap-2 rounded-full bg-black/20 p-2 backdrop-blur-sm">
