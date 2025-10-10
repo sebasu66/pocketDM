@@ -60,58 +60,48 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
   }, [videoError]);
 
   return (
-    <div className="h-full w-full overflow-y-auto bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
-      {/* Background atmospheric image */}
-      <div className="relative w-full h-48 md:h-64 overflow-hidden">
-        <Image
-          src="/locations/character-bg.jpg"
-          alt="Character background"
-          fill
-          className="object-cover opacity-40"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-900" />
-      </div>
-
-      {/* Character Portrait - Video or Image Fallback */}
-      <div className="relative -mt-24 md:-mt-32 px-4 md:px-6">
-        <div className="relative w-48 h-64 md:w-56 md:h-80 mx-auto rounded-lg overflow-hidden border-4 border-amber-700/50 shadow-2xl bg-black">
-          {!videoError ? (
-            <video
-              ref={videoRef}
-              className="w-full h-full object-cover"
-              autoPlay
-              muted
-              playsInline
-              onError={() => setVideoError(true)}
-            >
-              <source
-                src={`/characters/VisualPreset/${character.visualPreset}/${character.visualPreset}_live.mp4`}
-                type="video/mp4"
-              />
-            </video>
-          ) : (
-            <Image
-              src={`/characters/VisualPreset/${character.visualPreset}/portrait.jpg`}
-              alt={character.name}
-              fill
-              className="object-cover"
+    <div className="h-full w-full overflow-y-auto relative bg-slate-900">
+      {/* Full-width Video Background - Upper Section */}
+      <div className="relative w-full h-[50vh] md:h-[55vh] overflow-hidden">
+        {!videoError ? (
+          <video
+            ref={videoRef}
+            className="w-full h-full object-cover"
+            autoPlay
+            muted
+            playsInline
+            onError={() => setVideoError(true)}
+          >
+            <source
+              src={`/characters/VisualPreset/${character.visualPreset}/${character.visualPreset}_live.mp4`}
+              type="video/mp4"
             />
-          )}
-        </div>
+          </video>
+        ) : (
+          <Image
+            src={`/characters/VisualPreset/${character.visualPreset}/portrait.jpg`}
+            alt={character.name}
+            fill
+            className="object-cover"
+          />
+        )}
 
-        {/* Character Name */}
-        <div className="text-center mt-4">
-          <h2 className="font-headline text-3xl md:text-4xl uppercase tracking-wider text-amber-100 drop-shadow-lg">
+        {/* Dark gradient overlay at bottom of video */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-900/80" />
+
+        {/* Character Name - Positioned over video */}
+        <div className="absolute bottom-8 left-0 right-0 text-center z-10">
+          <h2 className="font-headline text-3xl md:text-5xl uppercase tracking-wider text-amber-100 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
             {character.name}
           </h2>
-          <p className="text-sm md:text-base text-amber-200/70 mt-1">
+          <p className="text-sm md:text-lg text-amber-200/90 mt-2 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
             {character.race} • {t('charactersLevel')} {character.level || 1}
           </p>
         </div>
       </div>
 
-      {/* Parchment Paper Stats Section */}
-      <div className="relative mt-6 px-3 md:px-6 pb-6">
+      {/* Parchment Paper Stats Section - Overlapping bottom of video */}
+      <div className="relative -mt-16 px-3 md:px-6 pb-6 z-20">
         <div
           className="relative bg-[url('/ui/parchment.jpg')] bg-cover bg-center rounded-lg shadow-2xl border-2 border-amber-900/50"
           style={{
