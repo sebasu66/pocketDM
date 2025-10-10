@@ -104,15 +104,15 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
       </div>
 
       {/* Parchment Paper Stats Section - Overlapping bottom of video */}
-      <div className="relative -mt-16 pb-6 z-20 w-full">
+      <div className="relative -mt-16 w-full z-20">
         <div
-          className="relative bg-[url('/ui/parchment.jpg')] bg-cover bg-center rounded-lg shadow-2xl border-2 border-amber-900/50 w-full"
+          className="relative bg-[url('/ui/parchment.jpg')] bg-cover bg-center shadow-2xl w-full"
           style={{
             backgroundBlendMode: 'multiply',
             backgroundColor: 'rgba(245, 222, 179, 0.95)'
           }}
         >
-          <div className="p-4 md:p-6">
+          <div className="p-4 md:p-6 pb-6">
             {/* Stats Summary from enriched_context */}
             {context?.stats && (
               <>
