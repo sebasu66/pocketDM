@@ -20,7 +20,6 @@ import { CommentForm } from './CommentForm';
 import { useToast } from '@/hooks/use-toast';
 import { CharacterSheet } from './CharacterSheet';
 import { PartyMembers } from './PartyMembers';
-import { CharacterContext } from './CharacterContext';
 import { CharacterPanel } from './CharacterPanel';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -499,14 +498,6 @@ export default function PlayerViewPage() {
                     )}
                 </div>
 
-                {/* Character Context (Stats, Quests, NPCs, Inventory) */}
-                {playerCharacter && (
-                    <CharacterContext
-                        character={playerCharacter}
-                        t={t}
-                    />
-                )}
-
                 {/* Party Members Section */}
                 <PartyMembers
                     characters={allCharacters}
@@ -626,13 +617,6 @@ export default function PlayerViewPage() {
                                     </div>
                                 )}
                             </div>
-
-                            {playerCharacter && (
-                                <CharacterContext
-                                    character={playerCharacter}
-                                    t={t}
-                                />
-                            )}
 
                             <PartyMembers
                                 characters={allCharacters}

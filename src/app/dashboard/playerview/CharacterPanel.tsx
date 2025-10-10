@@ -2,7 +2,7 @@
 
 import { Character } from "@/lib/firebase/types";
 import Image from "next/image";
-import { Coins, Backpack, ScrollText } from "lucide-react";
+import { Coins, Backpack, ScrollText, Heart, Zap, Award, Target, Users, Scroll } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useEffect, useRef, useState } from "react";
@@ -34,6 +34,9 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
 
   // Money - using gold field
   const money = character.gold || 0;
+
+  // Get enriched context for stats, quests, NPCs, objectives
+  const context = character.enriched_context;
 
   // Video loop with 2-second pause
   useEffect(() => {
@@ -73,13 +76,13 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
             onError={() => setVideoError(true)}
           >
             <source
-              src={`/characters/VisualPreset/${character.visualPreset}/${character.visualPreset}_live.mp4`}
+              src={`/characters/VisualPreset/${encodeURIComponent(character.visualPreset)}/${encodeURIComponent(character.visualPreset)}_live.mp4`}
               type="video/mp4"
             />
           </video>
         ) : (
           <Image
-            src={`/characters/VisualPreset/${character.visualPreset}/portrait.jpg`}
+            src={`/characters/VisualPreset/${encodeURIComponent(character.visualPreset)}/portrait.jpg`}
             alt={character.name}
             fill
             className="object-cover"
@@ -110,6 +113,49 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
           }}
         >
           <div className="p-4 md:p-6">
+            {/* Stats Summary from enriched_context */}
+            {context?.stats && (
+              <>
+                <div className="mb-6">
+                  <h3 className="font-headline text-xl uppercase tracking-wide text-stone-900 mb-3 flex items-center gap-2">
+                    <Award size={20} />
+                    Estado del Personaje
+                  </h3>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    <div className="bg-amber-900/10 rounded px-3 py-2 border border-amber-900/20">
+                      <div className="text-xs uppercase text-stone-600 font-semibold">Rango</div>
+                      <div className="text-xl font-bold text-stone-900 capitalize">{context.stats.rank}</div>
+                    </div>
+                    <div className="bg-amber-900/10 rounded px-3 py-2 border border-amber-900/20">
+                      <div className="text-xs uppercase text-stone-600 font-semibold flex items-center gap-1">
+                        <Heart size={12} /> Heridas
+                      </div>
+                      <div className="text-xl font-bold text-red-700">{context.stats.wounds}/3</div>
+                    </div>
+                    <div className="bg-amber-900/10 rounded px-3 py-2 border border-amber-900/20">
+                      <div className="text-xs uppercase text-stone-600 font-semibold flex items-center gap-1">
+                        <Zap size={12} /> Fatiga
+                      </div>
+                      <div className="text-xl font-bold text-yellow-700">{context.stats.fatigue}</div>
+                    </div>
+                    <div className="bg-amber-900/10 rounded px-3 py-2 border border-amber-900/20">
+                      <div className="text-xs uppercase text-stone-600 font-semibold">Bennies</div>
+                      <div className="text-xl font-bold text-blue-700">{context.stats.bennies}</div>
+                    </div>
+                    <div className="bg-amber-900/10 rounded px-3 py-2 border border-amber-900/20">
+                      <div className="text-xs uppercase text-stone-600 font-semibold">Gloria</div>
+                      <div className="text-xl font-bold text-purple-700">{context.stats.glory}</div>
+                    </div>
+                    <div className="bg-amber-900/10 rounded px-3 py-2 border border-amber-900/20">
+                      <div className="text-xs uppercase text-stone-600 font-semibold">XP</div>
+                      <div className="text-xl font-bold text-green-700">{context.stats.experience_points}</div>
+                    </div>
+                  </div>
+                </div>
+                <Separator className="my-4 bg-amber-900/30" />
+              </>
+            )}
+
             {/* Attributes Section */}
             <div className="mb-6">
               <h3 className="font-headline text-xl uppercase tracking-wide text-stone-900 mb-3 flex items-center gap-2">
@@ -198,6 +244,92 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
                 <p className="text-sm text-stone-600 italic">Sin objetos en inventario</p>
               )}
             </div>
+
+            {/* Active Quests */}
+            {context?.active_quests && context.active_quests.length > 0 && (
+              <>
+                <Separator className="my-4 bg-amber-900/30" />
+                <div className="mb-6">
+                  <h3 className="font-headline text-lg uppercase tracking-wide text-stone-900 mb-3 flex items-center gap-2">
+                    <Target size={18} />
+                    Misiones Activas
+                  </h3>
+                  <div className="space-y-3">
+                    {context.active_quests.map((quest) => (
+                      <div key={quest.id} className="bg-amber-900/10 rounded px-3 py-3 border border-amber-900/20">
+                        <h4 className="font-headline text-base text-amber-900 mb-1">{quest.name}</h4>
+                        {quest.description && (
+                          <p className="text-sm text-stone-700 mb-2">{quest.description}</p>
+                        )}
+                        {quest.progress && (
+                          <div className="mt-2 pt-2 border-t border-amber-900/20">
+                            <p className="text-xs text-stone-600 mb-1">Progreso:</p>
+                            <p className="text-sm text-stone-900 italic">{quest.progress}</p>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Known NPCs */}
+            {context?.known_npcs && context.known_npcs.length > 0 && (
+              <>
+                <Separator className="my-4 bg-amber-900/30" />
+                <div className="mb-6">
+                  <h3 className="font-headline text-lg uppercase tracking-wide text-stone-900 mb-3 flex items-center gap-2">
+                    <Users size={18} />
+                    NPCs Conocidos
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {context.known_npcs.map((npc) => (
+                      <div key={npc.id} className="bg-amber-900/10 rounded px-3 py-2 border border-amber-900/20">
+                        <h4 className="font-headline text-sm text-amber-900">{npc.name}</h4>
+                        {npc.title && (
+                          <p className="text-xs text-stone-600 italic">{npc.title}</p>
+                        )}
+                        {npc.role && (
+                          <p className="text-sm text-stone-800 mt-1">{npc.role}</p>
+                        )}
+                        {npc.location && (
+                          <p className="text-xs text-stone-600 mt-1">📍 {npc.location}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Current Objectives */}
+            {context?.current_objectives && context.current_objectives.length > 0 && (
+              <>
+                <Separator className="my-4 bg-amber-900/30" />
+                <div className="mb-6">
+                  <h3 className="font-headline text-lg uppercase tracking-wide text-stone-900 mb-3 flex items-center gap-2">
+                    <Scroll size={18} />
+                    Objetivos Actuales
+                  </h3>
+                  <div className="space-y-2">
+                    {context.current_objectives.map((obj, idx) => (
+                      <div key={idx} className="bg-amber-900/10 rounded px-3 py-2 border border-amber-900/20">
+                        <p className="text-xs text-amber-900 font-headline mb-1">{obj.quest_name}</p>
+                        <p className="text-sm text-stone-900">{obj.objective}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Context Update Timestamp */}
+            {context?.context_updated_at && (
+              <p className="text-center text-xs text-stone-500 mt-4">
+                Actualizado: {new Date(context.context_updated_at).toLocaleString('es-ES')}
+              </p>
+            )}
           </div>
         </div>
       </div>
