@@ -332,7 +332,22 @@
     "partyMemberHealth": "Salud",
     "partyMemberClass": "Clase",
     "partyMemberLevel": "Nivel",
-    "partyMemberUnknownLocation": "Ubicación desconocida"
+    "partyMemberUnknownLocation": "Ubicación desconocida",
+
+    "dashboardEnter": "Entrar",
+    "dashboardMyCharacter": "Mi Personaje",
+    "dashboardMyCharacterSubtitleView": "Ver tu hoja de personaje",
+    "dashboardMyCharacterSubtitleCreate": "Crea tu héroe",
+    "dashboardMyCharacterActive": "Activo",
+    "dashboardMyCharacterStartHere": "Comienza Aquí",
+    "dashboardAdventure": "Aventura",
+    "dashboardAdventureSubtitle": "Continúa tu viaje épico",
+    "dashboardAdventureRequiresCharacter": "Requiere Personaje",
+    "dashboardAdventurePreparing": "Preparando Historia...",
+    "dashboardAdventureNewChapter": "Nuevo Capítulo Te Espera",
+    "dashboardManual": "Manual",
+    "dashboardManualSubtitle": "Explora el conocimiento del mundo",
+    "dashboardManualKnowledgeBase": "Base de Conocimiento"
 }
 
     

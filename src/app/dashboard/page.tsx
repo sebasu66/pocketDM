@@ -174,9 +174,9 @@ export default function DashboardPage() {
       <div className="max-w-4xl mx-auto px-4 pb-12 space-y-6">
         {/* Panel 1: My Character */}
         <AnimatedPanel
-          title="My Character"
-          subtitle={hasCharacter ? "View your character sheet" : "Create your hero"}
-          contextLabel={hasCharacter ? "Active" : "Start Here"}
+          title={t('dashboardMyCharacter')}
+          subtitle={hasCharacter ? t('dashboardMyCharacterSubtitleView') : t('dashboardMyCharacterSubtitleCreate')}
+          contextLabel={hasCharacter ? t('dashboardMyCharacterActive') : t('dashboardMyCharacterStartHere')}
           images={[
             "/locations/character1.jpg",
             "/locations/character2.jpg",
@@ -190,14 +190,14 @@ export default function DashboardPage() {
         {/* Panel 2: Adventure (Narrative) */}
         {console.log("[Dashboard] Rendering Adventure panel. hasCharacter:", hasCharacter, "disabled:", !hasCharacter)}
         <AnimatedPanel
-          title="Adventure"
-          subtitle="Continue your epic journey"
+          title={t('dashboardAdventure')}
+          subtitle={t('dashboardAdventureSubtitle')}
           contextLabel={
             !hasCharacter
-              ? "Requires Character"
+              ? t('dashboardAdventureRequiresCharacter')
               : campaign.status === 'generating_narrative'
-              ? "Preparing Story..."
-              : "New Chapter Awaits"
+              ? t('dashboardAdventurePreparing')
+              : t('dashboardAdventureNewChapter')
           }
           images={[
             "/locations/adventure1.jpg",
@@ -215,9 +215,9 @@ export default function DashboardPage() {
 
         {/* Panel 3: Manual (Wiki) */}
         <AnimatedPanel
-          title="Manual"
-          subtitle="Explore the world lore"
-          contextLabel="Knowledge Base"
+          title={t('dashboardManual')}
+          subtitle={t('dashboardManualSubtitle')}
+          contextLabel={t('dashboardManualKnowledgeBase')}
           images={[
             "/locations/manual1.jpg",
             "/locations/manual2.jpg",

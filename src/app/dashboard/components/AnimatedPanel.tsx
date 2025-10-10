@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { ChevronRight, Lock } from "lucide-react";
+import { useI18n } from "@/context/i18n-context";
 
 interface AnimatedPanelProps {
   title: string;
@@ -27,6 +28,7 @@ export function AnimatedPanel({
   className = "",
   panelStyle = 'character'
 }: AnimatedPanelProps) {
+  const { t } = useI18n();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -177,7 +179,7 @@ export function AnimatedPanel({
                 ${isHovered ? 'translate-x-2 text-white' : ''}
               `}
             >
-              <span className="text-sm uppercase font-semibold tracking-wide">Enter</span>
+              <span className="text-sm uppercase font-semibold tracking-wide">{t('dashboardEnter')}</span>
               <ChevronRight
                 size={24}
                 className={`transition-transform duration-300 ${isHovered ? 'translate-x-1' : ''}`}
