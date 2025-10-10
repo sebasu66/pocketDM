@@ -104,9 +104,9 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
       </div>
 
       {/* Parchment Paper Stats Section - Overlapping bottom of video */}
-      <div className="relative -mt-16 px-3 md:px-6 pb-6 z-20">
+      <div className="relative -mt-16 pb-6 z-20 w-full">
         <div
-          className="relative bg-[url('/ui/parchment.jpg')] bg-cover bg-center rounded-lg shadow-2xl border-2 border-amber-900/50"
+          className="relative bg-[url('/ui/parchment.jpg')] bg-cover bg-center rounded-lg shadow-2xl border-2 border-amber-900/50 w-full"
           style={{
             backgroundBlendMode: 'multiply',
             backgroundColor: 'rgba(245, 222, 179, 0.95)'
