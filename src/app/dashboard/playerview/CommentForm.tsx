@@ -1,12 +1,12 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { MessageSquareQuote, Send, Zap } from "lucide-react";
+import { MessageSquareQuote, Send, Zap, Mic, MicOff } from "lucide-react";
 import type { Character, QuickOption } from "@/lib/firebase/types";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
 import { Separator } from "@/components/ui/separator";
@@ -21,12 +21,75 @@ interface CommentFormProps {
 export function CommentForm({ onSubmit, character, quickOptions, t }: CommentFormProps) {
     const [text, setText] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isListening, setIsListening] = useState(false);
+    const [speechSupported, setSpeechSupported] = useState(false);
+    const recognitionRef = useRef<any>(null);
+
+    useEffect(() => {
+        // Check if browser supports Web Speech API
+        if (typeof window !== 'undefined') {
+            const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+            if (SpeechRecognition) {
+                setSpeechSupported(true);
+                const recognition = new SpeechRecognition();
+                recognition.continuous = true;
+                recognition.interimResults = true;
+                recognition.lang = 'es-ES'; // Spanish for this campaign
+
+                recognition.onresult = (event: any) => {
+                    let fullTranscript = '';
+
+                    for (let i = 0; i < event.results.length; i++) {
+                        fullTranscript += event.results[i][0].transcript;
+                    }
+
+                    setText(fullTranscript);
+                };
+
+                recognition.onerror = (event: any) => {
+                    console.error('Speech recognition error:', event.error);
+                    setIsListening(false);
+                };
+
+                recognition.onend = () => {
+                    setIsListening(false);
+                };
+
+                recognitionRef.current = recognition;
+            }
+        }
+
+        return () => {
+            if (recognitionRef.current) {
+                recognitionRef.current.stop();
+            }
+        };
+    }, []);
+
+    const toggleListening = () => {
+        if (!recognitionRef.current) return;
+
+        if (isListening) {
+            recognitionRef.current.stop();
+            setIsListening(false);
+        } else {
+            recognitionRef.current.start();
+            setIsListening(true);
+        }
+    };
 
     const handleSubmit = async (e?: React.FormEvent | React.MouseEvent) => {
         e?.preventDefault();
         if (!text || isSubmitting) {
             return;
         }
+
+        // Stop listening if active
+        if (isListening && recognitionRef.current) {
+            recognitionRef.current.stop();
+            setIsListening(false);
+        }
+
         setIsSubmitting(true);
         try {
             await onSubmit(text);
@@ -98,14 +161,34 @@ export function CommentForm({ onSubmit, character, quickOptions, t }: CommentFor
                             <MessageSquareQuote />
                             {t('narrativePublicResponse')}
                         </Label>
-                        <Textarea
-                            id="comment-text"
-                            value={text}
-                            onChange={(e) => setText(e.target.value)}
-                            placeholder={t('narrativePublicResponsePlaceholder')}
-                            rows={5}
-                            className="bg-background/50"
-                        />
+                        <div className="relative">
+                            <Textarea
+                                id="comment-text"
+                                value={text}
+                                onChange={(e) => setText(e.target.value)}
+                                placeholder={t('narrativePublicResponsePlaceholder')}
+                                rows={5}
+                                className="bg-background/50 pr-12"
+                            />
+                            {speechSupported && (
+                                <Button
+                                    type="button"
+                                    variant={isListening ? "destructive" : "outline"}
+                                    size="icon"
+                                    className="absolute right-2 bottom-2"
+                                    onClick={toggleListening}
+                                    disabled={isSubmitting}
+                                    title={isListening ? "Detener grabación" : "Grabar con micrófono"}
+                                >
+                                    {isListening ? <MicOff size={20} /> : <Mic size={20} />}
+                                </Button>
+                            )}
+                        </div>
+                        {isListening && (
+                            <p className="text-xs text-muted-foreground animate-pulse">
+                                🎤 Escuchando... Habla ahora
+                            </p>
+                        )}
                     </div>
                 </form>
             </CardContent>
