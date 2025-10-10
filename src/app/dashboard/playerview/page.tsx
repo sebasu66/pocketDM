@@ -21,6 +21,7 @@ import { useToast } from '@/hooks/use-toast';
 import { CharacterSheet } from './CharacterSheet';
 import { PartyMembers } from './PartyMembers';
 import { CharacterContext } from './CharacterContext';
+import { CharacterPanel } from './CharacterPanel';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -40,6 +41,7 @@ export default function PlayerViewPage() {
     const [activeNodeIndex, setActiveNodeIndex] = useState(0);
     const [isMenuSheetOpen, setIsMenuSheetOpen] = React.useState(false);
     const [isCharacterSheetOpen, setIsCharacterSheetOpen] = React.useState(false);
+    const [isCharacterPanelOpen, setIsCharacterPanelOpen] = React.useState(false);
     const [playerCharacter, setPlayerCharacter] = useState<Character | null>(null);
     const [allCharacters, setAllCharacters] = useState<Character[]>([]);
     const [characterComments, setCharacterComments] = useState<CharacterComment[]>([]);
@@ -386,18 +388,37 @@ export default function PlayerViewPage() {
     const imageUrl = '/locations/default_location.jpg'; // TODO: Get image from location data
 
     return (
-        <div 
-            className="w-full mx-auto max-w-7xl flex"
+        <div
+            className="w-full h-screen flex overflow-hidden"
         >
             <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
-            
+
+            {/* Character Panel - Left Side (Desktop: fixed width, Mobile: slide-in) */}
+            {playerCharacter && (
+                <>
+                    {/* Desktop: Fixed column */}
+                    <div className="hidden lg:block w-80 xl:w-96 min-w-[320px] max-w-[400px] h-full z-20 bg-slate-900 shadow-2xl overflow-hidden">
+                        <CharacterPanel character={playerCharacter} t={t} />
+                    </div>
+
+                    {/* Mobile: Slide-in Sheet */}
+                    <Sheet open={isCharacterPanelOpen} onOpenChange={setIsCharacterPanelOpen}>
+                        <SheetContent side="left" className="p-0 w-80 bg-slate-900 border-r-0">
+                            <CharacterPanel character={playerCharacter} t={t} />
+                        </SheetContent>
+                    </Sheet>
+                </>
+            )}
+
+            {/* Campaign Title Column (Desktop only) */}
             <div className="hidden md:flex items-center justify-center p-4 z-10 bg-leather-column drop-shadow-2xl">
                 <h2 className="font-headline text-2xl text-foreground/80 [writing-mode:vertical-rl] rotate-180 uppercase tracking-widest">
                     {campaign?.title}
                 </h2>
             </div>
-            
-            <div className="flex-1 md:p-8 z-10">
+
+            {/* Main Narrative Panel */}
+            <div className="flex-1 md:p-8 z-10 overflow-y-auto min-w-0">
                  
                 <div className="md:hidden text-center h-20 flex items-center justify-center bg-leather-column drop-shadow-2xl mb-8">
                     <h2 className="font-body text-2xl text-foreground/80 uppercase tracking-widest">
@@ -506,6 +527,20 @@ export default function PlayerViewPage() {
                 <div className="h-24" />
             </div>
 
+            {/* Mobile Character Panel Toggle Button (Bottom Left) */}
+            {playerCharacter && (
+                <div className="lg:hidden fixed bottom-6 left-6 z-30">
+                    <RusticIconButton
+                        tooltip="Character Panel"
+                        onClick={() => setIsCharacterPanelOpen(true)}
+                        className="text-white/90 hover:text-white bg-black/40 backdrop-blur-sm"
+                    >
+                        <UserIcon />
+                    </RusticIconButton>
+                </div>
+            )}
+
+            {/* Bottom Right Controls */}
             <div className="fixed bottom-6 right-6 z-30 flex h-14 items-center gap-2 rounded-full bg-black/20 p-2 backdrop-blur-sm">
                 {canGoPrev && (
                     <RusticIconButton
@@ -525,7 +560,7 @@ export default function PlayerViewPage() {
                       <ArrowRight/>
                     </RusticIconButton>
                 )}
-                
+
                 {(canGoPrev || canGoNext) && <div className="h-6 w-px bg-white/20" />}
 
                  <RusticIconButton
