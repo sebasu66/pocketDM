@@ -26,16 +26,6 @@ const nextConfig: NextConfig = {
       }
     ],
   },
-  // WSL2 fix: Use polling for file watching on Windows filesystem (/mnt/)
-  webpack: (config, { dev, isServer }) => {
-    if (dev && !isServer) {
-      config.watchOptions = {
-        poll: 1000, // Check for changes every second
-        aggregateTimeout: 300,
-      };
-    }
-    return config;
-  },
   pwa: {
     dest: 'public',
     register: true,
