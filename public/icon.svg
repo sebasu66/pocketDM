@@ -1,0 +1,36 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dark background -->
+  <rect width="512" height="512" fill="#0B1113"/>
+
+  <!-- D20 dice outline in amber -->
+  <g transform="translate(256, 256)">
+    <!-- Pentagon shape resembling a D20 -->
+    <path d="M 0,-120 L 114,-37 L 70,97 L -70,97 L -114,-37 Z"
+          fill="none"
+          stroke="#F59E0B"
+          stroke-width="8"/>
+
+    <!-- Inner lines -->
+    <line x1="0" y1="-120" x2="0" y2="0" stroke="#F59E0B" stroke-width="4"/>
+    <line x1="114" y1="-37" x2="0" y2="0" stroke="#F59E0B" stroke-width="4"/>
+    <line x1="70" y1="97" x2="0" y2="0" stroke="#F59E0B" stroke-width="4"/>
+    <line x1="-70" y1="97" x2="0" y2="0" stroke="#F59E0B" stroke-width="4"/>
+    <line x1="-114" y1="-37" x2="0" y2="0" stroke="#F59E0B" stroke-width="4"/>
+
+    <!-- "20" text in center -->
+    <text x="0" y="15"
+          font-family="serif"
+          font-size="80"
+          font-weight="bold"
+          fill="#F59E0B"
+          text-anchor="middle">20</text>
+  </g>
+
+  <!-- "DM" text at bottom -->
+  <text x="256" y="450"
+        font-family="serif"
+        font-size="60"
+        font-weight="bold"
+        fill="#F59E0B"
+        text-anchor="middle">DM</text>
+</svg>
