@@ -229,5 +229,3 @@ export const archetypes = {
     religion: null
   }
 };
-
-    
