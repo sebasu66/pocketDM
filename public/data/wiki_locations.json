@@ -1,0 +1,1274 @@
+[
+  {
+    "id": "alantaris_isle",
+    "name": "Isla de Alantaris",
+    "type": "Antigua Provincia Imperial / Consejo",
+    "cell_id": "A1",
+    "population": "110,840",
+    "ruler": "@faction:council_of_citizens",
+    "markdown_content": "# Isla de Alantaris\n\n**Tipo:** Consejo de Ciudadanos (Baronía, Ex-Capital Imperial Anari)\n**Población:** 110,840 (83% Anari)\n**Gobernante:** @faction:council_of_citizens\n**Región:** @location:a1 (Hearthlands)\n\n## Descripción\n\nAntigua sede del Imperio Anari. La capital, Imperial City, fue devastada en la Blizzard War y sus ruinas (*The Rubble*) están sin explorar. La isla sufre de nieve permanente en las Cold Hills. La nobleza mágica, la @faction:the_convocation, mantiene su sede en el Palacio Imperial arruinado.\n\n## Servicios\n\n- Port (puerto vital, fuertemente defendido).\n- Sede de la @faction:the_convocation (biblioteca avanzada, costo 5 gs/hora).\n- The Theater (usado para reuniones, conciertos, mercados).\n- Producción de brebajes alquímicos y aceite de ballena.\n\n## Organizaciones\n\n- @faction:council_of_citizens (Consejo electo, gobierno de facto).\n- @faction:the_convocation (Cuartel general mágico).\n- @faction:the_justiciary (Cuartel general cerca, en Belvenus).\n- @faction:reliquary (Agentes encubiertos, ej. Ulfwyne Fivepints en The Wall).\n\n## Amenazas\n\n- Orcos en @location:orc_wood organizándose en un ejército cohesivo para invadir.\n- Gigantes y trolls en @location:cold_hills.\n- Desapariciones de personas sin hogar en Imperial City, posiblemente monstruos de @location:the_rubble.\n\n## Lugares Cercanos\n\n- @location:a2 (Angarion)\n- @location:b1 (The Borderlands)\n- @location:e2 (Isle of the Seareavers)\n- @location:orc_wood",
+    "nearby_locations": [
+      "the_rubble",
+      "a1",
+      "b1",
+      "a2",
+      "e2",
+      "orc_wood",
+      "cold_hills"
+    ],
+    "npcs": [],
+    "factions": [
+      "reliquary",
+      "the_convocation",
+      "council_of_citizens",
+      "the_justiciary"
+    ],
+    "search_terms": [
+      "isla de alantaris",
+      "antigua provincia imperial / consejo",
+      "alantaris_isle"
+    ]
+  },
+  {
+    "id": "angarion",
+    "name": "Angarion",
+    "type": "Dominio Élfico",
+    "cell_id": "A2",
+    "population": "23,048",
+    "ruler": "@npc:the_shining_king",
+    "markdown_content": "# Angarion\n\n**Tipo:** Reino Élfico (Elfos del Corazón)\n**Población:** 23,048 (99% Elfos del Corazón)\n**Gobernante:** @npc:the_shining_king\n**Región:** @location:a2 (Hearthlands)\n\n## Descripción\n\nAntiguo bosque deciduo, centro de la cultura elfa del corazón. La ciudad, que lleva el mismo nombre, es orgánica y está prohibida para no-elfos. Los caminos son escasos y las fronteras están constantemente vigiladas.\n\n## Servicios\n\n- Autosuficiente. Exporta arte y joyería.\n- Magia antigua usada para bendecir los campos de asentamientos aliados (@location:dale).\n\n## Organizaciones\n\n- Los Elfos del Corazón (cultura estricta).\n\n## Amenazas\n\n- Tensión elevada con @location:e5 (The Magocracy) que ha comenzado a invadir el oeste.\n- Conspiraciones internas contra el @npc:the_shining_king debido a que sus poderes de profecía están fallando, nublados por el hielo y la nieve.\n- Orcos en Lesser Hills.\n\n## Lugares Cercanos\n\n- @location:a1 (Alantaris Isle)\n- @location:a3 (Angmark)\n- @location:e5 (The Magocracy)\n- @location:e6 (Midmark)",
+    "nearby_locations": [
+      "a3",
+      "e5",
+      "e6",
+      "a1",
+      "a2",
+      "dale"
+    ],
+    "npcs": [
+      "the_shining_king"
+    ],
+    "factions": [],
+    "search_terms": [
+      "angarion",
+      "dominio élfico",
+      "angarion"
+    ]
+  },
+  {
+    "id": "angmark",
+    "name": "Angmark",
+    "type": "Markland Saxa",
+    "cell_id": "A3",
+    "population": "53,458",
+    "ruler": "@npc:cyning_knui_gillingsunu",
+    "markdown_content": "# Angmark\n\n**Tipo:** Reino Saxa (Markland occidental)\n**Población:** 53,458 (84% Saxa)\n**Gobernante:** @npc:cyning_knui_gillingsunu\n**Región:** @location:a3 (Hearthlands)\n\n## Descripción\n\nEl Markland más occidental, que se repobló después de la Blizzard War. Está defendido por el **Scieldvollr**, una gran fortificación de zanja y terraplén que marca el límite de la civilización Saxa en el norte.\n\n## Servicios\n\n- Puerto pesquero importante en @location:leirvik (capital).\n- Gran comercio de hierro y madera.\n\n## Organizaciones\n\n- Lealtad nominal al High Cyning en @location:g1 (Royalmark).\n\n## Amenazas\n\n- Incursiones frecuentes y crecientes de orcos y goblins en el norte.\n- **Draugr Hills** (antiguos túmulos funerarios) son frecuentadas por orcos y goblins.\n- Jarl Borgar (@location:estvik) enfrenta incursiones violentas.\n- Jarl Svip (@location:rindal) está bajo presión por ataques a caravanas.\n\n## Lugares Cercanos\n\n- @location:a2 (Angarion)\n- @location:a4 (Aspiria)\n- @location:b2 (The Cairn Lands)\n- @location:c3 (The Freelands)",
+    "nearby_locations": [
+      "a3",
+      "leirvik",
+      "b2",
+      "a2",
+      "a4",
+      "rindal",
+      "estvik",
+      "c3",
+      "g1"
+    ],
+    "npcs": [
+      "cyning_knui_gillingsunu"
+    ],
+    "factions": [],
+    "search_terms": [
+      "angmark",
+      "markland saxa",
+      "angmark"
+    ]
+  },
+  {
+    "id": "aspiria",
+    "name": "Aspiria",
+    "type": "Reino (Ex-Provincia Imperial)",
+    "cell_id": "A4",
+    "population": "264,755",
+    "ruler": "@npc:king_halgroth_v",
+    "markdown_content": "# Aspiria\n\n**Tipo:** Reino Anari independiente\n**Población:** 264,755 (75% Anari)\n**Gobernante:** @npc:king_halgroth_v\n**Región:** @location:a4 (Hearthlands)\n\n## Descripción\n\nEx-provincia del Imperio Anari. Es una cuenca natural fértil, pero la producción agrícola está disminuyendo debido a la nieve. El gobierno es laxo, liderado por un rey que prefiere la caza a la guerra.\n\n## Servicios\n\n- Exportación clave de gemas (Granite Mountains), aceite de oliva y vino.\n- Numerosos viñedos en Southern Marches.\n- Alchemist Guild avanzada en @location:glassport.\n\n## Organizaciones\n\n- @faction:the_convocation (fuerte presencia, tiene torres elementales en @location:new_asper).\n- Los Elfos de Corazón de Silverleaf Forest (a veces ayudan contra orcos).\n\n## Amenazas\n\n- Orcos han regresado y reconquistado **Eastern Marches**, atacando aldeas y granjas.\n- **Scavengers** (monstruos metálicos) avistados cerca de @location:kingsmead, amenazando las minas.\n- @location:drake_marsh (pantano) alberga un dragón de pantano, trolls y bufomi.\n- El rey @npc:king_halgroth_v es negligente y evita discutir la invasión orca.\n\n## Lugares Cercanos\n\n- @location:a3 (Angmark)\n- @location:b3 (Chalcis)\n- @location:b5 (Crystalflow Confederacy)\n- @location:d2 (The Great Swamp)",
+    "nearby_locations": [
+      "glassport",
+      "new_asper",
+      "drake_marsh",
+      "a3",
+      "b5",
+      "d2",
+      "kingsmead",
+      "b3",
+      "a4"
+    ],
+    "npcs": [
+      "king_halgroth_v"
+    ],
+    "factions": [
+      "the_convocation"
+    ],
+    "search_terms": [
+      "aspiria",
+      "reino (ex-provincia imperial)",
+      "aspiria"
+    ]
+  },
+  {
+    "id": "the_battlelands",
+    "name": "The Battlelands",
+    "type": "Confederación Tribal",
+    "cell_id": "A5",
+    "population": "39,046",
+    "ruler": "None",
+    "markdown_content": "# The Battlelands\n\n**Tipo:** Confederación Tribal Suelta (Tuomi)\n**Población:** 39,046 (69% Tuomi)\n**Gobernante:** None (Confederación tribal suelta)\n**Región:** @location:a5 (Hearthlands)\n\n## Descripción\n\nRegión de valles amplios y pantanos, atacada regularmente por gigantes de escarcha, orcos y goblins. Las llanuras centrales son planas, ideales para la guerra. El terreno es bajo y pantanoso en la costa suroeste.\n\n## Servicios\n\n- Exportación de pescado y gemas.\n- Calivar (@location:calivar) es un puerto que se defiende de los gigantes.\n\n## Organizaciones\n\n- Tribus Tuomi (beligerantes y divididas).\n- Culto de Canaul-Tiw (sub-secta de Tiw) creciendo en @location:jotungraef.\n\n## Amenazas\n\n- Invasión coordinada inminente de gigantes de escarcha desde @location:d6 (Hrimthyr Isle) y orcos/goblins de Iceblade Mountains.\n- **Candle Marsh** está plagado de *will-o-the-wisps*, gatormen y bufomi.\n- La disolución de alianzas tribales costeras ha fragmentado la defensa.\n- Conflicto inminente entre clanes Tuomi y la milicia de @location:giantwatch por incursiones de ganado.\n\n## Lugares Cercanos\n\n- @location:a4 (Aspiria)\n- @location:b1 (The Borderlands)\n- @location:b5 (Crystalflow Confederacy)\n- @location:d6 (Hrimthyr Isle)",
+    "nearby_locations": [
+      "b5",
+      "d6",
+      "calivar",
+      "b1",
+      "a4",
+      "a5",
+      "jotungraef",
+      "giantwatch"
+    ],
+    "npcs": [],
+    "factions": [],
+    "search_terms": [
+      "the battlelands",
+      "confederación tribal",
+      "the_battlelands"
+    ]
+  },
+  {
+    "id": "barony_of_blackstone",
+    "name": "Baronía de Blackstone",
+    "type": "Baronía Tiránica",
+    "cell_id": "A6",
+    "population": "12,248",
+    "ruler": "@npc:regent_orol_drakestaff",
+    "markdown_content": "# Baronía de Blackstone\n\n**Tipo:** Tiranía Militar\n**Población:** 12,248 (75% Anari)\n**Gobernante:** @npc:regent_orol_drakestaff (Regente autoproclamado)\n**Región:** @location:a6 (Hearthlands)\n\n## Descripción\n\nSituado en estribaciones montañosas (Brokentail Mountains). El terreno está casi siempre anegado por lluvia o nieve perpetua. El regente @npc:regent_orol_drakestaff es un tirano brutal que usa la fuerza y mantiene a la población en la hambruna.\n\n## Servicios\n\n- Minas de hierro y canteras de granito (trabajadas por esclavos).\n- Exportación de hierro, piedra y lana.\n\n## Organizaciones\n\n- @faction:lords_men (Movimiento de resistencia).\n- Thugs y \"caballeros\" leales a Drakestaff.\n- Templo secreto a Vali (dios del mal) bajo Blackstone Manor.\n\n## Amenazas\n\n- El Regente es un tirano que utiliza la esclavitud en las minas (The Mines).\n- Orcos y goblins aliados en secreto con Drakestaff, preparándose para atacar Veermark.\n- Cliff giants (gigantes de acantilado).\n\n## Lugares Cercanos\n\n- @location:h4 (Veermark)\n- @location:e6 (Midmark)\n- @location:c3 (The Freelands)",
+    "nearby_locations": [
+      "c3",
+      "a6",
+      "e6",
+      "h4"
+    ],
+    "npcs": [
+      "regent_orol_drakestaff"
+    ],
+    "factions": [
+      "lords_men"
+    ],
+    "search_terms": [
+      "baronía de blackstone",
+      "baronía tiránica",
+      "barony_of_blackstone"
+    ]
+  },
+  {
+    "id": "the_borderlands",
+    "name": "The Borderlands",
+    "type": "Región Fronteriza sin Gobierno",
+    "cell_id": "B1",
+    "population": "40,489",
+    "ruler": "None",
+    "markdown_content": "# The Borderlands\n\n**Tipo:** Confederación de Asentamientos Independientes (Tierra de nadie)\n**Población:** 40,489 (35% Tuomi, 25% Anari, 10% Saxa, 10% enanos, 10% frostborn, 5% elfos taiga, 3% elfos corazón, 2% engro)\n**Gobernante:** None (Confederación de asentamientos)\n**Región:** @location:b1 (Hearthlands)\n\n## Descripción\n\nRegión fronteriza, un crisol de razas y culturas. El territorio consiste en colinas ligeramente boscosas, con dos pequeñas cadenas montañosas.\n\n## Servicios\n\n- Comercio de armaduras y armas (principalmente desde @location:giantwatch).\n- Centro de comercio en Ludogov (@location:ludogov).\n\n## Organizaciones\n\n- El ejército @faction:dragon_guard en @location:scayle.\n- Guilds en @location:ludogov (con representación en el Consejo).\n\n## Amenazas\n\n- Bandidos en las rutas comerciales del este.\n- Gigantes, gárgolas, orcos y goblins en Silvercap Mountains.\n- Beastmen (hombres bestia) en Aurochs Hills, posiblemente relacionados con un templo secreto.\n- Incursiones Drachenlanders (Ludogov está cerca de la frontera).\n\n## Lugares Cercanos\n\n- @location:a1 (Alantaris Isle)\n- @location:a5 (The Battlelands)\n- @location:c1 (The Drachenlands)\n- @location:c3 (The Freelands)\n- @location:d2 (The Great Swamp)\n- @location:h6 (Witchwood)",
+    "nearby_locations": [
+      "c1",
+      "ludogov",
+      "c3",
+      "a1",
+      "d2",
+      "scayle",
+      "b1",
+      "h6",
+      "a5",
+      "giantwatch"
+    ],
+    "npcs": [],
+    "factions": [
+      "dragon_guard"
+    ],
+    "search_terms": [
+      "the borderlands",
+      "región fronteriza sin gobierno",
+      "the_borderlands"
+    ]
+  },
+  {
+    "id": "the_cairn_lands",
+    "name": "The Cairn Lands",
+    "type": "República Electa",
+    "cell_id": "B2",
+    "population": "25,346",
+    "ruler": "@faction:moot",
+    "markdown_content": "# The Cairn Lands\n\n**Tipo:** Consejo Electo (Moot)\n**Población:** 25,346 (70% Saxa)\n**Gobernante:** @faction:moot (Consejo de 20 ciudadanos electos)\n**Región:** @location:b2 (Hearthlands)\n\n## Descripción\n\nLlanuras de pastoreo y colinas que albergan una vasta necrópolis (Cairn Hills). Antiguo reino Vindari. La recolonización comenzó hace solo dos siglos.\n\n## Servicios\n\n- Fuerte exportación de queso, artículos de cuero y lana (gracias a la cría de ovejas).\n- Temple a Scaetha en @location:hergist (capital).\n\n## Organizaciones\n\n- @faction:moot (gobierno electo).\n- @faction:hearth_knights (buscan construir fuertes).\n- Paladines de Scaetha (@faction:divine_slayers).\n- @faction:ashen_veil (Célula activa en Hergist).\n\n## Amenazas\n\n- Los **muertos andan sueltos** en Cairn Hills (draugar y necrópolis).\n- El sello mágico en el Dark Temple (fortaleza del Liche-Priest) se está debilitando.\n- Incursiones de orcos y monstruos desde @location:temujin_marsh.\n- Incursiones de @location:b6 (Barony of Cul).\n\n## Lugares Cercanos\n\n- @location:a3 (Angmark)\n- @location:c3 (The Freelands)\n- @location:d4 (Heligioland)\n- @location:e4 (Liche Lands of Old)",
+    "nearby_locations": [
+      "a3",
+      "b2",
+      "b6",
+      "d4",
+      "hergist",
+      "c3",
+      "e4",
+      "temujin_marsh"
+    ],
+    "npcs": [],
+    "factions": [
+      "hearth_knights",
+      "moot",
+      "ashen_veil",
+      "divine_slayers"
+    ],
+    "search_terms": [
+      "the cairn lands",
+      "república electa",
+      "the_cairn_lands"
+    ]
+  },
+  {
+    "id": "chalcis",
+    "name": "Chalcis",
+    "type": "Ducado",
+    "cell_id": "B3",
+    "population": "88,637",
+    "ruler": "@npc:duke_howel_ap_selyv",
+    "markdown_content": "# Chalcis\n\n**Tipo:** Ducado (Ex-Provincia Anari)\n**Población:** 88,637 (65% Anari)\n**Gobernante:** @npc:duke_howel_ap_selyv\n**Región:** @location:b3 (Low Winterland, excepto el sur)\n\n## Descripción\n\nDucado que se ha convertido en Low Winterland debido a la dureza de los inviernos. Geográficamente, forma una \"W\" con valles, High Moor y montañas (Granite). El duque es popular pero corre el riesgo de morir sin heredero.\n\n## Servicios\n\n- Exporta metales preciosos (cobre, hierro, plata) y joyería.\n- Astilleros y defensa naval en @location:shapryr.\n- @location:sacros es la \"Ciudad de los Artesanos\" (metalistería).\n\n## Organizaciones\n\n- @faction:hearth_knights (tienen un fuerte en @location:deepdale_fort).\n- @faction:lorekeepers (tienen una base de operaciones en Highmoor).\n- La @faction:the_convocation tiene una Torre de los Cuatro Caminos en @location:highmoor.\n\n## Amenazas\n\n- Ataques devastadores de los **Scavengers** (monstruos metálicos) han cerrado minas y reducido la producción de metales en casi 50%.\n- Incursiones de no muertos (huesos de orcos masacrados) en Orcblood Hills.\n- La proximidad a @location:h6 (Witchwood) empeora el clima.\n- El Iron Count en @location:sacros es una figura enigmática que podría tener alguna conexión con los Scavengers.\n\n## Lugares Cercanos\n\n- @location:a4 (Aspiria)\n- @location:b6 (Barony of Cul)\n- @location:c1 (The Drachenlands)\n- @location:c2 (Dwarf Cities)\n- @location:h6 (Witchwood)",
+    "nearby_locations": [
+      "c2",
+      "c1",
+      "deepdale_fort",
+      "b6",
+      "b3",
+      "h6",
+      "sacros",
+      "a4",
+      "shapryr",
+      "highmoor"
+    ],
+    "npcs": [
+      "duke_howel_ap_selyv"
+    ],
+    "factions": [
+      "hearth_knights",
+      "lorekeepers",
+      "the_convocation"
+    ],
+    "search_terms": [
+      "chalcis",
+      "ducado",
+      "chalcis"
+    ]
+  },
+  {
+    "id": "coglelund",
+    "name": "Coglelund",
+    "type": "Principado Mercantil",
+    "cell_id": "B4",
+    "population": "39,431",
+    "ruler": "@npc:merchant_prince_leon_cogle_iv",
+    "markdown_content": "# Coglelund\n\n**Tipo:** Principado Mercantil independiente\n**Población:** 39,431 (71% Anari)\n**Gobernante:** @npc:merchant_prince_leon_cogle_iv\n**Región:** @location:b4 (Hearthlands)\n\n## Descripción\n\nPequeño reino independiente, gobernado por un Príncipe Mercante. Se originó como un puesto comercial fortificado. Consiste en llanuras planas y onduladas.\n\n## Servicios\n\n- Centro comercial vital entre Vestmark y la Magocracia.\n- Exporta ropa, joyería y cerámica.\n- La @faction:iron_guild provee escoltas de caravanas.\n\n## Organizaciones\n\n- @faction:house_of_pleasure (Hostelería que es secretamente un templo a Vali).\n- @faction:iron_guild.\n\n## Amenazas\n\n- Alta seguridad en la frontera sur con @location:e5 (The Magocracy).\n- El Príncipe Mercante ha estado negando la entrada a la mayoría de los refugiados de @location:h5 (Vestmark), causando tensiones diplomáticas.\n- La House of Pleasure es un templo secreto de @god:vali.\n\n## Lugares Cercanos\n\n- @location:a2 (Angarion)\n- @location:h5 (Vestmark)\n- @location:e5 (The Magocracy)\n- @location:g1 (Royalmark)",
+    "nearby_locations": [
+      "h5",
+      "e5",
+      "a2",
+      "b4",
+      "g1"
+    ],
+    "npcs": [
+      "merchant_prince_leon_cogle_iv"
+    ],
+    "factions": [
+      "iron_guild",
+      "house_of_pleasure"
+    ],
+    "search_terms": [
+      "coglelund",
+      "principado mercantil",
+      "coglelund"
+    ]
+  },
+  {
+    "id": "crystalflow_confederacy",
+    "name": "Crystalflow Confederacy",
+    "type": "Confederación de Ciudades",
+    "cell_id": "B5",
+    "population": "107,330",
+    "ruler": "None",
+    "markdown_content": "# Crystalflow Confederacy\n\n**Tipo:** Asociación Flexible de Ciudades (Sin gobierno central)\n**Población:** 107,330 (62% Anari)\n**Gobernante:** None\n**Región:** @location:b5 (Hearthlands)\n\n## Descripción\n\nAsociación de ciudades y pueblos centrada en la protección del comercio fluvial a lo largo del **Crystalflow**.\n\n## Servicios\n\n- Comercio fluvial (vital para Midmark, Nordmark, Royalmark).\n- Exportación de pescado, grano, verduras, vino y lana.\n\n## Organizaciones\n\n- @faction:the_barge_king (Connad ap-Huell, mercenario que provee escolta).\n- @faction:iron_guild (Busca monopolizar el comercio).\n- Gremios de Ladrones de @location:drakeport (masterminding el contrabando).\n\n## Amenazas\n\n- **Drakeport Delta** es un pantano infestado de trolls y bufomi.\n- La @faction:iron_guild está amenazando al Barge King y saboteando sus barcazas.\n- Aumento del contrabando y actividad de gremios de ladrones.\n- Ataques contra engros en @location:rushton están aumentando debido a panfletos que promueven la usurpación.\n\n## Lugares Cercanos\n\n- @location:a4 (Aspiria)\n- @location:a5 (The Battlelands)\n- @location:e6 (Midmark)\n- @location:f3 (Nordmark)\n- @location:g1 (Royalmark)",
+    "nearby_locations": [
+      "rushton",
+      "b5",
+      "e6",
+      "drakeport",
+      "a4",
+      "a5",
+      "f3",
+      "g1"
+    ],
+    "npcs": [],
+    "factions": [
+      "iron_guild",
+      "the_barge_king"
+    ],
+    "search_terms": [
+      "crystalflow confederacy",
+      "confederación de ciudades",
+      "crystalflow_confederacy"
+    ]
+  },
+  {
+    "id": "barony_of_cul",
+    "name": "Baronía de Cul",
+    "type": "Tiranía Frostborn",
+    "cell_id": "B6",
+    "population": "14,048",
+    "ruler": "@npc:baron_frostweaver_i",
+    "markdown_content": "# Baronía de Cul\n\n**Tipo:** Tiranía Frostborn (Culto de Hrimheorte)\n**Población:** 14,048 (65% frostborn)\n**Gobernante:** @npc:baron_frostweaver_i (Autócrata)\n**Región:** @location:b6 (Low Winterland)\n\n## Descripción\n\nUna baronía que cayó bajo el control tiránico del frostborn @npc:baron_frostweaver_i, un devoto de Thrym (@god:thrym, como Hrimheorte). Reprime violentamente a la población Anari y Saxa, usando la fuerza bruta.\n\n## Servicios\n\n- Exportación de carne de jabalí salvaje (Boarback Hills).\n\n## Organizaciones\n\n- Culto a Hrimheorte (Thrym).\n- Thugs frostborn (la policía) y hrimwisards.\n- Centro de poder en Coldfire Temple.\n\n## Amenazas\n\n- Tiranía brutal y represión de la población Anari y Saxa.\n- Incursiones militares de prueba en @location:d3 (Heldalund) para planificar una invasión.\n- El Barón Frostweaver está probando las defensas de los @faction:hearth_knights en @location:d4 (Heligioland).\n\n## Lugares Cercanos\n\n- @location:b2 (The Cairn Lands)\n- @location:c2 (Dwarf Cities)\n- @location:d3 (Heldalund)\n- @location:d4 (Heligioland)",
+    "nearby_locations": [
+      "c2",
+      "b2",
+      "d3",
+      "b6",
+      "d4"
+    ],
+    "npcs": [
+      "baron_frostweaver_i"
+    ],
+    "factions": [
+      "hearth_knights"
+    ],
+    "search_terms": [
+      "baronía de cul",
+      "tiranía frostborn",
+      "barony_of_cul"
+    ]
+  },
+  {
+    "id": "the_drachenlands",
+    "name": "The Drachenlands",
+    "type": "Confederación Tribal Tuomi",
+    "cell_id": "C1",
+    "population": "76,560",
+    "ruler": "@npc:voivode_ramel_the_berserk",
+    "markdown_content": "# The Drachenlands\n\n**Tipo:** Confederación Tribal (Tuomi)\n**Población:** 76,560 (75% Tuomi)\n**Gobernante:** @npc:voivode_ramel_the_berserk (Gobernante cruel)\n**Región:** @location:c1 (Low Winterland/High Winterlands al norte)\n\n## Descripción\n\nConfederación tribal, nominalmente bajo el Voivode Ramel el Berserk. La región se compone de lomas bajas y onduladas. Sufre de escasez de recursos. Famosos por su caballería.\n\n## Servicios\n\n- Exportación de pieles y carne.\n\n## Organizaciones\n\n- Tribus Tuomi (Argentocoxus es la tribu dominante).\n- Temple a Dargar (dios oscuro) bajo el palacio del voivode.\n\n## Amenazas\n\n- El @npc:voivode_ramel_the_berserk es cruel y errático; somete a rituales de tortura.\n- Guerra activa contra @location:g6 (Tethilin) por madera.\n- La frontera norte (The Sigilrun) marca el inicio de High Winterlands y permite incursiones de orcos y goblins.\n- Nobles conspiran contra el Voivode Ramel.\n\n## Lugares Cercanos\n\n- @location:b3 (Chalcis)\n- @location:c2 (Dwarf Cities)\n- @location:g6 (Tethilin)\n- @location:d4 (Heligioland)",
+    "nearby_locations": [
+      "c2",
+      "c1",
+      "b3",
+      "d4",
+      "g6"
+    ],
+    "npcs": [
+      "voivode_ramel_the_berserk"
+    ],
+    "factions": [],
+    "search_terms": [
+      "the drachenlands",
+      "confederación tribal tuomi",
+      "the_drachenlands"
+    ]
+  },
+  {
+    "id": "dwarf_cities",
+    "name": "Ciudades Enanas",
+    "type": "Ciudades Fortaleza Subterráneas",
+    "cell_id": "C2",
+    "population": "Variada (ej. Karad Zor 36k)",
+    "ruler": "Jarl o Thegn Hereditario",
+    "markdown_content": "# Ciudades Enanas\n\n**Tipo:** Sociedad Feudal de Ciudades Fortaleza\n**Población:** Variada (ej. Karad Zor 36,336 en Karad Zor)\n**Gobernante:** Jarl o Thegn Hereditario (feudal)\n**Región:** @location:c2 (High Winterlands)\n\n## Descripción\n\nCiudades fortaleza subterráneas construidas por encima de la línea de nieve o cerca de glaciares. Tienen una temperatura interior constante de 20° F. Son maestras en la talla de piedra y tienen vastos túneles.\n\n## Servicios\n\n- Exportación de armadura, armas, hierro y piedra (varía por ciudad).\n- Minería de hielo negro (*black ice*) en los glaciares.\n\n## Organizaciones\n\n- Casas nobles feudales.\n- Milicia compuesta principalmente por mineros.\n\n## Amenazas\n\n- Muchas ciudades están **sitiadas o han sido tomadas por orcos** (ej. Karad Marn, Karad Azgul, Karad Khan).\n- **Scavengers** (monstruos metálicos) ocupan Karad Noshrek.\n- El uso de ogros por parte de los orcos amenaza Karad Iarn.\n- Frost giants, orcos y cryohydras en Scythe Mountains.\n\n## Lugares Cercanos\n\n- @location:c1 (The Drachenlands)\n- @location:c5 (Frozen Forest)\n- @location:f6 (Rimeholm)\n- @location:g4 (Sunken Realm)",
+    "nearby_locations": [
+      "c2",
+      "c1",
+      "f6",
+      "c5",
+      "g4"
+    ],
+    "npcs": [],
+    "factions": [],
+    "search_terms": [
+      "ciudades enanas",
+      "ciudades fortaleza subterráneas",
+      "dwarf_cities"
+    ]
+  },
+  {
+    "id": "the_freelands",
+    "name": "The Freelands",
+    "type": "Colección de Asentamientos Independientes",
+    "cell_id": "C3",
+    "population": "149,492",
+    "ruler": "Independent settlements",
+    "markdown_content": "# The Freelands\n\n**Tipo:** Colección de Asentamientos Independientes\n**Población:** 149,492 (45% Anari, 28% Saxa)\n**Gobernante:** Asentamientos Independientes\n**Región:** @location:c3 (Hearthlands)\n\n## Descripción\n\nTerritorio con una amplia gama de características geográficas. Rodea a @location:withered_lands (Black Heath y Darkwood) por tres lados. Hogar de **The Stone Forest** (círculos de piedra, magia druídica).\n\n## Servicios\n\n- Variedad de exportaciones (ropa, metales, libros, ganado).\n- @location:nara es un centro de aprendizaje (@faction:lorekeepers) y comercio de ganado.\n- @location:aslov es un importante puesto avanzado cerca de Hellfrost Pass.\n\n## Organizaciones\n\n- @faction:reliquary (Cuartel general en The Citadel).\n- @faction:divine_slayers (Paladines de Scaetha en Deathwatch).\n- @faction:iron_guild (Caravanserai en Upper & Lower Guard).\n- La @faction:sisterhood_of_mercy opera en @location:sanctuary.\n\n## Amenazas\n\n- Incursiones de no muertos desde @location:withered_lands.\n- Orcos, goblins, trolls y gigantes en Jagged Peaks.\n- @location:aslov sufre de hambruna, disturbios, crimen organizado (gremios de ladrones) y desapariciones.\n- Presencia secreta de cultistas de @god:vali, Nauthiz y Niht en @location:aslov.\n\n## Lugares Cercanos\n\n- @location:b1 (The Borderlands)\n- @location:b2 (The Cairn Lands)\n- @location:g1 (Royalmark)\n- @location:withered_lands",
+    "nearby_locations": [
+      "aslov",
+      "b2",
+      "withered_lands",
+      "nara",
+      "sanctuary",
+      "b1",
+      "c3",
+      "g1"
+    ],
+    "npcs": [],
+    "factions": [
+      "sisterhood_of_mercy",
+      "reliquary",
+      "divine_slayers",
+      "iron_guild",
+      "lorekeepers"
+    ],
+    "search_terms": [
+      "the freelands",
+      "colección de asentamientos independientes",
+      "the_freelands"
+    ]
+  },
+  {
+    "id": "freetown",
+    "name": "Freetown",
+    "type": "Refugio de Piratas / Ciudad Libre",
+    "cell_id": "C4",
+    "population": "7,987",
+    "ruler": "@npc:lord_blackhand",
+    "markdown_content": "# Freetown\n\n**Tipo:** Ciudad-puerto criminal (Autocracia)\n**Población:** 7,987 (65% Anari)\n**Gobernante:** @npc:lord_blackhand (Criminal Autócrata)\n**Región:** @location:c4 (Hearthlands)\n\n## Descripción\n\nRefugio de piratas, criminales y contrabandistas. Nominalmente \"ciudad libre\", pero gobernada con mano de hierro por @npc:lord_blackhand. Está protegida por acantilados y se encuentra en una bahía resguardada.\n\n## Servicios\n\n- Exportación de crimen y contrabando.\n- El Black Swan (@location:the_black_swan) es un centro para cargamentos especiales (narcóticos, esclavos).\n\n## Organizaciones\n\n- @npc:lord_blackhand (líder).\n- @faction:black_watch (Guardias brutales).\n- @god:nauthiz (dios del sufrimiento), @god:neorthe, Freo, Thunor, Tiw (adorados).\n\n## Amenazas\n\n- Lord Blackhand suministra armas a los hombres lagarto de @location:d2 (The Great Swamp).\n- Gran centro de actividad criminal, asesinatos y rufianes.\n- Blackhand colabora con gremios de ladrones de @location:drakeport para el contrabando.\n- Blackhand entrena tripulaciones orcas para el @location:f4 (Orcmark) a cambio de riqueza mineral.\n\n## Lugares Cercanos\n\n- @location:b5 (Crystalflow Confederacy)\n- @location:d2 (The Great Swamp)\n- @location:h5 (Vestmark)\n- @location:e2 (Isle of the seareavers)",
+    "nearby_locations": [
+      "h5",
+      "b5",
+      "f4",
+      "d2",
+      "drakeport",
+      "e2",
+      "c4",
+      "the_black_swan"
+    ],
+    "npcs": [
+      "lord_blackhand"
+    ],
+    "factions": [
+      "black_watch"
+    ],
+    "search_terms": [
+      "freetown",
+      "refugio de piratas / ciudad libre",
+      "freetown"
+    ]
+  },
+  {
+    "id": "frozen_forest",
+    "name": "Bosque Congelado",
+    "type": "Bosque Congelado (Tierras Malditas)",
+    "cell_id": "C5",
+    "population": "Frost wights y momias de hielo",
+    "ruler": "Unknown",
+    "markdown_content": "# Bosque Congelado\n\n**Tipo:** Bosque de Hielo (Tierras Mortales)\n**Población:** Principalmente no muertos (Frost wights y momias de hielo)\n**Gobernante:** Unknown\n**Región:** @location:c5 (High Winterlands)\n\n## Descripción\n\nAntiguo bosque élfico congelado instantáneamente al inicio de la Blizzard War. Vasta franja de madera de hielo (*icewood*). La temperatura es constante a **-40° F**. Ninguna criatura viviente hace su hogar aquí.\n\n## Servicios\n\n- Ninguno. Los enanos de @location:c2 (Dwarf Cities) talan *icewood* para obtener recursos.\n\n## Organizaciones\n\n- No se conocen.\n\n## Amenazas\n\n- Temperaturas extremas (-40° F).\n- Frost wights, momias de hielo y otras horrores del hielo.\n- El White Stair (@location:white_stair) es un paso peligroso hacia @location:d5 (The Hellfrost) a través de la Icewall.\n\n## Lugares Cercanos\n\n- @location:c2 (Dwarf Cities)\n- @location:c6 (Giant’s Throne)\n- @location:d5 (The Hellfrost)\n- @location:e1 (Icedale Freeholds)",
+    "nearby_locations": [
+      "c2",
+      "white_stair",
+      "c6",
+      "c5",
+      "d5",
+      "e1"
+    ],
+    "npcs": [],
+    "factions": [],
+    "search_terms": [
+      "bosque congelado",
+      "bosque congelado (tierras malditas)",
+      "frozen_forest"
+    ]
+  },
+  {
+    "id": "the_glittersands",
+    "name": "The Glittersands",
+    "type": "Desierto Frío (Anormal)",
+    "cell_id": "D1",
+    "population": "2,468",
+    "ruler": "@faction:glaston_town_council",
+    "markdown_content": "# The Glittersands\n\n**Tipo:** Desierto Frío Aislado (Consejo)\n**Población:** 2,468 (70% Anari, más orcos y gigantes)\n**Gobernante:** @faction:glaston_town_council (Consejo electo en Glaston)\n**Región:** @location:d1 (Low Winterlands, anormalmente cálido)\n\n## Descripción\n\nDesierto frío de origen antinatural, con clima notablemente más cálido que Low Winterlands. Lleno de ruinas quemadas y escoriadas. Está rodeado por montañas y la Icewall.\n\n## Servicios\n\n- Exportación de vidrio (del Glass Lake, excepcionalmente puro).\n- Glaston (@location:glaston) almacena comida para varios años.\n\n## Organizaciones\n\n- @faction:glaston_town_council.\n- Mercenarios (ejército de Glaston).\n- Orcos en The Lighthouse (antiguo templo de Sigel).\n\n## Amenazas\n\n- Orcos, goblins, ice trolls, gigantes y monstruos de Hellfrost.\n- El movimiento de las arenas (Great Dunes) revela ruinas enterradas.\n- Ataques constantes a la única ciudad, @location:glaston.\n- Orcos y trolls en Icewall Pass.\n\n## Lugares Cercanos\n\n- @location:e1 (Icedale Freeholds)\n- @location:h2 (Unclaimed Lands)\n- @location:c5 (Frozen Forest)",
+    "nearby_locations": [
+      "glaston",
+      "d1",
+      "c5",
+      "h2",
+      "e1"
+    ],
+    "npcs": [],
+    "factions": [
+      "glaston_town_council"
+    ],
+    "search_terms": [
+      "the glittersands",
+      "desierto frío (anormal)",
+      "the_glittersands"
+    ]
+  },
+  {
+    "id": "the_great_swamp",
+    "name": "El Gran Pantano",
+    "type": "Ciénega Lizardman",
+    "cell_id": "D2",
+    "population": "100,000+",
+    "ruler": "@npc:the_tyrant_lizard_king",
+    "markdown_content": "# El Gran Pantano\n\n**Tipo:** Imperio Lizardman (nominal)\n**Población:** 100,000+ (85% hombres lagarto)\n**Gobernante:** @npc:the_tyrant_lizard_king (nominal)\n**Región:** @location:d2 (Hearthlands)\n\n## Descripción\n\nInmensa ciénaga y lodazal. Antiguo imperio gatorman, ahora el corazón de la cultura lizardman. El terreno es bajo, lleno de ríos y lodo.\n\n## Servicios\n\n- Exportación de hierbas narcóticas.\n- El High Road (antigua carretera gatorman) atraviesa la zona.\n\n## Organizaciones\n\n- Ejército de hombres lagarto (incluye unidades de *thunderlizard*).\n- Tribes gatormen (más bárbaras).\n\n## Amenazas\n\n- El grueso del ejército está asediando @location:g5 (Ostvik) en Sutmark.\n- El @npc:the_tyrant_lizard_king es un líder brutal que devora a los comandantes que fracasan.\n- @location:c4 (Freetown) suministra armas a los lizardmen a cambio de favores.\n- Gatormen y bufomi.\n\n## Lugares Cercanos\n\n- @location:a4 (Aspiria)\n- @location:c4 (Freetown)\n- @location:g5 (Sutmark)\n- @location:e6 (Midmark)",
+    "nearby_locations": [
+      "e6",
+      "d2",
+      "a4",
+      "g5",
+      "c4"
+    ],
+    "npcs": [
+      "the_tyrant_lizard_king"
+    ],
+    "factions": [],
+    "search_terms": [
+      "el gran pantano",
+      "ciénega lizardman",
+      "the_great_swamp"
+    ]
+  },
+  {
+    "id": "heldalund",
+    "name": "Heldalund",
+    "type": "Antiguo Reino Saxa",
+    "cell_id": "D3",
+    "population": "24,063",
+    "ruler": "@npc:thegn_franmar_barrisunu",
+    "markdown_content": "# Heldalund\n\n**Tipo:** Reino Saxa (nominalmente)\n**Población:** 24,063 (82% Saxa)\n**Gobernante:** @npc:thegn_franmar_barrisunu (Thegn de Norvik)\n**Región:** @location:d3 (Low Winterland)\n\n## Descripción\n\nAntiguo reino Saxa, cuya capital original (Held) ha sido conquistada por orcos. La geografía es principalmente plana, con marismas (Slush Marsh) en el norte.\n\n## Servicios\n\n- Exportación de cobre, pescado y gemas.\n- El puerto de @location:norvik es el más septentrional libre de hielo en la costa este.\n\n## Organizaciones\n\n- El Warlord orco Ragkar controla la antigua capital @location:held.\n- El thegn Franmar debe lidiar con nobles y mercaderes codiciosos.\n\n## Amenazas\n\n- La capital @location:held está ocupada por un caudillo orco (Ragkar) que finge servir a un dragón Cryotharsilus para mantener a la población esclava.\n- Invasión inminente de @location:b6 (Barony of Cul).\n- Orcos y trolls en Slush Marsh.\n- Deserciones y baja moral del ejército de Norvik.\n\n## Lugares Cercanos\n\n- @location:b6 (Barony of Cul)\n- @location:d4 (Heligioland)\n- @location:g2 (Seithrby)",
+    "nearby_locations": [
+      "d3",
+      "b6",
+      "d4",
+      "held",
+      "g2",
+      "norvik"
+    ],
+    "npcs": [
+      "thegn_franmar_barrisunu"
+    ],
+    "factions": [],
+    "search_terms": [
+      "heldalund",
+      "antiguo reino saxa",
+      "heldalund"
+    ]
+  },
+  {
+    "id": "heligioland",
+    "name": "Heligioland (Shieldlands)",
+    "type": "Región de Fortalezas (Hearth Knights)",
+    "cell_id": "D4",
+    "population": "65,630",
+    "ruler": "Independent settlements",
+    "markdown_content": "# Heligioland (Tierras del Escudo)\n\n**Tipo:** Confederación de Asentamientos Independientes (Protectorado de @faction:hearth_knights)\n**Población:** 65,630 (50% Saxa)\n**Gobernante:** Asentamientos Independientes\n**Región:** @location:d4 (Low Winterland)\n\n## Descripción\n\nConocido como las Shieldlands por la constante presencia de los @faction:hearth_knights. El territorio tiene muchas ruinas y está marcado por la protección de los fuertes contra las incursiones del Hellfrost.\n\n## Servicios\n\n- Fuerte de @location:hellfrost_keep (bloqueando Hellfrost Pass).\n- Cerámica de Greenpotware.\n\n## Organizaciones\n\n- @faction:hearth_knights (La principal fuerza militar, con Icewatch, Eastwatch y Watchgap Forts).\n- @faction:iron_guild (tiene un Guildhouse en @location:hellfrost_keep).\n\n## Amenazas\n\n- Incursiones de orcos, goblins y beasts de Whitedrake Mountains.\n- Dragones de Hellfrost (Whitedrake Mountains).\n- @location:b6 (Barony of Cul) es una amenaza constante.\n- Undead errantes de @location:e4 (Liche Lands of Old).\n- El Black Tower en Whitedrake Valley (posiblemente un nigromante).\n\n## Lugares Cercanos\n\n- @location:b2 (The Cairn Lands)\n- @location:c1 (The Drachenlands)\n- @location:c6 (Giant’s Throne)\n- @location:d3 (Heldalund)\n- @location:e4 (Liche Lands of Old)\n- @location:g2 (Seithrby)\n- @location:g3 (Shattered Moor)",
+    "nearby_locations": [
+      "b2",
+      "c1",
+      "d3",
+      "b6",
+      "g3",
+      "d4",
+      "c6",
+      "g2",
+      "hellfrost_keep",
+      "e4"
+    ],
+    "npcs": [],
+    "factions": [
+      "hearth_knights",
+      "iron_guild"
+    ],
+    "search_terms": [
+      "heligioland (shieldlands)",
+      "región de fortalezas (hearth knights)",
+      "heligioland"
+    ]
+  },
+  {
+    "id": "the_hellfrost",
+    "name": "El Hellfrost",
+    "type": "Páramo Helado (Zona Muerta)",
+    "cell_id": "D5",
+    "population": "Unknown (monstruosidades)",
+    "ruler": "Unknown",
+    "markdown_content": "# El Hellfrost\n\n**Tipo:** Páramo Helado (Zona de Desastre Total)\n**Población:** Desconocida (Orcos, goblins, gigantes, dragones y monstruosidades)\n**Gobernante:** Unknown\n**Región:** @location:d5 (Hellfrost - Invierno Permanente)\n\n## Descripción\n\nVastos y helados páramos ocultos tras el **Icewall** (Muro de Hielo). Es la región de origen sobrenatural y desastre total. Sufre lluvia de *coldfire*, temperaturas extremas y vientos huracanados.\n\n## Servicios\n\n- Ninguno.\n\n## Organizaciones\n\n- Se cree que es la fuente del poder de @god:thrym.\n\n## Amenazas\n\n- Lluvia de *coldfire*.\n- Monstruosidades de Hellfrost (dragones, osos blancos, gigantes).\n- Campos de *razor ice* (hielo afilado) y ríos de *coldfire*.\n- El pilar central (colossal pinnacle of ice) está rodeado de dragones.\n\n## Lugares Cercanos\n\n- @location:c5 (Frozen Forest)\n- @location:d6 (Hrimthyr Isle)\n- @location:h2 (Unclaimed Lands)",
+    "nearby_locations": [
+      "h2",
+      "d5",
+      "d6",
+      "c5"
+    ],
+    "npcs": [],
+    "factions": [],
+    "search_terms": [
+      "el hellfrost",
+      "páramo helado (zona muerta)",
+      "the_hellfrost"
+    ]
+  },
+  {
+    "id": "hrimthyr_isle",
+    "name": "Isla de Hrimthyr",
+    "type": "Isla de Hielo (Reino de Gigantes)",
+    "cell_id": "D6",
+    "population": "1,000 gigantes, 10,000 orcos",
+    "ruler": "@npc:high_ice_king_nagal_blizzardbreath",
+    "markdown_content": "# Isla de Hrimthyr\n\n**Tipo:** Reino de Gigantes de Escarcha\n**Población:** 1,000 gigantes de escarcha, 10,000 orcos (estimado)\n**Gobernante:** @npc:high_ice_king_nagal_blizzardbreath (Autócrata)\n**Región:** @location:d6 (High Winterlands)\n\n## Descripción\n\nIsla de hielo sólido en constante expansión debido a un volcán de *coldfire* (Thrym's Maw). Fortaleza de los gigantes de escarcha, que asaltan las costas occidentales.\n\n## Servicios\n\n- Ninguno.\n\n## Organizaciones\n\n- Ejército masivo de gigantes y orcos (regimientos organizados).\n- Sacerdotes de @god:thrym.\n- Hrimwisards renegados.\n\n## Amenazas\n\n- El @npc:high_ice_king_nagal_blizzardbreath planea una invasión coordinada de @location:a5 (The Battlelands).\n- La fortaleza @location:jarlshof está construida de hielo negro, protegida por un foso de *coldfire*.\n- El volcán de Coldfire (Thrym’s Maw) es un peligro constante.\n\n## Lugares Cercanos\n\n- @location:c6 (Giant’s Throne)\n- @location:d5 (The Hellfrost)\n- @location:a5 (The Battlelands)",
+    "nearby_locations": [
+      "d6",
+      "c6",
+      "d5",
+      "a5",
+      "jarlshof"
+    ],
+    "npcs": [
+      "high_ice_king_nagal_blizzardbreath"
+    ],
+    "factions": [],
+    "search_terms": [
+      "isla de hrimthyr",
+      "isla de hielo (reino de gigantes)",
+      "hrimthyr_isle"
+    ]
+  },
+  {
+    "id": "icedale_freeholds",
+    "name": "Feudos Libres de Icedale",
+    "type": "Freeholds (Territorios de colonos)",
+    "cell_id": "E1",
+    "population": "31,697",
+    "ruler": "@faction:council",
+    "markdown_content": "# Feudos Libres de Icedale\n\n**Tipo:** Territorio Fronterizo (Consejo)\n**Población:** 31,697 (50% Finnar, 20% Saxa)\n**Gobernante:** @faction:council (con influencia Finnar y Elfa Taiga)\n**Región:** @location:e1 (High Winterlands)\n\n## Descripción\n\nHigh Winterlands. La vida es dura, pero el comercio de *icewood* es vital. La gente es más tolerante con el préstamo de bienes debido a las dificultades.\n\n## Servicios\n\n- Comercio vital de *icewood* (madera de hielo).\n- Exportación de hueso, pieles y *icewood*.\n- @location:gurni’s_trading_post (puesto avanzado secreto de los @faction:hearth_knights).\n\n## Organizaciones\n\n- El ejército @faction:white_rangers (White Rangers).\n- @faction:divine_slayers (Paladines de Scaetha en el White Death Temple).\n\n## Amenazas\n\n- **Whitemound Hills** está embrujada por *ice mummies* y *frost wights*.\n- Ice trolls y ice goblins en Troll Hills.\n- La Ice Queen está expulsando a los no muertos del @location:c5 (Frozen Forest).\n- El fortín invertido The Icicle es hogar de hrimwisards.\n\n## Lugares Cercanos\n\n- @location:d1 (The Glittersands)\n- @location:c5 (Frozen Forest)\n- @location:e4 (Liche Lands of Old)\n- @location:f2 (Nerenel)",
+    "nearby_locations": [
+      "d1",
+      "f2",
+      "c5",
+      "gurni",
+      "e4",
+      "e1"
+    ],
+    "npcs": [],
+    "factions": [
+      "council",
+      "divine_slayers",
+      "hearth_knights",
+      "white_rangers"
+    ],
+    "search_terms": [
+      "feudos libres de icedale",
+      "freeholds (territorios de colonos)",
+      "icedale_freeholds"
+    ]
+  },
+  {
+    "id": "isle_of_the_seareavers",
+    "name": "Islas de los Seareavers",
+    "type": "Base Pirata",
+    "cell_id": "E2",
+    "population": "3,356",
+    "ruler": "@npc:reaver_general_odbert_foultongue",
+    "markdown_content": "# Islas de los Seareavers\n\n**Tipo:** Base de Piratas (Hermandad)\n**Población:** 3,356 (50% Anari, 30% Saxa)\n**Gobernante:** @npc:reaver_general_odbert_foultongue\n**Región:** @location:e2 (Hearthlands)\n\n## Descripción\n\nBase de los piratas Seareavers (hermandad de piratas y asesinos). Asaltan las costas de Angmark, Aspiria y Chalcis. La isla era antiguamente una sola masa de tierra.\n\n## Servicios\n\n- Solo saquean (Exporta: Ninguno).\n- Puerto neutral para piratas en @location:bloodport.\n\n## Organizaciones\n\n- @faction:seareavers_brotherhood (Hermandad de Piratas).\n- Culto a Bolverk (Neorthe, Nauthiz, Thunor, Dargar bajo un solo nombre).\n\n## Amenazas\n\n- Ataques a las flotas de @location:a4 (Aspiria), @location:b3 (Chalcis) y @location:e5 (The Magocracy).\n- El Reaver-General está estancando una alianza con @location:f4 (Orcmark).\n- Corsarios del desierto (competencia) están incursionando en sus territorios.\n\n## Lugares Cercanos\n\n- @location:a1 (Alantaris Isle)\n- @location:e5 (The Magocracy)\n- @location:a4 (Aspiria)\n- @location:b3 (Chalcis)",
+    "nearby_locations": [
+      "bloodport",
+      "e5",
+      "a1",
+      "f4",
+      "b3",
+      "e2",
+      "a4"
+    ],
+    "npcs": [
+      "reaver_general_odbert_foultongue"
+    ],
+    "factions": [
+      "seareavers_brotherhood"
+    ],
+    "search_terms": [
+      "islas de los seareavers",
+      "base pirata",
+      "isle_of_the_seareavers"
+    ]
+  },
+  {
+    "id": "lakeland",
+    "name": "Lakeland",
+    "type": "Territorio Seminómada",
+    "cell_id": "E3",
+    "population": "14,649",
+    "ruler": "@faction:hunt_council",
+    "markdown_content": "# Lakeland\n\n**Tipo:** Territorio Seminómada (Consejo de Caza)\n**Población:** 14,649 (45% Finnar)\n**Gobernante:** @faction:hunt_council (Consejo de Caza)\n**Región:** @location:e3 (High Winterlands)\n\n## Descripción\n\nTerritorio seminómada dominado por el Serpent Lake. El lago rara vez se congela por completo. La población Finnar nómada viaja hasta @location:h2 (Unclaimed Lands).\n\n## Servicios\n\n- Exportación de pieles, marfil y carne.\n- El puerto @location:othicus es visitado por los @faction:hearth_knights.\n\n## Organizaciones\n\n- @faction:hunt_council (Consejo de cazadores).\n- Presencia esporádica de @faction:hearth_knights.\n\n## Amenazas\n\n- Orcos y goblins.\n- Fauna salvaje peligrosa (mammoths, aurochs).\n- El Master Hunter Orkning (@location:mere) quiere cazar un gigantesco mammoth (\"mother of all mammoths\"), lo que podría provocar la ira de otras bestias.\n- Rumores de zeuglodons en Serpent Lake.\n\n## Lugares Cercanos\n\n- @location:h2 (Unclaimed Lands)\n- @location:f3 (Nordmark)\n- @location:c3 (The Freelands)",
+    "nearby_locations": [
+      "mere",
+      "othicus",
+      "h2",
+      "c3",
+      "f3",
+      "e3"
+    ],
+    "npcs": [],
+    "factions": [
+      "hearth_knights",
+      "hunt_council"
+    ],
+    "search_terms": [
+      "lakeland",
+      "territorio seminómada",
+      "lakeland"
+    ]
+  },
+  {
+    "id": "liche_lands_of_old",
+    "name": "Tierras Liche Antiguas",
+    "type": "Tierra Maldita (Undead)",
+    "cell_id": "E4",
+    "population": "Unknown (no muertos)",
+    "ruler": "None (Rumores de Vampiros)",
+    "markdown_content": "# Tierras Liche Antiguas\n\n**Tipo:** Tierra Maldita (Imperio de No Muertos)\n**Población:** Desconocida (no muertos)\n**Gobernante:** None (Rumores de Señores Vampiros)\n**Región:** @location:e4 (Low Winterland)\n\n## Descripción\n\nTierra maldita, sede del Liche-Priest antes de su derrota. Región inhabitable. El sello mágico en la tumba del Liche-Priest **se está debilitando**.\n\n## Servicios\n\n- Ninguno.\n\n## Organizaciones\n\n- Armadas de no muertos (esqueletos, zombis).\n- Paladines de Scaetha (@faction:divine_slayers) vigilan constantemente desde los fuertes cercanos.\n\n## Amenazas\n\n- El **Liche-Priest** está a punto de despertar (el sello fallará pronto).\n- El Dark Temple del Liche-Priest contiene un orbe negro custodiado por no muertos.\n- **Bonewood** (Bosque de Huesos) es un bosque maligno con árboles hechos de huesos y espíritus.\n- El **Castle of Blood** (antigua fortaleza no muerta) ha reportado luces en sus torres.\n\n## Lugares Cercanos\n\n- @location:b2 (The Cairn Lands)\n- @location:d4 (Heligioland)\n- @location:e1 (Icedale Freeholds)\n- @location:f2 (Nerenel)\n- @location:g2 (Seithrby)",
+    "nearby_locations": [
+      "b2",
+      "f2",
+      "d4",
+      "g2",
+      "e4",
+      "e1"
+    ],
+    "npcs": [],
+    "factions": [
+      "divine_slayers"
+    ],
+    "search_terms": [
+      "tierras liche antiguas",
+      "tierra maldita (undead)",
+      "liche_lands_of_old"
+    ]
+  },
+  {
+    "id": "the_magocracy",
+    "name": "La Magocracia",
+    "type": "Monarquía Mágica (Heahwisards)",
+    "cell_id": "E5",
+    "population": "377,000",
+    "ruler": "@npc:mage_king_adolphus_vii",
+    "markdown_content": "# La Magocracia\n\n**Tipo:** Monarquía Mágica (Heahwisards)\n**Población:** 377,000 (79% Anari)\n**Gobernante:** @npc:mage_king_adolphus_vii\n**Región:** @location:e5 (Hearthlands)\n\n## Descripción\n\nEstado gobernado por magos (elementalistas/heahwisards). La nobleza compite ferozmente por el poder. La **esclavitud está de vuelta**.\n\n## Servicios\n\n- Exportación de dispositivos alquímicos y oro.\n- Sede de la Academy of Heahwisardry en @location:kingshall.\n- Navy en Sethnor City (@location:sethnor_city).\n- Monopolio en el comercio alquímico (Tharkness).\n\n## Organizaciones\n\n- @faction:the_convocation (La élite mágica).\n- @faction:justiciary (Organización anti-magos, opera cerca de Alantaris).\n- @faction:the_order_of_twelve (Busca reemplazar el sistema político).\n- @faction:the_velvet_shackle (Monopolio de la esclavitud).\n- @faction:the_awakeners (Experimentan con cerebros humanos en golems).\n\n## Amenazas\n\n- Intriga política intensa entre Casas rivales (6 Principados, 9 Baronías/Condados).\n- Esclavitud desenfrenada (especialmente en Darovia).\n- El @npc:mage_prince_andmar_bremen es un déspota depravado que caza campesinos por deporte.\n- El Mage-King prohíbe investigar el Siphoning (la fuga de calor mágico).\n- Trolls y dragones de pantano en Blackglade Swamp.\n\n## Lugares Cercanos\n\n- @location:a2 (Angarion)\n- @location:b4 (Coglelund)\n- @location:e6 (Midmark)\n- @location:h5 (Vestmark)\n- @location:e2 (Isle of the Seareavers)",
+    "nearby_locations": [
+      "h5",
+      "e5",
+      "e6",
+      "a2",
+      "sethnor_city",
+      "b4",
+      "kingshall",
+      "e2"
+    ],
+    "npcs": [
+      "mage_prince_andmar_bremen",
+      "mage_king_adolphus_vii"
+    ],
+    "factions": [
+      "justiciary",
+      "the_awakeners",
+      "the_velvet_shackle",
+      "the_order_of_twelve",
+      "the_convocation"
+    ],
+    "search_terms": [
+      "la magocracia",
+      "monarquía mágica (heahwisards)",
+      "the_magocracy"
+    ]
+  },
+  {
+    "id": "midmark",
+    "name": "Midmark",
+    "type": "Markland Saxa",
+    "cell_id": "E6",
+    "population": "75,274",
+    "ruler": "@npc:cwene_saereid_hundingsdohtor",
+    "markdown_content": "# Midmark\n\n**Tipo:** Reino Saxa (Markland aislado)\n**Población:** 75,274 (80% Saxa)\n**Gobernante:** @npc:cwene_saereid_hundingsdohtor (deprimida)\n**Región:** @location:e6 (Hearthlands)\n\n## Descripción\n\nReino Saxa aislado por geografía. Sus fronteras están definidas por el Crystalflow y el Lesser Crystalflow. La Reina sufre una profunda depresión, fomentando la intriga nobiliaria.\n\n## Servicios\n\n- Exportación de cerveza (Ale), hierbas e hidromiel (mead).\n- Aith (@location:aith) es un centro de comercio y construcción naval.\n\n## Organizaciones\n\n- Numerosas casas nobiliarias rivales.\n- Druidas en @location:wald (Wald) que luchan contra arañas.\n\n## Amenazas\n\n- El **Spiderfell Wood** (Bosque de la Caída de Arañas) es hogar de arañas gigantes y el rumoreado **Spider-King**.\n- Incursiones de orcos y goblins desde Dragonspine Mountains.\n- Tensión por una posible guerra comercial con @location:f3 (Nordmark).\n- Lizardmen y bufomi en Marshrun.\n\n## Lugares Cercanos\n\n- @location:e5 (The Magocracy)\n- @location:b5 (Crystalflow Confederacy)\n- @location:f4 (Orcmark)\n- @location:h4 (Veermark)",
+    "nearby_locations": [
+      "e5",
+      "b5",
+      "e6",
+      "h4",
+      "f4",
+      "wald",
+      "aith",
+      "f3"
+    ],
+    "npcs": [
+      "cwene_saereid_hundingsdohtor"
+    ],
+    "factions": [],
+    "search_terms": [
+      "midmark",
+      "markland saxa",
+      "midmark"
+    ]
+  },
+  {
+    "id": "the_mistlands",
+    "name": "Tierras de la Niebla",
+    "type": "Región de Niebla Perpetua",
+    "cell_id": "F1",
+    "population": "Unknown",
+    "ruler": "None",
+    "markdown_content": "# Tierras de la Niebla\n\n**Tipo:** Región Maldita (Pérdida de Población)\n**Población:** Desconocida (población civil desapareció hace décadas)\n**Gobernante:** None\n**Región:** @location:f1 (Low Winterland)\n\n## Descripción\n\nRegión enteramente cubierta por un denso banco de **niebla perpetua**. El terreno se considera **Oscuridad** incluso de día y Oscuridad Absoluta de noche. Antiguamente Silverdale, famosa por sus minas de plata.\n\n## Servicios\n\n- Ninguno.\n\n## Organizaciones\n\n- Ninguna conocida.\n\n## Amenazas\n\n- Niebla perpetua y oscuridad.\n- Espíritus de los colonos perdidos (Haunted Hills).\n- Orcos y goblins.\n- Ruinas infestadas de monstruos.\n\n## Lugares Cercanos\n\n- @location:b3 (Chalcis)\n- @location:g1 (Royalmark)\n- @location:g2 (Seithrby)\n- @location:e4 (Liche Lands of Old)",
+    "nearby_locations": [
+      "f1",
+      "b3",
+      "g2",
+      "g1",
+      "e4"
+    ],
+    "npcs": [],
+    "factions": [],
+    "search_terms": [
+      "tierras de la niebla",
+      "región de niebla perpetua",
+      "the_mistlands"
+    ]
+  },
+  {
+    "id": "nerenel",
+    "name": "Nerenel",
+    "type": "Dominio Élfico Taiga (Militante)",
+    "cell_id": "F2",
+    "population": "12,569",
+    "ruler": "@npc:forestlord_elethenel",
+    "markdown_content": "# Nerenel\n\n**Tipo:** Dominio Élfico Taiga (Militante)\n**Población:** 12,569 (91% elfos taiga)\n**Gobernante:** @npc:forestlord_elethenel\n**Región:** @location:f2 (High Winterlands)\n\n## Descripción\n\nDominio élfico militante, parte de un bosque que resistió al Liche-Priest. La magia de los **Hearthstones** (piedras de hogar) mantiene la temperatura estable, pero está fallando.\n\n## Servicios\n\n- Exportación de pieles.\n- Se mueve estacionalmente para evitar el agotamiento de recursos (tent-town).\n\n## Organizaciones\n\n- Elfos Taiga (sociedad muy militarizada).\n\n## Amenazas\n\n- La magia de los Hearthstones está fallando, permitiendo que el frío de High Winterlands se acerque al núcleo.\n- Ataques constantes de orcos, goblins, frostreavers, Vendahl y no muertos.\n- Avistamiento de columnas de esqueletos marchando hacia Winding Peaks (@location:e4).\n\n## Lugares Cercanos\n\n- @location:e1 (Icedale Freeholds)\n- @location:e4 (Liche Lands of Old)\n- @location:g3 (Shattered Moor)\n- @location:f6 (Rimeholm)",
+    "nearby_locations": [
+      "f6",
+      "g3",
+      "f2",
+      "e4",
+      "e1"
+    ],
+    "npcs": [
+      "forestlord_elethenel"
+    ],
+    "factions": [],
+    "search_terms": [
+      "nerenel",
+      "dominio élfico taiga (militante)",
+      "nerenel"
+    ]
+  },
+  {
+    "id": "nordmark",
+    "name": "Nordmark",
+    "type": "Markland Saxa",
+    "cell_id": "F3",
+    "population": "73,274",
+    "ruler": "@npc:cyning_geirmund_kolsunu",
+    "markdown_content": "# Nordmark\n\n**Tipo:** Reino Saxa (Markland)\n**Población:** 73,274 (75% Saxa)\n**Gobernante:** @npc:cyning_geirmund_kolsunu\n**Región:** @location:f3 (Hearthlands)\n\n## Descripción\n\nReino Saxa que busca restablecer el comercio después de una guerra civil. Históricamente, fue explotado por el Imperio Anari por sus recursos de hierro.\n\n## Servicios\n\n- Exportación de hierro, artículos de cuero y vino.\n- El puerto fluvial de Yorvik (@location:yorvik) es un centro comercial vital.\n\n## Organizaciones\n\n- Cyning Geirmund (reconstruyendo el reino).\n- Jarl Erp the Crow (@npc:jarl_erp_the_crow) (rival peligroso).\n- Red de espías leales al Cyning.\n\n## Amenazas\n\n- Banditismo y orcos en las fronteras.\n- El **Grimwold** (mina de hierro) está supuestamente **embrujado por no muertos**.\n- @npc:jarl_erp_the_crow, el principal rival, está reclutando mercenarios en @location:norvold.\n- La esposa del Thegn Heimir Bull-Bear (@location:the_refuge) es una *shapeleaper* (cambiaformas).\n\n## Lugares Cercanos\n\n- @location:b5 (Crystalflow Confederacy)\n- @location:e3 (Lakeland)\n- @location:g1 (Royalmark)\n- @location:h3 (The Vale)",
+    "nearby_locations": [
+      "b5",
+      "norvold",
+      "yorvik",
+      "h3",
+      "the_refuge",
+      "f3",
+      "g1",
+      "e3"
+    ],
+    "npcs": [
+      "cyning_geirmund_kolsunu",
+      "jarl_erp_the_crow"
+    ],
+    "factions": [],
+    "search_terms": [
+      "nordmark",
+      "markland saxa",
+      "nordmark"
+    ]
+  },
+  {
+    "id": "orcmark",
+    "name": "Orcmark",
+    "type": "Territorio Ocupado (Orcos)",
+    "cell_id": "F4",
+    "population": "Unknown (Orcos, goblins) y 20k+ esclavos Saxa",
+    "ruler": "@npc:king_nagrat_i",
+    "markdown_content": "# Orcmark\n\n**Tipo:** Territorio de Guerra (Ocupación Orca)\n**Población:** Desconocida (Orcos, goblins) y 20,000+ esclavos Saxa\n**Gobernante:** @npc:king_nagrat_i (Líder orco estratégico)\n**Región:** @location:f4 (Hearthlands)\n\n## Descripción\n\nTerritorio de @location:h5 (Vestmark) ocupado por orcos (479 IR). La tierra es un páramo quemado, y el frente de batalla está a lo largo del Río Elve.\n\n## Servicios\n\n- Ninguno. Utilizan la mano de obra esclava para la fundición de hierro en @location:yetand.\n\n## Organizaciones\n\n- Ejército Orco de Nagrat (altamente organizado, incluye *fomorians* y *hrimwisards*).\n- Orc-Warlord Grizbane (@location:dorvik, torturador).\n\n## Amenazas\n\n- **Guerra activa** de desgaste contra @location:h5 (Vestmark).\n- Asedio de la ciudad clave de @location:ostersund.\n- El @npc:king_nagrat_i es un líder orco formidable y estratégico.\n- Tortura y ejecución de esclavos (ej. en @location:dorvik).\n- Propaganda de Nagrat a los ciudadanos de Vestmark para que traicionen a su Rey.\n\n## Lugares Cercanos\n\n- @location:e6 (Midmark)\n- @location:h5 (Vestmark)\n- @location:g1 (Royalmark)",
+    "nearby_locations": [
+      "h5",
+      "ostersund",
+      "e6",
+      "f4",
+      "dorvik",
+      "g1",
+      "yetand"
+    ],
+    "npcs": [
+      "king_nagrat_i"
+    ],
+    "factions": [],
+    "search_terms": [
+      "orcmark",
+      "territorio ocupado (orcos)",
+      "orcmark"
+    ]
+  },
+  {
+    "id": "ostmark",
+    "name": "Ostmark",
+    "type": "Oligarquía Mercantil (Markland)",
+    "cell_id": "F5",
+    "population": "72,824",
+    "ruler": "@npc:marchand_aethling_aran_thormodsunu",
+    "markdown_content": "# Ostmark\n\n**Tipo:** Oligarquía Mercantil (Markland)\n**Población:** 72,824 (70% Saxa)\n**Gobernante:** @npc:marchand_aethling_aran_thormodsunu y el Trada Counseil (Consejo de Comerciantes)\n**Región:** @location:f5 (Hearthlands)\n\n## Descripción\n\nEl más rico de los Marklands. Se rige por una oligarquía de comerciantes. Cuenta con un valle central fértil y está protegido por el Thunor Range.\n\n## Servicios\n\n- Mayor puerto de la costa este (Sandvik).\n- Exportación clave de pescado, grano, hierro y verduras.\n- Gran comercio con el Lejano Oriente (embajadas en Sandvik) y con los *desert traders* del sur.\n\n## Organizaciones\n\n- @faction:trada_counseil (Consejo de Comerciantes, el poder real).\n- Gremios de ladrones (aliados secretos de los mercaderes).\n- Druidas y Elfos del Corazón (Greenwood y Taselwood).\n\n## Amenazas\n\n- Invasiones de Drachenlanders.\n- @location:vends_bay es un punto débil para ataques marítimos desde Winterlands.\n- Rumores de barcos metálicos extraños en @location:sandvik.\n- Tensión por la falta de ayuda a @location:g5 (Sutmark).\n\n## Lugares Cercanos\n\n- @location:e6 (Midmark)\n- @location:g5 (Sutmark)\n- @location:h4 (Veermark)\n- @location:f3 (Nordmark)",
+    "nearby_locations": [
+      "f5",
+      "e6",
+      "vends_bay",
+      "h4",
+      "g5",
+      "f3",
+      "sandvik"
+    ],
+    "npcs": [
+      "marchand_aethling_aran_thormodsunu"
+    ],
+    "factions": [
+      "trada_counseil"
+    ],
+    "search_terms": [
+      "ostmark",
+      "oligarquía mercantil (markland)",
+      "ostmark"
+    ]
+  },
+  {
+    "id": "rimeholm",
+    "name": "Rimeholm",
+    "type": "Dominio Élfico Taiga (Druídico)",
+    "cell_id": "F6",
+    "population": "19,531",
+    "ruler": "@npc:the_white_king",
+    "markdown_content": "# Rimeholm\n\n**Tipo:** Reino Élfico Taiga (Druídico)\n**Población:** 19,531 (100% elfos taiga)\n**Gobernante:** @npc:the_white_king (Líder druídico)\n**Región:** @location:f6 (High Winterlands)\n\n## Descripción\n\nEl mayor reino sobreviviente de los elfos taiga. El bosque (White Wood) es impenetrable mágicamente. Está protegido por **Hearthstones** que están fallando, permitiendo que los glaciares consuman el bosque.\n\n## Servicios\n\n- Tesorería de reliquias (reputada por ser más rica que la de la @faction:reliquary).\n\n## Organizaciones\n\n- Elfos Taiga y druidas.\n- Blizzard Guard (Guardia personal del Rey).\n\n## Amenazas\n\n- La magia de los Hearthstones está fallando.\n- Glaciares consumiendo el White Wood.\n- Orcos, goblins y gigantes de Jotunvalk Mountains.\n- La @faction:reliquary está presionando para acceder a la tesorería de reliquias del White Palace.\n\n## Lugares Cercanos\n\n- @location:c2 (Dwarf Cities)\n- @location:g6 (Tethilin)\n- @location:h6 (Witchwood)",
+    "nearby_locations": [
+      "c2",
+      "g6",
+      "f6",
+      "h6"
+    ],
+    "npcs": [
+      "the_white_king"
+    ],
+    "factions": [
+      "reliquary"
+    ],
+    "search_terms": [
+      "rimeholm",
+      "dominio élfico taiga (druídico)",
+      "rimeholm"
+    ]
+  },
+  {
+    "id": "royalmark",
+    "name": "",
+    "type": "",
+    "cell_id": "",
+    "population": "",
+    "ruler": "",
+    "markdown_content": "---\nid: royalmark\nname: Royalmark\ntype: Reino Central Saxa (Markland)\ncell_id: G1\npopulation: 119,547\nruler: @npc: Cyning (autoridad nominal sobre otros Marklands). Gran parte del territorio es rural. Gasta recursos para proteger la frontera de incursiones de no muertos.\n\n## Servicios\n\n- Exportación de obras de arte, cerveza, queso y joyería.\n- El fortín Moot Hill (@location:moot_hill) es el centro de reunión anual de la nobleza Saxa.\n\n## Organizaciones\n\n- El Cyning (liderazgo nominal, tiene poco poder real sin fuerza).\n- @faction:knights_hrafn (activos en la frontera de @location:h5).\n- Huscarls y mercenarios (estacionados en @location:hereford y @location:salnorr).\n- @faction:divine_slayers (activos en la frontera con Darkwood).\n\n## Amenazas\n\n- Incursiones de no muertos desde Darkwood (@location:withered_lands).\n- El Beast (criatura indestructible) ataca @location:ridderhil.\n- Intriga política interna y la @faction:puppeteers (activa en Ravensburg) buscan deponer al High Cyning.\n- Tensión con @location:h3 (The Vale) por tierras.\n\n## Lugares Cercanos\n\n- @location:b4 (Coglelund)\n- @location:c3 (The Freelands)\n- @location:f3 (Nordmark)\n- @location:f4 (Orcmark)\n- @location:h3 (The Vale)\n- @location:withered_lands\n\n## Descripción\n\nRegión de Saxa militantes, regida por un Aethling que se niega a ser Cyning para evitar la autoridad central. La capital (@location:seithrby) es un centro de estudio místico.\n\n## Servicios\n\n- Exportación de pescado, cerámica (greenware) y madera.\n- La capital invita a magos a usar sus laboratorios y biblioteca.\n\n## Organizaciones\n\n- Facciones nobiliarias (Thegns).\n- @npc:thegn_osric_botnothsunu (primo y rival).\n- @faction:divine_slayers (Paladines de Scaetha en @location:wulfcestre).\n\n## Amenazas\n\n- Incursiones de no muertos desde @location:e4 (Liche Lands of Old).\n- Tala de árboles masiva en **Feywood** irrita a las hadas (*Fey*).\n- El rival @npc:thegn_osric_botnothsunu conspira para usurpar el trono.\n- Conflicto con @location:d4 (Heligioland) por la arcilla *greenware* (Skirmishes).\n- Frostreavers y Vendahl atacan las aldeas.\n\n## Lugares Cercanos\n\n- @location:e4 (Liche Lands of Old)\n- @location:f1 (The Mistlands)\n- @location:d4 (Heligioland)\n- @location:g3 (Shattered Moor)",
+    "nearby_locations": [
+      "h5",
+      "seithrby",
+      "withered_lands",
+      "f4",
+      "g3",
+      "hereford",
+      "f1",
+      "salnorr",
+      "b4",
+      "d4",
+      "wulfcestre",
+      "moot_hill",
+      "h3",
+      "c3",
+      "ridderhil",
+      "f3",
+      "e4"
+    ],
+    "npcs": [
+      "thegn_osric_botnothsunu"
+    ],
+    "factions": [
+      "knights_hrafn",
+      "puppeteers",
+      "divine_slayers"
+    ],
+    "search_terms": [
+      "",
+      "",
+      ""
+    ]
+  },
+  {
+    "id": "seithrby",
+    "name": "Seithrby",
+    "type": "Reino Saxa",
+    "cell_id": "G2",
+    "population": "19,086",
+    "ruler": "@npc:aethling_cuthwulf_eodricsunu",
+    "markdown_content": "# Seithrby\n\n**Tipo:** Reino Saxa\n**Población:** 19,086 (68% Saxa)\n**Gobernante:** @npc:aethling_cuthwulf_eodricsunu (Aethling Cuthwulf Eodricsunu)\n**Región:** @location:g2 (Low Winterlands)\n\n## Descripción\n\nEl territorio fue reclamado por un clan Saxa bajo el mando de Cuthwulf, después de haber sido escasamente poblado. El **Aethling Cuthwulf se niega a tomar el título de *Cyning*** para evadir la autoridad central del High Cyning. Los colonos Saxa esclavizaron a los Anari locales tras la conquista.\n\n## Servicios\n\n- Centro industrial que provee herramientas y bienes básicos a otros asentamientos.\n- Exportador de pescado y madera.\n\n## Organizaciones\n\n- El Aethling busca construir una comitiva de magos para su protección y para ayudar a sus guerreros en la batalla.\n\n## Amenazas\n\n- Incursiones en el norte de **no muertos** que provienen de las *Liche Lands* (@location:e4).\n- La tala masiva de árboles en *Feywood* está causando irritación a las hadas.\n\n## Lugares Cercanos\n\n- @location:f2 (Nerenel)\n- @location:f3 (Nordmark)\n- @location:g1 (Royalmark)\n- @location:g3 (Shattered Moor)\n- @location:h2 (Unclaimed Lands)\n- @location:h3 (The Vale)",
+    "nearby_locations": [
+      "g3",
+      "f2",
+      "h2",
+      "h3",
+      "g2",
+      "f3",
+      "g1",
+      "e4"
+    ],
+    "npcs": [
+      "aethling_cuthwulf_eodricsunu"
+    ],
+    "factions": [],
+    "search_terms": [
+      "seithrby",
+      "reino saxa",
+      "seithrby"
+    ]
+  },
+  {
+    "id": "shattered_moor",
+    "name": "Shattered Moor",
+    "type": "Páramo Quebrado",
+    "cell_id": "G3",
+    "population": "12,075",
+    "ruler": "None",
+    "markdown_content": "# Shattered Moor\n\n**Tipo:** Páramo Quebrado (Antiguo reino Selari)\n**Población:** 12,075 (50% Anari, 40% Saxa)\n**Gobernante:** Ninguno (Villas y pueblos independientes)\n**Región:** @location:g3 (Low Winterlands)\n\n## Descripción\n\nEs un **antiguo reino que fue destruido por magia** durante la *Blizzard War*. La destrucción hizo que la tierra se levantara y se quebrara. Es un páramo elevado y quebrado, donde la vida civilizada continúa a pesar de los inviernos y las bestias.\n\n## Organizaciones\n\n- Marca el límite más septentrional del alcance de las patrullas regulares de los Hearth Knights.\n\n## Amenazas\n\n- Es el hogar de *frostreavers* y *Vendahl* (tribus bárbaras).\n- Las incursiones de *frostreavers* y *Vendahl* están en aumento, con rumores de que un gran líder está uniendo a las tribus.\n- Las ruinas de antiguos castillos y torres son suficientes para atraer a aventureros.\n\n## Lugares Cercanos\n\n- @location:f3 (Nordmark)\n- @location:f4 (Orcmark)\n- @location:g2 (Seithrby)\n- @location:g4 (Sunken Realm)\n- @location:h3 (The Vale)\n- @location:h4 (Veermark)",
+    "nearby_locations": [
+      "h4",
+      "g3",
+      "f4",
+      "h3",
+      "g2",
+      "f3",
+      "g4"
+    ],
+    "npcs": [],
+    "factions": [],
+    "search_terms": [
+      "shattered moor",
+      "páramo quebrado",
+      "shattered_moor"
+    ]
+  },
+  {
+    "id": "sutmark",
+    "name": "Sutmark",
+    "type": "Markland en Colapso / Zona de Asedio",
+    "cell_id": "G5",
+    "population": "47,076",
+    "ruler": "@npc:aethling_tind_beitisunu",
+    "markdown_content": "# Sutmark\n\n**Tipo:** Markland en Colapso / Zona de Asedio\n**Población:** 47,076 (90% Saxa)\n**Gobernante:** @npc:aethling_tind_beitisunu (Lidera el asedio, se niega a ser Cyning)\n**Región:** @location:g5 (Hearthlands)\n\n## Descripción\n\nPrácticamente sin gobierno, ya que el líder (@npc:aethling_tind_beitisunu) y los nobles están en @location:ostvik, la ciudad asediada. El territorio es accidentado, con colinas y montañas.\n\n## Servicios\n\n- Exportación de cerveza (Blood Ale), pescado, aceite y lana.\n- El bosque Lastwood (@location:lastwood) contiene elfos que ayudan a la defensa.\n\n## Organizaciones\n\n- La mayoría de los huscarls han muerto; dependen de mercenarios.\n- Elfos del Corazón de @location:lastwood (la mayoría luchando en Ostvik).\n\n## Amenazas\n\n- **Asedio masivo de hombres lagarto** en @location:ostvik (punto focal). El asedio consume todos los recursos.\n- Orcos en Sandwall Mountains aliados con lizardmen.\n- La población en @location:vidlin desea que su líder tiránico, Jarl Armod the Black, muera en el asedio.\n\n## Lugares Cercanos\n\n- @location:f5 (Orcmark)\n- @location:g6 (Tethilin)\n- @location:h4 (Unclaimed Lands)",
+    "nearby_locations": [
+      "vidlin",
+      "f5",
+      "lastwood",
+      "h4",
+      "ostvik",
+      "g6",
+      "g5"
+    ],
+    "npcs": [
+      "aethling_tind_beitisunu"
+    ],
+    "factions": [],
+    "search_terms": [
+      "sutmark",
+      "markland en colapso / zona de asedio",
+      "sutmark"
+    ]
+  },
+  {
+    "id": "tethilin",
+    "name": "Tethilin",
+    "type": "Dominio Élfico Taiga",
+    "cell_id": "G6",
+    "population": "7,642",
+    "ruler": "@npc:forestlord_icespear",
+    "markdown_content": "# Tethilin\n\n**Tipo:** Dominio Élfico Taiga (Militante)\n**Población:** 7,642 (100% elfos taiga)\n**Gobernante:** @npc:forestlord_icespear\n**Región:** @location:g6 (Low Winterlands)\n\n## Descripción\n\nPequeño dominio élfico en guerra con los Drachenlanders (@location:c1). Se basa en guerrillas y druidas. El bosque es pantanoso en verano.\n\n## Servicios\n\n- Ninguno. Importa gemas y hierro.\n- Stone Circle (templo a Ullr y Eostre).\n\n## Organizaciones\n\n- Elfos Taiga (guerrilleros).\n\n## Amenazas\n\n- **Guerra activa** contra @location:c1 (The Drachenlands).\n- Los hearthstones están fallando.\n- El @npc:forestlord_icespear está considerando una alianza con la @npc:ice_queen de @location:h6 (Witchwood), una idea sospechosa.\n\n## Lugares Cercanos\n\n- @location:c1 (The Drachenlands)\n- @location:b3 (Chalcis)\n- @location:h6 (Witchwood)\n- @location:f6 (Rimeholm)",
+    "nearby_locations": [
+      "c1",
+      "f6",
+      "b3",
+      "g6",
+      "h6"
+    ],
+    "npcs": [
+      "forestlord_icespear",
+      "ice_queen"
+    ],
+    "factions": [],
+    "search_terms": [
+      "tethilin",
+      "dominio élfico taiga",
+      "tethilin"
+    ]
+  },
+  {
+    "id": "barony_of_trond",
+    "name": "Baronía de Trond",
+    "type": "Baronía Comercial / Consejo Electo",
+    "cell_id": "H1",
+    "population": "18,395",
+    "ruler": "@faction:council_of_trond",
+    "markdown_content": "# Baronía de Trond\n\n**Tipo:** Baronía Comercial / Consejo Electo\n**Población:** 18,395\n**Gobernante:** @faction:council_of_trond\n**Región:** @location:h1 (Low Winterlands)\n\n## Descripción\n\nComercio de *icewood* y el acceso a Low Winterlands. El Barón (@npc:baron_rodger_ap_gwar) es una figura decorativa controlada por un consejo electo.\n\n## Servicios\n\n- Comercio de *icewood*.\n- El puerto @location:trondavoe es el principal acceso a Low Winterlands.\n\n## Organizaciones\n\n- @faction:reclaimers (Facción Anari que busca restaurar el poder del Barón)\n\n## Lugares Cercanos\n\n- @location:g1 (Royalmark)\n- @location:h2 (Unclaimed Lands)\n- @location:h3 (The Vale)\n- @location:g2 (Seithrby)",
+    "nearby_locations": [
+      "h1",
+      "h3",
+      "h2",
+      "trondavoe",
+      "g2",
+      "g1"
+    ],
+    "npcs": [
+      "baron_rodger_ap_gwar"
+    ],
+    "factions": [
+      "reclaimers",
+      "council_of_trond"
+    ],
+    "search_terms": [
+      "baronía de trond",
+      "baronía comercial / consejo electo",
+      "barony_of_trond"
+    ]
+  },
+  {
+    "id": "unclaimed_lands",
+    "name": "Unclaimed Lands",
+    "type": "Territorio Salvaje",
+    "cell_id": "H2",
+    "population": "100,000+",
+    "ruler": "None",
+    "markdown_content": "# Unclaimed Lands\n\n**Tipo:** Tierras Altas Sin Reclamar\n**Población:** 100,000+ (55% Finnar nómadas)\n**Gobernante:** Ninguno\n**Región:** @location:h2 (High Winterlands)\n\n## Descripción\n\nEs un **vasto territorio sin reclamar** por ningún gobernante. La mayor parte de la región es un **campo de nieve continuo** que rara vez se derrite. Alberga ruinas de la cultura perdida Selari (adoradores del sol).\n\n## Organizaciones\n\n- Clanes nómadas Finnar viajan por la región con sus grandes rebaños de renos.\n- Los asentamientos existentes no deben lealtad a nadie.\n\n## Amenazas\n\n- Monstruos y horrores Hellfrost.\n- Los Saxa y Anari que viven aquí deben enfrentar los duros elementos y las bestias mortales a diario.\n\n## Lugares Cercanos\n\n- @location:g1 (Royalmark)\n- @location:g2 (Seithrby)\n- @location:h1 (Barony of Trond)\n- @location:h3 (The Vale)",
+    "nearby_locations": [
+      "h1",
+      "h3",
+      "h2",
+      "g2",
+      "g1"
+    ],
+    "npcs": [],
+    "factions": [],
+    "search_terms": [
+      "unclaimed lands",
+      "territorio salvaje",
+      "unclaimed_lands"
+    ]
+  },
+  {
+    "id": "the_vale",
+    "name": "The Vale",
+    "type": "Centro Agrícola",
+    "cell_id": "H3",
+    "population": "32,347",
+    "ruler": "@npc:mayor_pepin_ap_peredur",
+    "markdown_content": "# The Vale\n\n**Tipo:** Centro Agrícola Ferozmente Independiente\n**Población:** 32,347 (65% Anari)\n**Gobernante:** @npc:mayor_pepin_ap_peredur (Gobernado por oficiales electos)\n**Región:** @location:h3 (Hearthlands)\n\n## Descripción\n\nRegión de colinas y valles fértiles, compuesta por pequeños arroyos y campos cultivados. Los habitantes defienden ferozmente su independencia. No mantiene un ejército permanente.\n\n## Servicios\n\n- Exportador importante de *pipeleaf* (hoja de pipa).\n- También exporta ale, grano y vegetales.\n\n## Amenazas\n\n- Está experimentando un **gran influjo de refugiados** de Vestmark (@location:h5), lo que ha generado tensiones y robos de cosechas.\n- Hay avistamientos de criaturas extrañas en las colinas del norte, que se sospecha provienen del *Shade Marsh* (@location:g4/h4 border region).\n\n## Lugares Cercanos\n\n- @location:g2 (Seithrby)\n- @location:g3 (Shattered Moor)\n- @location:h2 (Unclaimed Lands)\n- @location:h4 (Veermark)",
+    "nearby_locations": [
+      "h5",
+      "h4",
+      "g3",
+      "h3",
+      "h2",
+      "g2",
+      "g4"
+    ],
+    "npcs": [
+      "mayor_pepin_ap_peredur"
+    ],
+    "factions": [],
+    "search_terms": [
+      "the vale",
+      "centro agrícola",
+      "the_vale"
+    ]
+  },
+  {
+    "id": "veermark",
+    "name": "Veermark",
+    "type": "Reino Saxa Dividido",
+    "cell_id": "H4",
+    "population": "46,577",
+    "ruler": "@npc:cyning_oddni_sturlasunu y @npc:horse_cyning_thrand_belly_shaker",
+    "markdown_content": "# Veermark\n\n**Tipo:** Reino Saxa Dividido (Dos Reyes)\n**Población:** 46,577 (84% Saxa)\n**Gobernante:** Dos reyes: @npc:cyning_oddni_sturlasunu y @npc:horse_cyning_thrand_belly_shaker\n**Región:** @location:h4 (Hearthlands)\n\n## Descripción\n\nReino dividido entre dos reyes Saxa: uno sedentario (Oddni) y uno nómada a caballo (Thrand). Los nómadas controlan 3/4 de la población y se reúnen en Veergarth en verano.\n\n## Servicios\n\n- Exportador de caballos.\n- El Grasslands es el centro de la cultura nómada a caballo.\n\n## Organizaciones\n\n- El ejército tradicional del Cyning Oddni.\n- Los nómadas Horse-Cyning.\n\n## Amenazas\n\n- Posible invasión del tirano de la Magocracy.\n\n## Lugares Cercanos\n\n- @location:g3 (Shattered Moor)\n- @location:g4 (Sunken Realm)\n- @location:h3 (The Vale)\n- @location:h5 (Vestmark)",
+    "nearby_locations": [
+      "h5",
+      "h4",
+      "g3",
+      "h3",
+      "g4"
+    ],
+    "npcs": [
+      "horse_cyning_thrand_belly_shaker",
+      "cyning_oddni_sturlasunu"
+    ],
+    "factions": [],
+    "search_terms": [
+      "veermark",
+      "reino saxa dividido",
+      "veermark"
+    ]
+  },
+  {
+    "id": "vestmark",
+    "name": "Vestmark",
+    "type": "Markland Saxa",
+    "cell_id": "H5",
+    "population": "51,676",
+    "ruler": "@npc:cyning_horgar_the_feeble",
+    "markdown_content": "# Vestmark\n\n**Tipo:** Reino Saxa (Markland)\n**Población:** 51,676 (75% Saxa)\n**Gobernante:** @npc:cyning_horgar_the_feeble (Cyning Horgar *the Feeble*)\n**Región:** @location:h5 (Hearthlands)\n\n## Descripción\n\nEl reino se encuentra **en grave peligro**. El sur fue conquistado por orcos y renombrado Orcmark (@location:f4). El Cyning Horgar ha perdido la razón y toma decisiones imposibles, aunque la guerra es manejada por Theodred Vulfgarsunu, el Mariscal del Mark.\n\n## Servicios\n\n- Exportaba plata, pero la riqueza se utiliza ahora para pagar a los vastos ejércitos mercenarios.\n- El puerto de Skei (@location:skei) es vital para la importación de armaduras, hierro y armas.\n\n## Amenazas\n\n- Guerra de desgaste constante a lo largo del Río Elve contra Orcmark (@location:f4).\n- El reino sufre una alta tasa de deserción y una **grave crisis de refugiados**.\n- Las incursiones de orcos, trolls y gigantes han aumentado en el norte, lo que ha provocado el cierre de varias minas de plata.\n\n## Lugares Cercanos\n\n- @location:g4 (Sunken Realm)\n- @location:g5 (Sutmark)\n- @location:h4 (Veermark)\n- @location:h6 (Witchwood)",
+    "nearby_locations": [
+      "h5",
+      "h4",
+      "f4",
+      "skei",
+      "h6",
+      "g5",
+      "g4"
+    ],
+    "npcs": [
+      "cyning_horgar_the_feeble"
+    ],
+    "factions": [],
+    "search_terms": [
+      "vestmark",
+      "markland saxa",
+      "vestmark"
+    ]
+  },
+  {
+    "id": "witchwood",
+    "name": "Witchwood",
+    "type": "Bosque Congelado",
+    "cell_id": "H6",
+    "population": "Desconocida",
+    "ruler": "@npc:ice_queen",
+    "markdown_content": "# Witchwood\n\n**Tipo:** Bosque de Hielo\n**Población:** Desconocida\n**Gobernante:** @npc:ice_queen (The Ice Queen)\n**Región:** @location:h6 (High Winterlands)\n\n## Descripción\n\nBosque bajo la influencia de la misteriosa **Ice Queen**. El bosque **está creciendo** a un ritmo de dos millas al año, transformando los árboles deciduos en madera de hielo (*icewood*). El núcleo del bosque es comparable a la región exterior del *Hellfrost*.\n\n## Defensas\n\n- La Reina de Hielo da la bienvenida a *taiga elves* y *frostborn* que le juran lealtad.\n- El bosque está protegido por sirvientes vivos y no muertos, incluyendo elementales de *coldfire* y gigantes.\n\n## Amenazas\n\n- La expansión del bosque amenaza el reino de Chalcis (@location:b3).\n- Los campesinos culpan a la Ice Queen de los inviernos severos.\n- Tethilin (@location:g6) está considerando una alianza con la Ice Queen debido al fallo de las *hearthstones*.\n\n## Lugares Cercanos\n\n- @location:g5 (Sutmark)\n- @location:g6 (Tethilin)\n- @location:h5 (Vestmark)",
+    "nearby_locations": [
+      "h5",
+      "b3",
+      "g6",
+      "h6",
+      "g5"
+    ],
+    "npcs": [
+      "ice_queen"
+    ],
+    "factions": [],
+    "search_terms": [
+      "witchwood",
+      "bosque congelado",
+      "witchwood"
+    ]
+  }
+]
