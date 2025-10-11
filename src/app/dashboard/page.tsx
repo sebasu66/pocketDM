@@ -7,9 +7,11 @@ import { useCampaign } from "@/context/campaign-context";
 import { useI18n } from "@/context/i18n-context";
 import { getCharactersByCampaign } from "@/lib/firebase/characters";
 import { AnimatedPanel } from "./components/AnimatedPanel";
+import { ChatPanel } from "./components/ChatPanel";
 import { MessagesSquare, Settings, Copy, Check, Users } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { RusticIconButton } from "@/components/ui/rustic-icon-button";
+import { useChatUnread } from "@/hooks/use-chat-unread";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -20,6 +22,8 @@ export default function DashboardPage() {
   const [isCheckingCharacter, setIsCheckingCharacter] = useState(true);
   const [copiedCode, setCopiedCode] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const { unreadCount, markAsRead } = useChatUnread(campaign?.id, user?.id);
 
   // Check if user has a character
   useEffect(() => {
@@ -238,13 +242,20 @@ export default function DashboardPage() {
 
       {/* Floating Button Strip */}
       <div className="fixed bottom-6 right-6 z-30 flex h-14 items-center gap-2 rounded-full bg-black/20 p-2 backdrop-blur-sm">
-        <RusticIconButton
-          tooltip="Chat"
-          onClick={() => router.push('/dashboard/chat')}
-          className="text-white/90 hover:text-white"
-        >
-          <MessagesSquare />
-        </RusticIconButton>
+        <div className="relative">
+          <RusticIconButton
+            tooltip="Chat"
+            onClick={() => setIsChatOpen(true)}
+            className="text-white/90 hover:text-white"
+          >
+            <MessagesSquare />
+          </RusticIconButton>
+          {unreadCount > 0 && (
+            <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold animate-pulse">
+              {unreadCount > 9 ? '9+' : unreadCount}
+            </div>
+          )}
+        </div>
 
         <RusticIconButton
           tooltip="Settings"
@@ -254,6 +265,14 @@ export default function DashboardPage() {
           <Settings />
         </RusticIconButton>
       </div>
+
+      {/* Chat Panel */}
+      {isChatOpen && (
+        <ChatPanel
+          onClose={() => setIsChatOpen(false)}
+          onOpen={markAsRead}
+        />
+      )}
     </div>
   );
 }

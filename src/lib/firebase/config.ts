@@ -2,6 +2,7 @@
 import { initializeApp, getApp, getApps, type FirebaseApp } from "firebase/app";
 import { getFirestore, initializeFirestore, connectFirestoreEmulator, type Firestore } from "firebase/firestore";
 import { getAuth, connectAuthEmulator, type Auth } from "firebase/auth";
+import { getDatabase, connectDatabaseEmulator, type Database } from "firebase/database";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -11,7 +12,8 @@ const firebaseConfig = {
   storageBucket: "lore-weaver-rt9pc.firebasestorage.app",
   messagingSenderId: "9043819570",
   appId: "1:9043819570:web:d20e4928ab338405d2d02b",
-  measurementId: "G-KRHEWVBV1G"
+  measurementId: "G-KRHEWVBV1G",
+  databaseURL: "https://lore-weaver-rt9pc-default-rtdb.firebaseio.com"
 };
 
 // Initialize Firebase
@@ -23,6 +25,7 @@ const db: Firestore = initializeFirestore(app, {
 });
 
 const auth: Auth = getAuth(app);
+const database: Database = getDatabase(app);
 
 // Connect to Firebase Emulators in development mode
 // Set NEXT_PUBLIC_USE_FIREBASE_EMULATOR=true in .env.local to enable
@@ -45,7 +48,15 @@ if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_USE_FIREBASE_EMULAT
     console.warn('⚠️ Auth Emulator already connected or failed:', error);
   }
 
+  // Connect Realtime Database Emulator
+  try {
+    connectDatabaseEmulator(database, '127.0.0.1', 9000);
+    console.log('✅ Realtime Database Emulator connected (localhost:9000)');
+  } catch (error) {
+    console.warn('⚠️ Realtime Database Emulator already connected or failed:', error);
+  }
+
   console.log('🔧 Firebase Emulators UI available at: http://localhost:4000');
 }
 
-export { app, db, auth };
+export { app, db, auth, database };

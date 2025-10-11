@@ -10,7 +10,7 @@ import { addCharacterComment, listenToCharacterComments, CharacterComment } from
 import { listenToCharacterNarrative, getLatestNarrativeNode, NarrativeNode } from '@/lib/firebase/narrative';
 import { getCharactersByCampaign } from '@/lib/firebase/characters';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ArrowLeft, ArrowRight, Menu, User as UserIcon, X, Plus, Trash2, Play, Pause, Wand2, Loader2, Volume2, AlertCircle } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Menu, User as UserIcon, X, Plus, Trash2, Play, Pause, Wand2, Loader2, Volume2, AlertCircle, MessagesSquare } from 'lucide-react';
 import { RusticIconButton } from '@/components/ui/rustic-icon-button';
 import { useI18n } from '@/context/i18n-context';
 import React from 'react';
@@ -21,6 +21,8 @@ import { useToast } from '@/hooks/use-toast';
 import { CharacterSheet } from './CharacterSheet';
 import { PartyMembers } from './PartyMembers';
 import { CharacterPanel } from './CharacterPanel';
+import { ChatPanel } from '../components/ChatPanel';
+import { useChatUnread } from '@/hooks/use-chat-unread';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -50,6 +52,8 @@ export default function PlayerViewPage() {
     const [hasBeenPlayed, setHasBeenPlayed] = useState(false);
     const isInitialLoad = useRef(true);
     const [animationTick, setAnimationTick] = useState(0);
+    const [isChatOpen, setIsChatOpen] = useState(false);
+    const { unreadCount, markAsRead } = useChatUnread(campaign?.id, user?.id);
 
     const isMaster = activeRole === 'gm';
 
@@ -722,6 +726,23 @@ export default function PlayerViewPage() {
 
                 {(canGoPrev || canGoNext) && <div className="h-6 w-px bg-white/20" />}
 
+                <div className="relative">
+                    <RusticIconButton
+                        tooltip="Chat"
+                        onClick={() => setIsChatOpen(true)}
+                        className="text-white/90 hover:text-white"
+                    >
+                        <MessagesSquare />
+                    </RusticIconButton>
+                    {unreadCount > 0 && (
+                        <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold animate-pulse">
+                            {unreadCount > 9 ? '9+' : unreadCount}
+                        </div>
+                    )}
+                </div>
+
+                <div className="h-6 w-px bg-white/20" />
+
                 <RusticIconButton
                     tooltip="Toggle Menu"
                     onClick={() => setIsMenuSheetOpen(true)}
@@ -730,6 +751,14 @@ export default function PlayerViewPage() {
                     <Menu />
                 </RusticIconButton>
             </div>
+
+            {/* Chat Panel */}
+            {isChatOpen && (
+                <ChatPanel
+                    onClose={() => setIsChatOpen(false)}
+                    onOpen={markAsRead}
+                />
+            )}
 
              <Sheet open={isMenuSheetOpen} onOpenChange={setIsMenuSheetOpen}>
                  <SheetContent side="right" className="p-0 w-80 bg-sidebar-gradient border-l-0 text-sidebar-foreground">
