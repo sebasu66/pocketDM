@@ -19,6 +19,7 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [repeatCount, setRepeatCount] = useState(0);
   const repeatTargetRef = useRef(Math.floor(Math.random() * 3) + 1); // Random 1-3 repeats
+  const [isVideoLoading, setIsVideoLoading] = useState(false);
 
   // Parse Savage Worlds attributes
   const attributes = character.attributes || {
@@ -53,6 +54,12 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
   const videoList = availableVideos[character.visualPreset] || [`${character.visualPreset}_live.mp4`];
   const currentVideoUrl = `/characters/VisualPreset/${encodeURIComponent(character.visualPreset)}/${videoList[currentVideoIndex]}`;
 
+  // Reset video error when switching to a new video
+  useEffect(() => {
+    setVideoError(false);
+    setIsVideoLoading(true);
+  }, [currentVideoIndex]);
+
   // Video loop with 2-second pause and random cycling
   useEffect(() => {
     const video = videoRef.current;
@@ -77,13 +84,11 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
         } else {
           // Repeat the same video
           setRepeatCount(prev => prev + 1);
+          video.currentTime = 0;
+          video.play().catch(err => {
+            console.error("Error playing video:", err);
+          });
         }
-
-        video.currentTime = 0;
-        video.play().catch(err => {
-          console.error("Error playing video:", err);
-          setVideoError(true);
-        });
       }, 2000); // 2 second pause
     };
 
@@ -97,7 +102,7 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
   return (
     <div className="h-full w-full overflow-y-auto relative bg-slate-900">
       {/* Full-width Video Background - Upper Section */}
-      <div className="relative w-full h-[50vh] md:h-[55vh] overflow-hidden">
+      <div className="relative w-full h-[50vh] md:h-[55vh] overflow-hidden bg-slate-800">
         {!videoError ? (
           <video
             key={currentVideoUrl}
@@ -106,7 +111,13 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
             autoPlay
             muted
             playsInline
-            onError={() => setVideoError(true)}
+            onError={(e) => {
+              console.error('Video load error:', currentVideoUrl, e);
+              setVideoError(true);
+            }}
+            onLoadStart={() => setIsVideoLoading(true)}
+            onLoadedData={() => setIsVideoLoading(false)}
+            onCanPlay={() => setIsVideoLoading(false)}
           >
             <source
               src={currentVideoUrl}
@@ -115,11 +126,18 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
           </video>
         ) : (
           <Image
-            src={`/characters/VisualPreset/${encodeURIComponent(character.visualPreset)}/portrait.jpg`}
+            src={`/characters/VisualPreset/${encodeURIComponent(character.visualPreset)}/portrait.png`}
             alt={character.name}
             fill
             className="object-cover"
           />
+        )}
+
+        {/* Loading indicator */}
+        {isVideoLoading && !videoError && (
+          <div className="absolute inset-0 flex items-center justify-center bg-slate-900/50">
+            <div className="text-white/70">Loading...</div>
+          </div>
         )}
 
         {/* Dark gradient overlay at bottom of video */}
