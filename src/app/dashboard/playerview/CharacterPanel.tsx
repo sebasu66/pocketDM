@@ -44,7 +44,7 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
   // Build list of available videos for this character
   // Statically defined based on known files (since we're caching everything)
   const availableVideos: Record<string, string[]> = {
-    avenger: ['avenger_live.mp4'],
+    avenger: ['avenger_live.mp4', 'avenger_live2.mp4', 'avenger_live3.mp4', 'avenger_live4.mp4', 'avenger_live5.mp4', 'avenger_live6.mp4'],
     bladedancer: ['bladedancer_live.mp4', 'bladedancer_live2.mp4'],
     paladin: ['paladin_live.mp4', 'paladin_live2.mp4'],
     sorceress: ['sorceress_live.mp4'],
