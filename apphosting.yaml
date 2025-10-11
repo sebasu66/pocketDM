@@ -1,3 +1,15 @@
+# Specifies the version of the App Hosting schema.
+schemaVersion: v1alpha1
+
+# Settings for the build process.
+build:
+  # The command to run to build the application.
+  run:
+    - npm install
+    - npm run build
+  # The output directory of the build.
+  outputDir: .next
+
 # Settings for Backend (on Cloud Run).
 # See https://firebase.google.com/docs/app-hosting/configure#cloud-run.
 runConfig:
