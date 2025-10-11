@@ -18,6 +18,10 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoError, setVideoError] = useState(false);
   const [isVideoPaused, setIsVideoPaused] = useState(false);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [repeatCount, setRepeatCount] = useState(0);
+  const repeatTargetRef = useRef(Math.floor(Math.random() * 3) + 1); // Random 1-3 repeats
+  const [isVideoLoading, setIsVideoLoading] = useState(false);
 
   // Parse Savage Worlds attributes
   const attributes = character.attributes || {
@@ -40,57 +44,92 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
   // Get enriched context for stats, quests, NPCs, objectives
   const context = character.enriched_context;
 
-  // Video loop with 2-second pause
+  // Build list of available videos for this character
+  // Statically defined based on known files (since we're caching everything)
+  const availableVideos: Record<string, string[]> = {
+    avenger: ['avenger_live.mp4', 'avenger_live2.mp4', 'avenger_live3.mp4', 'avenger_live4.mp4', 'avenger_live5.mp4', 'avenger_live6.mp4'],
+    bladedancer: ['bladedancer_live.mp4', 'bladedancer_live2.mp4'],
+    paladin: ['paladin_live.mp4', 'paladin_live2.mp4'],
+    sorceress: ['sorceress_live.mp4'],
+  };
+
+  const videoList = availableVideos[character.visualPreset] || [`${character.visualPreset}_live.mp4`];
+  const currentVideoUrl = `/characters/VisualPreset/${encodeURIComponent(character.visualPreset)}/${videoList[currentVideoIndex]}`;
+
+  // Reset video error when switching to a new video
+  useEffect(() => {
+    setVideoError(false);
+    setIsVideoLoading(true);
+  }, [currentVideoIndex]);
+
+  // Video loop logic
   useEffect(() => {
     const video = videoRef.current;
     if (!video || videoError) return;
-
+  
     const handleVideoEnd = () => {
-      setIsVideoPaused(true);
-      const timeoutId = setTimeout(() => {
-        setIsVideoPaused(false); // This will trigger the other useEffect to play the video
-      }, 2000); // 2 second pause
-      
-      return () => clearTimeout(timeoutId);
+      setIsVideoPaused(true); // Pause visually
+  
+      setTimeout(() => {
+        setIsVideoPaused(false); // Unpause to allow next play
+  
+        // Check if we should switch to a different video
+        if (repeatCount + 1 >= repeatTargetRef.current && videoList.length > 1) {
+          // Switch to a different random video, ensuring it's a valid index
+          let nextIndex;
+          do {
+            nextIndex = Math.floor(Math.random() * videoList.length);
+          } while (nextIndex === currentVideoIndex);
+          
+          setCurrentVideoIndex(nextIndex);
+          setRepeatCount(0);
+          repeatTargetRef.current = Math.floor(Math.random() * 3) + 1; // New random repeat count (1-3)
+        } else {
+          // Repeat the same video
+          setRepeatCount(prev => prev + 1);
+          if (videoRef.current) {
+            videoRef.current.currentTime = 0;
+            videoRef.current.play().catch(err => {
+              console.error("Error replaying video:", err);
+              if (err.name !== 'AbortError') {
+                setVideoError(true);
+              }
+            });
+          }
+        }
+      }, 2000); // 2-second pause
     };
-
+  
     video.addEventListener('ended', handleVideoEnd);
-
+  
     return () => {
       if (video) {
         video.removeEventListener('ended', handleVideoEnd);
       }
     };
-  }, [videoError]);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (video && !isVideoPaused && !videoError) {
-      video.currentTime = 0;
-      video.play().catch(err => {
-        // This catch block is important to handle the specific error.
-        if (err.name !== 'AbortError') {
-          setVideoError(true);
-        }
-      });
-    }
-  }, [isVideoPaused, videoError]);
+  }, [videoError, currentVideoIndex, repeatCount, videoList.length]);
 
   return (
     <div className="h-full w-full overflow-y-auto relative bg-slate-900">
       {/* Full-width Video Background - Upper Section */}
-      <div className="relative w-full h-[50vh] md:h-[55vh] overflow-hidden">
+      <div className="relative w-full h-[50vh] md:h-[55vh] overflow-hidden bg-slate-800">
         {!videoError ? (
           <video
+            key={currentVideoUrl}
             ref={videoRef}
             className="w-full h-full object-cover"
             autoPlay
             muted
             playsInline
-            onError={() => setVideoError(true)}
+            onError={() => {
+              setVideoError(true);
+            }}
+            onLoadStart={() => setIsVideoLoading(true)}
+            onLoadedData={() => setIsVideoLoading(false)}
+            onCanPlay={() => setIsVideoLoading(false)}
           >
             <source
-              src={`/characters/VisualPreset/${encodeURIComponent(character.visualPreset)}/${encodeURIComponent(character.visualPreset)}_live.mp4`}
+              src={currentVideoUrl}
               type="video/mp4"
             />
           </video>
@@ -102,6 +141,13 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
             className="object-cover"
             priority
           />
+        )}
+
+        {/* Loading indicator */}
+        {isVideoLoading && !videoError && (
+          <div className="absolute inset-0 flex items-center justify-center bg-slate-900/50">
+            <div className="text-white/70">Loading...</div>
+          </div>
         )}
 
         {/* Dark gradient overlay at bottom of video */}
@@ -119,15 +165,15 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
       </div>
 
       {/* Parchment Paper Stats Section - Overlapping bottom of video */}
-      <div className="relative -mt-16 px-3 md:px-6 pb-6 z-20">
+      <div className="relative -mt-16 w-full z-20">
         <div
-          className="relative bg-[url('/ui/parchment.jpg')] bg-cover bg-center rounded-lg shadow-2xl border-2 border-amber-900/50"
+          className="relative bg-[url('/ui/parchment.jpg')] bg-cover bg-center shadow-2xl w-full"
           style={{
             backgroundBlendMode: 'multiply',
             backgroundColor: 'rgba(245, 222, 179, 0.95)'
           }}
         >
-          <div className="p-4 md:p-6">
+          <div className="p-4 md:p-6 pb-6">
             {/* Stats Summary from enriched_context */}
             {context?.stats && (
               <>
@@ -350,6 +396,5 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
       </div>
     </div>
   );
-}
 
     
