@@ -1,8 +1,5 @@
-
-import withPWAInit from "next-pwa";
-
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const baseConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -22,16 +19,28 @@ const nextConfig = {
         hostname: 'picsum.photos',
         port: '',
         pathname: '/**',
-      }
+      },
     ],
   },
 };
 
-const withPWA = withPWAInit({
-  dest: "public",
-  disable: process.env.NODE_ENV === "development",
-  register: true,
-  skipWaiting: true,
-});
+const isProd = process.env.NODE_ENV === 'production';
 
-export default withPWA(nextConfig);
+export default (async () => {
+  if (isProd) {
+    try {
+      const withPWAInit = (await import('next-pwa')).default;
+      const withPWA = withPWAInit({
+        dest: 'public',
+        disable: process.env.NODE_ENV === 'development',
+        register: true,
+        skipWaiting: true,
+      });
+      return withPWA(baseConfig);
+    } catch (err) {
+      console.warn('⚠️ Warning: next-pwa could not be loaded. Skipping PWA integration.', err);
+    }
+  }
+
+  return baseConfig;
+})();
