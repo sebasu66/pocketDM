@@ -271,29 +271,7 @@ const AppLayoutContent = ({ children }: { children: React.ReactNode }) => {
       <TooltipProvider>
         <div className="min-h-screen w-full">
           <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-            <header className="flex items-center justify-between p-4 border-b border-border/20 bg-background/80 backdrop-blur-sm sticky top-0 z-20">
-              <div className="flex items-center gap-2">
-                 <div className="flex items-center gap-2">
-                    <RusticIconButton
-                        variant="incomplete"
-                        tooltip="Toggle Menu"
-                        onClick={() => setIsSheetOpen(true)}
-                        className="h-12 w-12 text-foreground/80 hover:text-foreground/100"
-                    >
-                        <Menu size={20} />
-                    </RusticIconButton>
-                  <h2 className="text-2xl font-semibold font-headline">{pageTitles[pathname] || "Dashboard"}</h2>
-                 </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <Input placeholder={t('searchInputPlaceholder')} className="hidden md:block w-64 bg-background" />
-                <UserNav />
-              </div>
-            </header>
-
-            <main 
-              className="p-4 md:p-6 bg-cover bg-fixed bg-center"
-            >
+            <main className="bg-cover bg-fixed bg-center">
               {children}
             </main>
             

@@ -561,17 +561,9 @@ export default function PlayerViewPage() {
                                     </div>
                                 )}
 
-                                {activeNode.audio_url && activeNode.audio_status === 'ready' && (
-                                    <div className="mt-4 flex justify-center items-center">
-                                        <audio ref={audioRef} src={activeNode.audio_url} onEnded={handleAudioEnded} />
-                                        <RusticIconButton
-                                            tooltip={isPlaying ? 'Pausar' : 'Reproducir'}
-                                            onClick={togglePlayPause}
-                                            className="w-20 h-20 text-white/90 hover:text-white"
-                                        >
-                                            {isPlaying ? <Pause size={36} /> : <Play size={36} />}
-                                        </RusticIconButton>
-                                    </div>
+                                {/* Hidden audio element for mobile */}
+                                {activeNode.audio_url && (
+                                    <audio ref={audioRef} src={activeNode.audio_url} onEnded={handleAudioEnded} />
                                 )}
                             </div>
 
