@@ -524,10 +524,13 @@ export default function PlayerViewPage() {
                 <div
                     className="flex transition-transform duration-300 ease-out h-full w-full pt-16"
                     style={{
-                        transform: currentPanel === 'character' ? 'translateX(0%)' :
-                                   currentPanel === 'narrative' ? 'translateX(-100%)' :
-                                   'translateX(-200%)',
-                        width: '300%' // 3 panels
+                        transform: playerCharacter
+                            ? (currentPanel === 'character' ? 'translateX(0%)' :
+                               currentPanel === 'narrative' ? 'translateX(-100%)' :
+                               'translateX(-200%)')
+                            : (currentPanel === 'narrative' ? 'translateX(0%)' :
+                               'translateX(-100%)'),
+                        width: playerCharacter ? '300%' : '200%' // 2-3 panels depending on character
                     }}
                 >
                     {/* Character Panel */}
@@ -538,7 +541,7 @@ export default function PlayerViewPage() {
                     )}
 
                     {/* Narrative Panel (duplicated content from desktop) */}
-                    <div className="w-1/3 h-full overflow-y-auto p-4">
+                    <div className={`${playerCharacter ? 'w-1/3' : 'w-1/2'} h-full overflow-y-auto p-4`}>
                         <div className="min-h-[calc(100vh-10rem)]">
                             <div className="text-center mb-8">
                                 <h1 className="text-3xl md:text-5xl font-headline uppercase tracking-widest">
@@ -631,7 +634,7 @@ export default function PlayerViewPage() {
                     </div>
 
                     {/* Map Panel (placeholder for now) */}
-                    <div className="w-1/3 h-full overflow-y-auto p-4 flex items-center justify-center">
+                    <div className={`${playerCharacter ? 'w-1/3' : 'w-1/2'} h-full overflow-y-auto p-4 flex items-center justify-center`}>
                         <div className="text-center">
                             <h2 className="text-2xl font-headline text-foreground/80">MAP</h2>
                             <p className="text-foreground/60 mt-2">Próximamente</p>
