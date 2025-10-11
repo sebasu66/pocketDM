@@ -32,16 +32,17 @@ export function AnimatedPanel({
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Auto-cycle through images
+  // Auto-cycle through images and video
   useEffect(() => {
-    if (images.length > 1) {
+    const totalItems = (images.length || 0) + (videoUrl ? 1 : 0);
+    if (totalItems > 1) {
       const interval = setInterval(() => {
-        setCurrentImageIndex((prev) => (prev + 1) % images.length);
-      }, 4000); // Change image every 4 seconds
+        setCurrentImageIndex((prev) => (prev + 1) % totalItems);
+      }, 4000); // Change media every 4 seconds
 
       return () => clearInterval(interval);
     }
-  }, [images.length]);
+  }, [images.length, videoUrl]);
 
   // Panel-specific styles
   const panelStyles = {
@@ -85,31 +86,41 @@ export function AnimatedPanel({
     >
       {/* Background Media Layer */}
       <div className="absolute inset-0 z-0">
-        {videoUrl ? (
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover"
-          >
-            <source src={videoUrl} type="video/mp4" />
-          </video>
-        ) : images.length > 0 ? (
+        {images.length > 0 || videoUrl ? (
           <div className="relative w-full h-full">
-            {images.map((img, index) => (
-              <Image
-                key={index}
-                src={img}
-                alt={`${title} background ${index + 1}`}
-                fill
-                sizes="100vw"
+            {/* Video (shown first if exists) */}
+            {videoUrl && (
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
                 className={`
-                  object-cover transition-opacity duration-1000
-                  ${index === currentImageIndex ? 'opacity-100' : 'opacity-0'}
+                  w-full h-full object-cover transition-opacity duration-1000
+                  ${currentImageIndex === 0 ? 'opacity-100' : 'opacity-0'}
                 `}
-              />
-            ))}
+              >
+                <source src={videoUrl} type="video/mp4" />
+              </video>
+            )}
+
+            {/* Images */}
+            {images.map((img, index) => {
+              const displayIndex = videoUrl ? index + 1 : index;
+              return (
+                <Image
+                  key={index}
+                  src={img}
+                  alt={`${title} background ${index + 1}`}
+                  fill
+                  sizes="100vw"
+                  className={`
+                    object-cover transition-opacity duration-1000
+                    ${displayIndex === currentImageIndex ? 'opacity-100' : 'opacity-0'}
+                  `}
+                />
+              );
+            })}
           </div>
         ) : (
           <div className={`w-full h-full bg-gradient-to-br ${style.gradient}`} />

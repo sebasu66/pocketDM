@@ -177,10 +177,12 @@ export default function DashboardPage() {
           title={t('dashboardMyCharacter')}
           subtitle={hasCharacter ? t('dashboardMyCharacterSubtitleView') : t('dashboardMyCharacterSubtitleCreate')}
           contextLabel={hasCharacter ? t('dashboardMyCharacterActive') : t('dashboardMyCharacterStartHere')}
+          videoUrl="/ui/banner_button_bkg/character_creation.mp4"
           images={[
-            "/locations/character1.jpg",
-            "/locations/character2.jpg",
-            "/locations/character3.jpg"
+            "/ui/banner_button_bkg/my_character_1.png",
+            "/ui/banner_button_bkg/my_character_2.png",
+            "/ui/banner_button_bkg/my_character_3.png",
+            "/ui/banner_button_bkg/my_character_4.png"
           ]}
           onClick={() => router.push("/dashboard/characters")}
           panelStyle="character"
