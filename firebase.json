@@ -25,5 +25,10 @@
       "host": "127.0.0.1"
     },
     "singleProjectMode": true
-  }
+  },
+  "hosting": {
+  "source": "app",
+  "frameworksBackend": {}
+}
+
 }
