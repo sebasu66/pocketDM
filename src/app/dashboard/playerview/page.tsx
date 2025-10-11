@@ -124,7 +124,7 @@ export default function PlayerViewPage() {
                     );
                 } else {
                     console.log("[PlayerView] No character found, showing campaign status");
-                    // No character - show campaign status for both GMs and Players
+                    // No character - show campaign status for GMs and Players
                     setIsLoading(false);
                 }
 
@@ -362,7 +362,7 @@ export default function PlayerViewPage() {
 
         return (
              <div className="min-h-[60vh] flex flex-col items-center justify-center text-center p-8">
-                <h1 className="text-4xl font-headline uppercase tracking-widest mb-6">{campaign?.title || t('notFoundTitle')}</h1>
+                <h1 className="text-4xl font-headline uppercase tracking-widest mb-6">{campaign?.campaign_name || t('notFoundTitle')}</h1>
 
                 {/* Animated Status Indicator */}
                 <div className={`flex flex-col items-center justify-center gap-6 my-8 ${campaignStatusIndicator.className}`}>
@@ -418,7 +418,7 @@ export default function PlayerViewPage() {
                 {/* Campaign Title Column */}
                 <div className="flex items-center justify-center p-4 z-10 bg-leather-column drop-shadow-2xl">
                     <h2 className="font-headline text-2xl text-foreground/80 [writing-mode:vertical-rl] rotate-180 uppercase tracking-widest">
-                        {campaign?.title}
+                        {campaign?.campaign_name}
                     </h2>
                 </div>
 
@@ -516,7 +516,7 @@ export default function PlayerViewPage() {
                 {/* Mobile Campaign Title Header */}
                 <div className="absolute top-0 left-0 right-0 z-20 text-center h-16 flex items-center justify-center bg-leather-column drop-shadow-2xl">
                     <h2 className="font-body text-xl text-foreground/80 uppercase tracking-widest">
-                        {campaign?.title}
+                        {campaign?.campaign_name}
                     </h2>
                 </div>
 
@@ -535,13 +535,13 @@ export default function PlayerViewPage() {
                 >
                     {/* Character Panel */}
                     {playerCharacter && (
-                        <div className="w-1/3 h-full overflow-y-auto">
+                        <div className="w-full h-full overflow-y-auto">
                             <CharacterPanel character={playerCharacter} t={t} />
                         </div>
                     )}
 
-                    {/* Narrative Panel (duplicated content from desktop) */}
-                    <div className={`${playerCharacter ? 'w-1/3' : 'w-1/2'} h-full overflow-y-auto p-4`}>
+                    {/* Narrative Panel */}
+                    <div className="w-full h-full overflow-y-auto p-4">
                         <div className="min-h-[calc(100vh-10rem)]">
                             <div className="text-center mb-8">
                                 <h1 className="text-3xl md:text-5xl font-headline uppercase tracking-widest">
@@ -569,7 +569,7 @@ export default function PlayerViewPage() {
 
                             <div className="prose prose-lg prose-invert max-w-none text-foreground/90 leading-relaxed">
                                 <div
-                                    className="relative aspect-[4/3] w-full image-mask-squared float-left mr-4 mb-4"
+                                    className="relative aspect-[4/3] w-full image-mask-squared float-none sm:float-left mr-4 mb-4"
                                     data-ai-hint="fantasy scene"
                                 >
                                     <Image
@@ -626,7 +626,7 @@ export default function PlayerViewPage() {
                     </div>
 
                     {/* Map Panel (placeholder for now) */}
-                    <div className={`${playerCharacter ? 'w-1/3' : 'w-1/2'} h-full overflow-y-auto p-4 flex items-center justify-center`}>
+                    <div className="w-full h-full overflow-y-auto p-4 flex items-center justify-center">
                         <div className="text-center">
                             <h2 className="text-2xl font-headline text-foreground/80">MAP</h2>
                             <p className="text-foreground/60 mt-2">Próximamente</p>
@@ -758,7 +758,7 @@ export default function PlayerViewPage() {
              <Sheet open={isMenuSheetOpen} onOpenChange={setIsMenuSheetOpen}>
                  <SheetContent side="right" className="p-0 w-80 bg-sidebar-gradient border-l-0 text-sidebar-foreground">
                     <SheetHeader className="p-4">
-                        <SheetTitle className="font-headline text-2xl text-white">{campaign?.title}</SheetTitle>
+                        <SheetTitle className="font-headline text-2xl text-white">{campaign?.campaign_name}</SheetTitle>
                     </SheetHeader>
                     <div className="p-2">
                        { isMaster ? 
