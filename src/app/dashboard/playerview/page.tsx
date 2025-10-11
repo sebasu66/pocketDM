@@ -47,6 +47,7 @@ export default function PlayerViewPage() {
 
     const audioRef = useRef<HTMLAudioElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [hasBeenPlayed, setHasBeenPlayed] = useState(false);
     const isInitialLoad = useRef(true);
     const [animationTick, setAnimationTick] = useState(0);
 
@@ -263,6 +264,7 @@ export default function PlayerViewPage() {
                 audioRef.current.pause();
             } else {
                 audioRef.current.play();
+                setHasBeenPlayed(true); // Stop pulsing once played
             }
             setIsPlaying(!isPlaying);
         }
@@ -271,6 +273,16 @@ export default function PlayerViewPage() {
     const handleAudioEnded = () => {
         setIsPlaying(false);
     };
+
+    // Reset audio state when node changes
+    useEffect(() => {
+        setIsPlaying(false);
+        setHasBeenPlayed(false);
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.currentTime = 0;
+        }
+    }, [activeNodeIndex]);
 
   const handleRestart = async () => {
     if (!campaign) return;
@@ -408,13 +420,7 @@ export default function PlayerViewPage() {
 
                 {/* Main Narrative Panel */}
                 <div className="flex-1 md:p-8 z-10 overflow-y-auto min-w-0">
-                 
-                <div className="md:hidden text-center h-20 flex items-center justify-center bg-leather-column drop-shadow-2xl mb-8">
-                    <h2 className="font-body text-2xl text-foreground/80 uppercase tracking-widest">
-                        {campaign?.title}
-                    </h2>
-                </div>
-                
+
                 <div className="p-4 md:p-0 min-h-[calc(100vh-10rem)]">
                     <div className="text-center mb-8 md:mb-12">
                         <h1 className="text-4xl md:text-7xl font-headline uppercase tracking-widest">
@@ -435,17 +441,9 @@ export default function PlayerViewPage() {
                             </div>
                         )}
 
-                        {activeNode.audio_url && activeNode.audio_status === 'ready' && (
-                            <div className="mt-4 flex justify-center items-center">
-                                <audio ref={audioRef} src={activeNode.audio_url} onEnded={handleAudioEnded} />
-                                <RusticIconButton
-                                    tooltip={isPlaying ? 'Pausar' : 'Reproducir'}
-                                    onClick={togglePlayPause}
-                                    className="w-24 h-24 text-white/90 hover:text-white"
-                                >
-                                    {isPlaying ? <Pause size={48} /> : <Play size={48} />}
-                                </RusticIconButton>
-                            </div>
+                        {/* Hidden audio element */}
+                        {activeNode.audio_url && (
+                            <audio ref={audioRef} src={activeNode.audio_url} onEnded={handleAudioEnded} />
                         )}
                     </div>
 
@@ -665,8 +663,44 @@ export default function PlayerViewPage() {
                 </div>
             </div>
 
+            {/* Top Right Character Icon */}
+            <div className="fixed top-6 right-6 z-30">
+                <RusticIconButton
+                    tooltip={t('charactersViewEditSheet')}
+                    onClick={() => setIsCharacterSheetOpen(true)}
+                    className="text-white/90 hover:text-white bg-black/20 backdrop-blur-sm"
+                    disabled={!playerCharacter}
+                >
+                    <UserIcon />
+                </RusticIconButton>
+            </div>
+
             {/* Bottom Right Controls */}
             <div className="fixed bottom-6 right-6 z-30 flex h-14 items-center gap-2 rounded-full bg-black/20 p-2 backdrop-blur-sm">
+                {/* Audio Button */}
+                {activeNode?.audio_url && (
+                    <>
+                        <RusticIconButton
+                            tooltip={
+                                activeNode.audio_status === 'generating'
+                                    ? 'Generando audio...'
+                                    : isPlaying
+                                        ? 'Pausar'
+                                        : 'Reproducir'
+                            }
+                            onClick={togglePlayPause}
+                            className={`
+                                ${activeNode.audio_status === 'ready' && !hasBeenPlayed ? 'animate-pulse' : ''}
+                                ${activeNode.audio_status === 'ready' ? 'text-green-500 hover:text-green-400' : 'text-white/90 hover:text-white'}
+                            `}
+                            disabled={activeNode.audio_status !== 'ready'}
+                        >
+                            {isPlaying ? <Pause /> : <Volume2 />}
+                        </RusticIconButton>
+                        <div className="h-6 w-px bg-white/20" />
+                    </>
+                )}
+
                 {canGoPrev && (
                     <RusticIconButton
                         tooltip={t('designTestPreviousPost')}
@@ -687,15 +721,6 @@ export default function PlayerViewPage() {
                 )}
 
                 {(canGoPrev || canGoNext) && <div className="h-6 w-px bg-white/20" />}
-
-                 <RusticIconButton
-                    tooltip={t('charactersViewEditSheet')}
-                    onClick={() => setIsCharacterSheetOpen(true)}
-                    className="text-white/90 hover:text-white"
-                    disabled={!playerCharacter}
-                >
-                    <UserIcon />
-                </RusticIconButton>
 
                 <RusticIconButton
                     tooltip="Toggle Menu"
