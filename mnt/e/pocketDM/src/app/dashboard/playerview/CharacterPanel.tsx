@@ -70,7 +70,6 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
       video.play().catch(err => {
         // This catch block is important to handle the specific error.
         if (err.name !== 'AbortError') {
-          console.error("Error playing video:", err);
           setVideoError(true);
         }
       });
@@ -352,3 +351,5 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
     </div>
   );
 }
+
+    
