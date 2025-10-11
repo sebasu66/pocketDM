@@ -16,6 +16,9 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoError, setVideoError] = useState(false);
   const [isVideoPaused, setIsVideoPaused] = useState(false);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [repeatCount, setRepeatCount] = useState(0);
+  const repeatTargetRef = useRef(Math.floor(Math.random() * 3) + 1); // Random 1-3 repeats
 
   // Parse Savage Worlds attributes
   const attributes = character.attributes || {
@@ -38,7 +41,19 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
   // Get enriched context for stats, quests, NPCs, objectives
   const context = character.enriched_context;
 
-  // Video loop with 2-second pause
+  // Build list of available videos for this character
+  // Statically defined based on known files (since we're caching everything)
+  const availableVideos: Record<string, string[]> = {
+    avenger: ['avenger_live.mp4'],
+    bladedancer: ['bladedancer_live.mp4', 'bladedancer_live2.mp4'],
+    paladin: ['paladin_live.mp4', 'paladin_live2.mp4'],
+    sorceress: ['sorceress_live.mp4'],
+  };
+
+  const videoList = availableVideos[character.visualPreset] || [`${character.visualPreset}_live.mp4`];
+  const currentVideoUrl = `/characters/VisualPreset/${encodeURIComponent(character.visualPreset)}/${videoList[currentVideoIndex]}`;
+
+  // Video loop with 2-second pause and random cycling
   useEffect(() => {
     const video = videoRef.current;
     if (!video || videoError) return;
@@ -47,6 +62,23 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
       setIsVideoPaused(true);
       setTimeout(() => {
         setIsVideoPaused(false);
+
+        // Check if we should switch to a different video
+        if (repeatCount + 1 >= repeatTargetRef.current && videoList.length > 1) {
+          // Switch to a different random video
+          let nextIndex;
+          do {
+            nextIndex = Math.floor(Math.random() * videoList.length);
+          } while (nextIndex === currentVideoIndex && videoList.length > 1);
+
+          setCurrentVideoIndex(nextIndex);
+          setRepeatCount(0);
+          repeatTargetRef.current = Math.floor(Math.random() * 3) + 1; // New random repeat count (1-3)
+        } else {
+          // Repeat the same video
+          setRepeatCount(prev => prev + 1);
+        }
+
         video.currentTime = 0;
         video.play().catch(err => {
           console.error("Error playing video:", err);
@@ -60,7 +92,7 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
     return () => {
       video.removeEventListener('ended', handleVideoEnd);
     };
-  }, [videoError]);
+  }, [videoError, currentVideoIndex, repeatCount, videoList.length]);
 
   return (
     <div className="h-full w-full overflow-y-auto relative bg-slate-900">
@@ -68,6 +100,7 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
       <div className="relative w-full h-[50vh] md:h-[55vh] overflow-hidden">
         {!videoError ? (
           <video
+            key={currentVideoUrl}
             ref={videoRef}
             className="w-full h-full object-cover"
             autoPlay
@@ -76,7 +109,7 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
             onError={() => setVideoError(true)}
           >
             <source
-              src={`/characters/VisualPreset/${encodeURIComponent(character.visualPreset)}/${encodeURIComponent(character.visualPreset)}_live.mp4`}
+              src={currentVideoUrl}
               type="video/mp4"
             />
           </video>
