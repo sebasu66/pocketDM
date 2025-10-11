@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Character } from "@/lib/firebase/types";
@@ -46,16 +47,11 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
 
     const handleVideoEnd = () => {
       setIsVideoPaused(true);
-      setTimeout(() => {
-        setIsVideoPaused(false);
-        if (videoRef.current) {
-          videoRef.current.currentTime = 0;
-          videoRef.current.play().catch(err => {
-            console.error("Error playing video:", err);
-            setVideoError(true);
-          });
-        }
+      const timeoutId = setTimeout(() => {
+        setIsVideoPaused(false); // This will trigger the other useEffect to play the video
       }, 2000); // 2 second pause
+      
+      return () => clearTimeout(timeoutId);
     };
 
     video.addEventListener('ended', handleVideoEnd);
@@ -66,6 +62,20 @@ export function CharacterPanel({ character, t }: CharacterPanelProps) {
       }
     };
   }, [videoError]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video && !isVideoPaused && !videoError) {
+      video.currentTime = 0;
+      video.play().catch(err => {
+        // This catch block is important to handle the specific error.
+        if (err.name !== 'AbortError') {
+          console.error("Error playing video:", err);
+          setVideoError(true);
+        }
+      });
+    }
+  }, [isVideoPaused, videoError]);
 
   return (
     <div className="h-full w-full overflow-y-auto relative bg-slate-900">
