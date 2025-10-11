@@ -1,0 +1,33 @@
+{
+  "rules": {
+    "campaigns": {
+      "$campaignId": {
+        "messages": {
+          ".read": "auth != null",
+          ".write": "auth != null",
+          "$messageId": {
+            ".validate": "newData.hasChildren(['campaignId', 'userId', 'userName', 'text', 'timestamp'])",
+            "campaignId": {
+              ".validate": "newData.val() == $campaignId"
+            },
+            "userId": {
+              ".validate": "newData.val() == auth.uid"
+            },
+            "userName": {
+              ".validate": "newData.isString() && newData.val().length > 0"
+            },
+            "characterName": {
+              ".validate": "!newData.exists() || newData.isString()"
+            },
+            "text": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 500"
+            },
+            "timestamp": {
+              ".validate": "newData.val() == now"
+            }
+          }
+        }
+      }
+    }
+  }
+}
