@@ -1,0 +1,40 @@
+{
+  "hosting": {
+    "target": "prototipos",
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/boveda",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/boveda/**",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/grafo",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/grafo/**",
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "/data/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public,max-age=60"
+          }
+        ]
+      }
+    ]
+  }
+}

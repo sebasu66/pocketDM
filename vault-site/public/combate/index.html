@@ -1,0 +1,1996 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Carriles · Prototipo A</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@600;700&family=Crimson+Pro:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/Flip.min.js"></script>
+<style>
+:root{
+  --bg:#120e0b;--panel:#1a1410;--panel-2:#231a13;--ink:#eadfc8;--muted:#a39579;--line:#3b2f22;
+  --gold:#d2ad62;--blood:#d0553a;--steel:#86a9cf;--sage:#8cc2a8;--violet:#b79ae0;--ember:#f08a3c;--amber:#e8b24a;
+  --frame:#7a6038;--display:'Cormorant SC',Georgia,serif;--body:'Crimson Pro',Georgia,serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#050403;overflow-x:clip;overflow-y:visible}
+html{overflow-y:auto}
+body{font:400 16px/1.25 var(--body);color:var(--ink);-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+#app{position:relative;max-width:440px;height:100vh;height:100dvh;margin:0 auto;overflow-x:clip;overflow-y:visible;background:var(--bg);isolation:isolate}
+.bg{position:absolute;inset:-4%;background:url(assets/bg-hellfrost.jpg) center 30%/cover;filter:brightness(.62) saturate(.85);z-index:-3}
+.vignette{position:absolute;inset:0;background:radial-gradient(120% 85% at 50% 42%,transparent 35%,rgba(0,0,0,.55) 70%,rgba(0,0,0,.92) 100%);pointer-events:none;z-index:-2}
+#snow{position:absolute;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
+#snow i{position:absolute;top:-10px;width:3px;height:3px;border-radius:50%;background:#e9f1ff;opacity:.5}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;visibility:hidden;opacity:0}
+h1,h2,h3{margin:0;font-family:var(--display);font-weight:700;letter-spacing:.03em}
+.frame{position:relative;background:linear-gradient(180deg,rgba(40,30,21,.92),rgba(20,15,11,.94));border:1px solid var(--frame);border-radius:10px;
+  box-shadow:inset 0 1px 0 rgba(255,230,180,.08),inset 0 0 0 1px rgba(0,0,0,.6),0 6px 18px rgba(0,0,0,.55)}
+.frame::before,.frame::after{content:"";position:absolute;width:12px;height:12px;border:2px solid var(--gold);pointer-events:none;opacity:.85}
+.frame::before{top:-2px;left:-2px;border-right:0;border-bottom:0;border-top-left-radius:8px}
+.frame::after{bottom:-2px;right:-2px;border-left:0;border-top:0;border-bottom-right-radius:8px}
+#scr-select{padding:max(22px,env(safe-area-inset-top)) 18px 18px;gap:14px;justify-content:center}
+.eyebrow{font:700 12px/1 var(--display);letter-spacing:.22em;color:var(--muted);text-align:center}
+.title{font-size:58px;line-height:.9;color:var(--gold);text-align:center;text-shadow:0 2px 0 #000,0 0 30px rgba(210,173,98,.35)}
+.lede{text-align:center;color:var(--ink);font-size:17px;max-width:32ch;margin:0 auto;opacity:.92}
+.foes{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.foe{display:grid;grid-template-columns:76px 1fr 18px;gap:12px;align-items:center;padding:10px 12px;text-align:left}
+.foe .pt{width:76px;height:76px;border-radius:50%;overflow:hidden;border:2px solid var(--ring,var(--gold));box-shadow:0 0 0 3px #0c0907,0 0 18px color-mix(in srgb,var(--ring) 40%,transparent)}
+.foe .pt img{width:100%;height:100%;object-fit:cover;display:block}
+.foe h3{font-size:24px;color:var(--ink);line-height:1}
+.foe p{margin:4px 0 0;font-size:15px;color:var(--muted);line-height:1.2}
+.foe .pips{font-size:13px;letter-spacing:.2em;color:var(--ring);margin-top:4px;font-family:var(--display)}
+.foe .go{color:var(--gold);font:700 22px var(--display)}
+.howto{padding:10px 14px;font-size:15px;color:var(--muted);line-height:1.3}
+.howto b{color:var(--ink);font-weight:500}
+.howto .legend{display:flex;gap:14px;margin-top:6px;align-items:center;flex-wrap:wrap}
+.lg{display:inline-flex;gap:6px;align-items:center}
+.lg .d{width:10px;height:10px;transform:rotate(45deg);background:var(--blood)}
+.lg .g{width:18px;height:9px;border-radius:2px;background:linear-gradient(var(--amber),#a47a2c)}
+#scr-fight{padding:max(8px,env(safe-area-inset-top)) 10px 0;gap:6px}
+.ehud{display:grid;grid-template-columns:62px 1fr 30px;gap:10px;align-items:center;padding:7px 10px}
+.portrait{width:62px;height:62px;border-radius:50%;overflow:hidden;border:2px solid var(--ring,var(--gold));box-shadow:0 0 0 3px #0c0907,0 0 16px color-mix(in srgb,var(--ring) 45%,transparent);position:relative}
+.portrait img{width:100%;height:100%;object-fit:cover;display:block}
+.einfo{display:flex;flex-direction:column;gap:4px;min-width:0}
+.erow{display:flex;align-items:center;gap:8px;justify-content:space-between;min-width:0}
+.ename{font:700 19px/1 var(--display);color:var(--gold);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.chip{font:700 13px/1 var(--display);letter-spacing:.06em;padding:3px 6px;border-radius:4px;border:1px solid currentColor;white-space:nowrap;background:#120c08}
+.chip.st{color:var(--amber);visibility:hidden;flex:none}
+.bar{position:relative;height:16px;border-radius:8px;background:#0b0806;border:1px solid #4d3c29;overflow:hidden;box-shadow:inset 0 1px 3px #000}
+.bar .fill{position:absolute;inset:0;transform-origin:left center;will-change:transform}
+.bar.hp .fill{background:linear-gradient(180deg,#e7795d,var(--blood) 55%,#8c2f1d)}
+.bar.post{height:10px}
+.bar.post .fill{background:linear-gradient(180deg,#ffd27a,var(--amber) 55%,#9a6c1f)}
+.bar.php .fill{background:linear-gradient(180deg,#ecd08d,var(--gold) 55%,#8b6a2c)}
+.bar .seg{position:absolute;inset:0;pointer-events:none}
+.bar .num{position:absolute;right:6px;top:50%;transform:translateY(-50%);font:700 13px/1 var(--display);color:#fff;text-shadow:0 1px 2px #000,0 0 4px #000}
+.blab{display:flex;justify-content:space-between;gap:6px;font:700 13px/1 var(--display);color:var(--muted)}
+.blab #eRule{color:var(--ink);opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#btnBack{width:30px;height:30px;border-radius:50%;border:1px solid var(--frame);color:var(--muted);font:700 16px var(--display);align-self:start}
+.clockwrap{padding:7px 8px 6px}
+.clock{display:grid;grid-template-columns:30px 1fr;gap:6px;height:66px}
+.now{position:relative;display:flex;align-items:center;justify-content:center;border-radius:6px;background:linear-gradient(#3b2b19,#1d150e);border:1px solid var(--frame)}
+.now span{writing-mode:vertical-rl;transform:rotate(180deg);font:700 13px/1 var(--display);letter-spacing:.12em;color:var(--gold)}
+.now::after{content:"";position:absolute;right:-5px;top:6px;bottom:6px;width:2px;background:var(--gold);box-shadow:0 0 8px var(--gold)}
+#track{position:relative;border-radius:6px;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,.04),transparent 40%),linear-gradient(180deg,#17110c,#0d0907);border:1px solid #4d3c29;box-shadow:inset 0 2px 8px #000}
+.slot{position:absolute;top:0;bottom:0;border-right:1px dashed rgba(210,173,98,.18)}
+.slot b{position:absolute;bottom:2px;left:0;right:0;text-align:center;font:700 13px/1 var(--display);color:rgba(190,175,145,.75)}
+#goldBlock{position:absolute;left:0;top:38px;height:9px;width:100%;transform-origin:left center;transform:scaleX(0);border-radius:3px;background:linear-gradient(180deg,#ffe3a0,var(--amber) 50%,#8f6420);box-shadow:0 0 10px rgba(232,178,74,.6)}
+#chanBand{position:absolute;left:0;top:17px;height:20px;width:100%;transform-origin:left center;transform:scaleX(0);background:linear-gradient(90deg,rgba(183,154,224,.05),rgba(183,154,224,.32));border-right:2px solid var(--violet)}
+.mk{position:absolute;left:0;top:27px;will-change:transform}
+.mk.dia i{display:block;width:14px;height:14px;margin-top:-7px;transform:rotate(45deg);border:2px solid var(--blood);background:transparent;border-radius:2px}
+.mk.dia.mine i{background:var(--blood);box-shadow:0 0 10px var(--blood)}
+.mk.dia.magic i{border-color:var(--violet)}
+.mk.dia.magic.mine i{background:var(--violet);box-shadow:0 0 10px var(--violet)}
+.mk.dia em{position:absolute;left:50%;top:-25px;transform:translateX(-50%);font:700 13px/1 var(--display);color:var(--ink);font-style:normal;white-space:nowrap;text-shadow:0 1px 2px #000}
+.mk.mv{top:18px;color:var(--sage);font:700 16px/1 var(--display)}
+.mk.sh{top:48px}
+.mk.sh i{display:block;width:10px;height:4px;border-radius:1px;background:var(--steel);opacity:.9}
+.mk.pv-hit i{outline:2px solid #ff8a70;outline-offset:3px}
+.mk.pv-ok i{outline:2px solid var(--sage);outline-offset:3px}
+.intent{display:flex;justify-content:space-between;gap:8px;margin-top:5px;font-size:15px;line-height:1.1;min-height:17px}
+.intent .now-i b{font-family:var(--display);font-weight:700;color:var(--ink);letter-spacing:.03em}
+.intent .red{color:#ff8a70}.intent .vio{color:var(--violet)}
+.intent .next{color:var(--muted);white-space:nowrap}
+#board{position:relative;flex:1;min-height:0;border-radius:12px;overflow:hidden;border:1px solid var(--frame);box-shadow:0 6px 18px rgba(0,0,0,.6)}
+#boardIn{position:absolute;inset:0}
+.lanes{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr)}
+.lane{position:relative;background:url(assets/lane-stone.jpg) center/170px;filter:brightness(.5) saturate(.8);box-shadow:inset 0 0 26px rgba(0,0,0,.9)}
+.lane:nth-child(2){background-position:40px 70px}.lane:nth-child(3){background-position:-60px 20px}
+.lanes::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,6,.85),transparent 30%,transparent 70%,rgba(10,8,6,.6));pointer-events:none}
+.divider{position:absolute;top:0;bottom:0;width:4px;margin-left:-2px;background:linear-gradient(90deg,#000,#5a4630 45%,#000);opacity:.85}
+#laneGlow{position:absolute;left:0;top:0;bottom:0;width:33.334%;background:linear-gradient(0deg,rgba(210,173,98,.24),rgba(210,173,98,.03) 55%,transparent);border-bottom:3px solid var(--gold);pointer-events:none}
+.tok{position:absolute;left:0;top:0;will-change:transform}
+.tok .inner{position:relative;width:0;height:0}
+.tok .body{position:absolute;left:0;top:0;transform:translate(-50%,-50%)}
+.disc{width:68px;height:68px;border-radius:50%;overflow:hidden;border:2px solid var(--ring,var(--gold));background:#0c0907;box-shadow:0 0 0 3px #0c0907,0 0 0 4px rgba(210,173,98,.35),0 8px 18px rgba(0,0,0,.8);position:relative}
+.disc img{width:100%;height:100%;object-fit:cover;display:block}
+.disc svg{width:58%;height:58%;position:absolute;left:21%;top:21%}
+.tok .lbl{position:absolute;left:50%;top:100%;transform:translateX(-50%);margin-top:5px;font:700 13px/1 var(--display);letter-spacing:.06em;color:var(--ink);text-shadow:0 1px 3px #000;white-space:nowrap}
+.mini{position:absolute;left:50%;top:100%;transform:translateX(-50%);margin-top:22px;width:58px;height:7px;border-radius:3px;background:#0b0806;border:1px solid #4d3c29;overflow:hidden}
+.mini i{position:absolute;inset:0;transform-origin:left;background:var(--blood)}
+.tok.dead .disc{filter:grayscale(1) brightness(.45)}
+.tok.dead .disc::after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,transparent 46%,var(--blood) 47%,var(--blood) 53%,transparent 54%)}
+.tok.stunned .disc{border-color:var(--amber);box-shadow:0 0 0 3px #0c0907,0 0 22px var(--amber)}
+.aura{position:absolute;inset:-12px;border-radius:50%;border:2px dashed var(--violet);box-shadow:0 0 18px var(--violet),inset 0 0 18px rgba(183,154,224,.4);opacity:0;visibility:hidden}
+#playerTok .disc{width:70px;height:70px;cursor:pointer}
+#playerTok.can .disc{box-shadow:0 0 0 3px #0c0907,0 0 0 5px rgba(210,173,98,.7),0 0 18px rgba(210,173,98,.6)}
+#playerTok .php{position:absolute;left:50%;top:100%;transform:translateX(-50%);margin-top:6px;width:96px}
+.parrow{position:absolute;left:0;top:0;width:0;height:0;visibility:hidden;opacity:0}
+.parrow button{position:absolute;left:-30px;top:-30px;width:60px;height:60px;border-radius:50%;border:2px solid var(--gold);background:radial-gradient(circle,#3a2b1c,#140e09);color:#fff3cf;font:700 26px/56px var(--display);box-shadow:0 0 16px rgba(210,173,98,.6),0 6px 12px rgba(0,0,0,.7)}
+.parrow .pvl{position:absolute;left:50%;top:36px;transform:translateX(-50%);white-space:nowrap;font:700 13px/1.1 var(--display);text-align:center;color:var(--ink);text-shadow:0 1px 3px #000}
+.tile{position:absolute;left:0;top:0;width:0;height:0;will-change:transform}
+.tile .in{position:absolute;left:-41px;top:-46px;width:82px;height:92px;border-radius:10px;border:2px solid var(--blood);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:radial-gradient(circle,rgba(208,85,58,.34),rgba(60,14,8,.8))}
+.tile .glow{position:absolute;inset:-4px;border-radius:12px;box-shadow:0 0 22px var(--blood);opacity:.85}
+.tile.magic .in{border-color:var(--violet);background:radial-gradient(circle,rgba(183,154,224,.32),rgba(36,18,60,.8))}
+.tile.magic .glow{box-shadow:0 0 22px var(--violet)}
+.tile:not(.mine) .in{opacity:.62}
+.tile .k{font:700 13px/1 var(--display);color:#ffd7cc;letter-spacing:.04em}
+.tile .nw{height:32px;overflow:hidden}
+.tile .n{display:block;font:700 32px/1 var(--display);color:#fff;text-shadow:0 2px 4px #000}
+.tile .s{font:700 14px/1 var(--display);color:#ffd7cc}
+.tile.magic .s,.tile.magic .k{color:#e6dbff}
+.shield{position:absolute;left:0;top:0;width:0;height:0;will-change:transform}
+.shield .sb{position:absolute;left:-30px;top:-34px;width:60px;height:62px;color:var(--steel);filter:drop-shadow(0 0 10px rgba(134,169,207,.8))}
+.shield .sb svg{width:100%;height:100%}
+.shield .dots{position:absolute;left:50%;top:30px;transform:translateX(-50%);display:flex;gap:5px}
+.shield .dots i{width:10px;height:10px;border-radius:50%;background:var(--steel);box-shadow:0 0 6px var(--steel);border:1px solid #0b0806}
+.shard{position:absolute;left:0;top:0;width:14px;height:10px;margin:-5px 0 0 -7px;background:var(--steel);clip-path:polygon(0 0,100% 30%,40% 100%);box-shadow:0 0 6px var(--steel)}
+.target{position:absolute;left:0;top:0;width:0;height:0;visibility:hidden;opacity:0;pointer-events:none}
+.target .fr{position:absolute;left:-46px;top:-46px;width:92px;height:92px;border-radius:14px;border:3px solid #ffe2a0;box-shadow:0 0 0 2px rgba(0,0,0,.6),0 0 22px var(--amber),inset 0 0 18px rgba(232,178,74,.45)}
+.target .tp{position:absolute;left:50%;top:52px;transform:translateX(-50%);white-space:nowrap;font:700 13px/1.1 var(--display);text-align:center;padding:3px 7px;border-radius:8px;background:rgba(10,7,5,.85);border:1px solid #6b5432}
+.target .tp .g{color:var(--gold)}.target .tp .r{color:#ff8a70}.target .tp .s{color:var(--sage)}
+#laneHit{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);pointer-events:none}
+#laneHit div{pointer-events:none}
+#laneHit div.on{pointer-events:auto;cursor:pointer}
+#fx{position:absolute;inset:0;pointer-events:none}
+.fl{position:absolute;left:0;top:0;font:700 22px/1 var(--display);white-space:nowrap;text-shadow:0 2px 0 #000,0 0 10px rgba(0,0,0,.9);will-change:transform}
+.fl.sm{font-size:16px}
+.slash{position:absolute;left:0;top:0;width:90px;height:90px;margin:-45px 0 0 -45px;border-radius:50%;border-top:5px solid #fff3cf;border-right:3px solid transparent;filter:drop-shadow(0 0 8px var(--amber))}
+.spark{position:absolute;left:0;top:0;width:3px;height:16px;margin:-8px 0 0 -1.5px;background:linear-gradient(#fff,var(--sage));border-radius:2px;box-shadow:0 0 8px var(--sage)}
+.ring{position:absolute;left:0;top:0;width:80px;height:80px;margin:-40px 0 0 -40px;border-radius:50%;border:3px solid var(--steel);box-shadow:0 0 16px var(--steel)}
+.orb{position:absolute;left:0;top:0;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:radial-gradient(#fff,var(--violet));box-shadow:0 0 16px var(--violet)}
+#flash{position:absolute;inset:0;background:var(--blood);opacity:0;visibility:hidden;mix-blend-mode:screen;pointer-events:none}
+#banner{position:absolute;left:0;right:0;top:40%;text-align:center;font:700 44px/1 var(--display);color:var(--amber);letter-spacing:.06em;text-shadow:0 3px 0 #000,0 0 28px rgba(232,178,74,.8);opacity:0;visibility:hidden;pointer-events:none}
+#turnBanner{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);padding:10px 22px;border-radius:12px;white-space:nowrap;font:700 22px/1 var(--display);color:var(--ink);letter-spacing:.04em;
+  background:linear-gradient(180deg,rgba(40,30,21,.95),rgba(20,15,11,.95));border:1px solid var(--gold);box-shadow:0 0 24px rgba(210,173,98,.35),0 8px 18px rgba(0,0,0,.7);opacity:0;visibility:hidden;pointer-events:none}
+#turnBanner b{color:var(--gold)}
+/* ----- zona de cartas: abanico flotante, mazo y descarte ----- */
+#fanZone{position:relative;height:196px;flex:none;margin:0 -10px}
+.card{position:absolute;left:0;top:0;width:84px;height:122px;border-radius:9px;cursor:pointer;transform-style:preserve-3d;
+  background:linear-gradient(180deg,#3a2b1c,#1b130d);border:1.5px solid #9a7a43;box-shadow:inset 0 0 0 1px #000,inset 0 1px 0 rgba(255,230,180,.15),0 6px 12px rgba(0,0,0,.75);will-change:transform}
+.card .face{position:absolute;inset:0;border-radius:8px;overflow:hidden;backface-visibility:hidden}
+.card .art{height:56%;background-size:cover;background-position:center;border-bottom:1px solid #9a7a43}
+.card .nm{font:700 14px/1 var(--display);text-align:center;margin-top:6px;white-space:nowrap}
+.card .cost{text-align:center;color:var(--amber);font-size:13px;letter-spacing:1px;margin-top:4px}
+.card .dur{text-align:center;margin-top:3px;display:flex;justify-content:center;gap:4px}
+.card .dur i{width:9px;height:9px;border-radius:50%;background:var(--steel);box-shadow:0 0 5px var(--steel)}
+.card .badge{position:absolute;top:4px;left:4px;width:22px;height:22px;border-radius:50%;background:#120c08;border:1px solid var(--amber);color:var(--amber);font:700 14px/20px var(--display);text-align:center}
+.card .backf{position:absolute;inset:0;border-radius:8px;visibility:hidden;background:radial-gradient(circle at 50% 50%,rgba(210,173,98,.4) 0 10px,transparent 11px),repeating-linear-gradient(45deg,#2a1e14 0 5px,#1a120c 5px 10px)}
+.card.down .backf{visibility:visible}.card.down .face{visibility:hidden}
+.card.sel{border-color:#ffe2a0;box-shadow:inset 0 0 0 1px #000,0 0 0 2px var(--gold),0 0 24px rgba(232,178,74,.75),0 12px 18px rgba(0,0,0,.8)}
+.card .art.glyph{display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 35%,#5a4318,#1c140c 70%);color:var(--gold)}
+.card .art.glyph svg{width:48px;height:48px;filter:drop-shadow(0 0 8px rgba(240,215,138,.5))}
+.card.sel.warn-tired{border-color:#d09070;box-shadow:inset 0 0 0 1px #000,0 0 0 2px #c07050,0 0 20px rgba(200,90,50,.45)}
+.card .tired-hint{position:absolute;left:4px;right:4px;bottom:24px;text-align:center;font:700 10px/1 var(--display);color:#f0b090;text-shadow:0 1px 2px #000;pointer-events:none;letter-spacing:.02em}
+#pChips{position:absolute;left:50%;bottom:calc(100% + 4px);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;z-index:5;pointer-events:auto;width:max-content}
+#pChips:empty{display:none}
+#pChips .chip{visibility:visible;cursor:help;background:#120c08}
+#pChips .chip.tired{color:#e8a070;border-color:#c07050}
+#pChips .chip.smite{color:var(--gold)}
+.card .spd .heal{color:var(--gold);font:700 13px/1 var(--display)}
+#tip p{margin:0;font:400 13px/1.3 var(--body);color:var(--ink)}
+#fatigueAsk{position:fixed;left:50%;top:50%;z-index:88;width:min(320px,calc(100% - 28px));padding:18px 16px 14px;border-radius:14px;background:linear-gradient(180deg,rgba(40,30,21,.97),rgba(18,13,9,.97));border:1px solid var(--gold);box-shadow:0 10px 26px rgba(0,0,0,.8);color:var(--ink);font:400 16px/1.35 var(--body);opacity:0;visibility:hidden;box-sizing:border-box;text-align:center}
+#fatigueAsk p{margin:0 0 14px}
+#fatigueAsk .btns{justify-content:center}
+#deck{position:absolute;left:12px;bottom:14px;width:56px;height:80px}
+.cback{position:absolute;inset:0;border-radius:7px;border:1.5px solid var(--frame);background:radial-gradient(circle at 50% 50%,rgba(210,173,98,.35) 0 7px,transparent 8px),repeating-linear-gradient(45deg,#2a1e14 0 4px,#1a120c 4px 8px);box-shadow:0 3px 6px rgba(0,0,0,.6)}
+.cback:nth-child(1){transform:translate(-3px,3px) rotate(-6deg)}.cback:nth-child(2){transform:translate(1px,1px) rotate(3deg)}
+#deck.empty .cback{background:transparent;border-style:dashed;box-shadow:none}
+.pcount{position:absolute;right:-8px;top:-10px;min-width:28px;height:28px;padding:0 5px;border-radius:14px;background:#120c08;border:2px solid var(--gold);color:var(--gold);font:700 16px/24px var(--display);text-align:center;box-shadow:0 0 10px rgba(210,173,98,.5)}
+#deck .lab,#discard .lab{position:absolute;left:0;right:0;bottom:-14px;text-align:center;font:700 13px/1 var(--display);color:var(--muted)}
+#discard{position:absolute;right:0;bottom:16px;width:96px;height:120px;border-radius:12px 0 0 12px;background:linear-gradient(90deg,#2a1e14,#140e09);border:1px solid var(--frame);border-right:0;box-shadow:-6px 0 16px rgba(0,0,0,.7)}
+#discard .stack{position:absolute;left:14px;top:14px;width:62px;height:90px}
+#discard .pcount{left:-14px;right:auto;top:-12px}
+#cardInfo{position:absolute;left:150px;right:12px;top:6px;padding:9px 11px;border-radius:10px;opacity:0;visibility:hidden;pointer-events:none;z-index:6}
+#cardInfo h4{margin:0;font:700 18px/1 var(--display);color:var(--gold)}
+#cardInfo h4 span{color:#e8a070;font-size:14px}
+#cardInfo .btns,#cardInfo button{pointer-events:auto;position:relative;z-index:7}
+#cardInfo .btns{margin:0 0 8px}
+#cardInfo p{margin:5px 0 0;font-size:15px;line-height:1.2;color:var(--ink)}
+#cardInfo .lp{margin-top:6px;font:700 14px/1.15 var(--display);color:var(--sage)}
+#cardInfo .lp.no{color:#ff8a70}
+#fxLayer{position:fixed;inset:0;pointer-events:none;z-index:50}
+#fxLayer .card{pointer-events:none}
+
+.intentbar{padding:6px 10px}
+.intentbar .intent{margin-top:0}
+#eLaneGlow{position:absolute;left:0;top:0;bottom:0;width:33.334%;background:linear-gradient(180deg,rgba(183,154,224,.2),rgba(183,154,224,.03) 35%,transparent 55%);border-top:3px solid var(--violet);pointer-events:none}
+#midline{position:absolute;left:6px;right:6px;top:0;height:0;border-top:2px dashed rgba(183,154,224,.35);pointer-events:none}
+#midline span{position:absolute;right:2px;top:-17px;font:700 13px/1 var(--display);color:rgba(200,185,230,.7);letter-spacing:.06em}
+.atk{position:absolute;left:0;top:0;width:0;height:0;will-change:transform}
+.atk .in{position:absolute;left:-27px;top:-27px;width:54px;height:54px;border-radius:50%;border:2px solid var(--blood);background:radial-gradient(circle,rgba(120,30,18,.95),rgba(40,10,6,.95));box-shadow:0 0 16px var(--blood),0 4px 10px rgba(0,0,0,.8)}
+.atk.magic .in{border-color:var(--violet);background:radial-gradient(circle,rgba(90,60,140,.95),rgba(28,14,50,.95));box-shadow:0 0 18px var(--violet),0 4px 10px rgba(0,0,0,.8)}
+.atk .ic{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:28px;line-height:1;color:#fff3e6}
+.atk .ic svg{width:34px;height:34px}
+.atk .dm{position:absolute;left:44px;top:-10px;font:700 15px/1 var(--display);color:#ffd7cc;text-shadow:0 1px 3px #000;white-space:nowrap}
+.atk.magic .dm{color:#e6dbff}
+.atk .chev{position:absolute;left:-9px;top:30px;width:18px;color:#ffb39e;filter:drop-shadow(0 0 4px rgba(0,0,0,.9))}
+.atk.magic .chev{color:#d9c8ff}
+.atk:not(.mine) .in{opacity:.7}
+.atk.mine .in{animation:none}
+.chev svg{display:block;width:100%;height:auto}
+.wave{position:absolute;left:0;top:0;width:0;height:0;will-change:transform}
+.wave .in{position:absolute;left:-30px;top:-22px;width:60px;height:44px;color:var(--sage);filter:drop-shadow(0 0 8px rgba(140,194,168,.9))}
+.wave .in svg{width:100%;height:100%}
+.wave .chev{position:absolute;left:-8px;top:-42px;width:16px;color:var(--sage)}
+.card .ico{position:absolute;left:50%;top:28%;width:36px;height:36px;margin:-18px 0 0 -18px;color:#e8f2ff;filter:drop-shadow(0 0 6px rgba(0,0,0,.9))}
+.card .ico svg{width:100%;height:100%}
+.card .spd{display:flex;justify-content:center;align-items:center;gap:4px;margin-top:4px;height:22px;color:var(--amber);font:700 13px/1 var(--display)}
+.card .spd .chev{width:16px}
+.card .spd em{font-style:normal;color:var(--muted)}
+.fly .chev{position:absolute;left:50%;top:-30px;width:20px;margin-left:-10px;color:var(--amber)}
+#discard .stack .cback{position:absolute;inset:0}
+.target.hov .fr{border-color:#fff;box-shadow:0 0 0 2px rgba(0,0,0,.6),0 0 30px #ffe2a0,inset 0 0 22px rgba(232,178,74,.6)}
+.card .spd .dur{display:flex;gap:5px;margin:0}
+#scr-fight,#board,#boardIn,#fanZone{overflow:clip}
+
+/* ----- franjas de cabezas: rival arriba, vos abajo, alineadas con los carriles ----- */
+.strip{position:relative;flex:none;height:62px}
+#pStrip{height:78px}
+.strip .slots{position:absolute;left:0;right:0;top:3px;bottom:3px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.strip .slots i{border-radius:10px;background:linear-gradient(180deg,rgba(30,22,15,.75),rgba(12,9,7,.75));border:1px solid rgba(122,96,56,.4)}
+.slotglow{position:absolute;left:0;top:3px;bottom:3px;width:calc(33.334% - 4px);margin-left:2px;border-radius:10px;pointer-events:none}
+#eSlotGlow{border:2px solid rgba(183,154,224,.7);box-shadow:0 0 14px rgba(183,154,224,.4),inset 0 0 14px rgba(183,154,224,.2)}
+#pSlotGlow{border:2px solid rgba(210,173,98,.7);box-shadow:0 0 14px rgba(210,173,98,.35),inset 0 0 14px rgba(210,173,98,.2)}
+#enemyLayer{position:absolute;inset:0;pointer-events:none}
+#eStrip .disc{width:48px;height:48px}
+#eStrip .tok .lbl{display:none}
+#eStrip .mini{margin-top:3px;width:46px;height:6px}
+#eStrip .aura{inset:-7px}
+#pStrip .disc{width:50px;height:50px}
+#pStrip #playerTok .php{margin-top:3px;width:100px}
+#pStrip .parrow button{left:-25px;top:-25px;width:50px;height:50px;line-height:46px;font-size:22px}
+#pStrip .parrow .pvl{top:28px}
+#scr-fight{gap:4px}
+.ehud{grid-template-columns:50px 1fr 30px;padding:6px 10px}
+.ehud .portrait{width:50px;height:50px}
+#fanZone{height:180px}
+#eLaneGlow{border-top:none}
+#laneGlow{border-bottom:none}
+#midline{top:0}
+.target .tp.up{top:auto;bottom:52px}
+.intent .now-i{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+
+/* =====================================================================
+   COMPONENTE · SpeedBadge  (.c-speed)  — 1 a 3 flechas apiladas, sin número
+   ===================================================================== */
+.c-speed{display:inline-flex;align-items:center;justify-content:center;width:18px;color:var(--amber);line-height:0;filter:drop-shadow(0 1px 2px rgba(0,0,0,.9))}
+.c-speed svg{display:block;width:100%;height:auto}
+.c-speed.down{color:#ffb39e}
+
+/* =====================================================================
+   COMPONENTE · DamageBadge  (.c-dmg + .c-dmg--<tipo>)  — número + ícono del tipo de daño
+   ===================================================================== */
+.c-dmg{--dc:#4a4d52;display:inline-flex;align-items:center;gap:5px;padding:2px 8px 2px 2px;border-radius:999px;background:rgba(10,7,5,.85);border:1px solid rgba(122,96,56,.55);
+  box-shadow:0 1px 4px rgba(0,0,0,.7);font:700 16px/1 var(--display);color:#fff;white-space:nowrap}
+/* círculo macizo del color del tipo, aro fino más oscuro y glifo blanco centrado */
+.c-dmg .ic{width:20px;height:20px;flex:none;border-radius:50%;background:radial-gradient(circle at 35% 30%,color-mix(in srgb,var(--dc) 80%,#fff),var(--dc) 60%);
+  border:1.5px solid color-mix(in srgb,var(--dc) 55%,#000);box-shadow:0 0 0 1px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;color:#fff}
+.c-dmg .ic svg{display:block;width:13px;height:13px;filter:drop-shadow(0 .5px .5px rgba(0,0,0,.6))}
+.c-dmg .n{color:#fff;text-shadow:0 1px 2px #000}
+.c-dmg--cortante{--dc:#55585d}
+.c-dmg--perforante{--dc:#5e564c}
+.c-dmg--contundente{--dc:#454c56}
+.c-dmg--fuego{--dc:#a8231b}
+.c-dmg--hielo{--dc:#1d8a86}
+.c-dmg--rayo{--dc:#8f8a24}
+.c-dmg--arcano{--dc:#7449b0}
+.c-dmg--sagrado{--dc:#c9a227}
+
+/* muestra de componentes (solo con ?componentes) */
+#compPanel{position:fixed;inset:0;z-index:100;overflow:auto;padding:18px;background:linear-gradient(rgba(10,8,6,.55),rgba(10,8,6,.75)),url(assets/bg-hellfrost.jpg) center/cover;color:var(--ink)}
+#compPanel h2{margin:0 0 4px;font:700 24px/1 var(--display);color:var(--gold)}
+#compPanel h3{margin:16px 0 8px;font:700 16px/1 var(--display);color:var(--muted);letter-spacing:.06em}
+#compPanel .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+#compPanel .cell{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 12px;border-radius:10px;background:rgba(20,15,11,.8);border:1px solid var(--frame);min-width:74px}
+#compPanel .cell small{font:700 13px/1 var(--display);color:var(--muted)}
+
+/* componentes dentro de la carta */
+.card .spd.band{justify-content:space-between;padding:0 6px;gap:2px}
+.card .spd.band:not(:has(.c-dmg)){justify-content:center}
+.card .spd.band > span:empty{display:none}
+.card .c-dmg{padding:1px 6px 1px 1px;gap:3px;font-size:15px;box-shadow:none}
+.card .c-dmg .ic{width:18px;height:18px}
+.card .c-dmg .ic svg{width:12px;height:12px}
+.card .c-speed{width:16px}
+.fly .chev .c-speed{width:20px}
+
+/* vida del mago bajo su cabeza en la franja de arriba (igual que #pHp) */
+.tok .bar.under{position:absolute;left:50%;top:100%;transform:translateX(-50%);margin-top:3px;width:100px}
+#eStrip{height:76px}
+
+/* fichas del rival: círculo del tipo de daño (estilo DamageBadge) con el número encima */
+.atk.typed .in{background:radial-gradient(circle at 35% 30%,color-mix(in srgb,var(--dc) 80%,#fff),var(--dc) 60%);border:2.5px solid color-mix(in srgb,var(--dc) 55%,#000);box-shadow:0 0 0 1px rgba(0,0,0,.6),0 0 14px color-mix(in srgb,var(--dc) 70%,transparent),0 4px 10px rgba(0,0,0,.8)}
+.atk.typed .ic{color:#fff}
+.atk.typed .ic svg{width:30px;height:30px;opacity:.9}
+.atk .dm,.atk.magic .dm{left:0;top:0;transform:translate(-50%,-50%);font:700 26px/1 var(--display);color:#fff;-webkit-text-stroke:4px #120c08;paint-order:stroke fill;text-shadow:0 2px 3px #000;pointer-events:none}
+.atk .chev{display:none}
+
+/* detalle al pasar o tocar fichas del carril */
+.atk .in,.wave .in,.shield .sb{pointer-events:auto;cursor:help}
+#fxLayer .card.fly{pointer-events:auto;cursor:help}
+.wave .dots{position:absolute;left:50%;top:22px;transform:translateX(-50%);display:flex;gap:4px}
+.wave .dots i{width:8px;height:8px;border-radius:50%;background:var(--sage);box-shadow:0 0 5px var(--sage);border:1px solid #0b0806}
+#tip{position:fixed;left:0;top:0;z-index:80;min-width:150px;max-width:220px;padding:8px 10px;border-radius:10px;background:linear-gradient(180deg,rgba(40,30,21,.97),rgba(18,13,9,.97));
+  border:1px solid var(--gold);box-shadow:0 8px 18px rgba(0,0,0,.75);pointer-events:none;opacity:0;visibility:hidden;transform-origin:left center;font:400 14px/1.2 var(--body);color:var(--ink)}
+#tip h5{margin:0 0 6px;font:700 17px/1 var(--display);color:var(--gold)}
+#tip .tr{display:flex;align-items:center;gap:6px;margin:4px 0;font-size:14px}
+#tip .tr .c-speed{width:16px}
+#tip .nt{margin-top:5px;font:700 13px/1.15 var(--display);color:var(--violet)}
+
+/* carriles a alto completo siempre: la pantalla de pelea crece y la página se desplaza */
+#scr-fight{bottom:auto;min-height:100%}
+#board{flex:none}
+
+/* turnos con fases: cartel centrado en pantalla, contador de turno y cartas en el carril */
+#phaseBanner{position:fixed;left:50%;top:42%;z-index:70;margin-left:-140px;width:280px;padding:12px 16px;border-radius:14px;text-align:center;pointer-events:none;opacity:0;visibility:hidden;
+  background:linear-gradient(180deg,rgba(40,30,21,.96),rgba(18,13,9,.96));border:1px solid var(--gold);box-shadow:0 10px 26px rgba(0,0,0,.8)}
+#phaseBanner small{display:block;font:700 14px/1.1 var(--display);color:var(--gold);letter-spacing:.04em;margin-bottom:4px}
+#phaseBanner b{display:block;font:700 20px/1.15 var(--display);color:var(--ink)}
+#turnHud{position:absolute;left:8px;top:8px;z-index:6;display:flex;align-items:center;gap:6px;pointer-events:none}
+#turnChip{padding:3px 9px;border-radius:9px;font:700 14px/1.2 var(--display);color:var(--gold);background:rgba(10,7,5,.8);border:1px solid var(--frame)}
+#btnHelp{pointer-events:auto;width:22px;height:22px;border-radius:50%;border:1px solid var(--frame);background:rgba(10,7,5,.8);color:var(--gold);font:700 14px/1 var(--display);padding:0;cursor:pointer;box-shadow:0 2px 8px #0008}
+#btnHelp:active{transform:scale(.94)}
+#helpPanel{position:fixed;left:50%;top:50%;z-index:85;width:min(340px,calc(100% - 28px));max-height:calc(100% - 36px);overflow:auto;padding:16px 16px 14px;border-radius:14px;background:linear-gradient(180deg,rgba(40,30,21,.97),rgba(18,13,9,.97));border:1px solid var(--gold);box-shadow:0 10px 26px rgba(0,0,0,.8);color:var(--ink);font:400 15px/1.35 var(--body);opacity:0;visibility:hidden;box-sizing:border-box}
+#helpPanel h3{margin:0 28px 10px 0;font:700 20px/1.1 var(--display);color:var(--gold)}
+#helpPanel p{margin:0 0 8px}
+#helpPanel p:last-child{margin-bottom:0}
+#helpPanel b{font:700 15px/1.35 var(--display);color:var(--gold)}
+#helpClose{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;border:1px solid var(--frame);background:transparent;color:var(--muted);font:700 16px/1 var(--display);padding:0;cursor:pointer}
+#pcards .card{position:absolute;left:0;top:0;pointer-events:auto;cursor:help}
+.atk .hchev{position:absolute;left:24px;top:-14px;width:16px;color:#fff59a;filter:drop-shadow(0 1px 2px #000)}
+.atk .hchev svg{width:16px;display:block}
+/* la mano canalizando: grande y entera a la vista, el número abajo a la derecha para no taparla */
+.atk[data-phase=ch] .in{left:-32px;top:-32px;width:64px;height:64px;opacity:1}
+.atk[data-phase=ch] .ic svg{width:50px;height:50px}
+.atk[data-phase=ch] .dm{left:24px;top:22px;font-size:22px}
+.atk[data-phase=ch] .hchev{left:30px;top:-30px}
+
+#scr-end{background:rgba(5,4,3,.72);align-items:center;justify-content:center;padding:20px;z-index:20}
+.endbox{width:100%;max-width:340px;padding:22px 18px;text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center}
+.endbox .portrait{width:96px;height:96px}
+.endbox h2{font-size:46px;line-height:.9}
+.endbox p{margin:0;color:var(--muted);font-size:17px}
+.btns{display:flex;gap:10px;width:100%}
+.btn{flex:1;padding:12px 8px;border-radius:10px;font:700 16px var(--display);letter-spacing:.05em;border:1px solid var(--frame);background:linear-gradient(#3a2b1c,#1b130d)}
+.btn.pri{color:#1b1209;border-color:#f0d18a;background:linear-gradient(180deg,#f3d58f,var(--gold) 45%,#94702f)}
+#btnMute{position:fixed;z-index:90;top:max(8px,env(safe-area-inset-top));right:10px;width:36px;height:36px;border-radius:50%;border:1px solid var(--frame);background:rgba(18,14,11,.88);color:var(--ink);font-size:18px;line-height:1;padding:0;cursor:pointer;box-shadow:0 2px 8px #0008}
+#btnMute:active{transform:scale(.94)}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="bg"></div><div class="vignette"></div><div id="snow"></div>
+
+  <section id="scr-select" class="screen">
+    <div class="eyebrow">Laboratorio de duelos · prototipo A</div>
+    <h1 class="title">Carriles</h1>
+    <p class="lede">Tres carriles. Todo baja o sube por ellos a su velocidad. Acá no hay dados.</p>
+    <div class="foes" id="foes"></div>
+    <div class="howto frame">
+      <b>Cómo se juega.</b> Cada turno (el tuyo y el del rival) tiene tres etapas: Mantenimiento, Planeamiento y Resolución. En Planeamiento tocá una carta y después un carril iluminado, o movete con las flechas ◀ ▶ (o ← → / A D). Lo que está en los carriles solo avanza en la Resolución, al final de cada turno; las flechitas marcan la velocidad. Si un golpe llega por la columna de tu cabeza, hace el doble. El ? junto al contador de turno lo explica.
+      <div class="legend"><span class="lg" style="color:#ffb39e">⌄ lento · ⌄⌄ medio · ⌄⌄⌄ rápido</span></div>
+    </div>
+  </section>
+
+  <section id="scr-fight" class="screen">
+    <header class="ehud frame">
+      <div class="portrait" id="ePortraitWrap"><img id="ePortrait" alt=""></div>
+      <div class="einfo">
+        <div class="erow"><span class="ename" id="eName">—</span><span class="chip st" id="eStatus"></span></div>
+        <div class="bar hp" id="eHp"><div class="fill"></div><span class="num"></span></div>
+      </div>
+      <button id="btnBack" aria-label="Elegir otro rival">✕</button>
+    </header>
+
+
+    <div id="eStrip" class="strip"><div class="slots"><i></i><i></i><i></i></div><div id="eSlotGlow" class="slotglow"></div><div id="enemyLayer"></div></div>
+
+    <div id="board">
+      <div id="boardIn">
+        <div class="lanes"><div class="lane"></div><div class="lane"></div><div class="lane"></div></div>
+        <div class="divider" style="left:33.333%"></div><div class="divider" style="left:66.666%"></div>
+        <div id="laneGlow"></div><div id="eLaneGlow"></div><div id="midline"><span>mitad</span></div>
+        <div id="tiles"></div>
+        <div id="shields"></div>
+        <div id="pcards"></div>
+        <div id="targets"></div>
+        <div id="laneHit"><div data-l="0"></div><div data-l="1"></div><div data-l="2"></div></div>
+                <div id="fx"></div>
+        <div id="flash"></div>
+        <div id="banner"></div>
+        <div id="turnBanner"></div>
+        <div id="turnHud"><div id="turnChip">Turno 1</div><button type="button" id="btnHelp" aria-label="Cómo se juegan los turnos">?</button></div>
+      </div>
+    </div>
+
+    <div id="pStrip" class="strip"><div class="slots"><i></i><i></i><i></i></div><div id="pSlotGlow" class="slotglow"></div>
+      <div class="tok" id="playerTok"><div class="inner"><div class="body">
+        <div id="pChips"></div>
+        <div class="disc" style="--ring:var(--gold)"><img src="assets/head-hero.jpg" alt="Vos"></div>
+        <div class="bar php hp" id="pHp"><div class="fill"></div><span class="num"></span></div></div></div></div>
+      <div class="parrow" id="arrL"><button aria-label="Moverte a la izquierda">◀</button><div class="pvl"></div></div>
+      <div class="parrow" id="arrR"><button aria-label="Moverte a la derecha">▶</button><div class="pvl"></div></div>
+    </div>
+
+    <div id="fanZone">
+      <div id="deck"><div class="cback"></div><div class="cback"></div><div class="cback"></div><div class="pcount" id="deckN">0</div><div class="lab">mazo</div></div>
+      <div id="discard"><div class="stack"></div><div class="pcount" id="discN">0</div></div>
+      <div id="cardInfo" class="frame"></div>
+      <div id="fan"></div>
+    </div>
+  </section>
+
+  <section id="scr-end" class="screen">
+    <div class="endbox frame">
+      <div class="portrait" id="endPortraitWrap"><img id="endPortrait" alt=""></div>
+      <h2 id="endTitle">Victoria</h2>
+      <p id="endText"></p>
+      <div class="btns"><button class="btn" id="btnPick">Elegir rival</button><button class="btn pri" id="btnAgain">Otra vez</button></div>
+    </div>
+  </section>
+  <div id="fxLayer"></div>
+  <button type="button" id="btnMute" aria-label="Silenciar sonidos" aria-pressed="false">🔊</button>
+  <div id="helpPanel" role="dialog" aria-labelledby="helpTitle">
+    <button type="button" id="helpClose" aria-label="Cerrar">✕</button>
+    <h3 id="helpTitle">Las tres etapas</h3>
+    <p>Cada turno — el tuyo y el del rival — tiene tres etapas:</p>
+    <p><b>Mantenimiento.</b> Se resuelven los estados con duración. Si se les acabó el tiempo, terminan acá.</p>
+    <p><b>Planeamiento.</b> El que está de turno elige su acción: vos te movés o jugás una carta.</p>
+    <p><b>Resolución.</b> Todo lo que está en los carriles avanza un paso. Las cartas y los ataques en camino solo avanzan en esta etapa, al final de cada turno (el tuyo y el del rival).</p>
+    <p>Las flechitas (⌄ ⌄⌄ ⌄⌄⌄) marcan la velocidad: cuántas más, más rápido llega.</p>
+    <p>Si un ataque llega por la columna de tu cabeza, hace el doble de daño.</p>
+    <p><b>Escudos.</b> La duración se cuenta desde el turno del rival. Un escudo de N turnos vence en tu Mantenimiento, después de N turnos del rival. También se rompe al bloquear el primer golpe.</p>
+    <p><b>Aguante y cansancio.</b> Tus cartas gastan aguante, un recurso que no se muestra hasta que hace falta. Si jugás una carta que pide más de lo que te queda, queda jugada y quedás Cansado por 2 turnos: recuperás la mitad de aguante y tus cartas que llegan al rival hacen −1 de daño (mínimo 1). El cansancio se va en tu Mantenimiento, después de esos dos turnos. Si una carta te va a cansar, el juego te pide confirmación.</p>
+  </div>
+  <div id="fatigueAsk" role="dialog" aria-labelledby="fatigueAskText">
+    <p id="fatigueAskText"></p>
+    <div class="btns"><button type="button" class="btn" id="fatigueNo">Cancelar</button><button type="button" class="btn pri" id="fatigueYes">Jugar</button></div>
+  </div>
+<script>
+/* =====================================================================
+   CARRILES · motor determinista (sin azar) + vista animada con GSAP
+   ===================================================================== */
+gsap.registerPlugin(Flip);
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+let RM = false;
+gsap.matchMedia().add('(prefers-reduced-motion: reduce)', () => { RM = true; return () => { RM = false; }; });
+const D = s => RM ? 0.001 : s;
+gsap.defaults({ ease: 'power2.out', duration: 0.3 });
+
+/* sonidos CC0 (assets/sfx/) — se desbloquean con el primer toque */
+const SFX_VOL = 0.5;
+const SFX_SRC = {
+  riffle: 'assets/sfx/card-riffle.ogg',
+  deal:   'assets/sfx/card-deal.ogg',
+  place:  'assets/sfx/card-place.ogg',
+  impact: 'assets/sfx/impact.ogg',
+  pain:   'assets/sfx/pain.ogg',
+  turn:   'assets/sfx/turn.ogg',
+  select: 'assets/sfx/select.ogg',
+  move:   'assets/sfx/move.ogg',
+  win:    'assets/sfx/win.ogg',
+  lose:   'assets/sfx/lose.ogg'
+};
+const SFX_GAIN = { riffle: 1, deal: 0.85, place: 0.75, impact: 1, pain: 0.85, turn: 0.6, select: 0.45, move: 0.4, win: 0.6, lose: 0.55 };
+const sfx = {
+  muted: localStorage.getItem('pocketdm-sfx-muted') === '1',
+  unlocked: false,
+  bank: {},
+  last: {},
+  load() {
+    for (const [k, src] of Object.entries(SFX_SRC)) {
+      const a = new Audio(src);
+      a.preload = 'auto';
+      a.volume = 0;
+      this.bank[k] = a;
+    }
+  },
+  unlock() {
+    if (this.unlocked) return;
+    this.unlocked = true;
+    const a = this.bank.riffle || Object.values(this.bank)[0];
+    if (!a) return;
+    const p = a.play();
+    if (p) p.then(() => { a.pause(); a.currentTime = 0; }).catch(() => {});
+  },
+  play(name, gap) {
+    if (this.muted) return;
+    const src = this.bank[name];
+    if (!src) return;
+    const now = performance.now();
+    if (gap && this.last[name] && now - this.last[name] < gap) return;
+    this.last[name] = now;
+    const a = src.cloneNode();
+    a.volume = SFX_VOL * (SFX_GAIN[name] || 1);
+    a.play().catch(() => {});
+  },
+  toggle() {
+    this.unlock();
+    this.muted = !this.muted;
+    localStorage.setItem('pocketdm-sfx-muted', this.muted ? '1' : '0');
+    this.syncBtn();
+  },
+  syncBtn() {
+    const b = $('#btnMute');
+    if (!b) return;
+    b.textContent = this.muted ? '🔇' : '🔊';
+    b.setAttribute('aria-label', this.muted ? 'Activar sonidos' : 'Silenciar sonidos');
+    b.setAttribute('aria-pressed', this.muted ? 'true' : 'false');
+  }
+};
+sfx.load();
+['pointerdown', 'keydown', 'touchstart'].forEach(ev => document.addEventListener(ev, () => sfx.unlock(), { once: true, capture: true }));
+$('#btnMute').addEventListener('click', ev => { ev.stopPropagation(); sfx.toggle(); });
+sfx.syncBtn();
+
+const LANES = ['izquierda', 'centro', 'derecha'];
+const ICON = {
+  shield: '<svg viewBox="0 0 48 48"><path d="M24 5l15 6v12c0 10-7 17-15 20C16 40 9 33 9 23V11z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M24 14v22M15 22h18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>',
+  sword: '<svg viewBox="0 0 48 48"><path d="M24 4l4.5 24h-9z" fill="currentColor"/><path d="M13 30h22" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M24 33v9" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>'
+};
+const ACTIONS = {
+  izq:      { name: 'Paso', stam: 0, kind: 'move', dir: -1 },
+  golpe:    { name: 'Golpe', stam: 1, kind: 'strike', dmg: 2, dmgType: 'perforante', art: 'golpe' },
+  tajo:     { name: 'Tajo fuerte', short: 'Tajo', stam: 2, kind: 'strike', dmg: 6, dmgType: 'cortante', art: 'tajo' },
+  bloquear: { name: 'Bloquear', stam: 1, kind: 'plant', art: 'bloquear' },
+  desviar:  { name: 'Desviar', stam: 2, kind: 'wave', art: 'desviar' },
+  der:      { name: 'Paso', stam: 0, kind: 'move', dir: 1 },
+  manos:    { name: 'Manos sanadoras', short: 'Manos', stam: 2, kind: 'instant', heal: 4 },
+  castigar: { name: 'Castigar el mal', short: 'Castigar', stam: 2, kind: 'instant', smite: 3 },
+  vengadora:{ name: 'Vengadora Sagrada', short: 'Vengadora', stam: 3, kind: 'strike', dmg: 5, dmgType: 'sagrado', art: null, magic: true }
+};
+// mazo finito y determinista: 19 cartas (16 base + 3 de paladín), siempre el mismo orden de robo (sin azar)
+const DECK_ORDER = ['golpe', 'manos', 'bloquear', 'tajo', 'golpe', 'desviar', 'castigar', 'golpe', 'bloquear', 'golpe', 'tajo', 'desviar', 'vengadora', 'golpe', 'bloquear', 'golpe', 'tajo', 'bloquear', 'desviar'];
+const BLOCK_DURS = [1, 2, 2, 3];
+const HAND_SIZE = 4;
+const CARD_INFO = {
+  golpe: 'Elegí un carril: sube y pega 2 a lo que haya ahí. Carril vacío: al aire.',
+  tajo: 'Sube más lento por el carril que elijas: 6 de daño. Mientras viaja, te quedás quieto.',
+  desviar: 'Lanza una onda lenta por tu carril. Desvía al carril vecino cada golpe físico que cruce; desde el centro, a un lado (lo ves antes de jugar). No se rompe. Se disipa a mitad del carril. No afecta la magia.',
+  manos: 'Te curás 4 de vida al instante, en el Planeamiento. No usa carril. No puede pasar tu vida máxima.',
+  castigar: 'Tu próximo golpe que llegue al rival hace +3 de daño. El efecto queda pendiente hasta que una carta de ataque conecte.',
+  vengadora: 'Sube a la velocidad del Tajo por el carril que elijas: 5 de daño sagrado. Es mágica: ignora la resistencia física.'
+};
+const blockInfo = n => 'Planta un escudo en la columna que elijas. Dura ' + n + (n > 1 ? ' turnos' : ' turno') + ' del rival: empieza a contar desde el turno del rival y vence en tu Mantenimiento. Anula por completo el próximo golpe que baje por ese carril, magia incluida, y se rompe. No se mueve.';
+const FOES = {
+  lobo: { name: 'Lobo de escarcha', short: 'Lobo', img: 'assets/enemy-lobo.jpg', ring: 'var(--sage)', hp: 28, pips: '◆◇◇',
+    rule: 'Rápido: avisa con 2 tics y te persigue de carril.', tag: 'te persigue',
+    cycle: ['mordida', 'mordida', 'zarpazo', 'salto', 'doble'] },
+  caballero: { name: 'Caballero helado', short: 'Caballero', img: 'assets/enemy-caballero.jpg', ring: 'var(--steel)', hp: 30, pips: '◆◆◇',
+    rule: 'Ocupa los tres carriles. El escudo te sigue cada 2 tics; romper brazo o escudo apaga sus golpes. Resistencia física: −2 al daño no mágico.', tag: 'el escudo te sigue',
+    physRes: 2,
+    cycle: ['tajo', 'embestida', 'embestida', 'tajo', 'mandoble'] },
+  mago: { name: 'Hechicero', short: 'Mago', img: 'assets/enemy-mago.jpg', head: 'assets/head-mago.jpg', ring: 'var(--violet)', hp: 20, pips: '◆◆◆',
+    rule: 'Canaliza con mucho aviso. Si lo herís mientras canaliza, se le corta.', tag: 'herilo y se corta',
+    cycle: ['rayo', 'dardos', 'rayo', 'tormenta'] }
+};
+const INAME = { mordida: 'Mordida', zarpazo: 'Zarpazo', salto: 'Salto', doble: 'Doble mordida', rodeo: 'Rodeo',
+  tajo: 'Tajo ancho', embestida: 'Embestida', mandoble: 'Mandoble', puno: 'Puño de hierro', reves: 'Revés',
+  rayo: 'Cadena de rayos', dardos: 'Dardos', tormenta: 'Tormenta', parpadeo: 'Parpadeo' };
+
+// tipo de daño de cada ataque del rival (ver DAMAGE_TYPES)
+const ATK_DMG_TYPE = { mordida: 'perforante', doble: 'perforante', salto: 'perforante', zarpazo: 'cortante',
+  tajo: 'cortante', reves: 'cortante', mandoble: 'cortante', embestida: 'contundente', puno: 'contundente',
+  dardos: 'perforante', rayo: 'rayo', tormenta: 'hielo' };
+const clone = o => JSON.parse(JSON.stringify(o));
+function newState(id) {
+  const F = FOES[id];
+  const S = { id, tic: 0, seq: 0, over: null,
+    p: { lane: 1, hp: 20, max: 20, stam: 10, stamMax: 10, tired: 0, smite: false },
+    e: { hp: F.hp, max: F.hp, lane: id === 'mago' ? 2 : 1, cycle: 0, intent: null, parts: null } };
+  if (id === 'caballero') S.e.parts = { cuerpo: { lane: 0 }, escudo: { lane: 1, hp: 12, max: 12 }, brazo: { lane: 2, hp: 10, max: 10 } };
+  let b = 0;
+  S.deck = DECK_ORDER.map((key, i) => { const c = { id: 'c' + i, key }; if (key === 'bloquear') c.dur = BLOCK_DURS[b++]; return c; });
+  S.hand = S.deck.splice(0, HAND_SIZE);
+  S.discard = []; S.shields = []; S.waves = []; S.cards = []; S.turn = 1;
+  S.e.intent = null;   // el rival planea en su propio turno
+  return S;
+}
+const alive = (S, part) => S.e.parts[part].hp > 0;
+const adj = l => [l - 1, l + 1].filter(x => x >= 0 && x <= 2);
+
+function nextKey(S, mutate) {
+  const e = S.e, F = FOES[S.id]; let c = e.cycle;
+  for (let i = 0; i < F.cycle.length; i++) {
+    const k = F.cycle[c % F.cycle.length]; c++;
+    if (S.id === 'caballero') {
+      if ((k === 'tajo' || k === 'mandoble') && !alive(S, 'brazo')) continue;
+      if (k === 'embestida' && !alive(S, 'escudo')) { if (mutate) e.cycle = c; return 'puno'; }
+    }
+    if (mutate) e.cycle = c;
+    return k;
+  }
+  if (mutate) e.cycle = c;
+  return 'puno';
+}
+function plan(S, t) {
+  const e = S.e, p = S.p;
+  const mk = (key, steps, o = {}) => ({ id: ++S.seq, key, name: INAME[key], channel: !!o.channel, needs: o.needs || null, from: t,
+    steps: steps.map(s => Object.assign({ id: ++S.seq, done: false, from: t }, s, s.kind === 'hit' ? { tk: s.lanes.map((l, i) => ({ k: i, lane: l })) } : {})) });
+  if (S.id === 'lobo') {
+    const k = FOES.lobo.cycle[e.cycle % 5];
+    if (e.lane !== p.lane && k !== 'salto') return mk('rodeo', [{ at: t + 1, kind: 'move', to: p.lane }]);
+    e.cycle++;
+    if (k === 'mordida') return mk(k, [{ at: t + 2, kind: 'hit', lanes: [e.lane], dmg: 5 }]);
+    if (k === 'zarpazo') return mk(k, [{ at: t + 3, kind: 'hit', lanes: [e.lane, ...adj(e.lane)].sort(), dmg: 3 }]);
+    if (k === 'salto') return mk(k, [{ at: t + 3, kind: 'move', to: p.lane }, { at: t + 3, kind: 'hit', lanes: [p.lane], dmg: 6 }]);
+    return mk('doble', [{ at: t + 2, kind: 'hit', lanes: [e.lane], dmg: 3 }, { at: t + 3, kind: 'hit', lanes: [e.lane], dmg: 3 }]);
+  }
+  if (S.id === 'caballero') {
+    const P = e.parts, k = nextKey(S, true);
+    if (k === 'tajo' && p.lane === P.cuerpo.lane) return mk('reves', [{ at: t + 2, kind: 'hit', src: 'brazo', lanes: [p.lane], dmg: 4 }], { needs: 'brazo' });
+    if (k === 'tajo') return mk(k, [{ at: t + 4, kind: 'hit', src: 'brazo', lanes: [0, 1, 2].filter(l => !(alive(S, 'escudo') && l === P.escudo.lane)), dmg: 4 }], { needs: 'brazo' });
+    if (k === 'embestida') return mk(k, [{ at: t + 3, kind: 'hit', src: 'escudo', lanes: [P.escudo.lane], dmg: 6 }], { needs: 'escudo' });
+    if (k === 'mandoble') return mk(k, [{ at: t + 5, kind: 'hit', src: 'brazo', lanes: [0, 1, 2], dmg: 6 }], { needs: 'brazo' });
+    return mk('puno', [{ at: t + 2, kind: 'hit', src: 'cuerpo', lanes: [p.lane], dmg: 3 }]);
+  }
+  if (e.lane === p.lane) {
+    const to = p.lane === 0 ? 2 : p.lane === 2 ? 0 : (e.cycle % 2 ? 0 : 2);
+    return mk('parpadeo', [{ at: t + 1, kind: 'move', to, blink: true }]);
+  }
+  const k = FOES.mago.cycle[e.cycle % 4]; e.cycle++;
+  // cadena de rayos: una mano con el rayo baja lenta hasta la mitad (5 resoluciones), ahí se parte en 3 rayos que pegan en la resolución siguiente
+  if (k === 'rayo') return mk(k, [{ at: t + 6, kind: 'hit', lanes: [0, 1, 2], dmg: 3, magic: true, origin: e.lane }], { channel: true });
+  if (k === 'dardos') return mk(k, [{ at: t + 2, kind: 'hit', lanes: [p.lane], dmg: 3 }]);
+  return mk('tormenta', [{ at: t + 8, kind: 'hit', lanes: [0, 1, 2], dmg: 4, magic: true, origin: e.lane }], { channel: true });
+}
+function partBreak(S, part, ev) {
+  ev.push({ type: 'partbreak', part });
+  const it = S.e.intent;
+  if (it && it.needs === part) { S.e.intent = null; ev.push({ type: 'interrupt', part }); }
+}
+function applyHeroDmgMods(S, act, ev) {
+  let dmg = act.dmg;
+  if (S.p.smite) { dmg += 3; S.p.smite = false; ev.push({ type: 'smiteused' }); }
+  if (S.p.tired) { dmg = Math.max(1, dmg - 1); ev.push({ type: 'tiredhit' }); }
+  const res = (FOES[S.id] && FOES[S.id].physRes) || 0;
+  if (res && !act.magic) { dmg = Math.max(1, dmg - res); ev.push({ type: 'resist', n: res }); }
+  return dmg;
+}
+function strike(S, act, t, ev, lane) {
+  const e = S.e, L = lane == null ? S.p.lane : lane;
+  if (S.id !== 'caballero') {
+    if (e.lane !== L) { ev.push({ type: 'whiff', lane: L }); return; }
+    const dmg = applyHeroDmgMods(S, act, ev);
+    e.hp -= dmg;
+    ev.push({ type: 'phit', part: 'main', lane: L, dmg });
+    // solo se corta mientras la mano todavía viaja (antes de soltarse en la mitad)
+    const wasChannel = e.intent && e.intent.channel && e.intent.steps.some(s => !s.done && isChannel(s) && t - 1 < s.at - 1);
+    if (wasChannel && e.hp > 0) { if (e.intent) e.intent = null; ev.push({ type: 'interrupt' }); }
+    return;
+  }
+  const P = e.parts;
+  const part = Object.keys(P).find(k => P[k].lane === L);
+  let dmg = applyHeroDmgMods(S, act, ev);
+  if (part === 'escudo' && alive(S, 'escudo')) {
+    dmg = Math.floor(dmg / 2); P.escudo.hp = Math.max(0, P.escudo.hp - dmg);
+    ev.push({ type: 'phit', part, lane: L, dmg, shield: true });
+    if (P.escudo.hp <= 0) partBreak(S, 'escudo', ev);
+  } else if (part === 'brazo' && alive(S, 'brazo')) {
+    P.brazo.hp = Math.max(0, P.brazo.hp - dmg);
+    ev.push({ type: 'phit', part, lane: L, dmg });
+    if (P.brazo.hp <= 0) partBreak(S, 'brazo', ev);
+  } else {
+    e.hp -= dmg;
+    ev.push({ type: 'phit', part, lane: L, dmg, exposed: part !== 'cuerpo' });
+  }
+}
+function resolveStep(S, s, t, ev) {
+  const e = S.e, p = S.p;
+  if (s.kind === 'move') { ev.push({ type: 'emove', from: e.lane, to: s.to, blink: !!s.blink }); e.lane = s.to; return; }
+  const src = s.src || 'main';
+  const base = { type: 'ehit', lanes: s.lanes, dmg: s.dmg, magic: !!s.magic, src, at: s.at };
+  // escudos plantados: cada uno anula por completo lo que baja por su carril (magia incluida) y se rompe
+  const blocked = [];
+  for (const sh of S.shields.slice()) {
+    if (!s.lanes.includes(sh.lane)) continue;
+    S.shields = S.shields.filter(x => x !== sh);
+    ev.push({ type: 'absorb', lane: sh.lane, shId: sh.id, stepId: s.id, dmg: s.dmg, magic: !!s.magic, src });
+    blocked.push(sh.lane);
+  }
+  // todo golpe que llega al fondo te daña; si llega por la columna donde está tu cabeza, el doble
+  const open = s.lanes.filter(l => !blocked.includes(l));
+  if (!open.length) { ev.push(Object.assign(base, { res: s.lanes.includes(p.lane) ? 'shield' : 'miss', taken: 0 })); return; }
+  const dbl = open.includes(p.lane), taken = dbl ? s.dmg * 2 : s.dmg;
+  p.hp -= taken;
+  ev.push(Object.assign(base, { res: 'hit', taken, dbl }));
+}
+// ----- una RESOLUCIÓN: todo lo que está en los carriles avanza un tic -----
+function tick(S) {
+  const ev = [], t = ++S.tic, p = S.p, e = S.e;
+  // 1 · tus cartas que llegan al otro extremo aplican su efecto
+  for (const c of S.cards.slice()) {
+    if (c.at !== t) continue;
+    S.cards = S.cards.filter(x => x !== c);
+    strike(S, ACTIONS[c.key], t, ev, c.lane);
+    S.discard.push({ id: c.id, key: c.key });
+    ev.push({ type: 'carrive', cId: c.id, lane: c.lane });
+  }
+  stepWaves(S, t, ev);
+  if (e.hp <= 0) { e.hp = 0; e.intent = null; S.over = 'win'; ev.push({ type: 'win' }); return ev; }
+  // 2 · lo del rival que llega en este tic
+  const it = e.intent;
+  if (it) for (const s of it.steps) {
+    if (s.done || s.at !== t) continue;
+    s.done = true; resolveStep(S, s, t, ev);
+    if (e.intent !== it) break;
+  }
+  if (e.intent && e.intent.steps.every(s => s.done)) e.intent = null;
+  // 3 · regla del caballero: el escudo da un paso hacia vos en los tics pares
+  if (S.id === 'caballero' && t % 2 === 0 && alive(S, 'escudo')) {
+    const P = e.parts, sl = P.escudo.lane;
+    if (sl !== p.lane) {
+      const to = sl + Math.sign(p.lane - sl), other = Object.keys(P).find(n => P[n].lane === to);
+      P[other].lane = sl; P.escudo.lane = to;
+      ev.push({ type: 'shield', from: sl, to, other });
+    }
+  }
+  if (p.hp <= 0) { p.hp = 0; S.over = 'lose'; ev.push({ type: 'lose' }); }
+  return ev;
+}
+// fase 1 de tu turno · Mantenimiento: cada escudo pierde un punto; sin puntos, se desvanece
+function heroStates(S) {
+  const ev = [];
+  const rec = S.p.tired > 0 ? 2 : 4;
+  S.p.stam = Math.min(S.p.stamMax, (S.p.stam || 0) + rec);
+  if (S.p.tired > 0) {
+    S.p.tired--;
+    ev.push({ type: S.p.tired ? 'tiredtick' : 'tiredend', left: S.p.tired });
+  }
+  for (const sh of S.shields.slice()) {
+    sh.dots--;
+    if (sh.dots <= 0) { S.shields = S.shields.filter(x => x !== sh); ev.push({ type: 'expire', lane: sh.lane, shId: sh.id }); }
+    else ev.push({ type: 'dot', lane: sh.lane, shId: sh.id, dots: sh.dots });
+  }
+  return ev;
+}
+// fase 2 del turno del rival · planeamiento: si no tiene nada en curso, pone su acción en su carril
+function rivalPlan(S) {
+  if (S.over || S.e.intent) return [];
+  S.e.intent = plan(S, S.tic);
+  return [{ type: 'announce', key: S.e.intent.key }];
+}
+// cuántas resoluciones tarda cada carta en cruzar el carril (2 resoluciones = 1 turno completo)
+const CARD_TICS = { golpe: 2, tajo: 4, vengadora: 4 };
+// ----- ondas de desvío: suben despacio y desvían los golpes físicos que cruzan -----
+const WAVE_START = 0.9, WAVE_END = 0.5, WAVE_STEP = 0.4 / 6;   // desviar: 6 resoluciones (3 turnos) hasta la mitad
+// posición a lo largo del carril (0 = cabeza del rival, 1 = vos). La magia tiene dos fases:
+// canaliza despacio hasta la línea media y ahí se suelta y cae rápido.
+const LANE_STEPS = 10;            // el carril mide 10 pasos
+function isChannel(s) { return !!s.magic && s.at - s.from >= 2; }
+function stepPos(s, t) {
+  if (isChannel(s)) { const rel = s.at - 1; return t >= s.at ? 1 : Math.max(0, Math.min(0.5, 0.5 * (t - s.from) / (rel - s.from))); }
+  return Math.max(0, Math.min(1, (t - s.from) / (s.at - s.from)));
+}
+function stepPhase(s, t) { return isChannel(s) && t < s.at - 1 ? 'ch' : 'go'; }
+// velocidad en pasos por tic → chevrones (1 lento · 2 medio · 3 rápido)
+function stepSpeed(s, t) { if (isChannel(s)) return stepPhase(s, t) === 'ch' ? 5 / (s.at - 1 - s.from) : 5; return LANE_STEPS / (s.at - s.from); }
+const chevOf = v => v >= 5 ? 3 : v >= 2 ? 2 : v > 0 ? 1 : 0;
+const CARD_SPEED = { golpe: 5, tajo: 2.5, desviar: 1, bloquear: 0, vengadora: 2.5, manos: 0, castigar: 0 };   // pasos por resolución (el carril mide 10)
+function sideFor(s, t) { return ((s.id * 7 + t * 3) % 2) ? 0 : 2; }   // desde el centro: a un lado, fijo y visible en la vista previa
+function stepWaves(S, t, ev) {
+  const it = S.e.intent;
+  for (const w of S.waves.slice()) {
+    const wPrev = w.pos, wNew = w.fresh ? w.pos : +(w.pos - WAVE_STEP).toFixed(4);
+    w.fresh = false; w.pos = wNew;
+    if (it) for (const s of it.steps) {
+      if (s.done || s.kind !== 'hit' || s.at < t) continue;
+      const aPrev = stepPos(s, t - 1), aNew = stepPos(s, t);
+      if (!(aPrev <= wPrev + 1e-9 && aNew >= wNew - 1e-9)) continue;
+      for (const tk of s.tk) {
+        if (tk.lane !== w.lane) continue;
+        if (s.magic) { ev.push({ type: 'pass', wId: w.id, lane: w.lane, stepId: s.id }); continue; }
+        const to = w.lane === 1 ? sideFor(s, t) : 1;
+        tk.lane = to;
+        ev.push({ type: 'redirect', wId: w.id, stepId: s.id, k: tk.k, from: w.lane, to, pos: aNew, name: it.name });
+      }
+      s.lanes = [...new Set(s.tk.map(x => x.lane))].sort();
+    }
+    if (wNew <= WAVE_END + 1e-9) { S.waves = S.waves.filter(x => x !== w); ev.push({ type: 'wfade', wId: w.id, lane: w.lane }); }
+  }
+}
+function validAction(S, key) {
+  const a = ACTIONS[key];
+  if (a.kind === 'move') { const to = S.p.lane + a.dir; return to >= 0 && to <= 2; }
+  return true;
+}
+// a qué carriles se puede mandar cada carta (y por qué no)
+function laneOk(S, key, lane) {
+  const a = ACTIONS[key];
+  if (a.kind === 'instant') return true;
+  if (a.kind === 'strike') return true;
+  if (a.kind === 'plant') return !S.shields.some(x => x.lane === lane);   // el escudo va en la columna que elijas
+  if (lane !== S.p.lane) return false;
+  return true;
+}
+function stamCost(key) { return (ACTIONS[key] && ACTIONS[key].stam) || 0; }
+function fatigueDeficit(S, key) { return Math.max(0, stamCost(key) - (S.p.stam || 0)); }
+function spendStam(S, key, ev) {
+  const cost = stamCost(key), def = Math.max(0, cost - (S.p.stam || 0));
+  S.p.stam = Math.max(0, (S.p.stam || 0) - cost);
+  if (def > 0) { S.p.tired = 2; ev.push({ type: 'tired', deficit: def }); }
+  return def;
+}
+function targetLanes(S, key) { return [0, 1, 2].filter(l => laneOk(S, key, l)); }
+// fase 2 de tu turno · planeamiento: la carta queda en el casillero de salida de tu carril
+function playCard(S, cardId, lane) {
+  const i = S.hand.findIndex(c => c.id === cardId);
+  if (i < 0 || (ACTIONS[S.hand[i].key].kind !== 'instant' && !laneOk(S, S.hand[i].key, lane))) return null;
+  const card = S.hand.splice(i, 1)[0], act = ACTIONS[card.key], ev = [];
+  spendStam(S, card.key, ev);
+  if (act.kind === 'strike') { S.cards.push({ id: card.id, key: card.key, lane, from: S.tic, at: S.tic + CARD_TICS[card.key] }); ev.push({ type: 'place', cId: card.id, lane }); }
+  if (act.kind === 'plant') {
+    const sh = { id: ++S.seq, lane, dots: card.dur || 1 };
+    S.shields.push(sh); ev.push({ type: 'plant', lane: sh.lane, shId: sh.id, dots: sh.dots });
+  }
+  if (act.kind === 'wave') {
+    const w = { id: ++S.seq, lane: S.p.lane, pos: WAVE_START, fresh: false };
+    S.waves.push(w); ev.push({ type: 'wspawn', wId: w.id, lane: w.lane, pos: w.pos });
+  }
+  if (act.kind === 'instant') {
+    if (act.heal) {
+      const n = Math.min(act.heal, S.p.max - S.p.hp);
+      S.p.hp = Math.min(S.p.max, S.p.hp + act.heal);
+      ev.push({ type: 'heal', n });
+    }
+    if (act.smite) { S.p.smite = true; ev.push({ type: 'smite' }); }
+  }
+  if (act.kind !== 'strike') S.discard.push(card);
+  const drawn = (S.deck.length && S.hand.length < HAND_SIZE) ? S.deck.shift() : null;
+  if (drawn) S.hand.push(drawn);
+  return { card, drawn, ev };
+}
+function playMove(S, dir) {
+  const key = dir < 0 ? 'izq' : 'der';
+  if (!validAction(S, key)) return null;
+  const to = S.p.lane + dir, ev = [{ type: 'pmove', from: S.p.lane, to }];
+  S.p.lane = to;
+  return { ev };
+}
+// después de tu acción: resolución, turno del rival (planea + resolución), tu turno siguiente (estados + resolución)...
+function simulateAfterHero(S, n) {
+  const frames = [];
+  for (let i = 0; i < n && !S.over; i++) {
+    if (i % 2 === 1) rivalPlan(S);
+    else if (i > 0) { S.turn++; heroStates(S); }
+    frames.push({ ev: tick(S) });
+  }
+  return frames;
+}
+function previewOf(S, key, lane, dur) {
+  const Cl = clone(S);
+  let ev0 = [];
+  if (key === 'izq' || key === 'der') { const mv = playMove(Cl, key === 'izq' ? -1 : 1); ev0 = (mv && mv.ev) || []; }
+  else { Cl.hand.push({ id: '__pv', key, dur }); const pl = playCard(Cl, '__pv', lane); ev0 = (pl && pl.ev) || []; }
+  const frames = [{ ev: ev0 }].concat(simulateAfterHero(Cl, Math.max(2, CARD_TICS[key] || 0)));
+  const r = { dealt: 0, taken: 0, notes: [], hits: {}, over: Cl.over };
+  for (const f of frames) for (const ev of f.ev) {
+    if (ev.type === 'phit') { r.dealt += ev.dmg; if (ev.shield) r.notes.push(['al escudo', 'm']); if (ev.exposed) r.notes.push(['¡cuerpo expuesto!', 'g']); }
+    if (ev.type === 'heal' && ev.n) r.notes.push(['te curás ' + ev.n, 's']);
+    if (ev.type === 'smite') r.notes.push(['castigar el mal queda listo', 'g']);
+    if (ev.type === 'smiteused') r.notes.push(['castigar +3', 'g']);
+    if (ev.type === 'tired') r.notes.push(['quedás cansado', 'r']);
+    if (ev.type === 'tiredhit') r.notes.push(['cansancio −1', 'r']);
+    if (ev.type === 'resist') r.notes.push(['resistencia −' + ev.n, 'm']);
+    if (ev.type === 'whiff') r.notes.push(['al aire', 'm']);
+    if (ev.type === 'ehit') {
+      const hk = 'h' + ev.at;
+      if (ev.res === 'hit') { r.taken += ev.taken; r.hits[hk] = 'hit'; }
+      if (ev.res === 'shield') { r.notes.push(['el escudo lo anula', 's']); r.hits[hk] = r.hits[hk] || 'ok'; }
+      if (ev.res === 'miss' && ev.lanes.includes(S.p.lane) && false) { r.notes.push(['esquivás', 's']); r.hits[hk] = r.hits[hk] || 'ok'; }
+    }
+    if (ev.type === 'redirect') r.notes.push(['desvía ' + ev.name + ' → ' + LANES[ev.to], 's']);
+    if (ev.type === 'pass') r.notes.push(['la magia pasa', 'v']);
+    if (ev.type === 'interrupt') r.notes.push([ev.part ? 'se corta su golpe' : 'cortás el conjuro', 'v']);
+    if (ev.type === 'partbreak') r.notes.push([ev.part === 'escudo' ? 'rompés el escudo' : 'rompés el brazo', 'a']);
+  }
+  if (Cl.over === 'win') r.notes.unshift(['¡ganás!', 'g']);
+  if (Cl.over === 'lose') r.notes.unshift(['caés', 'r']);
+  r.notes = r.notes.filter((n, i, a) => a.findIndex(m => m[0] === n[0]) === i);
+  const PRI = ['¡ganás!', 'caés', 'cortás el conjuro', 'se corta su golpe', 'rompés el escudo', 'rompés el brazo', '¡cuerpo expuesto!', 'el escudo lo anula', 'la magia pasa', 'esquivás', 'al escudo', 'al aire'];
+  const pri = n => { if (n[0].startsWith('desvía')) return 4.5; const i = PRI.indexOf(n[0]); return i < 0 ? 80 : i; };
+  r.notes.sort((a, b) => pri(a) - pri(b));
+  return r;
+}
+</script>
+<script>
+/* =====================================================================
+   VISTA · todo cambio de estado es una transición GSAP
+   ===================================================================== */
+let S = null, busy = false, selId = null, arrowsOn = false;
+let G = { bw: 300, bh: 400, zw: 390 };
+const TK = new Map(), WV = new Map(), SH = new Map(), FAN = new Map();
+let TOK = {};
+const ICON2 = {
+  shield: '<svg viewBox="0 0 48 48"><path d="M24 4l16 6v13c0 11-7 18-16 21C15 41 8 34 8 23V10z" fill="currentColor" fill-opacity=".28" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M24 12v26M14 21h20" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>',
+  wave: '<svg viewBox="0 0 48 48"><path d="M8 34c6-14 26-14 32 0" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M14 24c4-8 16-8 20 0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" opacity=".7"/><path d="M34 10l6 6-8 3" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  hands: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M14 28c0-8 4-14 8-14s6 4 6 8"/><path d="M20 26c0-7 3-12 7-12s6 4 6 9"/><path d="M28 26c0-5 2-9 5-9 3 0 5 3 5 8v10c0 6-5 11-13 11h-3c-7 0-12-5-12-11v-4"/><circle cx="24" cy="8" r="3" fill="currentColor" stroke="none"/></svg>',
+  smite: '<svg viewBox="0 0 48 48" fill="currentColor"><path d="M24 4l3 10 10 2-8 7 2 10-7-6-7 6 2-10-8-7 10-2z" fill-opacity=".25" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M24 14v22M16 22h16" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/></svg>',
+  avenger: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 4l5 22h-10z" fill="currentColor"/><path d="M14 28h20M24 28v10"/><path d="M16 8c4-3 12-3 16 0" opacity=".9"/></svg>'
+};
+function measure() {
+  const b = $('#board');
+  // los carriles ocupan siempre su alto completo (pantalla menos lo de arriba y la franja del héroe); la mano queda debajo y la página se desplaza
+  const top = b.getBoundingClientRect().top + window.scrollY, ps = $('#pStrip').offsetHeight;
+  b.style.height = Math.max(360, window.innerHeight - top - ps - 8) + 'px';
+  G.bw = b.clientWidth; G.bh = b.clientHeight; G.zw = $('#fanZone').clientWidth;
+  gsap.set('#midline', { y: Ya(WAVE_END) });
+}
+const LX = l => G.bw * (l + 0.5) / 3;
+// los carriles quedan libres de punta a punta: 0 = borde de arriba (rival), 1 = borde de abajo (vos); la mitad queda en el 50 %
+// el mago tiene su franja arriba; el lobo y el caballero siguen dentro de los carriles como antes
+let IN_LANE = true;
+const RY = { enemy: () => IN_LANE ? G.bh * 0.12 : 0, player: () => G.bh };
+const SY = { e: 28, p: 29 };          // centro de las cabezas dentro de su franja
+const EDGE = 28;
+const Ya = pos => { const a = IN_LANE ? RY.enemy() + 86 : EDGE, b = G.bh - EDGE; return a + (b - a) * pos; };
+const Yw = pos => Ya(0.5 + (pos - 0.5) * 1.25);   // la onda nace en el borde de abajo y se disipa justo en la mitad
+const SHY = () => Ya(0.9);                       // lugar del escudo, pegado al borde de abajo   // posición a lo largo del carril (0 = rival, 1 = vos)
+function A(tl, at, el, vars) {
+  if (!el) return;
+  if (tl) tl.to(el, Object.assign({ duration: D(0.32), ease: 'power2.out' }, vars), at);
+  else { const v = Object.assign({}, vars); delete v.duration; delete v.ease; gsap.set(el, v); }
+}
+function C(tl, at, fn) { tl ? tl.call(fn, null, at) : fn(); }
+function buildEnemy(id) {
+  const lay = $('#enemyLayer'), hpBar = $('#eHp');
+  hpBar.classList.remove('under'); $('.einfo').appendChild(hpBar);   // vuelve al HUD antes de rehacer las fichas
+  IN_LANE = id !== 'mago';
+  $('#eStrip').style.display = IN_LANE ? 'none' : '';
+  if (IN_LANE) $('#boardIn').insertBefore(lay, $('#targets')); else $('#eStrip').appendChild(lay); lay.innerHTML = ''; TOK = {};
+  const F = FOES[id];
+  const make = (key, inner, label, ring, mini) => {
+    const t = document.createElement('div'); t.className = 'tok'; t.dataset.part = key;
+    t.innerHTML = '<div class="inner"><div class="body"><div class="aura"></div><div class="disc" style="--ring:' + ring + ';color:' + ring + '">' + inner + '</div>' +
+      '<div class="lbl">' + label + '</div>' + (mini ? '<div class="mini"><i></i></div>' : '') + '</div></div>';
+    lay.appendChild(t); TOK[key] = t; return t;
+  };
+  if (id === 'caballero') {
+    make('cuerpo', '<img src="' + F.img + '" alt="">', 'cuerpo', 'var(--gold)');
+    make('escudo', ICON.shield, 'escudo', 'var(--steel)', true);
+    make('brazo', ICON.sword, 'brazo', 'var(--blood)', true);
+  } else make('main', '<img src="' + (F.head || F.img) + '" alt="">', F.short, F.ring);
+  if (id === 'mago') { hpBar.classList.add('under'); TOK.main.querySelector('.body').appendChild(hpBar); }   // la vida del mago va bajo su cabeza, como la tuya
+}
+
+/* ----- tablero ----- */
+function syncBoard(snap, tl, at, opt = {}) {
+  const p = snap.p, e = snap.e;
+  A(tl, at, $('#pSlotGlow'), { x: G.bw / 3 * p.lane, ease: 'power3.out', duration: D(0.3) });
+  A(tl, at, $('#playerTok'), { x: LX(p.lane), y: SY.p, ease: 'power3.out', duration: D(0.3) });
+  A(tl, at, $('#laneGlow'), { x: G.bw / 3 * p.lane, ease: 'power3.out', duration: D(0.3) });
+  A(tl, at, $('#eSlotGlow'), { x: G.bw / 3 * e.lane, autoAlpha: IN_LANE ? 0 : 1, ease: 'power3.out', duration: D(0.3) });
+  A(tl, at, $('#eLaneGlow'), { x: G.bw / 3 * (snap.id === 'caballero' ? 1 : e.lane), autoAlpha: snap.id === 'caballero' ? 0 : 1, ease: 'power3.out', duration: D(0.3) });
+  if (snap.id === 'caballero') {
+    for (const part of ['cuerpo', 'escudo', 'brazo']) {
+      const el = TOK[part], P = e.parts[part];
+      A(tl, at, el, { x: LX(P.lane), y: RY.enemy(), ease: 'power2.inOut', duration: D(0.34) });
+      if (P.max) A(tl, at, el.querySelector('.mini i'), { scaleX: P.hp / P.max });
+      const dead = part !== 'cuerpo' && P.hp <= 0;
+      C(tl, at, () => { el.classList.toggle('dead', dead); });
+    }
+  } else {
+    const el = TOK.main;
+    if (!opt.skipMain) A(tl, at, el, { x: LX(e.lane), y: IN_LANE ? RY.enemy() : SY.e, ease: snap.id === 'lobo' ? 'power4.out' : 'power2.inOut', duration: D(0.3) });
+    A(tl, at, el.querySelector('.aura'), { autoAlpha: e.intent && e.intent.channel ? 1 : 0, duration: D(0.25) });
+  }
+  const mainEl = snap.id === 'caballero' ? TOK.cuerpo : TOK.main;
+  A(tl, at, $('#eHp .fill'), { scaleX: Math.max(0, e.hp) / e.max, duration: D(0.4) });
+  A(tl, at, $('#pHp .fill'), { scaleX: Math.max(0, p.hp) / p.max, duration: D(0.4) });
+  C(tl, at, () => {
+    $('#eHp .num').textContent = Math.max(0, e.hp) + ' / ' + e.max;
+    $('#pHp .num').textContent = Math.max(0, p.hp) + ' / ' + p.max;
+    const st = $('#eStatus');
+    if (e.intent && e.intent.channel) { st.textContent = 'CANALIZA'; st.style.color = 'var(--violet)'; st.style.visibility = 'visible'; }
+    else st.style.visibility = 'hidden';
+    renderIntent(snap);
+    syncHeroChips(snap);
+  });
+  syncTokens(snap, tl, at);
+  syncWaves(snap, tl, at);
+  syncShields(snap, tl, at);
+  syncCards(snap, tl, at);
+}
+/* golpes del rival: fichas con ícono que bajan desde la cabeza del rival por su carril */
+const SVGI = {
+  fangs: '<svg viewBox="0 0 40 40"><path d="M5 12q15 8 30 0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M9 14l4 16 4-14zM23 16l4 14 4-16z" fill="#fff"/><path d="M8 30q12 -6 24 0" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity=".8"/></svg>',
+  claws: '<svg viewBox="0 0 40 40" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round"><path d="M10 6q-4 14 2 28"/><path d="M20 4q-4 16 2 32"/><path d="M30 6q-4 14 2 28"/></svg>',
+  darts: '<svg viewBox="0 0 40 40" fill="#fff" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M10 4v24M20 2v28M30 4v24" /><path d="M6 26l4 8 4-8zM16 28l4 8 4-8zM26 26l4 8 4-8z" stroke="none"/></svg>',
+  // mano que aprieta un rayo (cadena de rayos): zigzag blanco-amarillo agarrado por los dedos
+  handBolt: '<svg viewBox="0 0 40 40"><circle cx="21" cy="14" r="13" fill="#fff6b0" opacity=".22"/><path d="M24 1L13 17h7l-5 13 13-18h-7.5L29 1z" fill="#fff59a" stroke="#fffde6" stroke-width="1.2" stroke-linejoin="round"/><path d="M6 30q2-6 8-6h3q2 0 2 2v1h2v-2q0-2 2-2h1q2 0 2 2v1h1q2 0 2 2v1q2-1 3 1l-1 4q-3 5-10 5H13q-5 0-7-4z" fill="#f2d8bc" stroke="#6b4a2b" stroke-width="1.4" stroke-linejoin="round"/><path d="M19 27v4M24 27v4M29 29v3" stroke="#6b4a2b" stroke-width="1.2" stroke-linecap="round"/></svg>',
+  hand: '<svg viewBox="0 0 40 40"><circle cx="20" cy="13" r="8" fill="#e6dbff" opacity=".95"/><circle cx="20" cy="13" r="12" fill="none" stroke="#b79ae0" stroke-width="2" opacity=".8"/><path d="M5 27q8-3 13 2h9q4 0 6-3l3 2q-3 7-10 7H15q-5 0-10-4z" fill="#f2d8bc" stroke="#6b4a2b" stroke-width="1.5" stroke-linejoin="round"/></svg>'
+};
+function atkIcon(key, phase) {
+  if (phase === 'ch') return key === 'rayo' ? SVGI.handBolt : SVGI.hand;
+  return { rayo: '⚡', tormenta: '⛈️', fuego: '🔥', dardos: SVGI.darts, mordida: SVGI.fangs, doble: SVGI.fangs, zarpazo: SVGI.claws, salto: SVGI.claws,
+    tajo: '🗡️', mandoble: '🗡️', reves: '🗡️', embestida: '👊', puno: '👊' }[key] || '✖';
+}
+function chevSvg(n, up) {
+  if (!n) return '';
+  let d = '';
+  for (let i = 0; i < n; i++) { const y = 3 + i * 7; d += up ? '<path d="M3 ' + (y + 6) + 'l6-6 6 6"/>' : '<path d="M3 ' + y + 'l6 6 6-6"/>'; }
+  return '<svg viewBox="0 0 18 ' + (n * 7 + 6) + '" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>';
+}
+function headLane(snap, src) { return snap.id === 'caballero' ? snap.e.parts[src && src !== 'main' ? src : 'cuerpo'].lane : snap.e.lane; }
+function wantedTokens(snap) {
+  const out = new Map(), e = snap.e;
+  if (e.intent) for (const s of e.intent.steps) {
+    if (s.done || s.kind !== 'hit') continue;
+    const phase = stepPhase(s, snap.tic), w = tk => ({ s, key: e.intent.key, lane: tk.lane, pos: stepPos(s, snap.tic), phase, chev: chevOf(stepSpeed(s, snap.tic)) });
+    // conjuro canalizando: UNA sola mano en el carril del mago; al soltarse en la mitad se parte en un rayo por carril
+    if (phase === 'ch' && s.origin != null) { out.set(s.id + '-0', Object.assign(w(s.tk[0]), { lane: s.origin })); continue; }
+    for (const tk of s.tk) out.set(s.id + '-' + tk.k, w(tk));
+  }
+  return out;
+}
+function syncTokens(snap, tl, at) {
+  const want = wantedTokens(snap), p = snap.p;
+  for (const [key, w] of want) {
+    let el = TK.get(key);
+    const y = Ya(w.pos), x = LX(w.lane);
+    const paint = () => {
+      el.classList.toggle('magic', !!w.s.magic);
+      el.classList.toggle('mine', w.lane === p.lane);
+      const T = DAMAGE_TYPES[ATK_DMG_TYPE[w.key]] || DAMAGE_TYPES.contundente, typed = w.phase !== 'ch';
+      el.classList.toggle('typed', typed);
+      if (typed) el.style.setProperty('--dc', T.color);
+      el.querySelector('.ic').innerHTML = typed ? T.icon : atkIcon(w.key, w.phase);   // canalizando: la mano con el hechizo
+      el.querySelector('.dm').textContent = w.s.dmg;
+      el.querySelector('.hchev').innerHTML = w.phase === 'ch' ? chevSvg(w.chev, false) : '';   // la mano muestra su velocidad
+      el._w = w;
+      el.dataset.phase = w.phase;
+    };
+    if (!el) {
+      el = document.createElement('div'); el.className = 'atk';
+      el.innerHTML = '<div class="in"><div class="ic"></div></div><div class="dm"></div><div class="hchev"></div>';
+      $('#tiles').appendChild(el); TK.set(key, el); bindTip(el);
+      el.dataset.at = w.s.at; el.dataset.k = key; paint();
+      if (tl && w.phase === 'go' && w.s.origin != null) {   // la mano se partió en la mitad: el rayo sale de ahí
+        gsap.set(el, { x: LX(w.s.origin), y: Ya(0.5), scale: 0.3, autoAlpha: 0 });
+        tl.to(el, { x, y: Ya(0.5), scale: 1, autoAlpha: 1, duration: D(0.3), ease: 'back.out(2)' }, at + 0.5).to(el, { y, duration: D(0.3), ease: 'power2.in' }, at + 0.82);
+      } else if (tl) {   // nace en la cabeza del rival y entra a su carril
+        const hx = LX(headLane(snap, w.s.src));
+        gsap.set(el, { x: hx, y: IN_LANE ? RY.enemy() : Ya(0) - 20, scale: 0.3, autoAlpha: 0 });
+        tl.to(el, { x, y, scale: 1, autoAlpha: 1, duration: D(0.4), ease: 'back.out(1.6)' }, at + 0.14);
+        ring(tl, at + 0.2, hx, IN_LANE ? RY.enemy() : Ya(0), w.s.magic ? 'var(--violet)' : 'var(--blood)');
+      } else gsap.set(el, { x, y, scale: 1, autoAlpha: 1 });
+    } else {
+      const released = el.dataset.phase === 'ch' && w.phase === 'go';
+      if (released && tl) tl.to(el, { y: Ya(0.5), duration: D(0.34), ease: 'power1.inOut' }, at).to(el, { x, y, duration: D(0.3), ease: 'power2.in' }, at + 0.82);
+      else A(tl, at, el, { x, y, duration: D(0.34), ease: 'power1.inOut' });
+      if (released && tl) {   // la mano suelta el conjuro en la línea media: se transforma
+        el.querySelector('.hchev').innerHTML = '';
+        tl.to(el.querySelector('.in'), { scale: 0.2, rotation: 90, duration: D(0.16), ease: 'power2.in' }, at + 0.34);
+        tl.call(paint, null, at + 0.5);
+        tl.fromTo(el.querySelector('.in'), { scale: 0.2, rotation: -60 }, { scale: 1.25, rotation: 0, duration: D(0.26), ease: 'back.out(3)', immediateRender: false }, at + 0.5)
+          .to(el.querySelector('.in'), { scale: 1, duration: D(0.16) }, at + 0.76);
+        ring(tl, at + 0.5, x, Ya(0.5), 'var(--violet)');
+        sparks(tl, at + 0.5, x, Ya(0.5), 'var(--violet)');
+        flash(tl, at + 0.5, 'var(--violet)', 0.18);
+        continue;
+      }
+      C(tl, at, paint);
+    }
+  }
+  for (const [key, el] of [...TK]) {
+    if (want.has(key)) continue;
+    TK.delete(key);
+    const kill = () => el.remove();
+    if (!tl) { kill(); continue; }
+    if (+el.dataset.at === snap.tic) {   // llegó: estalla al final del carril
+      const x = gsap.getProperty(el, 'x'), yEnd = el.dataset.stop ? +el.dataset.stop : Ya(1);
+      tl.to(el, { y: yEnd, duration: D(0.14), ease: 'power2.in' }, at)
+        .to(el, { scale: 1.7, autoAlpha: 0, duration: D(0.28), ease: 'power2.out' }, at + 0.16);
+      sparks(tl, at + 0.16, x, yEnd, el.classList.contains('magic') ? 'var(--violet)' : 'var(--blood)');
+      tl.call(kill, null, at + 0.5);
+    } else { tl.to(el, { scale: 0, rotation: 20, autoAlpha: 0, duration: D(0.26) }, at + 0.1); tl.call(kill, null, at + 0.4); }
+  }
+}
+function syncWaves(snap, tl, at) {
+  const want = new Map((snap.waves || []).map(w => [w.id, w]));
+  for (const [id, w] of want) {
+    let el = WV.get(id);
+    if (!el) {
+      el = document.createElement('div'); el.className = 'wave'; el.innerHTML = '<div class="in">' + ICON2.wave + '</div><div class="dots"></div><div class="chev">' + chevSvg(chevOf(WAVE_STEP * LANE_STEPS), true) + '</div>'; $('#shields').appendChild(el); WV.set(id, el); bindTip(el);
+      if (tl) { gsap.set(el, { x: LX(w.lane), y: Yw(w.pos), scale: 0.2, autoAlpha: 0 }); tl.to(el, { scale: 1, autoAlpha: 1, duration: D(0.3), ease: 'back.out(2)' }, at + 0.1); }
+      else gsap.set(el, { x: LX(w.lane), y: Yw(w.pos), scale: 1, autoAlpha: 1 });
+    } else A(tl, at, el, { y: Yw(w.pos), duration: D(0.34), ease: 'power1.inOut' });
+    el._w = w; const left = Math.max(0, Math.round((w.pos - WAVE_END) / WAVE_STEP)), wel = el; C(tl, at, () => renderDots(wel, left));   // pasos que le quedan hasta la mitad
+  }
+  for (const [id, el] of [...WV]) {
+    if (want.has(id)) continue;
+    WV.delete(id);
+    if (!tl) { el.remove(); continue; }
+    const x = gsap.getProperty(el, 'x'), y = Yw(WAVE_END);
+    tl.to(el, { y, duration: D(0.2) }, at).to(el, { scaleX: 1.8, scaleY: 0.3, autoAlpha: 0, duration: D(0.35), ease: 'power2.out' }, at + 0.2);
+    sparks(tl, at + 0.22, x, y, 'var(--sage)');
+    tl.call(() => el.remove(), null, at + 0.6);
+  }
+}
+/* tus cartas en el carril: salen del casillero de abajo y suben como un auto, un tramo por resolución */
+const PC = new Map();
+const PY = pos => { const a = G.bh - 40, b = IN_LANE ? RY.enemy() + 40 : 40; return a + (b - a) * pos; };
+const cardPos = (c, t) => Math.max(0, Math.min(1, (t - c.from) / (c.at - c.from)));
+function syncCards(snap, tl, at) {
+  for (const c of snap.cards || []) {
+    const el = PC.get(c.id); if (!el) continue;
+    A(tl, at, el, { x: LX(c.lane) - CW / 2, y: PY(cardPos(c, snap.tic)) - CH / 2, duration: D(0.5), ease: 'power1.inOut' });
+  }
+  for (const [id, el] of [...PC]) {
+    if ((snap.cards || []).some(c => c.id === id)) continue;
+    PC.delete(id);
+    if (!tl) { el.remove(); continue; }
+    const y = PY(1) - CH / 2;   // llega al otro extremo: pega y se va al descarte
+    tl.to(el, { y, duration: D(0.18), ease: 'power3.in' }, at)
+      .to(el, { scale: 0.7, duration: D(0.08), yoyo: true, repeat: 1 }, at + 0.18)
+      .to(el, { autoAlpha: 0, scale: 0.3, rotation: -8, duration: D(0.3), ease: 'power2.in' }, at + 0.4)
+      .call(() => { el.remove(); updatePiles(); }, null, at + 0.72);
+    if (!RM) tl.to('#discard', { x: 0, duration: D(0.25), ease: 'power3.out' }, at + 0.5).fromTo('#discN', { scale: 1.7 }, { scale: 1, duration: D(0.3), ease: 'back.out(3)', immediateRender: false }, at + 0.75)
+      .to('#discard', { x: DRAWER_CLOSED, duration: D(0.3), ease: 'power2.inOut' }, at + 1.1);
+  }
+}
+function renderDots(el, n) { el.querySelector('.dots').innerHTML = '<i></i>'.repeat(n); }
+function syncShields(snap, tl, at) {
+  const want = new Map((snap.shields || []).map(s => [s.id, s]));
+  for (const [id, s] of want) {
+    let el = SH.get(id);
+    if (el) el._s = s;
+    if (!el) {
+      el = document.createElement('div'); el.className = 'shield';
+      el.innerHTML = '<div class="sb">' + ICON2.shield + '</div><div class="dots"></div>';
+      $('#shields').appendChild(el); SH.set(id, el); renderDots(el, s.dots); el.dataset.dots = s.dots; el._s = s; bindTip(el);
+      gsap.set(el, { x: LX(s.lane), y: SHY() });
+      if (tl) { gsap.set(el, { scale: 0.2, autoAlpha: 0 }); tl.to(el, { scale: 1, autoAlpha: 1, duration: D(0.35), ease: 'back.out(2.2)' }, at + 0.15); }
+    } else if (+el.dataset.dots > s.dots) {
+      const lost = [...el.querySelectorAll('.dots i')].slice(s.dots);
+      el.dataset.dots = s.dots;
+      if (tl) tl.to(lost, { scale: 0, autoAlpha: 0, y: -10, duration: D(0.3), ease: 'back.in(2)' }, at).call(() => lost.forEach(d => d.remove()), null, at + 0.32);
+      else renderDots(el, s.dots);
+    }
+  }
+  for (const [id, el] of [...SH]) {
+    if (want.has(id)) continue;
+    SH.delete(id);
+    if (!tl) { el.remove(); continue; }
+    if (el.dataset.broken) continue;            // el evento 'absorb' ya anima la rotura
+    tl.to(el, { autoAlpha: 0, scale: 0.7, y: '+=10', duration: D(0.4) }, at).call(() => el.remove(), null, at + 0.42);
+  }
+}
+function renderIntent(snap) {
+  const e = snap.e, p = snap.p, el = $('#intentLine');
+  if (!el) return;   // la barra de intención ya no se muestra
+  if (snap.over) { el.innerHTML = ''; return; }
+  if (!e.intent) { el.innerHTML = ''; return; }
+  const it = e.intent, hits = it.steps.filter(s => !s.done && s.kind === 'hit');
+  let txt = '<b>' + it.name + '</b>';
+  if (hits.length) {
+    const mine = hits.some(s => s.lanes.includes(p.lane));
+    const lanes = [...new Set(hits.flatMap(s => s.lanes))].sort();
+    const where = lanes.length === 3 ? 'todos' : lanes.map(l => LANES[l]).join(' y ');
+    txt += ' · <span class="' + (mine ? (hits[0].magic ? 'vio' : 'red') : '') + '">' + where + (mine ? ' (vos)' : '') + '</span>';
+  } else if (it.key === 'rodeo') txt += ' · va a tu carril';
+  else if (it.key === 'parpadeo') txt += ' · se aleja';
+  const nk = snap.id === 'caballero' ? nextKey(snap, false) : FOES[snap.id].cycle[e.cycle % FOES[snap.id].cycle.length];
+  el.innerHTML = '<span class="now-i">' + txt + '</span><span class="next">Después: ' + INAME[nk] + '</span>';
+}
+</script>
+
+<script>
+/* ----- efectos en el lugar ----- */
+function fxEl(cls, html) { const d = document.createElement('div'); d.className = cls; if (html != null) d.innerHTML = html; $('#fx').appendChild(d); return d; }
+function floatText(tl, at, text, x, y, color, small) {
+  const d = fxEl('fl' + (small ? ' sm' : ''), text); d.style.color = color;
+  gsap.set(d, { x, y, xPercent: -50, yPercent: -50, autoAlpha: 0, scale: 0.6 });
+  tl.to(d, { autoAlpha: 1, scale: 1, y: y - 18, duration: D(0.18), ease: 'back.out(2)' }, at)
+    .to(d, { autoAlpha: 0, y: y - 46, duration: D(0.45), ease: 'power1.in' }, at + 0.5)
+    .call(() => d.remove(), null, at + 1);
+}
+function shake(tl, at, el, amt = 6) {
+  if (RM) return;
+  tl.fromTo(el, { x: -amt }, { x: amt, duration: 0.05, repeat: 4, yoyo: true, ease: 'none', immediateRender: false }, at).set(el, { x: 0 }, at + 0.26);
+}
+function flash(tl, at, color, a = 0.35) {
+  const f = $('#flash');
+  tl.set(f, { backgroundColor: color }, at).fromTo(f, { autoAlpha: a }, { autoAlpha: 0, duration: D(0.35), immediateRender: false }, at);
+}
+function slash(tl, at, x, y) {
+  const d = fxEl('slash');
+  gsap.set(d, { x, y, rotation: -60, scale: 0.4, autoAlpha: 0 });
+  tl.to(d, { autoAlpha: 1, scale: 1.1, rotation: 70, duration: D(0.2), ease: 'power3.out' }, at)
+    .to(d, { autoAlpha: 0, duration: D(0.15) }, at + 0.18).call(() => d.remove(), null, at + 0.4);
+}
+function sparks(tl, at, x, y, color) {
+  for (let i = 0; i < 10; i++) {
+    const d = fxEl('spark'), a = i * 36, r = 46 + (i % 3) * 10;
+    if (color) { d.style.background = color; d.style.boxShadow = '0 0 8px ' + color; }
+    gsap.set(d, { x, y, rotation: a + 90, autoAlpha: 0 });
+    tl.set(d, { autoAlpha: 1 }, at)
+      .to(d, { x: x + Math.cos(a * Math.PI / 180) * r, y: y + Math.sin(a * Math.PI / 180) * r, autoAlpha: 0, duration: D(0.38), ease: 'power3.out' }, at + 0.01)
+      .call(() => d.remove(), null, at + 0.45);
+  }
+}
+function ring(tl, at, x, y, color) {
+  const d = fxEl('ring'); d.style.borderColor = color; d.style.boxShadow = '0 0 16px ' + color;
+  gsap.set(d, { x, y, scale: 0.4, autoAlpha: 0 });
+  tl.fromTo(d, { scale: 0.4, autoAlpha: 1 }, { scale: 1.3, autoAlpha: 0, duration: D(0.4), immediateRender: false }, at).call(() => d.remove(), null, at + 0.45);
+}
+function banner(tl, at, text, color) {
+  const b = $('#banner');
+  tl.call(() => { b.textContent = text; b.style.color = color; }, null, at)
+    .fromTo(b, { autoAlpha: 0, scale: 1.6 }, { autoAlpha: 1, scale: 1, duration: D(0.25), ease: 'back.out(2)', immediateRender: false }, at)
+    .to(b, { autoAlpha: 0, y: -20, duration: D(0.3) }, at + 0.7).set(b, { y: 0 }, at + 1.01);
+}
+function srcTok(snap, src) { return snap.id === 'caballero' ? TOK[src === 'main' ? 'cuerpo' : src] : TOK.main; }
+function enemyX(snap) { return LX(snap.id === 'caballero' ? snap.e.parts.cuerpo.lane : snap.e.lane); }
+
+function shards(tl, at, x, y) {
+  for (let i = 0; i < 8; i++) {
+    const d = fxEl('shard'), a = i * 45 + 20, r = 40 + (i % 3) * 12;
+    gsap.set(d, { x, y, rotation: a, autoAlpha: 0 });
+    tl.set(d, { autoAlpha: 1 }, at)
+      .to(d, { x: x + Math.cos(a * Math.PI / 180) * r, y: y + Math.sin(a * Math.PI / 180) * r + 18, rotation: a + 160, autoAlpha: 0, duration: D(0.5), ease: 'power2.out' }, at + 0.01)
+      .call(() => d.remove(), null, at + 0.55);
+  }
+}
+function animateEvents(tl, at, evs, prev, snap) {
+  const py = RY.player(), ey = IN_LANE ? RY.enemy() : 24, pIn = $('#playerTok .inner');
+  let hitAt = at + 0.14;
+  for (const ev of evs) {
+    switch (ev.type) {
+      case 'heal':
+        floatText(tl, at, (ev.n > 0 ? '+' : '') + ev.n, LX(snap.p.lane), RY.player() - 34, 'var(--gold)');
+        break;
+      case 'smite':
+        ring(tl, at + 0.1, LX(snap.p.lane), RY.player() - 20, 'var(--gold)');
+        floatText(tl, at, 'castigar', LX(snap.p.lane), RY.player() - 48, 'var(--gold)', true);
+        break;
+      case 'pmove':
+        C(tl, at, () => sfx.play('move'));
+        if (!RM) tl.fromTo(pIn, { scaleX: 1.15, scaleY: 0.88 }, { scaleX: 1, scaleY: 1, duration: D(0.35), ease: 'elastic.out(1,0.5)', immediateRender: false }, at);
+        break;
+      case 'phit': {
+        const tgt = snap.id === 'caballero' ? TOK[ev.part] : TOK.main, x = LX(ev.lane);
+        C(tl, at + 0.1, () => sfx.play('impact'));
+        slash(tl, at + 0.1, x, ey);
+        shake(tl, at + 0.1, tgt.querySelector('.disc'), 5);
+        floatText(tl, at + 0.1, '−' + ev.dmg, x, ey - 8, ev.shield ? 'var(--steel)' : 'var(--gold)');
+        if (ev.shield) ring(tl, at + 0.1, x, ey, 'var(--steel)');
+        if (!RM) tl.fromTo(tgt.querySelector('.disc'), { filter: 'brightness(2.4)' }, { filter: 'brightness(1)', duration: D(0.3), immediateRender: false, clearProps: 'filter' }, at + 0.1);
+        break;
+      }
+      case 'whiff':
+        floatText(tl, at + 0.1, 'al aire', LX(ev.lane), ey + 46, 'var(--muted)', true);
+        break;
+      case 'plant': ring(tl, at + 0.15, LX(ev.lane), SHY(), 'var(--steel)'); break;
+      case 'wspawn': ring(tl, at + 0.1, LX(ev.lane), Yw(ev.pos), 'var(--sage)'); break;
+      case 'absorb': {
+        const x = LX(ev.lane), y = SHY();
+        C(tl, hitAt, () => sfx.play('impact'));
+        shards(tl, hitAt + 0.02, x, y); flash(tl, hitAt, 'var(--steel)', 0.22);
+        floatText(tl, hitAt, ev.magic ? 'anulado ✦' : 'anulado', x, y - 40, 'var(--steel)', true);
+        break;
+      }
+      case 'redirect': {
+        const x = LX(ev.from), y = Ya(ev.pos);
+        sparks(tl, at + 0.05, x, y, 'var(--sage)');
+        floatText(tl, at + 0.1, 'desviado → ' + LANES[ev.to], (x + LX(ev.to)) / 2, y - 30, 'var(--sage)', true);
+        break;
+      }
+      case 'pass': {
+        const w = WV.get(ev.wId), x = LX(ev.lane), y = w ? gsap.getProperty(w, 'y') : Ya(0.7);
+        ring(tl, at + 0.2, x, y, 'var(--violet)');
+        if (w && !RM) tl.fromTo(w, { filter: 'hue-rotate(0deg) brightness(1)' }, { filter: 'hue-rotate(90deg) brightness(1.8)', duration: D(0.18), yoyo: true, repeat: 1, immediateRender: false, clearProps: 'filter' }, at + 0.2);
+        floatText(tl, at + 0.25, 'la magia pasa', x, y - 30, 'var(--violet)', true);
+        break;
+      }
+      case 'ehit': {
+        const tok = srcTok(snap, ev.src), tin = tok.querySelector('.inner'), x = LX(snap.p.lane);
+        if (!ev.magic) tl.to(tin, { y: 14, duration: D(0.1), ease: 'power3.in' }, hitAt - 0.1).to(tin, { y: 0, duration: D(0.24) }, hitAt + 0.02);
+        if (ev.res === 'hit') {
+          if (ev.taken > 0) C(tl, hitAt + 0.1, () => sfx.play('pain'));
+          shake(tl, hitAt + 0.1, $('#boardIn'), 7); flash(tl, hitAt + 0.1, ev.magic ? 'var(--violet)' : 'var(--blood)', 0.4);
+          floatText(tl, hitAt + 0.1, '−' + ev.taken + (ev.dbl ? ' ×2' : ''), x, py - 34, '#ff7a5e');
+        } else if (ev.res === 'miss' && ev.lanes.includes(prev.p.lane) && ev.lanes.includes(snap.p.lane) === false) {
+          floatText(tl, hitAt + 0.1, '¡Esquivás!', x, py - 40, 'var(--sage)', true);
+        }
+        hitAt += 0.06;
+        break;
+      }
+      case 'emove':
+        if (ev.blink) {   // parpadeo: se desvanece y reaparece en otro carril
+          const el = TOK.main;
+          ring(tl, at, LX(ev.from), ey, 'var(--violet)');
+          tl.to(el, { autoAlpha: 0, scale: 0.4, duration: D(0.22), ease: 'power2.in' }, at)
+            .set(el, { x: LX(ev.to) }, at + 0.24)
+            .to(el, { autoAlpha: 1, scale: 1, duration: D(0.26), ease: 'back.out(2)' }, at + 0.3);
+          ring(tl, at + 0.3, LX(ev.to), ey, 'var(--violet)');
+          sparks(tl, at + 0.02, LX(ev.from), ey, 'var(--violet)');
+        }
+        break;
+      case 'shield':
+        floatText(tl, at + 0.12, 'el escudo te sigue', LX(ev.to), ey + 62, 'var(--steel)', true);
+        break;
+      case 'interrupt':
+        floatText(tl, at + 0.22, ev.part ? 'se corta su golpe' : '¡Conjuro cortado!', enemyX(snap), ey + 62, 'var(--violet)', true);
+        if (!ev.part) sparks(tl, at + 0.22, enemyX(snap), ey, 'var(--violet)');
+        break;
+      case 'partbreak': {
+        const el = TOK[ev.part];
+        floatText(tl, at + 0.24, ev.part === 'escudo' ? '¡Escudo roto!' : '¡Brazo roto!', LX(snap.e.parts[ev.part].lane), ey + 62, 'var(--amber)', true);
+        if (!RM) tl.fromTo(el.querySelector('.disc'), { scale: 1.3 }, { scale: 1, duration: D(0.4), ease: 'back.out(3)', immediateRender: false }, at + 0.24);
+        break;
+      }
+    }
+  }
+}
+</script>
+
+<script>
+/* ----- cartas: abanico flotante ----- */
+const CH = 122, CW = 84, ZH = 180, DRAWER_CLOSED = 70;
+function cardName(key) { return ACTIONS[key].name; }
+function cardText(c) { return c.key === 'bloquear' ? blockInfo(c.dur) : CARD_INFO[c.key]; }
+// franja de abajo de la carta: daño a la izquierda, velocidad a la derecha (o los puntos de duración del escudo)
+function cardBand(c) {
+  if (c.dur) return '<span class="dur">' + '<i></i>'.repeat(c.dur) + '</span>';
+  const a = ACTIONS[c.key], n = chevOf(CARD_SPEED[c.key]);
+  if (a.kind === 'instant') return '<span class="heal">+' + (a.heal || a.smite || 0) + '</span>';
+  return (a.dmg ? DamageBadge(a.dmg, a.dmgType) : '<span></span>') + (n ? SpeedBadge(n, 'up') : '');
+}
+function cardArtHtml(c) {
+  const a = ACTIONS[c.key];
+  if (c.key === 'manos') return '<div class="art glyph">' + ICON2.hands + '</div>';
+  if (c.key === 'castigar') return '<div class="art glyph">' + ICON2.smite + '</div>';
+  if (c.key === 'vengadora') return '<div class="art glyph">' + ICON2.avenger + '</div>';
+  return '<div class="art" style="background-image:url(assets/card-' + a.art + '.jpg)"></div>';
+}
+function makeCard(c) {
+  const el = document.createElement('div'); el.className = 'card'; el.dataset.id = c.id; el.dataset.key = c.key;
+  const ico = c.key === 'bloquear' ? ICON2.shield : c.key === 'desviar' ? ICON2.wave : '';
+  el.innerHTML = '<div class="face">' + cardArtHtml(c) +
+    (ico ? '<div class="ico">' + ico + '</div>' : '') + '<div class="nm">' + (ACTIONS[c.key].short || cardName(c.key)) + '</div>' +
+    '<div class="spd' + (c.dur ? '' : ' band') + '">' + cardBand(c) + '</div></div><div class="backf"></div>';
+  el.addEventListener('click', ev => { ev.stopPropagation(); if (!el.classList.contains('fly')) selectCard(c.id); });
+  $('#fan').appendChild(el); FAN.set(c.id, el);
+  gsap.set(el, { transformOrigin: '50% 100%', transformPerspective: 600 });
+  return el;
+}
+function fanPos(i, n, selIdx) {
+  if (selIdx < 0) {
+    const o = i - (n - 1) / 2, cx = G.zw / 2 + 26;
+    return { x: cx + o * 66 - CW / 2, y: ZH - CH - 26 + o * o * 5, rotation: o * 5, scale: 1 };
+  }
+  if (i === selIdx) return { x: 50, y: ZH - CH - 20, rotation: 0, scale: 1.3 };
+  const j = i < selIdx ? i : i - 1;
+  return { x: 156 + j * 64, y: 132, rotation: 0, scale: 0.85 };
+}
+function layoutFan(dur = 0.32) {
+  if (dur >= 0.15) sfx.play('deal', 200);
+  const ids = S.hand.map(c => c.id), si = ids.indexOf(selId);
+  ids.forEach((id, i) => {
+    const el = FAN.get(id); if (!el) return;
+    el.classList.toggle('sel', id === selId);
+    el.style.zIndex = id === selId ? 20 : i + 1;
+    gsap.to(el, Object.assign({ duration: D(dur), ease: 'power3.out', overwrite: 'auto', autoAlpha: 1, rotationY: 0 }, fanPos(i, ids.length, si)));
+  });
+}
+function showFan(tl, at) {
+  C(tl, at, () => sfx.play('deal', 200));
+  const ids = S.hand.map(c => c.id);
+  ids.forEach((id, i) => {
+    let el = FAN.get(id);
+    const pos = fanPos(i, ids.length, -1);
+    if (!el) {   // carta robada: sale del mazo boca abajo y se da vuelta
+      el = makeCard(S.hand[i]); el.classList.add('down');
+      gsap.set(el, { x: 12 + 28 - CW / 2, y: ZH - 14 - 80 - 10, scale: 0.66, rotation: -6, autoAlpha: 1 });
+      tl.to(el, Object.assign({ duration: D(0.45), ease: 'power3.out' }, pos), at + 0.05 * i)
+        .to(el, { rotationY: 90, duration: D(0.14), ease: 'power1.in' }, at + 0.05 * i)
+        .call(() => el.classList.remove('down'), null, at + 0.05 * i + 0.15)
+        .to(el, { rotationY: 0, duration: D(0.18), ease: 'power1.out' }, at + 0.05 * i + 0.15);
+      if (!RM) tl.fromTo('#deckN', { scale: 1.6 }, { scale: 1, duration: D(0.35), ease: 'back.out(3)', immediateRender: false }, at);
+    } else {
+      el.classList.remove('sel');
+      tl.fromTo(el, { y: ZH + 40, autoAlpha: 0 }, Object.assign({ autoAlpha: 1, duration: D(0.4), ease: 'back.out(1.4)', immediateRender: false }, pos), at + 0.05 * i);
+    }
+    el.style.zIndex = i + 1;
+  });
+  tl.call(updatePiles, null, at);
+}
+function hideFan(tl, at) {
+  const els = [...FAN.values()];
+  if (els.length) tl.to(els, { y: ZH + 40, autoAlpha: 0, duration: D(0.28), ease: 'power2.in', stagger: D(0.03), overwrite: 'auto' }, at);
+}
+function updatePiles() {
+  $('#deckN').textContent = S.deck.length;
+  $('#deck').classList.toggle('empty', !S.deck.length);
+  $('#discN').textContent = S.discard.length;
+  const st = $('#discard .stack'), want = Math.min(3, S.discard.length);
+  while (st.children.length < want) { const d = document.createElement('div'); d.className = 'cback'; st.appendChild(d); }
+  while (st.children.length > want) st.lastChild.remove();
+}
+
+/* ----- selección, carriles iluminados y vista previa ----- */
+function buildTargets() {
+  const t = $('#targets'); t.innerHTML = '';
+  for (let l = 0; l < 3; l++) { const d = document.createElement('div'); d.className = 'target'; d.dataset.l = l; d.innerHTML = '<div class="fr"></div><div class="tp"></div>'; t.appendChild(d); }
+  $$('#laneHit div').forEach(d => {
+    d.addEventListener('click', ev => { ev.stopPropagation(); if (d.classList.contains('on') && selId) requestPlay(+d.dataset.l); });
+    d.addEventListener('pointerenter', () => { if (d.classList.contains('on') && selId) hoverLane(+d.dataset.l); });
+  });
+}
+function selCard() { return S && S.hand.find(c => c.id === selId); }
+function pvText(r) {
+  return '<span class="g">pegás ' + r.dealt + '</span><br><span class="' + (r.taken ? 'r' : 's') + '">recibís ' + r.taken + '</span>';
+}
+function lpHtml(c, l) {
+  const r = previewOf(S, c.key, l, c.dur);
+  const note = r.notes[0] ? ' · ' + r.notes[0][0] : '';
+  return (ACTIONS[c.key].kind !== 'wave' ? 'Carril ' + LANES[l] + ': ' : 'Tu carril: ') + 'pegás ' + r.dealt + ', recibís ' + r.taken + note;
+}
+function hoverLane(l) {
+  const c = selCard(); if (!c) return;
+  const lp = $('#cardInfo .lp'); if (lp) { lp.className = 'lp'; lp.innerHTML = lpHtml(c, l); }
+  $$('.target').forEach(t => t.classList.toggle('hov', +t.dataset.l === l));
+}
+function showInfo(c, lanes) {
+  const ci = $('#cardInfo');
+  const act = ACTIONS[c.key], tired = S && fatigueDeficit(S, c.key) > 0;
+  let lp;
+  if (act.kind === 'instant') {
+    const r = previewOf(S, c.key, S.p.lane, c.dur);
+    const extra = r.notes[0] ? ' · ' + r.notes[0][0] : '';
+    const instTxt = act.heal ? (S.p.hp >= S.p.max ? 'Estás a máxima vida' : 'Te curás ' + Math.min(act.heal, S.p.max - S.p.hp)) : 'Castigar el mal queda listo';
+    lp = '<div class="btns"><button type="button" class="btn pri" id="btnInstant">Jugar</button></div>' +
+      '<div class="lp">' + instTxt + extra + '</div>';
+  } else if (lanes.length) lp = '<div class="lp">' + (lanes.length === 1 ? lpHtml(c, lanes[0]) : 'Tocá un carril iluminado.') + '</div>';
+  else lp = '<div class="lp no">Ya hay escudos en todas las columnas: no podés plantar otro.</div>';
+  const warn = tired ? ' <span>te va a cansar</span>' : '';
+  ci.innerHTML = '<h4>' + cardName(c.key) + warn + '</h4><p>' + cardText(c) + '</p>' + lp;
+  const inst = ci.querySelector('#btnInstant');
+  if (inst) inst.addEventListener('click', ev => { ev.stopPropagation(); requestPlay(null); });
+  gsap.fromTo(ci, { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: D(0.25), overwrite: true });
+}
+function hideInfo() { gsap.to('#cardInfo', { autoAlpha: 0, y: 6, duration: D(0.18), overwrite: true }); }
+function showTargets(c) {
+  hideTargets();
+  if (ACTIONS[c.key].kind === 'instant') { $('#playerTok').classList.add('can'); return []; }
+  const lanes = targetLanes(S, c.key), strike = ACTIONS[c.key].kind === 'strike';
+  $$('.target').forEach(t => {
+    const l = +t.dataset.l, on = lanes.includes(l);
+    $('#laneHit div[data-l="' + l + '"]').classList.toggle('on', on);
+    t.classList.remove('hov');
+    if (!on) { gsap.to(t, { autoAlpha: 0, scale: 0.8, duration: D(0.15), overwrite: true }); return; }
+    t.querySelector('.tp').innerHTML = pvText(previewOf(S, c.key, l, c.dur));
+    // casillero de salida: el extremo de TU lado del carril
+    gsap.set(t, { x: LX(l), y: strike ? PY(0) : ACTIONS[c.key].kind === 'wave' ? Yw(WAVE_START) : SHY() });
+    t.querySelector('.tp').classList.toggle('up', true);
+    gsap.fromTo(t, { autoAlpha: 0, scale: 1.3 }, { autoAlpha: 1, scale: 1, duration: D(0.28), ease: 'back.out(2)', overwrite: true, delay: D(0.04 * l) });
+    if (!RM) { if (t._p) t._p.kill(); t._p = gsap.fromTo(t.querySelector('.fr'), { opacity: 1 }, { opacity: 0.55, repeat: -1, yoyo: true, duration: 0.6, ease: 'sine.inOut' }); }
+  });
+  return lanes;
+}
+function hideTargets() {
+  $$('#laneHit div').forEach(d => d.classList.remove('on'));
+  $$('.target').forEach(t => { if (t._p) { t._p.kill(); t._p = null; } gsap.to(t, { autoAlpha: 0, scale: 0.8, duration: D(0.15), overwrite: true }); });
+  if ($('#playerTok')) $('#playerTok').classList.toggle('can', !!(S && !S.over && S.hand && !S.hand.length));
+}
+function selectCard(id) {
+  if (busy || !S || S.over) return;
+  hideArrows();
+  if (selId === id) { deselect(); return; }
+  selId = id;
+  sfx.play('select');
+  const c = selCard();
+  layoutFan();
+  $$('#fan .card').forEach(el => {
+    const on = el.dataset.id === String(c.id) && fatigueDeficit(S, c.key) > 0;
+    el.classList.toggle('warn-tired', on);
+    if (on && !el.querySelector('.tired-hint')) el.insertAdjacentHTML('beforeend', '<div class="tired-hint">te va a cansar</div>');
+    if (!on) { const h = el.querySelector('.tired-hint'); if (h) h.remove(); }
+  });
+  showInfo(c, showTargets(c));
+}
+function deselect() {
+  if (!selId) return;
+  $$('#fan .card').forEach(el => { el.classList.remove('warn-tired'); const h = el.querySelector('.tired-hint'); if (h) h.remove(); });
+  selId = null; hideTargets(); hideInfo(); layoutFan();
+  if (!busy && S && !S.over) showArrows();
+}
+
+/* ----- moverse: tocá tu avatar ----- */
+function showArrows() {
+  arrowsOn = true;
+  [[-1, '#arrL'], [1, '#arrR']].forEach(([dir, sel]) => {
+    const el = $(sel), to = S.p.lane + dir;
+    if (to < 0 || to > 2) { gsap.to(el, { autoAlpha: 0, duration: D(0.15), overwrite: true }); return; }
+    const r = previewOf(S, dir < 0 ? 'izq' : 'der');
+    el.querySelector('.pvl').innerHTML = r.taken ? '<span style="color:#ff8a70">recibís ' + r.taken + '</span>' : '<span style="color:var(--sage)">' + (r.notes[0] && r.notes[0][0] === 'esquivás' ? 'esquivás' : 'a salvo') + '</span>';
+    gsap.set(el, { x: LX(to), y: SY.p });
+    gsap.fromTo(el, { autoAlpha: 0, scale: 0.4 }, { autoAlpha: 1, scale: 1, duration: D(0.28), ease: 'back.out(2.4)', overwrite: true });
+  });
+}
+function hideArrows() {
+  if (!arrowsOn) return;
+  arrowsOn = false;
+  gsap.to(['#arrL', '#arrR'], { autoAlpha: 0, scale: 0.6, duration: D(0.16), overwrite: true });
+}
+function onAvatar(ev) {
+  ev.stopPropagation();
+  if (busy || !S || S.over) return;
+  const c = selCard();
+  if (c && ACTIONS[c.key].kind === 'instant') { requestPlay(null); return; }
+  if (selId) deselect();
+  if (arrowsOn) hideArrows(); else showArrows();
+}
+function tiredTip() {
+  return 'Mientras estás cansado, recuperás la mitad de aguante (2 por Mantenimiento) y tus cartas que llegan al rival hacen −1 de daño (mínimo 1). Se acaba en tu Mantenimiento, después de estos turnos.';
+}
+function syncHeroChips(snap) {
+  const box = $('#pChips'); if (!box || !snap) return;
+  const p = snap.p, bits = [];
+  if (p.tired > 0) bits.push('<span class="chip tired" id="pTired" data-tip="' + tiredTip().replace(/"/g, '&quot;') + '">Cansado · ' + p.tired + '</span>');
+  if (p.smite) bits.push('<span class="chip smite" id="pSmite" data-tip="Tu próximo golpe que llegue al rival hace +3 de daño.">Castigar</span>');
+  box.innerHTML = bits.join('');
+  box.querySelectorAll('.chip').forEach(el => bindTip(el));
+}
+
+/* ----- resolver un turno ----- */
+const boardRect = () => $('#board').getBoundingClientRect();
+function runFrames(tl, frames, prev, onFrame) {
+  const TD = D(0.62);
+  frames.forEach((f, i) => {
+    const at = tl.duration();
+    for (const ev of f.ev) if (ev.type === 'absorb') {   // el escudo se rompe con fragmentos
+      const el = SH.get(ev.shId);
+      for (const [k, t] of TK) if (k.startsWith(ev.stepId + '-') && Math.round((gsap.getProperty(t, 'x') / G.bw) * 3 - 0.5) === ev.lane) t.dataset.stop = SHY();
+      if (el) { el.dataset.broken = 1; tl.to(el, { scale: 1.25, duration: D(0.1) }, at + 0.14).to(el, { scale: 0.4, autoAlpha: 0, rotation: 25, duration: D(0.25), ease: 'power2.in' }, at + 0.24).call(() => el.remove(), null, at + 0.5); }
+    }
+    if (onFrame) onFrame(tl, at, f, i);
+    const blink = f.ev.some(e => e.type === 'emove' && e.blink);
+    syncBoard(f.snap, tl, at + 0.05, { skipMain: blink });
+    animateEvents(tl, at + 0.05, f.ev, prev, f.snap);
+    tl.to({}, { duration: TD }, at);
+    prev = f.snap;
+  });
+}
+/* ----- turnos con fases: mantenimiento → planeamiento → resolución, con un cartel en cada paso ----- */
+const PHASE_HOLD = 1.0;   // segundos para leer cada cartel
+function phaseBanner(tl, at, title, sub, keep) {
+  const pb = $('#phaseBanner');
+  tl.call(() => { pb.innerHTML = '<small>' + title + '</small><b>' + sub + '</b>'; }, null, at)
+    .fromTo(pb, { autoAlpha: 0, scale: 0.8 }, { autoAlpha: 1, scale: 1, duration: D(0.28), ease: 'back.out(2)', immediateRender: false }, at);
+  tl.set(pb, { top: '42%' }, at);
+  if (!keep) tl.to(pb, { autoAlpha: 0, scale: 0.92, duration: D(0.22), ease: 'power2.in' }, at + D(PHASE_HOLD) - D(0.22));
+  else tl.to(pb, { top: 8, scale: 0.85, duration: D(0.35), ease: 'power2.inOut' }, at + D(PHASE_HOLD));   // queda arriba mientras elegís, sin tapar los carriles
+  return at + D(PHASE_HOLD);
+}
+function hidePhaseBanner() { gsap.to('#phaseBanner', { autoAlpha: 0, scale: 0.92, duration: D(0.2), overwrite: true }); }
+function setTurnChip() { $('#turnChip').textContent = 'Turno ' + S.turn; }
+function finish() { busy = false; updatePiles(); hidePhaseBanner(); showEnd(S.over); }
+// TU TURNO
+function heroTurn(first) {
+  if (S.over) return finish();
+  if (!first) S.turn++;
+  setTurnChip();
+  const tl = gsap.timeline({ onComplete: () => { busy = false; if (!S.over) showArrows(); } });
+  window.__lastTl = tl;
+  let at = phaseBanner(tl, 0, 'Turno ' + S.turn, 'Mantenimiento');
+  heroStates(S);
+  syncShields(clone(S), tl, 0.3);   // escudos: pierden un punto o se desvanecen
+  tl.call(() => syncHeroChips(clone(S)), null, 0.3);
+  tl.call(() => autoScroll(true), null, at);
+  const empty = !S.hand.length;
+  C(tl, at, () => sfx.play('turn'));
+  phaseBanner(tl, at, 'Turno ' + S.turn + ' · Planeamiento', empty ? 'Tu turno — sin cartas: movete' : 'Tu turno — elegí tu acción', true);
+  $('#playerTok').classList.toggle('can', empty);
+  showFan(tl, at + 0.2);
+}
+// RESOLUCIÓN: todo lo que está en los carriles avanza un tic; lo que llega al final se resuelve
+function resolution(next) {
+  const tl = gsap.timeline({ onComplete: () => { if (S.over) return finish(); next === 'rival' ? rivalTurn() : heroTurn(); } });
+  window.__lastTl = tl;
+  autoScroll(false);
+  let at = phaseBanner(tl, 0, next === 'rival' ? 'Tu turno' : 'Turno del ' + FOES[S.id].name, 'Resolución');
+  const prev = clone(S), ev = tick(S);
+  tl.to({}, { duration: D(0.1) }, at - D(0.4));
+  runFrames(tl, [{ ev, snap: clone(S) }], prev);
+  tl.to({}, { duration: D(0.35) });
+}
+// TURNO DEL RIVAL
+function rivalTurn() {
+  if (S.over) return finish();
+  busy = true;
+  const tl = gsap.timeline({ onComplete: () => resolution('hero') });
+  window.__lastTl = tl;
+  autoScroll(false);
+  const who = 'Turno del ' + FOES[S.id].name;
+  let at = phaseBanner(tl, 0, who, 'Mantenimiento');
+  const prev = clone(S), ev = rivalPlan(S);
+  at = phaseBanner(tl, at, who, ev.length ? 'Planeamiento · ' + S.e.intent.name : 'Planeamiento · sigue con lo suyo');
+  syncBoard(clone(S), tl, at - D(PHASE_HOLD) + 0.25);
+  animateEvents(tl, at - D(PHASE_HOLD) + 0.25, ev, prev, clone(S));
+}
+function fatigueAskOpen() { return +gsap.getProperty('#fatigueAsk', 'autoAlpha') > 0.01; }
+function closeFatigueAsk() {
+  if (!fatigueAskOpen()) return;
+  gsap.to('#fatigueAsk', { autoAlpha: 0, scale: 0.92, xPercent: -50, yPercent: -50, duration: D(0.16), overwrite: true });
+  pendingFatiguePlay = null;
+}
+let pendingFatiguePlay = null;
+function openFatigueAsk(def, then) {
+  pendingFatiguePlay = then;
+  $('#fatigueAskText').textContent = 'Esta carta te va a dar ' + def + ' de cansancio. ¿Jugarla igual?';
+  gsap.fromTo('#fatigueAsk', { autoAlpha: 0, scale: 0.9, xPercent: -50, yPercent: -50 }, { autoAlpha: 1, scale: 1, xPercent: -50, yPercent: -50, duration: D(0.22), ease: 'back.out(2)', overwrite: true });
+}
+function requestPlay(lane) {
+  const c = selCard(); if (!c || busy) return;
+  const def = fatigueDeficit(S, c.key);
+  if (def > 0) { openFatigueAsk(def, () => commitPlay(lane)); return; }
+  commitPlay(lane);
+}
+function commitPlay(lane) {
+  const c = selCard(); if (!c || busy) return;
+  if (ACTIONS[c.key].kind === 'instant') return playInstant();
+  playSel(lane);
+}
+function playInstant() {
+  const c = selCard(); if (!c || busy) return;
+  busy = true;
+  const el = FAN.get(c.id); FAN.delete(c.id);
+  selId = null; hideTargets(); hideInfo(); hideArrows(); hidePhaseBanner();
+  const prev = clone(S), res = playCard(S, c.id, null);
+  if (!res) { busy = false; return; }
+  const tok = $('#playerTok .disc').getBoundingClientRect();
+  const zr = $('#fanZone').getBoundingClientRect();
+  const s0 = gsap.getProperty(el, 'scale'), x0 = gsap.getProperty(el, 'x') + zr.left, y0 = gsap.getProperty(el, 'y') + zr.top + 61 - 61 * s0;
+  el.classList.remove('sel', 'warn-tired'); const hint = el.querySelector('.tired-hint'); if (hint) hint.remove();
+  $('#fxLayer').appendChild(el);
+  gsap.set(el, { x: x0, y: y0, transformOrigin: '50% 50%' });
+  const tl = gsap.timeline({ onComplete: () => resolution('rival') });
+  window.__lastTl = tl;
+  C(tl, 0, () => sfx.play('place'));
+  hideFan(tl, 0);
+  tl.to(el, { x: tok.left + tok.width / 2 - CW / 2, y: tok.top + tok.height / 2 - CH / 2, scale: 0.4, rotation: 0, duration: D(0.4), ease: 'power3.inOut' }, 0);
+  tl.to(el, { scale: 0.2, autoAlpha: 0, duration: D(0.22), ease: 'power2.in' }, D(0.4)).call(() => { el.remove(); updatePiles(); }, null, D(0.64));
+  syncBoard(clone(S), tl, D(0.4));
+  animateEvents(tl, D(0.4), res.ev, prev, clone(S));
+  tl.to({}, { duration: D(0.45) });
+}
+function playSel(lane) {
+  const c = selCard(); if (!c || busy) return;
+  busy = true;
+  const el = FAN.get(c.id); FAN.delete(c.id);
+  selId = null; hideTargets(); hideInfo(); hideArrows(); hidePhaseBanner();
+  const prev = clone(S), res = playCard(S, c.id, lane);
+  if (!res) { busy = false; return; }
+  const act = ACTIONS[c.key], br = boardRect(), zr = $('#fanZone').getBoundingClientRect();
+  // la carta va al casillero de salida de tu carril y se queda ahí (no sale disparada)
+  const s0 = gsap.getProperty(el, 'scale'), x0 = gsap.getProperty(el, 'x') + zr.left, y0 = gsap.getProperty(el, 'y') + zr.top + 61 - 61 * s0;
+  el.classList.remove('sel'); el.classList.add('fly'); el.style.zIndex = ''; el._card = c; el._lane = lane; bindTip(el);
+  el.insertAdjacentHTML('beforeend', act.kind === 'plant' ? '' : '<div class="chev">' + SpeedBadge(chevOf(CARD_SPEED[c.key]), 'up') + '</div>');
+  $('#fxLayer').appendChild(el);
+  gsap.set(el, { x: x0, y: y0, transformOrigin: '50% 50%' });
+  window.__flyCard = el;
+  const tl = gsap.timeline({ onComplete: () => resolution('rival') });
+  window.__lastTl = tl;
+  C(tl, 0, () => sfx.play('place'));
+  hideFan(tl, 0);
+  const slotY = act.kind === 'plant' ? SHY() : act.kind === 'wave' ? Yw(WAVE_START) : PY(0);
+  tl.to(el, { x: br.left + LX(lane) - CW / 2, y: br.top + slotY - CH / 2, scale: 0.5, rotation: 0, duration: D(0.45), ease: 'power3.inOut' }, 0);
+  if (act.kind === 'strike') {
+    tl.call(() => { $('#pcards').appendChild(el); gsap.set(el, { x: LX(lane) - CW / 2, y: PY(0) - CH / 2 }); PC.set(c.id, el); }, null, D(0.46));
+    ring(tl, D(0.46), LX(lane), PY(0), 'var(--gold)');
+  } else {   // escudo u onda: la carta se funde en lo que crea
+    tl.to(el, { scale: 0.32, autoAlpha: 0, duration: D(0.25), ease: 'power2.in' }, D(0.45)).call(() => { el.remove(); updatePiles(); }, null, D(0.72));
+    syncBoard(clone(S), tl, D(0.45));
+    animateEvents(tl, D(0.45), res.ev, prev, clone(S));
+  }
+  tl.to({}, { duration: D(0.5) });
+}
+function doMove(dir) {
+  if (busy || !S || S.over) return;
+  busy = true; hideArrows(); deselect(); hidePhaseBanner();
+  const prev = clone(S), res = playMove(S, dir);
+  if (!res) { busy = false; return; }
+  const tl = gsap.timeline({ onComplete: () => resolution('rival') });
+  window.__lastTl = tl;
+  hideFan(tl, 0);
+  syncBoard(clone(S), tl, 0.1);
+  animateEvents(tl, 0.1, res.ev, prev, clone(S));
+  tl.to({}, { duration: D(0.5) });
+}
+// turno del héroe: baja hasta la mano; turno del rival: sube para ver al rival y los carriles (~0.5 s)
+const scrollProxy = { y: 0 };
+function autoScroll(toHand) {
+  const max = document.scrollingElement.scrollHeight - window.innerHeight, y = toHand ? Math.max(0, max) : 0;
+  scrollProxy.y = window.scrollY;
+  gsap.to(scrollProxy, { y, duration: D(0.5), ease: 'power2.inOut', overwrite: true, onUpdate: () => window.scrollTo(0, scrollProxy.y) });
+}
+const startTurn = () => heroTurn(true);
+
+/* ----- pantallas (fundidos + Flip del retrato) ----- */
+function show(scr, on, dur = 0.35) { return gsap.to(scr, { autoAlpha: on ? 1 : 0, duration: D(dur), ease: 'power2.out' }); }
+function clearFlipIds() { $$('[data-flip-id]').forEach(n => n.removeAttribute('data-flip-id')); }
+function startFight(id, fromImg) {
+  const F = FOES[id];
+  S = newState(id); selId = null; busy = true; arrowsOn = false;
+  $('#ePortrait').src = F.img; $('#ePortraitWrap').style.setProperty('--ring', F.ring);
+  $('#eName').textContent = F.name;
+  [TK, WV, SH, FAN, PC].forEach(m => { m.forEach(el => el.remove()); m.clear(); });
+  gsap.set('#phaseBanner', { autoAlpha: 0 }); setTurnChip();
+  $('#fx').innerHTML = ''; $('#fan').innerHTML = ''; $('#discard .stack').innerHTML = '';
+  $$('#fxLayer .card').forEach(n => n.remove());
+  gsap.set(['#playerTok .inner', '#boardIn'], { clearProps: 'all' });
+  gsap.set(['#arrL', '#arrR', '#cardInfo', '#turnBanner'], { autoAlpha: 0 });
+  hideTargets();
+  buildEnemy(id);
+  const fight = $('#scr-fight');
+  gsap.set(fight, { visibility: 'visible' });
+  measure();
+  gsap.set('#discard', { x: DRAWER_CLOSED });
+  syncBoard(S, null, 0);
+  updatePiles();
+  const tl = gsap.timeline({ onComplete: () => startTurn() });
+  let st = null;
+  clearFlipIds();
+  if (fromImg) { fromImg.setAttribute('data-flip-id', 'foe'); $('#ePortrait').setAttribute('data-flip-id', 'foe'); st = Flip.getState(fromImg); }
+  tl.add(show('#scr-select', false), 0).add(show('#scr-end', false, 0.25), 0).add(show(fight, true), 0.05);
+  if (st) tl.add(Flip.from(st, { targets: '#ePortrait', duration: D(0.55), ease: 'power3.inOut', absolute: true, scale: true }), 0);
+  tl.from(Object.values(TOK).map(t => t.querySelector('.inner')), { y: -90, autoAlpha: 0, duration: D(0.5), stagger: D(0.08), ease: 'back.out(1.6)' }, 0.25);
+  tl.from('#playerTok .inner', { y: 80, autoAlpha: 0, duration: D(0.45), ease: 'back.out(1.6)' }, 0.3);
+  const pops = [...TK.values()];
+  if (pops.length) tl.from(pops, { scale: 0, autoAlpha: 0, duration: D(0.3), stagger: D(0.05), ease: 'back.out(2)' }, 0.6);
+  tl.from('#deck', { y: 60, autoAlpha: 0, duration: D(0.35), ease: 'back.out(1.6)' }, 0.4);
+  C(tl, 0.4, () => sfx.play('riffle'));
+  tl.to({}, { duration: D(0.2) });
+}
+function showEnd(res) {
+  const F = FOES[S.id], win = res === 'win';
+  hideArrows(); hideTargets(); hideInfo();
+  $('#endPortrait').src = F.img; $('#endPortraitWrap').style.setProperty('--ring', win ? 'var(--gold)' : 'var(--blood)');
+  $('#endTitle').textContent = win ? 'Victoria' : 'Derrota';
+  $('#endTitle').style.color = win ? 'var(--gold)' : 'var(--blood)';
+  $('#endText').textContent = win ? 'Le ganaste al ' + F.short.toLowerCase() + ' en ' + S.turn + ' turnos, con ' + S.p.hp + ' de vida.'
+                                  : 'El ' + F.short.toLowerCase() + ' te ganó en el turno ' + S.turn + '. Mirá cómo bajan sus golpes y probá otra vez.';
+  clearFlipIds();
+  $('#ePortrait').setAttribute('data-flip-id', 'end'); $('#endPortrait').setAttribute('data-flip-id', 'end');
+  const st = Flip.getState('#ePortrait');
+  busy = true;
+  const tl = gsap.timeline({ onComplete: () => { busy = false; } });
+  C(tl, 0, () => sfx.play(win ? 'win' : 'lose'));
+  if (win) tl.to(Object.values(TOK).map(t => t.querySelector('.inner')), { autoAlpha: 0.15, scale: 0.8, rotation: -12, duration: D(0.5) }, 0);
+  else tl.to('#playerTok .inner', { autoAlpha: 0.2, scale: 0.8, duration: D(0.5) }, 0);
+  hideFan(tl, 0);
+  tl.add(show('#scr-end', true, 0.4), 0.3)
+    .fromTo('.endbox', { scale: 0.88, y: 20 }, { scale: 1, y: 0, duration: D(0.45), ease: 'back.out(1.6)' }, 0.3)
+    .add(Flip.from(st, { targets: '#endPortrait', duration: D(0.6), ease: 'power3.inOut', absolute: true }), 0.3);
+}
+function toSelect() {
+  if (busy) return;
+  const id = S && S.id;
+  const target = id ? $('.foe[data-id="' + id + '"] img') : null;
+  let st = null;
+  clearFlipIds();
+  if (target) { $('#ePortrait').setAttribute('data-flip-id', 'back'); target.setAttribute('data-flip-id', 'back'); st = Flip.getState('#ePortrait'); }
+  busy = true;
+  const tl = gsap.timeline({ onComplete: () => { gsap.set('#scr-fight', { visibility: 'hidden' }); busy = false; } });
+  tl.add(show('#scr-end', false, 0.25), 0).add(show('#scr-fight', false), 0).add(show('#scr-select', true), 0.1);
+  if (st) tl.add(Flip.from(st, { targets: target, duration: D(0.5), ease: 'power3.inOut', absolute: true }), 0);
+  tl.fromTo('.foe', { x: -24, autoAlpha: 0 }, { x: 0, autoAlpha: 1, stagger: D(0.06), duration: D(0.3) }, 0.15);
+  S = null;
+}
+
+/* ----- inicio ----- */
+function buildFoes() {
+  $('#foes').innerHTML = Object.entries(FOES).map(([id, F]) =>
+    '<button class="foe frame" data-id="' + id + '" style="--ring:' + F.ring + '"><div class="pt"><img src="' + F.img + '" alt=""></div>' +
+    '<div><h3>' + F.short + '</h3><p>' + F.rule + '</p><div class="pips">' + F.pips + '</div></div><div class="go">›</div></button>').join('');
+  $$('.foe').forEach(b => b.addEventListener('click', () => {
+    if (busy) return;
+    if (!RM) gsap.fromTo(b, { scale: 0.97 }, { scale: 1, duration: 0.2 });
+    startFight(b.dataset.id, b.querySelector('img'));
+  }));
+}
+function snow() {
+  if (RM) return;
+  const sn = $('#snow');
+  for (let i = 0; i < 26; i++) {
+    const d = document.createElement('i'); sn.appendChild(d);
+    const s = 1 + (i % 3);
+    gsap.set(d, { left: ((i * 37) % 100) + '%', width: s, height: s, opacity: 0.25 + (i % 4) * 0.12 });
+    gsap.fromTo(d, { y: -20, x: 0 }, { y: window.innerHeight + 20, x: (i % 2 ? 30 : -30), duration: 9 + (i % 5) * 2.2, repeat: -1, ease: 'none', delay: -(i * 0.9) });
+  }
+}
+$('#playerTok .disc').addEventListener('click', onAvatar);
+$('#arrL button').addEventListener('click', ev => { ev.stopPropagation(); doMove(-1); });
+$('#arrR button').addEventListener('click', ev => { ev.stopPropagation(); doMove(1); });
+document.addEventListener('keydown', ev => {
+  const k = ev.key.toLowerCase();
+  if (k === 'arrowleft' || k === 'a') { ev.preventDefault(); doMove(-1); }
+  else if (k === 'arrowright' || k === 'd') { ev.preventDefault(); doMove(1); }
+});
+$('#board').addEventListener('click', () => { if (!busy) { deselect(); hideArrows(); } });
+$('#btnBack').addEventListener('click', toSelect);
+$('#btnPick').addEventListener('click', toSelect);
+$('#btnAgain').addEventListener('click', () => { if (busy || !S) return; startFight(S.id, null); });
+let rT; window.addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() => { if (S && !busy) { measure(); syncBoard(S, null, 0); layoutFan(0.01); } }, 120); });
+
+// la rueda del mouse siempre desplaza la página, esté el cursor donde esté
+document.addEventListener('wheel', e => { e.preventDefault(); window.scrollBy({ top: e.deltaY, left: 0 }); }, { passive: false, capture: true });
+buildFoes(); snow(); buildTargets();
+gsap.timeline()
+  .to('#scr-select', { autoAlpha: 1, duration: D(0.5) })
+  .from('#scr-select > *', { y: 16, autoAlpha: 0, stagger: D(0.07), duration: D(0.4) }, 0.05);
+
+
+/* =====================================================================
+   COMPONENTE · SpeedBadge(n, dir) — 1 a 3 flechas apiladas (reusa chevSvg). Sin número.
+   ===================================================================== */
+function SpeedBadge(n, dir = 'up') {
+  n = Math.max(1, Math.min(3, n | 0));
+  return '<span class="c-speed ' + dir + '" title="velocidad ' + n + '">' + chevSvg(n, dir === 'up') + '</span>';
+}
+
+/* =====================================================================
+   COMPONENTE · DamageBadge(amount, type) — número + ícono del tipo de daño.
+   Para sumar un tipo: agregalo a DAMAGE_TYPES y su color en .c-dmg--<tipo>.
+   ===================================================================== */
+const DAMAGE_TYPES = {
+  cortante:    { label: 'cortante',    color: '#55585d', kind: 'físico',   // un solo tajo: almendra fina en diagonal
+    icon: '<svg viewBox="0 0 16 16" fill="currentColor"><path d="M2.2 13.8Q10.4 10.4 13.8 2.2Q5.6 5.6 2.2 13.8Z"/></svg>' },
+  perforante:  { label: 'perforante',  color: '#5e564c', kind: 'físico',   // un solo agujero: punto blanco con centro oscuro
+    icon: '<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="4.6" fill="currentColor"/><circle cx="8" cy="8" r="2" fill="#1a1410"/></svg>' },
+  contundente: { label: 'contundente', color: '#454c56', kind: 'físico',
+    icon: '<svg viewBox="0 0 16 16" fill="currentColor"><rect x="7.5" y="1.5" width="7" height="5" rx="1" transform="rotate(45 11 4)"/><path d="M8.5 7.5L2 14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>' },
+  fuego:       { label: 'fuego',       color: '#a8231b', kind: 'elemental',
+    icon: '<svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1c1 3 4 4.5 4 8.2A4 4 0 0 1 4 9.2C4 7 5.5 6 6 4c.8 1.2 1 2 1 3 1-1.5 1.3-3.5 1-6z"/></svg>' },
+  hielo:       { label: 'frío / hielo', color: '#1d8a86', kind: 'elemental',
+    icon: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 1v14M2 4.5l12 7M2 11.5l12-7"/><path d="M6.3 2.3L8 3.6l1.7-1.3M6.3 13.7L8 12.4l1.7 1.3"/></svg>' },
+  rayo:        { label: 'rayo',        color: '#8f8a24', kind: 'elemental',
+    icon: '<svg viewBox="0 0 16 16" fill="currentColor"><path d="M9.5 1L3 9h4l-1.5 6L13 6.5H9z"/></svg>' },
+  arcano:      { label: 'arcano',      color: '#7449b0', kind: 'elemental',
+    icon: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="6"/><path d="M8 3.2l1.4 3.4 3.4 1.4-3.4 1.4L8 12.8 6.6 9.4 3.2 8l3.4-1.4z" fill="currentColor" stroke="none"/></svg>' },
+  sagrado:     { label: 'sagrado',     color: '#c9a227', kind: 'mágico',
+    icon: '<svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5l1.2 3.6 3.8.2-3 2.3 1 3.7L8 9.2 4.9 11.3l1-3.7-3-2.3 3.8-.2z"/></svg>' }
+};
+DAMAGE_TYPES['frío'] = DAMAGE_TYPES.hielo;
+function DamageBadge(amount, type) {
+  const key = type === 'frío' ? 'hielo' : type, T = DAMAGE_TYPES[key] || DAMAGE_TYPES.contundente;
+  return '<span class="c-dmg c-dmg--' + (DAMAGE_TYPES[key] ? key : 'contundente') + '" title="' + amount + ' de daño ' + T.label + '">' +
+    '<span class="ic">' + T.icon + '</span><span class="n">' + amount + '</span></span>';
+}
+
+/* muestra oculta: a-carriles.html?componentes */
+if (/[?&]componentes\b/.test(location.search)) {
+  const P = document.createElement('div'); P.id = 'compPanel';
+  const cell = (html, lab) => '<div class="cell">' + html + '<small>' + lab + '</small></div>';
+  P.innerHTML = '<h2>Componentes de carta</h2>' +
+    '<h3>SPEEDBADGE · SUBE</h3><div class="row">' + [1, 2, 3].map(n => cell(SpeedBadge(n, 'up'), n === 1 ? 'lento' : n === 2 ? 'medio' : 'rápido')).join('') + '</div>' +
+    '<h3>SPEEDBADGE · BAJA</h3><div class="row">' + [1, 2, 3].map(n => cell(SpeedBadge(n, 'down'), n === 1 ? 'lento' : n === 2 ? 'medio' : 'rápido')).join('') + '</div>' +
+    '<h3>DAMAGEBADGE · FÍSICO</h3><div class="row">' + ['cortante', 'perforante', 'contundente'].map((t, i) => cell(DamageBadge([2, 3, 6][i], t), DAMAGE_TYPES[t].label)).join('') + '</div>' +
+    '<h3>DAMAGEBADGE · ELEMENTAL</h3><div class="row">' + ['fuego', 'hielo', 'rayo', 'arcano'].map((t, i) => cell(DamageBadge([4, 5, 5, 8][i], t), DAMAGE_TYPES[t].label)).join('') + '</div>';
+  document.body.appendChild(P);
+}
+
+/* panel de ayuda junto al contador de turno */
+function helpOpen() { return +gsap.getProperty('#helpPanel', 'autoAlpha') > 0.01; }
+function openHelp() {
+  hideTip();
+  gsap.fromTo('#helpPanel', { autoAlpha: 0, scale: 0.9, xPercent: -50, yPercent: -50 }, { autoAlpha: 1, scale: 1, xPercent: -50, yPercent: -50, duration: D(0.22), ease: 'back.out(2)', overwrite: true });
+}
+function closeHelp() {
+  if (!helpOpen()) return;
+  gsap.to('#helpPanel', { autoAlpha: 0, scale: 0.92, xPercent: -50, yPercent: -50, duration: D(0.16), overwrite: true });
+}
+gsap.set('#helpPanel', { xPercent: -50, yPercent: -50 });
+$('#btnHelp').addEventListener('click', ev => { ev.stopPropagation(); helpOpen() ? closeHelp() : openHelp(); });
+$('#helpClose').addEventListener('click', ev => { ev.stopPropagation(); closeHelp(); });
+gsap.set('#fatigueAsk', { xPercent: -50, yPercent: -50 });
+$('#fatigueYes').addEventListener('click', ev => { ev.stopPropagation(); const fn = pendingFatiguePlay; closeFatigueAsk(); if (fn) fn(); });
+$('#fatigueNo').addEventListener('click', ev => { ev.stopPropagation(); closeFatigueAsk(); });
+document.addEventListener('click', ev => {
+  if (fatigueAskOpen()) {
+    if ($('#fatigueAsk').contains(ev.target)) return;
+    closeFatigueAsk();
+    ev.stopPropagation();
+    return;
+  }
+  if (!helpOpen()) return;
+  if ($('#helpPanel').contains(ev.target) || ev.target.closest('#btnHelp')) return;
+  closeHelp();
+  ev.stopPropagation();
+}, true);
+
+/* gancho para pruebas automáticas */
+window.__duel = { state: () => S, start: id => startFight(id, $('.foe[data-id="' + id + '"] img')), busy: () => busy,
+  select: selectCard, play: playSel, requestPlay, avatar: () => $('#playerTok .disc').click(), move: doMove, back: toSelect,
+  targetLanes: k => targetLanes(S, k), preview: (k, l, d) => previewOf(S, k, l, d),
+  give: (key, dur) => { const c = { id: 't' + (++S.seq), key, dur }; S.hand.unshift(c); const el = makeCard(c); gsap.set(el, { y: ZH + 40, autoAlpha: 0 }); layoutFan(0.01); return c.id; },
+  newState, playCard, playMove, clone, ACTIONS, CARD_SPEED, chevOf, stepSpeed, LANE_STEPS, tick, rivalPlan, heroStates };
+</script>
+
+<script>
+/* =====================================================================
+   DETALLE DE FICHAS · al pasar el mouse o tocar algo que viaja por un carril
+   ===================================================================== */
+const SPEED_WORD = ['', 'lento', 'medio', 'rápido'];
+const lanesTxt = ls => ls.length === 3 ? 'los tres carriles' : (ls.length > 1 ? 'carriles ' : 'carril ') + ls.map(l => LANES[l]).join(' y ');
+function tipRow(html) { return '<div class="tr">' + html + '</div>'; }
+function tipHtml(el) {
+  if (el.classList.contains('chip') && el.dataset.tip) {
+    const title = el.classList.contains('tired') ? 'Cansado' : 'Castigar el mal';
+    return '<h5>' + title + '</h5><p>' + el.dataset.tip + '</p>';
+  }
+  if (el.classList.contains('atk') && el._w) {
+    const w = el._w, typeKey = ATK_DMG_TYPE[w.key] || 'contundente', T = DAMAGE_TYPES[typeKey];
+    const notes = [];
+    if (w.s.magic) notes.push('mágico: solo lo para un escudo');
+    if (w.phase === 'ch') notes.push('canalizando: pegale para cortarlo'); if (w.phase === 'ch' && w.s.origin != null) notes.push('en la mitad se parte en un rayo por carril');
+    if (!w.s.magic) notes.push('se puede desviar');
+    return '<h5>' + INAME[w.key] + '</h5>' + tipRow(DamageBadge(w.s.dmg, typeKey) + ' <span>' + w.s.dmg + ' · ' + T.label + '</span>') +
+      tipRow(SpeedBadge(w.chev, 'down') + ' <span>' + SPEED_WORD[w.chev] + '</span>') + tipRow('<span>pega en ' + lanesTxt(w.s.lanes) + '</span>') +
+      notes.map(n => '<div class="nt">' + n + '</div>').join('');
+  }
+  if (el.classList.contains('wave') && el._w) {
+    return '<h5>Desviar</h5>' + tipRow(SpeedBadge(1, 'up') + ' <span>lento</span>') + tipRow('<span>carril ' + LANES[el._w.lane] + '</span>') +
+      '<div class="nt">desvía golpes físicos, se disipa en la mitad</div>';
+  }
+  if (el.classList.contains('shield') && el._s) {
+    const n = el._s.dots;
+    return '<h5>Escudo</h5>' + tipRow('<span>' + (n === 1 ? 'queda 1 turno' : 'quedan ' + n + ' turnos') + '</span>') + tipRow('<span>carril ' + LANES[el._s.lane] + '</span>') +
+      '<div class="nt">anula un golpe, magia incluida</div>';
+  }
+  if (el.classList.contains('fly') && el._card) {
+    const a = ACTIONS[el._card.key], n = chevOf(CARD_SPEED[el._card.key]);
+    return '<h5>' + a.name + '</h5>' + (a.dmg ? tipRow(DamageBadge(a.dmg, a.dmgType) + ' <span>' + a.dmg + ' · ' + DAMAGE_TYPES[a.dmgType].label + '</span>') : '') +
+      (n ? tipRow(SpeedBadge(n, 'up') + ' <span>' + SPEED_WORD[n] + '</span>') : '') + tipRow('<span>carril ' + LANES[el._lane] + '</span>');
+  }
+  return '';
+}
+let tipFor = null;
+function showTip(el) {
+  const html = tipHtml(el); if (!html) return;
+  const tip = $('#tip'); tip.innerHTML = html; tipFor = el;
+  gsap.set(tip, { autoAlpha: 0, scale: 1 });
+  const hit = el.querySelector('.in, .sb') || el, r = hit.getBoundingClientRect(), tw = tip.offsetWidth, th = tip.offsetHeight;
+  const W = window.innerWidth, H = window.innerHeight;
+  let x = r.right + 8, y = r.top + r.height / 2 - th / 2;
+  if (x + tw > W - 6) x = r.left - 8 - tw;
+  if (x < 6) {   // sin lugar al costado: arriba o abajo de la ficha, sin taparla
+    x = Math.min(W - tw - 6, Math.max(6, r.left + r.width / 2 - tw / 2));
+    y = r.bottom + 8 + th < H - 6 ? r.bottom + 8 : r.top - 8 - th;
+  }
+  y = Math.max(6, Math.min(H - th - 6, y));
+  gsap.set(tip, { x, y });
+  gsap.fromTo(tip, { autoAlpha: 0, scale: 0.85 }, { autoAlpha: 1, scale: 1, duration: D(0.18), ease: 'back.out(2)', overwrite: true });
+}
+function hideTip() { if (!tipFor) return; tipFor = null; gsap.to('#tip', { autoAlpha: 0, scale: 0.9, duration: D(0.14), overwrite: true }); }
+function bindTip(el) {
+  el.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') showTip(el); });
+  el.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse' && tipFor === el) hideTip(); });
+  el.addEventListener('click', e => { e.stopPropagation(); if (tipFor === el && e.pointerType !== 'mouse') hideTip(); else showTip(el); });   // un toque en la ficha no juega carta
+}
+document.addEventListener('click', e => { if (tipFor && !tipFor.contains(e.target)) hideTip(); }, true);
+(() => { const t = document.createElement('div'); t.id = 'tip'; document.body.appendChild(t); const b = document.createElement('div'); b.id = 'phaseBanner'; document.body.appendChild(b); })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,642 @@
+{
+  "version": "pocketdm-vault-v1",
+  "updatedAt": "2026-11-24",
+  "source": "GDD PocketDM y README del paquete 2026-11-23; auditoría local 2026-11-24",
+  "nodes": [
+    {
+      "id": "doc_0001",
+      "type": "document",
+      "name": "Pocket DM · visión del proyecto",
+      "category": "Dirección",
+      "summary": "Juego asíncrono de cartas con Dungeon Master asistido por IA.",
+      "description_md": "# Visión del proyecto\n\n- Las cartas son escenas autocontenidas con elecciones cerradas, reglas y consecuencias.\n- El mundo se organiza como un grafo de entidades conectadas.\n- El servidor determina tiradas y estado; las IA ayudan a generar, ensamblar y narrar.\n- La documentación de diseño y operación se centraliza en esta bóveda.",
+      "status": "active",
+      "tags": [
+        "visión",
+        "juego"
+      ],
+      "links": [
+        {
+          "type": "documentado_en",
+          "target": "doc_0002"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0004"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0005"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0017"
+        }
+      ],
+      "source": {
+        "label": "GDD PocketDM",
+        "href": "https://docs.google.com/document/d/13cKvD6hb_-rVodySOk0U9_Xp9YsoQJ1XpVhZOQ5z9Xg/edit"
+      }
+    },
+    {
+      "id": "doc_0002",
+      "type": "reference",
+      "name": "GDD PocketDM · documento vigente",
+      "category": "Referencias",
+      "summary": "Diseño actual: juego, mundo, sistemas, prototipos y decisiones recientes.",
+      "description_md": "# GDD vigente\n\nFuente principal de decisiones fechadas del 21 al 23 de noviembre de 2026. Incluye arquitectura de cartas, grafo, mundo propio, IA narrativa, economía y decisiones abiertas.\n\nLa bóveda presenta resúmenes y vínculos; el documento completo permanece en Drive.",
+      "status": "active",
+      "tags": [
+        "fuente",
+        "diseño"
+      ],
+      "links": [
+        {
+          "type": "documenta",
+          "target": "doc_0001"
+        },
+        {
+          "type": "documenta",
+          "target": "doc_0005"
+        },
+        {
+          "type": "documenta",
+          "target": "doc_0008"
+        },
+        {
+          "type": "documenta",
+          "target": "doc_0017"
+        }
+      ],
+      "source": {
+        "label": "Abrir en Google Drive",
+        "href": "https://docs.google.com/document/d/13cKvD6hb_-rVodySOk0U9_Xp9YsoQJ1XpVhZOQ5z9Xg/edit"
+      }
+    },
+    {
+      "id": "doc_0003",
+      "type": "reference",
+      "name": "README del paquete del proyecto",
+      "category": "Referencias",
+      "summary": "Inventario del paquete de trabajo fechado el 23 de noviembre de 2026.",
+      "description_md": "# README del paquete\n\nDescribe el contenido y estado de GDD, narrativa, grafo-json-git, prototipo de combate, mundo, reglas, arte y configuración técnica. El ZIP incluye archivos de ejemplo y recursos pesados; no hace falta duplicarlos aquí.\n\n**Importante:** el README del repositorio Next.js no sustituye a este documento.",
+      "status": "active",
+      "tags": [
+        "fuente",
+        "inventario"
+      ],
+      "links": [
+        {
+          "type": "referencia",
+          "target": "doc_0002"
+        },
+        {
+          "type": "referencia",
+          "target": "doc_0011"
+        },
+        {
+          "type": "referencia",
+          "target": "doc_0010"
+        }
+      ],
+      "source": {
+        "label": "Abrir en Google Drive",
+        "href": "https://docs.google.com/document/d/1sClTs8JXj18KSlMxxkQdHqpYhgLbedfdxenGn0FwHxU/edit"
+      }
+    },
+    {
+      "id": "doc_0004",
+      "type": "concept",
+      "name": "Sistema de cartas asíncronas",
+      "category": "Diseño",
+      "summary": "Acciones acotadas y cartas con escena, decisiones, tiradas y resultados.",
+      "description_md": "# Sistema de cartas\n\n- Una carta reúne escena, opciones cerradas, tiradas de habilidad y consecuencias.\n- El jugador elige acciones de listas, no introduce texto libre.\n- Las cartas se ensamblan con arte, diálogos y reglas reutilizables.\n- El máster puede revisar cartas generadas antes de publicarlas.",
+      "status": "active",
+      "tags": [
+        "cartas",
+        "narrativa"
+      ],
+      "links": [
+        {
+          "type": "depende_de",
+          "target": "doc_0005"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0008"
+        },
+        {
+          "type": "implementado_en",
+          "target": "doc_0010"
+        }
+      ],
+      "source": {
+        "label": "Diseño en GDD",
+        "href": "https://docs.google.com/document/d/13cKvD6hb_-rVodySOk0U9_Xp9YsoQJ1XpVhZOQ5z9Xg/edit"
+      }
+    },
+    {
+      "id": "doc_0005",
+      "type": "architecture",
+      "name": "Grafo de mundo: JSON versionado",
+      "category": "Tecnología",
+      "summary": "Un documento JSON por actor/lugar con IDs estables y enlaces tipados.",
+      "description_md": "# Arquitectura del grafo\n\n- Entidades tipadas: lugares, PNJ, facciones, objetos, monstruos, eventos y jugadores.\n- Cada nodo usa **id**, **type**, **name**, **description_md**, **state** y **links**.\n- La fuente versionada vive en Git; las campañas pueden ser ramas y las sesiones commits.\n- La aplicación muestra vínculos de entrada y salida y la diferencia entre commits.",
+      "status": "active",
+      "tags": [
+        "grafo",
+        "git",
+        "esquema"
+      ],
+      "links": [
+        {
+          "type": "rige",
+          "target": "doc_0006"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0014"
+        },
+        {
+          "type": "visualizado_en",
+          "target": "doc_0011"
+        },
+        {
+          "type": "complementa",
+          "target": "doc_0007"
+        }
+      ],
+      "source": {
+        "label": "Documentación del grafo",
+        "href": "https://drive.google.com/drive/folders/1bKwy9Z6O7-uyr5ZES1UFGV7RgMioODAF"
+      }
+    },
+    {
+      "id": "doc_0006",
+      "type": "decision",
+      "name": "Los IDs nunca cambian",
+      "category": "Decisiones",
+      "summary": "Renombrar un elemento no debe romper su historial ni sus relaciones.",
+      "description_md": "# Decisión: identificadores inmutables\n\nEl nombre **Stormkeep** pasó a ser canónico y **Frostgate** quedó como alias. Renombrar el ID provocó pérdida aparente de continuidad en Git.\n\nLa regla es usar referencias por ID estable; el nombre y los alias pueden modificarse libremente.",
+      "status": "active",
+      "tags": [
+        "ids",
+        "integridad"
+      ],
+      "links": [
+        {
+          "type": "afecta",
+          "target": "doc_0005"
+        },
+        {
+          "type": "afecta",
+          "target": "doc_0012"
+        }
+      ],
+      "source": {
+        "label": "Decisión registrada en GDD",
+        "href": "https://docs.google.com/document/d/13cKvD6hb_-rVodySOk0U9_Xp9YsoQJ1XpVhZOQ5z9Xg/edit"
+      }
+    },
+    {
+      "id": "doc_0007",
+      "type": "architecture",
+      "name": "Estado en vivo y Firestore",
+      "category": "Tecnología",
+      "summary": "Firestore resuelve datos operativos; Git preserva instantáneas y versiones del mundo.",
+      "description_md": "# Estado en vivo\n\n- Las sesiones necesitan acceso rápido a estado y reglas desde el servidor.\n- Firestore puede mantener el estado actual de campañas y acciones.\n- Al finalizar cada sesión, una instantánea puede pasar a Git.\n- La bóveda documental **no** necesita escrituras públicas en Firestore para su MVP estático.",
+      "status": "active",
+      "tags": [
+        "firebase",
+        "backend"
+      ],
+      "links": [
+        {
+          "type": "complementa",
+          "target": "doc_0005"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0013"
+        }
+      ],
+      "source": {
+        "label": "Arquitectura en GDD",
+        "href": "https://docs.google.com/document/d/13cKvD6hb_-rVodySOk0U9_Xp9YsoQJ1XpVhZOQ5z9Xg/edit"
+      }
+    },
+    {
+      "id": "doc_0008",
+      "type": "concept",
+      "name": "Motor de consecuencias",
+      "category": "Diseño",
+      "summary": "Una acción propaga efectos sobre actores relacionados en el grafo.",
+      "description_md": "# Motor de consecuencias\n\nEl servidor resuelve la acción y genera una marca. La propagación por relaciones identifica actores relevantes; un modelo de decisión elige una reacción finita por actor. El resultado modifica el estado de campaña e informa la narración.\n\nEl sistema debe calcular reglas y efectos fuera de la IA narradora.",
+      "status": "active",
+      "tags": [
+        "consecuencias",
+        "IA"
+      ],
+      "links": [
+        {
+          "type": "depende_de",
+          "target": "doc_0005"
+        },
+        {
+          "type": "alimenta",
+          "target": "doc_0009"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0004"
+        }
+      ],
+      "source": {
+        "label": "Diseño en GDD",
+        "href": "https://docs.google.com/document/d/13cKvD6hb_-rVodySOk0U9_Xp9YsoQJ1XpVhZOQ5z9Xg/edit"
+      }
+    },
+    {
+      "id": "doc_0009",
+      "type": "concept",
+      "name": "Caché narrativo de ramas",
+      "category": "Diseño",
+      "summary": "Reutilizar ramas aprobadas cuando grupos distintos alcanzan situaciones equivalentes.",
+      "description_md": "# Caché de ramas\n\n- Cada rama se identifica con una clave de módulo, carta y decisiones relevantes.\n- Se reutilizan ramas aprobadas; las nuevas empiezan como provisionales.\n- Los puntos de reencuentro limitan el crecimiento combinatorio.\n- Tiradas, combate y estado individual se recalculan siempre.",
+      "status": "active",
+      "tags": [
+        "cache",
+        "narrativa"
+      ],
+      "links": [
+        {
+          "type": "depende_de",
+          "target": "doc_0008"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0004"
+        }
+      ],
+      "source": {
+        "label": "Diseño en GDD",
+        "href": "https://docs.google.com/document/d/13cKvD6hb_-rVodySOk0U9_Xp9YsoQJ1XpVhZOQ5z9Xg/edit"
+      }
+    },
+    {
+      "id": "doc_0010",
+      "type": "prototype",
+      "name": "Combate por carriles · versión actual",
+      "category": "Prototipos",
+      "summary": "Demo HTML existente. En la versión pública anterior se sirve desde la raíz.",
+      "description_md": "# Prototipo de combate\n\nLa demo de tres carriles utiliza cartas, interacción de selección y recursos visuales/sonoros. La copia de `prototipo-combate/index.html` en el paquete coincide bit a bit con el HTML del sitio publicado al 24/11/2026.\n\nEn la nueva vista previa se replica bajo `/combate/`; la publicación vigente permanece intacta.",
+      "status": "active",
+      "tags": [
+        "html",
+        "demo"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0004"
+        },
+        {
+          "type": "referenciado_por",
+          "target": "doc_0012"
+        }
+      ],
+      "source": {
+        "label": "Abrir prototipo",
+        "href": "/combate/"
+      }
+    },
+    {
+      "id": "doc_0011",
+      "type": "prototype",
+      "name": "Visor original del grafo JSON + Git",
+      "category": "Prototipos",
+      "summary": "HTML con visualización SVG, fichas y navegación entre ramas y commits.",
+      "description_md": "# Visor HTML recuperado\n\nEl archivo fuente vive en `grafo-json-git/viewer/index.html` dentro del paquete de proyecto. Tiene una representación SVG de nodos y enlaces, tarjetas de documentos y selección de rama/commit.\n\nLa nueva vista documental aprovecha el mismo modelo de nodos y relaciones. El explorador histórico original sigue como referencia técnica y **no se publica con contenido de campaña sin revisar derechos y privacidad**.",
+      "status": "active",
+      "tags": [
+        "visor",
+        "html"
+      ],
+      "links": [
+        {
+          "type": "visualiza",
+          "target": "doc_0005"
+        },
+        {
+          "type": "inspira",
+          "target": "doc_0012"
+        }
+      ],
+      "source": {
+        "label": "Paquete original en Drive",
+        "href": "https://drive.google.com/drive/folders/1bKwy9Z6O7-uyr5ZES1UFGV7RgMioODAF"
+      }
+    },
+    {
+      "id": "doc_0012",
+      "type": "prototype",
+      "name": "Bóveda documental y navegación",
+      "category": "Prototipos",
+      "summary": "Portal de documentos, búsqueda, fichas vinculadas y grafo por niveles.",
+      "description_md": "# Bóveda MVP\n\n- Portal `/` con accesos y estado del proyecto.\n- Biblioteca `/boveda/` con filtros, búsquedas y lectura de fichas.\n- Grafo `/grafo/` con selección, vecindad y enlaces a fichas.\n- Prototipo `/combate/` preservado en la nueva versión de prueba.\n- Documentos enlazan a GitHub o Drive; no se copian archivos pesados ni secretos.",
+      "status": "active",
+      "tags": [
+        "documentación",
+        "mvp"
+      ],
+      "links": [
+        {
+          "type": "usa",
+          "target": "doc_0013"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0014"
+        },
+        {
+          "type": "respeta",
+          "target": "doc_0006"
+        },
+        {
+          "type": "referencia",
+          "target": "doc_0010"
+        }
+      ],
+      "source": null
+    },
+    {
+      "id": "doc_0013",
+      "type": "architecture",
+      "name": "Firebase Hosting: sitios separados",
+      "category": "Tecnología",
+      "summary": "Proyecto Firebase verificado con sitio principal y sitio de prototipos.",
+      "description_md": "# Firebase Hosting\n\n**Proyecto:** `lore-weaver-rt9pc`.\n\n**Sitios confirmados:** `lore-weaver-rt9pc` y `pocketdm-prototipos`.\n\nLa aplicación Next.js del repositorio tiene su propia configuración y no debe confundirse con la publicación estática de prototipos. Esta bóveda se prueba en un canal de vista previa del sitio de prototipos y no modifica producción.",
+      "status": "active",
+      "tags": [
+        "firebase",
+        "hosting"
+      ],
+      "links": [
+        {
+          "type": "aloja",
+          "target": "doc_0010"
+        },
+        {
+          "type": "aloja",
+          "target": "doc_0012"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0007"
+        }
+      ],
+      "source": {
+        "label": "Repositorio técnico",
+        "href": "https://github.com/sebasu66/pocketDM"
+      }
+    },
+    {
+      "id": "doc_0014",
+      "type": "architecture",
+      "name": "GitHub y gestión de archivos grandes",
+      "category": "Tecnología",
+      "summary": "Versionar fuentes y enlazar los recursos sin duplicar binarios grandes.",
+      "description_md": "# Versionado y recursos\n\n- El repositorio `sebasu66/pocketDM` es la fuente pública de código Next.js existente.\n- Los JSON y Markdown se pueden versionar por archivo y referenciar por URL estable.\n- Imágenes pesadas, vídeos y arte fuente conservan su origen, con enlace y metadatos.\n- La bóveda no incluye claves privadas ni exportaciones completas de usuarios.",
+      "status": "active",
+      "tags": [
+        "git",
+        "archivos"
+      ],
+      "links": [
+        {
+          "type": "sirve_a",
+          "target": "doc_0005"
+        },
+        {
+          "type": "sirve_a",
+          "target": "doc_0012"
+        }
+      ],
+      "source": {
+        "label": "Repositorio en GitHub",
+        "href": "https://github.com/sebasu66/pocketDM"
+      }
+    },
+    {
+      "id": "doc_0015",
+      "type": "concept",
+      "name": "Atlas por teselas (etapa futura)",
+      "category": "Diseño",
+      "summary": "Mapa navegable independiente del grafo conceptual.",
+      "description_md": "# Atlas\n\nConcepto de mapa con teselas, zoom, marcadores y capas. Los lugares contienen coordenadas; los actores hacen referencia a su ubicación por ID. Es una vista distinta del grafo de relaciones y no bloquea la publicación de la bóveda.",
+      "status": "active",
+      "tags": [
+        "mapa",
+        "futuro"
+      ],
+      "links": [
+        {
+          "type": "depende_de",
+          "target": "doc_0005"
+        },
+        {
+          "type": "propuesto_en",
+          "target": "doc_0002"
+        }
+      ],
+      "source": {
+        "label": "Concepto en GDD",
+        "href": "https://docs.google.com/document/d/13cKvD6hb_-rVodySOk0U9_Xp9YsoQJ1XpVhZOQ5z9Xg/edit"
+      }
+    },
+    {
+      "id": "doc_0016",
+      "type": "document",
+      "name": "Dirección artística y assets",
+      "category": "Arte",
+      "summary": "Cartas con fondos, sprites de estados y composición adaptable.",
+      "description_md": "# Arte y presentación\n\nEl paquete incluye muestras de estilo, sprites de personaje, escenarios y variantes de interfaz de combate. Los archivos originales pueden permanecer en su repositorio o Drive; la bóveda almacena índices, notas y vínculos a sus fuentes.",
+      "status": "active",
+      "tags": [
+        "arte",
+        "assets"
+      ],
+      "links": [
+        {
+          "type": "relacionado_con",
+          "target": "doc_0010"
+        },
+        {
+          "type": "apoya",
+          "target": "doc_0004"
+        }
+      ],
+      "source": {
+        "label": "Carpeta PocketDM",
+        "href": "https://drive.google.com/drive/folders/1bKwy9Z6O7-uyr5ZES1UFGV7RgMioODAF"
+      }
+    },
+    {
+      "id": "doc_0017",
+      "type": "document",
+      "name": "Modelo comercial (síntesis no sensible)",
+      "category": "Administración",
+      "summary": "Opciones de membresías y campañas pregeneradas en evaluación.",
+      "description_md": "# Modelo de negocio (idea)\n\nSe estudia un anfitrión de pago que crea campañas y conecta su propia IA, con participantes invitados sin costo, y una suscripción superior que incluya IA con límite mensual. También se consideran módulos pregenerados.\n\nNo se publican aquí contratos, cuentas ni credenciales.",
+      "status": "active",
+      "tags": [
+        "negocio",
+        "administración"
+      ],
+      "links": [
+        {
+          "type": "documentado_en",
+          "target": "doc_0002"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0001"
+        }
+      ],
+      "source": null
+    },
+    {
+      "id": "doc_0018",
+      "type": "task",
+      "name": "Decisiones abiertas del motor de reglas",
+      "category": "Decisiones",
+      "summary": "Elegir entre variantes de Mythras y el material de Savage Worlds.",
+      "description_md": "# Decisión pendiente\n\nEl GDD registra Mythras Imperative, Mythras completo y datos de Savage Worlds/Hellfrost como alternativas. No se fija un sistema hasta cerrar la comparación técnica, la licencia y el alcance del motor de resolución.",
+      "status": "active",
+      "tags": [
+        "reglas",
+        "pendiente"
+      ],
+      "links": [
+        {
+          "type": "impacta",
+          "target": "doc_0004"
+        },
+        {
+          "type": "documentado_en",
+          "target": "doc_0002"
+        }
+      ],
+      "source": {
+        "label": "Opciones en GDD",
+        "href": "https://docs.google.com/document/d/13cKvD6hb_-rVodySOk0U9_Xp9YsoQJ1XpVhZOQ5z9Xg/edit"
+      }
+    },
+    {
+      "id": "doc_0019",
+      "type": "task",
+      "name": "Seguridad y separación de entornos",
+      "category": "Tecnología",
+      "summary": "Antes de publicación definitiva, validar reglas de Firestore y contenido público.",
+      "description_md": "# Seguridad operativa\n\n- El sitio estático de la bóveda no tiene inicio de sesión ni roles en el MVP.\n- No desplegar documentos con claves, contraseñas, información contractual o datos de usuarios.\n- Validar las reglas reales de Firestore en una tarea de seguridad independiente.\n- Cambios de Hosting se prueban primero en un canal preview y con plan de reversión.",
+      "status": "active",
+      "tags": [
+        "seguridad",
+        "prioritario"
+      ],
+      "links": [
+        {
+          "type": "protege",
+          "target": "doc_0013"
+        },
+        {
+          "type": "protege",
+          "target": "doc_0012"
+        }
+      ],
+      "source": null
+    },
+    {
+      "id": "doc_0020",
+      "type": "decision",
+      "name": "Mundo propio y nombre Stormkeep",
+      "category": "Decisiones",
+      "summary": "Adaptación original; Stormkeep es el nombre canónico y Frostgate, un alias.",
+      "description_md": "# Mundo propio\n\nEl mundo final no reproduce textualmente Hellfrost. El hielo avanza, pero también hay costas de tormenta, pantanos, desiertos de ceniza y ciudades ricas. **Stormkeep** se conserva como nombre canónico; **Frostgate**, sólo como alias de referencia.",
+      "status": "active",
+      "tags": [
+        "narrativa",
+        "mundo"
+      ],
+      "links": [
+        {
+          "type": "relacionado_con",
+          "target": "doc_0005"
+        },
+        {
+          "type": "ilustra",
+          "target": "doc_0006"
+        }
+      ],
+      "source": {
+        "label": "Decisión en GDD",
+        "href": "https://docs.google.com/document/d/13cKvD6hb_-rVodySOk0U9_Xp9YsoQJ1XpVhZOQ5z9Xg/edit"
+      }
+    },
+    {
+      "id": "doc_0021",
+      "type": "document",
+      "name": "Arco narrativo de Galahad",
+      "category": "Diseño",
+      "summary": "Estructura del primer arco: el códice perdido y cartas por reconstruir.",
+      "description_md": "# Primer arco\n\nLa línea de Galahad y el códice perdido de SoulFrost está documentada como trabajo narrativo. El paquete conserva cartas parciales; la introducción definitiva requiere resolver contradicciones con el inicio en el naufragio.\n\nNo se incorpora aquí texto extenso de fuentes de terceros.",
+      "status": "active",
+      "tags": [
+        "Galahad",
+        "historia"
+      ],
+      "links": [
+        {
+          "type": "usa",
+          "target": "doc_0004"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0020"
+        }
+      ],
+      "source": {
+        "label": "Documentación de narrativa",
+        "href": "https://drive.google.com/drive/folders/1bKwy9Z6O7-uyr5ZES1UFGV7RgMioODAF"
+      }
+    },
+    {
+      "id": "doc_0022",
+      "type": "task",
+      "name": "Pipeline de publicación de la bóveda",
+      "category": "Tecnología",
+      "summary": "Validar datos, generar índice y publicar en Firebase preview antes de live.",
+      "description_md": "# Flujo de publicación\n\n1. Editar `data/catalog.json` manteniendo IDs.\n2. Ejecutar el validador de JSON y enlaces.\n3. Ejecutar pruebas de navegación de portal, fichas y grafo.\n4. Desplegar a Firebase Hosting preview.\n5. Verificar que `/combate/` conserva la copia de la demo y que el sitio live no cambia.\n6. Promover a producción sólo después de revisar rutas y seguridad.",
+      "status": "active",
+      "tags": [
+        "CI",
+        "deploy"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0012"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0013"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0019"
+        }
+      ],
+      "source": null
+    }
+  ]
+}
