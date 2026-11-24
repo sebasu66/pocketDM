@@ -1,4 +1,4 @@
-const BUILD='2026-11-24-editorial-2';
+const BUILD='2026-11-24-sheet-1';
 let displayed=false, checking=false;
 function announce(release){
  if(displayed)return;displayed=true;

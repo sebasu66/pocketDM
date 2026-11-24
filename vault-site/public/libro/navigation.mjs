@@ -1,4 +1,5 @@
 import {campaign} from './campaign.mjs';
+import {renderActorSheet} from './actor-sheet.mjs';
 
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const hrefFor=v=>v==='home'?'/app/':v==='profile'?'/app/?view=profile':v==='story'?'/libro/':'/libro/?view='+encodeURIComponent(v);
@@ -19,6 +20,7 @@ class BookSheet extends HTMLElement {
   if(this.dataset.ready)return;this.dataset.ready='1';
   const c=campaign.characters.find(x=>x.id===this.getAttribute('character'));
   if(!c){this.textContent='Personaje no encontrado';return;}
+  if(renderActorSheet(this,c.id,c.portrait))return;
   this.innerHTML='<section class="folio-module"><div class="eyebrow">Hoja de personaje · muestra</div>'+
    '<h2>'+esc(c.name)+'</h2><p class="subtitle">'+esc(c.role)+'</p>'+
    '<img class="sheet-portrait" src="'+esc(c.portrait)+'" alt="Retrato ilustrado de '+esc(c.name)+'">'+
