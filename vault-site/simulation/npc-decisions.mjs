@@ -1,4 +1,5 @@
-// Bounded utility AI prototype. Intent selection is not action execution.
+// DEPRECATED narrative experiment: retained for regression comparison only.
+// Never use this to select narrative decisions. Intelligent entities are roleplayed by the narrative LLM.
 // All inputs come from trusted server state; no arbitrary code from a narrator.
 const own=(o,k)=>Object.hasOwn(o,k),ok=(v,m)=>{if(!v)throw Error(m)},copy=structuredClone;
 const id=x=>typeof x==='string'&&/^[a-z][a-z0-9_.-]{0,100}$/.test(x)&&!['constructor','prototype','__proto__'].includes(x);
