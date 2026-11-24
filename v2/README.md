@@ -9,3 +9,7 @@ Deploy safely using firebase hosting:channel:deploy v2 --project lore-weaver-rt9
 ## Crónica interactiva (ES)
 
 Open public/v2/cronica/index.html using an HTTP server. Native custom elements: book-page, book-title, book-portrait, book-inset, combat-phase. The reader displays one or two pages, animated transitions, zoom (100–250%), and scrolling/panning. Inline sigils open the associated explanation. events.mjs contains explicitly illustrative event fixtures, not actual combat results. Art is drawn from the provided PocketDM project assets; external book layout references are not redistributed.
+
+### Revisión editorial
+
+Desktop: wider two-page spread automatically fitted to the viewport. Mobile: single page, vertical transitions and next/previous controls at the foot. Organic SVG masks soften artwork edges; chapter headings overlap atmospheric art. The shared native dialog displays mechanics without changing page geometry. Run `node test-cronica-browser.mjs` on Windows with Edge to test both viewport modes and overlay behavior.
