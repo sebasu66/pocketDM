@@ -1146,7 +1146,7 @@
       "name": "Especificación y backlog del simulador avanzado de combate",
       "category": "Tecnología",
       "summary": "Fuentes mecánicas, ingesta validada, resolvedor Mythras, tácticas, laboratorio estadístico e integración al mundo y libro.",
-      "description_md": "# Estado y especificación\n\nEl libro actual usa acontecimientos y tiradas prefijados; el prototipo IADM D10 y el piloto PocketDM D100 simplificado son cálculos reales pero no Mythras completo. El manual Mythras completo local (306 páginas) es la referencia primaria de verificación. Los materiales de encounter gen aportan perfiles, estilos, rasgos, dificultad, defensa y efectos; el HTML del Encounter Generator depende parcialmente de un servidor. No hay ingesta aprobada ni simulador estadístico avanzado todavía.\n\nTres capas: catálogo mecánico versionado, canon del mundo, instancias por campaña. Pipeline de ingesta con procedencia, permisos, normalización, validación y revisión. Motor determinista con resolución Mythras y capa de tácticas; mismo motor para partida y laboratorio estadístico. Pruebas por semillas reproducibles y métricas de resultados, lesiones, duración, fatiga y consumo. Eventos resueltos alimentan al narrador, no al revés.\n\nBacklog ADV-C01 a ADV-C13, dependencias y criterios de aceptación en documento completo. Prioridad: inventario y permisos, esquema de datos, muestra piloto de equipo/estilos/criaturas y verificación de reglas. El equipo de simulación es responsable. Estado: documentado, implementación pendiente. Sin redistribución de catálogos protegidos.",
+      "description_md": "# Estado y especificación\n\nEl libro actual usa acontecimientos y tiradas prefijados; el prototipo IADM D10 y el piloto PocketDM D100 simplificado son cálculos reales pero no Mythras completo. El manual Mythras completo local (306 páginas) es la referencia primaria de verificación. Los materiales de encounter gen aportan perfiles, estilos, rasgos, dificultad, defensa y efectos; el HTML del Encounter Generator depende parcialmente de un servidor. No hay ingesta aprobada ni simulador estadístico avanzado todavía.\n\nTres capas: catálogo mecánico versionado, canon del mundo, instancias por campaña. Pipeline de ingesta con procedencia, permisos, normalización, validación y revisión. Motor determinista con resolución Mythras y capa de tácticas; mismo motor para partida y laboratorio estadístico. Pruebas por semillas reproducibles y métricas de resultados, lesiones, duración, fatiga y consumo. Eventos resueltos alimentan al narrador, no al revés.\n\nBacklog ADV-C01 a ADV-C13, dependencias y criterios de aceptación en documento completo. Prioridad: inventario y permisos, esquema de datos, muestra piloto de equipo/estilos/criaturas y verificación de reglas. El equipo de simulación es responsable. Estado: documentado, implementación pendiente. Sin redistribución de catálogos protegidos.\n\n**Avance parcial:** catálogo de fixtures, verificación de algunas reglas, resolvedor inicial y micro-lab de intercambios en doc_0912. No se completaron aún C02/C05/C06/C10 ni la ingesta.",
       "status": "active",
       "tags": [
         "Mythras",
@@ -1175,11 +1175,84 @@
         {
           "type": "usa",
           "target": "doc_0909"
+        },
+        {
+          "type": "avance",
+          "target": "doc_0912"
         }
       ],
       "source": {
         "label": "Especificación completa y tareas",
         "href": "/docs/advanced-combat-spec.md"
+      }
+    },
+    {
+      "id": "doc_0912",
+      "type": "architecture",
+      "name": "Núcleo mecánico y micro-laboratorio de combate",
+      "category": "Tecnología",
+      "summary": "Catálogo original validado, grados D100, oposición, diferencial, parada y ensayos reproducibles de intercambios.",
+      "description_md": "# Implementación parcial C02/C05/C06/C10\n\nCatálogo versionado de prueba: tres armas, dos estilos, dos anatomías, tres plantillas; IDs, procedencia y referencias validadas. No es ingesta de datos externos. Manual completo verificado en pp.37–38,51,94–95 para grados, límites, oposición/diferencial y parada. Pendiente revisar redondeos y fumbles con modificadores, reacciones retroactivas y resto de reglas. Entitlement de efectos no ejecuta efectos. Micro-lab: 1000 intercambios por política, mismas semillas, 1.821 vs 2.475 daño medio antes de armadura, con y sin parada. 22 pruebas totales aprobadas. No hay combate completo, scheduler, lesiones, integración de mundo o libro. C01 pendiente de permisos/huellas; C03/C04 sin ingesta. Siguiente: consolidar esquema, verificar reglas y resolver un combate completo 1v1 con estados y efectos.",
+      "status": "active",
+      "tags": [
+        "combate",
+        "D100",
+        "pruebas",
+        "catálogo"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0911"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0901"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0907"
+        }
+      ],
+      "source": {
+        "label": "Implementación y pruebas",
+        "href": "https://github.com/sebasu66/pocketDM/pull/3"
+      }
+    },
+    {
+      "id": "doc_0913",
+      "type": "task",
+      "name": "Backlog paralelo del agente narrador",
+      "category": "Diseño",
+      "summary": "N01–N09: biblia, hub, lore, contrato, caché, composición de libro, presentación, skill y aventura.",
+      "description_md": "# Trabajo paralelo\n\nPriorizar N01–N04 y N09: canon propio, Stormkeep, referencias aún sin posición, contrato narrativo y situaciones de aventura. N05/N06: caché y composición dinámica del libro con eventos resueltos; N07/N08: presentación y profundización de skills. Responsable narración/presentación; pendiente confirmación de tareas por el otro agente. No modificar estado ni resolver dados desde el narrador. Ver backlog completo.",
+      "status": "active",
+      "tags": [
+        "narrador",
+        "backlog",
+        "coordinación"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0905"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0906"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0908"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0912"
+        }
+      ],
+      "source": {
+        "label": "Backlog narrador",
+        "href": "/docs/narrator-backlog.md"
       }
     }
   ]
