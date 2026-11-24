@@ -1106,7 +1106,7 @@
       "name": "Responsabilidad del simulador avanzado de combate",
       "category": "Diseño",
       "summary": "El equipo de simulación mantiene el combate avanzado y su laboratorio; el narrador presenta sus eventos en el libro compartido.",
-      "description_md": "# División de responsabilidades\n\nEl equipo de simulación mantiene el mundo, contexto, reglas y resolución avanzada de combate. El equipo de narrativa mantiene el narrador, diálogos, caché narrativo y presentación editorial. El laboratorio de combate es una herramienta de desarrollo del mismo motor, no una segunda experiencia de juego. Recuperar y evaluar especificaciones y prototipos originales de IADM; conservar estrategias programadas, prioridades, condiciones, ventanas de intervención y trazas reproducibles. Validar reglas, habilidades, equipo, fatiga, defensa, heridas y efectos con pruebas y comparativas estadísticas. No sustituir el combate original por un ejemplo de atacar por turnos sin acuerdo. Los eventos resueltos, anotaciones de chequeo y cambios de estado alimentan al libro y a la misma ficha. Pendiente: revisar prototipo original y fijar reglas de referencia/licencias antes de integrar.",
+      "description_md": "# División de responsabilidades\n\nEl equipo de simulación mantiene el mundo, contexto, reglas y resolución avanzada de combate. El equipo de narrativa mantiene el narrador, diálogos, caché narrativo y presentación editorial. El laboratorio de combate es una herramienta de desarrollo del mismo motor, no una segunda experiencia de juego. Recuperar y evaluar especificaciones y prototipos originales de IADM; conservar estrategias programadas, prioridades, condiciones, ventanas de intervención y trazas reproducibles. Validar reglas, habilidades, equipo, fatiga, defensa, heridas y efectos con pruebas y comparativas estadísticas. No sustituir el combate original por un ejemplo de atacar por turnos sin acuerdo. Los eventos resueltos, anotaciones de chequeo y cambios de estado alimentan al libro y a la misma ficha. Pendiente: revisar prototipo original y fijar reglas de referencia/licencias antes de integrar.\n\nEspecificación y tareas de implementación: doc_0911.",
       "status": "active",
       "tags": [
         "combate",
@@ -1129,11 +1129,57 @@
         {
           "type": "conecta",
           "target": "doc_0909"
+        },
+        {
+          "type": "detallado_en",
+          "target": "doc_0911"
         }
       ],
       "source": {
         "label": "Tablero compartido",
         "href": "/actividad/"
+      }
+    },
+    {
+      "id": "doc_0911",
+      "type": "architecture",
+      "name": "Especificación y backlog del simulador avanzado de combate",
+      "category": "Tecnología",
+      "summary": "Fuentes mecánicas, ingesta validada, resolvedor Mythras, tácticas, laboratorio estadístico e integración al mundo y libro.",
+      "description_md": "# Estado y especificación\n\nEl libro actual usa acontecimientos y tiradas prefijados; el prototipo IADM D10 y el piloto PocketDM D100 simplificado son cálculos reales pero no Mythras completo. El manual Mythras completo local (306 páginas) es la referencia primaria de verificación. Los materiales de encounter gen aportan perfiles, estilos, rasgos, dificultad, defensa y efectos; el HTML del Encounter Generator depende parcialmente de un servidor. No hay ingesta aprobada ni simulador estadístico avanzado todavía.\n\nTres capas: catálogo mecánico versionado, canon del mundo, instancias por campaña. Pipeline de ingesta con procedencia, permisos, normalización, validación y revisión. Motor determinista con resolución Mythras y capa de tácticas; mismo motor para partida y laboratorio estadístico. Pruebas por semillas reproducibles y métricas de resultados, lesiones, duración, fatiga y consumo. Eventos resueltos alimentan al narrador, no al revés.\n\nBacklog ADV-C01 a ADV-C13, dependencias y criterios de aceptación en documento completo. Prioridad: inventario y permisos, esquema de datos, muestra piloto de equipo/estilos/criaturas y verificación de reglas. El equipo de simulación es responsable. Estado: documentado, implementación pendiente. Sin redistribución de catálogos protegidos.",
+      "status": "active",
+      "tags": [
+        "Mythras",
+        "combate",
+        "ingesta",
+        "estadística",
+        "backlog"
+      ],
+      "links": [
+        {
+          "type": "amplia",
+          "target": "doc_0910"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0018"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0901"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0907"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0909"
+        }
+      ],
+      "source": {
+        "label": "Especificación completa y tareas",
+        "href": "/docs/advanced-combat-spec.md"
       }
     }
   ]

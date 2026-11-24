@@ -1,0 +1,20 @@
+{
+  "id": "act-20261124-advanced-combat-spec-001",
+  "date": "2026-11-24",
+  "area": "Combate / Simulador V2",
+  "owner": "Equipo de simulación",
+  "status": "decidido",
+  "title": "Especificación del simulador avanzado y plan de ingesta",
+  "summary": "Verificados los fixtures del libro, piloto D100 y prototipo D10 anterior. Mythras completo local como fuente de verificación. Inventario de encounter gen, tres capas de datos, pipeline de ingesta, resolvedor y laboratorio estadístico. Backlog ADV-C01 a ADV-C13 con criterios de aceptación. No se ha implementado aún la ingesta ni el simulador avanzado.",
+  "changed": [
+    "vault-site/public/docs/advanced-combat-spec.md",
+    "vault-site/public/data/catalog.json"
+  ],
+  "next": "ADV-C01/C02: inspección de formatos, permisos y esquema normalizado; ingesta piloto de equipo, estilos y criaturas (C03/C04); verificar reglas contra Mythras completo (C05).",
+  "source": "https://github.com/sebasu66/pocketDM/pull/3",
+  "nodeIds": [
+    "doc_0911",
+    "doc_0910",
+    "doc_0018"
+  ]
+}
