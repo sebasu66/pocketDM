@@ -1,3 +1,9 @@
+> **Actualización verificada el 24/11/2026:** el MVP de bóveda y libro narrativo V2 ya fue publicado en un **canal de preview**, no en live. URL: https://pocketdm-prototipos--boveda-mvp-20261124-2wn8b31j.web.app. El catálogo actual contiene 24 nodos y 64 relaciones. La demo obsoleta de carriles fue retirada únicamente de la vista previa; `/combate/` redirige al libro. La publicación live anterior no fue tocada.
+>
+> **Coordinación de código:** `vault-site/public/libro/` es una adaptación de prueba del lector del canal V2. El desarrollo principal de V2 y del simulador sigue separado; la integración definitiva debe evitar dos fuentes de verdad. Las notas de traspaso a continuación se conservan como registro de su estado anterior y sus pendientes técnicos.
+
+---
+
 # Pocket DM · Integración de bóveda y visor de grafos
 
 **Estado al 24-11-2026:** PENDIENTE DE INTEGRACIÓN Y DE DEPLOY EN FIREBASE.  
