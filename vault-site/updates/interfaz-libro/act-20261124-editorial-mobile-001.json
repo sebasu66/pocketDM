@@ -1,0 +1,18 @@
+{
+    "source":  "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+    "summary":  "Prototipo aislado dentro del lector canónico: flujo alrededor de alfa, scroll y lectura ampliada; controles a la derecha. No modifica reglas ni contrato de escenas.",
+    "id":  "act-20261124-editorial-mobile-001",
+    "next":  "Validar en Edge apaisado y publicar preview separado. Overview de campaña desktop/TV queda futuro.",
+    "title":  "Paneles editoriales mobile-first",
+    "owner":  "Agente narrador / presentación",
+    "date":  "2026-11-24",
+    "changed":  [
+                    "vault-site/public/libro/editorial/"
+                ],
+    "area":  "Interfaz / Libro",
+    "status":  "en-progreso",
+    "nodeIds":  [
+                    "doc_0903",
+                    "doc_0913"
+                ]
+}
