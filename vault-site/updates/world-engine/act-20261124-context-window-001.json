@@ -1,0 +1,22 @@
+{
+  "id": "act-20261124-context-window-001",
+  "date": "2026-11-24",
+  "area": "World Engine / Grafo",
+  "owner": "Equipo de simulación",
+  "status": "en-revision",
+  "title": "Contexto móvil y snapshot adaptados de IADM",
+  "summary": "Resolvedor de snapshot y overlay con altas, reemplazos y bajas; selección por ubicación efectiva, hexágonos, jerarquía y relevancia. Corredor piloto predefinido de Stormkeep. 13 pruebas aprobadas. El equipo de simulación asume el simulador avanzado y su laboratorio.",
+  "changed": [
+    "vault-site/simulation/world-context.mjs",
+    "vault-site/simulation/world-pilot.mjs",
+    "vault-site/simulation/test-world-context.mjs",
+    "vault-site/public/data/catalog.json"
+  ],
+  "next": "Unificar actor del piloto y estado efectivo, implementar generación extensible y permisos/persistencia. Auditar simulador avanzado original y acordar contrato de tácticas y eventos con narrador.",
+  "source": "https://github.com/sebasu66/pocketDM/pull/3",
+  "nodeIds": [
+    "doc_0909",
+    "doc_0910",
+    "doc_0908"
+  ]
+}

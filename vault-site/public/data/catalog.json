@@ -1062,6 +1062,79 @@
         "label": "Contrato de generación West Marches",
         "href": "/skills/pocketdm-storyteller/west-marches.md"
       }
+    },
+    {
+      "id": "doc_0909",
+      "type": "architecture",
+      "name": "Burbuja contextual y resolvedor de mundo efectivo",
+      "category": "Tecnología",
+      "summary": "Adaptación de IADM a Node: snapshot inmutable, cambios por campaña, escalas geográficas y selección contextual acotada.",
+      "description_md": "# Implementación inicial\n\nReutiliza los conceptos verificados de IADM: world_state.py, world_scale.py, world_resolver.py, multi_models.py, dm_context_builder.py, dm_context_enricher.py y dm_context_views.py. No se copia el backend anterior. El resolvedor admite adiciones, reemplazos y tombstones por campaña; valida referencias, hexágonos y rutas, con revisión esperada. Contexto a partir de ubicación efectiva, jerarquía, hexágonos próximos, entidades presentes y relaciones/focos explícitos. Proyecciones resumidas y completas con presupuesto de registros. La visibilidad del jugador se filtra antes de proyectar; el rol y conocimiento deben venir de un servicio autorizado, no del cliente.\n\nPiloto territorial provisional: Stormkeep y corredor oriental a Llanuras Heladas, aldea, puente y tres NPC. Materialización de dependencias predefinida, no generador general ni integración con el combate aún. Pruebas: seis nuevas y siete anteriores aprobadas. Estado en memoria, sin persistencia ni índice espacial de producción.\n\nSiguiente: integrar actor y estado del piloto de acontecimientos, búsqueda por coste de ruta y presupuesto de tokens, conocimiento autorizado, generación territorial extensible y almacenamiento. No modificar IADM original.",
+      "status": "active",
+      "tags": [
+        "contexto",
+        "LOD",
+        "snapshot",
+        "IADM"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0908"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0005"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0907"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0019"
+        }
+      ],
+      "source": {
+        "label": "Implementación y pruebas",
+        "href": "https://github.com/sebasu66/pocketDM/pull/3"
+      }
+    },
+    {
+      "id": "doc_0910",
+      "type": "decision",
+      "name": "Responsabilidad del simulador avanzado de combate",
+      "category": "Diseño",
+      "summary": "El equipo de simulación mantiene el combate avanzado y su laboratorio; el narrador presenta sus eventos en el libro compartido.",
+      "description_md": "# División de responsabilidades\n\nEl equipo de simulación mantiene el mundo, contexto, reglas y resolución avanzada de combate. El equipo de narrativa mantiene el narrador, diálogos, caché narrativo y presentación editorial. El laboratorio de combate es una herramienta de desarrollo del mismo motor, no una segunda experiencia de juego. Recuperar y evaluar especificaciones y prototipos originales de IADM; conservar estrategias programadas, prioridades, condiciones, ventanas de intervención y trazas reproducibles. Validar reglas, habilidades, equipo, fatiga, defensa, heridas y efectos con pruebas y comparativas estadísticas. No sustituir el combate original por un ejemplo de atacar por turnos sin acuerdo. Los eventos resueltos, anotaciones de chequeo y cambios de estado alimentan al libro y a la misma ficha. Pendiente: revisar prototipo original y fijar reglas de referencia/licencias antes de integrar.",
+      "status": "active",
+      "tags": [
+        "combate",
+        "responsabilidades",
+        "simulación"
+      ],
+      "links": [
+        {
+          "type": "especializa",
+          "target": "doc_0905"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0901"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0018"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0909"
+        }
+      ],
+      "source": {
+        "label": "Tablero compartido",
+        "href": "/actividad/"
+      }
     }
   ]
 }
