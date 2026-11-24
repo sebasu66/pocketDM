@@ -795,7 +795,7 @@
       "name": "Coordinación de motores y estado compartido",
       "category": "Tecnología",
       "summary": "Un libro y un personaje; el motor de mundo y el de combate intercambian eventos y consecuencias.",
-      "description_md": "# División de trabajo acordada\n\n- Agente mundo: generación de mundo, escenas, narrativa general, exploración, navegación, cuenta e integración del lector.\n- Agente combate: resolución de enfrentamientos, tácticas, mecánicas, pruebas y eventos de combate. Mantiene el laboratorio como herramienta de desarrollo, no como una segunda aplicación de juego.\n- Compartido: personaje, contrato de chequeos, evento narrativo, componentes de libro y bóveda. El personaje evoluciona con TODAS las acciones, no solo combate.\n\n# Propuesta de integración (por acordar)\n\nUn único servicio de estado de campaña recibe comandos con IDs de actor/campaña y revisión esperada. Cada motor devuelve eventos resueltos y cambios de estado; el servicio valida y aplica una sola vez en transacción, actualiza personaje/diario y entrega la vista autorizada al libro. El libro jamás escribe directamente heridas, experiencia o inventario desde una tirada visual. Las decisiones del narrador no sustituyen los resultados del motor.\n\nFirestore como estado operativo según doc_0007; Git para versión de esquemas, código y snapshots autorizados. No desplegar sobre el canal del otro agente mientras trabaja. Integrar vía PR y actualizar la misma bóveda. Las reglas exactas, el esquema persistente y la autenticación aún requieren acuerdo.",
+      "description_md": "# División de trabajo acordada\n\n- Agente mundo: generación de mundo, escenas, narrativa general, exploración, navegación, cuenta e integración del lector.\n- Agente combate: resolución de enfrentamientos, tácticas, mecánicas, pruebas y eventos de combate. Mantiene el laboratorio como herramienta de desarrollo, no como una segunda aplicación de juego.\n- Compartido: personaje, contrato de chequeos, evento narrativo, componentes de libro y bóveda. El personaje evoluciona con TODAS las acciones, no solo combate.\n\n# Propuesta de integración (por acordar)\n\nUn único servicio de estado de campaña recibe comandos con IDs de actor/campaña y revisión esperada. Cada motor devuelve eventos resueltos y cambios de estado; el servicio valida y aplica una sola vez en transacción, actualiza personaje/diario y entrega la vista autorizada al libro. El libro jamás escribe directamente heridas, experiencia o inventario desde una tirada visual. Las decisiones del narrador no sustituyen los resultados del motor.\n\nFirestore como estado operativo según doc_0007; Git para versión de esquemas, código y snapshots autorizados. No desplegar sobre el canal del otro agente mientras trabaja. Integrar vía PR y actualizar la misma bóveda. Las reglas exactas, el esquema persistente y la autenticación aún requieren acuerdo.\n\n**Actualización:** la división combate/mundo queda sustituida por simulación/acontecimientos y narración/presentación. Ver doc_0905.",
       "status": "active",
       "tags": [
         "coordinación",
@@ -823,6 +823,10 @@
         {
           "type": "depende_de",
           "target": "doc_0019"
+        },
+        {
+          "type": "actualizado_por",
+          "target": "doc_0905"
         }
       ],
       "source": {
@@ -898,6 +902,108 @@
       "source": {
         "label": "PR de integración",
         "href": "https://github.com/sebasu66/pocketDM/pull/2"
+      }
+    },
+    {
+      "id": "doc_0905",
+      "type": "decision",
+      "name": "Simulación y narrador: dos responsabilidades, un mundo",
+      "category": "Tecnología",
+      "summary": "Separar por capas, no por combate y aventura. Simulación genera eventos y ramas; narrador convierte hechos visibles en contenido persistente.",
+      "description_md": "# Decisión de diseño del usuario\n\nEquipo de simulación: generación y validación de mundo, acciones, reglas, combate, semillas, ramas, consecuencias, estado y servicio MCP operativo. Equipo de narrativa: diseño literario de situaciones y NPC como propuestas, narración de eventos resueltos, caché de fragmentos, diálogos y presentación. Compartido: contratos, personaje, grafo y libro. Las propuestas del narrador no alteran estado hasta validación por simulación.\n\nUna sola aventura piloto, pequeña, generada proceduralmente desde situaciones y parámetros, no guion de desenlace. Anticipar ramas legales dentro de un presupuesto; completar contenido faltante al elegir ruta nueva. No publicar futuras ramas ni semillas. El jugador conserva agencia. Las decisiones sustituyen la división anterior combate/mundo; los equipos deben acordar la integración y no duplicar implementaciones.",
+      "status": "active",
+      "tags": [
+        "arquitectura",
+        "simulación",
+        "narración"
+      ],
+      "links": [
+        {
+          "type": "actualiza",
+          "target": "doc_0902"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0008"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0009"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0023"
+        }
+      ],
+      "source": {
+        "label": "Tablero de actividad",
+        "href": "/actividad/"
+      }
+    },
+    {
+      "id": "doc_0906",
+      "type": "document",
+      "name": "Skills para agentes de PocketDM",
+      "category": "Tecnología",
+      "summary": "Dos skills: protocolo operativo MCP y dirección narrativa modular, con fuentes, fichas y tablas originales.",
+      "description_md": "# PocketDM System\nProtocolo de consultas, propuestas, ramas, confirmación idempotente y lectura de resultados. Los métodos MCP son capacidades previstas, no herramientas desplegadas.\n\n# PocketDM Storyteller\nMódulos de mundo, NPC, aventuras, emergencia, exploración y narración. Basado en la revisión del manual de síntesis local y los índices, introducciones y extractos de cinco PDF: Mythic 2e, Anatomy of Adventure, Worldbuilding Blueprint, Lazy Dungeon Master y Forbidden Lands Players Handbook. Tablas y ejemplos propios; no se redistribuyen libros ni tablas originales. Profundizar capítulos identificados en sources.md.",
+      "status": "active",
+      "tags": [
+        "skills",
+        "MCP",
+        "narrativa",
+        "NPC"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0905"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0901"
+        }
+      ],
+      "source": {
+        "label": "Storyteller Skill",
+        "href": "/skills/pocketdm-storyteller/SKILL.md"
+      }
+    },
+    {
+      "id": "doc_0907",
+      "type": "architecture",
+      "name": "Piloto de simulación con semilla",
+      "category": "Tecnología",
+      "summary": "Primer motor Node privado: tiradas por dirección estable, ramas aisladas, chequeos compatibles y trabajos de narración.",
+      "description_md": "# Implementación inicial\n\nCódigo en vault-site/simulation, fuera de public/. HMAC-SHA256 con semilla y dirección de tirada (camino, actor/acción y slot según corresponda), rechazo de sesgo. Misma semilla, reglas, estado y decisiones reproducen eventos. Los IDs de rama son distintos. Explorar ramas no cambia estado original. Una semilla de desarrollo produjo Aldea del Hielo, disputa por medicina y 39 trabajos de narración a profundidad tres. Siete pruebas automatizadas aprobadas, incluyendo contrato del libro. Las estadísticas son provisionales, no Mythras completo; NPC, combate y generación de mundo son muy simples.\n\nPendiente: modelo común de personaje, grafo real, persistencia transaccional, servicio MCP, cola/caché persistente y narración LLM validada. Los resultados todavía no alimentan al lector en vivo. No exponer semillas ni futuros eventos.",
+      "status": "active",
+      "tags": [
+        "semilla",
+        "motor",
+        "piloto",
+        "pruebas"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0905"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0901"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0018"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0009"
+        }
+      ],
+      "source": {
+        "label": "Código del piloto",
+        "href": "https://github.com/sebasu66/pocketDM/tree/feature/seeded-adventure-pilot/vault-site/simulation"
       }
     }
   ]
