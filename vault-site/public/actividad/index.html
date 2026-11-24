@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Actividad compartida y coordinación de desarrollo Pocket DM">
+<title>Pocket DM | Actividad compartida</title>
+<link rel="icon" href="data:,"><link rel="stylesheet" href="/site.css">
+<link rel="stylesheet" href="/actividad/activity.css">
+<script type="module" src="/actividad/activity.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#activity-root">Saltar al contenido</a>
+<header class="topbar">
+<a class="brand" href="/" aria-label="Pocket DM · Inicio"><span class="brand-mark" aria-hidden="true">✦</span><span>POCKET <strong>DM</strong><small>PROJECT VAULT</small></span></a>
+<nav aria-label="Navegación principal" class="topnav">
+<a href="/">Portal</a><a href="/boveda/">Bóveda</a><a href="/grafo/">Grafo</a>
+<a href="/actividad/" class="active" aria-current="page">Actividad</a><a href="/libro/">Libro ↗</a><a href="/app/">Aplicación</a>
+</nav></header>
+<main id="activity-root" tabindex="-1">
+<section class="hero activity-hero">
+<div class="eyebrow">Coordinación de desarrollo</div>
+<h1>Lo último del <em>proyecto.</em></h1>
+<p class="lede">Un registro común de avances, cambios de contrato, decisiones y próximos pasos. Consultalo antes de iniciar una tarea, incluso si estás retomando trabajo anterior.</p>
+<div class="actions"><a href="/boveda/?doc=doc_0025" class="btn primary">Reglas de colaboración ↗</a><a href="https://github.com/sebasu66/pocketDM/pull/1" class="btn" target="_blank" rel="noopener noreferrer">Ver GitHub ↗</a></div>
+</section>
+<section class="section" aria-label="Registro de actividad">
+<div class="sectionhead"><div><div class="eyebrow">Registro versionado</div><h2>Avances por área</h2></div></div>
+<div class="activity-protocol"><strong>Antes de programar:</strong> leer las novedades, comprobar las ramas de Git, revisar los archivos que toca cada equipo y acordar los cambios compartidos. <strong>Después:</strong> registrar resultados, enlaces y pendientes.</div>
+<div class="controlsbar"><label class="activity-filter-label" for="activity-area">Área</label><select id="activity-area" class="select"><option value="Todas">Todas las áreas</option></select><label class="activity-filter-label" for="activity-status">Estado</label><select id="activity-status" class="select"><option value="Todos">Todos</option></select></div>
+<p id="activity-count" class="graph-count" aria-live="polite"></p>
+<div id="activity-entries" aria-live="polite"><p class="loading">Cargando registro...</p></div>
+<div class="notice"><strong>Importante:</strong> el sitio muestra datos versionados en GitHub y publicados a Firebase. No es un editor colaborativo en vivo. Una entrada nueva debe incluir el PR o commit que respalda el avance, y el canal de vista previa debe actualizarse para reflejarlo aquí.</div>
+</section>
+</main>
+<footer class="footer"><span>Pocket DM · Actividad compartida</span><span id="activity-meta">Últimas actualizaciones por área</span></footer>
+</body></html>

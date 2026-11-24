@@ -59,3 +59,19 @@ Antes de promover a live: validar navegación móvil, componentes, accesibilidad
 5. Publicación del juego en un canal/entorno independiente de la bóveda de administración.
 
 Documentación fuente: GDD PocketDM y README del paquete del 23/11/2026 disponibles en Google Drive. No incluir secretos, exportaciones con usuarios ni texto extenso licenciado de Hellfrost.
+
+## Coordinación entre equipos
+
+**Regla obligatoria:** antes de cualquier desarrollo, leer `/actividad/`, ejecutar `node scripts/preflight.mjs` y revisar los commits/PRs nuevos de `main` y del equipo de la bóveda. No editar archivos o contratos compartidos sin integrar los cambios y acordar responsable. Ver `COORDINACION.md`.
+
+**Un JSON por entrega para reducir conflictos de Git:** cada equipo agrega `updates/<area>/<id>.json` con fecha, área, equipo, estado real, resumen, archivos afectados, fuente PR/commit y próximo paso. Nunca sobrescribir el archivo de otro equipo. No inventar avances ajenos.
+
+El índice de `public/data/activity.json` se genera y no se versiona. Para preparar una nueva vista previa:
+
+```sh
+node scripts/build-activity.mjs
+node scripts/validate.mjs
+firebase hosting:channel:deploy boveda-mvp-20261124 --project lore-weaver-rt9pc --expires 7d --no-authorized-domains
+```
+
+**Importante:** registrar sólo en Git no actualiza la web; desplegar preview cuando los demás deban ver la entrada. El visor es de lectura, no una wiki editable en vivo. El combate canónico V2 tiene su propietario y la bóveda no modifica su motor por su cuenta.

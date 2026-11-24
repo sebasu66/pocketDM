@@ -2,3 +2,4 @@
 firebase-debug.log
 ui-debug.log
 *.local
+public/data/activity.json

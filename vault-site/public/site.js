@@ -45,11 +45,11 @@ function portal(){
  ];
  app.innerHTML='<section class="hero"><div class="eyebrow">El archivo vivo del proyecto</div><h1>Un mundo de cartas.<br>Una bóveda de <em>conexiones.</em></h1>'+
   '<p class="lede">Pocket DM centraliza documentación, decisiones, prototipos y recursos originales en un catálogo de nodos conectados con identidad estable.</p>'+
-  '<div class="actions">'+anchor("/boveda/","Entrar a la bóveda","btn primary")+anchor("/grafo/","Explorar el grafo","btn")+'</div>'+
+  '<div class="actions">'+anchor("/boveda/","Entrar a la bóveda","btn primary")+anchor("/grafo/","Explorar el grafo","btn")+anchor("/actividad/","Leer últimos avances","btn")+'</div>'+
   '<div class="stats"><div><strong>'+nodes.length+'</strong><span>Fichas indexadas</span></div><div><strong>'+totalLinks()+'</strong><span>Relaciones</span></div><div><strong>'+categories().length+'</strong><span>Áreas de trabajo</span></div></div></section>'+
   '<section class="section"><div class="sectionhead"><div class="eyebrow">Explorar por vista<h2>Las puertas de entrada</h2></div></div><div class="grid">'+
   cards.map(x=>'<a class="tile" href="'+x[3]+'"><span class="arrow">↗</span><span class="tile-icon">'+x[0]+'</span><h3>'+esc(x[1])+'</h3><p>'+esc(x[2])+'</p></a>').join("")+'</div>'+
-  '<p class="notice"><strong>Versión de prueba:</strong> se reutilizan resúmenes del GDD, referencias a GitHub y Drive, y el HTML del prototipo de combate. No se publican claves, contratos ni datos personales.</p></section>';
+  '<p class="notice"><strong>Versión de prueba:</strong> se reutilizan resúmenes del GDD, referencias a GitHub y Drive, y el libro narrativo V2. No se publican claves, contratos ni datos personales.</p></section>';
 }
 function relationHtml(n){
  const outgoing=n.links.filter(l=>byId.has(l.target)).map(l=>'<div class="relation"><span class="rel-type">'+esc(l.type.replace(/_/g," "))+' →</span>'+anchor(hrefDoc(l.target),byId.get(l.target).name)+'</div>').join("");
