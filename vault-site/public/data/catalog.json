@@ -709,6 +709,80 @@
         "label": "Inicio de la aplicación",
         "href": "/app/"
       }
+    },
+    {
+      "id": "doc_0901",
+      "type": "architecture",
+      "name": "Contrato compartido de chequeos",
+      "category": "Tecnología",
+      "summary": "Una tirada resuelta, una anotación con habilidad y resultado; reutilizable por aventura y combate.",
+      "description_md": "# Componente book-skill-check\n\nImplementación en rama de integración: el nombre de la habilidad y el resultado aparecen juntos dentro de la narración. Al pulsar, se muestra solamente la tirada asociada: actor, valor base, dificultad, valor efectivo, dado, resultado y consecuencia visible. No se recalcula ni se modifica el personaje al abrir la ventana.\n\nCada chequeo tiene ID estable; no se repite en un mismo bloque. Visión nocturna, frío, cobertura y otros factores no son chequeos independientes si no hubo tirada. Los resultados privados se filtran antes de enviar al lector. Las etiquetas son castellanas; los IDs son independientes del idioma.\n\nEl ejemplo incluye Percepción fallida de Galahad y exitosa de Zhalan; las tiradas están prefijadas. Pendiente: conectar los eventos reales del servidor.",
+      "status": "active",
+      "tags": [
+        "libro",
+        "reglas",
+        "contrato",
+        "integración"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0023"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0018"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0006"
+        }
+      ],
+      "source": {
+        "label": "Código del componente en rama de integración",
+        "href": "https://github.com/sebasu66/pocketDM/tree/feature/combat-checks-v2/vault-site/public/libro"
+      }
+    },
+    {
+      "id": "doc_0902",
+      "type": "architecture",
+      "name": "Coordinación de motores y estado compartido",
+      "category": "Tecnología",
+      "summary": "Un libro y un personaje; el motor de mundo y el de combate intercambian eventos y consecuencias.",
+      "description_md": "# División de trabajo acordada\n\n- Agente mundo: generación de mundo, escenas, narrativa general, exploración, navegación, cuenta e integración del lector.\n- Agente combate: resolución de enfrentamientos, tácticas, mecánicas, pruebas y eventos de combate. Mantiene el laboratorio como herramienta de desarrollo, no como una segunda aplicación de juego.\n- Compartido: personaje, contrato de chequeos, evento narrativo, componentes de libro y bóveda. El personaje evoluciona con TODAS las acciones, no solo combate.\n\n# Propuesta de integración (por acordar)\n\nUn único servicio de estado de campaña recibe comandos con IDs de actor/campaña y revisión esperada. Cada motor devuelve eventos resueltos y cambios de estado; el servicio valida y aplica una sola vez en transacción, actualiza personaje/diario y entrega la vista autorizada al libro. El libro jamás escribe directamente heridas, experiencia o inventario desde una tirada visual. Las decisiones del narrador no sustituyen los resultados del motor.\n\nFirestore como estado operativo según doc_0007; Git para versión de esquemas, código y snapshots autorizados. No desplegar sobre el canal del otro agente mientras trabaja. Integrar vía PR y actualizar la misma bóveda. Las reglas exactas, el esquema persistente y la autenticación aún requieren acuerdo.",
+      "status": "active",
+      "tags": [
+        "coordinación",
+        "estado",
+        "combate",
+        "mundo"
+      ],
+      "links": [
+        {
+          "type": "complementa",
+          "target": "doc_0007"
+        },
+        {
+          "type": "rige",
+          "target": "doc_0023"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0008"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0901"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0019"
+        }
+      ],
+      "source": {
+        "label": "Contrato y coordinación",
+        "href": "https://github.com/sebasu66/pocketDM/tree/feature/combat-checks-v2/vault-site"
+      }
     }
   ]
 }
