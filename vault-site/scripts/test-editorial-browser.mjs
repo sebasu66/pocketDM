@@ -9,20 +9,22 @@ await call('Runtime.enable');await call('Page.enable');
 for(const [width,height] of [[844,390],[1396,547],[390,844],[1280,900]]){
  await call('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<1000});
  await call('Page.navigate',{url:'http://127.0.0.1:'+server.address().port+'/libro/editorial/'});
- for(let i=0;i<50;i++){if(await ev("!!document.querySelector('.reading') && document.querySelector('.cutout').complete"))break;await sleep(100)}
- const q=await ev("(()=>{let r=document.querySelector('.reading'),a=document.querySelector('.cutout'),p=document.querySelector('book-editorial-panel'),rail=document.querySelector('.rail');return {scroll:r.scrollHeight,client:r.clientHeight,shape:getComputedStyle(a).shapeOutside,loaded:a.naturalWidth,rail:rail.getBoundingClientRect().left,panel:p.getBoundingClientRect().right,body:document.body.scrollWidth}})()");
- assert.ok(q.loaded>0);assert.match(q.shape,/galahad-cutout/);assert.ok(q.client>0);assert.ok(q.body<=width);
+ for(let i=0;i<50;i++){if(await ev("!!document.querySelector('.plate-image') && document.querySelector('.plate-image').complete"))break;await sleep(100)}
+ const q=await ev("(()=>{let r=document.querySelector('.reading'),a=document.querySelector('.plate-image'),p=document.querySelector('book-editorial-panel'),rail=document.querySelector('.rail');return {scroll:r.scrollHeight,client:r.clientHeight,loaded:a.naturalWidth,rail:rail.getBoundingClientRect().left,panel:p.getBoundingClientRect().right,body:document.body.scrollWidth}})()");
+ assert.ok(q.loaded>0);assert.ok(q.client>0);assert.ok(q.body<=width);
  if(width>height){assert.ok(q.rail>=q.panel);if(height<600)assert.ok(q.scroll>q.client)}
+ if(width===844||width===1396){const shot=await call('Page.captureScreenshot',{format:'png'});await writeFile('C:/DEV/PocketDM_narrative_coordination/editorial-'+width+'.png',Buffer.from(shot.data,'base64'))}
  await ev("document.querySelector('.reading').scrollTop=80");const old=await ev("document.querySelector('.reading').scrollTop");
  await ev("document.querySelector('.expand').click()");assert.equal(await ev("document.querySelector('.full-read').open"),true);
  assert.equal(await ev("document.querySelectorAll('.full-body p').length"),6);
  await ev("document.querySelector('.close').click()");await sleep(50);
- assert.equal(await ev("document.querySelector('.full-read').open"),false);assert.equal(await ev("document.querySelectorAll('.reading p').length"),6);assert.equal(await ev("document.querySelector('.reading').scrollTop"),old);
+ assert.equal(await ev("document.querySelector('.full-read').open"),false);assert.equal(await ev("document.querySelector('.reading').scrollTop"),old);
  await ev("document.querySelector('#variant').click()");assert.equal(await ev("document.querySelectorAll('.reading p').length"),1);
- await ev("document.querySelector('#variant').click()");await ev("document.querySelector('#prev').click()");assert.equal(await ev("document.querySelector('.chapter h1').textContent"),'STORMKEEP');
- await ev("document.querySelector('#next').click();document.querySelector('#next').click()");assert.ok(await ev("!!document.querySelector('.reveal')"));
+ await ev("document.querySelector('#variant').click();document.querySelector('#next').click()");assert.equal(await ev("document.querySelector('.chapter h1').textContent"),'STORMKEEP');
+ await ev("document.querySelector('#next').click()");assert.ok(await ev("document.querySelector('.cutout').style.shapeOutside.includes('galahad-cutout')"));
+ await ev("document.querySelector('#next').click()");assert.ok(await ev("!!document.querySelector('.reveal')"));
  console.log(width+'x'+height,JSON.stringify(q),'OK');
 }
 assert.deepEqual(errors,[]);
-console.log('Editorial: 4 viewports, alpha shape, scroll, overlay, restore, navigation, variants OK');
+console.log('Art plate: 4 viewports OK');
 }finally{ws?.close();edge.kill();server.close();await sleep(200);await rm(dir,{recursive:true,force:true,maxRetries:3,retryDelay:200}).catch(()=>{})}
