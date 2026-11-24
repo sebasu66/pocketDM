@@ -1,0 +1,23 @@
+{
+  "id": "act-20261124-pwa-001",
+  "date": "2026-11-24",
+  "area": "Infraestructura / Firebase",
+  "owner": "Equipo de combate",
+  "status": "en-revision",
+  "title": "PWA principal y detección de móviles apaisados",
+  "summary": "Manifiesto, iconos, service worker de red y detección de pantallas bajas. Pruebas automatizadas: registro de worker y modo móvil 1396x547, además de escritorio y móvil vertical. Usuario autoriza promover el lector integrado a live. Sin FCM ni autenticación.",
+  "changed": [
+    "vault-site/public/app.webmanifest",
+    "vault-site/public/sw-pocketdm.js",
+    "vault-site/public/libro/pwa.mjs",
+    "vault-site/public/libro/mobile-reader.mjs",
+    "vault-site/firebase.json"
+  ],
+  "next": "Verificar instalación en Android real; coordinar backend, permisos y suscripción FCM. Priorizar motor de combate.",
+  "source": "https://github.com/sebasu66/pocketDM/pull/2",
+  "nodeIds": [
+    "doc_0904",
+    "doc_0013",
+    "doc_0903"
+  ]
+}

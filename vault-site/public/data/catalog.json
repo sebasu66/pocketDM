@@ -385,7 +385,7 @@
       "name": "Firebase Hosting: sitios separados",
       "category": "Tecnología",
       "summary": "Proyecto Firebase verificado con sitio principal y sitio de prototipos.",
-      "description_md": "# Firebase Hosting\n\nProyecto verificado lore-weaver-rt9pc. Sitios lore-weaver-rt9pc y pocketdm-prototipos.\n\nLa bóveda y el libro integrado se prueban en un canal de vista previa de prototipos, sin modificar producción. El lector original proviene de la vista V2 del sitio, no de la demo anterior.\n\nLa producción anterior puede conservar aún el combate antiguo hasta su migración formal.",
+      "description_md": "# Firebase Hosting\n\nProyecto verificado lore-weaver-rt9pc. Sitios lore-weaver-rt9pc y pocketdm-prototipos.\n\nLa bóveda y el libro integrado se prueban en un canal de vista previa de prototipos, sin modificar producción. El lector original proviene de la vista V2 del sitio, no de la demo anterior.\n\nLa producción anterior puede conservar aún el combate antiguo hasta su migración formal.\n\n**Decisión posterior del usuario:** el libro integrado V2 pasa a ser la aplicación principal de pocketdm-prototipos; se autoriza promover la versión revisada a live. Ver doc_0904.",
       "status": "active",
       "tags": [
         "firebase",
@@ -403,6 +403,10 @@
         {
           "type": "relacionado_con",
           "target": "doc_0007"
+        },
+        {
+          "type": "actualizado_por",
+          "target": "doc_0904"
         }
       ],
       "source": {
@@ -852,6 +856,43 @@
         {
           "type": "usa",
           "target": "doc_0901"
+        }
+      ],
+      "source": {
+        "label": "PR de integración",
+        "href": "https://github.com/sebasu66/pocketDM/pull/2"
+      }
+    },
+    {
+      "id": "doc_0904",
+      "type": "decision",
+      "name": "Pocket DM como PWA principal",
+      "category": "Tecnología",
+      "summary": "El libro integrado V2 reemplaza los prototipos anteriores como experiencia principal; instalación web y futura mensajería push.",
+      "description_md": "# Decisión del usuario (24/11/2026)\n\nEl lector integrado V2 es la aplicación principal. Se autoriza publicar en el sitio pocketdm-prototipos live, sin mantener los prototipos obsoletos como entrada de juego. Se conserva el historial Git y una versión de Hosting para reversión. La bóveda y el tablero permanecen disponibles en el mismo sitio.\n\nPWA: manifiesto, iconos 192/512, modo fullscreen/standalone según navegador, orientación adaptable y service worker con navegación network-first. Sin caché de estado privado. En pantallas bajas o dispositivos táctiles se prioriza el lector móvil; se comprobó 1396 × 547 además de las resoluciones anteriores.\n\nPendientes: instalar en dispositivo físico; FCM y suscripción push con consentimiento, autenticación y asociación de tokens al usuario; definir backend y reglas de seguridad. El modo offline muestra aviso de conexión; no ejecuta partidas offline. El motor de combate todavía no está conectado.\n\nLa revisión se integra por PR #2; no fusionar ni editar las ramas de otros equipos sin acuerdo.",
+      "status": "active",
+      "tags": [
+        "PWA",
+        "móvil",
+        "Firebase",
+        "notificaciones"
+      ],
+      "links": [
+        {
+          "type": "actualiza",
+          "target": "doc_0013"
+        },
+        {
+          "type": "implementa",
+          "target": "doc_0903"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0019"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0025"
         }
       ],
       "source": {

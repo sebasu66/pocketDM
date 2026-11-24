@@ -1,5 +1,12 @@
 // Shell móvil del libro. Reutiliza las fichas, el mapa y el diario del lector.
-export const mobileQuery='(max-width: 800px), (max-width: 1100px) and (max-height: 600px), (pointer: coarse) and (max-height: 650px)';
+// Foldables and embedded Android browsers may report a desktop-sized width.
+// A short reading surface should never be squeezed into a two-page spread.
+export const mobileQuery='(max-width: 800px), (max-height: 660px), (any-pointer: coarse) and (max-width: 1600px)';
+export function readerMode(){
+ const forced=new URLSearchParams(location.search).get('layout');
+ if(forced==='mobile'||forced==='desktop')return forced==='mobile';
+ return matchMedia(mobileQuery).matches || (navigator.maxTouchPoints>0 && /Android|iPhone|iPod|Mobile/i.test(navigator.userAgent));
+}
 export function splitStoryPages(pages){
  const result=[];
  pages.forEach((html,index)=>{

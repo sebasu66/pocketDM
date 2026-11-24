@@ -1,5 +1,5 @@
 import {createServer} from 'node:http';import {readFile,mkdtemp,rm,writeFile} from 'node:fs/promises';import {spawn} from 'node:child_process';import {tmpdir} from 'node:os';import {join,extname,resolve} from 'node:path';import assert from 'node:assert/strict';
-const base=resolve('public');const mime={'.html':'text/html','.mjs':'text/javascript','.css':'text/css','.png':'image/png','.svg':'image/svg+xml'};
+const base=resolve('public');const mime={'.html':'text/html','.mjs':'text/javascript','.js':'text/javascript','.webmanifest':'application/manifest+json','.css':'text/css','.png':'image/png','.svg':'image/svg+xml'};
 const server=createServer(async(req,res)=>{try{let path=join(base,new URL(req.url,'http://localhost').pathname.replace(/^\//,'')||'index.html');if(!extname(path))path=join(path,'index.html');res.setHeader('Content-Type',mime[extname(path)]||'application/octet-stream');res.end(await readFile(path))}catch{res.statusCode=404;res.end()}});
 await new Promise(r=>server.listen(0,'127.0.0.1',r));const dir=await mkdtemp(join(tmpdir(),'pocketdm-browser-'));const edge=spawn('C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',['--headless=new','--disable-gpu','--no-first-run','--no-default-browser-check','--remote-debugging-port=0','--user-data-dir='+dir,'about:blank'],{stdio:'ignore'});let ws;
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -68,5 +68,12 @@ assert.equal(await ev("document.querySelector('.mobile-progress').textContent"),
 await call('Emulation.setDeviceMetricsOverride',{width:1280,height:900,deviceScaleFactor:1,mobile:false});await sleep(300);
 assert.equal(await ev("document.querySelectorAll('book-page').length"),2);
 assert.equal(await ev("getComputedStyle(document.querySelector('.campaignnav')).display"),'flex');
-assert.deepEqual(errors,[]);console.log('PASS: chequeos, escritorio intacto, retratos verticales, móvil apaisado, rail derecho, paneles y posición conservada.');
+await call('Emulation.setDeviceMetricsOverride',{width:1396,height:547,deviceScaleFactor:1,mobile:false});await sleep(300);
+assert.equal(await ev("document.body.classList.contains('mobile-story')"),true);
+assert.equal(await ev("document.querySelectorAll('book-page').length"),1);
+assert.equal(await ev("getComputedStyle(document.querySelector('.mobile-rail')).flexDirection"),'column');
+assert.equal(await ev("getComputedStyle(document.querySelector('.readerbar')).display"),'none');
+assert.equal(await ev("document.querySelector('link[rel=manifest]').getAttribute('href')"),'/app.webmanifest');
+assert.equal(await ev("Promise.race([navigator.serviceWorker.ready.then(r=>new URL(r.active.scriptURL).pathname),new Promise(r=>setTimeout(()=>r('timeout'),5000))])"),'/sw-pocketdm.js');
+assert.deepEqual(errors,[]);console.log('PASS: PWA service worker y pantalla apaisada ancha 1396x547.');console.log('PASS: chequeos, escritorio intacto, retratos verticales, móvil apaisado, rail derecho, paneles y posición conservada.');
 }finally{ws?.close();edge.kill();server.close();await sleep(400);await rm(dir,{recursive:true,force:true}).catch(()=>{})}
