@@ -1,0 +1,20 @@
+{
+  "id": "act-20261124-editorial-mobile-002",
+  "date": "2026-11-24",
+  "area": "Interfaz / Libro",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Laboratorio editorial móvil: texto fluido y lectura ampliada",
+  "summary": "Tres paneles reutilizables aislados del lector: apertura, narración con WebP alfa, revelación. Cuatro resoluciones Edge aprobadas; scroll, diálogo y restauración de posición. Arte existente provisional. Decisión móvil principal; escritorio/TV overview complementario futuro. No altera reglas ni contratos.",
+  "changed": [
+    "vault-site/public/libro/editorial/",
+    "vault-site/scripts/test-editorial-browser.mjs",
+    "vault-site/public/docs/editorial-mobile-first.md"
+  ],
+  "next": "Revisar aspecto con usuario, generar arte expresionista específico, probar Android físico e integrar con contrato de edición. Overview TV no implementado.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0903",
+    "doc_0913"
+  ]
+}
