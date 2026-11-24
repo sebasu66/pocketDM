@@ -31,7 +31,7 @@ function md(t){
  if(list)out.push("</ul>");return out.join("");
 }
 function markNav(current){
- for(const [id,k] of [["nav-home","/"],["nav-vault","/boveda"],["nav-graph","/grafo"],["nav-combat","/combate"]]){
+ for(const [id,k] of [["nav-home","/"],["nav-vault","/boveda"],["nav-graph","/grafo"],["nav-book","/libro"],["nav-app","/app"]]){
   const a=document.getElementById(id);a.classList.toggle("active",current===k);
   if(current===k)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current");
  }
@@ -41,7 +41,7 @@ function portal(){
  const cards=[
   ["◫","Bóveda documental","Fichas, decisiones, documentación técnica y referencias.","/boveda/"],
   ["◎","Grafo interactivo","Relaciones y niveles de detalle: áreas, vecinos y catálogo.","/grafo/"],
-  ["⚔","Prototipo de combate","Copia preservada de la demo original de tres carriles.","/combate/"]
+  ["⚔","Libro narrativo interactivo","Historia, personaje, diario y mapa en el mismo lector.","/libro/"]
  ];
  app.innerHTML='<section class="hero"><div class="eyebrow">El archivo vivo del proyecto</div><h1>Un mundo de cartas.<br>Una bóveda de <em>conexiones.</em></h1>'+
   '<p class="lede">Pocket DM centraliza documentación, decisiones, prototipos y recursos originales en un catálogo de nodos conectados con identidad estable.</p>'+

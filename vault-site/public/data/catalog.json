@@ -286,14 +286,16 @@
     {
       "id": "doc_0010",
       "type": "prototype",
-      "name": "Combate por carriles · versión actual",
+      "name": "Crónica del invierno · Libro narrativo V2",
       "category": "Prototipos",
-      "summary": "Demo HTML existente. En la versión pública anterior se sirve desde la raíz.",
-      "description_md": "# Prototipo de combate\n\nLa demo de tres carriles utiliza cartas, interacción de selección y recursos visuales/sonoros. La copia de `prototipo-combate/index.html` en el paquete coincide bit a bit con el HTML del sitio publicado al 24/11/2026.\n\nEn la nueva vista previa se replica bajo `/combate/`; la publicación vigente permanece intacta.",
+      "summary": "Un lector de campaña para narración, combate, Personaje, Diario y Mapa.",
+      "description_md": "# Libro narrativo V2\n\nEl lector de Crónica del invierno presenta escenas, ilustraciones, personajes y fases de combate como parte de una sola experiencia. Su diseño es también la base para hojas de personaje, diario, mapa y decisiones cerradas.\n\nLas resoluciones mecánicas del ejemplo original son ilustrativas, no tiradas de un motor en vivo. La conexión a Firestore y al servicio de campañas queda pendiente.\n\nLa demo obsoleta de tres carriles se retira de la bóveda.",
       "status": "active",
       "tags": [
-        "html",
-        "demo"
+        "libro",
+        "interfaz",
+        "narrativa",
+        "combate"
       ],
       "links": [
         {
@@ -303,11 +305,15 @@
         {
           "type": "referenciado_por",
           "target": "doc_0012"
+        },
+        {
+          "type": "es_interfaz_de",
+          "target": "doc_0023"
         }
       ],
       "source": {
-        "label": "Abrir prototipo",
-        "href": "/combate/"
+        "label": "Abrir libro narrativo",
+        "href": "/libro/"
       }
     },
     {
@@ -343,7 +349,7 @@
       "name": "Bóveda documental y navegación",
       "category": "Prototipos",
       "summary": "Portal de documentos, búsqueda, fichas vinculadas y grafo por niveles.",
-      "description_md": "# Bóveda MVP\n\n- Portal `/` con accesos y estado del proyecto.\n- Biblioteca `/boveda/` con filtros, búsquedas y lectura de fichas.\n- Grafo `/grafo/` con selección, vecindad y enlaces a fichas.\n- Prototipo `/combate/` preservado en la nueva versión de prueba.\n- Documentos enlazan a GitHub o Drive; no se copian archivos pesados ni secretos.",
+      "description_md": "# Bóveda y libro\n\nLa bóveda /boveda/ y el grafo /grafo/ son herramientas de documentación y administración del proyecto. La experiencia del jugador utiliza el libro /libro/ para las escenas y vistas de campaña.\n\nLa entrada /app/ y el usuario /app/?view=profile emplean provisionalmente la misma base visual. /combate/ remite a un encuentro del libro, nunca a la demo antigua de carriles.",
       "status": "active",
       "tags": [
         "documentación",
@@ -375,7 +381,7 @@
       "name": "Firebase Hosting: sitios separados",
       "category": "Tecnología",
       "summary": "Proyecto Firebase verificado con sitio principal y sitio de prototipos.",
-      "description_md": "# Firebase Hosting\n\n**Proyecto:** `lore-weaver-rt9pc`.\n\n**Sitios confirmados:** `lore-weaver-rt9pc` y `pocketdm-prototipos`.\n\nLa aplicación Next.js del repositorio tiene su propia configuración y no debe confundirse con la publicación estática de prototipos. Esta bóveda se prueba en un canal de vista previa del sitio de prototipos y no modifica producción.",
+      "description_md": "# Firebase Hosting\n\nProyecto verificado lore-weaver-rt9pc. Sitios lore-weaver-rt9pc y pocketdm-prototipos.\n\nLa bóveda y el libro integrado se prueban en un canal de vista previa de prototipos, sin modificar producción. El lector original proviene de la vista V2 del sitio, no de la demo anterior.\n\nLa producción anterior puede conservar aún el combate antiguo hasta su migración formal.",
       "status": "active",
       "tags": [
         "firebase",
@@ -616,7 +622,7 @@
       "name": "Pipeline de publicación de la bóveda",
       "category": "Tecnología",
       "summary": "Validar datos, generar índice y publicar en Firebase preview antes de live.",
-      "description_md": "# Flujo de publicación\n\n1. Editar `data/catalog.json` manteniendo IDs.\n2. Ejecutar el validador de JSON y enlaces.\n3. Ejecutar pruebas de navegación de portal, fichas y grafo.\n4. Desplegar a Firebase Hosting preview.\n5. Verificar que `/combate/` conserva la copia de la demo y que el sitio live no cambia.\n6. Promover a producción sólo después de revisar rutas y seguridad.",
+      "description_md": "# Etapas de publicación\n\n1. Reutilizar el libro V2 como interfaz principal de juego.\n2. Mantener documentación y administración en vistas separadas.\n3. Validar JSON, rutas, libro y componentes.\n4. Publicar solo en Firebase preview y comprobar el conjunto.\n5. Conectar estado, autenticación, eventos y reglas reales más adelante.\n6. Publicar live con rollback y revisión de contenidos, sin restaurar la demo obsoleta.",
       "status": "active",
       "tags": [
         "CI",
@@ -637,6 +643,72 @@
         }
       ],
       "source": null
+    },
+    {
+      "id": "doc_0023",
+      "type": "architecture",
+      "name": "Libro como interfaz unificada del jugador",
+      "category": "Diseño",
+      "summary": "El libro muestra historia, opciones, combate, personaje, diario y mapa con una misma estética.",
+      "description_md": "# El libro es la interfaz\n\nHistoria: narración, ilustraciones, elecciones y resultados.\n\nPersonaje: fichas y estados en páginas del libro.\n\nDiario: acciones y decisiones registradas por campaña.\n\nMapa: vista de lugares y posiciones con capa ilustrada.\n\nInicio y usuario: permiten salir de la campaña sin abandonar el lenguaje visual del libro.\n\nComponentes reutilizables: book-page, book-title, book-portrait, book-inset, combat-phase, book-sheet, book-journal, book-map, book-home, book-profile, book-link.\n\nPendiente: datos auténticos, sincronización, identidad y opciones calculadas por servidor.",
+      "status": "active",
+      "tags": [
+        "libro",
+        "interfaz",
+        "web components",
+        "jugador"
+      ],
+      "links": [
+        {
+          "type": "basado_en",
+          "target": "doc_0010"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0024"
+        },
+        {
+          "type": "separa",
+          "target": "doc_0012"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0007"
+        }
+      ],
+      "source": {
+        "label": "Abrir libro integrado",
+        "href": "/libro/"
+      }
+    },
+    {
+      "id": "doc_0024",
+      "type": "architecture",
+      "name": "Navegación de campaña y aplicación",
+      "category": "Tecnología",
+      "summary": "Rutas funcionales de Historia, Personaje, Diario, Mapa, Home y Usuario.",
+      "description_md": "# Navegación\n\nDentro de campaña: /libro/, /libro/?view=character, /libro/?view=journal y /libro/?view=map.\n\nFuera de campaña: /app/ para inicio y /app/?view=profile para usuario. Son pantallas demostrativas, sin login conectado.\n\n/combate/ dirige al encuentro dentro del libro; no contiene los tres carriles antiguos.\n\nLa documentación del proyecto permanece separada en /boveda/ y /grafo/.",
+      "status": "active",
+      "tags": [
+        "navegación",
+        "rutas",
+        "campaña",
+        "usuario"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0023"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0019"
+        }
+      ],
+      "source": {
+        "label": "Inicio de la aplicación",
+        "href": "/app/"
+      }
     }
   ]
 }

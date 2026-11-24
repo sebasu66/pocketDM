@@ -1,47 +1,61 @@
-# Pocket DM · Bóveda documental (MVP)
+# Pocket DM · Libro de campaña + bóveda de proyecto
 
-Estado: implementación experimental, separada de la aplicación Next.js principal.
+**Estado:** prototipo integrado, sin publicación live. El libro narrativo V2 es la interfaz del jugador; la bóveda y el grafo son herramientas separadas de documentación.
 
-## Contiene
+## Rutas
 
-- Portal en /, catálogo en /boveda/, grafo en /grafo/ y copia del combate en /combate/.
-- Un catálogo estático versionable en public/data/catalog.json.
-- Documentos vinculados por ID estable; enlaces externos a GDD, README y GitHub.
-- Grafo SVG interactivo con áreas, vecindario, vista completa, búsqueda, zoom y arrastre.
-- La demo de combate HTML y assets publicados se copian sin modificación, verificando su SHA-256.
+| Ruta | Función |
+| --- | --- |
+| `/libro/` | Historia / crónica del invierno, ilustraciones y fases de combate |
+| `/libro/?view=character` | Hojas de personaje |
+| `/libro/?view=journal` | Diario de eventos y decisiones |
+| `/libro/?view=map` | Mapa narrativo demostrativo |
+| `/app/` | Inicio de aplicación y selector de campaña (MVP) |
+| `/app/?view=profile` | Usuario / perfil (sin autenticación aún) |
+| `/combate/` | Acceso histórico redirigido a un encuentro en el libro |
+| `/boveda/` y `/grafo/` | Documentación administrativa y técnica |
+| `/` | Portal de documentación del proyecto |
 
-## Auditoría (2026-11-24)
+## Arquitectura de presentación
 
-- Repositorio: sebasu66/pocketDM, rama main, proyecto Firebase lore-weaver-rt9pc.
-- Dos sitios Firebase verificados: lore-weaver-rt9pc y pocketdm-prototipos.
-- La publicación anterior de prototipos servía el combate en / (no existía /combate/).
-- El SHA-256 del HTML en producción coincide con el index.html del paquete Drive: 697635b637eeaf6edc8c6b21b4743730e574cbe56c10a8fd5228231e8550fa68.
-- Se recuperó el visor original grafo-json-git/viewer/index.html del paquete PocketDM-paquete-2026-11-23.zip.
-- La nueva interfaz documental conserva la estructura de nodos y enlaces y adapta la representación SVG. El histórico de ramas/commits del visor original no se incorporó a este MVP.
-- Hay un archivo local sin seguimiento en src/components/wiki/WikiLayout.tsx del repositorio principal: no fue alterado.
+Se reutilizan el HTML, CSS, el registro `events.mjs` y los Web Components del lector original **Crónica del invierno** del canal Firebase `v2` de `pocketdm-prototipos` (`/v2/cronica/`). Se amplían con:
 
-## Desarrollo y pruebas
+- `book-page`, `book-title`, `book-portrait`, `book-inset`, `combat-phase`: componentes originales, conservados.
+- `book-sheet`, `book-journal`, `book-map`, `book-home`, `book-profile`, `book-link`: componentes nuevos.
+- `book-actions`: opciones finitas derivadas de `campaign.mjs`, registradas solo durante la sesión de demostración.
+- `reader.mjs`: un único motor de páginas/zoom, navegación por vista con historial y enlaces cruzados. Mismo estilo editorial en escenas y módulos.
 
-En vault-site/: 
+`public/libro/campaign.mjs` es el contrato temporal de datos del ejemplo. Más adelante un adaptador deberá cargar escena, actores, opciones, mapa y diario desde el backend, sin rehacer los componentes visuales.
 
-1. Editar public/data/catalog.json, conservando los IDs.
-2. Ejecutar node --check public/site.js y node scripts/validate.mjs.
-3. Servir public con un servidor HTTP. El fetch del JSON no funciona abriendo index.html como file://.
-4. Verificar /, /boveda/?doc=doc_0005, /grafo/?node=doc_0005 y /combate/.
-5. Vista previa Firebase (desde este directorio):
+**Límite actual:** el combate, las tiradas y los cambios de estado del lector V2 original son ilustrativos. La selección de opciones no ejecuta todavía un motor de reglas, ni sincroniza con Firestore o cuentas reales. No presentar este ejemplo como una simulación completa o un perfil auténtico.
 
-   firebase hosting:channel:deploy boveda-mvp-20261124 --only hosting:prototipos --project lore-weaver-rt9pc --expires 7d
+## Origen y versión
 
-No ejecutar firebase deploy --only hosting:prototipos (live) hasta cerrar la revisión de contenido y rutas.
+- Fuente verificada: `https://pocketdm-prototipos--v2-zxrxtosa.web.app/v2/cronica/`.
+- Código base recuperado en `index.html`, `book.css`, `reader.mjs`, `components.mjs`, `events.mjs` y sus cinco assets. La ampliación respeta la estructura de libro.
+- La demo anterior de tres columnas/carriles queda **obsoleta** y sus assets fueron retirados de este nuevo despliegue. La ruta `/combate/` es solo un enlace de compatibilidad.
+- El sitio **live** de prototipos no se modifica con este trabajo.
 
-## Contenido y privacidad
+## Pruebas y despliegue
 
-La vista previa de Firebase es una URL pública por enlace: no hay roles ni protección de secretos. Los resúmenes administrativos aquí incluidos son no sensibles. No publicar credenciales, exportaciones de usuarios, contratos ni texto extenso licenciado de Hellfrost. El material original de campañas y el visor histórico permanecen en sus fuentes para revisión de permisos/licencia.
+Desde `vault-site/`, ejecutar:
 
-## Pendientes
+```sh
+node --check public/site.js
+node --check public/libro/reader.mjs
+node --check public/libro/navigation.mjs
+node scripts/validate.mjs
+firebase hosting:channel:deploy boveda-mvp-20261124 --project lore-weaver-rt9pc --expires 7d --no-authorized-domains
+```
 
-- Inspeccionar el HTML original de la bóveda si se recupera su archivo.
-- Incorporar visor histórico ramas/commits como una segunda vista cuando se apruebe la fuente.
-- Migrar documentos y recursos con un pipeline de validación automático.
-- Revisar reglas de Firestore antes de habilitar cualquier edición en línea.
-- Evaluar el cambio de la raíz pública de combate a portal en un despliegue live separado, con rollback listo.
+Antes de promover a live: validar navegación móvil, componentes, accesibilidad, vínculos, derechos de los assets y retorno desde libro a aplicación. Guardar copia de la release anterior para rollback.
+
+## Próxima etapa de integración real
+
+1. Definir esquema de vista genérico: escenas/cartas, bloques narrativos, componentes, imágenes y opciones.
+2. Motor de reglas de servidor: acciones cerradas, tiradas auditables, efectos e historial.
+3. Sincronización del cliente con campañas, estado del personaje, diario y localizaciones; navegación por IDs estables.
+4. Autenticación y perfil; diferenciar los datos de usuario de la documentación pública.
+5. Publicación del juego en un canal/entorno independiente de la bóveda de administración.
+
+Documentación fuente: GDD PocketDM y README del paquete del 23/11/2026 disponibles en Google Drive. No incluir secretos, exportaciones con usuarios ni texto extenso licenciado de Hellfrost.
