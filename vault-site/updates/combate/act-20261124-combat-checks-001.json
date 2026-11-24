@@ -1,0 +1,21 @@
+{
+  "id": "act-20261124-combat-checks-001",
+  "date": "2026-11-24",
+  "area": "Combate / Simulador V2",
+  "owner": "Equipo de combate",
+  "status": "implementado-en-preview",
+  "title": "Contrato común para tiradas resueltas",
+  "summary": "Chequeos con ID estable, habilidad y resultado visible, modal con dificultad y dado, validación de referencias únicas. Pruebas con éxito y fallo prefijados; no se implementó aún el motor de resolución.",
+  "changed": [
+    "vault-site/public/libro/check-contract.mjs",
+    "vault-site/public/libro/book-skill-check.mjs",
+    "vault-site/public/libro/events.mjs",
+    "vault-site/COMBAT_HANDOFF.md"
+  ],
+  "next": "Acordar servicio de estado único y conectar eventos reales del motor de combate.",
+  "source": "https://github.com/sebasu66/pocketDM/pull/2",
+  "nodeIds": [
+    "doc_0901",
+    "doc_0902"
+  ]
+}

@@ -825,6 +825,39 @@
         "label": "Contrato y coordinación",
         "href": "https://github.com/sebasu66/pocketDM/tree/feature/combat-checks-v2/vault-site"
       }
+    },
+    {
+      "id": "doc_0903",
+      "type": "decision",
+      "name": "Lectura móvil inmersiva y navegación lateral",
+      "category": "Diseño",
+      "summary": "Móvil: una sección por vez, orientación apaisada preferente, paneles laterales y navegación mínima; escritorio conserva el libro de doble página.",
+      "description_md": "# Decisión de diseño\n\nEn móvil desaparecen las barras redundantes de navegación durante la aventura. La lectura vertical dispone retratos a ancho completo y texto arriba o abajo. En apaisado, las ilustraciones se sitúan junto al texto cuando hay espacio, con controles a la derecha para el pulgar. Se muestran fragmentos editoriales derivados de la misma historia, sin duplicar el estado.\n\nPersonaje se abre desde el lado izquierdo; mapa, diario y misiones desde el derecho. Deslizamiento horizontal o menú accesible. Los paneles no cambian la posición de lectura. Inicio se accede desde el menú, sin mostrarlo duplicado durante la aventura. En pantallas grandes se conserva la navegación de escritorio. Las fichas, diario y mapa reutilizan los componentes compartidos; misiones es un espacio reservado hasta conexión al estado real.\n\nEstado: prototipo integrado en PR #2, no fusionado ni publicado live. Pendiente: revisar ergonomía en dispositivo real y acordar la fuente única del lector con el otro equipo.",
+      "status": "active",
+      "tags": [
+        "móvil",
+        "responsive",
+        "libro",
+        "UX"
+      ],
+      "links": [
+        {
+          "type": "especializa",
+          "target": "doc_0023"
+        },
+        {
+          "type": "actualiza",
+          "target": "doc_0024"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0901"
+        }
+      ],
+      "source": {
+        "label": "PR de integración",
+        "href": "https://github.com/sebasu66/pocketDM/pull/2"
+      }
     }
   ]
 }
