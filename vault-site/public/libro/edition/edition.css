@@ -26,3 +26,24 @@ book-edition .edition-menu[hidden]{display:none}book-edition .edition-menu butto
 @media(orientation:portrait){book-edition .edition-grid{grid-template-columns:25px minmax(0,1fr) 53px}book-edition .collage{width:100%;float:none;shape-outside:none;display:block;margin:0 0 8px}book-edition .reading{padding:10px}book-edition .title{font-size:30px}book-edition .prose{font-size:16px}book-edition .cover img{object-fit:contain}}
 @media(min-width:1100px) and (min-height:700px){book-edition .prose{font-size:24px}.book-edition .collage{width:min(60%,850px)}}
 book-edition .reading{padding-left:10px}book-edition .title{font-size:clamp(27px,8vh,62px)}book-edition .collage{margin-left:-10px} @media(orientation:portrait){book-edition .collage{margin-left:0}}
+/* The reader owns the page index; this is only the rendering of its first two folios. */
+body.edition-opening .mobile-rail{display:none!important}
+body.edition-opening .mobile-drawer{z-index:50}
+book-edition{inset:0;width:100%;height:100dvh}
+book-edition .edition-grid{grid-template-columns:clamp(34px,4.3vw,50px) minmax(0,1fr) clamp(60px,8vw,96px);padding:0}
+book-edition-spine{font-size:clamp(14px,2.5vh,19px);letter-spacing:.035em;padding:0 2px}
+book-edition-spine .number{font-size:clamp(19px,4vh,27px)}
+book-edition-nav{padding-right:max(3px,env(safe-area-inset-right));box-sizing:border-box}
+book-edition-nav output{font-size:clamp(15px,3vh,21px)}
+book-edition-nav button{font-size:28px}
+book-edition .edition-page:not(.cover){display:grid;grid-template-columns:minmax(0,43%) minmax(0,1fr);background-size:cover}
+book-edition .fixed-art{position:relative;overflow:hidden;height:100%;min-width:0;display:flex;align-items:center;justify-content:center}
+book-edition .fixed-art img{height:100%;width:100%;object-fit:contain;object-position:center bottom}
+book-edition .reading{position:relative;inset:auto;min-height:0;height:100%;padding:clamp(10px,2.8vh,22px) clamp(13px,2.5vw,34px) 14px 8px;box-sizing:border-box}
+book-edition .title{font-size:clamp(25px,7vh,58px);line-height:.99}
+book-edition .prose{font-size:clamp(16px,3.65vh,23px)}
+book-edition .cover{background:#17232e;overflow:hidden}
+book-edition .cover::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#17232e40,#17232e),url('./assets/cover.webp') center/cover;filter:blur(22px);transform:scale(1.1)}
+book-edition .cover img{position:relative;height:100%;width:100%;object-fit:contain;mask-image:linear-gradient(to right,#000 0%,#000 94%,transparent 100%)}
+.rotation-notice{display:none}
+@media(orientation:portrait){.rotation-notice{position:fixed;inset:0;z-index:2147482000;background:#172430;color:#f1d6a6;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font:20px Georgia;padding:24px}.rotation-notice span{font-size:70px}.rotation-notice p{font-size:16px}}

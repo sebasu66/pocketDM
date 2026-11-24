@@ -5,7 +5,7 @@ await new Promise(r=>server.listen(0,'127.0.0.1',r));const dir=await mkdtemp(joi
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 try{let port;for(let i=0;i<80;i++){try{port=(await readFile(join(dir,'DevToolsActivePort'),'utf8')).split(/\r?\n/)[0];break}catch{await sleep(150)}}assert.ok(port,'Edge devtools port');let targets=await (await fetch('http://127.0.0.1:'+port+'/json/list')).json();ws=new WebSocket(targets.find(x=>x.type==='page').webSocketDebuggerUrl);await new Promise((r,j)=>{ws.onopen=r;ws.onerror=j});let id=0;const pending=new Map(),errors=[];ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.id){const p=pending.get(m.id);pending.delete(m.id);if(m.error)p.reject(Error(JSON.stringify(m.error)));else p.resolve(m.result)}else if(m.method==='Runtime.exceptionThrown')errors.push(m.params.exceptionDetails.text)};
 const call=(method,params={})=>new Promise((resolve,reject)=>{const n=++id;pending.set(n,{resolve,reject});ws.send(JSON.stringify({id:n,method,params}))});const ev=async expression=>{const r=await call('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(JSON.stringify(r.exceptionDetails));return r.result.value};
-await call('Runtime.enable');await call('Page.enable');await call('Emulation.setDeviceMetricsOverride',{width:1280,height:900,deviceScaleFactor:1,mobile:false});await call('Page.navigate',{url:'http://127.0.0.1:'+server.address().port+'/libro/'});for(let i=0;i<50;i++){if(await ev("document.querySelectorAll('book-skill-check .skill-pill').length>0"))break;await sleep(100)}
+await call('Runtime.enable');await call('Page.enable');await call('Emulation.setDeviceMetricsOverride',{width:1280,height:900,deviceScaleFactor:1,mobile:false});await call('Page.navigate',{url:'http://127.0.0.1:'+server.address().port+'/libro/?page=3'});for(let i=0;i<50;i++){if(await ev("document.querySelectorAll('book-skill-check .skill-pill').length>0"))break;await sleep(100)}
 assert.equal(await ev("document.querySelectorAll('book-page').length"),2);
 assert.equal(await ev("document.getElementById('mechanics').open"),false);
 assert.equal(await ev("document.querySelectorAll('book-narrative-event book-skill-check').length"),2);
@@ -33,7 +33,7 @@ assert.equal(await ev("document.querySelectorAll('book-page').length"),1);
 assert.equal(await ev("getComputedStyle(document.querySelector('.campaignnav')).display"),'none');
 assert.equal(await ev("getComputedStyle(document.querySelector('.readerbar')).display"),'none');
 assert.equal(await ev("getComputedStyle(document.querySelector('.readerfoot')).display"),'none');
-assert.equal(await ev("document.querySelector('.mobile-progress').textContent"),'1/8');
+assert.equal(await ev("document.querySelector('.mobile-progress').textContent"),'3/10');
 await ev("document.querySelector('[data-mobile=next]').click();document.querySelector('[data-mobile=next]').click()");
 assert.equal(await ev("document.querySelectorAll('.skill-pill').length"),2);
 assert.equal(await ev("getComputedStyle(document.querySelector('.portrait')).float"),'none');
@@ -64,7 +64,7 @@ await ev("document.querySelector('[data-mobile=menu]').click();document.querySel
 assert.equal(await ev("document.body.classList.contains('mobile-story')"),false);
 assert.equal(await ev("document.querySelectorAll('book-home').length"),1);
 await ev("document.querySelector('a[data-route-view=story]').click()");
-assert.equal(await ev("document.querySelector('.mobile-progress').textContent"),'4/8');
+assert.equal(await ev("document.querySelector('.mobile-progress').textContent"),'6/10');
 await call('Emulation.setDeviceMetricsOverride',{width:1280,height:900,deviceScaleFactor:1,mobile:false});await sleep(300);
 assert.equal(await ev("document.querySelectorAll('book-page').length"),2);
 assert.equal(await ev("getComputedStyle(document.querySelector('.campaignnav')).display"),'flex');

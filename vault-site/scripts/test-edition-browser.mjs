@@ -6,18 +6,22 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 try{let port;for(let i=0;i<80;i++){try{port=(await readFile(join(dir,'DevToolsActivePort'),'utf8')).split(/\r?\n/)[0];break}catch{await sleep(150)}}assert.ok(port,'Edge devtools port');let targets=await (await fetch('http://127.0.0.1:'+port+'/json/list')).json();ws=new WebSocket(targets.find(x=>x.type==='page').webSocketDebuggerUrl);await new Promise((r,j)=>{ws.onopen=r;ws.onerror=j});let id=0;const pending=new Map(),errors=[];ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.id){const p=pending.get(m.id);pending.delete(m.id);if(m.error)p.reject(Error(JSON.stringify(m.error)));else p.resolve(m.result)}else if(m.method==='Runtime.exceptionThrown')errors.push(m.params.exceptionDetails.text)};
 const call=(method,params={})=>new Promise((resolve,reject)=>{const n=++id;pending.set(n,{resolve,reject});ws.send(JSON.stringify({id:n,method,params}))});const ev=async expression=>{const r=await call('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(JSON.stringify(r.exceptionDetails));return r.result.value};
 await call('Runtime.enable');await call('Page.enable');
-for(const [width,height] of [[882,344],[844,390],[736,414],[1396,547],[390,844]]){
- await call('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:true});
+for(const [width,height] of [[882,344],[844,390],[736,414],[1396,547],[390,844],[1280,900]]){
+ await call('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<1000});
  await call('Page.navigate',{url:'http://127.0.0.1:'+server.address().port+'/libro/'});
  for(let i=0;i<60;i++){if(await ev("!!document.querySelector('book-edition .cover img') && document.querySelector('book-edition .cover img').naturalWidth>0"))break;await sleep(100)}
  assert.ok(await ev("document.querySelector('book-edition .cover img').naturalWidth>0"));
+ assert.equal(await ev("getComputedStyle(document.querySelector('.rotation-notice')).display"),width<height?'flex':'none');
  await ev("document.querySelector('book-edition-nav [data-action=next]').click()");
- for(let i=0;i<40;i++){if(await ev("document.querySelector('book-edition .collage').naturalWidth>0"))break;await sleep(100)}
- const q=await ev("(()=>{let r=document.querySelector('book-edition .reading'),im=document.querySelector('book-edition .collage'),p=document.querySelector('book-edition .edition-page'),nav=document.querySelector('book-edition-nav');return {width:innerWidth,height:innerHeight,scroll:r.scrollHeight,client:r.clientHeight,shape:getComputedStyle(im).shapeOutside,loaded:im.naturalWidth,rail:nav.getBoundingClientRect().left,panel:p.getBoundingClientRect().right}})()");
- assert.ok(q.loaded>0);assert.ok(q.client>0);assert.ok(q.rail>=q.panel-1);if(width>height)assert.match(q.shape,/collage.webp/);
- if(width===882||width===736){const shot=await call('Page.captureScreenshot',{format:'png'});await writeFile('C:/Users/Lorita/AppData/Local/Temp/pdm-edition-'+width+'.png',Buffer.from(shot.data,'base64'))}
- await ev("document.querySelector('book-edition-nav [data-action=expand]').click()");assert.equal(await ev("document.querySelector('book-edition dialog').open"),true);assert.equal(await ev("document.querySelectorAll('book-edition .full-body p').length"),4);await ev("document.querySelector('book-edition dialog button').click()");
- await ev("document.querySelector('book-edition-nav [data-action=next]').click()");assert.ok(await ev("document.querySelector('book-edition').hidden"));assert.ok(await ev("document.querySelectorAll('#book book-page').length>0"));console.log(width+'x'+height,JSON.stringify(q),'OK');
+ for(let i=0;i<40;i++){if(await ev("document.querySelector('.fixed-art img').naturalWidth>0"))break;await sleep(100)}
+ const q=await ev("(()=>{let r=document.querySelector('book-edition .reading'),a=document.querySelector('.fixed-art'),im=a.querySelector('img');let before=im.getBoundingClientRect().top;r.scrollTop=100;return {scroll:r.scrollHeight,client:r.clientHeight,art:a.clientHeight,loaded:im.naturalWidth,fixed:before===im.getBoundingClientRect().top,separate:r.getBoundingClientRect().left>=a.getBoundingClientRect().right-1,scrollTop:r.scrollTop}})()");
+ assert.ok(q.loaded>0);assert.ok(q.client>0);assert.ok(q.fixed);assert.ok(q.separate);assert.equal(q.art,height);
+ if(width===882){const shot=await call('Page.captureScreenshot',{format:'png'});await writeFile('C:/Users/Lorita/AppData/Local/Temp/pdm-fixed-882.png',Buffer.from(shot.data,'base64'))}
+ await ev("document.querySelector('book-edition-nav [data-action=next]').click()");assert.ok(await ev("document.querySelector('book-edition').hidden"));
+ assert.ok(await ev("document.querySelectorAll('#book book-title').length>0"));
+ await ev("(document.body.classList.contains('mobile-story')?document.querySelector('[data-mobile=prev]'):document.querySelector('#prev')).click()");
+ assert.equal(await ev("document.querySelector('book-edition').hidden"),false);assert.ok(await ev("!!document.querySelector('book-edition .fixed-art')"));
+ await ev("document.querySelector('book-edition-nav [data-action=prev]').click()");assert.ok(await ev("!!document.querySelector('book-edition .cover img')"));console.log(width+'x'+height,JSON.stringify(q),'OK');
 }
-assert.deepEqual(errors,[]);console.log('Layered edition: 5 viewports OK');
+assert.deepEqual(errors,[]);console.log('Unified navigation and fixed image: 6 viewports OK');
 }finally{ws?.close();edge.kill();server.close();await sleep(200);await rm(dir,{recursive:true,force:true,maxRetries:3,retryDelay:200}).catch(()=>{})}
