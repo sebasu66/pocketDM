@@ -21,3 +21,6 @@ Este skill enseña dirección narrativa, no el protocolo MCP. Consultar también
 - Conversión de eventos en prosa y control de calidad: narration.md.
 - Mapa bibliográfico y alcance de revisión: sources.md.
 Las tablas son originales de PocketDM y sirven para proponer contenido o parametrizar generadores; no son reglas oficiales de los RPG consultados. El motor decide cuándo y cómo utilizarlas.
+
+## Campañas West Marches
+Consultar west-marches.md para generar regiones bajo demanda, conservar canon y preparar únicamente las dependencias necesarias de una aventura. No asignar ubicaciones exactas a referencias abstractas sin validación del motor.

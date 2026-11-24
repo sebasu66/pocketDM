@@ -12,3 +12,6 @@ Consulta de campaña y entidades; propuesta y validación de mundo; enumeración
 Usar los campos del contrato existente check-contract.mjs. Una tirada visible corresponde a una anotación; factores no son tiradas adicionales.
 ## Coordinación
 Consultar /actividad/ y Git antes de cambiar contratos. Simulación y generación de acontecimientos por un lado; narración y presentación por otro; un único personaje y estado de campaña.
+
+## Mundo progresivo
+Consultar ../pocketdm-storyteller/west-marches.md. Capacidades previstas: leer snapshot base y overlay de campaña, solicitar materialización territorial para una aventura y validar dependencias antes de confirmar. No asumir que las funciones MCP ya existen. Atlas y libro leen la misma proyección autorizada.

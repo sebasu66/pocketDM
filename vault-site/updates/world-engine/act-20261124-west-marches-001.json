@@ -1,0 +1,23 @@
+{
+  "id": "act-20261124-west-marches-001",
+  "date": "2026-11-24",
+  "area": "World Engine / Grafo",
+  "owner": "Equipo de simulación",
+  "status": "decidido",
+  "title": "Mundo West Marches: generación bajo demanda y atlas",
+  "summary": "Canon inicial, hub Stormkeep, regiones de referencia y materialización de corredores para aventuras. Snapshot base con ramas aisladas y caché compatible. Atlas como proyección multiescala con permisos DM/jugador. Contrato documentado, aún sin implementación.",
+  "changed": [
+    "vault-site/public/skills/pocketdm-storyteller/west-marches.md",
+    "vault-site/public/skills/pocketdm-storyteller/SKILL.md",
+    "vault-site/public/skills/pocketdm-system/SKILL.md",
+    "vault-site/public/data/catalog.json"
+  ],
+  "next": "Implementar esquema de snapshot y generación del corredor de la primera aventura; validar rutas y referencias. Atlas después del modelo de datos.",
+  "source": "https://github.com/sebasu66/pocketDM/pull/3",
+  "nodeIds": [
+    "doc_0908",
+    "doc_0005",
+    "doc_0015",
+    "doc_0020"
+  ]
+}
