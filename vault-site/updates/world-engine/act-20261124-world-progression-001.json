@@ -1,0 +1,23 @@
+{
+  "id": "act-20261124-world-progression-001",
+  "date": "2026-11-24",
+  "area": "World Engine / Grafo",
+  "owner": "Equipo de simulación",
+  "status": "en-revision",
+  "title": "Progresión del mundo v0.1: cierre y continuidad entre módulos",
+  "summary": "Rutas explícitas, descubrimiento, cierre de módulo con replay y revisión única, consecuencias por rama, diario y candidatos de continuación declarativos. 311 hojas terminales verificadas, 64 pruebas totales. En memoria, fixture legacy; continuaciones no autoradas ni jugables.",
+  "changed": [
+    "vault-site/simulation/world-journey.mjs",
+    "vault-site/simulation/test-world-journey.mjs",
+    "vault-site/public/docs/world-progression.md"
+  ],
+  "next": "Narrador: proponer módulos con finales, precondiciones y dependencias reales; simulación: unificar ficha/overlay, consecuencias tipadas, viaje y persistencia. Contrato: https://pocketdm-prototipos.web.app/docs/world-progression.md",
+  "source": "https://github.com/sebasu66/pocketDM/pull/3",
+  "nodeIds": [
+    "doc_0008",
+    "doc_0908",
+    "doc_0909",
+    "doc_0907",
+    "doc_0913"
+  ]
+}
