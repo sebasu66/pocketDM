@@ -371,6 +371,10 @@
         {
           "type": "referencia",
           "target": "doc_0010"
+        },
+        {
+          "type": "documenta",
+          "target": "doc_0025"
         }
       ],
       "source": null
@@ -708,6 +712,44 @@
       "source": {
         "label": "Inicio de la aplicación",
         "href": "/app/"
+      }
+    },
+    {
+      "id": "doc_0025",
+      "type": "document",
+      "name": "Coordinación compartida y registro de avances",
+      "category": "Administración",
+      "summary": "Antes de desarrollar, leer los últimos cambios de todos los equipos y registrar resultados por área con enlaces a GitHub.",
+      "description_md": "# Cómo trabajamos sin pisarnos\n\n1. **Leer antes de modificar:** abrir Actividad, filtrar por área si hace falta y revisar las últimas entradas de todos los equipos. Consultar commits y PRs, no sólo la versión cacheada en Firebase.\n2. **Verificar Git:** ejecutar git fetch origin y el preflight del repositorio; integrar cambios remotos relevantes antes de modificar archivos, APIs o modelos compartidos.\n3. **Coordinar responsable y alcance:** cada subsistema tiene un equipo dueño. Si dos equipos deben tocar un contrato, decidir primero cómo se integrará.\n4. **Registrar al cerrar:** crear un archivo nuevo en updates/<area>/<id>.json con área, equipo, fecha, estado, hechos, archivos, enlace fuente, riesgos y próximo paso; modificar la ficha relacionada si se cambió una decisión.\n5. **Publicar en preview:** validar y desplegar la vista previa para que los demás puedan leerlo. No asumir que el registro web se actualiza solo al subir Git.\n\n**Responsabilidades:** el equipo de combate es dueño del Simulador V2 y las reglas; la bóveda administra documentos, catálogo y grafo. El libro es interfaz compartida y requiere coordinación. **No registrar avances que otro equipo aún no confirmó.**\n\n**Limitación:** esto es un proceso colaborativo basado en GitHub y un visor de Firebase, no edición multiusuario ni bloqueo automático. El preflight avisa, pero cada equipo debe seguir la práctica.\n\nDetalle operativo: archivo COORDINACION.md del repositorio; tablero web en /actividad/.",
+      "status": "active",
+      "tags": [
+        "coordinación",
+        "registro",
+        "protocolo",
+        "equipos",
+        "git"
+      ],
+      "links": [
+        {
+          "type": "relacionado_con",
+          "target": "doc_0012"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0019"
+        },
+        {
+          "type": "coordina",
+          "target": "doc_0010"
+        },
+        {
+          "type": "coordina",
+          "target": "doc_0023"
+        }
+      ],
+      "source": {
+        "label": "Abrir tablero de actividad",
+        "href": "/actividad/"
       }
     }
   ]

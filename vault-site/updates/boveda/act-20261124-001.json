@@ -1,0 +1,20 @@
+{
+  "id": "act-20261124-001",
+  "date": "2026-11-24",
+  "area": "Documentación / Bóveda",
+  "owner": "Equipo bóveda",
+  "status": "implementado-en-preview",
+  "title": "Portal documental y grafo en canal Firebase de pruebas",
+  "summary": "Catálogo de documentos por ID estable, búsqueda, filtros y grafo de relaciones; código separado y sin publicación live.",
+  "changed": [
+    "vault-site/public/index.html",
+    "vault-site/public/site.js",
+    "vault-site/public/data/catalog.json"
+  ],
+  "next": "Incorporar avances de los equipos por área, revisar documentos y evitar duplicar estados.",
+  "source": "https://github.com/sebasu66/pocketDM/pull/1",
+  "nodeIds": [
+    "doc_0012",
+    "doc_0005"
+  ]
+}

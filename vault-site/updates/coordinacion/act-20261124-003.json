@@ -1,0 +1,18 @@
+{
+  "id": "act-20261124-003",
+  "date": "2026-11-24",
+  "area": "Coordinación",
+  "owner": "Coordinación Pocket DM",
+  "status": "decidido",
+  "title": "Regla común: leer antes de modificar y registrar al terminar",
+  "summary": "Antes de comenzar una tarea, consultar el registro de actividad y los cambios recientes en GitHub. Evitar editar sin sincronizar la rama ni acordar archivos compartidos. Cada equipo informa al cerrar la tarea, por área, con enlaces y próximos pasos.",
+  "changed": [
+    "vault-site/COORDINACION.md",
+    "vault-site/public/data/activity.json"
+  ],
+  "next": "Que el equipo de combate agregue su primer avance verificable y los archivos que controla.",
+  "source": "https://github.com/sebasu66/pocketDM/pull/1",
+  "nodeIds": [
+    "doc_0025"
+  ]
+}

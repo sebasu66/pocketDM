@@ -1,0 +1,21 @@
+{
+  "id": "act-20261124-002",
+  "date": "2026-11-24",
+  "area": "Interfaz / Libro",
+  "owner": "Equipo bóveda",
+  "status": "implementado-en-preview",
+  "title": "Lector narrativo V2 integrado como interfaz de campaña",
+  "summary": "Historia, Personaje, Diario, Mapa, Inicio y Usuario usan páginas y componentes del libro. La demo de tres carriles se excluyó de preview. No se implementó el motor real de reglas y la versión canónica del lector V2 sigue a cargo del equipo de combate.",
+  "changed": [
+    "vault-site/public/libro/",
+    "vault-site/public/app/",
+    "vault-site/public/combate/index.html"
+  ],
+  "next": "Coordinar con combate la fuente única de componentes V2 y el contrato de escenas antes de modificar su motor.",
+  "source": "https://github.com/sebasu66/pocketDM/pull/1",
+  "nodeIds": [
+    "doc_0010",
+    "doc_0023",
+    "doc_0024"
+  ]
+}
