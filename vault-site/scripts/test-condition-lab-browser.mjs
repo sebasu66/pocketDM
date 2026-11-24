@@ -5,6 +5,10 @@ await new Promise(r=>server.listen(0,'127.0.0.1',r));const dir=await mkdtemp(joi
 try{let port;for(let i=0;i<80;i++){try{port=(await readFile(join(dir,'DevToolsActivePort'),'utf8')).split(/\r?\n/)[0];break}catch{await sleep(150)}}assert.ok(port,'Edge devtools port');let targets=await (await fetch('http://127.0.0.1:'+port+'/json/list')).json();ws=new WebSocket(targets.find(x=>x.type==='page').webSocketDebuggerUrl);await new Promise((r,j)=>{ws.onopen=r;ws.onerror=j});let id=0;const pending=new Map(),errors=[];ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.id){const p=pending.get(m.id);pending.delete(m.id);if(m.error)p.reject(Error(JSON.stringify(m.error)));else p.resolve(m.result)}else if(m.method==='Runtime.exceptionThrown')errors.push(m.params.exceptionDetails.text)};
 const call=(method,params={})=>new Promise((resolve,reject)=>{const n=++id;pending.set(n,{resolve,reject});ws.send(JSON.stringify({id:n,method,params}))});const ev=async expression=>{const r=await call('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(JSON.stringify(r.exceptionDetails));return r.result.value};
 await call('Runtime.enable');await call('Page.enable');await call('Emulation.setDeviceMetricsOverride',{width:1440,height:900,deviceScaleFactor:1,mobile:false});await call('Page.navigate',{url:process.env.POCKETDM_TEST_URL||'http://127.0.0.1:'+server.address().port+'/laboratorio/'});for(let i=0;i<50;i++){if(await ev("!!document.querySelector('.round')"))break;await sleep(100)}
+assert.match(await ev("document.querySelector('#summary').textContent"),/Cambios alcance/);
+assert.match(await ev("document.querySelector('#timeline').textContent"),/alcance|mordida/i);
+assert.equal(await ev("document.querySelectorAll('details[open]').length"),0);
+await ev("document.querySelector('#profile').value='baseline';document.querySelector('#profile').dispatchEvent(new Event('change'))");
 assert.match(await ev("document.querySelector('#summary').textContent"),/Galahad vence/);
 assert.equal(await ev("document.querySelectorAll('details[open]').length"),0);
 await ev("document.querySelector('.round summary').click()");assert.equal(await ev("document.querySelector('.round').open"),true);
@@ -12,6 +16,9 @@ await ev("document.querySelector('.round .event details summary').click()");asse
 await ev("document.querySelector('#hero details summary').click();let f=document.querySelector('#hero [data-state=fatigue]');f.value='4';f.dispatchEvent(new Event('change',{bubbles:true}))");assert.match(await ev("document.querySelector('#hero .metrics').textContent"),/29%/);
 assert.match(await ev("document.querySelector('#summary').textContent"),/Condiciones modificadas/);
 await ev("document.querySelector('#run').click()");assert.ok(await ev("document.querySelectorAll('.round').length>0"));
+await ev("document.querySelector('#profile').value='tactical';document.querySelector('#profile').dispatchEvent(new Event('change'))");
+await ev("document.querySelector('#initial-range').value='short';document.querySelector('#initial-range').dispatchEvent(new Event('change'))");
+assert.match(await ev("document.querySelector('#summary').textContent"),/Cambios alcance/);
 await ev("document.querySelector('#opponent').value='boar';document.querySelector('#opponent').dispatchEvent(new Event('change'))");assert.match(await ev("document.querySelector('#enemy h2').textContent"),/Jabalí/);
 await ev("document.querySelector('#batch').click()");for(let i=0;i<100;i++){if(await ev("!!document.querySelector('.batchBars')"))break;await sleep(100)}assert.equal(await ev("document.querySelectorAll('.batchBars .bar').length"),4);
 await call('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});await sleep(200);assert.ok(await ev("document.documentElement.scrollWidth<=window.innerWidth+1"));
