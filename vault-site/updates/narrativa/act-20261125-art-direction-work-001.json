@@ -1,0 +1,19 @@
+{
+  "id": "act-20261125-art-direction-work-001",
+  "date": "2026-11-25",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Skill artístico y cola de producción para Work",
+  "summary": "Dos estilos separados, generador nativo exclusivo, tres originales por categoría, un horario por lugar y reparto multiespecie. Se descartan candidatos FLUX como definitivos. Cola P0/P1/P2 para revisión y producción de assets.",
+  "changed": [
+    "vault-site/public/skills/pocketdm-art-direction/SKILL.md",
+    "vault-site/public/skills/pocketdm-art-direction/TAREAS_TERRA.md"
+  ],
+  "next": "Entregar paquete al agente Work/Terra; verificar acceso al generador nativo y las referencias. No se inició sesión Work desde este chat.",
+  "source": "https://github.com/sebasu66/pocketDM/blob/feature/narrative-coordination-20261124/vault-site/public/skills/pocketdm-art-direction/SKILL.md",
+  "nodeIds": [
+    "doc_0914",
+    "doc_0913"
+  ]
+}
