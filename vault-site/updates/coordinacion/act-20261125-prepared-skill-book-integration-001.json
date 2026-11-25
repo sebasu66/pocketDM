@@ -1,0 +1,23 @@
+{
+  "id": "act-20261125-prepared-skill-book-integration-001",
+  "date": "2026-11-25",
+  "area": "Coordinación",
+  "owner": "Equipo de simulación",
+  "status": "en-revision",
+  "title": "Skill checks pregenerados: integración directa con el libro y tres personajes",
+  "summary": "Rama conjunta de narrador y simulación. Las tres fichas reales generan dos opciones de ejemplo no canónico. El componente existente muestra el D100 confirmado y bloquea la elección alternativa. Prueba real Edge 6/6. Los datos públicos son únicamente fixtures; no se publica el dossier ni resultados futuros reales.",
+  "changed": [
+    "vault-site/simulation/narrative-projection.mjs",
+    "vault-site/simulation/prepared-skill-book-fixture.mjs",
+    "vault-site/scripts/build-prepared-skill-example.mjs",
+    "vault-site/scripts/test-prepared-skill-browser.mjs",
+    "vault-site/public/libro/prepared-skill-example.mjs",
+    "vault-site/public/libro/reader.mjs"
+  ],
+  "next": "Narrador: usar el mismo contrato y componente en las escenas definitivas, sin repetir chequeos ni modificar sus resultados. Simulación: preparar los bindings específicos de la primera aventura. Validador: revisar integración.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/skill-check-book-integration-20261125",
+  "nodeIds": [
+    "doc_0915",
+    "doc_0909"
+  ]
+}
