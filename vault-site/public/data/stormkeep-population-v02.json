@@ -1,0 +1,959 @@
+{
+  "schemaVersion": 1,
+  "status": "proposal",
+  "settlementId": "stormkeep",
+  "population": {
+    "target": 260,
+    "range": [
+      200,
+      350
+    ],
+    "households": 55,
+    "namedResidents": 30,
+    "notCensus": true
+  },
+  "sites": [
+    {
+      "id": "draft.stormkeep.fort",
+      "parentId": "stormkeep",
+      "name": "Bastión Varn"
+    },
+    {
+      "id": "draft.stormkeep.barracks",
+      "parentId": "stormkeep",
+      "name": "Cuartel"
+    },
+    {
+      "id": "draft.stormkeep.east-gate",
+      "parentId": "stormkeep",
+      "name": "Puerta Oriental"
+    },
+    {
+      "id": "draft.stormkeep.harbor",
+      "parentId": "stormkeep",
+      "name": "Muelles del Regreso"
+    },
+    {
+      "id": "draft.stormkeep.market",
+      "parentId": "stormkeep",
+      "name": "Mercado de las Balanzas"
+    },
+    {
+      "id": "draft.stormkeep.inn",
+      "parentId": "stormkeep",
+      "name": "El Cuervo Gris"
+    },
+    {
+      "id": "draft.stormkeep.smithy",
+      "parentId": "stormkeep",
+      "name": "Forja del Ancla"
+    },
+    {
+      "id": "draft.stormkeep.hospice",
+      "parentId": "stormkeep",
+      "name": "Hospicio del Umbral"
+    },
+    {
+      "id": "draft.stormkeep.shrine",
+      "parentId": "stormkeep",
+      "name": "Casa de las Lámparas"
+    },
+    {
+      "id": "draft.stormkeep.homes",
+      "parentId": "stormkeep",
+      "name": "Barrio de los Hogares"
+    },
+    {
+      "id": "draft.stormkeep.shipyard",
+      "parentId": "stormkeep",
+      "name": "Varadero"
+    },
+    {
+      "id": "draft.stormkeep.farms",
+      "parentId": "stormkeep",
+      "name": "Huertas de la Ladera"
+    },
+    {
+      "id": "draft.stormkeep.bakery",
+      "parentId": "stormkeep",
+      "name": "Horno de Elin"
+    },
+    {
+      "id": "draft.stormkeep.woodlot",
+      "parentId": "stormkeep",
+      "name": "Linde de los Leñadores"
+    },
+    {
+      "id": "draft.stormkeep.spring",
+      "parentId": "stormkeep",
+      "name": "Fuente alta y cisterna"
+    },
+    {
+      "id": "draft.stormkeep.reserve",
+      "parentId": "stormkeep",
+      "name": "Depósito común"
+    },
+    {
+      "id": "draft.stormkeep.smokehouse",
+      "parentId": "stormkeep",
+      "name": "Ahumaderos"
+    }
+  ],
+  "actors": [
+    {
+      "id": "draft.npc.edda",
+      "name": "Edda Varn",
+      "age": 51,
+      "role": "Señora de la fortaleza",
+      "homeAreaId": "draft.stormkeep.fort",
+      "workplaceId": "draft.stormkeep.fort",
+      "appearance": "Cabello gris recogido, broche de hierro, capa azul",
+      "background": "Heredó la obligación de defender el muelle y firmó la renovación de la Carta. Durante la tormenta autorizó créditos de emergencia.",
+      "voice": "Habla en términos de obligaciones; escucha antes de comprometerse.",
+      "goal": "Conservar autonomía y recuperar confianza en las cuentas",
+      "routine": "Audiencias al mediodía, revisión de cuentas al alba."
+    },
+    {
+      "id": "draft.npc.oren",
+      "name": "Oren Varn",
+      "age": 28,
+      "role": "Administrador y heredero",
+      "homeAreaId": "draft.stormkeep.fort",
+      "workplaceId": "draft.stormkeep.fort",
+      "appearance": "Delgado, cabello oscuro, dedos manchados de tinta",
+      "background": "Era joven cuando se repartieron los créditos de la tormenta. Estudió con un escribiente de un puerto meridional y regresó para llevar las cuentas.",
+      "voice": "Preciso, impaciente con las anécdotas.",
+      "goal": "Demostrar que el bastión puede sostenerse con ingresos regulares",
+      "routine": "Revisa depósitos y manifiestos durante el día."
+    },
+    {
+      "id": "draft.npc.hald",
+      "name": "Hald Eirik",
+      "age": 55,
+      "role": "Capitán de la guardia",
+      "homeAreaId": "draft.stormkeep.homes",
+      "workplaceId": "draft.stormkeep.barracks",
+      "appearance": "Nariz torcida, barba blanca, vieja capa de marinero",
+      "background": "Perdió a un hermano en un rescate durante la tormenta. Aceptó la jefatura de guardia al año siguiente.",
+      "voice": "Lacónico, observa manos y equipo antes de hablar.",
+      "goal": "Mantener seguridad sin agotar a sus seis guardias",
+      "routine": "Inspecciona puerta y muelles, ronda según turno."
+    },
+    {
+      "id": "draft.npc.runa",
+      "name": "Runa Eirik",
+      "age": 25,
+      "role": "Guardia de la puerta",
+      "homeAreaId": "draft.stormkeep.homes",
+      "workplaceId": "draft.stormkeep.east-gate",
+      "appearance": "Pecas, pelo corto, guantes reparados",
+      "background": "Aprendió de su padre Hald y de caravanas que esperaba en la puerta. Entró en guardia para dejar de depender de trabajos familiares.",
+      "voice": "Pregunta con curiosidad, no usa fórmulas de nobleza.",
+      "goal": "Ganarse el respeto por su criterio",
+      "routine": "Turnos de puerta y descanso en casa."
+    },
+    {
+      "id": "draft.npc.bjar",
+      "name": "Bjar Kol",
+      "age": 34,
+      "role": "Guardia de los muelles",
+      "homeAreaId": "draft.stormkeep.homes",
+      "workplaceId": "draft.stormkeep.harbor",
+      "appearance": "Ancho, cicatriz en mentón, bufanda verde",
+      "background": "Trabajó de estibador con Fen y quedó sin empleo tras una temporada mala; su madre Tessa lo animó a entrar en guardia.",
+      "voice": "Sociable, incómodo al imponer límites a conocidos.",
+      "goal": "Evitar accidentes y que sus amigos abusen de su puesto",
+      "routine": "Vigila descargas y accesos según turno."
+    },
+    {
+      "id": "draft.npc.corwin",
+      "name": "Corwin",
+      "age": 39,
+      "role": "Escribiente de tránsito",
+      "homeAreaId": "draft.stormkeep.homes",
+      "workplaceId": "draft.stormkeep.east-gate",
+      "appearance": "Ojos claros, barba corta, carpeta de cuero",
+      "background": "Llegó con una caravana antes de la tormenta y recibió trabajo registrando entregas. Conserva un criterio independiente de la casa Varn.",
+      "voice": "Seco, pide fechas y nombres.",
+      "goal": "Hacer que los acuerdos escritos puedan comprobarse",
+      "routine": "Trabaja con Runa en horas de acceso."
+    },
+    {
+      "id": "draft.npc.vesna",
+      "name": "Vesna Rauk",
+      "age": 44,
+      "role": "Posadera del Cuervo Gris",
+      "homeAreaId": "draft.stormkeep.inn",
+      "workplaceId": "draft.stormkeep.inn",
+      "appearance": "Pelo rojizo canoso, ceja marcada, delantal azul",
+      "background": "Su madre inició el hospedaje para tripulaciones; tras la tormenta Vesna convirtió el salón en dormitorio de damnificados, acumulando deudas.",
+      "voice": "Humor seco, recuerda nombres y costumbres.",
+      "goal": "Mantener el alojamiento abierto y pagar sus deudas",
+      "routine": "Recibe viajeros por la tarde, limpia y compra por la mañana."
+    },
+    {
+      "id": "draft.npc.emil",
+      "name": "Emil Rauk",
+      "age": 40,
+      "role": "Cocinero y conservador de pescado",
+      "homeAreaId": "draft.stormkeep.inn",
+      "workplaceId": "draft.stormkeep.inn",
+      "appearance": "Barba rojiza, mangas arremangadas, risa fácil",
+      "background": "Hermano de Vesna. Aprendió a ahumar pescado con los Lonn y cocinó para los evacuados de la tormenta.",
+      "voice": "Conversador, evita discutir cuando hay trabajo.",
+      "goal": "Sostener la cocina y enseñar a otros a conservar alimento",
+      "routine": "Cocina antes del alba y al final del día."
+    },
+    {
+      "id": "draft.npc.toren",
+      "name": "Toren Brasa",
+      "age": 47,
+      "role": "Herrero",
+      "homeAreaId": "draft.stormkeep.smithy",
+      "workplaceId": "draft.stormkeep.smithy",
+      "appearance": "Manos grandes, delantal chamuscado, cabello oscuro",
+      "background": "Tras la tormenta reparó anclas y herrajes a crédito. Algunos de sus deudores nunca regresaron.",
+      "voice": "Usa metáforas de oficio, desconfía de promesas vagas.",
+      "goal": "Formar a su sobrina Liv y mantener la forja",
+      "routine": "Enciende la forja al alba, recibe encargos por la tarde."
+    },
+    {
+      "id": "draft.npc.liv",
+      "name": "Liv Brasa",
+      "age": 21,
+      "role": "Aprendiz de herrería",
+      "homeAreaId": "draft.stormkeep.smithy",
+      "workplaceId": "draft.stormkeep.smithy",
+      "appearance": "Pelo rapado a un lado, brazos manchados, oreja perforada",
+      "background": "Hija de una hermana de Toren que emigró. Se quedó porque disfruta diseñar cierres y mecanismos.",
+      "voice": "Ingeniosa, se ríe cuando se equivoca.",
+      "goal": "Conseguir reconocimiento por su trabajo fino",
+      "routine": "Ayuda en la forja, aprende con Dain en ocasiones acordadas."
+    },
+    {
+      "id": "draft.npc.aldra",
+      "name": "Aldra Neral",
+      "age": 49,
+      "role": "Mercader y acreedora",
+      "homeAreaId": "draft.stormkeep.homes",
+      "workplaceId": "draft.stormkeep.market",
+      "appearance": "Pelo negro recogido, abrigo ocre, libreta de cuero",
+      "background": "Vendió provisiones a crédito durante la tormenta y recibió garantías de varias familias. Su negocio evitó cierres y también acumuló poder.",
+      "voice": "Calmada, recuerda condiciones con exactitud.",
+      "goal": "Mantener crédito suficiente para importar grano y hierro",
+      "routine": "Supervisa mercancía al alba, mercado y reuniones."
+    },
+    {
+      "id": "draft.npc.bram",
+      "name": "Bram Neral",
+      "age": 27,
+      "role": "Comerciante de sal y telas",
+      "homeAreaId": "draft.stormkeep.homes",
+      "workplaceId": "draft.stormkeep.market",
+      "appearance": "Bufanda clara, bigote fino, manos inquietas",
+      "background": "Viajó para aprender rutas propias y regresó al negocio de su madre tras perder un socio.",
+      "voice": "Entusiasta, promete demasiado cuando está nervioso.",
+      "goal": "Construir una actividad independiente de Aldra",
+      "routine": "Organiza pedidos y habla con carreteros."
+    },
+    {
+      "id": "draft.npc.anja",
+      "name": "Anja Sorel",
+      "age": 37,
+      "role": "Tejedora y remendadora",
+      "homeAreaId": "draft.stormkeep.homes",
+      "workplaceId": "draft.stormkeep.homes",
+      "appearance": "Trenzas castañas, chal rojo, dedos ágiles",
+      "background": "Reparó velas para la flota dañada y enseñó a otras mujeres y hombres a usar retazos de lana.",
+      "voice": "Práctica, afectuosa sin exagerar.",
+      "goal": "Conservar un oficio útil y accesible",
+      "routine": "Trabaja en casa y entrega encargos al mercado."
+    },
+    {
+      "id": "draft.npc.dain",
+      "name": "Dain Sorel",
+      "age": 39,
+      "role": "Carpintero naval",
+      "homeAreaId": "draft.stormkeep.homes",
+      "workplaceId": "draft.stormkeep.shipyard",
+      "appearance": "Alto, barba corta, manos con pequeñas marcas",
+      "background": "Hermano de Anja; ayudó a recuperar embarcaciones tras la tormenta y conoce los daños que no se ven desde cubierta.",
+      "voice": "Paciente, explica con bocetos.",
+      "goal": "Mantener barcos y techos seguros",
+      "routine": "Repara en el varadero según pedidos."
+    },
+    {
+      "id": "draft.npc.senn",
+      "name": "Senn",
+      "age": 62,
+      "role": "Custodio de las Lámparas",
+      "homeAreaId": "draft.stormkeep.shrine",
+      "workplaceId": "draft.stormkeep.shrine",
+      "appearance": "Calvo, barba blanca, túnica remendada",
+      "background": "Ayudó a conservar la lista de damnificados y a mediar en la Carta. Entiende su fe como memoria y acogida.",
+      "voice": "Pausado, usa nombres y preguntas concretas.",
+      "goal": "Conservar memoria de hogares y acuerdos",
+      "routine": "Cuida lámparas, recibe visitas y conserva registros."
+    },
+    {
+      "id": "draft.npc.nola",
+      "name": "Nola Vey",
+      "age": 23,
+      "role": "Aprendiz del santuario",
+      "homeAreaId": "draft.stormkeep.shrine",
+      "workplaceId": "draft.stormkeep.shrine",
+      "appearance": "Cabello rizado, manos con cera, voz clara",
+      "background": "Hija de Orik. Eligió aprender lectura con Senn después de ayudar a las familias del puerto.",
+      "voice": "Inquieta, pregunta incluso a personas mayores.",
+      "goal": "Ordenar registros y enseñar lectura a otros",
+      "routine": "Copia registros y ayuda en acogida."
+    },
+    {
+      "id": "draft.npc.isveld",
+      "name": "Isveld",
+      "age": 43,
+      "role": "Curandera",
+      "homeAreaId": "draft.stormkeep.hospice",
+      "workplaceId": "draft.stormkeep.hospice",
+      "appearance": "Cabello ceniza, abrigo gris, manos delgadas",
+      "background": "Sanadora itinerante que se instaló tras atender heridos de la tormenta. El hospicio funciona en una vivienda adaptada.",
+      "voice": "Amable, precisa, reconoce límites.",
+      "goal": "Mantener cuidados seguros y abastecer remedios",
+      "routine": "Visitas y atención diurna, descanso alternado con Tessa."
+    },
+    {
+      "id": "draft.npc.tessa",
+      "name": "Tessa Kol",
+      "age": 52,
+      "role": "Partera y cuidadora",
+      "homeAreaId": "draft.stormkeep.homes",
+      "workplaceId": "draft.stormkeep.hospice",
+      "appearance": "Rostro redondo, pelo entrecano, bolsa de paños",
+      "background": "Madre de Bjar; ayudó a hospedar desplazados y conoce dificultades domésticas que no llegan al registro.",
+      "voice": "Franca, pregunta por comida, familia y agua.",
+      "goal": "Sostener visitas domésticas y prevenir enfermedades",
+      "routine": "Visitas acordadas y apoyo al hospicio."
+    },
+    {
+      "id": "draft.npc.orik",
+      "name": "Orik Vey",
+      "age": 55,
+      "role": "Maestro de puerto",
+      "homeAreaId": "draft.stormkeep.homes",
+      "workplaceId": "draft.stormkeep.harbor",
+      "appearance": "Pelo gris, nariz curtida, bastón de trabajo",
+      "background": "Durante la tormenta perdió su barco y se encargó de organizar rescates. Padre de Nola.",
+      "voice": "Autoritario sin gritar, distingue carga y tripulación.",
+      "goal": "Mantener atraques seguros y registrar salidas",
+      "routine": "Inspecciona amarres y movimientos portuarios."
+    },
+    {
+      "id": "draft.npc.kael",
+      "name": "Kael Lonn",
+      "age": 35,
+      "role": "Pescador",
+      "homeAreaId": "draft.stormkeep.homes",
+      "workplaceId": "draft.stormkeep.harbor",
+      "appearance": "Piel curtida, pelo rubio oscuro, capa impermeabilizada",
+      "background": "Su hogar perdió parte del equipo en la tormenta y obtuvo un préstamo de Aldra; comparte trabajo con Mira.",
+      "voice": "Optimista prudente, habla de mareas.",
+      "goal": "Pagar el préstamo sin arriesgar la tripulación",
+      "routine": "Pesca cuando es viable, ayuda a reparar redes en tierra."
+    },
+    {
+      "id": "draft.npc.mira",
+      "name": "Mira Lonn",
+      "age": 34,
+      "role": "Redera y vendedora de pescado",
+      "homeAreaId": "draft.stormkeep.homes",
+      "workplaceId": "draft.stormkeep.market",
+      "appearance": "Pelo rojo oscuro, pañuelo azul, manos ásperas",
+      "background": "Pareja de Kael y hermana de Yarik. Durante la recuperación asumió parte de la venta y las cuentas familiares.",
+      "voice": "Incisiva, negocia con humor.",
+      "goal": "Diversificar ingresos y conservar el hogar",
+      "routine": "Remienda por la mañana, vende en mercado si hay producto."
+    },
+    {
+      "id": "draft.npc.jorun",
+      "name": "Jorun Skeld",
+      "age": 45,
+      "role": "Patrón de embarcación mercante",
+      "homeAreaId": "draft.stormkeep.homes",
+      "workplaceId": "draft.stormkeep.harbor",
+      "appearance": "Barba oscura, abrigo pesado, anillo sencillo",
+      "background": "Trajo grano durante el invierno que originó la Carta siendo aprendiz. Ahora dirige un pequeño negocio marítimo.",
+      "voice": "Calmo, describe riesgos sin grandilocuencia.",
+      "goal": "Mantener trabajo para su tripulación",
+      "routine": "Revisa carga y reparaciones cuando está en puerto."
+    },
+    {
+      "id": "draft.npc.fen",
+      "name": "Fen Arvik",
+      "age": 24,
+      "role": "Estibador",
+      "homeAreaId": "draft.stormkeep.homes",
+      "workplaceId": "draft.stormkeep.harbor",
+      "appearance": "Delgado, pelo revuelto, manos callosas",
+      "background": "Llegó con su familia desde el interior después de la tormenta; vive con un pariente de Roan y busca un hogar propio.",
+      "voice": "Reservado, se anima al hablar de caminos.",
+      "goal": "Conseguir trabajo regular y derecho de participación local",
+      "routine": "Trabaja según jornadas disponibles."
+    },
+    {
+      "id": "draft.npc.sava",
+      "name": "Sava Renn",
+      "age": 31,
+      "role": "Guía de navegación",
+      "homeAreaId": "draft.stormkeep.homes",
+      "workplaceId": "draft.stormkeep.harbor",
+      "appearance": "Pelo negro corto, mirada atenta, abrigo verde",
+      "background": "Aprendió a leer corrientes con Orik antes de la tormenta. Rechaza relatos de heroísmo que ignoran el peligro.",
+      "voice": "Distingue observaciones de conjeturas.",
+      "goal": "Ganarse contratos por navegación prudente",
+      "routine": "Consulta condiciones y guía cuando tiene contrato."
+    },
+    {
+      "id": "draft.npc.hessa",
+      "name": "Hessa Dorn",
+      "age": 50,
+      "role": "Agricultora y representante de huertas",
+      "homeAreaId": "draft.stormkeep.farms",
+      "workplaceId": "draft.stormkeep.farms",
+      "appearance": "Trenzas grises, botas de barro, manos fuertes",
+      "background": "Su familia aportó grano al depósito durante el gran invierno. Desde entonces exige que la Carta reconozca la labor de las huertas.",
+      "voice": "Directa, habla de estaciones y trabajo.",
+      "goal": "Conservar semillas, animales y voz de los hogares productores",
+      "routine": "Cuida huertas y participa en reuniones cuando se convocan."
+    },
+    {
+      "id": "draft.npc.nils",
+      "name": "Nils Dorn",
+      "age": 26,
+      "role": "Carretero",
+      "homeAreaId": "draft.stormkeep.farms",
+      "workplaceId": "draft.stormkeep.market",
+      "appearance": "Chaleco de cuero, cabello claro, hombros anchos",
+      "background": "Hijo de Hessa, aprendió a transportar mercancías reparando el carro familiar con Toren.",
+      "voice": "Animado, impaciente ante esperas.",
+      "goal": "Ahorrar para transporte propio",
+      "routine": "Realiza encargos autorizados y descansa en hogar."
+    },
+    {
+      "id": "draft.npc.elin",
+      "name": "Elin Dorn",
+      "age": 32,
+      "role": "Panadera",
+      "homeAreaId": "draft.stormkeep.homes",
+      "workplaceId": "draft.stormkeep.bakery",
+      "appearance": "Pelo recogido, delantal con harina, mejillas rosadas",
+      "background": "Hermana de Nils. Abrió el horno con apoyo de su madre y crédito de Aldra tras el invierno de escasez.",
+      "voice": "Cálida, precisa en medidas.",
+      "goal": "Mantener pan asequible y cubrir el préstamo",
+      "routine": "Amasa antes del alba y vende por la mañana."
+    },
+    {
+      "id": "draft.npc.roan",
+      "name": "Roan Arvik",
+      "age": 46,
+      "role": "Leñador y carbonero",
+      "homeAreaId": "draft.stormkeep.homes",
+      "workplaceId": "draft.stormkeep.woodlot",
+      "appearance": "Barba oscura entrecana, chaqueta de piel",
+      "background": "Tío de Fen; se instaló junto al bosque antes de que su familia llegara. Ayudó a reconstruir techos.",
+      "voice": "Taciturno, prefiere acuerdos simples.",
+      "goal": "Mantener trabajo forestal sostenible y sostener a su familia",
+      "routine": "Corta y prepara combustible cuando es viable."
+    },
+    {
+      "id": "draft.npc.varek",
+      "name": "Varek Oss",
+      "age": 42,
+      "role": "Revendedor de materiales recuperados",
+      "homeAreaId": "draft.stormkeep.homes",
+      "workplaceId": "draft.stormkeep.market",
+      "appearance": "Cabello lacio, guantes gastados, sonrisa contenida",
+      "background": "Empezó rescatando piezas de embarcaciones abandonadas tras el temporal. Negocia materiales que otros no pueden comprar nuevos.",
+      "voice": "Cordial, evasivo ante preguntas personales.",
+      "goal": "Mantener clientela para materiales baratos",
+      "routine": "Compra y vende en mercado, visita talleres por encargo."
+    },
+    {
+      "id": "draft.npc.kestrel",
+      "name": "Kestrel Vale",
+      "age": 30,
+      "role": "Guía terrestre",
+      "homeAreaId": "draft.stormkeep.homes",
+      "workplaceId": "draft.stormkeep.east-gate",
+      "appearance": "Capa parda, cabello negro con mechón claro",
+      "background": "Conoció el camino oriental acompañando a caravanas y perdió un contrato tras negarse a viajar durante una nevada.",
+      "voice": "Irónica, habla de referencias del terreno.",
+      "goal": "Conseguir trabajo independiente y mantener su reputación",
+      "routine": "Consulta viajeros y prepara salidas bajo contrato."
+    }
+  ],
+  "relationships": [
+    {
+      "source": "draft.npc.edda",
+      "rel": "family-of",
+      "target": "draft.npc.oren",
+      "reason": "Tía y sobrino, sucesión pendiente"
+    },
+    {
+      "source": "draft.npc.hald",
+      "rel": "family-of",
+      "target": "draft.npc.runa",
+      "reason": "Padre e hija"
+    },
+    {
+      "source": "draft.npc.tessa",
+      "rel": "family-of",
+      "target": "draft.npc.bjar",
+      "reason": "Madre e hijo"
+    },
+    {
+      "source": "draft.npc.vesna",
+      "rel": "family-of",
+      "target": "draft.npc.emil",
+      "reason": "Hermanos, negocio compartido"
+    },
+    {
+      "source": "draft.npc.toren",
+      "rel": "family-of",
+      "target": "draft.npc.liv",
+      "reason": "Tío y sobrina"
+    },
+    {
+      "source": "draft.npc.aldra",
+      "rel": "family-of",
+      "target": "draft.npc.bram",
+      "reason": "Madre e hijo"
+    },
+    {
+      "source": "draft.npc.anja",
+      "rel": "family-of",
+      "target": "draft.npc.dain",
+      "reason": "Hermanos"
+    },
+    {
+      "source": "draft.npc.orik",
+      "rel": "family-of",
+      "target": "draft.npc.nola",
+      "reason": "Padre e hija"
+    },
+    {
+      "source": "draft.npc.kael",
+      "rel": "family-of",
+      "target": "draft.npc.mira",
+      "reason": "Pareja"
+    },
+    {
+      "source": "draft.npc.hessa",
+      "rel": "family-of",
+      "target": "draft.npc.nils",
+      "reason": "Madre e hijo"
+    },
+    {
+      "source": "draft.npc.hessa",
+      "rel": "family-of",
+      "target": "draft.npc.elin",
+      "reason": "Madre e hija"
+    },
+    {
+      "source": "draft.npc.nils",
+      "rel": "family-of",
+      "target": "draft.npc.elin",
+      "reason": "Hermanos"
+    },
+    {
+      "source": "draft.npc.roan",
+      "rel": "family-of",
+      "target": "draft.npc.fen",
+      "reason": "Tío y sobrino"
+    },
+    {
+      "source": "draft.npc.edda",
+      "rel": "superior-of",
+      "target": "draft.npc.hald",
+      "reason": "Autoridad limitada por Carta"
+    },
+    {
+      "source": "draft.npc.hald",
+      "rel": "superior-of",
+      "target": "draft.npc.runa",
+      "reason": "Turnos"
+    },
+    {
+      "source": "draft.npc.hald",
+      "rel": "superior-of",
+      "target": "draft.npc.bjar",
+      "reason": "Turnos"
+    },
+    {
+      "source": "draft.npc.edda",
+      "rel": "superior-of",
+      "target": "draft.npc.oren",
+      "reason": "Cuentas"
+    },
+    {
+      "source": "draft.npc.toren",
+      "rel": "superior-of",
+      "target": "draft.npc.liv",
+      "reason": "Aprendizaje"
+    },
+    {
+      "source": "draft.npc.senn",
+      "rel": "superior-of",
+      "target": "draft.npc.nola",
+      "reason": "Aprendizaje"
+    },
+    {
+      "source": "draft.npc.isveld",
+      "rel": "ally-of",
+      "target": "draft.npc.tessa",
+      "reason": "Cuidados"
+    },
+    {
+      "source": "draft.npc.kael",
+      "rel": "owes-to",
+      "target": "draft.npc.aldra",
+      "reason": "Préstamo tras tormenta, saldo a validar"
+    },
+    {
+      "source": "draft.npc.vesna",
+      "rel": "owes-to",
+      "target": "draft.npc.aldra",
+      "reason": "Crédito de posada"
+    },
+    {
+      "source": "draft.npc.elin",
+      "rel": "owes-to",
+      "target": "draft.npc.aldra",
+      "reason": "Préstamo de horno"
+    },
+    {
+      "source": "draft.npc.bram",
+      "rel": "rival-of",
+      "target": "draft.npc.aldra",
+      "reason": "Diferencias sobre independencia comercial, no enemistad"
+    },
+    {
+      "source": "draft.npc.hessa",
+      "rel": "related-to",
+      "target": "draft.npc.edda",
+      "reason": "Representación de productores"
+    },
+    {
+      "source": "draft.npc.orik",
+      "rel": "related-to",
+      "target": "draft.npc.jorun",
+      "reason": "Atraque y disputa de plazos"
+    },
+    {
+      "source": "draft.npc.orik",
+      "rel": "related-to",
+      "target": "draft.npc.sava",
+      "reason": "Experiencia y seguridad"
+    },
+    {
+      "source": "draft.npc.orik",
+      "rel": "related-to",
+      "target": "draft.npc.fen",
+      "reason": "Trabajo portuario"
+    },
+    {
+      "source": "draft.npc.corwin",
+      "rel": "related-to",
+      "target": "draft.npc.runa",
+      "reason": "Registro de acceso"
+    },
+    {
+      "source": "draft.npc.aldra",
+      "rel": "related-to",
+      "target": "draft.npc.orik",
+      "reason": "Cargas"
+    },
+    {
+      "source": "draft.npc.aldra",
+      "rel": "related-to",
+      "target": "draft.npc.isveld",
+      "reason": "Abastecimiento sanitario"
+    },
+    {
+      "source": "draft.npc.aldra",
+      "rel": "related-to",
+      "target": "draft.npc.nils",
+      "reason": "Transporte"
+    },
+    {
+      "source": "draft.npc.emil",
+      "rel": "related-to",
+      "target": "draft.npc.elin",
+      "reason": "Pan y cocina"
+    },
+    {
+      "source": "draft.npc.emil",
+      "rel": "related-to",
+      "target": "draft.npc.mira",
+      "reason": "Pescado y ahumado"
+    },
+    {
+      "source": "draft.npc.toren",
+      "rel": "related-to",
+      "target": "draft.npc.roan",
+      "reason": "Combustible"
+    },
+    {
+      "source": "draft.npc.dain",
+      "rel": "related-to",
+      "target": "draft.npc.toren",
+      "reason": "Herrajes"
+    },
+    {
+      "source": "draft.npc.dain",
+      "rel": "related-to",
+      "target": "draft.npc.jorun",
+      "reason": "Reparación naval"
+    },
+    {
+      "source": "draft.npc.anja",
+      "rel": "related-to",
+      "target": "draft.npc.mira",
+      "reason": "Redes y telas"
+    },
+    {
+      "source": "draft.npc.vesna",
+      "rel": "related-to",
+      "target": "draft.npc.kestrel",
+      "reason": "Viajeros"
+    },
+    {
+      "source": "draft.npc.sava",
+      "rel": "friend-of",
+      "target": "draft.npc.kael",
+      "reason": "Experiencia costera"
+    },
+    {
+      "source": "draft.npc.varek",
+      "rel": "related-to",
+      "target": "draft.npc.dain",
+      "reason": "Piezas recuperadas"
+    },
+    {
+      "source": "draft.npc.kestrel",
+      "rel": "related-to",
+      "target": "draft.npc.nils",
+      "reason": "Caminos"
+    },
+    {
+      "source": "draft.npc.senn",
+      "rel": "related-to",
+      "target": "draft.npc.orik",
+      "reason": "Memoria del puerto"
+    },
+    {
+      "source": "draft.npc.hessa",
+      "rel": "related-to",
+      "target": "draft.npc.elin",
+      "reason": "Semilla y harina"
+    },
+    {
+      "source": "draft.npc.bjar",
+      "rel": "friend-of",
+      "target": "draft.npc.fen",
+      "reason": "Antiguos compañeros de estiba"
+    },
+    {
+      "source": "draft.npc.senn",
+      "rel": "related-to",
+      "target": "draft.npc.edda",
+      "reason": "Historia de Carta"
+    },
+    {
+      "source": "draft.npc.isveld",
+      "rel": "related-to",
+      "target": "draft.npc.hessa",
+      "reason": "Necesidades de hogares productores"
+    },
+    {
+      "source": "draft.npc.edda",
+      "rel": "works-at",
+      "target": "draft.stormkeep.fort",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.oren",
+      "rel": "works-at",
+      "target": "draft.stormkeep.fort",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.hald",
+      "rel": "works-at",
+      "target": "draft.stormkeep.barracks",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.runa",
+      "rel": "works-at",
+      "target": "draft.stormkeep.east-gate",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.bjar",
+      "rel": "works-at",
+      "target": "draft.stormkeep.harbor",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.corwin",
+      "rel": "works-at",
+      "target": "draft.stormkeep.east-gate",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.vesna",
+      "rel": "works-at",
+      "target": "draft.stormkeep.inn",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.emil",
+      "rel": "works-at",
+      "target": "draft.stormkeep.inn",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.toren",
+      "rel": "works-at",
+      "target": "draft.stormkeep.smithy",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.liv",
+      "rel": "works-at",
+      "target": "draft.stormkeep.smithy",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.aldra",
+      "rel": "works-at",
+      "target": "draft.stormkeep.market",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.bram",
+      "rel": "works-at",
+      "target": "draft.stormkeep.market",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.anja",
+      "rel": "works-at",
+      "target": "draft.stormkeep.homes",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.dain",
+      "rel": "works-at",
+      "target": "draft.stormkeep.shipyard",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.senn",
+      "rel": "works-at",
+      "target": "draft.stormkeep.shrine",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.nola",
+      "rel": "works-at",
+      "target": "draft.stormkeep.shrine",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.isveld",
+      "rel": "works-at",
+      "target": "draft.stormkeep.hospice",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.tessa",
+      "rel": "works-at",
+      "target": "draft.stormkeep.hospice",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.orik",
+      "rel": "works-at",
+      "target": "draft.stormkeep.harbor",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.kael",
+      "rel": "works-at",
+      "target": "draft.stormkeep.harbor",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.mira",
+      "rel": "works-at",
+      "target": "draft.stormkeep.market",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.jorun",
+      "rel": "works-at",
+      "target": "draft.stormkeep.harbor",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.fen",
+      "rel": "works-at",
+      "target": "draft.stormkeep.harbor",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.sava",
+      "rel": "works-at",
+      "target": "draft.stormkeep.harbor",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.hessa",
+      "rel": "works-at",
+      "target": "draft.stormkeep.farms",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.nils",
+      "rel": "works-at",
+      "target": "draft.stormkeep.market",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.elin",
+      "rel": "works-at",
+      "target": "draft.stormkeep.bakery",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.roan",
+      "rel": "works-at",
+      "target": "draft.stormkeep.woodlot",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.varek",
+      "rel": "works-at",
+      "target": "draft.stormkeep.market",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "source": "draft.npc.kestrel",
+      "rel": "works-at",
+      "target": "draft.stormkeep.east-gate",
+      "reason": "Actividad habitual propuesta"
+    }
+  ],
+  "constraints": "Catálogo de autoría, no conocimiento automático del jugador ni estado efectivo. Sin secretos, sin stats, inventario, posiciones ni decisiones automáticas. Corwin e Isveld son nombres reutilizados opcionales, sin secretos anteriores."
+}

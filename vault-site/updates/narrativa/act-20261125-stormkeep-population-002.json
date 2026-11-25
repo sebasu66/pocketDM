@@ -1,0 +1,20 @@
+{
+    "id":  "act-20261125-stormkeep-population-002",
+    "date":  "2026-11-25",
+    "area":  "Narrativa / Contenido",
+    "owner":  "Agente narrador / presentación",
+    "status":  "en-revision",
+    "title":  "N02 v0.2: fundamentos históricos y población de Stormkeep",
+    "summary":  "Aplicación de capítulos de asentamientos, gobierno, economía y fichas sociales de los manuales. Puerto de 260 habitantes y 55 hogares como hipótesis; historia, Carta del Muelle, agua, sustento, crédito, autoridad y conflictos. 30 residentes, tres actores exteriores, 17 lugares y 77 relaciones públicas propuestas. Corwin e Isveld no son canon privilegiado. Fichas privadas locales.",
+    "changed":  [
+                    "vault-site/public/docs/stormkeep-foundation-v02.md",
+                    "vault-site/public/docs/stormkeep-population-v02.md",
+                    "vault-site/public/data/stormkeep-population-v02.json"
+                ],
+    "next":  "Revisar escala, historia y personajes; acordar materialización, esquema de perfiles privados y vínculos Ripple con simulación. Sin alterar PWA ni motor.",
+    "source":  "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+    "nodeIds":  [
+                    "doc_0020",
+                    "doc_0021"
+                ]
+}
