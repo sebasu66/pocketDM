@@ -28,3 +28,15 @@ Las estampas son cuadros de lugares vistos desde el punto de vista de un viajero
 - Recursos distintos: plano estructural del atlas; referencia privada opcional; estampa de localización; retrato o escena editorial. El libro/revista presenta imágenes y narración, no una cuadrícula interior. Composición con imágenes intercaladas, máscaras/bordes orgánicos y posibles banners artísticos con texto integrado para ocasiones especiales; texto narrativo normal accesible y adaptable. La implementación del lector sigue siendo compartida.
 - Imágenes anteriores de ejemplo (secundarias, no objetivo de estilo): paisaje_invernal_2k.png, Image_3.png, taberna_2k.png. Ejemplos de animación proporcionados: Boticari Shop Interior Day..mp4, Camp Bonfire Night.mp4, tabern-interior.mp4, templo_exterior_dia.mp4, Blacksmith interior day..mp4. Se registran nombres de origen, no se afirma que los clips hayan sido inspeccionados ni publicados.
 - Estado de archivos: muestra reducida de las cuatro nuevas referencias incorporada; originales a resolución completa, imágenes anteriores y MP4 pendientes de enlace o copia verificable. No utilizar material como arte canónico sin aprobación de localización/identidad.
+
+## Referencias adicionales de escenarios · 25/11/2026
+Cuatro nuevas imágenes aportadas por el usuario. [Galería con los originales a resolución completa](/docs/art-references/escenarios-20261125.html).
+
+| Referencia | Lectura estética |
+|---|---|
+| [Bosque nocturno](/docs/art-references/bosqueNocturno.png) | Azul de Prusia, luna ámbar monumental, profundidad por siluetas y textura erosionada. 2048 × 1366. |
+| [Callejón medieval](/docs/art-references/callejon.png) | Contraluz bermellón, arquitectura oscura y reflejos de luz sobre el suelo. 2048 × 1152. |
+| [Herrería](/docs/art-references/herreria.png) | Interior en penumbra, forja naranja y siluetas de herramientas; perspectiva enmarcada por el arco. 2048 × 1152. |
+| [Templo exterior](/docs/art-references/templo_exterior.png) | Arquitectura gótica monumental, escalera ceremonial, cielo rojo y focos cálidos. 2048 × 1153. |
+
+Se suman al estilo preferido: fantasía oscura pictórica, masas de luz y sombra, acentos cálidos intensos, perspectiva ambiental, textura irregular. El disco solar o lunar monumental es un recurso compositivo, no una propiedad astronómica del mundo. El templo monumental no representa automáticamente un edificio del pequeño asentamiento Stormkeep; la arquitectura debe ajustarse al lugar canónico. Los PNG se conservan sin edición.

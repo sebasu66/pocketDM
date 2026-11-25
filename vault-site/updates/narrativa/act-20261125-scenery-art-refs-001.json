@@ -1,0 +1,19 @@
+﻿{
+  "id": "act-20261125-scenery-art-refs-001",
+  "date": "2026-11-25",
+  "area": "Arte / Assets",
+  "owner": "Agente narrador / presentación",
+  "status": "decidido",
+  "title": "Cuatro referencias estéticas adicionales de escenarios",
+  "summary": "Bosque nocturno, callejón medieval, herrería y templo exterior aportados por el usuario. Originales PNG íntegros, galería y enlace a dirección artística; referencias, no arte canónico.",
+  "changed": [
+    "vault-site/public/docs/art-references/",
+    "vault-site/public/docs/narrative-atlas-art-direction.md",
+    "vault-site/public/data/catalog.json"
+  ],
+  "next": "Usar como referencias de composición, luz y textura en futuras estampas, adaptando escala y arquitectura a cada lugar.",
+  "source": "https://pocketdm-prototipos.web.app/docs/art-references/escenarios-20261125.html",
+  "nodeIds": [
+    "doc_0914"
+  ]
+}
