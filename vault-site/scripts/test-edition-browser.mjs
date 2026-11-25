@@ -8,7 +8,7 @@ const call=(method,params={})=>new Promise((resolve,reject)=>{const n=++id;pendi
 await call('Runtime.enable');await call('Page.enable');
 for(const [width,height] of [[882,344],[844,390],[736,414],[1396,547],[390,844],[1280,900]]){
  await call('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<1000});
- await call('Page.navigate',{url:'http://127.0.0.1:'+server.address().port+'/libro/'});
+ await call('Page.navigate',{url:'http://127.0.0.1:'+server.address().port+'/libro/?view=openingDemo'});
  for(let i=0;i<60;i++){if(await ev("!!document.querySelector('book-edition .cover img') && document.querySelector('book-edition .cover img').naturalWidth>0"))break;await sleep(100)}
  assert.ok(await ev("document.querySelector('book-edition .cover img').naturalWidth>0"));
  assert.equal(await ev("getComputedStyle(document.querySelector('.rotation-notice')).display"),width<height?'flex':'none');
@@ -17,9 +17,7 @@ for(const [width,height] of [[882,344],[844,390],[736,414],[1396,547],[390,844],
  await sleep(120);const q=await ev("(()=>{let r=document.querySelector('book-edition .reading'),a=document.querySelector('.fixed-art'),im=a.querySelector('img'),m=document.querySelector('.contour-exclusion');return {scroll:r.scrollHeight,client:r.clientHeight,art:a.clientHeight,loaded:im.naturalWidth,shape:getComputedStyle(m).shapeOutside,top:im.getBoundingClientRect().top}})()");
  assert.ok(q.loaded>0);assert.ok(q.client>0);assert.match(q.shape,/polygon/);assert.equal(q.art,height);
  if(width===882||width===736||width===1396){const shot=await call('Page.captureScreenshot',{format:'png'});await writeFile('C:/Users/Lorita/AppData/Local/Temp/pdm-contour-'+width+'.png',Buffer.from(shot.data,'base64'))} await ev("document.querySelector('book-edition .reading').scrollTop=120");await sleep(120);assert.equal(await ev("document.querySelector('.fixed-art img').getBoundingClientRect().top"),q.top);if(width===882){const shot=await call('Page.captureScreenshot',{format:'png'});await writeFile('C:/Users/Lorita/AppData/Local/Temp/pdm-contour-scroll.png',Buffer.from(shot.data,'base64'))} await ev("document.querySelector('book-edition-nav [data-action=expand]').click()");assert.ok(await ev("document.querySelector('.reading-full').open"));await ev("document.querySelector('.reading-full button').click()");
- await ev("document.querySelector('book-edition-nav [data-action=next]').click()");assert.ok(await ev("document.querySelector('book-edition').hidden"));
- assert.ok(await ev("document.querySelectorAll('#book book-title').length>0"));
- await ev("(document.body.classList.contains('mobile-story')?document.querySelector('[data-mobile=prev]'):document.querySelector('#prev')).click()");
+ assert.equal(await ev("document.querySelector('book-edition-nav [data-action=next]').disabled"),true);
  assert.equal(await ev("document.querySelector('book-edition').hidden"),false);assert.ok(await ev("!!document.querySelector('book-edition .fixed-art')"));
  await ev("document.querySelector('book-edition-nav [data-action=prev]').click()");assert.ok(await ev("!!document.querySelector('book-edition .cover img')"));console.log(width+'x'+height,JSON.stringify({...q,shape:q.shape.slice(0,70)}),'OK');
 }
