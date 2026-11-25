@@ -1,6 +1,6 @@
 // QA-03: server-only persistence against the isolated Firestore emulator.
 // Production adapter/authentication is deliberately not enabled by this module.
-import {confirmCommand,playerState,previewCommand} from './campaign-state.mjs';
+import {confirmCommand,playerState,previewCommand,prepareWindow} from './campaign-state.mjs';
 import {snapshot} from './world-context.mjs';
 const ok=(condition,message)=>{if(!condition)throw Error(message)};
 const id=s=>typeof s==='string'&&/^[a-z][a-z0-9_.-]{0,100}$/.test(s)&&!['constructor','prototype','__proto__'].includes(s);
@@ -56,6 +56,11 @@ export class FirestoreCampaignStore {
   // Trusted worker only. Never expose this method as a player HTTP endpoint.
   ok(principal.role==='worker','Worker access required');
   return previewCommand(row.base,row.state,{campaignId:principal.campaignId,actorId:principal.actorId,role:'worker'},command);
+ }
+ async prepare(principal,budget){
+  ok(principal?.role==='worker','Worker access required');
+  const row=await this.read(principal.campaignId);this.authorize(row,principal,principal.campaignId);
+  return prepareWindow(row.base,row.state,{campaignId:principal.campaignId,actorId:principal.actorId,role:'worker'},budget);
  }
  async confirm(principal,command,{expectedPreviewHash}={}){
   ok(principal.role==='player','Player access required');

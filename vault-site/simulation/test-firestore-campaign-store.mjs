@@ -76,3 +76,14 @@ run('Firestore rules deny unauthenticated client reads, listing and writes',asyn
  const {principal}=await fixture(),root='http://'+host+'/v1/projects/demo-pocketdm-qa03/databases/(default)/documents/qa_campaigns',url=root+'/'+principal.campaignId;
  for(const r of [await fetch(url),await fetch(root),await fetch(url,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({fields:{ownerUid:{stringValue:'attacker'}}})})])assert.equal(r.status,403,await r.text());
 });
+
+run('private window over persisted state: prepare and confirm selected branch only',async()=>{
+ const {principal}=await fixture(),s=store(),v=await s.view(principal);
+ await assert.rejects(s.prepare(principal),/Worker access required/);
+ const w=await s.prepare({...principal,role:'worker'},{maxDepth:2,maxEdges:40});
+ assert.equal(w.coverage.immediateComplete,true);assert.deepEqual(await s.view(principal),v);
+ const edge=w.nodes[0].choices.find(e=>e.command.action==='consume-ration');
+ const r=await store().confirm(principal,edge.command,{expectedPreviewHash:edge.previewHash});
+ assert.equal(r.receipt.event.id,edge.eventId);assert.equal(rations(r.view),2);
+ assert.equal(r.view.journal.length,1);noPrivate(r);
+});

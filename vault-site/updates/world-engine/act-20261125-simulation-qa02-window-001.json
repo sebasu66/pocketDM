@@ -1,0 +1,24 @@
+{
+  "id": "act-20261125-simulation-qa02-window-001",
+  "date": "2026-11-25",
+  "area": "World Engine / Grafo",
+  "owner": "Equipo de simulación",
+  "status": "en-revision",
+  "title": "QA-02/07: ventana anticipada sobre estado común persistido",
+  "summary": "Exploración acotada de acciones legales con IDs estables, hashes y trabajos narrativos especulativos filtrados. Confirmación de la rama elegida sin modificar alternativas; preparación desde Firestore emulado. 99/99 pruebas con emulador, 3 nuevas. No módulo original ni LLM.",
+  "changed": [
+    "vault-site/simulation/campaign-state.mjs",
+    "vault-site/simulation/firestore-campaign-store.mjs",
+    "vault-site/simulation/test-campaign-state.mjs",
+    "vault-site/simulation/test-firestore-campaign-store.mjs",
+    "vault-site/public/docs/campaign-anticipation-qa02.md"
+  ],
+  "next": "Coordinar contrato de evento/job con narrador; integrar módulo aprobado, cierre y cola de preparación. Validador revisa PR #5; no cerrar H01.",
+  "source": "https://github.com/sebasu66/pocketDM/pull/5",
+  "nodeIds": [
+    "doc_0009",
+    "doc_0907",
+    "doc_0909",
+    "doc_0913"
+  ]
+}

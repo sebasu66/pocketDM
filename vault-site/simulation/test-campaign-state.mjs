@@ -101,3 +101,30 @@ test('confirmed changes and combat AP trace refer to the same actor and revision
  assert.deepEqual(confirmCommand(base,d.state,access,c).state,d.state);
  assert.throws(()=>previewCommand(base,state,access,c),/Worker access required/);
 });
+
+test('bounded anticipation covers immediate choices and replays selected path on common state',async()=>{
+ const {prepareWindow}=await import('./campaign-state.mjs');
+ const {base,state,access}=setup(),worker={...access,role:'worker'},before=structuredClone(state);
+ const w=prepareWindow(base,state,worker,{maxDepth:3,maxEdges:40});
+ assert.deepEqual(w,prepareWindow(base,state,worker,{maxDepth:3,maxEdges:40}));assert.deepEqual(state,before);
+ assert.equal(w.coverage.immediateComplete,true);assert.equal(w.nodes[0].choices.length,legalActions(base,state,access).length);
+ assert.equal(w.jobs.length,w.coverage.edges);assert.ok(w.coverage.edges<=40);
+ assert.equal(new Set(w.jobs.map(j=>j.eventId)).size,w.jobs.length);
+ const json=JSON.stringify(w.jobs);for(const k of ['HIDDEN-','privateState','seed','receipts','completedEncounters'])assert.equal(json.includes(k),false,k);
+ let current=state,node=w.nodes[0];for(let i=0;i<2;i++){
+  const edge=node.choices.find(e=>e.command.action==='consume-ration');assert.ok(edge);
+  const r=confirmCommand(base,current,access,edge.command,{expectedPreviewHash:edge.previewHash});
+  assert.equal(r.receipt.event.id,edge.eventId);current=r.state;node=w.nodes.find(n=>n.id===edge.nextId);
+ }
+ const visible=playerState(base,current,access);assert.equal(ration(visible),1);assert.equal(visible.journal.length,2);
+ assert.equal(visible.journal.some(e=>e.id===w.nodes[0].choices.find(e=>e.command.action==='duel').eventId),false);
+ assert.throws(()=>prepareWindow(base,state,access),/Worker access required/);
+});
+test('anticipation budget never removes legal options; deferred choices stay playable',async()=>{
+ const {prepareWindow}=await import('./campaign-state.mjs');
+ const {base,state,access}=setup(),w=prepareWindow(base,state,{...access,role:'worker'},{maxDepth:3,maxEdges:1});
+ assert.equal(w.coverage.immediateComplete,false);assert.equal(w.nodes[0].choices.length+w.nodes[0].deferred.length,legalActions(base,state,access).length);
+ const action=w.nodes[0].deferred.find(a=>a.action==='travel');assert.ok(action);
+ const done=confirmCommand(base,state,access,command(state,action.action,{targetId:action.targetId},'deferred'));
+ assert.equal(playerState(base,done.state,access).locationId,action.targetId);
+});

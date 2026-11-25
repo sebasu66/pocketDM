@@ -120,3 +120,33 @@ export function impactForConfirmed(base,state,access,eventId,relations=[]){
  requireThat(e&&Object.values(state.receipts).some(r=>r.event.id===eventId),'Event not confirmed');
  return buildImpactContext(w,relations,e);
 }
+
+// QA-02/07: private bounded anticipation over the same authoritative transition.
+// No secondary hero state, no authored module/canon, no writes, no LLM.
+export function prepareWindow(base,state,access,{maxDepth=3,maxEdges=40}={}){
+ requireThat(access?.role==='worker','Worker access required');authorize(state,access);readState(base,state);
+ requireThat(Number.isInteger(maxDepth)&&maxDepth>=1&&maxDepth<=6&&Number.isInteger(maxEdges)&&maxEdges>=1&&maxEdges<=1200,'Invalid anticipation budget');
+ const rootId='window-'+hash([state.id,base.id,state.delta.revision,VERSION]).slice(0,32);
+ const nodes=[],jobs=[],queue=[{id:rootId,state:copy(state),depth:0}];let edges=0,omitted=0;
+ const publicAccess={...access,role:'player'};
+ for(let i=0;i<queue.length;i++){
+  const n=queue[i],actions=legalActions(base,n.state,access);
+  const row={id:n.id,revision:n.state.delta.revision,depth:n.depth,choices:[],deferred:[],terminal:actions.length===0};nodes.push(row);
+  if(n.depth>=maxDepth){row.deferred=copy(actions);omitted+=actions.length;continue}
+  for(const action of actions){
+   // Every legal immediate option is retained even when preparation budget is exhausted.
+   const command={campaignId:state.id,actorId:state.actorId,expectedRevision:n.state.delta.revision,commandId:'prepared-'+hash([n.id,action]).slice(0,32),...action};
+   if(edges>=maxEdges){row.deferred.push(copy(action));omitted++;continue}
+   const r=resolve(base,n.state,access,command);edges++;
+   const childId='window-'+hash([n.id,command.commandId,r.previewHash]).slice(0,32);
+   const before=playerState(base,n.state,publicAccess),after=playerState(base,r.next,publicAccess);
+   const event=after.journal.at(-1);
+   row.choices.push({command,previewHash:r.previewHash,eventId:event.id,nextId:childId});
+   // Inputs to trusted narration worker contain only branch-local player-visible facts.
+   // Do not include seed, private sheets, other branches or authoritative mutable state.
+   jobs.push({schemaVersion:1,kind:'narration-job',status:'queued',resolution:'speculative',campaignId:state.id,baseRevision:state.delta.revision,branchId:childId,eventId:event.id,actorId:state.actorId,locationId:event.locationId,rulesVersion:VERSION,audience:'player:'+state.actorId,input:{event,before:{locationId:before.locationId,elapsedSeconds:before.elapsedSeconds},after:{locationId:after.locationId,elapsedSeconds:after.elapsedSeconds}},checkIds:event.checks.map(c=>c.id)});
+   queue.push({id:childId,state:r.next,depth:n.depth+1});
+  }
+ }
+ return {schemaVersion:1,kind:'private-anticipation-window',campaignId:state.id,baseSnapshotId:base.id,baseRevision:state.delta.revision,rootId,nodes,jobs,coverage:{edges,nodes:nodes.length,omitted,immediateComplete:nodes[0].deferred.length===0,maxDepth,maxEdges}};
+}
