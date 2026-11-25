@@ -46,4 +46,24 @@ test('group encounter uses common campaign snapshots and confirms prepared check
  assert.deepEqual(r.receipt.event.checks,job.input.event.checks);assert.equal(r.receipt.event.combat.actorIds.length,3);assert.equal(r.receipt.event.combat.turnTrace.length,r.receipt.event.combat.apTrace.length);
  const w=effective(base,r.state.delta);for(const s of wolves)assert.equal(w.entities[s.id].privateState.sheet.id,s.id);
  assert.equal(playerState(base,r.state,access).journal.length,1);
+ const replay=r.receipt.event.combat.replay;assert.deepEqual(replay,job.input.event.combat.replay);assert.deepEqual(replay,playerState(base,r.state,access).journal[0].combat.replay);
+ const checkIds=new Set(r.receipt.event.checks.map(c=>c.id));for(const t of replay.turns){for(const ref of [...t.checkIds,t.attackCheckId,t.defenseCheckId,t.referenceAttackId,t.wound?.opposedAgainst].filter(Boolean))assert.ok(checkIds.has(ref));}
+ assert.ok(replay.turns.some(t=>t.damage&&t.weapon));assert.ok(!JSON.stringify(replay).includes('GROUP-TEST'));
+});
+
+test('illustrated replay reconstructs the visible end state and references the actual resolved dice',()=>{
+ const p=params([participant(galahadSheet(),'heroes'),participant(wolfSheet(),'wolves'),participant(wolf2(),'wolves')]);
+ const r=resolveCombatEncounter(p),visible=structuredClone(r.initialActors);
+ let impacts=0;
+ for(const [i,e] of r.events.entries()){
+  assert.equal(e.sequence,i);assert.ok(e.actorId);
+  if(e.kind==='exchange'){assert.ok(e.weapon.id);assert.equal(typeof e.hit,'boolean');assert.ok(e.attack.id)}
+  if(e.damage){impacts++;assert.equal(e.damage.before-e.damage.after,e.damage.net);assert.equal(e.damage.net,Math.max(0,e.damage.afterParry-e.damage.armor))}
+  for(const change of e.changes){
+   const a=visible.find(s=>s.id===change.actorId);
+   for(const [k,v] of Object.entries(change.state)){assert.equal(a.state[k],v.before);a.state[k]=v.after}
+   for(const d of change.locations){const l=a.locations.find(l=>l.id===d.id);assert.equal(l.hp,d.hpBefore);assert.equal(l.disabled,d.disabledBefore);l.hp=d.hpAfter;l.disabled=d.disabledAfter}
+  }
+ }
+ assert.ok(impacts>0);assert.deepEqual(visible,r.finalActors);
 });

@@ -5,6 +5,7 @@ import {conditionProfile} from './conditions.mjs';
 import {isDead,advanceTrauma} from './trauma.mjs';
 import {exchange,continueGrip,combatCheck} from './duel.mjs';
 import {engagement,rangeProfile,preferredPosition,changeRange,canChangeRange,gripValid,struggle} from './engagement.mjs';
+import {replayRecorder} from './combat-log.mjs';
 import {successful,GRADES} from './percentile.mjs';
 const ok=(v,m)=>{if(!v)throw Error(m)};
 const clone=structuredClone;
@@ -35,7 +36,8 @@ export function simulateGroup(participants,{roll,id,maxRounds,initialRange,surpr
  const flat=new Set(surprisedIds),firstAttack=new Set(surprisedIds);
  let elapsed=0,round=0,pausedForWithdrawal=false,ap=actors.map(()=>0);
  const effort=actors.map(()=>0),counts={attacks:0,success:0,damage:actors.map(()=>0),wounds:actors.map(()=>0),rangeChanges:0,grips:0,escapes:0,gripTicks:0};
- const record=(i,kind,details={})=>events.push({round,actorId:ids[i],actor:actors[i].name,kind,...details,ap:[...ap]});
+ const replay=replayRecorder(actors);let cycleIndex=null;
+ const record=(i,kind,details={})=>events.push(replay.record({sequence:events.length,round,cycle:cycleIndex,actorId:ids[i],actor:actors[i].name,kind,...details,ap:[...ap]},actors));
  const hurt=(i,r)=>{counts.damage[i]+=r.damage?.net??0;counts.wounds[i]+=Number(['serious','major'].includes(r.wound?.severity))};
  const clearGrips=()=>{for(const ctx of contexts.values())if(ctx.grip&&!gripValid(ctx,actors))ctx.grip=null};
  const gripFor=id=>[...contexts.values()].find(c=>c.grip&&(c.grip.ownerId===id||c.grip.targetId===id));
@@ -49,7 +51,7 @@ export function simulateGroup(participants,{roll,id,maxRounds,initialRange,surpr
   ap=actors.map((s,i)=>active(i)?conditionProfile(s).ap:0);
   // AP bounds this loop; each turn spends one AP or explicitly skips a combatant.
   for(let cycle=0;ap.some(n=>n>0)&&activeSides().size>1;cycle++){
-   let progressed=false;
+   let progressed=false;cycleIndex=cycle;
    for(const i of order){
     if(!active(i)){ap[i]=0;continue}
     flat.delete(ids[i]);if(ap[i]<=0)continue;
@@ -64,7 +66,7 @@ export function simulateGroup(participants,{roll,id,maxRounds,initialRange,surpr
     if(round===1&&surprisedIds.includes(s.id)){spend();record(i,'wait',{message:'Sorpresa: sin acción ofensiva'});continue}
     if(ownGrip?.grip.targetId===s.id){
      const r=struggle(s,other,ownGrip,check);spend();if(r.released){ownGrip.grip=null;counts.escapes++}
-     if(s.state.stunTurns>0)s.state.stunTurns--;record(i,'struggle',{...target,checks:r.checks,message:r.message});continue;
+     if(s.state.stunTurns>0)s.state.stunTurns--;record(i,'struggle',{...target,checks:r.checks,released:r.released,message:r.message});continue;
     }
     if(s.state.prone&&!s.state.stunTurns&&conditionProfile(s,'athletics','stand').move>0){s.state.prone=false;spend();record(i,'stand',{message:'Recupera la postura'});continue}
     const p=conditionProfile(s);
@@ -75,8 +77,8 @@ export function simulateGroup(participants,{roll,id,maxRounds,initialRange,surpr
     }
     const desired=preferredPosition(s,other,ctx.position),rp=rangeProfile(s,other,ctx.position),otherHeld=!!gripFor(other.id);
     if(desired!==ctx.position&&canChangeRange(s,ctx)){
-     const r=changeRange(s,other,ctx,{resist:ap[j]>0&&!flat.has(other.id)&&!otherHeld,check,desired});
-     if(r.cost[0]){ap[i]-=r.cost[0];ap[j]-=r.cost[1];progressed=true;if(r.changed){ctx.position=r.position;counts.rangeChanges++}record(i,'range',{...target,checks:r.checks,message:r.message,position:ctx.position});continue}
+     const beforePosition=ctx.position,r=changeRange(s,other,ctx,{resist:ap[j]>0&&!flat.has(other.id)&&!otherHeld,check,desired});
+     if(r.cost[0]){ap[i]-=r.cost[0];ap[j]-=r.cost[1];progressed=true;if(r.changed){ctx.position=r.position;counts.rangeChanges++}record(i,'range',{...target,checks:r.checks,message:r.message,changed:r.changed,beforePosition,position:ctx.position});continue}
     }
     if(rp.tooFar){spend();record(i,'wait',{...target,message:'Fuera de alcance'});continue}
     // An actor held by a third party cannot evade or gain a second simultaneous grip.
@@ -91,19 +93,20 @@ export function simulateGroup(participants,{roll,id,maxRounds,initialRange,surpr
    }
    if(!progressed)break;
   }
-  elapsed+=5;flat.clear();firstAttack.clear();
+  elapsed+=5;cycleIndex=null;flat.clear();firstAttack.clear();
   for(let i=0;i<actors.length;i++){
-   const s=actors[i];advanceTrauma(s,5);
-   if(!active(i))continue;
+   const s=actors[i],old=JSON.stringify(s.state);advanceTrauma(s,5);
+   if(!active(i)){if(old!==JSON.stringify(s.state))record(i,'round-state');continue}
    if(s.state.fear==='shaken')s.state.fear='none';
    if(s.state.bleeding)s.state.fatigue=Math.min(9,s.state.fatigue+1);
    effort[i]+=5;
    if(effort[i]>=Math.ceil(s.attributes.CON/5)*5&&active(i)){effort[i]=0;const p=conditionProfile(s,'endurance','resist'),c=combatCheck(s,p,p.target,roll,'fatigue',id+'.r'+round);if(!successful(c.outcome))s.state.fatigue=Math.min(9,s.state.fatigue+1);record(i,'fatigue',{checks:[c]})}
+   else if(old!==JSON.stringify(s.state))record(i,'round-state');
   }
  }
  clearGrips();
  const remaining=[...activeSides()],winningSide=remaining.length===1?remaining[0]:null;
  const withdrawalRequested=actors.filter((s,i)=>active(i)&&s.state.fear==='flee').map(s=>s.id);
  const outcome=winningSide?'victory':remaining.length===0?'draw':pausedForWithdrawal?'withdrawal-pending':'unresolved';
- return {mode:'tactical-group-v1',actorIds:ids,sides,actors,initiativeDice,initiative,order:order.map(i=>ids[i]),rounds:Math.ceil(elapsed/5),elapsed,winningSide,winner:winningSide&&ids.filter((_,i)=>active(i)&&sides[i]===winningSide).length===1?ids.find((_,i)=>active(i)&&sides[i]===winningSide):null,outcome,withdrawalRequested,events,counts,engagements:[...contexts].map(([key,c])=>({actorIds:JSON.parse(key),...clone(c)}))};
+ return {mode:'tactical-group-v1',actorIds:ids,sides,actors,initiativeDice,initiative,order:order.map(i=>ids[i]),initialActors:replay.initial,finalActors:replay.final(actors),rounds:Math.ceil(elapsed/5),elapsed,winningSide,winner:winningSide&&ids.filter((_,i)=>active(i)&&sides[i]===winningSide).length===1?ids.find((_,i)=>active(i)&&sides[i]===winningSide):null,outcome,withdrawalRequested,events,counts,engagements:[...contexts].map(([key,c])=>({actorIds:JSON.parse(key),...clone(c)}))};
 }
