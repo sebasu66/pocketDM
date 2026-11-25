@@ -1,0 +1,18 @@
+{
+  "id": "act-20261125-narrative-module-002",
+  "date": "2026-11-25",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Propuesta MOD-01: La última llama del norte",
+  "summary": "Borrador de mundo macro, conflicto de medicinas, elenco Mara/Ivo/Neris con IDs existentes, lugares, escenas, cuatro familias de cierre y plan visual. No canon aprobado ni secretos. Basado en GDD y contratos actuales.",
+  "changed": [
+    "vault-site/public/docs/stormkeep-module-proposal.md"
+  ],
+  "next": "Usuario revisa premisa; simulación valida dependencias, condiciones de entrada/cierre y mapeo de acciones; recuperar fichas previas y desarrollar perfiles privados antes de arte canónico.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0020",
+    "doc_0021"
+  ]
+}
