@@ -8,3 +8,6 @@ scripts/import-azgaar-trial.mjs importa bitmap y vincula ID stormkeep al burg 38
 
 ## Acceso directo sin el editor anterior
 /azgaar/ muestra exclusivamente el PNG original generado por Azgaar, con zoom, desplazamiento y enfoque en Stormkeep. No carga biblioteca de sprites, IndexedDB ni el renderizador anterior. La vista es una exportación, no una sesión del generador nativo. /atlas/?project=azgaar conserva el editor de composición opcional.
+
+## Visor vectorial v2
+/azgaar/ ahora carga el SVG original (3 MB, relieve, costas, ríos y rutas) y 772 asentamientos exportados por MCP. Cámara SVG viewBox, rueda, +/−, deslizador, pan y pellizco implementado. Los marcadores muestran capitales y aumentan densidad según escala, con filtrado por viewport y separación de etiquetas; datos de población provisionales, no canon. Edge 1440×900 verificó 13→94 marcadores, zoom por rueda, pan real y retorno a mundo. La prueba headless tardó 64 s: falta optimizar repintado de miles de símbolos y verificar fluidez y gestos en hardware móvil. No genera aún topología nueva a escala urbana ni es el editor nativo. El PNG anterior sigue disponible como referencia.
