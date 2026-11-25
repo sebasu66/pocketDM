@@ -4,6 +4,7 @@ import {skillProfile,checkFromProfile,DIFFICULTIES,SKILL_METADATA} from './skill
 import {contestTargets,opposed,differential,gradeOf,effectiveSkill,successful} from '../public/laboratorio/percentile.mjs';
 import {validateSheet} from '../public/laboratorio/character-sheet.mjs';
 import {validateCheck} from '../public/libro/check-contract.mjs';
+import {simulateGroup} from '../public/laboratorio/group-combat.mjs';
 import {exchange,simulateDuel} from '../public/laboratorio/duel.mjs';
 import {die} from './engine.mjs';
 import {encounterOperations} from './encounter-rules.mjs';
@@ -91,6 +92,7 @@ export function resolveCombatExchange(x){
  return exchange(x.attacker,x.defender,{id:checkId(x.id),roll:roller(x),defense:x.defense,defenseAvailable:x.defenseAvailable??true,context:x.context??null,surpriseBonus:x.surpriseBonus??false,limbLifeThreat:x.limbLifeThreat,attackDifficulty:x.attackDifficulty,defenseDifficulty:x.defenseDifficulty});
 }
 export function resolveCombatEncounter(x){
+ if(Array.isArray(x.participants))return simulateGroup(x.participants,{roll:roller(x),id:checkId(x.id),maxRounds:x.maxRounds,initialRange:x.initialRange,surprisedIds:x.surprisedIds,limbLifeThreat:x.limbLifeThreat});
  validateSheet(x.attacker);validateSheet(x.defender);ok(x.attacker.id!==x.defender.id,'Distinct combatants required');
  ok(Number.isInteger(x.maxRounds)&&x.maxRounds>=1&&x.maxRounds<=100,'Explicit round limit required');
  ok(['long','short'].includes(x.initialRange),'Explicit initial range required');ok(Array.isArray(x.surprisedIds)&&x.surprisedIds.every(id=>[x.attacker.id,x.defender.id].includes(id)),'Explicit surprised actor IDs required');bool(x.limbLifeThreat,'limbLifeThreat');

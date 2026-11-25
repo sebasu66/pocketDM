@@ -1,0 +1,22 @@
+{
+  "id": "act-20261125-group-combat-001",
+  "date": "2026-11-25",
+  "area": "World Engine / Grafo",
+  "owner": "Equipo de simulación",
+  "status": "en-revision",
+  "title": "Combate grupal: ciclos de iniciativa y AP individuales",
+  "summary": "Extensión de resolveCombatEncounter a 2–20 combatientes, bandos y prioridades de objetivo, mismos ataques/defensas/heridas. 1v2 y 2v2 probados; las bajas no detienen el encuentro. Integración de campaña con rama privada pregenerada y trazas para libro.",
+  "changed": [
+    "vault-site/public/laboratorio/group-combat.mjs",
+    "vault-site/simulation/master-rules.mjs",
+    "vault-site/simulation/campaign-state.mjs",
+    "vault-site/simulation/firestore-campaign-store.mjs",
+    "vault-site/public/docs/group-combat-api.md"
+  ],
+  "next": "Narrador: utilizar la lista de participantes y la traza de turnos del mismo libro. Validador: verificar 1v2/2v2 y contexto de retirada. Aplicar a encuentros reales de MOD-01.",
+  "source": "https://github.com/sebasu66/pocketDM/pull/6",
+  "nodeIds": [
+    "doc_0915",
+    "doc_0909"
+  ]
+}

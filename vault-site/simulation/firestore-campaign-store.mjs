@@ -1,5 +1,6 @@
 // QA-03: server-only persistence against the isolated Firestore emulator.
 // Production adapter/authentication is deliberately not enabled by this module.
+import {requiresPrepared} from './campaign-state.mjs';
 import {confirmCommand,playerState,previewCommand,prepareWindow} from './campaign-state.mjs';
 import {snapshot} from './world-context.mjs';
 const ok=(condition,message)=>{if(!condition)throw Error(message)};
@@ -74,7 +75,7 @@ export class FirestoreCampaignStore {
    const row=await this.read(principal.campaignId);this.authorize(row,principal,principal.campaignId);
    const access={campaignId:principal.campaignId,actorId:principal.actorId,role:'player'};
    let preparedTransition;
-   if(command?.action==='module-intent'&&row.state.module?.intents[command.intentId]?.capability==='skill-check'&&!Object.hasOwn(row.state.receipts,command.commandId)){
+   if(command&&requiresPrepared(row.state,command)&&!Object.hasOwn(row.state.receipts,command.commandId)){
     ok(id(command.commandId),'Invalid command ID');
     try{const doc=await this.request(this.path(principal.campaignId)+'/prepared/'+command.commandId);preparedTransition=decode(doc.fields.transition)}
     catch(e){if(e.httpStatus===404)throw Error('Skill check must be prepared before confirmation');throw e}

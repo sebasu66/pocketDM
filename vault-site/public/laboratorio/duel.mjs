@@ -10,6 +10,7 @@ const rollDice=(d,roll,purpose)=>Array.from({length:d.count},(_,i)=>roll(d.sides
 const sum=xs=>xs.reduce((n,x)=>n+x,0);
 const isOut=s=>isDead(s)||s.state.incapacitated||s.state.unconscious||s.state.fatigue>=6;
 function check(s,p,target,roll,role,id){const value=roll(100,id+'.'+role+'.'+s.id,0);return {schemaVersion:1,id:id+'.'+role+'.'+s.id,actorId:s.id,actorName:s.name,skillId:p.skill==='combat'?s.style.id:p.skill,skillName:p.skill==='combat'?s.style.name:p.skill,base:p.base,target,difficulty:labels[p.grade]??'Bloqueada',reason:p.mods.map(m=>m.reason).join('; ')||'Sin modificadores',dice:'D100',roll:value,outcome:gradeOf(value,target),visibility:'player',source:'pocketdm-lab-v1',role,formula:p.base+' × '+(p.grade==='hard'?'2/3':p.grade==='formidable'?'1/2':p.grade==='herculean'?'1/10':String(p.factor))+' → '+p.target+(target!==p.target?' → '+target+' (oposición)':''),modifiers:p.mods};}
+export {check as combatCheck};
 const grades=['very-easy','easy','standard','hard','formidable','herculean'];
 function contextualProfile(s,p,base){
  if(!Object.hasOwn(GRADES,base))throw Error('Invalid combat difficulty');
@@ -37,7 +38,7 @@ function damageResolution(a,b,{aw,bw,mode,dc,ac,roll,id,locationId=null,checks,l
  }
  return {damage,wound};
 }
-export function exchange(attacker,defender,{roll,id='exchange',defense='auto',defenseAvailable=true,context=null,surpriseBonus=false,limbLifeThreat=false,roundSeconds=5,attackDifficulty='standard',defenseDifficulty='standard'}={}){
+export function exchange(attacker,defender,{roll,id='exchange',defense='auto',defenseAvailable=true,context=null,surpriseBonus=false,limbLifeThreat=false,roundSeconds=5,attackDifficulty='standard',defenseDifficulty='standard',allowGrip=true}={}){
  const a=clone(validateSheet(attacker)),b=clone(validateSheet(defender)),p=contextualProfile(a,conditionProfile(a),attackDifficulty),ar=context?rangeProfile(a,b,context.position):null,br=context?rangeProfile(b,a,context.position):null,aw=ar?.weapon??equipped(a),bw=equipped(b);
  if(!p.legal||ar?.tooFar)return {attacker:a,defender:b,blocked:ar?.tooFar?[...p.blocked,'Fuera del alcance directo']:p.blocked,checks:[],damage:null,entitlement:null,defense:'none',cost:{attack:0,defense:0},effects:[]};
  let mode=defense==='auto'?(bw.natural||br?.cramped?'evade':'parry'):defense;
@@ -62,7 +63,7 @@ export function exchange(attacker,defender,{roll,id='exchange',defense='auto',de
   if(budget>0&&!context.grip&&wp.relevant&&preferredPosition(winner,loser,context.position)!==context.position&&canChangeRange(winner,context)){
    rangeChange=preferredPosition(winner,loser,context.position);effects.push({id:rangeChange==='short'?'close-range':'open-range',actorId:winner.id});budget--;
   }
-  if(hit&&winner===a&&a.speciesId==='wolf'&&budget>0&&!context.grip&&!ar.tooFar){
+  if(allowGrip&&hit&&winner===a&&a.speciesId==='wolf'&&budget>0&&!context.grip&&!ar.tooFar){
    wantGrip=true;budget--; // In this lab, a bite must penetrate armour to establish a hold.
   }
   if(hit&&winner===a&&a.speciesId==='wolf'&&budget>0){

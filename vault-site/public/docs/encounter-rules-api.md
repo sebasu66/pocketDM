@@ -1,4 +1,6 @@
 # API de encuentros y consecuencias · master-rules-v1
+
+**Extension:** [Combate grupal](group-combat-api.md) habilita 2?20 participantes en la misma operacion resolveCombatEncounter. Los limites 1v1 descritos abajo se refieren a la firma anterior.
 25/11/2026. Extensión de [API del máster](master-rules-api.md). Consumidor: narrador durante la preparación privada de una rama. Todas las operaciones reciben snapshots; no consultan el argumento, no modifican la campaña y no obtienen dados desde el jugador. El llamador conserva resultados y aplica las fichas devueltas solo al confirmar la rama.
 
 ## Contrato compartido

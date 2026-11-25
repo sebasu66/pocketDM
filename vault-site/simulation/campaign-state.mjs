@@ -6,6 +6,8 @@ import {newSeed,die} from './engine.mjs';
 import {validateSheet,derived} from '../public/laboratorio/character-sheet.mjs';
 import {conditionProfile} from '../public/laboratorio/conditions.mjs';
 import {simulateDuel} from '../public/laboratorio/duel.mjs';
+import {simulateGroup} from '../public/laboratorio/group-combat.mjs';
+import {GRADES} from '../public/laboratorio/percentile.mjs';
 import {advanceTrauma,isDead} from '../public/laboratorio/trauma.mjs';
 import {SKILL_METADATA} from './skill-check.mjs';
 import {validateCheck} from '../public/libro/check-contract.mjs';
@@ -46,7 +48,16 @@ export function createState(base,{id,actorId,actorSheets,delta=campaign(base,id)
  for(const s of actorSheets){validateSheet(s);requireThat(validId(s.id)&&w.entities[s.id]&&!ids.has(s.id),'Unknown or duplicate sheet actor');ids.add(s.id);entities[s.id]=replaceSheet(w.entities[s.id],s)}
  requireThat(ids.has(actorId)&&w.entities[actorId].kind==='player'&&w.entities[actorId].locationId,'Invalid player actor');
  const enc={};
- for(const e of encounters){requireThat(validId(e.id)&&!own(enc,e.id)&&ids.has(e.opponentId)&&e.opponentId!==actorId&&w.entities[e.opponentId].locationId===e.locationId&&w.nodes[e.locationId]&&Number.isInteger(e.maxRounds)&&e.maxRounds>=1&&e.maxRounds<=12,'Invalid encounter');enc[e.id]=select(e,['id','opponentId','locationId','maxRounds'])}
+ for(const e of encounters){
+  requireThat(validId(e.id)&&!own(enc,e.id)&&w.nodes[e.locationId]&&Number.isInteger(e.maxRounds)&&e.maxRounds>=1&&e.maxRounds<=12,'Invalid encounter');
+  if(Array.isArray(e.participants)){
+   const ps=e.participants,byId=new Map(ps.map(p=>[p.actorId,p]));
+   requireThat(ps.length>=2&&ps.length<=20&&byId.size===ps.length&&byId.has(actorId)&&new Set(ps.map(p=>p.side)).size>=2,'Invalid group participants');
+   for(const p of ps)requireThat(ids.has(p.actorId)&&typeof p.side==='string'&&p.side&&w.entities[p.actorId].locationId===e.locationId&&Object.hasOwn(GRADES,p.difficulty?.attack)&&Object.hasOwn(GRADES,p.difficulty?.defense)&&['auto','parry','evade','none'].includes(p.defense)&&Array.isArray(p.targetPriority)&&new Set(p.targetPriority).size===p.targetPriority.length&&p.targetPriority.every(k=>byId.has(k)&&byId.get(k).side!==p.side),'Invalid group participant');
+   requireThat(['long','short'].includes(e.initialRange)&&typeof e.limbLifeThreat==='boolean'&&Array.isArray(e.surprisedIds)&&e.surprisedIds.every(k=>byId.has(k)),'Missing encounter context');
+   enc[e.id]={...select(e,['id','locationId','maxRounds','initialRange','limbLifeThreat','surprisedIds']),participants:ps.map(p=>select(p,['actorId','side','difficulty','defense','targetPriority']))};
+  }else{requireThat(ids.has(e.opponentId)&&e.opponentId!==actorId&&w.entities[e.opponentId].locationId===e.locationId,'Invalid opponent');enc[e.id]=select(e,['id','opponentId','locationId','maxRounds'])}
+ }
  requireThat(knownIds.every(k=>w.nodes[k]||w.entities[k]||w.routes[k]),'Unknown known ID');
  const next=applyChanges(base,delta,delta.revision,{entities});
  const module=moduleDefinition?createModule(moduleDefinition,effective(base,next),actorId):null;
@@ -59,7 +70,10 @@ export function legalActions(base,state,access){
  if(conditionProfile(s,'evade','move').legal&&conditionProfile(s,'evade','move').move>0){
  for(const n of Object.values(w.nodes))if(n.id!==at&&isVisible(n,known)&&findRoute(w,at,n.id,{knownIds:state.knownIds}))out.push({action:'travel',targetId:n.id});
  }
- for(const e of Object.values(state.encounters))if(!own(state.completedEncounters,e.id)&&e.locationId===at&&w.entities[e.opponentId].locationId===at&&isVisible(w.entities[e.opponentId],known)&&!isOut(sheetOf(w,e.opponentId)))out.push({action:'duel',encounterId:e.id});
+ for(const e of Object.values(state.encounters))if(!own(state.completedEncounters,e.id)&&e.locationId===at){
+  if(e.participants){const ownSide=e.participants.find(p=>p.actorId===state.actorId).side;if(e.participants.every(p=>w.entities[p.actorId]?.locationId===at&&isVisible(w.entities[p.actorId],known))&&e.participants.some(p=>p.side!==ownSide&&!isOut(sheetOf(w,p.actorId))))out.push({action:'duel',encounterId:e.id});}
+  else if(w.entities[e.opponentId].locationId===at&&isVisible(w.entities[e.opponentId],known)&&!isOut(sheetOf(w,e.opponentId)))out.push({action:'duel',encounterId:e.id});
+ }
  out.push(...moduleActions(w,state,s));return out;
 }
 function commandShape(c){
@@ -89,15 +103,15 @@ function resolve(base,state,access,c){
  const roll=combatRoller(state.seed,[state.id,state.delta.revision,state.module.id,state.module.version]);
  seconds=resolveModule(w,state,next,sheet,c.intentId,{eventId:id,roll,fact,checks,entities,participants,observations});checks.forEach(validateCheck);
  }else{
- const enc=state.encounters[c.encounterId],opponent=w.entities[enc.opponentId];participants.push(opponent.id);
+ const enc=state.encounters[c.encounterId];participants.push(...(enc.participants?enc.participants.map(p=>p.actorId).filter(k=>k!==actor.id):[enc.opponentId]));
  const scope=[state.id,state.delta.revision,enc.id];
  const roll=combatRoller(state.seed,scope);
- const duel=simulateDuel(sheet,sheetOf(w,opponent.id),{seed:'private-provider',roll,tactical:true,maxRounds:enc.maxRounds,eventPrefix:'combat-'+hash(scope).slice(0,24)+'.'});
+ const duel=enc.participants?simulateGroup(enc.participants.map(p=>({...p,character:sheetOf(w,p.actorId)})),{id:'combat-'+hash(scope).slice(0,24),roll,maxRounds:enc.maxRounds,initialRange:enc.initialRange,surprisedIds:enc.surprisedIds,limbLifeThreat:enc.limbLifeThreat}):simulateDuel(sheet,sheetOf(w,enc.opponentId),{seed:'private-provider',roll,tactical:true,maxRounds:enc.maxRounds,eventPrefix:'combat-'+hash(scope).slice(0,24)+'.'});
  for(const s of duel.actors)entities[s.id]=replaceSheet(w.entities[s.id],s);
  for(const e of duel.events)for(const ch of e.checks??[])checks.push(checkProjection(ch,id));
- combat={profile:duel.mode,encounterId:enc.id,rounds:duel.rounds,actorIds:duel.actors.map(a=>a.id),apTrace:duel.events.filter(e=>Array.isArray(e.ap)).map(e=>({round:e.round,kind:e.kind,remaining:[...e.ap]}))};
+ combat={profile:duel.mode,encounterId:enc.id,rounds:duel.rounds,actorIds:duel.actors.map(a=>a.id),...(enc.participants?{sides:duel.sides,order:duel.order,initiative:duel.initiative,winningSide:duel.winningSide,withdrawalRequested:duel.withdrawalRequested,turnTrace:duel.events.map(e=>({round:e.round,actorId:e.actorId,targetId:e.targetId??null,kind:e.kind,remaining:e.ap}))}:{}),apTrace:duel.events.filter(e=>Array.isArray(e.ap)).map(e=>({round:e.round,kind:e.kind,remaining:[...e.ap]}))};
  seconds=duel.elapsed;next.completedEncounters[enc.id]={eventId:id,outcome:duel.outcome,winner:duel.winner};
- fact('duel-resolved','Encuentro resuelto.',{encounterId:enc.id,outcome:duel.outcome,winnerId:duel.winner,rounds:duel.rounds});
+ fact('duel-resolved','Encuentro resuelto.',{encounterId:enc.id,outcome:duel.outcome,winnerId:duel.winner,rounds:duel.rounds,...(enc.participants?{winningSide:duel.winningSide,withdrawalRequested:duel.withdrawalRequested}:{})});
  }
  if(c.action!=='duel'&&seconds>0&&sheet.state.wounds?.some(w=>!w.stabilized&&w.remainingSeconds!==null)){
  const e=entities[actor.id]??actor,s=copy(e.privateState.sheet);advanceTrauma(s,seconds);entities[actor.id]=replaceSheet(e,s);if(isDead(s))fact('actor-died','El personaje muere por una herida no estabilizada.',{actorId:actor.id});
@@ -114,7 +128,7 @@ function resolve(base,state,access,c){
 export function previewCommand(base,state,access,c){requireThat(access?.role==='worker','Worker access required');const r=resolve(base,state,access,c);return {kind:'speculative',event:copy(r.event),previewHash:r.previewHash,state:{...copy(r.next),phase:'speculative'}}}
 // Prepared transitions are private server records, not browser-supplied results.
 const preparationStateHash=s=>{const {receipts,...rest}=s;return hash(rest)};
-function isSkillIntent(state,c){return c.action==='module-intent'&&state.module?.intents[c.intentId]?.capability==='skill-check'}
+export function requiresPrepared(state,c){return c.action==='module-intent'&&state.module?.intents[c.intentId]?.capability==='skill-check'||c.action==='duel'&&Array.isArray(state.encounters[c.encounterId]?.participants)}
 export function confirmCommand(base,state,access,c,{expectedPreviewHash,preparedTransition}={}){
  requireThat(access?.role==='player','Player access required');const fingerprint=commandShape(c);authorize(state,access);requireThat(c.campaignId===state.id&&c.actorId===state.actorId,'Command actor/campaign mismatch');readState(base,state);
  if(own(state.receipts,c.commandId)){const r=state.receipts[c.commandId];requireThat(r.fingerprint===fingerprint,'Command ID reused');return {state:copy(state),receipt:copy(r),duplicate:true}}
@@ -124,7 +138,7 @@ export function confirmCommand(base,state,access,c,{expectedPreviewHash,prepared
   requireThat(preparedTransition.integrity===hash([preparedTransition.beforeHash,preparedTransition.fingerprint,preparedTransition.result]),'Prepared transition corrupted');
   requireThat(legalActions(base,state,access).some(a=>hash(a)===hash(actionPart(c))),'Action not allowed');
   r=copy(preparedTransition.result);r.next.receipts=copy(state.receipts);
- }else{requireThat(!isSkillIntent(state,c),'Skill check must be prepared before confirmation');r=resolve(base,state,access,c)}
+ }else{requireThat(!requiresPrepared(state,c),'Skill check must be prepared before confirmation');r=resolve(base,state,access,c)}
  if(expectedPreviewHash!==undefined)requireThat(expectedPreviewHash===r.previewHash,'Preview mismatch');
  const receipt={commandId:c.commandId,fingerprint,revision:r.event.revision,event:copy(r.event)};
  r.next.receipts[c.commandId]=receipt;return {state:r.next,receipt:copy(receipt),duplicate:false};
@@ -159,7 +173,7 @@ export function prepareWindow(base,state,access,{maxDepth=3,maxEdges=40}={}){
    const command={campaignId:state.id,actorId:state.actorId,expectedRevision:n.state.delta.revision,commandId:'prepared-'+hash([n.id,action]).slice(0,32),...action};
    if(edges>=maxEdges){row.deferred.push(copy(action));omitted++;continue}
    const r=resolve(base,n.state,access,command);edges++;
-   if(isSkillIntent(n.state,command)){
+   if(requiresPrepared(n.state,command)){
     const beforeHash=preparationStateHash(n.state),result=copy(r);
     preparedTransitions[command.commandId]={kind:'private-prepared-transition',baseSnapshotId:base.id,beforeHash,fingerprint:r.fingerprint,result,integrity:hash([beforeHash,r.fingerprint,result])};
    }
