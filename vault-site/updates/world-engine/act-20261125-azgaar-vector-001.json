@@ -1,0 +1,23 @@
+{
+  "id": "act-20261125-azgaar-vector-001",
+  "date": "2026-11-25",
+  "area": "World Engine / Grafo",
+  "owner": "Equipo de simulación",
+  "status": "en-revision",
+  "title": "Azgaar: visor vectorial con zoom semántico",
+  "summary": "SVG auténtico de Azgaar y 772 coordenadas de asentamientos. Cámara viewBox, zoom y pan, detalle variable de etiquetas y selección. Edge verificó 13→94 marcadores y eventos reales. Rendimiento pendiente, no canon.",
+  "changed": [
+    "vault-site/public/azgaar/index.html",
+    "vault-site/public/azgaar/viewer-v2.mjs",
+    "vault-site/public/azgaar/geography.svg",
+    "vault-site/public/azgaar/settlements.json",
+    "vault-site/scripts/export-azgaar-vector.mjs",
+    "vault-site/scripts/test-azgaar-view-browser.mjs"
+  ],
+  "next": "Optimizar SVG y acordar niveles urbanos y geografía con narrador. https://pocketdm-prototipos.web.app/azgaar/",
+  "source": "https://github.com/aznan-triks/mcp-for-Azgaar",
+  "nodeIds": [
+    "doc_0018",
+    "doc_0909"
+  ]
+}
