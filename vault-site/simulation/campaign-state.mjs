@@ -106,10 +106,20 @@ function resolve(base,state,access,c){
 }
 // For a trusted preparation worker only; the speculative result must never be served to a player.
 export function previewCommand(base,state,access,c){requireThat(access?.role==='worker','Worker access required');const r=resolve(base,state,access,c);return {kind:'speculative',event:copy(r.event),previewHash:r.previewHash,state:{...copy(r.next),phase:'speculative'}}}
-export function confirmCommand(base,state,access,c,{expectedPreviewHash}={}){
+// Prepared transitions are private server records, not browser-supplied results.
+const preparationStateHash=s=>{const {receipts,...rest}=s;return hash(rest)};
+function isSkillIntent(state,c){return c.action==='module-intent'&&state.module?.intents[c.intentId]?.capability==='skill-check'}
+export function confirmCommand(base,state,access,c,{expectedPreviewHash,preparedTransition}={}){
  requireThat(access?.role==='player','Player access required');const fingerprint=commandShape(c);authorize(state,access);requireThat(c.campaignId===state.id&&c.actorId===state.actorId,'Command actor/campaign mismatch');readState(base,state);
  if(own(state.receipts,c.commandId)){const r=state.receipts[c.commandId];requireThat(r.fingerprint===fingerprint,'Command ID reused');return {state:copy(state),receipt:copy(r),duplicate:true}}
- const r=resolve(base,state,access,c);if(expectedPreviewHash!==undefined)requireThat(expectedPreviewHash===r.previewHash,'Preview mismatch');
+ let r;
+ if(preparedTransition!==undefined){
+  requireThat(preparedTransition.kind==='private-prepared-transition'&&preparedTransition.baseSnapshotId===base.id&&preparedTransition.beforeHash===preparationStateHash(state)&&preparedTransition.fingerprint===fingerprint,'Prepared transition stale or mismatched');
+  requireThat(preparedTransition.integrity===hash([preparedTransition.beforeHash,preparedTransition.fingerprint,preparedTransition.result]),'Prepared transition corrupted');
+  requireThat(legalActions(base,state,access).some(a=>hash(a)===hash(actionPart(c))),'Action not allowed');
+  r=copy(preparedTransition.result);r.next.receipts=copy(state.receipts);
+ }else{requireThat(!isSkillIntent(state,c),'Skill check must be prepared before confirmation');r=resolve(base,state,access,c)}
+ if(expectedPreviewHash!==undefined)requireThat(expectedPreviewHash===r.previewHash,'Preview mismatch');
  const receipt={commandId:c.commandId,fingerprint,revision:r.event.revision,event:copy(r.event)};
  r.next.receipts[c.commandId]=receipt;return {state:r.next,receipt:copy(receipt),duplicate:false};
 }
@@ -132,7 +142,7 @@ export function prepareWindow(base,state,access,{maxDepth=3,maxEdges=40}={}){
  requireThat(access?.role==='worker','Worker access required');authorize(state,access);readState(base,state);
  requireThat(Number.isInteger(maxDepth)&&maxDepth>=1&&maxDepth<=6&&Number.isInteger(maxEdges)&&maxEdges>=1&&maxEdges<=1200,'Invalid anticipation budget');
  const rootId='window-'+hash([state.id,base.id,state.delta.revision,VERSION]).slice(0,32);
- const nodes=[],jobs=[],queue=[{id:rootId,state:copy(state),depth:0}];let edges=0,omitted=0;
+ const nodes=[],jobs=[],preparedTransitions={},queue=[{id:rootId,state:copy(state),depth:0}];let edges=0,omitted=0;
  const publicAccess={...access,role:'player'};
  for(let i=0;i<queue.length;i++){
   const n=queue[i],actions=legalActions(base,n.state,access);
@@ -143,6 +153,10 @@ export function prepareWindow(base,state,access,{maxDepth=3,maxEdges=40}={}){
    const command={campaignId:state.id,actorId:state.actorId,expectedRevision:n.state.delta.revision,commandId:'prepared-'+hash([n.id,action]).slice(0,32),...action};
    if(edges>=maxEdges){row.deferred.push(copy(action));omitted++;continue}
    const r=resolve(base,n.state,access,command);edges++;
+   if(isSkillIntent(n.state,command)){
+    const beforeHash=preparationStateHash(n.state),result=copy(r);
+    preparedTransitions[command.commandId]={kind:'private-prepared-transition',baseSnapshotId:base.id,beforeHash,fingerprint:r.fingerprint,result,integrity:hash([beforeHash,r.fingerprint,result])};
+   }
    const childId='window-'+hash([n.id,command.commandId,r.previewHash]).slice(0,32);
    const before=playerState(base,n.state,publicAccess),after=playerState(base,r.next,publicAccess);
    const event=after.journal.at(-1);
@@ -153,5 +167,5 @@ export function prepareWindow(base,state,access,{maxDepth=3,maxEdges=40}={}){
    queue.push({id:childId,state:r.next,depth:n.depth+1});
   }
  }
- return {schemaVersion:1,kind:'private-anticipation-window',campaignId:state.id,baseSnapshotId:base.id,baseRevision:state.delta.revision,rootId,nodes,jobs,coverage:{edges,nodes:nodes.length,omitted,immediateComplete:nodes[0].deferred.length===0,maxDepth,maxEdges}};
+ return {schemaVersion:1,kind:'private-anticipation-window',campaignId:state.id,baseSnapshotId:base.id,baseRevision:state.delta.revision,rootId,nodes,jobs,preparedTransitions,coverage:{edges,nodes:nodes.length,omitted,immediateComplete:nodes[0].deferred.length===0,maxDepth,maxEdges}};
 }

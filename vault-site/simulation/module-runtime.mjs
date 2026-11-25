@@ -1,9 +1,10 @@
 // QA-02/07 capability pilot. Server-authored test definitions only, never import narrative drafts as rules.
 import {conditionProfile} from '../public/laboratorio/conditions.mjs';
-import {gradeOf,successful} from '../public/laboratorio/percentile.mjs';
+import {successful} from '../public/laboratorio/percentile.mjs';
+import {validateSkillSpec,skillProfile,resolveSkillCheck} from './skill-check.mjs';
 const ok=(v,m)=>{if(!v)throw Error(m)},own=Object.hasOwn,copy=structuredClone;
 const id=x=>typeof x==='string'&&/^[a-z][a-z0-9_.-]{0,100}$/.test(x)&&!['constructor','prototype','__proto__'].includes(x);
-const kinds=['module-accept','module-decline','module-withdraw','module-close','dialogue','inspect','negotiate','transfer-cargo','report','offer-resource'];
+const kinds=['module-accept','module-decline','module-withdraw','module-close','dialogue','inspect','negotiate','skill-check','transfer-cargo','report','offer-resource'];
 const live=['offered','active'];
 const visible=(r,known)=>r&&(r.visibility==='public'||r.visibility==='known'&&known.includes(r.id));
 const person=(r)=>r&&['player','npc','creature'].includes(r.kind);
@@ -29,10 +30,12 @@ export function createModule(def,w,actorId){
   const allowedStatus=['module-accept','module-decline'].includes(i.capability)?['offered']:i.capability==='dialogue'?['offered','active']:['active'];ok(allowedStatus.includes(i.status),'Invalid intent status');
   ok(i.authoringIntentId===undefined||id(i.authoringIntentId),'Invalid authoring intent reference');
   ok(i.requiresSuccess===undefined||Array.isArray(i.requiresSuccess)&&i.requiresSuccess.every(id),'Invalid success prerequisite');
+  ok(i.requiresFailure===undefined||Array.isArray(i.requiresFailure)&&i.requiresFailure.every(id),'Invalid failure prerequisite');
   if(['dialogue','negotiate','report','offer-resource','transfer-cargo'].includes(i.capability))ok(person(w.entities[i.targetId])&&i.targetId!==actorId,'Invalid target');
   if(i.capability==='dialogue'||i.capability==='inspect'||i.capability==='report')ok(own(evidence,i.evidenceId),'Unknown evidence');
   if(i.capability==='report')ok(i.knownEvidence.includes(i.evidenceId),'Report requires observed evidence');
   if(['inspect','negotiate'].includes(i.capability))ok(conditions.includes(i.difficulty),'Invalid check difficulty');
+  if(i.capability==='skill-check'){validateSkillSpec(i.check);ok(id(i.challengeId),'Missing challenge ID');}
   if(i.capability==='transfer-cargo'){
    const c=cargo(w,i.cargoId);ok(i.ownerId===c.ownerId&&person(w.entities[i.fromId])&&person(w.entities[i.toId])&&i.fromId!==i.toId&&i.targetId===(i.fromId===actorId?i.toId:i.fromId)&&[i.fromId,i.toId].includes(actorId)&&qty(i.quantity)&&i.quantity<=c.total&&i.authorization==='fixture-explicit-consent','Invalid transfer authorization');
   }
@@ -44,10 +47,10 @@ export function createModule(def,w,actorId){
   }
   intents[i.id]=copy(i);
  }
- for(const i of Object.values(intents)){ok([...i.requires,...(i.requiresSuccess??[])].every(k=>own(intents,k)&&k!==i.id),'Unknown prerequisite');ok((i.requiresSuccess??[]).every(k=>['inspect','negotiate'].includes(intents[k].capability)),'Success prerequisite is not a check')}
+ for(const i of Object.values(intents)){ok([...i.requires,...(i.requiresSuccess??[]),...(i.requiresFailure??[])].every(k=>own(intents,k)&&k!==i.id),'Unknown prerequisite');ok([...(i.requiresSuccess??[]),...(i.requiresFailure??[])].every(k=>['inspect','negotiate','skill-check'].includes(intents[k].capability)),'Success prerequisite is not a check')}
  // Reject dependency cycles, not just direct self-reference.
  const done=new Set(),visiting=new Set();
- function visit(k){if(done.has(k))return;ok(!visiting.has(k),'Intent dependency cycle');visiting.add(k);for(const r of [...intents[k].requires,...(intents[k].requiresSuccess??[])])visit(r);visiting.delete(k);done.add(k)}
+ function visit(k){if(done.has(k))return;ok(!visiting.has(k),'Intent dependency cycle');visiting.add(k);for(const r of [...intents[k].requires,...(intents[k].requiresSuccess??[]),...(intents[k].requiresFailure??[])])visit(r);visiting.delete(k);done.add(k)}
  Object.keys(intents).forEach(visit);
  ok(Object.values(intents).some(i=>i.capability==='module-accept')&&Object.values(intents).some(i=>i.capability==='module-close'),'Missing contract lifecycle');
  return {id:def.id,version:def.version,mode:def.mode,status:'offered',intents,evidence,completed:[],observed:[],results:{}};
@@ -56,13 +59,14 @@ export function moduleActions(w,state,sheet){
  const m=state.module;if(!m||!live.includes(m.status))return [];
  const a=state.actorId,location=w.entities[a].locationId;
  return Object.values(m.intents).filter(i=>{
-  if(i.status!==m.status||i.locationId!==location||m.completed.includes(i.id)||!i.requires.every(k=>m.completed.includes(k))||!(i.requiresSuccess??[]).every(k=>successful(m.results?.[k]?.outcome))||!i.knownEvidence.every(k=>m.observed.includes(k)))return false;
+  if(i.status!==m.status||i.locationId!==location||m.completed.includes(i.id)||!i.requires.every(k=>m.completed.includes(k))||!(i.requiresSuccess??[]).every(k=>successful(m.results?.[k]?.outcome))||!(i.requiresFailure??[]).every(k=>['failure','fumble'].includes(m.results?.[k]?.outcome))||!i.knownEvidence.every(k=>m.observed.includes(k)))return false;
   if(i.targetId&&(!coLocated(w,a,i.targetId)||!visible(w.entities[i.targetId],state.knownIds)))return false;
   if(i.capability==='module-close'&&!(i.cargoRequirements??[]).every(r=>(cargo(w,r.cargoId).allocations[r.custodianId]??0)>=r.quantity))return false;
   if(i.capability==='transfer-cargo'){
    const c=cargo(w,i.cargoId);return c.ownerId===i.ownerId&&coLocated(w,a,i.fromId)&&coLocated(w,a,i.toId)&&(c.allocations[i.fromId]??0)>=i.quantity;
   }
   if(i.capability==='offer-resource')return sheet.inventory.some(x=>x.id===i.itemId&&x.kind==='gear'&&x.carried&&x.quantity>=i.quantity);
+  if(i.capability==='skill-check')return skillProfile(sheet,i.check).legal&&!Object.values(m.intents).some(other=>other.capability==='skill-check'&&other.challengeId===i.challengeId&&m.completed.includes(other.id));
   if(['inspect','negotiate'].includes(i.capability))return conditionProfile(sheet,i.capability==='inspect'?'perception':'influence','skill').legal;
   return true;
  }).map(i=>({action:'module-intent',intentId:i.id}));
@@ -79,16 +83,14 @@ export function resolveModule(w,state,next,sheet,intentId,{eventId,roll,fact,che
  case 'module-withdraw':m.status='withdrawn';record('module-withdrawn','Retirada confirmada.');break;
  case 'module-close':m.status='closed';m.endingId=i.endingId??'closed';record('module-closed','Cierre de módulo confirmado.',{endingId:m.endingId});break;
  case 'dialogue':record('dialogue-observed','Información autorizada comunicada.',{targetId:i.targetId});observed();break;
+ case 'skill-check':
  case 'inspect':
  case 'negotiate':{
-  const skill=i.capability==='inspect'?'perception':'influence',p=conditionProfile(sheet,skill,'skill');
-  const grades=['standard','hard','formidable','herculean'],grade=grades[Math.max(grades.indexOf(p.grade),grades.indexOf(i.difficulty))];
-  const target=Math.round(p.base*({standard:1,hard:2/3,formidable:.5,herculean:.1}[grade])),r=roll(100,'module.'+i.id+'.'+skill,0),outcome=gradeOf(r,target);
-  checks.push({schemaVersion:1,id:eventId+'.'+skill,actorId:a,actorName:sheet.name,skillId:skill,skillName:skill==='perception'?'Percepción':'Influencia',base:p.base,target,difficulty:labels[grade],reason:'Dificultad autorizada y condición efectiva.',dice:'D100',roll:r,outcome,visibility:'player',source:'module-runtime-fixture'});
-  m.results??={};m.results[i.id]={outcome};
-  record(i.capability==='inspect'?'inspection-resolved':'negotiation-check','Chequeo resuelto.',{outcome});
-  if(i.capability==='inspect'&&successful(outcome))observed();
-  // A negotiation check is not NPC consent, a transaction, or a narrative decision.
+  const spec=i.capability==='skill-check'?i.check:{skillId:i.capability==='inspect'?'perception':'influence',difficulty:i.difficulty,reason:'Dificultad autorizada de la escena.'};
+  const check=resolveSkillCheck(sheet,spec,{eventId,slot:'module.'+i.id,roll});
+  checks.push(check);m.results??={};m.results[i.id]={outcome:check.outcome};
+  record(i.capability==='inspect'?'inspection-resolved':i.capability==='negotiate'?'negotiation-check':'skill-check-resolved','Chequeo resuelto.',{outcome:check.outcome,checkId:check.id,...(i.challengeId?{challengeId:i.challengeId}:{})});
+  if(i.capability==='inspect'&&successful(check.outcome))observed();
   break;
  }
  case 'report':{
