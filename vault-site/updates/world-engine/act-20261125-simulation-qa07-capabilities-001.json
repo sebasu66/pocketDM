@@ -1,0 +1,23 @@
+{
+  "id": "act-20261125-simulation-qa07-capabilities-001",
+  "date": "2026-11-25",
+  "area": "World Engine / Grafo",
+  "owner": "Equipo de simulación",
+  "status": "en-revision",
+  "title": "QA-07/02: capacidades mecánicas de módulos y cierres condicionados",
+  "summary": "Contrato de módulo sobre ficha/overlay común: diálogo, evidencia, negociación, oferta, custodia, informe, aceptación/rechazo/retirada/cierre. Bindings por sitio, resultados exitosos y umbrales de custodia. 9 pruebas nuevas; 108/108 con emulador. Dossier privado revisado sin canonizar ni publicar contenido.",
+  "changed": [
+    "vault-site/simulation/module-runtime.mjs",
+    "vault-site/simulation/campaign-state.mjs",
+    "vault-site/simulation/test-module-runtime.mjs",
+    "vault-site/public/docs/module-runtime-qa07.md"
+  ],
+  "next": "Narrador: revisar contrato y ampliar fallback confirmado para module-intent; simulación: autorización dinámica, carga, obligaciones, mapeo de escenas y finales, canon aprobado. Validador revisar PR #5. H01 abierto.",
+  "source": "https://github.com/sebasu66/pocketDM/pull/5",
+  "nodeIds": [
+    "doc_0009",
+    "doc_0907",
+    "doc_0909",
+    "doc_0913"
+  ]
+}

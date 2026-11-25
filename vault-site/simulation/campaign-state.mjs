@@ -8,6 +8,7 @@ import {conditionProfile} from '../public/laboratorio/conditions.mjs';
 import {simulateDuel} from '../public/laboratorio/duel.mjs';
 import {validateCheck} from '../public/libro/check-contract.mjs';
 import {buildImpactContext} from './ripple-impact.mjs';
+import {createModule,moduleActions,resolveModule,moduleView} from './module-runtime.mjs';
 const copy=structuredClone, own=Object.hasOwn;
 const requireThat=(v,m)=>{if(!v)throw Error(m)};
 const validId=s=>typeof s==='string'&&/^[a-z][a-z0-9_.-]{0,100}$/.test(s)&&!['constructor','prototype','__proto__'].includes(s);
@@ -36,7 +37,7 @@ function sheetOf(w,id){const e=w.entities[id];requireThat(e&&e.privateState?.she
 function replaceSheet(entity,s){const {fatigue,hp,ap,rations,inventory,conditions,...rest}=entity.publicState??{};return {...entity,publicState:rest,privateState:{...entity.privateState,sheet:copy(validateSheet(s))}}}
 function authorize(state,access){requireThat(access?.campaignId===state.id&&access.actorId===state.actorId,'Access denied')}
 function readState(base,state){requireThat(state?.phase==='confirmed'&&state.schemaVersion===1&&state.rulesVersion===VERSION&&state.id===state.delta.id&&Number.isSafeInteger(state.elapsedSeconds)&&state.elapsedSeconds>=0,'Invalid state');const w=effective(base,state.delta);sheetOf(w,state.actorId);return w}
-export function createState(base,{id,actorId,actorSheets,delta=campaign(base,id),knownIds=[],encounters=[],seed=newSeed()}){
+export function createState(base,{id,actorId,actorSheets,delta=campaign(base,id),knownIds=[],encounters=[],moduleDefinition=null,seed=newSeed()}){
  requireThat(validId(id)&&validId(actorId)&&delta.id===id&&typeof seed==='string'&&seed.length>0,'Invalid campaign');
  const w=effective(base,delta),entities=Object.create(null),ids=new Set();
  for(const s of actorSheets){validateSheet(s);requireThat(validId(s.id)&&w.entities[s.id]&&!ids.has(s.id),'Unknown or duplicate sheet actor');ids.add(s.id);entities[s.id]=replaceSheet(w.entities[s.id],s)}
@@ -45,7 +46,8 @@ export function createState(base,{id,actorId,actorSheets,delta=campaign(base,id)
  for(const e of encounters){requireThat(validId(e.id)&&!own(enc,e.id)&&ids.has(e.opponentId)&&e.opponentId!==actorId&&w.entities[e.opponentId].locationId===e.locationId&&w.nodes[e.locationId]&&Number.isInteger(e.maxRounds)&&e.maxRounds>=1&&e.maxRounds<=12,'Invalid encounter');enc[e.id]=select(e,['id','opponentId','locationId','maxRounds'])}
  requireThat(knownIds.every(k=>w.nodes[k]||w.entities[k]||w.routes[k]),'Unknown known ID');
  const next=applyChanges(base,delta,delta.revision,{entities});
- return {schemaVersion:1,phase:'confirmed',rulesVersion:VERSION,id,actorId,seed,delta:next,elapsedSeconds:0,knownIds:[...new Set([...knownIds,actorId,w.entities[actorId].locationId])],encounters:enc,completedEncounters:{},receipts:{},journal:[]};
+ const module=moduleDefinition?createModule(moduleDefinition,effective(base,next),actorId):null;
+ return {schemaVersion:1,phase:'confirmed',rulesVersion:VERSION,id,actorId,seed,delta:next,elapsedSeconds:0,knownIds:[...new Set([...knownIds,actorId,w.entities[actorId].locationId])],encounters:enc,completedEncounters:{},receipts:{},journal:[],...(module?{module}:{})};
 }
 export function legalActions(base,state,access){
  authorize(state,access);const w=readState(base,state),s=sheetOf(w,state.actorId),at=w.entities[state.actorId].locationId,known=new Set(state.knownIds),out=[];
@@ -55,24 +57,24 @@ export function legalActions(base,state,access){
  for(const n of Object.values(w.nodes))if(n.id!==at&&isVisible(n,known)&&findRoute(w,at,n.id,{knownIds:state.knownIds}))out.push({action:'travel',targetId:n.id});
  }
  for(const e of Object.values(state.encounters))if(!own(state.completedEncounters,e.id)&&e.locationId===at&&w.entities[e.opponentId].locationId===at&&isVisible(w.entities[e.opponentId],known)&&!isOut(sheetOf(w,e.opponentId)))out.push({action:'duel',encounterId:e.id});
- return out;
+ out.push(...moduleActions(w,state,s));return out;
 }
 function commandShape(c){
  requireThat(c&&Object.getPrototypeOf(c)===Object.prototype&&validId(c.commandId)&&validId(c.actorId)&&validId(c.campaignId)&&Number.isSafeInteger(c.expectedRevision)&&c.expectedRevision>=0,'Invalid command');
- const args={travel:['targetId'],'consume-ration':[],duel:['encounterId']};requireThat(own(args,c.action),'Invalid action');
+ const args={travel:['targetId'],'consume-ration':[],duel:['encounterId'],'module-intent':['intentId']};requireThat(own(args,c.action),'Invalid action');
  const allowed=['commandId','actorId','campaignId','expectedRevision','action',...args[c.action]];
  requireThat(Object.keys(c).length===allowed.length&&allowed.every(k=>own(c,k))&&args[c.action].every(k=>validId(c[k])),'Invalid command fields');return hash(c);
 }
-const actionPart=c=>select(c,['action','targetId','encounterId']);
+const actionPart=c=>select(c,['action','targetId','encounterId','intentId']);
 function sheetChanges(before,after){const changes=[];const add=(path,a,b)=>{if(hash(a)!==hash(b))changes.push({path,before:a,after:b})};for(const l of before.locations){const n=after.locations.find(x=>x.id===l.id);add('locations.'+l.id+'.hp',l.hp,n.hp);add('locations.'+l.id+'.disabled',l.disabled,n.disabled)}for(const i of before.inventory){const n=after.inventory.find(x=>x.id===i.id);add('inventory.'+i.id+'.quantity',i.quantity,n?.quantity??0);if(i.hp!==undefined)add('inventory.'+i.id+'.hp',i.hp,n?.hp??0)}for(const k of ['fatigue','bleeding','prone','stunTurns','incapacitated','unconscious','fear','cold','extraLoad','light'])add('state.'+k,before.state[k],after.state[k]);add('effectiveAP',conditionProfile(before).ap,conditionProfile(after).ap);return changes}
 function checkProjection(c,id){const p=select(c,['schemaVersion','id','actorId','actorName','skillId','skillName','base','target','difficulty','reason','dice','roll','outcome','visibility','source','role','formula']);p.id=id+'.'+p.id;return validateCheck(p)}
 function resolve(base,state,access,c){
  const fingerprint=commandShape(c);authorize(state,access);requireThat(c.campaignId===state.id&&c.actorId===state.actorId,'Command actor/campaign mismatch');
  const w=readState(base,state);requireThat(c.expectedRevision===state.delta.revision,'Revision conflict');
  requireThat(legalActions(base,state,access).some(a=>hash(a)===hash(actionPart(c))),'Action not allowed');
- const next=copy(state),actor=w.entities[state.actorId],sheet=copy(sheetOf(w,state.actorId)),entities=Object.create(null),checks=[],facts=[],participants=[actor.id];let seconds=0,locationId=actor.locationId,combat=null;
+ const next=copy(state),actor=w.entities[state.actorId],sheet=copy(sheetOf(w,state.actorId)),entities=Object.create(null),checks=[],facts=[],participants=[actor.id],observations=[];let seconds=0,locationId=actor.locationId,combat=null;
  const id='evt-'+hash([state.id,state.delta.revision,c.commandId]).slice(0,32);
- const fact=(kind,description,data={})=>facts.push({id:id+'.f'+facts.length,kind,description,...data});
+ const fact=(kind,description,data={})=>{const f={id:id+'.f'+facts.length,kind,description,...data};facts.push(f);return f.id};
  if(c.action==='consume-ration'){
  const i=sheet.inventory.findIndex(x=>x.id==='rations');if(sheet.inventory[i].quantity===1)sheet.inventory.splice(i,1);else sheet.inventory[i].quantity--;
  entities[actor.id]=replaceSheet(actor,sheet);fact('ration-consumed','Se consume una ración.');seconds=60;
@@ -80,6 +82,9 @@ function resolve(base,state,access,c){
  const route=findRoute(w,actor.locationId,c.targetId,{knownIds:state.knownIds});
  locationId=c.targetId;seconds=route.minutes*60;requireThat(Number.isSafeInteger(seconds),'Invalid travel duration');
  entities[actor.id]={...actor,locationId};next.knownIds=[...new Set([...state.knownIds,...route.nodes,...route.routes])];fact('travel','Desplazamiento completado.',{fromId:actor.locationId,toId:locationId,routeIds:route.routes});
+ }else if(c.action==='module-intent'){
+ const roll=combatRoller(state.seed,[state.id,state.delta.revision,state.module.id,state.module.version]);
+ seconds=resolveModule(w,state,next,sheet,c.intentId,{eventId:id,roll,fact,checks,entities,participants,observations});checks.forEach(validateCheck);
  }else{
  const enc=state.encounters[c.encounterId],opponent=w.entities[enc.opponentId];participants.push(opponent.id);
  const scope=[state.id,state.delta.revision,enc.id];
@@ -93,10 +98,10 @@ function resolve(base,state,access,c){
  }
  next.delta=applyChanges(base,state.delta,c.expectedRevision,{entities});next.elapsedSeconds+=seconds;
  const changes=sheetChanges(sheetOf(w,actor.id),sheetOf(effective(base,next.delta),actor.id));
- const event={schemaVersion:1,id,revision:next.delta.revision,actorId:actor.id,action:c.action,locationId,participantIds:participants,checks,facts,changes,...(combat?{combat}:{}),knowledge:[{entityId:actor.id,source:'participant',factIds:facts.map(f=>f.id)}],elapsedSeconds:seconds,source:'simulation-runtime-prototype'};
+ const event={schemaVersion:1,id,revision:next.delta.revision,actorId:actor.id,action:c.action,...(state.module?{moduleId:state.module.id,moduleVersion:state.module.version}:{}),...(c.intentId?{intentId:c.intentId}:{}),locationId,participantIds:participants,checks,facts,changes,...(combat?{combat}:{}),knowledge:[{entityId:actor.id,source:'participant',factIds:facts.map(f=>f.id)},...observations],elapsedSeconds:seconds,source:'simulation-runtime-prototype'};
  const unique=new Set(checks.map(x=>x.id));requireThat(unique.size===checks.length,'Duplicate check ID');
  next.journal.push(copy(event));
- const previewHash=hash([state.id,base.id,state.delta.revision,fingerprint,next.delta,event]);
+ const previewHash=hash([state.id,base.id,state.delta.revision,fingerprint,next.delta,...(next.module?[next.module]:[]),event]);
  return {next,event,previewHash,fingerprint};
 }
 // For a trusted preparation worker only; the speculative result must never be served to a player.
@@ -112,7 +117,7 @@ export function playerState(base,state,access){
  requireThat(access?.role==='player','Player access required');authorize(state,access);const w=readState(base,state),actor=w.entities[state.actorId],s=sheetView(sheetOf(w,state.actorId)),known=new Set(state.knownIds);
  const nodes=Object.values(w.nodes).filter(n=>isVisible(n,known)).map(n=>({...select(n,['id','name','kind','generation','q','r','terrain']),...(isVisible(w.nodes[n.parentId],known)?{parentId:n.parentId}:{})}));
  const visibleIds=new Set(nodes.map(n=>n.id));
- return {schemaVersion:1,campaignId:state.id,revision:state.delta.revision,actorId:actor.id,locationId:actor.locationId,elapsedSeconds:state.elapsedSeconds,sheet:s,derived:derived(s),effectiveAP:conditionProfile(s).ap,nodes,routes:Object.values(w.routes).filter(r=>isVisible(r,known)&&visibleIds.has(r.a)&&visibleIds.has(r.b)).map(r=>select(r,['id','a','b','status','minutes'])),actions:legalActions(base,state,access),journal:state.journal.map(e=>select(e,['schemaVersion','id','revision','actorId','action','locationId','checks','facts','changes','combat','elapsedSeconds','source']))};
+ return {schemaVersion:1,campaignId:state.id,revision:state.delta.revision,actorId:actor.id,locationId:actor.locationId,elapsedSeconds:state.elapsedSeconds,sheet:s,derived:derived(s),effectiveAP:conditionProfile(s).ap,...(state.module?{module:moduleView(state.module)}:{}),nodes,routes:Object.values(w.routes).filter(r=>isVisible(r,known)&&visibleIds.has(r.a)&&visibleIds.has(r.b)).map(r=>select(r,['id','a','b','status','minutes'])),actions:legalActions(base,state,access),journal:state.journal.map(e=>select(e,['schemaVersion','id','revision','actorId','action','moduleId','moduleVersion','intentId','locationId','checks','facts','changes','combat','elapsedSeconds','source']))};
 }
 // Confirmed events only; private graph packet for analyst. No automatic NPC reaction.
 export function impactForConfirmed(base,state,access,eventId,relations=[]){
@@ -144,7 +149,7 @@ export function prepareWindow(base,state,access,{maxDepth=3,maxEdges=40}={}){
    row.choices.push({command,previewHash:r.previewHash,eventId:event.id,nextId:childId});
    // Inputs to trusted narration worker contain only branch-local player-visible facts.
    // Do not include seed, private sheets, other branches or authoritative mutable state.
-   jobs.push({schemaVersion:1,kind:'narration-job',status:'queued',resolution:'speculative',campaignId:state.id,baseRevision:state.delta.revision,branchId:childId,eventId:event.id,actorId:state.actorId,locationId:event.locationId,rulesVersion:VERSION,audience:'player:'+state.actorId,input:{event,before:{locationId:before.locationId,elapsedSeconds:before.elapsedSeconds},after:{locationId:after.locationId,elapsedSeconds:after.elapsedSeconds}},checkIds:event.checks.map(c=>c.id)});
+   jobs.push({schemaVersion:1,kind:'narration-job',status:'queued',resolution:'speculative',campaignId:state.id,baseRevision:state.delta.revision,branchId:childId,eventId:event.id,actorId:state.actorId,locationId:event.locationId,rulesVersion:VERSION,...(event.moduleId?{moduleId:event.moduleId,moduleVersion:event.moduleVersion}:{}),audience:'player:'+state.actorId,input:{event,before:{locationId:before.locationId,elapsedSeconds:before.elapsedSeconds},after:{locationId:after.locationId,elapsedSeconds:after.elapsedSeconds}},checkIds:event.checks.map(c=>c.id)});
    queue.push({id:childId,state:r.next,depth:n.depth+1});
   }
  }
