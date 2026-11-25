@@ -1,0 +1,23 @@
+{
+  "id": "act-20261125-narrative-art-atlas-001",
+  "date": "2026-11-25",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Atlas narrativo persistente y dirección artística preferida",
+  "summary": "Decisión del usuario: regiones fijas, layouts cenitales con hotspots, interiores privados opcionales, simulación centrada en aventura y estampas editoriales animables. Cuatro referencias visuales nuevas preferidas frente a ejemplos previos. No hay cambios de motor ni canon.",
+  "changed": [
+    "vault-site/public/docs/narrative-atlas-art-direction.md",
+    "vault-site/public/docs/art-references/preferred-20261125.webp",
+    "vault-site/public/data/catalog.json"
+  ],
+  "next": "Completar enlace a originales y vídeos; coordinar proyección autorizada del atlas y reutilización de assets en el lector. No implementar simulación cotidiana ni VTT interior por defecto.",
+  "source": "https://pocketdm-prototipos.web.app/docs/narrative-atlas-art-direction.md",
+  "nodeIds": [
+    "doc_0010",
+    "doc_0016",
+    "doc_0015",
+    "doc_0023",
+    "doc_0914"
+  ]
+}

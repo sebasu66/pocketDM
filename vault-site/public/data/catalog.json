@@ -1,6 +1,6 @@
 {
   "version": "pocketdm-vault-v1",
-  "updatedAt": "2026-11-24",
+  "updatedAt": "2026-11-25",
   "source": "GDD PocketDM y README del paquete 2026-11-23; auditoría local 2026-11-24",
   "nodes": [
     {
@@ -465,6 +465,10 @@
         {
           "type": "actualizado_por",
           "target": "doc_0908"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0914"
         }
       ],
       "source": {
@@ -492,6 +496,10 @@
         {
           "type": "apoya",
           "target": "doc_0004"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0914"
         }
       ],
       "source": {
@@ -1253,6 +1261,47 @@
       "source": {
         "label": "Backlog narrador",
         "href": "/docs/narrator-backlog.md"
+      }
+    },
+    {
+      "id": "doc_0914",
+      "type": "document",
+      "name": "Atlas narrativo persistente y direccion artistica editorial",
+      "category": "Narrativa / Arte",
+      "summary": "Regiones fijas, mapas de asentamientos con hotspots, estampas de localizacion e ilustraciones vivas; referencias visuales preferidas.",
+      "description_md": "# Decision del usuario 25/11/2026\n\nGenerar cada region una vez. Usar cartografia como estructura, no como arte final. Interiores de referencia privados, no VTT. Simular aventuras y consecuencias, no rutinas exhaustivas. El libro muestra estampas pictoricas y animaciones ambientales. Cuatro nuevas referencias preferidas; ver documento y muestra visual.",
+      "status": "active",
+      "tags": [
+        "atlas",
+        "arte",
+        "narrativa",
+        "libro"
+      ],
+      "links": [
+        {
+          "type": "relacionado_con",
+          "target": "doc_0010"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0016"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0015"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0023"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0020"
+        }
+      ],
+      "source": {
+        "label": "Decision de diseno y referencias visuales",
+        "href": "/docs/narrative-atlas-art-direction.md"
       }
     }
   ]
