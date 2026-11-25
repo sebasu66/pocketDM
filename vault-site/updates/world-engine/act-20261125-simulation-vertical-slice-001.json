@@ -1,0 +1,17 @@
+{
+  "id": "act-20261125-simulation-vertical-slice-001",
+  "date": "2026-11-25",
+  "area": "World Engine / Grafo",
+  "owner": "Equipo de simulación",
+  "status": "en-progreso",
+  "title": "H01: prioridad de corte vertical desde Stormkeep",
+  "summary": "Decisión del usuario: tres personajes pregenerados, Stormkeep como hogar, primera expedición vecina y soporte mecánico por orden de escenas. Posponer simulación cotidiana, catálogo genérico y creación libre. Se ordena el trabajo VS-01 a VS-06; no se declara código nuevo ni H01 cerrado.",
+  "changed": [
+    "vault-site/public/docs/qa-playable-stormkeep.md"
+  ],
+  "next": "VS-01: integrar selección de las tres fichas predefinidas con la apertura real del libro, estado persistente y prueba de recuperación. Narrador proporciona perfiles y primera escena; validador revisa criterios. Después avanzar a diálogo y preparación, no a logística.",
+  "source": "https://github.com/sebasu66/pocketDM/pull/5",
+  "nodeIds": [
+    "doc_0915"
+  ]
+}

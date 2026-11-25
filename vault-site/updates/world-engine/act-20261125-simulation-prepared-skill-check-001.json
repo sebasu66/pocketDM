@@ -1,0 +1,22 @@
+{
+  "id": "act-20261125-simulation-prepared-skill-check-001",
+  "date": "2026-11-25",
+  "area": "World Engine / Grafo",
+  "owner": "Equipo de simulación",
+  "status": "en-revision",
+  "title": "H01: skill checks pregenerados en ramas y registro para el libro",
+  "summary": "Lee habilidad efectiva y dificultad, resuelve D100 antes de selección, conserva rama privada en Firestore emulado y confirma sin tirar de nuevo. Continuaciones por éxito/fallo; caballo de prueba no canónico. 110/110 pruebas.",
+  "changed": [
+    "vault-site/simulation/skill-check.mjs",
+    "vault-site/simulation/module-runtime.mjs",
+    "vault-site/simulation/campaign-state.mjs",
+    "vault-site/simulation/firestore-campaign-store.mjs",
+    "vault-site/simulation/test-module-runtime.mjs"
+  ],
+  "next": "Narrador: usar skill-check-resolved y checks del evento con book-skill-check; prueba conjunta con las tres fichas y primeras escenas reales. No crear lector alternativo.",
+  "source": "https://github.com/sebasu66/pocketDM/pull/5",
+  "nodeIds": [
+    "doc_0915",
+    "doc_0909"
+  ]
+}

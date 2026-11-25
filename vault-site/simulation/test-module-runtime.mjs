@@ -138,3 +138,46 @@ test('same authoring intent may bind to different sites; distinct terminal recei
  assert.ok(options(base,current,access).includes('withdraw-site'));assert.ok(!options(base,current,access).includes('withdraw'));assert.ok(!options(base,current,access).includes('close-impossible'));
  const r=apply(base,current,access,'close');assert.equal(playerState(base,r.state,access).module.endingId,'transfer-completed');assert.equal(r.receipt.event.facts[0].endingId,'transfer-completed');
 });
+
+test('horse check: prepare the chosen path, store D100, then commit without rolling again',()=>{
+ const d=definition();
+ const skill=(id,skillId,difficulty)=>intent(id,'skill-check',{challengeId:'test.horse',check:{skillId,difficulty,reason:'Caballo desbocado; prueba de integracion.'}});
+ d.intents.push(skill('catch','brawn','hard'),skill('dodge','evade','standard'));
+ d.intents.push(intent('close-catch','module-close',{requires:['catch'],requiresSuccess:['catch'],endingId:'caught'}));
+ d.intents.push(intent('close-miss','module-close',{requires:['catch'],requiresFailure:['catch'],endingId:'missed'}));
+ let passed=false,failed=false;
+ for(let k=0;k<30&&!(passed&&failed);k++){
+  const {base,state,access}=fixture(d,'horse-demo','horse-'+k),active=apply(base,state,access,'accept').state;
+  const w=prepareWindow(base,active,{...access,role:'worker'},{maxDepth:1,maxEdges:100});
+  const edge=w.nodes[0].choices.find(e=>e.command.intentId==='catch');
+  const job=w.jobs.find(j=>j.eventId===edge.eventId),check=job.input.event.checks[0];
+  assert.equal(check.base,26);assert.equal(check.target,17);assert.equal(check.skillId,'brawn');
+  assert.throws(()=>confirmCommand(base,active,access,edge.command),/must be prepared/);
+  const saved=JSON.parse(JSON.stringify(w.preparedTransitions[edge.command.commandId]));
+  const bad=structuredClone(saved);bad.result.event.checks[0].roll=100;
+  assert.throws(()=>confirmCommand(base,active,access,edge.command,{preparedTransition:bad}),/corrupted/);
+  const r=confirmCommand(base,active,access,edge.command,{preparedTransition:saved,expectedPreviewHash:edge.previewHash});
+  assert.deepEqual(r.receipt.event.checks,[check]);assert.equal(r.state.journal.at(-1).checks[0].roll,check.roll);
+  assert.ok(!options(base,r.state,access).includes('dodge'));assert.ok(!options(base,r.state,access).includes('catch'));
+  assert.equal(confirmCommand(base,r.state,access,edge.command).duplicate,true);
+  const success=['success','critical'].includes(check.outcome);
+  assert.equal(options(base,r.state,access).includes('close-catch'),success);
+  assert.equal(options(base,r.state,access).includes('close-miss'),!success);
+  assert.equal(apply(base,r.state,access,success?'close-catch':'close-miss').state.module.endingId,success?'caught':'missed');
+  assert.ok(!JSON.stringify(playerState(base,r.state,access)).includes('preparedTransitions'));
+  if(success)passed=true;else failed=true;
+ }assert.ok(passed&&failed);
+});
+
+test('Firestore stores prepared skill branches; a new client selects without providing a roll', {skip:!process.env.FIRESTORE_EMULATOR_HOST},async()=>{
+ const d=definition();d.intents.push(intent('catch','skill-check',{challengeId:'horse',check:{skillId:'brawn',difficulty:'hard',reason:'Prueba de aventura.'}}));
+ const {base,state,access}=fixture(d,'qa-skill-'+randomUUID()),principal={...access,uid:'fixture-owner'},store=new FirestoreCampaignStore();
+ await store.create(base,state,{ownerUid:principal.uid});const v=await store.view(principal);
+ await store.confirm(principal,{campaignId:v.campaignId,actorId:v.actorId,commandId:'accept',expectedRevision:v.revision,action:'module-intent',intentId:'accept'});
+ const window=await store.prepare({...principal,role:'worker'},{maxDepth:1,maxEdges:100});
+ const edge=window.nodes[0].choices.find(x=>x.command.intentId==='catch'),job=window.jobs.find(x=>x.eventId===edge.eventId);
+ const fresh=new FirestoreCampaignStore(),r=await fresh.confirm(principal,edge.command);
+ assert.deepEqual(r.receipt.event.checks,job.input.event.checks);
+ assert.equal((await fresh.confirm(principal,edge.command)).duplicate,true);
+ assert.ok(!JSON.stringify(r).includes('private-prepared-transition'));
+});

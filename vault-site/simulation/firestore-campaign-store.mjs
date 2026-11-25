@@ -60,14 +60,26 @@ export class FirestoreCampaignStore {
  async prepare(principal,budget){
   ok(principal?.role==='worker','Worker access required');
   const row=await this.read(principal.campaignId);this.authorize(row,principal,principal.campaignId);
-  return prepareWindow(row.base,row.state,{campaignId:principal.campaignId,actorId:principal.actorId,role:'worker'},budget);
+  const window=prepareWindow(row.base,row.state,{campaignId:principal.campaignId,actorId:principal.actorId,role:'worker'},budget);
+  // The worker stores each precomputed skill transition privately, before selection.
+  for(const [commandId,transition] of Object.entries(window.preparedTransitions)){
+   const path=this.path(principal.campaignId)+'/prepared/'+commandId;
+   await this.request(':commit',{method:'POST',body:{writes:[{update:{name:this.prefix+path,fields:{transition:encode(transition)}}}]}});
+  }
+  return window;
  }
  async confirm(principal,command,{expectedPreviewHash}={}){
   ok(principal.role==='player','Player access required');
   for(let attempt=0;attempt<8;attempt++){
    const row=await this.read(principal.campaignId);this.authorize(row,principal,principal.campaignId);
    const access={campaignId:principal.campaignId,actorId:principal.actorId,role:'player'};
-   const r=confirmCommand(row.base,row.state,access,command,{expectedPreviewHash});
+   let preparedTransition;
+   if(command?.action==='module-intent'&&row.state.module?.intents[command.intentId]?.capability==='skill-check'&&!Object.hasOwn(row.state.receipts,command.commandId)){
+    ok(id(command.commandId),'Invalid command ID');
+    try{const doc=await this.request(this.path(principal.campaignId)+'/prepared/'+command.commandId);preparedTransition=decode(doc.fields.transition)}
+    catch(e){if(e.httpStatus===404)throw Error('Skill check must be prepared before confirmation');throw e}
+   }
+   const r=confirmCommand(row.base,row.state,access,command,{expectedPreviewHash,preparedTransition});
    if(!r.duplicate){
     try{await this.write(principal.campaignId,row.base,r.state,row.ownerUid,{updateTime:row.version})}
     catch(e){if([409,412].includes(e.httpStatus)||e.message==='FAILED_PRECONDITION'||e.message==='ABORTED')continue;throw e}
