@@ -1269,7 +1269,7 @@
       "name": "Atlas narrativo persistente y direccion artistica editorial",
       "category": "Narrativa / Arte",
       "summary": "Regiones fijas, mapas de asentamientos con hotspots, estampas de localizacion e ilustraciones vivas; referencias visuales preferidas.",
-      "description_md": "# Decision del usuario 25/11/2026\n\nGenerar cada region una vez. Usar cartografia como estructura, no como arte final. Interiores de referencia privados, no VTT. Simular aventuras y consecuencias, no rutinas exhaustivas. El libro muestra estampas pictoricas y animaciones ambientales. Cuatro nuevas referencias preferidas; ver documento y muestra visual.\n\nCuatro referencias adicionales de escenarios a resolución completa: [galería de bosque, callejón, herrería y templo](/docs/art-references/escenarios-20261125.html).",
+      "description_md": "# Decision del usuario 25/11/2026\n\nGenerar cada region una vez. Usar cartografia como estructura, no como arte final. Interiores de referencia privados, no VTT. Simular aventuras y consecuencias, no rutinas exhaustivas. El libro muestra estampas pictoricas y animaciones ambientales. Cuatro nuevas referencias preferidas; ver documento y muestra visual.\n\nCuatro referencias adicionales de escenarios a resolución completa: [galería de bosque, callejón, herrería y templo](/docs/art-references/escenarios-20261125.html).\n\n[Galería completa de ocho originales](/docs/art-references/escenarios-20261125.html): cuatro referencias editoriales principales y cuatro complementarias de escenarios.",
       "status": "active",
       "tags": [
         "atlas",

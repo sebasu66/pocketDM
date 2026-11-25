@@ -1,0 +1,19 @@
+{
+  "id": "act-20261125-primary-editorial-art-001",
+  "date": "2026-11-25",
+  "area": "Arte / Assets",
+  "owner": "Agente narrador / presentación",
+  "status": "decidido",
+  "title": "Originales de las cuatro referencias editoriales principales",
+  "summary": "Galería unificada de ocho referencias con grupos A (escena narrativa, retrato NPC, plaza, puente) y B (escenarios). Cuatro PNG adicionales íntegros y dimensiones comprobadas; sin asignación canónica.",
+  "changed": [
+    "vault-site/public/docs/art-references/",
+    "vault-site/public/docs/narrative-atlas-art-direction.md",
+    "vault-site/public/data/catalog.json"
+  ],
+  "next": "Usar grupo A como referencia editorial prioritaria y B para ambientes; generar arte según identidad y localización aprobadas.",
+  "source": "https://pocketdm-prototipos.web.app/docs/art-references/escenarios-20261125.html",
+  "nodeIds": [
+    "doc_0914"
+  ]
+}

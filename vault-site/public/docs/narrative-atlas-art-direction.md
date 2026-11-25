@@ -27,7 +27,7 @@ Las estampas son cuadros de lugares vistos desde el punto de vista de un viajero
 - Integrar cuadros estáticos y escenas ambientales animadas discretas tipo periódico mágico de Harry Potter: cámara principalmente fija, fuego, humo, nieve, telas, pequeñas acciones ambientales. No hacer de cada visita una cinemática. Propuesta técnica: vídeo corto en bucle silenciado, poster estático de respaldo, respetar movimiento reducido; reutilizar por lugar y estado, crear variante solo si cambia de modo relevante.
 - Recursos distintos: plano estructural del atlas; referencia privada opcional; estampa de localización; retrato o escena editorial. El libro/revista presenta imágenes y narración, no una cuadrícula interior. Composición con imágenes intercaladas, máscaras/bordes orgánicos y posibles banners artísticos con texto integrado para ocasiones especiales; texto narrativo normal accesible y adaptable. La implementación del lector sigue siendo compartida.
 - Imágenes anteriores de ejemplo (secundarias, no objetivo de estilo): paisaje_invernal_2k.png, Image_3.png, taberna_2k.png. Ejemplos de animación proporcionados: Boticari Shop Interior Day..mp4, Camp Bonfire Night.mp4, tabern-interior.mp4, templo_exterior_dia.mp4, Blacksmith interior day..mp4. Se registran nombres de origen, no se afirma que los clips hayan sido inspeccionados ni publicados.
-- Estado de archivos: muestra reducida de las cuatro nuevas referencias incorporada; originales a resolución completa, imágenes anteriores y MP4 pendientes de enlace o copia verificable. No utilizar material como arte canónico sin aprobación de localización/identidad.
+- Estado de archivos: muestra reducida de las cuatro nuevas referencias incorporada; originales principales y complementarios ya incorporados (ver grupos A y B); otras imágenes anteriores y MP4 pendientes de enlace o copia verificable. No utilizar material como arte canónico sin aprobación de localización/identidad.
 
 ## Referencias adicionales de escenarios · 25/11/2026
 Cuatro nuevas imágenes aportadas por el usuario. [Galería con los originales a resolución completa](/docs/art-references/escenarios-20261125.html).
@@ -40,3 +40,15 @@ Cuatro nuevas imágenes aportadas por el usuario. [Galería con los originales a
 | [Templo exterior](/docs/art-references/templo_exterior.png) | Arquitectura gótica monumental, escalera ceremonial, cielo rojo y focos cálidos. 2048 × 1153. |
 
 Se suman al estilo preferido: fantasía oscura pictórica, masas de luz y sombra, acentos cálidos intensos, perspectiva ambiental, textura irregular. El disco solar o lunar monumental es un recurso compositivo, no una propiedad astronómica del mundo. El templo monumental no representa automáticamente un edificio del pequeño asentamiento Stormkeep; la arquitectura debe ajustarse al lugar canónico. Los PNG se conservan sin edición.
+
+## A · Originales de las cuatro referencias editoriales principales
+[Galería completa de ocho referencias, con prioridad editorial](/docs/art-references/escenarios-20261125.html).
+
+| Original recibido | Referencia principal | Clasificación y lectura estética |
+|---|---|---|
+| image(2).png | [Mujer herida en el bosque](/docs/art-references/mujer-herida-bosque.png) | Escena narrativa con personaje. Tensión íntima, luz cálida del farol frente al bosque azul y luna monumental. 1535 × 1024. |
+| herrero_var1(2).png | [Herrero](/docs/art-references/herrero-retrato.png) | Retrato de NPC. Silueta robusta, oficio visible, pincelada erosionada, contraluz naranja de la forja. 1194 × 1317. |
+| plaza(1).png | [Plaza del Cuervo Gris](/docs/art-references/plaza-cuervo-gris.png) | Estampa de localización. Pozo, cuervos, niebla azul y disco bermellón; profundidad con siluetas. 1672 × 941. |
+| pueblo(2).png | [Puente y entrada fortificada](/docs/art-references/puente-pueblo.png) | Estampa de localización. Perspectiva de llegada, estatua monumental, arquitectura escalonada y cielo rojo. 1672 × 941. |
+
+El grupo A tiene prioridad como objetivo editorial; las cuatro estampas ambientales previas forman el grupo B, complementario. Los ocho originales PNG están disponibles. No se asignan identidades ni localizaciones canónicas automáticamente. El retrato vertical se conserva sin recortar. Las dimensiones corresponden a los archivos recibidos y comprobados.
