@@ -1,0 +1,18 @@
+{
+  "id": "act-20261125-narrative-module-001",
+  "date": "2026-11-25",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-progreso",
+  "title": "Primer módulo de Stormkeep: argumento y elenco",
+  "summary": "N01/N02/N09: preparar propuesta original de aventura finita, partir del GDD y las entidades del corredor piloto, sin consolidar canon ni exponer secretos. No modificar lector ni motor.",
+  "changed": [
+    "vault-site/public/docs/stormkeep-module-proposal.md"
+  ],
+  "next": "Revisar premisa, perfiles públicos, dependencias y desenlaces de diseño con simulación.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0020",
+    "doc_0021"
+  ]
+}
