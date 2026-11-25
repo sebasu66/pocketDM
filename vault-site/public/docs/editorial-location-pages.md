@@ -1,0 +1,9 @@
+# Libro de campaña: localizaciones editoriales (2026-11-25)
+Estado: candidato integrado en el lector real, no promoción de producción.
+Ruta /libro/?view=locations; entrada desde el botón ⌖ del libro y navegación Localizaciones.
+Conserva las dos páginas de apertura, la crónica/combate y los índices existentes.
+Presentación: panorámica completa y texto a la derecha. Plaza usa la extensión suministrada; forja y candidatos usan el original con velo cromático.
+Escena: imagen fija a altura completa, recorte calculado del alfa del PNG quemado suministrado (sin banda quemada), texto con exclusión CSS actualizada en scroll. Una o dos columnas según legibilidad, orden de lectura de izquierda a derecha, justificado, sangría 2.4em, capitular de dos líneas, interlineado 1.6, Palatino 16px, Germania One hasta 61px, tinta 96%, sombra y contorno, moldura vectorial. Papel por lugar con textura del libro. Plaza #132e51/#da3107; forja #252b32/#efa76b.
+Fuentes originales de plaza y herrería preservadas. Nuevas imágenes rectangulares de muelles y taberna son candidatas, no canon: generadas con referencia visual directa de plaza (exterior) o herrería (interior), Flux.3 Image; descartado primer puerto demasiado realista. Referencias de estilo preferentes: las obras originales del usuario. Evitar fotorrealismo y exceso de detalle, mantener grandes masas cromáticas, sombras y marcas de pincel; no quemar el arte: la máscara es independiente.
+Las páginas no son eventos confirmados. El componente admite párrafos como datos; conectar la proyección confirmada del motor con el identificador de localización cuando el contrato lo permita. No se crea estado de campaña.
+Pruebas: scripts/test-location-editorial-browser.mjs (tres resoluciones y 25 párrafos para scroll); scripts/test-edition-browser.mjs (seis resoluciones, navegación anterior); scripts/test-narrative-browser.mjs (tiradas confirmadas). Android físico pendiente.

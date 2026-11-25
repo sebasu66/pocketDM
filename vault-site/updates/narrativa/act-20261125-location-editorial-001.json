@@ -1,0 +1,22 @@
+{
+  "id": "act-20261125-location-editorial-001",
+  "date": "2026-11-25",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Localizaciones editoriales en el lector real",
+  "summary": "Presets de plaza y forja incorporados al libro, dos modos y recorte original, composición de párrafo/columnas, moldura y tinta. Dos candidatos de arte generados con imágenes originales como referencia directa. Navegación y pruebas de tiradas preservadas.",
+  "changed": [
+    "vault-site/public/libro/edition/location-pages.mjs",
+    "vault-site/public/libro/edition/location-pages.css",
+    "vault-site/public/libro/reader.mjs",
+    "vault-site/public/docs/editorial-location-pages.md",
+    "vault-site/scripts/test-location-editorial-browser.mjs"
+  ],
+  "next": "Revisión visual de los dos candidatos; conectar escenas a proyección confirmada y probar Android físico; promoción de producción según QA.",
+  "source": "https://github.com/sebasu66/pocketDM/blob/feature/narrative-coordination-20261124/vault-site/public/docs/editorial-location-pages.md",
+  "nodeIds": [
+    "doc_0914",
+    "doc_0913"
+  ]
+}
