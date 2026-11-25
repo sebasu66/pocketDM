@@ -7,6 +7,7 @@ import {validateSheet,derived} from '../public/laboratorio/character-sheet.mjs';
 import {conditionProfile} from '../public/laboratorio/conditions.mjs';
 import {simulateDuel} from '../public/laboratorio/duel.mjs';
 import {simulateGroup} from '../public/laboratorio/group-combat.mjs';
+import {projectCombatReplay} from './combat-replay.mjs';
 import {GRADES} from '../public/laboratorio/percentile.mjs';
 import {advanceTrauma,isDead} from '../public/laboratorio/trauma.mjs';
 import {SKILL_METADATA} from './skill-check.mjs';
@@ -109,7 +110,7 @@ function resolve(base,state,access,c){
  const duel=enc.participants?simulateGroup(enc.participants.map(p=>({...p,character:sheetOf(w,p.actorId)})),{id:'combat-'+hash(scope).slice(0,24),roll,maxRounds:enc.maxRounds,initialRange:enc.initialRange,surprisedIds:enc.surprisedIds,limbLifeThreat:enc.limbLifeThreat}):simulateDuel(sheet,sheetOf(w,enc.opponentId),{seed:'private-provider',roll,tactical:true,maxRounds:enc.maxRounds,eventPrefix:'combat-'+hash(scope).slice(0,24)+'.'});
  for(const s of duel.actors)entities[s.id]=replaceSheet(w.entities[s.id],s);
  for(const e of duel.events)for(const ch of e.checks??[])checks.push(checkProjection(ch,id));
- combat={profile:duel.mode,encounterId:enc.id,rounds:duel.rounds,actorIds:duel.actors.map(a=>a.id),...(enc.participants?{sides:duel.sides,order:duel.order,initiative:duel.initiative,winningSide:duel.winningSide,withdrawalRequested:duel.withdrawalRequested,turnTrace:duel.events.map(e=>({round:e.round,actorId:e.actorId,targetId:e.targetId??null,kind:e.kind,remaining:e.ap}))}:{}),apTrace:duel.events.filter(e=>Array.isArray(e.ap)).map(e=>({round:e.round,kind:e.kind,remaining:[...e.ap]}))};
+ combat={replay:projectCombatReplay(duel,id),profile:duel.mode,encounterId:enc.id,rounds:duel.rounds,actorIds:duel.actors.map(a=>a.id),...(enc.participants?{sides:duel.sides,order:duel.order,initiative:duel.initiative,winningSide:duel.winningSide,withdrawalRequested:duel.withdrawalRequested,turnTrace:duel.events.map(e=>({round:e.round,actorId:e.actorId,targetId:e.targetId??null,kind:e.kind,remaining:e.ap}))}:{}),apTrace:duel.events.filter(e=>Array.isArray(e.ap)).map(e=>({round:e.round,kind:e.kind,remaining:[...e.ap]}))};
  seconds=duel.elapsed;next.completedEncounters[enc.id]={eventId:id,outcome:duel.outcome,winner:duel.winner};
  fact('duel-resolved','Encuentro resuelto.',{encounterId:enc.id,outcome:duel.outcome,winnerId:duel.winner,rounds:duel.rounds,...(enc.participants?{winningSide:duel.winningSide,withdrawalRequested:duel.withdrawalRequested}:{})});
  }

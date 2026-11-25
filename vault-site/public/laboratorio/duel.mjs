@@ -1,6 +1,7 @@
 import {validateSheet,equipped,armorAt} from './character-sheet.mjs';
 import {conditionProfile} from './conditions.mjs';
 import {woundAfterHit,advanceTrauma,isDead} from './trauma.mjs';
+import {weaponView,replayRecorder} from './combat-log.mjs';
 import {GRADES,effectiveSkill,gradeOf,opposed,differential,contestTargets,parryDamage,successful} from './percentile.mjs';
 import {engagement,rangeProfile,preferredPosition,changeRange,canChangeRange,chooseExposedLocation,gripValid,struggle} from './engagement.mjs';
 const clone=structuredClone;
@@ -75,13 +76,13 @@ export function exchange(attacker,defender,{roll,id='exchange',defense='auto',de
   newGrip={ownerId:a.id,targetId:b.id,weaponId:aw.id,locationId:resolved.damage.locationId,attack:clone(ac)};
   effects.push({id:'grip',actorId:a.id,locationId:newGrip.locationId});rangeChange='short';
  }
- return {attacker:a,defender:b,checks,attack:ac,defenseCheck:dc,defense:mode,evaded,...resolved,entitlement,surpriseEffect,effect,effects,rangeChange,newGrip,range:context?{position:context.position,cramped:ar.cramped,weaponSize:aw.size,weaponDice:aw.damage}:null,cost:{attack:1,defense:dc?1:0},blocked:[]};
+ return {attacker:a,defender:b,weapon:weaponView(aw),defenseWeapon:mode==='parry'?weaponView(bw):null,hit,checks,attack:ac,defenseCheck:dc,defense:mode,evaded,...resolved,entitlement,surpriseEffect,effect,effects,rangeChange,newGrip,range:context?{position:context.position,cramped:ar.cramped,weaponSize:aw.size,weaponDice:aw.damage}:null,cost:{attack:1,defense:dc?1:0},blocked:[]};
 }
 // The bite remains in the same location. One proactive AP per continuation; no fresh hit roll.
 // The initial opposed attack is retained for wound resistance. Armour still applies in this profile.
 export function continueGrip(owner,victim,grip,{roll,id='grip',limbLifeThreat=false,roundSeconds=5}){const a=clone(owner),b=clone(victim),checks=[];
  const result=damageResolution(a,b,{aw:equipped(a),bw:equipped(b),mode:'none',dc:null,ac:grip.attack,roll,id,locationId:grip.locationId,checks,limbLifeThreat,roundSeconds});
- return {attacker:a,defender:b,checks,...result,referenceAttackId:grip.attack.id,referenceAttackRoll:grip.attack.roll};
+ return {attacker:a,defender:b,weapon:weaponView(equipped(a)),hit:true,checks,...result,referenceAttackId:grip.attack.id,referenceAttackRoll:grip.attack.roll};
 }
 export function simulateDuel(a0,b0,{seed='demo-001',maxRounds=12,roll=labRoller(seed),trace=true,tactical=false,initialRange='long',surprisedIds=[],limbLifeThreat=false,roundSeconds=5,eventPrefix='',combatDifficulties=null}={}){
  if(!Array.isArray(surprisedIds)||surprisedIds.some(id=>![a0.id,b0.id].includes(id))||!Number.isInteger(roundSeconds)||roundSeconds<=0)throw Error('Invalid encounter context');
@@ -90,64 +91,66 @@ export function simulateDuel(a0,b0,{seed='demo-001',maxRounds=12,roll=labRoller(
  const context=tactical?engagement(a0,b0,initialRange):null;
  const initiativeDice=[roll(10,'initiative.'+actors[0].id,0),roll(10,'initiative.'+actors[1].id,0)],initiative=actors.map((s,i)=>conditionProfile(s).initiative+initiativeDice[i]-(surprisedIds.includes(s.id)?10:0)),order=initiative[0]>=initiative[1]?[0,1]:[1,0];
  let winner=null,outcome='unresolved',effort=[0,0];const flatFooted=new Set(surprisedIds),firstAttack=new Set(surprisedIds);
- const record=(e)=>{if(trace)events.push(e)};
+ const replay=trace?replayRecorder(actors):null;let cycleIndex=null;
+ const record=(e)=>{if(trace)events.push(replay.record({sequence:events.length,cycle:cycleIndex,...e},actors))};
  const recordDamage=(i,r)=>{counts.damage[i]+=r.damage?.net??0;counts.wounds[i]+=Number(r.wound?.severity==='serious'||r.wound?.severity==='major')};
  for(round=1;round<=maxRounds;round++){
   if(actors.some(s=>s.state.fear==='flee'||isOut(s)))break;
   let ap=actors.map(s=>conditionProfile(s).ap);
   for(let cycle=0;cycle<12&&ap.some(x=>x>0);cycle++){
-   let progress=false;
+   let progress=false;cycleIndex=cycle;
    for(const i of order){const j=1-i;if(actors.some(isOut))break;if(ap[i]<=0)continue;
     let s=actors[i],other=actors[j];const id=eventPrefix+'r'+round+'c'+cycle+'a'+i;
     flatFooted.delete(s.id);
-    if(round===1&&surprisedIds.includes(s.id)){ap[i]--;progress=true;record({round,actor:s.name,kind:'wait',message:'Sorpresa: sin accion ofensiva',ap:[...ap]});continue;}
+    if(round===1&&surprisedIds.includes(s.id)){ap[i]--;progress=true;record({round,actorId:s.id,actor:s.name,kind:'wait',message:'Sorpresa: sin accion ofensiva',ap:[...ap]});continue;}
     if(context?.grip&&!gripValid(context,actors))context.grip=null;
     const localCheck=(actor,p,target,role)=>check(actor,p,target,roll,role,id);
     if(context?.grip?.targetId===s.id){
      const r=struggle(s,other,context,localCheck);ap[i]--;progress=true;if(r.released){context.grip=null;counts.escapes++}
      if(s.state.stunTurns>0)s.state.stunTurns--;
-     record({round,actor:s.name,target:other.name,kind:'struggle',message:r.message,checks:r.checks,ap:[...ap]});continue;
+     record({round,actorId:s.id,actor:s.name,targetId:other.id,target:other.name,kind:'struggle',released:r.released,message:r.message,checks:r.checks,ap:[...ap]});continue;
     }
-    if(s.state.prone&&!s.state.stunTurns&&conditionProfile(s,'athletics','stand').move>0){s.state.prone=false;ap[i]--;progress=true;record({round,actor:s.name,kind:'stand',message:'Recupera la postura',ap:[...ap]});continue}
+    if(s.state.prone&&!s.state.stunTurns&&conditionProfile(s,'athletics','stand').move>0){s.state.prone=false;ap[i]--;progress=true;record({round,actorId:s.id,actor:s.name,kind:'stand',message:'Recupera la postura',ap:[...ap]});continue}
     const p=conditionProfile(s);
-    if(!p.legal){if(s.state.stunTurns>0)s.state.stunTurns--;ap[i]--;progress=true;record({round,actor:s.name,kind:'wait',message:p.blocked.join('; '),ap:[...ap]});continue}
+    if(!p.legal){if(s.state.stunTurns>0)s.state.stunTurns--;ap[i]--;progress=true;record({round,actorId:s.id,actor:s.name,kind:'wait',message:p.blocked.join('; '),ap:[...ap]});continue}
     if(context?.grip?.ownerId===s.id){
      const r=continueGrip(s,other,context.grip,{roll,id,limbLifeThreat,roundSeconds});actors[i]=r.attacker;actors[j]=r.defender;ap[i]--;progress=true;counts.gripTicks++;recordDamage(i,r);
-     const {attacker,defender,...details}=r;record({round,actor:s.name,target:other.name,kind:'grip-damage',message:'Mantiene la mordida',...details,ap:[...ap]});continue;
+     const {attacker,defender,...details}=r;record({round,actorId:s.id,actor:s.name,targetId:other.id,target:other.name,kind:'grip-damage',message:'Mantiene la mordida',...details,ap:[...ap]});continue;
     }
     if(context){
      const desired=preferredPosition(s,other,context.position),rp=rangeProfile(s,other,context.position);
      if(desired!==context.position&&canChangeRange(s,context)){
-      const r=changeRange(s,other,context,{resist:ap[j]>0&&!flatFooted.has(other.id),check:localCheck,desired});
+      const beforePosition=context.position,r=changeRange(s,other,context,{resist:ap[j]>0&&!flatFooted.has(other.id),check:localCheck,desired});
       ap[i]-=r.cost[0];ap[j]-=r.cost[1];progress=true;if(r.changed){context.position=r.position;counts.rangeChanges++}
-      record({round,actor:s.name,target:other.name,kind:'range',message:r.message,checks:r.checks,ap:[...ap],position:context.position});continue;
+      record({round,actorId:s.id,actor:s.name,targetId:other.id,target:other.name,kind:'range',message:r.message,checks:r.checks,ap:[...ap],changed:r.changed,beforePosition,position:context.position});continue;
      }
-     if(rp.tooFar){ap[i]--;progress=true;record({round,actor:s.name,kind:'wait',message:'No puede alcanzar al rival',ap:[...ap]});continue}
+     if(rp.tooFar){ap[i]--;progress=true;record({round,actorId:s.id,actor:s.name,kind:'wait',message:'No puede alcanzar al rival',ap:[...ap]});continue}
     }
     if(ap[i]===1&&ap[j]>1&&cycle===0)continue;
     const r=exchange(s,actors[j],{roll,id,defenseAvailable:ap[j]>0&&!flatFooted.has(other.id),context,surpriseBonus:firstAttack.has(other.id),limbLifeThreat,roundSeconds,attackDifficulty:combatDifficulties?.[s.id]?.attack??'standard',defenseDifficulty:combatDifficulties?.[other.id]?.defense??'standard'});if(r.attack)firstAttack.delete(other.id);actors[i]=r.attacker;actors[j]=r.defender;ap[i]-=r.cost.attack;ap[j]-=r.cost.defense;progress=true;counts.attacks+=Number(!!r.attack);counts.success+=Number(successful(r.attack?.outcome));recordDamage(i,r);
     if(context&&r.rangeChange&&context.position!==r.rangeChange){context.position=r.rangeChange;counts.rangeChanges++}
     if(context&&r.newGrip){context.grip=r.newGrip;counts.grips++}
-    if(trace){const {attacker,defender,...details}=r;events.push({round,actor:s.name,target:actors[j].name,kind:'exchange',ap:[...ap],...details})}
+    if(trace){const {attacker,defender,...details}=r;record({round,actorId:s.id,actor:s.name,targetId:actors[j].id,target:actors[j].name,kind:'exchange',ap:[...ap],...details})}
     if(actors.some(isOut))break;
    }
    if(!progress||actors.some(isOut))break;
   }
-  elapsed+=roundSeconds;
-  for(const s of actors)advanceTrauma(s,roundSeconds);
+  elapsed+=roundSeconds;cycleIndex=null;
+  for(const s of actors){const old=JSON.stringify(s.state);advanceTrauma(s,roundSeconds);if(old!==JSON.stringify(s.state))record({round,actorId:s.id,actor:s.name,kind:'round-state',ap:[...ap]})}
   flatFooted.clear();firstAttack.clear();
   if(actors.some(isOut))break;
   for(let i=0;i<2;i++){
-   const s=actors[i];if(s.state.fear==='shaken')s.state.fear='none';
+   const s=actors[i],old=JSON.stringify(s.state);if(s.state.fear==='shaken')s.state.fear='none';
    if(s.state.bleeding)s.state.fatigue=Math.min(9,s.state.fatigue+1);
    effort[i]+=5;
-   if(effort[i]>=Math.ceil(s.attributes.CON/5)*5){effort[i]=0;const p=conditionProfile(s,'endurance','resist'),c=check(s,p,p.target,roll,'fatigue',eventPrefix+'r'+round);if(!successful(c.outcome))s.state.fatigue=Math.min(9,s.state.fatigue+1);record({round,actor:s.name,kind:'fatigue',checks:[c],message:'Fatiga: '+conditionProfile(s).fatigueLabel})}
+   if(effort[i]>=Math.ceil(s.attributes.CON/5)*5){effort[i]=0;const p=conditionProfile(s,'endurance','resist'),c=check(s,p,p.target,roll,'fatigue',eventPrefix+'r'+round);if(!successful(c.outcome))s.state.fatigue=Math.min(9,s.state.fatigue+1);record({round,actorId:s.id,actor:s.name,kind:'fatigue',checks:[c],message:'Fatiga: '+conditionProfile(s).fatigueLabel,ap:[...ap]})}
+   else if(old!==JSON.stringify(s.state))record({round,actorId:s.id,actor:s.name,kind:'round-state',ap:[...ap]})
   }
   if(actors.some(isOut))break;
  }
  const losers=actors.map(s=>isOut(s)||s.state.fear==='flee');
  if(losers[0]&&losers[1])outcome='draw';else if(losers[0]||losers[1]){winner=actors[losers[0]?1:0].id;outcome=actors[losers[0]?0:1].state.fear==='flee'?'withdrawal':isDead(actors[losers[0]?0:1])?'death':'incapacitation'}
- return {mode:tactical?'tactical-lab-v2':'restricted-lab',seed,rounds:Math.ceil(elapsed/roundSeconds),elapsed,initiativeDice,initiative,winner,outcome,withdrawalRequested:actors.filter(s=>s.state.fear==='flee').map(s=>s.id),actors,events,counts,engagement:context?{position:context.position,grip:gripValid(context,actors)?{ownerId:context.grip.ownerId,targetId:context.grip.targetId,locationId:context.grip.locationId}:null}:null};
+ return {mode:tactical?'tactical-lab-v2':'restricted-lab',seed,rounds:Math.ceil(elapsed/roundSeconds),elapsed,initiativeDice,initiative,order:order.map(i=>actors[i].id),...(trace?{initialActors:replay.initial,finalActors:replay.final(actors)}:{}),winner,outcome,withdrawalRequested:actors.filter(s=>s.state.fear==='flee').map(s=>s.id),actors,events,counts,engagement:context?{position:context.position,grip:gripValid(context,actors)?{ownerId:context.grip.ownerId,targetId:context.grip.targetId,locationId:context.grip.locationId}:null}:null};
 }
 export function runBatch(a,b,{count=1000,seed='batch-001',maxRounds=12,tactical=false,initialRange='long'}={}){
  if(!Number.isInteger(count)||count<1||count>10000)throw Error('Muestra inválida');
