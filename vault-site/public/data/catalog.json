@@ -1303,6 +1303,43 @@
         "label": "Decision de diseno y referencias visuales",
         "href": "/docs/narrative-atlas-art-direction.md"
       }
+    },
+    {
+      "id": "doc_0915",
+      "type": "task",
+      "name": "H01: backlog QA para la primera aventura jugable",
+      "category": "Diseño",
+      "summary": "QA-01 a QA-10, prioridades, dependencias, responsables y criterios verificables de integración.",
+      "description_md": "Backlog aprobado por el usuario tras auditoría del 25/11/2026. H01 exige una aventura original de Stormkeep integrada con motor, libro, Ripple y persistencia; las tareas están pendientes y no reemplazan ADV-C ni N01–N09. Consultar documento completo y actividad.",
+      "status": "active",
+      "tags": [
+        "QA",
+        "backlog",
+        "coordinación",
+        "Stormkeep"
+      ],
+      "links": [
+        {
+          "type": "conecta",
+          "target": "doc_0025"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0911"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0913"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0023"
+        }
+      ],
+      "source": {
+        "label": "Backlog QA y criterios H01",
+        "href": "/docs/qa-playable-stormkeep.md"
+      }
     }
   ]
 }

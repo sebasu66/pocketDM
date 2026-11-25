@@ -1,0 +1,20 @@
+{
+  "id": "act-20261125-qa-02-001",
+  "date": "2026-11-25",
+  "area": "Coordinación",
+  "owner": "Simulación + narrador/presentación",
+  "status": "pendiente",
+  "title": "QA-02 · P0 · Integración de mundo, combate, compilador y narrador",
+  "summary": "Tarea aprobada para H01; no implementada. Definir contrato versionado de comandos, eventos confirmados, chequeos, cambios y proyección visible. Adaptador del lector existente; narrador sin autoridad mecánica. Integrar un encuentro real y sus consecuencias Ripple. Aceptación: Un encuentro Galahad/Zhalan vs lobos u otro equivalente aprobado emite eventos reales con IDs de chequeo, se presenta una sola vez en el libro, actualiza ficha/diario y consecuencias al confirmar; opciones ilegales rechazadas; sin fixture manual ni segundo lector.",
+  "changed": [
+    "vault-site/public/docs/qa-playable-stormkeep.md"
+  ],
+  "next": "Dependencias: QA-01, QA-04, QA-06; coordinación temprana con QA-07. Referencias: ADV-C12; N04/N06; MOD-03. Registrar evidencia y revisión cruzada al cerrar.",
+  "source": "https://github.com/sebasu66/pocketDM/blob/feature/qa-playable-stormkeep-20261125/vault-site/public/docs/qa-playable-stormkeep.md",
+  "nodeIds": [
+    "doc_0905",
+    "doc_0911",
+    "doc_0023",
+    "doc_0915"
+  ]
+}

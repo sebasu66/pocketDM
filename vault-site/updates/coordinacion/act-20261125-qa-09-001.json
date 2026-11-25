@@ -1,0 +1,20 @@
+{
+  "id": "act-20261125-qa-09-001",
+  "date": "2026-11-25",
+  "area": "Interfaz / Libro",
+  "owner": "Narrador/presentación",
+  "status": "pendiente",
+  "title": "QA-09 · P2 · Aceptación del lector en Android físico",
+  "summary": "Tarea aprobada para H01; no implementada. Probar PWA instalada, apaisado, scroll, composición editorial, navegación al mapa/diario/ficha, retorno a aplicación y reanudación; respetar movimiento reducido. Aceptación: Registrar modelo/dispositivo/versión, capturas y resultados; texto legible sin desbordes, rotación y retorno correctos, interacción táctil, regreso a campaña sin perder posición; distinguir emulación de equipo físico.",
+  "changed": [
+    "vault-site/public/docs/qa-playable-stormkeep.md"
+  ],
+  "next": "Dependencias: Lector candidato; repetir tras QA-02/07. Referencias: N07; doc_0903/0904. Registrar evidencia y revisión cruzada al cerrar.",
+  "source": "https://github.com/sebasu66/pocketDM/blob/feature/qa-playable-stormkeep-20261125/vault-site/public/docs/qa-playable-stormkeep.md",
+  "nodeIds": [
+    "doc_0903",
+    "doc_0904",
+    "doc_0023",
+    "doc_0915"
+  ]
+}

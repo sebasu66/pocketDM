@@ -1,0 +1,20 @@
+{
+  "id": "act-20261125-qa-04-001",
+  "date": "2026-11-25",
+  "area": "Combate / Simulador V2",
+  "owner": "Simulación",
+  "status": "pendiente",
+  "title": "QA-04 · P1 · Servicio de azar determinista común",
+  "summary": "Tarea aprobada para H01; no implementada. Sustituir o encapsular generador secuencial del laboratorio con servicio común direccionado y versionado; semilla privada, propósito/actor/encuentro/ordinal estables. Aceptación: Misma semilla, versión y decisiones reproduce trazas; insertar una tirada ajena no altera las demás; comparar políticas con semillas emparejadas; no filtrar semilla en vista jugador; regresiones del laboratorio y piloto aprobadas.",
+  "changed": [
+    "vault-site/public/docs/qa-playable-stormkeep.md"
+  ],
+  "next": "Dependencias: —. Referencias: ADV-C06/C10. Registrar evidencia y revisión cruzada al cerrar.",
+  "source": "https://github.com/sebasu66/pocketDM/blob/feature/qa-playable-stormkeep-20261125/vault-site/public/docs/qa-playable-stormkeep.md",
+  "nodeIds": [
+    "doc_0907",
+    "doc_0911",
+    "doc_0912",
+    "doc_0915"
+  ]
+}
