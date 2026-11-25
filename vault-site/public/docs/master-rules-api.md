@@ -1,4 +1,6 @@
 # API de reglas del máster · master-rules-v1
+
+**Actualizacion:** [API de encuentros y consecuencias](encounter-rules-api.md) amplia las operaciones con sorpresa, miedo, heridas, retirada, primeros auxilios y potenciacion. Los parametros de combate de la extension son obligatorios y sustituyen los del cuadro v1 inicial.
 Fecha: 25/11/2026. Autoridad: simulación. Consumidor: narrador/máster durante la preparación de caminos narrativos. Alcance: operaciones implementadas para la primera aventura, no certificación completa de Mythras.
 
 ## Principio

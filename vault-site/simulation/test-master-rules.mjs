@@ -51,7 +51,7 @@ test('resistance, lifting and group checks use existing rules; all output checks
  assert.deepEqual(checkGroup({...group,mode:'sorting'}).results.map(x=>x.outcome),['success','failure']);
 });
 test('combat API wraps existing deterministic exchange and encounter, does not mutate input',()=>{
- const a=person(),b=wolfSheet(),before=structuredClone([a,b]),p={id:'fight',seed:'TEST-ONLY',attacker:a,defender:b,defense:'evade'};
+ const a=person(),b=wolfSheet(),before=structuredClone([a,b]),p={id:'fight',seed:'TEST-ONLY',attacker:a,defender:b,defense:'evade',attackDifficulty:'standard',defenseDifficulty:'standard',defenseAvailable:true,surpriseBonus:false,limbLifeThreat:false,context:null,initialRange:'long',surprisedIds:[],combatDifficulties:{[a.id]:{attack:'standard',defense:'standard'},[b.id]:{attack:'standard',defense:'standard'}}};
  const r=resolveCombatExchange(p);assert.ok(r.checks.length);assert.deepEqual(r,resolveCombatExchange(p));r.checks.forEach(validateCheck);
  const d=resolveCombatEncounter({...p,maxRounds:3});assert.ok(d.events.length);assert.deepEqual(d,resolveCombatEncounter({...p,maxRounds:3}));assert.deepEqual([a,b],before);assert.equal(Object.hasOwn(d,'seed'),false);
 });
