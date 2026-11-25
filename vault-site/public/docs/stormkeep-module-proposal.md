@@ -2,7 +2,7 @@
 Propuesta de módulo MOD-01 v0.1, 25/11/2026. Borrador de narrativa para revisión del usuario y simulación. No es un guion de resultados, no es canon aprobado ni edición jugable. No contiene secretos de campaña.
 ## Base de mundo (N01)
 Decisiones vigentes: Stormkeep es ciudad costera, mundo propio de fantasía medieval; el hielo avanza desde el norte; el resto del mundo no es uniformemente invernal. El grafo materializa sólo dependencias necesarias. IDs de los lugares existentes no cambian al renombrarlos. GDD conserva referencias antiguas a Rassilon y Savage Worlds que no se importan como canon ni reglas; el simulador actual usa Mythras.
-Propuesta de cinco ámbitos macro (nombres de trabajo, sin coordenadas ni fronteras aprobadas):
+Propuesta de seis ámbitos macro (nombres de trabajo, sin coordenadas ni fronteras aprobadas):
 - Las Marcas: frontera fría y costera, puertos, caminos de abastecimiento y autonomía de las comunidades. Stormkeep es el ancla.
 - Llanuras Heladas: tundra y asentamientos dispersos; supervivencia, rutas estacionales y retirada del cultivo. Existente en el fixture.
 - Costas de la Tormenta: mar bravo, comercio marítimo, rivalidad por refugios y puertos. No implica que Stormkeep pertenezca a una segunda región.
