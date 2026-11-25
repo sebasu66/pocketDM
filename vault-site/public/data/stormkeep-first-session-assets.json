@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "status": "candidate",
+  "description": "Read-only authoring asset references. No materialization, position, availability or quest state.",
+  "npc": {
+    "draft.npc.runa": {
+      "portrait": "/docs/art-references/stormkeep-inicio/runa.jpg",
+      "status": "candidate"
+    },
+    "draft.npc.vesna": {
+      "portrait": "/docs/art-references/stormkeep-inicio/vesna.jpg",
+      "status": "candidate"
+    },
+    "draft.npc.isveld": {
+      "portrait": "/docs/art-references/stormkeep-inicio/isveld.jpg",
+      "status": "candidate"
+    },
+    "draft.npc.aldra": {
+      "portrait": "/docs/art-references/stormkeep-inicio/aldra.jpg",
+      "status": "candidate"
+    },
+    "draft.npc.nils": {
+      "portrait": "/docs/art-references/stormkeep-inicio/nils.jpg",
+      "status": "candidate"
+    }
+  },
+  "locations": {
+    "draft.stormkeep.east-gate": {
+      "art": "/docs/art-references/stormkeep-inicio/puerta.jpg",
+      "status": "candidate"
+    },
+    "draft.stormkeep.hospice": {
+      "art": "/docs/art-references/stormkeep-inicio/hospicio.jpg",
+      "status": "candidate"
+    },
+    "draft.stormkeep.market": {
+      "art": "/docs/art-references/stormkeep-inicio/mercado.jpg",
+      "status": "candidate"
+    },
+    "draft.stormkeep.inn": {
+      "art": "/libro/edition/assets/cuervo-gris-interior-candidato.png",
+      "status": "candidate"
+    },
+    "draft.stormkeep.smithy": {
+      "art": "/docs/art-references/herreria.png",
+      "status": "original"
+    }
+  }
+}

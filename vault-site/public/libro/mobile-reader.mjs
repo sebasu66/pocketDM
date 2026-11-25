@@ -19,7 +19,7 @@ export function splitStoryPages(pages){
  });
  return result;
 }
-export function createMobileReader({viewport,turn,home,zoomBy,resetZoom,getZoom}){
+export function createMobileReader({viewport,turn,home,route,zoomBy,resetZoom,getZoom}){
  const rail=document.createElement('nav');rail.className='mobile-rail';rail.setAttribute('aria-label','Controles de lectura móvil');
  const paths={menu:'M5 6h14M5 12h14M5 18h14',prev:'M6 15l6-6 6 6',next:'M6 9l6 6 6-6'};
  const button=(id,label,icon)=>'<button type="button" data-mobile="'+id+'" aria-label="'+label+'" title="'+label+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+paths[icon]+'"/></svg></button>';
@@ -29,7 +29,7 @@ export function createMobileReader({viewport,turn,home,zoomBy,resetZoom,getZoom}
  document.body.append(panel);
  const content=panel.querySelector('.drawer-body');let gesture=null;
  function close(){if(panel.open)panel.close()}
- function open(which){
+ function open(which){if(route&&['character','notes'].includes(which)){close();route(which==='character'?'character':'map');return}
   panel.classList.toggle('from-left',which==='character');
   panel.querySelector('h2').textContent=({character:'Personaje',notes:'Mapa y diario',menu:'El libro'})[which];
   if(which==='character'){content.innerHTML='<book-sheet character="galahad"></book-sheet><book-sheet character="zhalan"></book-sheet>'}
@@ -39,8 +39,8 @@ export function createMobileReader({viewport,turn,home,zoomBy,resetZoom,getZoom}
    const select=(key)=>{content.querySelectorAll('[data-tab]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tab===key)));tabBody.innerHTML=key==='map'?'<book-map></book-map>':key==='journal'?'<book-journal></book-journal>':'<h3>Misiones activas</h3><p class="sample">Todavía no hay misiones sincronizadas con el motor de campaña.</p>'};
    content.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>select(b.dataset.tab));select('map');
   }else{
-   content.innerHTML='<div class="drawer-menu"><button type="button" data-open="character">Ficha de personaje <span>←</span></button><button type="button" data-open="notes">Mapa y diario <span>→</span></button><div class="drawer-zoom"><button type="button" data-z="-">−</button><button type="button" data-z="reset">Ajustar lectura</button><button type="button" data-z="+">+</button></div><button type="button" data-exit>Salir al inicio <span>⌂</span></button></div>';
-   content.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>open(b.dataset.open));content.querySelectorAll('[data-z]').forEach(b=>b.onclick=()=>{const v=b.dataset.z;close();if(v==='reset')resetZoom();else zoomBy(v==='+'?.25:-.25)});content.querySelector('[data-exit]').onclick=()=>{close();home()};
+   content.innerHTML='<div class="drawer-menu"><button type="button" data-open="character">Ficha de personaje <span>←</span></button><button type="button" data-route="story">Libro de campaña <span>↗</span></button><button type="button" data-route="map">Mapa <span>⌖</span></button><button type="button" data-route="journal">Diario <span>↗</span></button><button type="button" data-route="locations">Localizaciones <span>⌖</span></button><button type="button" data-route="profile">Usuario <span>↗</span></button><div class="drawer-zoom"><button type="button" data-z="-">−</button><button type="button" data-z="reset">Ajustar lectura</button><button type="button" data-z="+">+</button></div><button type="button" data-exit>Salir al inicio <span>⌂</span></button></div>';
+   content.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>open(b.dataset.open));content.querySelectorAll('[data-route]').forEach(b=>b.onclick=()=>{close();route?.(b.dataset.route)});content.querySelectorAll('[data-z]').forEach(b=>b.onclick=()=>{const v=b.dataset.z;close();if(v==='reset')resetZoom();else zoomBy(v==='+'?.25:-.25)});content.querySelector('[data-exit]').onclick=()=>{close();home()};
   }
   if(!panel.open)panel.showModal();panel.scrollTop=0;content.scrollTop=0;
  }
