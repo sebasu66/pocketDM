@@ -1,6 +1,6 @@
 import './components.mjs';
 import './navigation.mjs';
-import {openingPages, syncOpening} from './edition/edition.mjs?v=2';
+import {openingPages, syncOpening} from './edition/edition.mjs?v=3';
 import {mobileQuery,readerMode,splitStoryPages,createMobileReader} from './mobile-reader.mjs?v=20261124c';
 let pages=[
  `<book-title kicker="Capítulo III · Invierno" heading="Los colmillos del invierno" subtitle="En los confines de Rassilon" image="./assets/bosque.png" alt="Sendero entre árboles cubiertos de nieve"></book-title><p class="dropcap">La nieve había borrado el sendero. Bajo la luz mortecina del cielo, dos viajeros avanzaban hacia el norte, atentos al murmullo de las ramas. El silencio del bosque no era una promesa de paz.</p><book-inset heading="Cuaderno de viaje" vertical><div class="statline"><span>Terreno</span><span>Bosque</span></div><div class="statline"><span>Clima</span><span>Nieve</span></div><div class="statline"><span>Luz</span><span>Escasa</span></div></book-inset><p>Galahad se ajustó el abrigo. Zhalan, acostumbrado a la oscuridad, se adelantó unos pasos. El frío se había instalado en las costuras del abrigo y el camino apenas se distinguía bajo la nieve. Por momentos, las copas se abrían sobre un cielo de plomo; después, la espesura volvía a tragarse toda claridad. Entonces se oyó un crujido.</p>`,
