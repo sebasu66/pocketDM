@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "id": "azgaar-stormkeep-draft",
+  "status": "draft",
+  "source": "Azgaar 1.154.1 / pocketdm-stormkeep-v1 / preliminary non-canon geography",
+  "activeMapId": "azgaar-world",
+  "assets": [
+    {
+      "id": "azgaar-world-image",
+      "name": "Mapa físico · Azgaar",
+      "category": "terrain",
+      "layer": "ground",
+      "src": "assets/terrain/azgaar-world.png",
+      "width": 1600
+    }
+  ],
+  "world": {
+    "nodes": [
+      {
+        "id": "world",
+        "name": "Mundo de prueba",
+        "kind": "world"
+      },
+      {
+        "id": "stormkeep",
+        "name": "Stormkeep",
+        "kind": "settlement",
+        "parentId": "world",
+        "azgaarBurgId": 389,
+        "azgaarCellId": 71,
+        "port": true,
+        "walls": true,
+        "populationDraft": 14061
+      }
+    ],
+    "entities": [],
+    "routes": []
+  },
+  "maps": [
+    {
+      "id": "azgaar-world",
+      "title": "Azgaar · Mundo de prueba",
+      "level": "Mundo",
+      "parentId": null,
+      "nodeId": "world",
+      "width": 1600,
+      "height": 1000,
+      "sprites": [
+        {
+          "id": "world-image",
+          "assetId": "azgaar-world-image",
+          "x": 800,
+          "y": 500,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "ground",
+          "entityId": null
+        }
+      ],
+      "markers": [
+        {
+          "id": "stormkeep-marker",
+          "label": "Stormkeep",
+          "x": 468.14,
+          "y": 166.7,
+          "nodeId": "stormkeep",
+          "targetMapId": "azgaar-region"
+        }
+      ],
+      "routes": []
+    },
+    {
+      "id": "azgaar-region",
+      "title": "Costa de Stormkeep · Azgaar",
+      "level": "Región",
+      "parentId": "azgaar-world",
+      "nodeId": null,
+      "width": 480,
+      "height": 300,
+      "sprites": [
+        {
+          "id": "region-image",
+          "assetId": "azgaar-world-image",
+          "x": 571.86,
+          "y": 483.3,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "ground",
+          "entityId": null
+        }
+      ],
+      "markers": [
+        {
+          "id": "stormkeep-local-marker",
+          "label": "Stormkeep",
+          "x": 240,
+          "y": 150,
+          "nodeId": "stormkeep",
+          "targetMapId": null
+        }
+      ],
+      "routes": []
+    }
+  ]
+}
