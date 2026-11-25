@@ -1,0 +1,19 @@
+{
+  "id": "act-20261125-editorial-contour-001",
+  "date": "2026-11-25",
+  "area": "Interfaz / Libro",
+  "owner": "Agente narrador / presentación",
+  "status": "en-progreso",
+  "title": "Contorno editorial irregular en la PWA",
+  "summary": "Reemplazar columna recta por exclusión derivada del alfa de la ilustración fija y título integrado. Mantener lomo, rail, navegación, ficha y combate. Probar móvil 16:9 y 21:9 y scroll.",
+  "changed": [
+    "vault-site/public/libro/edition/",
+    "vault-site/scripts/test-edition-browser.mjs"
+  ],
+  "next": "Validar capturas y comportamiento; publicar en live solo si se preservan los avances compartidos.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0903",
+    "doc_0913"
+  ]
+}
