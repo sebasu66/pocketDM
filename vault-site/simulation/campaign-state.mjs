@@ -163,7 +163,7 @@ export function prepareWindow(base,state,access,{maxDepth=3,maxEdges=40}={}){
    row.choices.push({command,previewHash:r.previewHash,eventId:event.id,nextId:childId});
    // Inputs to trusted narration worker contain only branch-local player-visible facts.
    // Do not include seed, private sheets, other branches or authoritative mutable state.
-   jobs.push({schemaVersion:1,kind:'narration-job',status:'queued',resolution:'speculative',campaignId:state.id,baseRevision:state.delta.revision,branchId:childId,eventId:event.id,actorId:state.actorId,locationId:event.locationId,rulesVersion:VERSION,...(event.moduleId?{moduleId:event.moduleId,moduleVersion:event.moduleVersion}:{}),audience:'player:'+state.actorId,input:{event,before:{locationId:before.locationId,elapsedSeconds:before.elapsedSeconds},after:{locationId:after.locationId,elapsedSeconds:after.elapsedSeconds}},checkIds:event.checks.map(c=>c.id)});
+   jobs.push({schemaVersion:1,kind:'narration-job',status:'queued',resolution:'speculative',campaignId:state.id,baseRevision:state.delta.revision,branchId:childId,eventId:event.id,actorId:state.actorId,locationId:event.locationId,rulesVersion:VERSION,...(event.moduleId?{moduleId:event.moduleId,moduleVersion:event.moduleVersion}:{}),audience:'player:'+state.actorId,input:{event,before:{locationId:before.locationId,elapsedSeconds:before.elapsedSeconds},after:{locationId:after.locationId,elapsedSeconds:after.elapsedSeconds,actions:after.actions}},checkIds:event.checks.map(c=>c.id)});
    queue.push({id:childId,state:r.next,depth:n.depth+1});
   }
  }

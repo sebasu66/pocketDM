@@ -6,6 +6,9 @@ const ok=(v,m)=>{if(!v)throw Error(m)},own=Object.hasOwn,copy=structuredClone;
 const id=x=>typeof x==='string'&&/^[a-z][a-z0-9_.-]{0,100}$/.test(x)&&!['constructor','prototype','__proto__'].includes(x);
 const kinds=['module-accept','module-decline','module-withdraw','module-close','dialogue','inspect','negotiate','skill-check','transfer-cargo','report','offer-resource'];
 const live=['offered','active'];
+const outcomes=['critical','success','failure','fumble'];
+const opportunity=i=>i.opportunityId??i.challengeId;
+const dependencies=i=>[...i.requires,...(i.requiresSuccess??[]),...(i.requiresFailure??[]),...(i.requiresOutcomes??[]).map(r=>r.intentId)];
 const visible=(r,known)=>r&&(r.visibility==='public'||r.visibility==='known'&&known.includes(r.id));
 const person=(r)=>r&&['player','npc','creature'].includes(r.kind);
 const coLocated=(w,actor,target)=>person(w.entities[target])&&w.entities[target].locationId===w.entities[actor].locationId;
@@ -35,7 +38,8 @@ export function createModule(def,w,actorId){
   if(i.capability==='dialogue'||i.capability==='inspect'||i.capability==='report')ok(own(evidence,i.evidenceId),'Unknown evidence');
   if(i.capability==='report')ok(i.knownEvidence.includes(i.evidenceId),'Report requires observed evidence');
   if(['inspect','negotiate'].includes(i.capability))ok(conditions.includes(i.difficulty),'Invalid check difficulty');
-  if(i.capability==='skill-check'){validateSkillSpec(i.check);ok(id(i.challengeId),'Missing challenge ID');}
+  ok(i.requiresOutcomes===undefined||Array.isArray(i.requiresOutcomes)&&i.requiresOutcomes.every(r=>r&&id(r.intentId)&&Array.isArray(r.outcomes)&&r.outcomes.length>0&&r.outcomes.every(o=>outcomes.includes(o))),'Invalid exact outcome prerequisite');
+  if(i.capability==='skill-check'){validateSkillSpec(i.check);ok(id(i.challengeId),'Missing challenge ID');ok(i.opportunityId===undefined||id(i.opportunityId),'Invalid opportunity ID');}
   if(i.capability==='transfer-cargo'){
    const c=cargo(w,i.cargoId);ok(i.ownerId===c.ownerId&&person(w.entities[i.fromId])&&person(w.entities[i.toId])&&i.fromId!==i.toId&&i.targetId===(i.fromId===actorId?i.toId:i.fromId)&&[i.fromId,i.toId].includes(actorId)&&qty(i.quantity)&&i.quantity<=c.total&&i.authorization==='fixture-explicit-consent','Invalid transfer authorization');
   }
@@ -47,10 +51,10 @@ export function createModule(def,w,actorId){
   }
   intents[i.id]=copy(i);
  }
- for(const i of Object.values(intents)){ok([...i.requires,...(i.requiresSuccess??[]),...(i.requiresFailure??[])].every(k=>own(intents,k)&&k!==i.id),'Unknown prerequisite');ok([...(i.requiresSuccess??[]),...(i.requiresFailure??[])].every(k=>['inspect','negotiate','skill-check'].includes(intents[k].capability)),'Success prerequisite is not a check')}
+ for(const i of Object.values(intents)){ok(dependencies(i).every(k=>own(intents,k)&&k!==i.id),'Unknown prerequisite');ok([...(i.requiresSuccess??[]),...(i.requiresFailure??[]),...(i.requiresOutcomes??[]).map(r=>r.intentId)].every(k=>['inspect','negotiate','skill-check'].includes(intents[k].capability)),'Success prerequisite is not a check')}
  // Reject dependency cycles, not just direct self-reference.
  const done=new Set(),visiting=new Set();
- function visit(k){if(done.has(k))return;ok(!visiting.has(k),'Intent dependency cycle');visiting.add(k);for(const r of [...intents[k].requires,...(intents[k].requiresSuccess??[]),...(intents[k].requiresFailure??[])])visit(r);visiting.delete(k);done.add(k)}
+ function visit(k){if(done.has(k))return;ok(!visiting.has(k),'Intent dependency cycle');visiting.add(k);for(const r of dependencies(intents[k]))visit(r);visiting.delete(k);done.add(k)}
  Object.keys(intents).forEach(visit);
  ok(Object.values(intents).some(i=>i.capability==='module-accept')&&Object.values(intents).some(i=>i.capability==='module-close'),'Missing contract lifecycle');
  return {id:def.id,version:def.version,mode:def.mode,status:'offered',intents,evidence,completed:[],observed:[],results:{}};
@@ -59,14 +63,14 @@ export function moduleActions(w,state,sheet){
  const m=state.module;if(!m||!live.includes(m.status))return [];
  const a=state.actorId,location=w.entities[a].locationId;
  return Object.values(m.intents).filter(i=>{
-  if(i.status!==m.status||i.locationId!==location||m.completed.includes(i.id)||!i.requires.every(k=>m.completed.includes(k))||!(i.requiresSuccess??[]).every(k=>successful(m.results?.[k]?.outcome))||!(i.requiresFailure??[]).every(k=>['failure','fumble'].includes(m.results?.[k]?.outcome))||!i.knownEvidence.every(k=>m.observed.includes(k)))return false;
+  if(i.status!==m.status||i.locationId!==location||m.completed.includes(i.id)||!i.requires.every(k=>m.completed.includes(k))||!(i.requiresSuccess??[]).every(k=>successful(m.results?.[k]?.outcome))||!(i.requiresFailure??[]).every(k=>['failure','fumble'].includes(m.results?.[k]?.outcome))||!(i.requiresOutcomes??[]).every(r=>r.outcomes.includes(m.results?.[r.intentId]?.outcome))||!i.knownEvidence.every(k=>m.observed.includes(k)))return false;
   if(i.targetId&&(!coLocated(w,a,i.targetId)||!visible(w.entities[i.targetId],state.knownIds)))return false;
   if(i.capability==='module-close'&&!(i.cargoRequirements??[]).every(r=>(cargo(w,r.cargoId).allocations[r.custodianId]??0)>=r.quantity))return false;
   if(i.capability==='transfer-cargo'){
    const c=cargo(w,i.cargoId);return c.ownerId===i.ownerId&&coLocated(w,a,i.fromId)&&coLocated(w,a,i.toId)&&(c.allocations[i.fromId]??0)>=i.quantity;
   }
   if(i.capability==='offer-resource')return sheet.inventory.some(x=>x.id===i.itemId&&x.kind==='gear'&&x.carried&&x.quantity>=i.quantity);
-  if(i.capability==='skill-check')return skillProfile(sheet,i.check).legal&&!Object.values(m.intents).some(other=>other.capability==='skill-check'&&other.challengeId===i.challengeId&&m.completed.includes(other.id));
+  if(i.capability==='skill-check')return skillProfile(sheet,i.check).legal&&!Object.values(m.intents).some(other=>other.capability==='skill-check'&&other.challengeId===i.challengeId&&opportunity(other)===opportunity(i)&&m.completed.includes(other.id));
   if(['inspect','negotiate'].includes(i.capability))return conditionProfile(sheet,i.capability==='inspect'?'perception':'influence','skill').legal;
   return true;
  }).map(i=>({action:'module-intent',intentId:i.id}));
@@ -89,7 +93,7 @@ export function resolveModule(w,state,next,sheet,intentId,{eventId,roll,fact,che
   const spec=i.capability==='skill-check'?i.check:{skillId:i.capability==='inspect'?'perception':'influence',difficulty:i.difficulty,reason:'Dificultad autorizada de la escena.'};
   const check=resolveSkillCheck(sheet,spec,{eventId,slot:'module.'+i.id,roll});
   checks.push(check);m.results??={};m.results[i.id]={outcome:check.outcome};
-  record(i.capability==='inspect'?'inspection-resolved':i.capability==='negotiate'?'negotiation-check':'skill-check-resolved','Chequeo resuelto.',{outcome:check.outcome,checkId:check.id,...(i.challengeId?{challengeId:i.challengeId}:{})});
+  record(i.capability==='inspect'?'inspection-resolved':i.capability==='negotiate'?'negotiation-check':'skill-check-resolved','Chequeo resuelto.',{outcome:check.outcome,checkId:check.id,...(i.challengeId?{challengeId:i.challengeId,opportunityId:opportunity(i)}:{})});
   if(i.capability==='inspect'&&successful(check.outcome))observed();
   break;
  }
