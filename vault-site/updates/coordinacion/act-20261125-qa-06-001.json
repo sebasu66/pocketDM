@@ -1,0 +1,21 @@
+{
+  "id": "act-20261125-qa-06-001",
+  "date": "2026-11-25",
+  "area": "World Engine / Grafo",
+  "owner": "Simulación + narrador/presentación",
+  "status": "pendiente",
+  "title": "QA-06 · P1 · Validar y materializar Stormkeep",
+  "summary": "Tarea aprobada para H01; no implementada. Revisar población v0.2 (30 residentes, 17 sitios, 77 relaciones) y fundamentos; validar IDs y referencias, marcar propuestas vs canon, materializar solo dependencias aprobadas. Atlas jugador con hotspots autorizados. Aceptación: Importador valida duplicados, destinos y relaciones; mapa persistente vinculado a IDs, no regenera zona; rutas legales; al menos un NPC y un sitio de MOD-01 operativos; proyección sin perfiles secretos.",
+  "changed": [
+    "vault-site/public/docs/qa-playable-stormkeep.md"
+  ],
+  "next": "Dependencias: Acuerdo de canon del usuario; QA-08. Referencias: N01/N02; doc_0908/0909. Registrar evidencia y revisión cruzada al cerrar.",
+  "source": "https://github.com/sebasu66/pocketDM/blob/feature/qa-playable-stormkeep-20261125/vault-site/public/docs/qa-playable-stormkeep.md",
+  "nodeIds": [
+    "doc_0020",
+    "doc_0909",
+    "doc_0913",
+    "doc_0914",
+    "doc_0915"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "id": "act-20261125-qa-10-001",
+  "date": "2026-11-25",
+  "area": "Coordinación",
+  "owner": "Simulación + narrador/presentación",
+  "status": "pendiente",
+  "title": "QA-10 · P2 · Regresiones de integración y publicación trazable",
+  "summary": "Tarea aprobada para H01; no implementada. Automatizar validación del catálogo, motor, navegador y recorrido jugable, y publicación por revisión Git; revisar ramas activas antes de deploy, no sobreescribir trabajo de otros. Aceptación: CI o procedimiento repetible registra SHA, ambiente, casos, logs, fallos y resultado; prueba de extremo a extremo contra preview; validación de actividad; rollback documentado; promoción live solo tras aprobación y revisión de cambios.",
+  "changed": [
+    "vault-site/public/docs/qa-playable-stormkeep.md"
+  ],
+  "next": "Dependencias: Comenzar ya; consolidar con QA-02/03/07/08. Referencias: doc_0022/0025. Registrar evidencia y revisión cruzada al cerrar.",
+  "source": "https://github.com/sebasu66/pocketDM/blob/feature/qa-playable-stormkeep-20261125/vault-site/public/docs/qa-playable-stormkeep.md",
+  "nodeIds": [
+    "doc_0022",
+    "doc_0025",
+    "doc_0912",
+    "doc_0915"
+  ]
+}

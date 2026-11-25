@@ -1,0 +1,19 @@
+{
+  "id": "act-20261125-qa-01-001",
+  "date": "2026-11-25",
+  "area": "World Engine / Grafo",
+  "owner": "Simulación",
+  "status": "pendiente",
+  "title": "QA-01 · P0 · Ficha única y estado efectivo",
+  "summary": "Tarea aprobada para H01; no implementada. Unificar actor, ficha, recursos, heridas, equipo y overlay; adaptador de lectura para el libro. Eliminar doble autoridad de datos, no duplicar fichas. Aceptación: Un mismo actorId y revisión alimentan laboratorio, motor, hoja y diario; cambio confirmado de HP/PA/inventario visible en los consumidores; prueba de aislamiento entre campañas y de rechazo de revisión obsoleta.",
+  "changed": [
+    "vault-site/public/docs/qa-playable-stormkeep.md"
+  ],
+  "next": "Dependencias: —. Referencias: ADV-C02/C11; MOD-02. Registrar evidencia y revisión cruzada al cerrar.",
+  "source": "https://github.com/sebasu66/pocketDM/blob/feature/qa-playable-stormkeep-20261125/vault-site/public/docs/qa-playable-stormkeep.md",
+  "nodeIds": [
+    "doc_0909",
+    "doc_0912",
+    "doc_0915"
+  ]
+}

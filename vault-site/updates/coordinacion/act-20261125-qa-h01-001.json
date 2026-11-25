@@ -1,0 +1,21 @@
+{
+  "id": "act-20261125-qa-h01-001",
+  "date": "2026-11-25",
+  "area": "Coordinación",
+  "owner": "Simulación + narrador/presentación",
+  "status": "pendiente",
+  "title": "H01 · Primer hito jugable de Stormkeep",
+  "summary": "Backlog QA-01 a QA-10 aprobado. Criterio: campaña real, Stormkeep, aventura original, combate, libro, Ripple, diario y reanudación persistente. Sin fixture en el recorrido central.",
+  "changed": [
+    "vault-site/public/docs/qa-playable-stormkeep.md",
+    "vault-site/public/data/catalog.json"
+  ],
+  "next": "Comenzar por QA-01/04/08 y contrato QA-02; QA-10 desde el inicio. Revisión cruzada y prueba integral antes de cierre.",
+  "source": "https://github.com/sebasu66/pocketDM/blob/feature/qa-playable-stormkeep-20261125/vault-site/public/docs/qa-playable-stormkeep.md",
+  "nodeIds": [
+    "doc_0915",
+    "doc_0025",
+    "doc_0023",
+    "doc_0905"
+  ]
+}

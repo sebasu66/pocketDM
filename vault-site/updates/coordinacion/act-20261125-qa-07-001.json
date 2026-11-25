@@ -1,0 +1,21 @@
+{
+  "id": "act-20261125-qa-07-001",
+  "date": "2026-11-25",
+  "area": "Narrativa / Contenido",
+  "owner": "Simulación + narrador/presentación",
+  "status": "pendiente",
+  "title": "QA-07 · P1 · Primera aventura original compilada y jugable",
+  "summary": "Tarea aprobada para H01; no implementada. Reemplazar fixture corredor por módulo original aprobado (La última llama del norte es candidata); definir precondiciones, alternativas, cierres y fragmentos/arte reutilizables. Completar cobertura mediante narrador autorizado y caché compatible. Aceptación: Al menos dos rutas con consecuencias distintas y cierres coherentes; compilación y replay de ramas válidas; opciones reales, fragmentos autorizados con clave de contexto/idioma/versiones y fallback explícito; lectura en libro único; no resultados preescritos como hechos.",
+  "changed": [
+    "vault-site/public/docs/qa-playable-stormkeep.md"
+  ],
+  "next": "Dependencias: QA-01, QA-04, QA-06; contrato QA-02; aprobación de premisa. Referencias: N09/N05/N06; MOD-01/MOD-04. Registrar evidencia y revisión cruzada al cerrar.",
+  "source": "https://github.com/sebasu66/pocketDM/blob/feature/qa-playable-stormkeep-20261125/vault-site/public/docs/qa-playable-stormkeep.md",
+  "nodeIds": [
+    "doc_0907",
+    "doc_0908",
+    "doc_0913",
+    "doc_0009",
+    "doc_0915"
+  ]
+}

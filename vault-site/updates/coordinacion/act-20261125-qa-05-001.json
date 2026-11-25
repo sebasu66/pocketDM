@@ -1,0 +1,19 @@
+{
+  "id": "act-20261125-qa-05-001",
+  "date": "2026-11-25",
+  "area": "World Engine / Grafo",
+  "owner": "Simulación",
+  "status": "pendiente",
+  "title": "QA-05 · P1 · Regresión de navegación Azgaar",
+  "summary": "Tarea aprobada para H01; no implementada. Investigar fallo de línea 12 de test-azgaar-view-browser.mjs en Firebase: botón Región no modificó viewBox en la ejecución de auditoría; distinguir defecto real de sincronización de prueba. Aceptación: Prueba repetida en preview y luego live tras autorización: mundo→región, selección Stormkeep, rueda y arrastre; viewBox cambia donde corresponde; sin errores de consola; documentar causa y comprobar táctil. No bloquear MOD-01 si un mapa persistente alternativo cumple el contrato.",
+  "changed": [
+    "vault-site/public/docs/qa-playable-stormkeep.md"
+  ],
+  "next": "Dependencias: —. Referencias: doc_0908; doc_0914. Registrar evidencia y revisión cruzada al cerrar.",
+  "source": "https://github.com/sebasu66/pocketDM/blob/feature/qa-playable-stormkeep-20261125/vault-site/public/docs/qa-playable-stormkeep.md",
+  "nodeIds": [
+    "doc_0908",
+    "doc_0914",
+    "doc_0915"
+  ]
+}
