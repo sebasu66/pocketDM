@@ -166,5 +166,21 @@
     "layer": "props",
     "src": "assets/props/well.png",
     "width": 65
+  },
+  {
+    "id": "coast-west",
+    "name": "Costa y mar",
+    "category": "water",
+    "layer": "water",
+    "src": "assets/water/coast-west.png",
+    "width": 740
+  },
+  {
+    "id": "pier",
+    "name": "Muelle de madera",
+    "category": "props",
+    "layer": "props",
+    "src": "assets/props/pier.png",
+    "width": 200
   }
 ]

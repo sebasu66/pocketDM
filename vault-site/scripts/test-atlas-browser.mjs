@@ -8,7 +8,7 @@ await call('Runtime.enable');await call('Page.enable');await call('Emulation.set
 await call('Page.navigate',{url:process.env.POCKETDM_TEST_URL||'http://127.0.0.1:'+server.address().port+'/atlas/'});
 for(let i=0;i<120;i++){if(await ev("document.body?.dataset.ready==='true'"))break;await sleep(150)}
 assert.equal(await ev("document.body?.dataset.ready"),'true',await ev("document.querySelector('#status')?.textContent"));
-assert.equal(await ev("document.querySelectorAll('.asset').length"),21);
+assert.equal(await ev("document.querySelectorAll('.asset').length"),23);
 assert.match(await ev("document.querySelector('#mapTitle').textContent"),/región de Stormkeep/);
 console.log('Renderer:',await ev("document.querySelector('#renderer').textContent"));
 if(process.env.POCKETDM_ATLAS_SCREENSHOT){const {writeFile}=await import('node:fs/promises');const shot=await call('Page.captureScreenshot',{format:'png'});await writeFile(process.env.POCKETDM_ATLAS_SCREENSHOT,Buffer.from(shot.data,'base64'))}
@@ -17,6 +17,7 @@ const zoom=await ev("document.querySelector('#zoom').textContent");await ev("doc
 await ev("document.querySelector('#places button').click()");assert.equal(await ev("document.querySelector('#enter').hidden"),false);await ev("document.querySelector('#enter').click()");assert.equal(await ev("document.querySelector('#maps').value"),'town');
 const before=await ev("document.querySelector('#validation').textContent");await ev("document.querySelector('[data-asset=house-a]').click()");assert.equal(await ev("document.querySelector('#fields').hidden"),false);assert.notEqual(await ev("document.querySelector('#validation').textContent"),before);
 await ev("let f=document.querySelector('#scale');f.value='1.8';f.dispatchEvent(new Event('change'))");assert.equal(await ev("document.querySelector('#scale').value"),'1.8');
+await call('DOM.enable');const root1=await call('DOM.getDocument');const replacement=await call('DOM.querySelector',{nodeId:root1.root.nodeId,selector:'#replaceFile'});await call('DOM.setFileInputFiles',{nodeId:replacement.nodeId,files:[resolve('public/atlas/assets/buildings/house-b.png')]});for(let i=0;i<30;i++){if(await ev("document.querySelector('[data-asset=house-a] img').src.startsWith('data:image/png')"))break;await sleep(100)}assert.ok(await ev("document.querySelector('[data-asset=house-a] img').src.startsWith('data:image/png')"));
 await ev("document.querySelector('#duplicate').click()");await ev("document.querySelector('#delete').click()");await ev("document.querySelector('#save').click()");for(let i=0;i<30;i++){if(/guardado en este navegador/.test(await ev("document.querySelector('#status').textContent")))break;await sleep(100)}
 assert.match(await ev("document.querySelector('#status').textContent"),/guardado en este navegador/);
 await ev("document.querySelector('#parent').click()");assert.equal(await ev("document.querySelector('#maps').value"),'region');

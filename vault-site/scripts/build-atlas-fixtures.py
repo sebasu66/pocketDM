@@ -84,5 +84,22 @@ im=blank();d=ImageDraw.Draw(im);shadow(im,(28,72,231,194));d.rounded_rectangle((
 for x in range(26,230,17):d.line((x,76,x,180),fill=(171,143,93),width=5)
 d.line((19,79,237,79),fill=(195,180,140),width=10);d.line((19,178,237,178),fill=(195,180,140),width=10);save(im,'bridge','Puente de madera','props','props',98)
 im=blank();d=ImageDraw.Draw(im);d.ellipse((49,49,207,207),fill=(88,97,86),outline=(179,185,166),width=14);d.ellipse((77,77,179,179),fill=(48,68,66));d.rectangle((63,110,193,139),fill=(124,95,59));save(im,'well','Pozo','props','props',65)
+# Coastal strip: alpha at the inland edge, reusable for the port settlement and region.
+coast=blank(512,1024);d=ImageDraw.Draw(coast)
+shore=[(int(310+math.sin(y/120)*25+math.sin(y/39)*10),y) for y in range(0,1025,4)]
+poly=[(0,0),*shore,(0,1024)]
+d.polygon([(0,0),*[(x+11,y) for x,y in shore],(0,1024)],fill=(157,170,146,255))
+d.polygon(poly,fill=(88,124,133,255))
+d.polygon([(0,0),*[(x-26,y) for x,y in shore],(0,1024)],fill=(68,110,126,255))
+d.line(shore,fill=(212,218,191,255),width=8)
+d.line([(x-12,y) for x,y in shore],fill=(143,183,184,255),width=4)
+for _ in range(650):
+    y=rng.randrange(1024); edge=310+math.sin(y/120)*25+math.sin(y/39)*10;x=rng.randint(0,max(0,int(edge)-35));length=rng.randint(4,28);d.line((x,y,min(x+length,int(edge)-22),y),fill=(93,139,151,rng.randint(50,110)),width=1)
+save(coast,'coast-west','Costa y mar','water','water',740)
+im=blank(320,160);shadow(im,(15,34,304,147));d=ImageDraw.Draw(im);d.rounded_rectangle((10,35,310,126),radius=4,fill=(122,105,75),outline=(70,78,70),width=4)
+for x in range(20,307,16):d.line((x,42,x,120),fill=(190,171,126),width=3)
+for x in [24,95,166,237,300]:
+    for y in [40,122]:d.ellipse((x-6,y-6,x+6,y+6),fill=(79,77,58),outline=(185,165,114),width=2)
+save(im,'pier','Muelle de madera','props','props',200)
 (root/'assets'/'manifest.json').write_text(json.dumps(assets,ensure_ascii=False,indent=2),encoding='utf8')
 print('Generated',len(assets),'original raster prototype assets')

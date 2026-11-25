@@ -5,7 +5,7 @@
   "owner": "Equipo de simulación",
   "status": "en-revision",
   "title": "Atlas bitmap editable con navegación por niveles",
-  "summary": "Editor PixiJS, 21 piezas PNG originales de prueba, tres mapas jerárquicos, carga/reemplazo de imágenes, transformaciones, capas, marcadores vinculados, guardado local y JSON. 80 pruebas y verificación en Edge. Arte y distribución no canónicos.",
+  "summary": "Editor PixiJS, 23 piezas PNG originales de prueba, tres mapas jerárquicos, carga/reemplazo de imágenes, transformaciones, capas, marcadores vinculados, guardado local y JSON. 80 pruebas y verificación en Edge. Arte y distribución no canónicos.",
   "changed": [
     "vault-site/public/atlas/",
     "vault-site/scripts/build-atlas-fixtures.py",
