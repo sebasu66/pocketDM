@@ -181,3 +181,21 @@ test('Firestore stores prepared skill branches; a new client selects without pro
  assert.equal((await fresh.confirm(principal,edge.command)).duplicate,true);
  assert.ok(!JSON.stringify(r).includes('private-prepared-transition'));
 });
+
+test('narrative opportunity gates are outside the skill calculation',()=>{
+ const d=definition();d.intents=d.intents.filter(i=>['accept','decline','withdraw'].includes(i.id));
+ const first=intent('ride-1','skill-check',{challengeId:'horse',opportunityId:'first',check:{skillId:'brawn',difficulty:'hard',reason:'Controlar caballo.'}});
+ const retry=intent('ride-2','skill-check',{challengeId:'horse',opportunityId:'second',requiresOutcomes:[{intentId:'ride-1',outcomes:['failure']}],check:first.check});
+ const fall=intent('fall','module-close',{requires:['ride-1'],requiresOutcomes:[{intentId:'ride-1',outcomes:['fumble']}],endingId:'fallen'});
+ d.intents.push(first,retry,fall);
+ let failure=false,fumble=false;
+ for(let k=0;k<500&&!(failure&&fumble);k++){
+  const {base,state,access}=fixture(d,'retry-example','retry-'+k),s=apply(base,state,access,'accept').state;
+  const w=prepareWindow(base,s,{...access,role:'worker'},{maxDepth:1,maxEdges:100}),edge=w.nodes[0].choices.find(e=>e.command.intentId==='ride-1');
+  const r=confirmCommand(base,s,access,edge.command,{preparedTransition:w.preparedTransitions[edge.command.commandId]});
+  const outcome=r.receipt.event.checks[0].outcome,available=options(base,r.state,access);
+  assert.equal(available.includes('ride-2'),outcome==='failure');assert.equal(available.includes('fall'),outcome==='fumble');
+  if(outcome==='failure')failure=true;if(outcome==='fumble')fumble=true;
+ }
+ assert.ok(failure&&fumble);
+});
