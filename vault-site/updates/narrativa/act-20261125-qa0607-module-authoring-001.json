@@ -1,0 +1,19 @@
+{
+  "id": "act-20261125-qa0607-module-authoring-001",
+  "date": "2026-11-25",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "QA-06/07: módulo original v0.2 y materialización mínima",
+  "summary": "Dossier privado de MOD-01: 8 escenas, 7 NPC, 20 intenciones, dos rutas candidatas, cinco cierres y nueve briefs de arte. Validador de referencias ejecutable. Canon y premisa pendientes de aprobación. Integrados avances ec65dd2/5e8bc82 sin tocar motor ni lector.",
+  "changed": [
+    "vault-site/public/docs/stormkeep-module-qa07-v02.md",
+    "vault-site/scripts/validate-authored-module.mjs"
+  ],
+  "next": "Validar canon y esquema de módulo con usuario/simulación; acordar capacidades de diálogo, evidencia, negociación, transferencia y cierre. Dossier fuera de Hosting, acceso por canal privado. Probar ramas reales antes de declarar H01.",
+  "source": "https://github.com/sebasu66/pocketDM/blob/feature/narrative-coordination-20261124/vault-site/public/docs/stormkeep-module-qa07-v02.md",
+  "nodeIds": [
+    "doc_0020",
+    "doc_0913"
+  ]
+}
