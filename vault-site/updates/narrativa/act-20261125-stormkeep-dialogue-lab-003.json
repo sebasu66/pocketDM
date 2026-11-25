@@ -7,7 +7,7 @@
   "title": "Laboratorio de diálogo de Stormkeep",
   "summary": "Inicio abre un panel de prueba independiente de la campaña. El selector usa el catálogo de 30 residentes y el manifiesto de arte. Cada diálogo tiene una opción directa y una opción D100 con éxito, fallo o tirada al azar. El registro se muestra en línea con el contrato de presentación del libro.",
   "changed": [
-    "vault-site/public/libro/navigation.mjs",
+    "vault-site/public/libro/reader.mjs",
     "vault-site/public/laboratorio/dialogo/"
   ],
   "next": "Revisar el panel en el teléfono del usuario y usar la misma separación para las siguientes pruebas de combate y habilidades.",
