@@ -1,0 +1,1836 @@
+{
+  "version": 1,
+  "status": "en-revision",
+  "date": "2026-11-25",
+  "references": {
+    "retrato": [
+      "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+      "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+      "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+    ],
+    "lugar": [
+      "/docs/art-references/plaza-cuervo-gris.png",
+      "/docs/art-references/bosqueNocturno.png",
+      "/docs/art-references/herreria.png"
+    ]
+  },
+  "entries": [
+    {
+      "key": "edda",
+      "id": "draft.npc.edda",
+      "name": "Edda Varn",
+      "age": 51,
+      "role": "Señora de la fortaleza",
+      "species": "humano",
+      "speciesStatus": "propuesta",
+      "priority": "P1",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/edda.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Edda Varn, a 51-year-old human keeper of the fort from Stormkeep, gray hair pinned back, plain iron clasp and a blue cloak, with a listening gaze. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "a4b41dfe334e0c560f02e3563cced82a629dedddd33ea7ce31d535cc3bd6ae02"
+      },
+      "notes": "Capa azul y cabello gris recogido. La espada y la armadura se dejan a revisión."
+    },
+    {
+      "key": "oren",
+      "id": "draft.npc.oren",
+      "name": "Oren Varn",
+      "age": 28,
+      "role": "Administrador y heredero",
+      "species": "humano",
+      "speciesStatus": "propuesta",
+      "priority": "P1",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/oren.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Oren Varn, a 28-year-old human steward and heir from Stormkeep, slender with dark hair and ink stains on his fingertips, with a precise, intent expression. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "33576bbce3348baaccbafc943e93c78f32502a40ae75a4955a63b34c187d3734"
+      },
+      "notes": "Dedos manchados de tinta y gesto concentrado. Revisar el emblema de la casa."
+    },
+    {
+      "key": "hald",
+      "id": "draft.npc.hald",
+      "name": "Hald Eirik",
+      "age": 55,
+      "role": "Capitán de la guardia",
+      "species": "elfo",
+      "speciesStatus": "propuesta",
+      "priority": "P1",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/hald.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Hald Eirik, a 55-year-old elf captain of the guard from Stormkeep, a crooked nose, short white beard, subtly pointed ears and a worn sailor’s cloak, with a watchful gaze. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "809d5c0863809ff4a3e7f56dcebcef4e7b00997e83a3cb2565ca3ff7eb813b8f"
+      },
+      "notes": "Capa marinera y rasgos élficos visibles. Revisar continuidad del uniforme con Runa."
+    },
+    {
+      "key": "runa",
+      "id": "draft.npc.runa",
+      "name": "Runa Eirik",
+      "age": 25,
+      "role": "Guardia de la puerta",
+      "species": "elfo",
+      "speciesStatus": "propuesta",
+      "priority": "P0",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/runa.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Runa Eirik, a 25-year-old elf gate guard from Stormkeep, short chestnut hair, freckles, subtly pointed ears, a dark cloak and mended gloves, with an open and curious gaze. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "867b6c8544370145b3a965497d27fd0bebe40e7381ffe15c469ffa7c25d76953"
+      },
+      "notes": "Pecas y guantes remendados legibles. La alabarda y el emblema requieren revisión de vestuario."
+    },
+    {
+      "key": "bjar",
+      "id": "draft.npc.bjar",
+      "name": "Bjar Kol",
+      "age": 34,
+      "role": "Guardia de los muelles",
+      "species": "enano",
+      "speciesStatus": "propuesta",
+      "priority": "P1",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/bjar.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Bjar Kol, a 34-year-old dwarf harbor guard from Stormkeep, broad build, a chin scar and a green scarf, with a friendly glance. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "1792502fbbba7bfd03de7f0d533d397666fcda46cf1be2cc7fbf9a402548bab7"
+      },
+      "notes": "Bufanda verde y cicatriz en mentón legibles. La alabarda y la heráldica requieren revisión."
+    },
+    {
+      "key": "corwin",
+      "id": "draft.npc.corwin",
+      "name": "Corwin",
+      "age": 39,
+      "role": "Escribiente de tránsito",
+      "species": "humano",
+      "speciesStatus": "propuesta",
+      "priority": "P2",
+      "type": "retrato",
+      "status": "pendiente",
+      "notes": "Pendiente de selección."
+    },
+    {
+      "key": "vesna",
+      "id": "draft.npc.vesna",
+      "name": "Vesna Rauk",
+      "age": 44,
+      "role": "Posadera del Cuervo Gris",
+      "species": "enano",
+      "speciesStatus": "propuesta",
+      "priority": "P0",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/vesna.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Vesna Rauk, a 44-year-old dwarf innkeeper from Stormkeep, graying auburn hair, a scar through one eyebrow, a blue apron and a wry half-smile. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "91ebf9f94d9746582c1f0339e40877394ea5d0f6e891e358528f5dc8fe2a36c3"
+      },
+      "notes": "Marca en la ceja, delantal y sonrisa seca visibles. La jarra y los bordados son elementos añadidos."
+    },
+    {
+      "key": "emil",
+      "id": "draft.npc.emil",
+      "name": "Emil Rauk",
+      "age": 40,
+      "role": "Cocinero y conservador de pescado",
+      "species": "enano",
+      "speciesStatus": "propuesta",
+      "priority": "P2",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/emil.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Emil Rauk, a 40-year-old dwarf cook from Stormkeep, auburn beard, rolled sleeves and a ready laugh. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "559f66ab274eeb39982beafbda19e970aa58ddd8e83ff573b0bf29b211881e20"
+      },
+      "notes": "Barba rojiza y risa legibles. La vajilla y los utensilios sobran para una pose neutra."
+    },
+    {
+      "key": "toren",
+      "id": "draft.npc.toren",
+      "name": "Toren Brasa",
+      "age": 47,
+      "role": "Herrero",
+      "species": "humano",
+      "speciesStatus": "propuesta",
+      "priority": "P1",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/toren.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Toren Brasa, a 47-year-old human blacksmith from Stormkeep, large hands, dark hair and a singed apron, with a skeptical gaze. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "62e0401c51345d957e6488db3ec0b6dbcd6719dafbe63ec11fb2415ecedec630"
+      },
+      "notes": "Delantal de trabajo y manos fuertes. El martillo es una adición de la generación."
+    },
+    {
+      "key": "liv",
+      "id": "draft.npc.liv",
+      "name": "Liv Brasa",
+      "age": 21,
+      "role": "Aprendiz de herrería",
+      "species": "humano",
+      "speciesStatus": "propuesta",
+      "priority": "P1",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/liv.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Liv Brasa, a 21-year-old human smith’s apprentice from Stormkeep, hair shaved on one side, stained forearms and a pierced ear, with the start of a laugh. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "fe5c48ee9a83ad008e78cfaeae97cfa0352af391e3a3f8e8a3c7e66610fff7ba"
+      },
+      "notes": "Lado rapado y rostro expresivo. Revisar cantidad de herramientas y adornos."
+    },
+    {
+      "key": "aldra",
+      "id": "draft.npc.aldra",
+      "name": "Aldra Neral",
+      "age": 49,
+      "role": "Mercader y acreedora",
+      "species": "humano",
+      "speciesStatus": "propuesta",
+      "priority": "P0",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/aldra.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Aldra Neral, a 49-year-old human merchant from Stormkeep, black hair neatly tied back, an ochre coat and a calm, appraising gaze. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "f164ed876921ddf0aabab0e50fd53ede7b0a3e095d4544f304eac9456ec1d2a2"
+      },
+      "notes": "Abrigo ocre y mirada acordes. La ornamentación y los emblemas requieren revisión."
+    },
+    {
+      "key": "bram",
+      "id": "draft.npc.bram",
+      "name": "Bram Neral",
+      "age": 27,
+      "role": "Comerciante de sal y telas",
+      "species": "humano",
+      "speciesStatus": "propuesta",
+      "priority": "P2",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/bram.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Bram Neral, a 27-year-old human merchant from Stormkeep, pale scarf, a thin mustache and restless hands, with an eager gaze. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "9ee44e2be8914f67cf0bbd77d9046e92ae0c0c3a7f8a61aefe05d8cf930225a9"
+      },
+      "notes": "Bufanda clara y manos inquietas. Revisar accesorios y coincidencia visual con Aldra."
+    },
+    {
+      "key": "anja",
+      "id": "draft.npc.anja",
+      "name": "Anja Sorel",
+      "age": 37,
+      "role": "Tejedora y remendadora",
+      "species": "humano",
+      "speciesStatus": "propuesta",
+      "priority": "P2",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/anja.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Anja Sorel, a 37-year-old human weaver from Stormkeep, chestnut braids, a red shawl and deft hands, with a practical, kind expression. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "02119eeb2f1c4bae702eb151d48d5298956405d9044ee098b62c09640b824631"
+      },
+      "notes": "Chal rojo y trenzas visibles. El tejido da contexto, con simbología añadida."
+    },
+    {
+      "key": "dain",
+      "id": "draft.npc.dain",
+      "name": "Dain Sorel",
+      "age": 39,
+      "role": "Carpintero naval",
+      "species": "humano",
+      "speciesStatus": "propuesta",
+      "priority": "P1",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/dain.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Dain Sorel, a 39-year-old human shipwright from Stormkeep, tall build, short beard and small marks on his hands, with a patient expression. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "44825bd16861a19ff0e9e6c97afc5a450706fae16cfb3d2d05a0c49090cd5dbd"
+      },
+      "notes": "Barba corta y marcas en manos. El boceto naval encaja con su forma de explicar, con equipo añadido."
+    },
+    {
+      "key": "senn",
+      "id": "draft.npc.senn",
+      "name": "Senn",
+      "age": 62,
+      "role": "Custodio de las Lámparas",
+      "species": "humano",
+      "speciesStatus": "propuesta",
+      "priority": "P1",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/senn-v2.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Senn, a 62-year-old human caretaker from Stormkeep, bald with a white beard, in a plain brown patched wool robe, hands loosely clasped, with a patient gaze. Empty hands, no staff, magical items or insignia. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "bc73661b11eb49bc85e912ee108f17b67ba6d41747e5f877617e317f0838e428"
+      },
+      "notes": "Túnica remendada y manos libres. Conserva la caracterización de custodio."
+    },
+    {
+      "key": "nola",
+      "id": "draft.npc.nola",
+      "name": "Nola Vey",
+      "age": 23,
+      "role": "Aprendiz del santuario",
+      "species": "elfo",
+      "speciesStatus": "propuesta",
+      "priority": "P1",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/nola.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Nola Vey, a 23-year-old elf sanctuary apprentice from Stormkeep, curly hair, slightly pointed ears and a small trace of candle wax on her fingers, with a curious lifted brow. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "effc0e63fe68b82be9488b52448581639dccf449d98e72fe5d0f27b3bfa45a7d"
+      },
+      "notes": "Rizos y gesto curioso. El libro y la vela son compatibles con su oficio. Revisar los frascos e insignias."
+    },
+    {
+      "key": "isveld",
+      "id": "draft.npc.isveld",
+      "name": "Isveld",
+      "age": 43,
+      "role": "Curandera",
+      "species": null,
+      "speciesStatus": "sin asignar · retrato aprobado",
+      "priority": "P0",
+      "type": "retrato",
+      "status": "aprobado-usuario",
+      "image": "assets/isveld.png",
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "5e3c9fff6536d2414431b345ff7ffc4f67629106d89c8b050b71e30b3e098a29"
+      },
+      "notes": "Retrato aprobado. La ficha no declara una especie.",
+      "prompt": null,
+      "references": null,
+      "engine": null
+    },
+    {
+      "key": "tessa",
+      "id": "draft.npc.tessa",
+      "name": "Tessa Kol",
+      "age": 52,
+      "role": "Partera y cuidadora",
+      "species": "enano",
+      "speciesStatus": "propuesta",
+      "priority": "P1",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/tessa.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Tessa Kol, a 52-year-old dwarf midwife from Stormkeep, a round face, graying hair and a plain satchel of cloth, with a frank expression. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "89ab43790a937dcf16be05874e02d21085999d39dad488ce6d79421e1dbe5aab"
+      },
+      "notes": "Rostro redondo, pelo entrecano y paños visibles. Revisar instrumental añadido."
+    },
+    {
+      "key": "orik",
+      "id": "draft.npc.orik",
+      "name": "Orik Vey",
+      "age": 55,
+      "role": "Maestro de puerto",
+      "species": "elfo",
+      "speciesStatus": "propuesta",
+      "priority": "P1",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/orik.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Orik Vey, a 55-year-old elf harbor master from Stormkeep, gray hair, wind-worn nose, slightly pointed ears and a plain working coat, with a firm gaze. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "0049ff34c14bb47b93763f451b875fd822b0029e50d23995012461830ab719c9"
+      },
+      "notes": "Abrigo de trabajo y expresión firme. El catalejo sustituye visualmente el bastón de la ficha."
+    },
+    {
+      "key": "kael",
+      "id": "draft.npc.kael",
+      "name": "Kael Lonn",
+      "age": 35,
+      "role": "Pescador",
+      "species": "humano",
+      "speciesStatus": "propuesta",
+      "priority": "P2",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/kael.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Kael Lonn, a 35-year-old human fisher from Stormkeep, weathered skin, dark blond hair and an oilskin cloak, with a cautiously upbeat expression. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "8a05ac27fbaa18a8628749390fd22cae42de55745828ee48cf16105866a1d6e6"
+      },
+      "notes": "Abrigo de trabajo y gesto sereno. El pescado y los accesorios son añadidos."
+    },
+    {
+      "key": "mira",
+      "id": "draft.npc.mira",
+      "name": "Mira Lonn",
+      "age": 34,
+      "role": "Redera y vendedora de pescado",
+      "species": "elfo",
+      "speciesStatus": "propuesta",
+      "priority": "P2",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/mira.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Mira Lonn, a 34-year-old elf net maker from Stormkeep, dark red hair, blue headscarf, slightly pointed ears and rough hands, with a quick, amused expression. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "ac565ec715c3c2fca06724ffa0911984e8408d06550e6908e4cc9c74c7bb5d17"
+      },
+      "notes": "Pañuelo azul y pelo rojizo. La red ayuda a leer el oficio. Revisar el emblema."
+    },
+    {
+      "key": "jorun",
+      "id": "draft.npc.jorun",
+      "name": "Jorun Skeld",
+      "age": 45,
+      "role": "Patrón de embarcación mercante",
+      "species": "enano",
+      "speciesStatus": "propuesta",
+      "priority": "P2",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/jorun.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Jorun Skeld, a 45-year-old dwarf skipper from Stormkeep, dark beard, heavy coat and a plain ring, with a quiet expression. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "f2066baccf0b9f19fadac7ca63827451c73e23a548e6d597a4020f9b4e766aa6"
+      },
+      "notes": "Abrigo pesado y barba oscura. Revisar abrigo y equipamiento frente a otros trabajadores del muelle."
+    },
+    {
+      "key": "fen",
+      "id": "draft.npc.fen",
+      "name": "Fen Arvik",
+      "age": 24,
+      "role": "Estibador",
+      "species": "elfo oscuro",
+      "speciesStatus": "propuesta",
+      "priority": "P2",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/fen.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Fen Arvik, a 24-year-old dark elf dockworker from Stormkeep, slender build, tousled hair, ash-gray skin and calloused hands, with a reserved look. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "28afcd962069a9307909a77b7ee920bc8b3130f6e0542f375dd8eca81b0c22d8"
+      },
+      "notes": "Perfil delgado y reservado. Mantiene rasgos de familia propuestos con Roan."
+    },
+    {
+      "key": "sava",
+      "id": "draft.npc.sava",
+      "name": "Sava Renn",
+      "age": 31,
+      "role": "Guía de navegación",
+      "species": "humano",
+      "speciesStatus": "propuesta",
+      "priority": "P2",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/sava.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Sava Renn, a 31-year-old human navigation guide from Stormkeep, short black hair, green coat and attentive eyes. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "ec922fa342f4bfaaadb3eb5cd138b81dc7443558b96159c1f52dbc681ff12c8a"
+      },
+      "notes": "Pelo corto, abrigo verde y expresión atenta. Revisar instrumento de navegación añadido."
+    },
+    {
+      "key": "hessa",
+      "id": "draft.npc.hessa",
+      "name": "Hessa Dorn",
+      "age": 50,
+      "role": "Agricultora y representante de huertas",
+      "species": "humano",
+      "speciesStatus": "propuesta",
+      "priority": "P2",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/hessa.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Hessa Dorn, a 50-year-old human gardener and farmers’ representative from Stormkeep, gray braids and strong hands, with a direct gaze. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "57bc989f02745b46c9fc15d5983a52691b0fe7a02b3270aaba6c4a790d565bf7"
+      },
+      "notes": "Trenza gris y postura directa. La pala y la cesta refuerzan el oficio y ocupan mucho encuadre."
+    },
+    {
+      "key": "nils",
+      "id": "draft.npc.nils",
+      "name": "Nils Dorn",
+      "age": 26,
+      "role": "Carretero",
+      "species": "humano",
+      "speciesStatus": "propuesta",
+      "priority": "P0",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/nils.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Nils Dorn, a 26-year-old human cart driver from Stormkeep, dark blond hair, broad shoulders, a worn leather waistcoat and a visibly impatient expression. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "0045a654476fb916519848de7c5d8ed67019f6190be0db90e2c1f34b0018a8dc"
+      },
+      "notes": "Vestuario de trabajo y expresión impaciente reconocibles. El equipo puede simplificarse en una futura revisión."
+    },
+    {
+      "key": "elin",
+      "id": "draft.npc.elin",
+      "name": "Elin Dorn",
+      "age": 32,
+      "role": "Panadera",
+      "species": "humano",
+      "speciesStatus": "propuesta",
+      "priority": "P2",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/elin.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Elin Dorn, a 32-year-old human baker from Stormkeep, pinned-up hair, flour-dusted apron and rosy cheeks, with a warm, focused expression. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "47b1bc847c4d1a79b4f54d4153cf88e53d90f3da57a65363dd35f2700099bfe5"
+      },
+      "notes": "Delantal con harina y expresión cálida. La masa y la cesta son añadidos."
+    },
+    {
+      "key": "roan",
+      "id": "draft.npc.roan",
+      "name": "Roan Arvik",
+      "age": 46,
+      "role": "Leñador y carbonero",
+      "species": "elfo oscuro",
+      "speciesStatus": "propuesta",
+      "priority": "P2",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/roan.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Roan Arvik, a 46-year-old dark elf charcoal burner from Stormkeep, ash-gray skin, graying dark beard and a worn hide jacket, with a quiet expression. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "5e4d98a0611dc3fd2aa04c484b32905ef340bd66f4ada4d2e84f3bca78ffdef1"
+      },
+      "notes": "Barba oscura entrecana y chaqueta de piel. Revisar herramienta añadida y afinidad familiar con Fen."
+    },
+    {
+      "key": "varek",
+      "id": "draft.npc.varek",
+      "name": "Varek Oss",
+      "age": 42,
+      "role": "Revendedor de materiales recuperados",
+      "species": "humano",
+      "speciesStatus": "propuesta",
+      "priority": "P2",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/varek.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Varek Oss, a 42-year-old human salvage dealer from Stormkeep, straight hair, worn gloves and a restrained smile. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "ee60953396f17d9e91170092ab7faec6c025f6a9b02f8f08d181f3cd7276dbac"
+      },
+      "notes": "Guantes gastados y sonrisa contenida. Los instrumentos acumulados necesitan revisión de vestuario."
+    },
+    {
+      "key": "kestrel",
+      "id": "draft.npc.kestrel",
+      "name": "Kestrel Vale",
+      "age": 30,
+      "role": "Guía terrestre",
+      "species": "elfo oscuro",
+      "speciesStatus": "propuesta",
+      "priority": "P1",
+      "type": "retrato",
+      "status": "candidato",
+      "image": "assets/kestrel.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Kestrel Vale, a 30-year-old dark elf overland guide from Stormkeep, dark ash skin, subtly pointed ears, black hair with one pale streak and a brown cloak, with a dry half-smile. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "da15e5868cdbdf3a1c047354f04df6caaaa1237042252b12fb142ac17c9cb375"
+      },
+      "notes": "Mechón claro, capa parda y expresión seca. Revisar si bastón y emblema corresponden."
+    },
+    {
+      "key": "stormkeep",
+      "id": "stormkeep",
+      "name": "Stormkeep desde el camino oriental",
+      "view": "exterior",
+      "time": "Atardecer",
+      "priority": "P0",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/stormkeep.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Exterior view of Stormkeep from the eastern approach, showing a small fortified port built down a hillside to a sheltered sea inlet, with working piers and a modest hilltop keep at sunset, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "f53440f917a5d257e4351d8f48732606cd71fe2eac0b93c64b6cebb30a026d78"
+      },
+      "notes": "Se leen la entrada terrestre, el puerto en uso, las viviendas y el bastión en altura. Revisar heráldica."
+    },
+    {
+      "key": "puerta-oriental",
+      "id": "draft.stormkeep.east-gate",
+      "name": "Puerta Oriental",
+      "view": "exterior",
+      "time": "Anochecer carmesí",
+      "priority": "P0",
+      "type": "lugar",
+      "status": "aprobado-usuario",
+      "image": "assets/puerta-oriental.png",
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "597004db20ff81a556d9ad95f2733e6a5bc85330ef41a72ed29610b3a41603c8"
+      },
+      "notes": "Primera versión nativa aprobada.",
+      "prompt": null,
+      "references": null,
+      "engine": null
+    },
+    {
+      "key": "plaza",
+      "id": "stormkeep",
+      "name": "Plaza del Cuervo Gris",
+      "view": "exterior",
+      "time": "Atardecer",
+      "priority": "P0",
+      "type": "lugar",
+      "status": "original",
+      "image": "/docs/art-references/plaza-cuervo-gris.png",
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": [
+          255,
+          255
+        ],
+        "sha256": "9d74f74132821694b43490a9b024ef1d763a63a3b7aa2a5a75eb1ff92eb4185c"
+      }
+    },
+    {
+      "key": "taberna-exterior",
+      "id": "draft.stormkeep.inn",
+      "name": "El Cuervo Gris",
+      "view": "exterior",
+      "time": "Anochecer",
+      "priority": "P0",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/taberna-exterior.png",
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "3aafc810125a675d38433214b0220481c0f5115d81a4847e0563e351e8148505"
+      },
+      "notes": "Posada reconocible, con ventanas cálidas y pórtico de madera.",
+      "prompt": null,
+      "references": null,
+      "engine": null
+    },
+    {
+      "key": "taberna-interior",
+      "id": "draft.stormkeep.inn",
+      "name": "El Cuervo Gris",
+      "view": "interior",
+      "time": "Anochecer",
+      "priority": "P0",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "/libro/edition/assets/cuervo-gris-interior-candidato.png",
+      "file": {
+        "width": 2736,
+        "height": 1536,
+        "alphaRange": null,
+        "sha256": "ad6449947cb95d3570fd62590cd943ba7f1ee13b025ce95776cbe277db7be88b"
+      },
+      "notes": "Interior existente de la edición del libro. Sala pequeña e iluminación compatible con el exterior.",
+      "prompt": null,
+      "references": null,
+      "engine": null
+    },
+    {
+      "key": "hospicio-exterior",
+      "id": "draft.stormkeep.hospice",
+      "name": "Hospicio del Umbral",
+      "view": "exterior",
+      "time": "Amanecer",
+      "priority": "P0",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/hospicio-exterior.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Exterior view of the Hospice of the Threshold, a small adapted stone-and-timber house in Stormkeep with a pointed two-light window and a weathered entrance at dawn, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "2a5282e540c6bbee7c63af8489ce730e32b83cfe94213cacb659e34beac34bc2"
+      },
+      "notes": "Vivienda de escala manejable con vano apuntado. Revisar tamaño de ventana y luz con el interior preferente."
+    },
+    {
+      "key": "hospicio-interior",
+      "id": "draft.stormkeep.hospice",
+      "name": "Hospicio del Umbral",
+      "view": "interior",
+      "time": "Amanecer",
+      "priority": "P0",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/hospicio-interior.png",
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": [
+          255,
+          255
+        ],
+        "sha256": "b3a53cd506f4e6bbd0c661d86c78dbd5b043e64c30948c143d6cc870ee74b51b"
+      },
+      "notes": "Muestra preferente aportada por el usuario. Revisar escala de la sala y heráldica.",
+      "prompt": null,
+      "references": null,
+      "engine": null
+    },
+    {
+      "key": "mercado",
+      "id": "draft.stormkeep.market",
+      "name": "Mercado de las Balanzas",
+      "view": "exterior",
+      "time": "Mañana invernal",
+      "priority": "P0",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/mercado-v2.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Exterior view of a hillside market in a small medieval port with pale canvas stalls, grain sacks and people trading at an overcast winter morning. No signboards, text or heraldry, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "fb7e4ae64db9eea7e1e4f1b8a93406f706e7bde5493ad135f2bc72eb08b808c2"
+      },
+      "notes": "Puestos sin letreros y luz invernal. Revisar escala de la silueta al fondo."
+    },
+    {
+      "key": "forja-exterior",
+      "id": "draft.stormkeep.smithy",
+      "name": "Forja del Ancla",
+      "view": "exterior",
+      "time": "Tarde",
+      "priority": "P0",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/forja-exterior-v2.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Exterior view of a modest stone forge with a wide arched opening and a low chimney near the waterfront at late afternoon. The sun is out of frame. No signboards, text or heraldry, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "9cf5d64cda82155f62b2b6508daa47b7d13858a99abd6c7caa0a3c9dce1a3a59"
+      },
+      "notes": "Taller junto a la costa con vano y luz interior compatibles con la referencia de la forja."
+    },
+    {
+      "key": "forja-interior",
+      "id": "draft.stormkeep.smithy",
+      "name": "Forja del Ancla",
+      "view": "interior",
+      "time": "Tarde",
+      "priority": "P0",
+      "type": "lugar",
+      "status": "original",
+      "image": "/docs/art-references/herreria.png",
+      "file": {
+        "width": 2048,
+        "height": 1152,
+        "alphaRange": [
+          255,
+          255
+        ],
+        "sha256": "31444499389a50d526d6d19dfce96d983496f3bfa3a2ad6b36aa92d31c0e7d68"
+      }
+    },
+    {
+      "key": "camino-oriental",
+      "id": "hex.0.0 / hex.1.0 / hex.2.0",
+      "name": "Camino oriental",
+      "view": "exterior",
+      "time": "Mañana brumosa",
+      "priority": "P0",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/camino-oriental-v2.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Exterior view of a rutted cart road well beyond the town walls, passing through muted green pastures and into a wooded valley at a foggy morning. No fortifications, signs or visible sun, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "a3d5c9be5f39d5b2bb35ebaf5dba954a84c2886c48a3843333950a5c1d7a9e87"
+      },
+      "notes": "Camino carretero en campo abierto, con niebla y sin puerta ni sol visible."
+    },
+    {
+      "key": "puente-vado",
+      "id": "pilot.bridge",
+      "name": "Puente del Vado",
+      "view": "exterior",
+      "time": "Tarde fría",
+      "priority": "P0",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/puente-vado.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Exterior view of the isolated Bridge of the Ford, a narrow low stone bridge carrying the eastern cart road across a shallow river between wooded banks at a cold late afternoon, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "673bebbd1297dce35371f45f8ef14c8365580814023bdd9e93465414a1ae44fb"
+      },
+      "notes": "Paso rural con camino sobre cauce somero. Revisar sol dominante y estandarte añadido."
+    },
+    {
+      "key": "aldea-hielo",
+      "id": "pilot.village",
+      "name": "Aldea del Hielo",
+      "view": "exterior",
+      "time": "Mañana cubierta",
+      "priority": "P0",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/aldea-hielo.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Exterior view of the Ice Village, a small cluster of occupied homes and woodpiles in the winter valley beyond the ford, at an overcast winter morning, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "ff7452e7f15929f5e49c2b9cdac3653b3a2e200b1625fea5bf1cc65900dfbb5f"
+      },
+      "notes": "Casas habitadas y leña apilada. El estandarte de copo es una adición visual para revisión."
+    },
+    {
+      "key": "templo-exterior",
+      "id": "draft.stormkeep.shrine",
+      "name": "Casa de las Lámparas",
+      "view": "exterior",
+      "time": "Mañana cubierta",
+      "priority": "P1",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/templo-exterior.png",
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "d6b523fafc6b4252561c7f59e964d2114a19524a689cfc3e918cc716118afd5c"
+      },
+      "notes": "Edificio reconocible, pero puede verse monumental para un santuario de puerto pequeño.",
+      "prompt": null,
+      "references": null,
+      "engine": null
+    },
+    {
+      "key": "templo-interior",
+      "id": "draft.stormkeep.shrine",
+      "name": "Casa de las Lámparas",
+      "view": "interior",
+      "time": "Mañana cubierta",
+      "priority": "P1",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/templo-interior.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Interior view of the House of the Lamps, a small hillside sanctuary in the port of Stormkeep, with oil lamps and simple benches at an overcast morning, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "e5c50dbe8df423f2b5fec5a1bca53134faef40f29eb6dfa3d13c6c6d54b7acbd"
+      },
+      "notes": "Bancos, lámparas y espacio de culto visibles. Revisar escala de arcos y simbología con el exterior."
+    },
+    {
+      "key": "bastion-exterior",
+      "id": "draft.stormkeep.fort",
+      "name": "Bastión Varn",
+      "view": "exterior",
+      "time": "Anochecer",
+      "priority": "P1",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/bastion-exterior.png",
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "13f8893ab80fc1a3d9dcc48f8d6b3767ed9eabdf54a1e2dc37c44f90b113e36b"
+      },
+      "notes": "Identifica la fortificación. Revisar escala y estandartes.",
+      "prompt": null,
+      "references": null,
+      "engine": null
+    },
+    {
+      "key": "bastion-interior",
+      "id": "draft.stormkeep.fort",
+      "name": "Bastión Varn",
+      "view": "interior",
+      "time": "Anochecer",
+      "priority": "P1",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/bastion-interior.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Interior view of the modest audience hall of Bastion Varn, with a long plain table below an iron wall sconce and a narrow seaward window, in Stormkeep at dusk, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "d10fe7bc8fa2baadc657600ed6ae8b352efbce8a93c5a3a386a3cd3d52e2078b"
+      },
+      "notes": "Sala de audiencias sencilla con vista al mar. Revisar heráldica y continuidad exterior."
+    },
+    {
+      "key": "puerto",
+      "id": "draft.stormkeep.harbor",
+      "name": "Muelles del Regreso",
+      "view": "exterior",
+      "time": "Hora azul",
+      "priority": "P1",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/puerto.png",
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "49b499906c64e29b50beca3f4f6ea78cd43bdfc1862f59fd99075757010c8e98"
+      },
+      "notes": "Muestra los muelles en uso y embarcaciones pequeñas. Revisar tamaño de la fortificación al fondo.",
+      "prompt": null,
+      "references": null,
+      "engine": null
+    },
+    {
+      "key": "cuartel-exterior",
+      "id": "draft.stormkeep.barracks",
+      "name": "Cuartel",
+      "view": "exterior",
+      "time": "Mediodía nublado",
+      "priority": "P1",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/cuartel-exterior.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Exterior view of the small timber-and-stone guard quarters just inside the land gate of Stormkeep at a cloudy midday, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "4afd31cfb622d5e5004176df62d56b6d02c5901dda3f43b3ae17c2d0404c3f5a"
+      },
+      "notes": "Cuartel pequeño junto a la puerta. Revisar arquitectura de la puerta con la vista aprobada."
+    },
+    {
+      "key": "cuartel-interior",
+      "id": "draft.stormkeep.barracks",
+      "name": "Cuartel",
+      "view": "interior",
+      "time": "Mediodía nublado",
+      "priority": "P1",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/cuartel-interior.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Interior view of the small guard quarters beside Stormkeep’s land gate, with a shared bench, a plain hearth and a few drying cloaks at a cloudy midday, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "df192f7cbddeacc25ee666cad86a52a6460b9394e68ba6a140e846366d53cb27"
+      },
+      "notes": "Banco, hogar y capas reconocibles. Revisar si el arco abierto representa bien el interior del mismo edificio."
+    },
+    {
+      "key": "varadero-exterior",
+      "id": "draft.stormkeep.shipyard",
+      "name": "Varadero",
+      "view": "exterior",
+      "time": "Última hora de la tarde",
+      "priority": "P1",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/varadero-exterior-v3.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Edit only the first image, the boatyard exterior. Remove the entire hanging sign with the readable lettering and its signpost. Keep the original medieval fishing boats, timber shed, light, layout and framing. The other three images are style references only. Retain the horizontal 16:9 frame.",
+      "references": [
+        "assets/varadero-exterior.png",
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "5b7da4720bcf7ec7046acd91f342413083152759587e0416da5fe5e0ee78e9b7"
+      },
+      "notes": "Vista sin el letrero en inglés. Revisar la cabina de la embarcación y la continuidad con el taller interior."
+    },
+    {
+      "key": "varadero-interior",
+      "id": "draft.stormkeep.shipyard",
+      "name": "Varadero",
+      "view": "interior",
+      "time": "Última hora de la tarde",
+      "priority": "P1",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/varadero-interior.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Interior view of Stormkeep’s boatyard shed facing the slips, with spare planks and a fishing hull under repair at a clear late afternoon, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "e7aef36fecd4a439072e6d91c0541e309e0917a248b68366876dc5cd2291b175"
+      },
+      "notes": "Casco y tablones en reparación. Iluminación compatible con la hora visual de la vista exterior."
+    },
+    {
+      "key": "deposito-interior",
+      "id": "draft.stormkeep.reserve",
+      "name": "Depósito común",
+      "view": "interior",
+      "time": "Mediodía",
+      "priority": "P1",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/deposito-interior-v2.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Interior view of a small enclosed dry stone storehouse with a closed plank door, lidded grain chests on raised pallets and narrow high windows at noon. No banners or outdoor vista, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "20a8ec1a71f35c5d56a25c72b8507857a6922d8278bf6464be21fcd02c3c0f53"
+      },
+      "notes": "Reserva cubierta y seca con puerta cerrada, cajones con tapa y piso despejado."
+    },
+    {
+      "key": "fuente-cisterna",
+      "id": "draft.stormkeep.spring",
+      "name": "Fuente alta y cisterna",
+      "view": "exterior",
+      "time": "Primera mañana",
+      "priority": "P1",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/fuente-cisterna.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Exterior view of Stormkeep’s upper spring and its low stone cistern cover on the slope below the keep at early morning, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "d5b01e45ca60190cdd753a3d57493926de801ddab27e303e2decb74be36b890f"
+      },
+      "notes": "Toma de agua y tapa visibles. El disco rojo compite con el lugar."
+    },
+    {
+      "key": "barrio-hogares",
+      "id": "draft.stormkeep.homes",
+      "name": "Barrio de los Hogares",
+      "view": "exterior",
+      "time": "Tarde cubierta",
+      "priority": "P1",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/barrio-hogares.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Exterior view of the hillside residential quarter of Stormkeep with modest stone-and-timber houses and steep footpaths at an overcast afternoon, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "1897e5bd20b0261bb7fefc98808ae723d0fbb8a7e041abba9914ec0df25c8f89"
+      },
+      "notes": "Viviendas de ladera y senderos escalonados. La luz cubierta difiere del callejón existente."
+    },
+    {
+      "key": "callejon",
+      "id": "draft.stormkeep.homes",
+      "name": "Callejón del Barrio de los Hogares",
+      "view": "exterior",
+      "time": "Atardecer",
+      "priority": "P1",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/callejon.png",
+      "file": {
+        "width": 2048,
+        "height": 1152,
+        "alphaRange": [
+          255,
+          255
+        ],
+        "sha256": "555e5a5ea8002daf05709d346b0d1d4e32dc1114993670987f957f32e1e89e68"
+      },
+      "notes": "Revisar continuidad con el barrio y la continuidad de la luz.",
+      "prompt": null,
+      "references": null,
+      "engine": null
+    },
+    {
+      "key": "horno-elin",
+      "id": "draft.stormkeep.bakery",
+      "name": "Horno de Elin",
+      "view": "interior",
+      "time": "Antes del alba",
+      "priority": "P1",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/horno-elin.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Interior view of Elin’s neighborhood bakery in Stormkeep, with a modest stone oven and bread cooling on a wooden shelf before dawn, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "6fb5197237761d2ad73c449ce5963f199520e140cd476ac7abb768fc2ef78d66"
+      },
+      "notes": "Se leen el horno encendido, la mesa de trabajo y los panes."
+    },
+    {
+      "key": "huertas",
+      "id": "draft.stormkeep.farms",
+      "name": "Huertas de la Ladera",
+      "view": "exterior",
+      "time": "Mañana con helada",
+      "priority": "P1",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/huertas.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Exterior view of the walled slope gardens outside Stormkeep, with cold-weather vegetable beds and low windbreaks at morning after frost, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "28db47bcb1b6192ed49fb9ef7ff6a2f772d04d2018fd22441393237a6e0aebf4"
+      },
+      "notes": "Parcelas escalonadas con escarcha. El sol rojo repite un motivo de las referencias."
+    },
+    {
+      "key": "linde",
+      "id": "draft.stormkeep.woodlot",
+      "name": "Linde de los Leñadores",
+      "view": "exterior",
+      "time": "Tarde pálida",
+      "priority": "P1",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/linde.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Exterior view of Stormkeep’s managed woodland edge, with marked trunks and stacked cordwood at a pale afternoon, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "f86669dc4c99907d7f9f6edee3b8cca813f0aa347f9d7fb8f9bfe5a351d2d31d"
+      },
+      "notes": "Troncos marcados y pilas de leña visibles. Revisar estandarte añadido."
+    },
+    {
+      "key": "ahumadero",
+      "id": "draft.stormkeep.smokehouse",
+      "name": "Ahumaderos",
+      "view": "exterior",
+      "time": "Mañana con niebla",
+      "priority": "P1",
+      "type": "lugar",
+      "status": "candidato",
+      "image": "assets/ahumadero.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Exterior view of Stormkeep’s low fish smokehouse above the quay, with a few fish-drying racks at a foggy morning, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "f84c68f3fc8ac0394bc856fa8c276f6c430c86a12d7e87793a302e4a74401c5f"
+      },
+      "notes": "La pesca y la función del ahumadero se distinguen. La silueta del bastión al fondo es grande."
+    }
+  ],
+  "historical": [
+    {
+      "key": "senn-historial",
+      "id": "draft.npc.senn",
+      "name": "Senn",
+      "age": 62,
+      "role": "Custodio de las Lámparas",
+      "species": "humano",
+      "speciesStatus": "propuesta",
+      "priority": "P1",
+      "type": "retrato",
+      "status": "rechazado",
+      "image": "assets/senn.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Senn, a 62-year-old human sanctuary keeper from Stormkeep, bald head, white beard and a patched robe, with a patient gaze. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "325f6321809a5a60ede452fcd39bb07baf63197da3440595523334b54993758f"
+      },
+      "notes": "El bastón y los adornos lo caracterizan como mago sin respaldo en la ficha."
+    },
+    {
+      "key": "mercado-historial",
+      "id": "draft.stormkeep.market",
+      "name": "Mercado de las Balanzas",
+      "view": "exterior",
+      "time": "Mañana invernal",
+      "priority": "P0",
+      "type": "lugar",
+      "status": "rechazado",
+      "image": "assets/mercado.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Exterior view of the small Market of the Scales on the hillside of Stormkeep, with timber stalls selling grain and salted fish at an overcast winter morning, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "fd5592688a4c4b098a94205c3c668137803384b09c9ec0eca4c554ae74017ed3"
+      },
+      "notes": "El cartel y la composición reproducen motivos de la plaza de referencia."
+    },
+    {
+      "key": "forja-exterior-historial",
+      "id": "draft.stormkeep.smithy",
+      "name": "Forja del Ancla",
+      "view": "exterior",
+      "time": "Tarde",
+      "priority": "P0",
+      "type": "lugar",
+      "status": "rechazado",
+      "image": "assets/forja-exterior.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Exterior view of the modest Anchor Forge, a stone workshop with a wide arched opening and a low chimney in Stormkeep at late afternoon, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "ccfffbf056bf635a9cc12f803686d994e10f1b1ad80a9bb03e12fc7c4f4d6786"
+      },
+      "notes": "Cartel en inglés y sol dominante heredado de la referencia."
+    },
+    {
+      "key": "camino-oriental-historial",
+      "id": "hex.0.0 / hex.1.0 / hex.2.0",
+      "name": "Camino oriental",
+      "view": "exterior",
+      "time": "Mañana brumosa",
+      "priority": "P0",
+      "type": "lugar",
+      "status": "rechazado",
+      "image": "assets/camino-oriental.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Exterior view of the eastern cart road beyond Stormkeep, crossing rough pasture toward a wooded valley at a misty morning, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "ae62287d728b967361a6414680d282e5a9a811046b5182dbd0041286b3e4b884"
+      },
+      "notes": "La fortificación domina la escena y la luz se lee como atardecer."
+    },
+    {
+      "key": "varadero-exterior-historial",
+      "id": "draft.stormkeep.shipyard",
+      "name": "Varadero",
+      "view": "exterior",
+      "time": "Última hora de la tarde",
+      "priority": "P1",
+      "type": "lugar",
+      "status": "rechazado",
+      "image": "assets/varadero-exterior.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Exterior view of Stormkeep’s coastal boatyard with a modest timber shed and a small fishing boat on slips at a clear late afternoon, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "e2991cb91e851f89de5036a64768d9c33aacd08cbdd9b36f71e707a66d29ea4a"
+      },
+      "notes": "Cartel en inglés añadido en primer plano."
+    },
+    {
+      "key": "varadero-exterior-v2-historial",
+      "id": "draft.stormkeep.shipyard",
+      "name": "Varadero",
+      "view": "exterior",
+      "time": "Última hora de la tarde",
+      "priority": "P1",
+      "type": "lugar",
+      "status": "rechazado",
+      "image": "assets/varadero-exterior-v2.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Exterior view of a modest unmarked timber boatshed on a small fishing harbor, with a timber hull on repair cradles and working slips at late afternoon. No signboards, lettering or flags, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "3fbceecd14d12e98612289b4d8c0d7ce4f4260ff7b02cf34add7230367272eb7"
+      },
+      "notes": "Las embarcaciones parecen pesqueros modernos con cabina cerrada."
+    },
+    {
+      "key": "deposito-interior-historial",
+      "id": "draft.stormkeep.reserve",
+      "name": "Depósito común",
+      "view": "interior",
+      "time": "Mediodía",
+      "priority": "P1",
+      "type": "lugar",
+      "status": "rechazado",
+      "image": "assets/deposito-interior.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Interior view of Stormkeep’s shared winter provisions store, with low stone walls and simple grain bins raised from the floor at noon, in the same visual style as the reference images. Horizontal 16:9.",
+      "references": [
+        "/docs/art-references/plaza-cuervo-gris.png",
+        "/docs/art-references/bosqueNocturno.png",
+        "/docs/art-references/herreria.png"
+      ],
+      "file": {
+        "width": 1672,
+        "height": 941,
+        "alphaRange": null,
+        "sha256": "de67c88204d361b0fbc288764c85abb0c45dbda0552191fb5a828909086fa0db"
+      },
+      "notes": "Granero abierto a la nieve y al agua. El catálogo pide una reserva seca."
+    }
+  ],
+  "pending": [
+    {
+      "scope": "Retratos del tramo exterior",
+      "status": "bloqueado",
+      "notes": "Requieren fichas por el canal privado del DM."
+    },
+    {
+      "scope": "Refugio de la aldea y cargamento",
+      "status": "pendiente",
+      "notes": "Condicionados a la vista o ilustración de objeto autorizada por el módulo."
+    },
+    {
+      "scope": "Localizaciones secundarias P2",
+      "status": "pendiente",
+      "notes": "Confirmar en atlas o aventura antes de producir comercio, botica, cementerio, acantilados, playa, campamento, refugio abandonado, ruinas o escondite."
+    }
+  ],
+  "counts": {
+    "candidato": 55,
+    "pendiente": 1,
+    "aprobado-usuario": 2,
+    "original": 2
+  },
+  "priorReview": [
+    {
+      "item": "Dos panorámicas de fortaleza al atardecer",
+      "finding": "La fortaleza domina y falta el fondeadero con muelles operativos."
+    },
+    {
+      "item": "Puente de pueblo del paquete",
+      "finding": "Es un acceso fortificado a un asentamiento, distinto del vado rural del módulo."
+    },
+    {
+      "item": "Dos interiores alternativos del hospicio",
+      "finding": "Se mantuvo la muestra preferente del usuario."
+    },
+    {
+      "item": "Arte anterior de la primera sesión",
+      "finding": "Los retratos y escenarios FLUX previos quedan en el historial del manifiesto original y están descartados como arte definitivo."
+    }
+  ]
+}

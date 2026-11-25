@@ -45,5 +45,10 @@
       "art": "/docs/art-references/herreria.png",
       "status": "original"
     }
+  },
+  "visualReview": {
+    "status": "en-revision",
+    "gallery": "/docs/art-references/stormkeep-work-20261125/",
+    "manifest": "/docs/art-references/stormkeep-work-20261125/manifest.json"
   }
 }
