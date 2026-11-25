@@ -1,0 +1,170 @@
+[
+  {
+    "id": "cold-meadow",
+    "name": "Pradera fría",
+    "category": "terrain",
+    "layer": "ground",
+    "src": "assets/terrain/cold-meadow.png",
+    "width": 1200
+  },
+  {
+    "id": "pine-1",
+    "name": "Pino 1",
+    "category": "nature",
+    "layer": "nature",
+    "src": "assets/nature/pine-1.png",
+    "width": 75
+  },
+  {
+    "id": "pine-2",
+    "name": "Pino 2",
+    "category": "nature",
+    "layer": "nature",
+    "src": "assets/nature/pine-2.png",
+    "width": 75
+  },
+  {
+    "id": "forest",
+    "name": "Bosque de coníferas",
+    "category": "nature",
+    "layer": "nature",
+    "src": "assets/nature/forest.png",
+    "width": 270
+  },
+  {
+    "id": "mountains",
+    "name": "Cordillera nevada",
+    "category": "nature",
+    "layer": "nature",
+    "src": "assets/nature/mountains.png",
+    "width": 240
+  },
+  {
+    "id": "rock",
+    "name": "Roca",
+    "category": "nature",
+    "layer": "nature",
+    "src": "assets/nature/rock.png",
+    "width": 62
+  },
+  {
+    "id": "lake",
+    "name": "Lago",
+    "category": "water",
+    "layer": "water",
+    "src": "assets/water/lake.png",
+    "width": 300
+  },
+  {
+    "id": "road-straight",
+    "name": "Camino recto",
+    "category": "props",
+    "layer": "roads",
+    "src": "assets/props/road-straight.png",
+    "width": 260
+  },
+  {
+    "id": "road-bend",
+    "name": "Curva de camino",
+    "category": "props",
+    "layer": "roads",
+    "src": "assets/props/road-bend.png",
+    "width": 260
+  },
+  {
+    "id": "river-straight",
+    "name": "Río recto",
+    "category": "water",
+    "layer": "water",
+    "src": "assets/water/river-straight.png",
+    "width": 280
+  },
+  {
+    "id": "river-bend",
+    "name": "Curva del río",
+    "category": "water",
+    "layer": "water",
+    "src": "assets/water/river-bend.png",
+    "width": 280
+  },
+  {
+    "id": "house-a",
+    "name": "Casa de madera",
+    "category": "buildings",
+    "layer": "buildings",
+    "src": "assets/buildings/house-a.png",
+    "width": 115
+  },
+  {
+    "id": "house-b",
+    "name": "Casa de pizarra",
+    "category": "buildings",
+    "layer": "buildings",
+    "src": "assets/buildings/house-b.png",
+    "width": 115
+  },
+  {
+    "id": "warehouse",
+    "name": "Almacén",
+    "category": "buildings",
+    "layer": "buildings",
+    "src": "assets/buildings/warehouse.png",
+    "width": 160
+  },
+  {
+    "id": "tavern",
+    "name": "Taberna",
+    "category": "buildings",
+    "layer": "buildings",
+    "src": "assets/buildings/tavern.png",
+    "width": 150
+  },
+  {
+    "id": "barracks",
+    "name": "Cuartel",
+    "category": "buildings",
+    "layer": "buildings",
+    "src": "assets/buildings/barracks.png",
+    "width": 145
+  },
+  {
+    "id": "tower",
+    "name": "Torre de piedra",
+    "category": "buildings",
+    "layer": "buildings",
+    "src": "assets/buildings/tower.png",
+    "width": 110
+  },
+  {
+    "id": "wall",
+    "name": "Muralla",
+    "category": "buildings",
+    "layer": "buildings",
+    "src": "assets/buildings/wall.png",
+    "width": 220
+  },
+  {
+    "id": "gate",
+    "name": "Portón",
+    "category": "buildings",
+    "layer": "buildings",
+    "src": "assets/buildings/gate.png",
+    "width": 155
+  },
+  {
+    "id": "bridge",
+    "name": "Puente de madera",
+    "category": "props",
+    "layer": "props",
+    "src": "assets/props/bridge.png",
+    "width": 98
+  },
+  {
+    "id": "well",
+    "name": "Pozo",
+    "category": "props",
+    "layer": "props",
+    "src": "assets/props/well.png",
+    "width": 65
+  }
+]

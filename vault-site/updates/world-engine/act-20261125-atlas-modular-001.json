@@ -1,0 +1,26 @@
+{
+  "id": "act-20261125-atlas-modular-001",
+  "date": "2026-11-25",
+  "area": "World Engine / Grafo",
+  "owner": "Equipo de simulación",
+  "status": "en-revision",
+  "title": "Atlas bitmap editable con navegación por niveles",
+  "summary": "Editor PixiJS, 21 piezas PNG originales de prueba, tres mapas jerárquicos, carga/reemplazo de imágenes, transformaciones, capas, marcadores vinculados, guardado local y JSON. 80 pruebas y verificación en Edge. Arte y distribución no canónicos.",
+  "changed": [
+    "vault-site/public/atlas/",
+    "vault-site/scripts/build-atlas-fixtures.py",
+    "vault-site/scripts/build-atlas-demo.mjs",
+    "vault-site/scripts/test-atlas-browser.mjs",
+    "vault-site/simulation/test-atlas-model.mjs",
+    "vault-site/public/docs/atlas-modular.md",
+    "vault-site/public/index.html"
+  ],
+  "next": "Probar el editor en https://pocketdm-prototipos.web.app/atlas/ ; reemplazar arte de prueba con bitmaps transparentes, acordar coordenadas y nodos reales con narrador, persistencia compartida y proyección de jugador. Contrato https://pocketdm-prototipos.web.app/docs/atlas-modular.md",
+  "source": "https://github.com/sebasu66/pocketDM/pull/3",
+  "nodeIds": [
+    "doc_0909",
+    "doc_0018",
+    "doc_0908",
+    "doc_0008"
+  ]
+}

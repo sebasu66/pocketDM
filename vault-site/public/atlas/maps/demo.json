@@ -1,0 +1,1962 @@
+{
+  "schemaVersion": 1,
+  "id": "stormkeep-atlas-demo",
+  "status": "fixture",
+  "source": "world-pilot + visual illustrative layout; not canon",
+  "assets": [
+    {
+      "id": "cold-meadow",
+      "name": "Pradera fría",
+      "category": "terrain",
+      "layer": "ground",
+      "src": "assets/terrain/cold-meadow.png",
+      "width": 1200
+    },
+    {
+      "id": "pine-1",
+      "name": "Pino 1",
+      "category": "nature",
+      "layer": "nature",
+      "src": "assets/nature/pine-1.png",
+      "width": 75
+    },
+    {
+      "id": "pine-2",
+      "name": "Pino 2",
+      "category": "nature",
+      "layer": "nature",
+      "src": "assets/nature/pine-2.png",
+      "width": 75
+    },
+    {
+      "id": "forest",
+      "name": "Bosque de coníferas",
+      "category": "nature",
+      "layer": "nature",
+      "src": "assets/nature/forest.png",
+      "width": 270
+    },
+    {
+      "id": "mountains",
+      "name": "Cordillera nevada",
+      "category": "nature",
+      "layer": "nature",
+      "src": "assets/nature/mountains.png",
+      "width": 240
+    },
+    {
+      "id": "rock",
+      "name": "Roca",
+      "category": "nature",
+      "layer": "nature",
+      "src": "assets/nature/rock.png",
+      "width": 62
+    },
+    {
+      "id": "lake",
+      "name": "Lago",
+      "category": "water",
+      "layer": "water",
+      "src": "assets/water/lake.png",
+      "width": 300
+    },
+    {
+      "id": "road-straight",
+      "name": "Camino recto",
+      "category": "props",
+      "layer": "roads",
+      "src": "assets/props/road-straight.png",
+      "width": 260
+    },
+    {
+      "id": "road-bend",
+      "name": "Curva de camino",
+      "category": "props",
+      "layer": "roads",
+      "src": "assets/props/road-bend.png",
+      "width": 260
+    },
+    {
+      "id": "river-straight",
+      "name": "Río recto",
+      "category": "water",
+      "layer": "water",
+      "src": "assets/water/river-straight.png",
+      "width": 280
+    },
+    {
+      "id": "river-bend",
+      "name": "Curva del río",
+      "category": "water",
+      "layer": "water",
+      "src": "assets/water/river-bend.png",
+      "width": 280
+    },
+    {
+      "id": "house-a",
+      "name": "Casa de madera",
+      "category": "buildings",
+      "layer": "buildings",
+      "src": "assets/buildings/house-a.png",
+      "width": 115
+    },
+    {
+      "id": "house-b",
+      "name": "Casa de pizarra",
+      "category": "buildings",
+      "layer": "buildings",
+      "src": "assets/buildings/house-b.png",
+      "width": 115
+    },
+    {
+      "id": "warehouse",
+      "name": "Almacén",
+      "category": "buildings",
+      "layer": "buildings",
+      "src": "assets/buildings/warehouse.png",
+      "width": 160
+    },
+    {
+      "id": "tavern",
+      "name": "Taberna",
+      "category": "buildings",
+      "layer": "buildings",
+      "src": "assets/buildings/tavern.png",
+      "width": 150
+    },
+    {
+      "id": "barracks",
+      "name": "Cuartel",
+      "category": "buildings",
+      "layer": "buildings",
+      "src": "assets/buildings/barracks.png",
+      "width": 145
+    },
+    {
+      "id": "tower",
+      "name": "Torre de piedra",
+      "category": "buildings",
+      "layer": "buildings",
+      "src": "assets/buildings/tower.png",
+      "width": 110
+    },
+    {
+      "id": "wall",
+      "name": "Muralla",
+      "category": "buildings",
+      "layer": "buildings",
+      "src": "assets/buildings/wall.png",
+      "width": 220
+    },
+    {
+      "id": "gate",
+      "name": "Portón",
+      "category": "buildings",
+      "layer": "buildings",
+      "src": "assets/buildings/gate.png",
+      "width": 155
+    },
+    {
+      "id": "bridge",
+      "name": "Puente de madera",
+      "category": "props",
+      "layer": "props",
+      "src": "assets/props/bridge.png",
+      "width": 98
+    },
+    {
+      "id": "well",
+      "name": "Pozo",
+      "category": "props",
+      "layer": "props",
+      "src": "assets/props/well.png",
+      "width": 65
+    }
+  ],
+  "maps": [
+    {
+      "id": "world",
+      "title": "La frontera del norte",
+      "level": "Mundo",
+      "parentId": null,
+      "nodeId": "world",
+      "width": 1800,
+      "height": 1100,
+      "sprites": [
+        {
+          "id": "s-1",
+          "assetId": "cold-meadow",
+          "x": 600,
+          "y": 600,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "ground",
+          "entityId": null
+        },
+        {
+          "id": "s-2",
+          "assetId": "cold-meadow",
+          "x": 1800,
+          "y": 600,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "ground",
+          "entityId": null
+        },
+        {
+          "id": "s-3",
+          "assetId": "mountains",
+          "x": 170,
+          "y": 150,
+          "scale": 1.8,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-4",
+          "assetId": "mountains",
+          "x": 350,
+          "y": 187.86619431635535,
+          "scale": 1.8,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-5",
+          "assetId": "mountains",
+          "x": 530,
+          "y": 190.91838420715567,
+          "scale": 1.8,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-6",
+          "assetId": "mountains",
+          "x": 710,
+          "y": 156.35040036269402,
+          "scale": 1.8,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-7",
+          "assetId": "mountains",
+          "x": 890,
+          "y": 115.94388771114323,
+          "scale": 1.8,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-8",
+          "assetId": "mountains",
+          "x": 1070,
+          "y": 106.84840764015877,
+          "scale": 1.8,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-9",
+          "assetId": "mountains",
+          "x": 1250,
+          "y": 137.42630258104833,
+          "scale": 1.8,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-10",
+          "assetId": "mountains",
+          "x": 1430,
+          "y": 179.5643969423455,
+          "scale": 1.8,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-11",
+          "assetId": "mountains",
+          "x": 1610,
+          "y": 194.52112109805216,
+          "scale": 1.8,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-12",
+          "assetId": "forest",
+          "x": 269.3250865023583,
+          "y": 779.9460171000101,
+          "scale": 1.3139810013584792,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-13",
+          "assetId": "forest",
+          "x": 530.4295793222263,
+          "y": 438.87694077100605,
+          "scale": 1.1935859507648274,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-14",
+          "assetId": "forest",
+          "x": 1234.1665829345584,
+          "y": 548.6166276573204,
+          "scale": 0.9111780112143606,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-15",
+          "assetId": "forest",
+          "x": 1500.7803526287898,
+          "y": 478.38338925503194,
+          "scale": 1.195247198198922,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-16",
+          "assetId": "forest",
+          "x": 136.77780342288315,
+          "y": 529.5991817233153,
+          "scale": 0.8623304400593041,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-17",
+          "assetId": "forest",
+          "x": 1064.972773664631,
+          "y": 768.9941191719845,
+          "scale": 0.9741257916903123,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-18",
+          "assetId": "forest",
+          "x": 1617.1304959617555,
+          "y": 877.6782821188681,
+          "scale": 0.968881736556068,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-19",
+          "assetId": "forest",
+          "x": 415.2612218214199,
+          "y": 729.5223910175264,
+          "scale": 0.9336882211500779,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-20",
+          "assetId": "forest",
+          "x": 1301.9087450858206,
+          "y": 719.2852053442039,
+          "scale": 1.2029983823187649,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-21",
+          "assetId": "forest",
+          "x": 864.8072639526799,
+          "y": 607.2767126513645,
+          "scale": 0.70828474170994,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-22",
+          "assetId": "forest",
+          "x": 816.3049694895744,
+          "y": 515.2575870952569,
+          "scale": 1.386904341680929,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-23",
+          "assetId": "forest",
+          "x": 365.5372059484944,
+          "y": 772.7989031095058,
+          "scale": 0.8426737954141572,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-24",
+          "assetId": "forest",
+          "x": 472.62713790871203,
+          "y": 730.0042896647938,
+          "scale": 0.9370394250378012,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-25",
+          "assetId": "forest",
+          "x": 1007.5899153063074,
+          "y": 866.2398822465912,
+          "scale": 0.879528305470012,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-26",
+          "assetId": "forest",
+          "x": 586.9501134194434,
+          "y": 877.269543025177,
+          "scale": 1.3311104134190828,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-27",
+          "assetId": "forest",
+          "x": 390.30852797906846,
+          "y": 441.16786394268274,
+          "scale": 1.3634321438381447,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-28",
+          "assetId": "forest",
+          "x": 1308.1495050620288,
+          "y": 850.2783420146443,
+          "scale": 0.7470217606984079,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-29",
+          "assetId": "forest",
+          "x": 1537.4444965319708,
+          "y": 767.199333733879,
+          "scale": 1.066652416693978,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-30",
+          "assetId": "forest",
+          "x": 718.1681244447827,
+          "y": 602.8048476739787,
+          "scale": 0.7924969085957855,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-31",
+          "assetId": "forest",
+          "x": 1581.4885303890333,
+          "y": 733.0482698511332,
+          "scale": 1.1957818060414864,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-32",
+          "assetId": "forest",
+          "x": 497.03311373479664,
+          "y": 683.2621814054437,
+          "scale": 1.311681718379259,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-33",
+          "assetId": "forest",
+          "x": 1357.5703227007762,
+          "y": 584.5285197766498,
+          "scale": 1.1429350495105608,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-34",
+          "assetId": "forest",
+          "x": 609.7160301916301,
+          "y": 856.89051625086,
+          "scale": 1.0889082419220357,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-35",
+          "assetId": "forest",
+          "x": 669.9275521142408,
+          "y": 720.8430725522339,
+          "scale": 1.244304734119214,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-36",
+          "assetId": "lake",
+          "x": 1300,
+          "y": 840,
+          "scale": 1.9,
+          "rotation": 0,
+          "layer": "water",
+          "entityId": null
+        }
+      ],
+      "markers": [
+        {
+          "id": "marches",
+          "x": 510,
+          "y": 610,
+          "label": "Las Marcas",
+          "nodeId": "marches",
+          "targetMapId": "region"
+        },
+        {
+          "id": "plains",
+          "x": 1390,
+          "y": 400,
+          "label": "Llanuras Heladas",
+          "nodeId": "plains",
+          "targetMapId": null
+        },
+        {
+          "id": "stormkeep-overview",
+          "x": 660,
+          "y": 680,
+          "label": "Stormkeep",
+          "nodeId": "stormkeep",
+          "targetMapId": "town"
+        }
+      ],
+      "routes": []
+    },
+    {
+      "id": "region",
+      "title": "La región de Stormkeep",
+      "level": "Región",
+      "parentId": "world",
+      "nodeId": "marches",
+      "width": 1800,
+      "height": 1100,
+      "sprites": [
+        {
+          "id": "s-37",
+          "assetId": "cold-meadow",
+          "x": 600,
+          "y": 600,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "ground",
+          "entityId": null
+        },
+        {
+          "id": "s-38",
+          "assetId": "cold-meadow",
+          "x": 1800,
+          "y": 600,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "ground",
+          "entityId": null
+        },
+        {
+          "id": "s-39",
+          "assetId": "mountains",
+          "x": 120,
+          "y": 120,
+          "scale": 1.4,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-40",
+          "assetId": "mountains",
+          "x": 350,
+          "y": 149.45148446827636,
+          "scale": 1.4,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-41",
+          "assetId": "mountains",
+          "x": 580,
+          "y": 151.82540993889887,
+          "scale": 1.4,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-42",
+          "assetId": "mountains",
+          "x": 810,
+          "y": 124.93920028209536,
+          "scale": 1.4,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-43",
+          "assetId": "mountains",
+          "x": 1040,
+          "y": 93.5119126642225,
+          "scale": 1.4,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-44",
+          "assetId": "mountains",
+          "x": 1270,
+          "y": 86.43765038679015,
+          "scale": 1.4,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-45",
+          "assetId": "mountains",
+          "x": 1500,
+          "y": 110.2204575630376,
+          "scale": 1.4,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-46",
+          "assetId": "mountains",
+          "x": 1730,
+          "y": 142.99453095515761,
+          "scale": 1.4,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-47",
+          "assetId": "forest",
+          "x": 1029.4745052652434,
+          "y": 995.8060150034726,
+          "scale": 0.5356828722637147,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-48",
+          "assetId": "forest",
+          "x": 1507.0129406242631,
+          "y": 434.69298478215933,
+          "scale": 0.6690396651276387,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-49",
+          "assetId": "forest",
+          "x": 464.36629232019186,
+          "y": 363.8849843852222,
+          "scale": 0.7647517202654853,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-50",
+          "assetId": "forest",
+          "x": 1412.486814178992,
+          "y": 979.8764110356569,
+          "scale": 0.6706550420611166,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-51",
+          "assetId": "forest",
+          "x": 777.097015264444,
+          "y": 868.5869980789721,
+          "scale": 0.5143414634279907,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-52",
+          "assetId": "forest",
+          "x": 1590.2044634637423,
+          "y": 334.13489781320095,
+          "scale": 0.5629696617252193,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-53",
+          "assetId": "forest",
+          "x": 382.1837811684236,
+          "y": 388.15775657072663,
+          "scale": 0.6623280182480812,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-54",
+          "assetId": "forest",
+          "x": 449.6182422223501,
+          "y": 451.9915545359254,
+          "scale": 0.4576767822843976,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-55",
+          "assetId": "forest",
+          "x": 534.9408548278734,
+          "y": 963.2994274236262,
+          "scale": 0.5183757823891938,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-56",
+          "assetId": "forest",
+          "x": 1566.510522000026,
+          "y": 679.7720356658101,
+          "scale": 0.49852223313646393,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-57",
+          "assetId": "forest",
+          "x": 127.41964691784233,
+          "y": 510.0937061943114,
+          "scale": 0.4101700166240334,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-58",
+          "assetId": "forest",
+          "x": 1374.8895925539546,
+          "y": 842.2798660770059,
+          "scale": 0.5650317303952761,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-59",
+          "assetId": "forest",
+          "x": 1578.5667097149417,
+          "y": 909.2365462519228,
+          "scale": 0.6325743264518677,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-60",
+          "assetId": "forest",
+          "x": 1682.2155712242238,
+          "y": 394.8527227714658,
+          "scale": 0.5239625715767033,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-61",
+          "assetId": "forest",
+          "x": 1594.8682683473453,
+          "y": 953.6944087781012,
+          "scale": 0.3973376933485269,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-62",
+          "assetId": "forest",
+          "x": 756.7037739162333,
+          "y": 318.74475933611393,
+          "scale": 0.7690643034293316,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-63",
+          "assetId": "forest",
+          "x": 715.8971887268126,
+          "y": 457.85206673666835,
+          "scale": 0.7133461208315566,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-64",
+          "assetId": "forest",
+          "x": 659.3616933864541,
+          "y": 328.958360478282,
+          "scale": 0.4155900329700671,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-65",
+          "assetId": "forest",
+          "x": 284.8203253885731,
+          "y": 712.7110850252211,
+          "scale": 0.4179815916344523,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-66",
+          "assetId": "forest",
+          "x": 685.1683900761418,
+          "y": 958.1106815114617,
+          "scale": 0.7200698789325543,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-67",
+          "assetId": "forest",
+          "x": 342.02292484231293,
+          "y": 824.7935881279409,
+          "scale": 0.7982797507895156,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-68",
+          "assetId": "forest",
+          "x": 868.5106160189025,
+          "y": 377.15244460850954,
+          "scale": 0.4267693248693831,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-69",
+          "assetId": "forest",
+          "x": 270.82532450556755,
+          "y": 569.2151789180934,
+          "scale": 0.5910359874600545,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-70",
+          "assetId": "forest",
+          "x": 1668.6109613929875,
+          "y": 847.2835568338633,
+          "scale": 0.44525489168008786,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-71",
+          "assetId": "forest",
+          "x": 1380.9494156343862,
+          "y": 963.1582466699183,
+          "scale": 0.7940669913776219,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-72",
+          "assetId": "forest",
+          "x": 685.1958874682896,
+          "y": 770.5164988711476,
+          "scale": 0.36578277341322973,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-73",
+          "assetId": "forest",
+          "x": 1462.8695613425225,
+          "y": 452.8461748920381,
+          "scale": 0.7932694438612089,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-74",
+          "assetId": "forest",
+          "x": 149.75860613165423,
+          "y": 949.1127768531442,
+          "scale": 0.39678776265354826,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-75",
+          "assetId": "forest",
+          "x": 1021.8254457879812,
+          "y": 711.8526812456548,
+          "scale": 0.6463871025247498,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-76",
+          "assetId": "forest",
+          "x": 1172.8888562717475,
+          "y": 874.7627137601376,
+          "scale": 0.6350565833854489,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-77",
+          "assetId": "forest",
+          "x": 1237.530924421735,
+          "y": 957.011742759496,
+          "scale": 0.4631785565521568,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-78",
+          "assetId": "lake",
+          "x": 1510,
+          "y": 860,
+          "scale": 1.25,
+          "rotation": 0,
+          "layer": "water",
+          "entityId": null
+        },
+        {
+          "id": "s-79",
+          "assetId": "river-straight",
+          "x": 1060,
+          "y": 140,
+          "scale": 0.8,
+          "rotation": 90,
+          "layer": "water",
+          "entityId": null
+        },
+        {
+          "id": "s-80",
+          "assetId": "river-straight",
+          "x": 1060,
+          "y": 360,
+          "scale": 0.8,
+          "rotation": 90,
+          "layer": "water",
+          "entityId": null
+        },
+        {
+          "id": "s-81",
+          "assetId": "river-straight",
+          "x": 1060,
+          "y": 580,
+          "scale": 0.8,
+          "rotation": 90,
+          "layer": "water",
+          "entityId": null
+        },
+        {
+          "id": "s-82",
+          "assetId": "river-straight",
+          "x": 1060,
+          "y": 800,
+          "scale": 0.8,
+          "rotation": 90,
+          "layer": "water",
+          "entityId": null
+        },
+        {
+          "id": "s-83",
+          "assetId": "river-straight",
+          "x": 1060,
+          "y": 1020,
+          "scale": 0.8,
+          "rotation": 90,
+          "layer": "water",
+          "entityId": null
+        },
+        {
+          "id": "s-84",
+          "assetId": "road-straight",
+          "x": 390,
+          "y": 585,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "roads",
+          "entityId": null
+        },
+        {
+          "id": "s-85",
+          "assetId": "road-straight",
+          "x": 650,
+          "y": 585,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "roads",
+          "entityId": null
+        },
+        {
+          "id": "s-86",
+          "assetId": "road-straight",
+          "x": 910,
+          "y": 585,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "roads",
+          "entityId": null
+        },
+        {
+          "id": "s-87",
+          "assetId": "road-straight",
+          "x": 1170,
+          "y": 585,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "roads",
+          "entityId": null
+        },
+        {
+          "id": "s-88",
+          "assetId": "road-straight",
+          "x": 1430,
+          "y": 585,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "roads",
+          "entityId": null
+        },
+        {
+          "id": "s-89",
+          "assetId": "bridge",
+          "x": 1060,
+          "y": 585,
+          "scale": 0.9,
+          "rotation": 0,
+          "layer": "props",
+          "entityId": null
+        },
+        {
+          "id": "s-90",
+          "assetId": "tower",
+          "x": 430,
+          "y": 550,
+          "scale": 1.1,
+          "rotation": 0,
+          "layer": "buildings",
+          "entityId": "stormkeep"
+        },
+        {
+          "id": "s-91",
+          "assetId": "house-a",
+          "x": 485,
+          "y": 592,
+          "scale": 0.42,
+          "rotation": 0,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-92",
+          "assetId": "house-b",
+          "x": 385,
+          "y": 612,
+          "scale": 0.4,
+          "rotation": 0,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-93",
+          "assetId": "house-a",
+          "x": 1420,
+          "y": 560,
+          "scale": 0.45,
+          "rotation": 0,
+          "layer": "buildings",
+          "entityId": "pilot.village"
+        },
+        {
+          "id": "s-94",
+          "assetId": "house-b",
+          "x": 1470,
+          "y": 610,
+          "scale": 0.4,
+          "rotation": 0,
+          "layer": "buildings",
+          "entityId": null
+        }
+      ],
+      "markers": [
+        {
+          "id": "hub",
+          "x": 430,
+          "y": 530,
+          "label": "Stormkeep",
+          "nodeId": "stormkeep",
+          "targetMapId": "town"
+        },
+        {
+          "id": "forest-road",
+          "x": 830,
+          "y": 585,
+          "label": "Camino oriental",
+          "nodeId": "hex.1.0",
+          "targetMapId": null
+        },
+        {
+          "id": "village",
+          "x": 1440,
+          "y": 540,
+          "label": "Aldea del Hielo",
+          "nodeId": "pilot.village",
+          "targetMapId": null
+        },
+        {
+          "id": "ford",
+          "x": 1070,
+          "y": 620,
+          "label": "Puente del Vado",
+          "nodeId": "pilot.bridge",
+          "targetMapId": null
+        }
+      ],
+      "routes": [
+        {
+          "routeId": "route.0.1",
+          "points": [
+            [
+              430,
+              585
+            ],
+            [
+              830,
+              585
+            ]
+          ]
+        },
+        {
+          "routeId": "route.1.2",
+          "points": [
+            [
+              830,
+              585
+            ],
+            [
+              1440,
+              585
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "town",
+      "title": "Stormkeep",
+      "level": "Asentamiento",
+      "parentId": "region",
+      "nodeId": "stormkeep",
+      "width": 1600,
+      "height": 1100,
+      "sprites": [
+        {
+          "id": "s-95",
+          "assetId": "cold-meadow",
+          "x": 600,
+          "y": 600,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "ground",
+          "entityId": null
+        },
+        {
+          "id": "s-96",
+          "assetId": "cold-meadow",
+          "x": 1800,
+          "y": 600,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "ground",
+          "entityId": null
+        },
+        {
+          "id": "s-97",
+          "assetId": "pine-2",
+          "x": 682.1323812264018,
+          "y": 89.84568848274648,
+          "scale": 1.5899773978395388,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-98",
+          "assetId": "pine-1",
+          "x": 874.8719098418951,
+          "y": 99.21901948284358,
+          "scale": 1.278393781138584,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-99",
+          "assetId": "pine-2",
+          "x": 212.8657995746471,
+          "y": 321.7854062654078,
+          "scale": 1.189078958076425,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-100",
+          "assetId": "pine-1",
+          "x": 97.16089443769306,
+          "y": 80.35187064204365,
+          "scale": 1.4491621864959598,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-101",
+          "assetId": "pine-2",
+          "x": 171.28702027490363,
+          "y": 1019.5360080618411,
+          "scale": 1.0751183924963699,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-102",
+          "assetId": "pine-1",
+          "x": 75.57217328809202,
+          "y": 339.834554172121,
+          "scale": 1.4590214021969587,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-103",
+          "assetId": "pine-2",
+          "x": 401.24605247052386,
+          "y": 112.57332287728786,
+          "scale": 1.4297206649789587,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-104",
+          "assetId": "pine-1",
+          "x": 381.3234844850376,
+          "y": 1016.555032772012,
+          "scale": 0.9551938905380667,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-105",
+          "assetId": "pine-2",
+          "x": 631.4977309922688,
+          "y": 129.59923963062465,
+          "scale": 1.032637699204497,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-106",
+          "assetId": "pine-1",
+          "x": 217.83898532390594,
+          "y": 282.5916816992685,
+          "scale": 0.9502336345147342,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-107",
+          "assetId": "pine-2",
+          "x": 693.3148819045164,
+          "y": 1003.5714911855757,
+          "scale": 1.3197944884421304,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-108",
+          "assetId": "pine-1",
+          "x": 1446.8747858563438,
+          "y": 800.2217720495537,
+          "scale": 0.9974767119623721,
+          "rotation": 0,
+          "layer": "nature",
+          "entityId": null
+        },
+        {
+          "id": "s-109",
+          "assetId": "wall",
+          "x": 350,
+          "y": 235,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-110",
+          "assetId": "wall",
+          "x": 350,
+          "y": 885,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-111",
+          "assetId": "wall",
+          "x": 550,
+          "y": 235,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-112",
+          "assetId": "wall",
+          "x": 550,
+          "y": 885,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-113",
+          "assetId": "wall",
+          "x": 750,
+          "y": 235,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-114",
+          "assetId": "wall",
+          "x": 950,
+          "y": 235,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-115",
+          "assetId": "wall",
+          "x": 950,
+          "y": 885,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-116",
+          "assetId": "wall",
+          "x": 1150,
+          "y": 235,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-117",
+          "assetId": "wall",
+          "x": 1150,
+          "y": 885,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-118",
+          "assetId": "wall",
+          "x": 250,
+          "y": 340,
+          "scale": 1,
+          "rotation": 90,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-119",
+          "assetId": "wall",
+          "x": 1350,
+          "y": 340,
+          "scale": 1,
+          "rotation": 90,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-120",
+          "assetId": "wall",
+          "x": 250,
+          "y": 540,
+          "scale": 1,
+          "rotation": 90,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-121",
+          "assetId": "wall",
+          "x": 1350,
+          "y": 540,
+          "scale": 1,
+          "rotation": 90,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-122",
+          "assetId": "wall",
+          "x": 250,
+          "y": 740,
+          "scale": 1,
+          "rotation": 90,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-123",
+          "assetId": "wall",
+          "x": 1350,
+          "y": 740,
+          "scale": 1,
+          "rotation": 90,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-124",
+          "assetId": "tower",
+          "x": 250,
+          "y": 235,
+          "scale": 1.15,
+          "rotation": 0,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-125",
+          "assetId": "tower",
+          "x": 1350,
+          "y": 235,
+          "scale": 1.15,
+          "rotation": 0,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-126",
+          "assetId": "tower",
+          "x": 250,
+          "y": 885,
+          "scale": 1.15,
+          "rotation": 0,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-127",
+          "assetId": "tower",
+          "x": 1350,
+          "y": 885,
+          "scale": 1.15,
+          "rotation": 0,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-128",
+          "assetId": "gate",
+          "x": 800,
+          "y": 885,
+          "scale": 1.2,
+          "rotation": 0,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-129",
+          "assetId": "road-straight",
+          "x": 800,
+          "y": 325,
+          "scale": 1,
+          "rotation": 90,
+          "layer": "roads",
+          "entityId": null
+        },
+        {
+          "id": "s-130",
+          "assetId": "road-straight",
+          "x": 800,
+          "y": 585,
+          "scale": 1,
+          "rotation": 90,
+          "layer": "roads",
+          "entityId": null
+        },
+        {
+          "id": "s-131",
+          "assetId": "road-straight",
+          "x": 800,
+          "y": 845,
+          "scale": 1,
+          "rotation": 90,
+          "layer": "roads",
+          "entityId": null
+        },
+        {
+          "id": "s-132",
+          "assetId": "road-straight",
+          "x": 410,
+          "y": 550,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "roads",
+          "entityId": null
+        },
+        {
+          "id": "s-133",
+          "assetId": "road-straight",
+          "x": 670,
+          "y": 550,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "roads",
+          "entityId": null
+        },
+        {
+          "id": "s-134",
+          "assetId": "road-straight",
+          "x": 930,
+          "y": 550,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "roads",
+          "entityId": null
+        },
+        {
+          "id": "s-135",
+          "assetId": "road-straight",
+          "x": 1190,
+          "y": 550,
+          "scale": 1,
+          "rotation": 0,
+          "layer": "roads",
+          "entityId": null
+        },
+        {
+          "id": "s-136",
+          "assetId": "tower",
+          "x": 800,
+          "y": 330,
+          "scale": 1.65,
+          "rotation": 0,
+          "layer": "buildings",
+          "entityId": "stormkeep"
+        },
+        {
+          "id": "s-137",
+          "assetId": "warehouse",
+          "x": 470,
+          "y": 350,
+          "scale": 1.4,
+          "rotation": 0,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-138",
+          "assetId": "barracks",
+          "x": 1130,
+          "y": 360,
+          "scale": 1.4,
+          "rotation": 0,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-139",
+          "assetId": "tavern",
+          "x": 510,
+          "y": 710,
+          "scale": 1.35,
+          "rotation": 0,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-140",
+          "assetId": "well",
+          "x": 940,
+          "y": 670,
+          "scale": 1.1,
+          "rotation": 0,
+          "layer": "props",
+          "entityId": null
+        },
+        {
+          "id": "s-141",
+          "assetId": "house-b",
+          "x": 400,
+          "y": 480,
+          "scale": 0.95,
+          "rotation": -7.5020366767421365,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-142",
+          "assetId": "house-b",
+          "x": 625,
+          "y": 450,
+          "scale": 0.95,
+          "rotation": 13.299392787739635,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-143",
+          "assetId": "house-b",
+          "x": 1010,
+          "y": 460,
+          "scale": 0.95,
+          "rotation": 3.3558642910793424,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-144",
+          "assetId": "house-b",
+          "x": 1200,
+          "y": 480,
+          "scale": 0.95,
+          "rotation": 10.252820793539286,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-145",
+          "assetId": "house-a",
+          "x": 390,
+          "y": 765,
+          "scale": 0.95,
+          "rotation": -9.686027322895825,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-146",
+          "assetId": "house-a",
+          "x": 650,
+          "y": 770,
+          "scale": 0.95,
+          "rotation": 11.554541001096368,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-147",
+          "assetId": "house-a",
+          "x": 1100,
+          "y": 750,
+          "scale": 0.95,
+          "rotation": -12.435476048849523,
+          "layer": "buildings",
+          "entityId": null
+        },
+        {
+          "id": "s-148",
+          "assetId": "house-a",
+          "x": 1240,
+          "y": 680,
+          "scale": 0.95,
+          "rotation": -7.527867034077644,
+          "layer": "buildings",
+          "entityId": null
+        }
+      ],
+      "markers": [
+        {
+          "id": "keep",
+          "x": 800,
+          "y": 315,
+          "label": "Stormkeep",
+          "nodeId": "stormkeep",
+          "targetMapId": null
+        },
+        {
+          "id": "gate-demo",
+          "x": 800,
+          "y": 910,
+          "label": "Portón · muestra",
+          "nodeId": null,
+          "targetMapId": null
+        },
+        {
+          "id": "warehouse-demo",
+          "x": 470,
+          "y": 310,
+          "label": "Almacén · muestra",
+          "nodeId": null,
+          "targetMapId": null
+        },
+        {
+          "id": "tavern-demo",
+          "x": 510,
+          "y": 660,
+          "label": "Taberna · muestra",
+          "nodeId": null,
+          "targetMapId": null
+        },
+        {
+          "id": "barracks-demo",
+          "x": 1130,
+          "y": 310,
+          "label": "Cuartel · muestra",
+          "nodeId": null,
+          "targetMapId": null
+        }
+      ],
+      "routes": []
+    }
+  ],
+  "world": {
+    "nodes": [
+      {
+        "id": "world",
+        "name": "Frontera del Norte",
+        "kind": "world",
+        "generation": "skeleton"
+      },
+      {
+        "id": "marches",
+        "name": "Las Marcas",
+        "kind": "region",
+        "parentId": "world",
+        "generation": "skeleton"
+      },
+      {
+        "id": "plains",
+        "name": "Llanuras Heladas",
+        "kind": "region",
+        "parentId": "world",
+        "generation": "skeleton"
+      },
+      {
+        "id": "hex.0.0",
+        "name": "Alrededores del bastión",
+        "kind": "hex",
+        "parentId": "marches",
+        "generation": "visitable",
+        "q": 0,
+        "r": 0,
+        "terrain": "colinas"
+      },
+      {
+        "id": "stormkeep",
+        "name": "Stormkeep",
+        "kind": "settlement",
+        "parentId": "hex.0.0",
+        "generation": "visitable"
+      },
+      {
+        "id": "hex.1.0",
+        "name": "Camino oriental",
+        "kind": "hex",
+        "parentId": "marches",
+        "generation": "visitable",
+        "q": 1,
+        "r": 0,
+        "terrain": "bosque"
+      },
+      {
+        "id": "hex.2.0",
+        "name": "Borde de las Llanuras Heladas",
+        "kind": "hex",
+        "parentId": "plains",
+        "generation": "visitable",
+        "q": 2,
+        "r": 0,
+        "terrain": "tundra"
+      },
+      {
+        "id": "pilot.village",
+        "name": "Aldea del Hielo",
+        "kind": "settlement",
+        "parentId": "hex.2.0",
+        "generation": "visitable"
+      },
+      {
+        "id": "pilot.bridge",
+        "name": "Puente del Vado",
+        "kind": "site",
+        "parentId": "hex.2.0",
+        "generation": "visitable"
+      }
+    ],
+    "entities": [
+      {
+        "id": "galahad",
+        "name": "Galahad",
+        "kind": "player",
+        "locationId": "stormkeep"
+      },
+      {
+        "id": "pilot.mara",
+        "name": "Mara",
+        "kind": "npc",
+        "locationId": "pilot.village"
+      },
+      {
+        "id": "pilot.ivo",
+        "name": "Ivo",
+        "kind": "npc",
+        "locationId": "pilot.bridge"
+      },
+      {
+        "id": "pilot.neris",
+        "name": "Neris",
+        "kind": "npc",
+        "locationId": "pilot.bridge"
+      }
+    ],
+    "routes": [
+      {
+        "id": "route.0.1",
+        "a": "hex.0.0",
+        "b": "hex.1.0",
+        "status": "open",
+        "minutes": 120
+      },
+      {
+        "id": "route.1.2",
+        "a": "hex.1.0",
+        "b": "hex.2.0",
+        "status": "open",
+        "minutes": 180
+      },
+      {
+        "id": "route.hub",
+        "a": "stormkeep",
+        "b": "hex.0.0",
+        "status": "open",
+        "minutes": 15
+      },
+      {
+        "id": "route.village",
+        "a": "hex.2.0",
+        "b": "pilot.village",
+        "status": "open",
+        "minutes": 15
+      },
+      {
+        "id": "route.bridge",
+        "a": "pilot.village",
+        "b": "pilot.bridge",
+        "status": "open",
+        "minutes": 10
+      }
+    ]
+  },
+  "activeMapId": "region"
+}
