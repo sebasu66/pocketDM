@@ -40,7 +40,7 @@ export default {
             "roll": 89,
             "outcome": "failure",
             "visibility": "player",
-            "source": "prepared-skill-v1",
+            "source": "prepared-skill-v2",
             "formula": "55 × 0.6666666666666666 = 37"
           }
         ]
@@ -85,7 +85,7 @@ export default {
             "roll": 22,
             "outcome": "success",
             "visibility": "player",
-            "source": "prepared-skill-v1",
+            "source": "prepared-skill-v2",
             "formula": "40 × 1 = 40"
           }
         ]
@@ -132,7 +132,7 @@ export default {
             "roll": 77,
             "outcome": "failure",
             "visibility": "player",
-            "source": "prepared-skill-v1",
+            "source": "prepared-skill-v2",
             "formula": "32 × 0.6666666666666666 = 21"
           }
         ]
@@ -177,7 +177,7 @@ export default {
             "roll": 93,
             "outcome": "failure",
             "visibility": "player",
-            "source": "prepared-skill-v1",
+            "source": "prepared-skill-v2",
             "formula": "70 × 1 = 70"
           }
         ]
@@ -224,7 +224,7 @@ export default {
             "roll": 3,
             "outcome": "success",
             "visibility": "player",
-            "source": "prepared-skill-v1",
+            "source": "prepared-skill-v2",
             "formula": "22 × 0.6666666666666666 = 15"
           }
         ]
@@ -269,7 +269,7 @@ export default {
             "roll": 16,
             "outcome": "success",
             "visibility": "player",
-            "source": "prepared-skill-v1",
+            "source": "prepared-skill-v2",
             "formula": "50 × 1 = 50"
           }
         ]
