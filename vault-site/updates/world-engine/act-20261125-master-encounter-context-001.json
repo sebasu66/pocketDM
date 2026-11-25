@@ -1,0 +1,23 @@
+{
+  "id": "act-20261125-master-encounter-context-001",
+  "date": "2026-11-25",
+  "area": "World Engine / Grafo",
+  "owner": "Equipo de simulación",
+  "status": "en-revision",
+  "title": "API máster: sorpresa, miedo, heridas, retirada y primeros auxilios",
+  "summary": "Seis operaciones de encuentro, contexto explícito, plazos de heridas/muerte, curación inicial y potenciación; sorpresa altera iniciativa y primera ronda, dificultades de combate obligatorias. Ficha y journal conservan heridas; sin alterar argumento.",
+  "changed": [
+    "vault-site/simulation/encounter-rules.mjs",
+    "vault-site/simulation/master-rules.mjs",
+    "vault-site/public/laboratorio/trauma.mjs",
+    "vault-site/public/laboratorio/duel.mjs",
+    "vault-site/simulation/skill-check.mjs",
+    "vault-site/public/docs/encounter-rules-api.md"
+  ],
+  "next": "Narrador: vincular operaciones a las escenas reales del módulo, incluyendo contexto requerido. Validador: revisar resultados, límites y el contrato. No añadir infraestructura innecesaria.",
+  "source": "https://github.com/sebasu66/pocketDM/pull/5",
+  "nodeIds": [
+    "doc_0915",
+    "doc_0909"
+  ]
+}

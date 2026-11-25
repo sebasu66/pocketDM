@@ -6,6 +6,8 @@ import {newSeed,die} from './engine.mjs';
 import {validateSheet,derived} from '../public/laboratorio/character-sheet.mjs';
 import {conditionProfile} from '../public/laboratorio/conditions.mjs';
 import {simulateDuel} from '../public/laboratorio/duel.mjs';
+import {advanceTrauma,isDead} from '../public/laboratorio/trauma.mjs';
+import {SKILL_METADATA} from './skill-check.mjs';
 import {validateCheck} from '../public/libro/check-contract.mjs';
 import {buildImpactContext} from './ripple-impact.mjs';
 import {createModule,moduleActions,resolveModule,moduleView} from './module-runtime.mjs';
@@ -19,18 +21,19 @@ export const RNG_VERSION='addressed-d100-v1';
 // Explicit, stateless address: a new unrelated draw cannot alter an existing address.
 export function addressedRoll(seed,address,sides){requireThat(Array.isArray(address)&&address.length>0&&address.every(x=>typeof x==='string'||Number.isSafeInteger(x)),'Invalid roll address');return die(seed,[RNG_VERSION,...address],sides)}
 export function combatRoller(seed,scope){requireThat(Array.isArray(scope)&&scope.length>0,'Invalid combat scope');return (sides,purpose,ordinal=0)=>{requireThat(typeof purpose==='string'&&purpose.length>0&&Number.isSafeInteger(ordinal)&&ordinal>=0,'Missing combat draw purpose');return addressedRoll(seed,[...scope,purpose,ordinal],sides)}}
-const isOut=s=>s.state.incapacitated||s.state.unconscious||s.state.fatigue>=6;
+const isOut=s=>isDead(s)||s.state.incapacitated||s.state.unconscious||s.state.fatigue>=6;
 const isVisible=(r,known)=>r&&(r.visibility==='public'||r.visibility==='known'&&known.has(r.id));
 const select=(obj,keys)=>Object.fromEntries(keys.filter(k=>own(obj,k)).map(k=>[k,copy(obj[k])]));
 // Public actor sheet is a projection of the authoritative record, never another stored copy.
 function sheetView(s){
  const v=select(s,['schemaVersion','id','name','kind','speciesId','profession','rank','source','baseMove','magicPoints','equippedWeaponId','abilities','pendingAbilities']);
  v.attributes=select(s.attributes,['STR','CON','SIZ','DEX','INT','INS','POW','CHA']);
- v.skills=select(s.skills,['combat','athletics','brawn','endurance','evade','perception','stealth','willpower','influence','track','firstAid']);
+ v.skills=select(s.skills,Object.keys(SKILL_METADATA));
  v.style=select(s.style,['id','name','weaponIds']);v.damageModifier=select(s.damageModifier,['count','sides','sign']);
  v.locations=s.locations.map(l=>select(l,['id','name','from','to','maxHp','hp','naturalAP','vital','limb','disabled']));
  v.inventory=s.inventory.map(i=>({...select(i,['id','kind','name','enc','quantity','carried','size','reach','hands','ap','maxHp','hp','natural','coverage','worn']),...(i.damage?{damage:select(i.damage,['count','sides','bonus'])}:{})}));
- v.state=select(s.state,['fatigue','bleeding','prone','stunTurns','incapacitated','unconscious','fear','cold','extraLoad','light']);
+ v.state=select(s.state,['fatigue','bleeding','prone','stunTurns','incapacitated','unconscious','fear','cold','extraLoad','light','dead']);
+ if(s.state.wounds)v.state.wounds=s.state.wounds.map(w=>select(w,['id','locationId','location','severity','netDamage','bleeding','treated','stabilized','remainingSeconds','effect','partialFunction','stunTurns','unconsciousSeconds']));
  return validateSheet(v);
 }
 function sheetOf(w,id){const e=w.entities[id];requireThat(e&&e.privateState?.sheet&&e.privateState.sheet.id===id,'Actor sheet missing');return validateSheet(e.privateState.sheet)}
@@ -66,7 +69,7 @@ function commandShape(c){
  requireThat(Object.keys(c).length===allowed.length&&allowed.every(k=>own(c,k))&&args[c.action].every(k=>validId(c[k])),'Invalid command fields');return hash(c);
 }
 const actionPart=c=>select(c,['action','targetId','encounterId','intentId']);
-function sheetChanges(before,after){const changes=[];const add=(path,a,b)=>{if(hash(a)!==hash(b))changes.push({path,before:a,after:b})};for(const l of before.locations){const n=after.locations.find(x=>x.id===l.id);add('locations.'+l.id+'.hp',l.hp,n.hp);add('locations.'+l.id+'.disabled',l.disabled,n.disabled)}for(const i of before.inventory){const n=after.inventory.find(x=>x.id===i.id);add('inventory.'+i.id+'.quantity',i.quantity,n?.quantity??0);if(i.hp!==undefined)add('inventory.'+i.id+'.hp',i.hp,n?.hp??0)}for(const k of ['fatigue','bleeding','prone','stunTurns','incapacitated','unconscious','fear','cold','extraLoad','light'])add('state.'+k,before.state[k],after.state[k]);add('effectiveAP',conditionProfile(before).ap,conditionProfile(after).ap);return changes}
+function sheetChanges(before,after){const changes=[];const add=(path,a,b)=>{if(hash(a)!==hash(b))changes.push({path,before:a,after:b})};for(const l of before.locations){const n=after.locations.find(x=>x.id===l.id);add('locations.'+l.id+'.hp',l.hp,n.hp);add('locations.'+l.id+'.disabled',l.disabled,n.disabled)}for(const i of before.inventory){const n=after.inventory.find(x=>x.id===i.id);add('inventory.'+i.id+'.quantity',i.quantity,n?.quantity??0);if(i.hp!==undefined)add('inventory.'+i.id+'.hp',i.hp,n?.hp??0)}for(const k of ['fatigue','bleeding','prone','stunTurns','incapacitated','unconscious','fear','cold','extraLoad','light'])add('state.'+k,before.state[k],after.state[k]);add('state.dead',isDead(before),isDead(after));add('state.wounds',sheetView(before).state.wounds??[],sheetView(after).state.wounds??[]);add('effectiveAP',conditionProfile(before).ap,conditionProfile(after).ap);return changes}
 function checkProjection(c,id){const p=select(c,['schemaVersion','id','actorId','actorName','skillId','skillName','base','target','difficulty','reason','dice','roll','outcome','visibility','source','role','formula']);p.id=id+'.'+p.id;return validateCheck(p)}
 function resolve(base,state,access,c){
  const fingerprint=commandShape(c);authorize(state,access);requireThat(c.campaignId===state.id&&c.actorId===state.actorId,'Command actor/campaign mismatch');
@@ -89,12 +92,15 @@ function resolve(base,state,access,c){
  const enc=state.encounters[c.encounterId],opponent=w.entities[enc.opponentId];participants.push(opponent.id);
  const scope=[state.id,state.delta.revision,enc.id];
  const roll=combatRoller(state.seed,scope);
- const duel=simulateDuel(sheet,sheetOf(w,opponent.id),{seed:'private-provider',roll,tactical:true,maxRounds:enc.maxRounds});
+ const duel=simulateDuel(sheet,sheetOf(w,opponent.id),{seed:'private-provider',roll,tactical:true,maxRounds:enc.maxRounds,eventPrefix:'combat-'+hash(scope).slice(0,24)+'.'});
  for(const s of duel.actors)entities[s.id]=replaceSheet(w.entities[s.id],s);
  for(const e of duel.events)for(const ch of e.checks??[])checks.push(checkProjection(ch,id));
  combat={profile:duel.mode,encounterId:enc.id,rounds:duel.rounds,actorIds:duel.actors.map(a=>a.id),apTrace:duel.events.filter(e=>Array.isArray(e.ap)).map(e=>({round:e.round,kind:e.kind,remaining:[...e.ap]}))};
  seconds=duel.elapsed;next.completedEncounters[enc.id]={eventId:id,outcome:duel.outcome,winner:duel.winner};
  fact('duel-resolved','Encuentro resuelto.',{encounterId:enc.id,outcome:duel.outcome,winnerId:duel.winner,rounds:duel.rounds});
+ }
+ if(c.action!=='duel'&&seconds>0&&sheet.state.wounds?.some(w=>!w.stabilized&&w.remainingSeconds!==null)){
+ const e=entities[actor.id]??actor,s=copy(e.privateState.sheet);advanceTrauma(s,seconds);entities[actor.id]=replaceSheet(e,s);if(isDead(s))fact('actor-died','El personaje muere por una herida no estabilizada.',{actorId:actor.id});
  }
  next.delta=applyChanges(base,state.delta,c.expectedRevision,{entities});next.elapsedSeconds+=seconds;
  const changes=sheetChanges(sheetOf(w,actor.id),sheetOf(effective(base,next.delta),actor.id));

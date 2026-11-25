@@ -6,10 +6,13 @@ import {validateSheet} from '../public/laboratorio/character-sheet.mjs';
 import {validateCheck} from '../public/libro/check-contract.mjs';
 import {exchange,simulateDuel} from '../public/laboratorio/duel.mjs';
 import {die} from './engine.mjs';
+import {encounterOperations} from './encounter-rules.mjs';
 const ok=(v,m)=>{if(!v)throw Error(m)};
 const own=Object.hasOwn;
 const version='master-rules-v1';
-const spec=x=>({skillId:x.skill,difficulty:x.difficulty,reason:x.reason,modifiers:x.modifiers,requirements:x.requirements});
+const combatGrade=x=>ok(['very-easy','easy','standard','hard','formidable','herculean'].includes(x),'Explicit combat difficulty required');
+const bool=(x,name)=>ok(typeof x==='boolean','Explicit '+name+' required');
+const spec=x=>({skillId:x.skill,difficulty:x.difficulty,reason:x.reason,modifiers:x.modifiers,requirements:x.requirements,augmentation:x.augmentation});
 function profile(x){ok(x&&x.character,'Missing actor snapshot');return skillProfile(x.character,spec(x))}
 function single(x,id,p=profile(x),target=p.target){
  if(!p.legal)return {status:'blocked',reasons:p.blocked,warnings:p.warnings,checks:[]};
@@ -20,7 +23,7 @@ function single(x,id,p=profile(x),target=p.target){
 const checkId=id=>{ok(typeof id==='string'&&/^[a-zA-Z0-9_.-]{1,180}$/.test(id),'Explicit check ID required');return id};
 export function checkSkill(x){return single(x,checkId(x.id))}
 export function checkProfile(x){
- const p=profile(x);return {base:p.base,baseDifficulty:p.baseDifficulty,difficulty:p.grade,target:p.target,legal:p.legal,blocked:p.blocked,modifiers:[...p.mods.filter(m=>m.grade!=='standard'),...p.modifiers],warnings:p.warnings};
+ const p=profile(x);return {base:p.base,baseDifficulty:p.baseDifficulty,difficulty:p.grade,target:p.target,legal:p.legal,blocked:p.blocked,modifiers:[...p.mods.filter(m=>m.grade!=='standard'),...p.modifiers,...(p.augmentationDetail?[p.augmentationDetail]:[])],augmentation:p.augmentation,unaugmentedTarget:p.unaugmentedTarget,warnings:p.warnings};
 }
 function contest(x,mode){
  const id=checkId(x.id),a=profile(x.actor),b=profile(x.opponent);
@@ -84,16 +87,20 @@ function roller(x){
 export function resolveCombatExchange(x){
  validateSheet(x.attacker);validateSheet(x.defender);ok(x.attacker.id!==x.defender.id,'Distinct combatants required');
  ok(['auto','parry','evade','none'].includes(x.defense),'Explicit defense required');
- return exchange(x.attacker,x.defender,{id:checkId(x.id),roll:roller(x),defense:x.defense,defenseAvailable:x.defenseAvailable??true,context:x.context??null});
+ combatGrade(x.attackDifficulty);combatGrade(x.defenseDifficulty);bool(x.defenseAvailable,'defenseAvailable');bool(x.surpriseBonus,'surpriseBonus');bool(x.limbLifeThreat,'limbLifeThreat');ok(own(x,'context'),'Explicit range/grip context required (null allowed)');
+ return exchange(x.attacker,x.defender,{id:checkId(x.id),roll:roller(x),defense:x.defense,defenseAvailable:x.defenseAvailable??true,context:x.context??null,surpriseBonus:x.surpriseBonus??false,limbLifeThreat:x.limbLifeThreat,attackDifficulty:x.attackDifficulty,defenseDifficulty:x.defenseDifficulty});
 }
 export function resolveCombatEncounter(x){
  validateSheet(x.attacker);validateSheet(x.defender);ok(x.attacker.id!==x.defender.id,'Distinct combatants required');
  ok(Number.isInteger(x.maxRounds)&&x.maxRounds>=1&&x.maxRounds<=100,'Explicit round limit required');
- const {seed,...result}=simulateDuel(x.attacker,x.defender,{seed:'private-provider',roll:roller(x),maxRounds:x.maxRounds,tactical:true,initialRange:x.initialRange??'long'});
+ ok(['long','short'].includes(x.initialRange),'Explicit initial range required');ok(Array.isArray(x.surprisedIds)&&x.surprisedIds.every(id=>[x.attacker.id,x.defender.id].includes(id)),'Explicit surprised actor IDs required');bool(x.limbLifeThreat,'limbLifeThreat');
+ for(const actor of [x.attacker,x.defender]){combatGrade(x.combatDifficulties?.[actor.id]?.attack);combatGrade(x.combatDifficulties?.[actor.id]?.defense)}
+ const {seed,...result}=simulateDuel(x.attacker,x.defender,{seed:'private-provider',roll:roller(x),maxRounds:x.maxRounds,tactical:true,initialRange:x.initialRange??'long',surprisedIds:x.surprisedIds??[],limbLifeThreat:x.limbLifeThreat??false,eventPrefix:x.id+'.',combatDifficulties:x.combatDifficulties});
  return result;
 }
 // JSON-callable surface for the narrator's trusted preparation process.
-export const operations=Object.freeze({checkProfile,checkSkill,checkOpposed,checkDifferential,checkResistance,checkLift,checkGroup,resolveCombatExchange,resolveCombatEncounter});
+export const {resolveSurprise,resolveFear,resolveWithdrawal,resolveWound,advanceWounds,resolveFirstAid}=encounterOperations({checkSkill,checkOpposed});
+export const operations=Object.freeze({resolveSurprise,resolveFear,resolveWithdrawal,resolveWound,advanceWounds,resolveFirstAid,checkProfile,checkSkill,checkOpposed,checkDifferential,checkResistance,checkLift,checkGroup,resolveCombatExchange,resolveCombatEncounter});
 export function callMasterRules(operation,params){
  ok(typeof operation==='string'&&own(operations,operation),'Unknown master rules operation');
  return {apiVersion:version,operation,result:operations[operation](params)};
