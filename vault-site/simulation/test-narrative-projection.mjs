@@ -1,0 +1,50 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {playerState,confirmCommand,previewCommand,impactForConfirmed} from './campaign-state.mjs';
+import {confirmedNarration} from './narrative-projection.mjs';
+import {readConfirmedNarration} from '../public/libro/confirmed-narration.mjs';
+import {setup,cmd,confirmedDuel} from './narrative-test-fixture.mjs';
+test('real combat feeds existing book check contract once, no invented rolls',()=>{
+ const {base,state,access,view,envelope}=confirmedDuel();
+ const p=readConfirmedNarration(envelope,view);
+ assert.ok(p.checks.length>0);assert.deepEqual(p.checks,view.journal[0].checks);
+ assert.equal(p.text.filter(x=>typeof x!=='string').length,p.checks.length);
+ assert.equal(new Set(p.checks.map(c=>c.id)).size,p.checks.length);
+ const ripple=impactForConfirmed(base,state,{...access,role:'analyst'},envelope.eventId);
+ assert.equal(ripple.event.id,envelope.eventId);
+ assert.ok(!JSON.stringify(envelope).includes('PRIVATE-WOLF'));
+});
+test('speculation, missing receipt, wrong campaign and worker are rejected',()=>{
+ const {base,state,access}=setup(),other=setup('qa02-b');
+ const c=cmd(state,'duel',{encounterId:'qa02.duel'});
+ const p=previewCommand(base,state,{...access,role:'worker'},c);
+ assert.throws(()=>confirmedNarration(base,state,access,p.event.id),/not confirmed/);
+ assert.throws(()=>confirmedNarration(base,p.state,access,p.event.id),/Invalid state/);
+ const done=confirmCommand(base,state,access,c);
+ assert.throws(()=>confirmedNarration(base,done.state,other.access,done.receipt.event.id),/Access denied/);
+ assert.throws(()=>confirmedNarration(base,done.state,{...access,role:'worker'},done.receipt.event.id),/Player access required/);
+ const altered=structuredClone(done.state);altered.receipts={};
+ assert.throws(()=>confirmedNarration(base,altered,access,done.receipt.event.id),/receipt/);
+});
+test('travel and ration fallback reflect confirmed state, replay produces same presentation',()=>{
+ const {base,state,access}=setup();
+ const c=cmd(state,'consume-ration'),r=confirmCommand(base,state,access,c);
+ const a=confirmedNarration(base,r.state,access,r.receipt.event.id);
+ const again=confirmCommand(base,r.state,access,c);
+ assert.deepEqual(a,confirmedNarration(base,again.state,access,r.receipt.event.id));
+ const d=confirmCommand(base,r.state,access,cmd(r.state,'travel',{targetId:'hex.0.0'},'cmd-2'));
+ const b=confirmedNarration(base,d.state,access,d.receipt.event.id);
+ assert.match(b.presentation.text[0],/Stormkeep.*Alrededores del bastión/);
+ assert.match(a.presentation.text[0],/ración/);
+ assert.equal(playerState(base,d.state,access).journal.length,2);
+ assert.throws(()=>confirmCommand(base,d.state,access,cmd(d.state,'travel',{targetId:'hex.1.0'},'illegal')),/not allowed/);
+});
+test('browser rejects foreign, future, injected and duplicate check envelopes',()=>{
+ const {view,envelope}=confirmedDuel();
+ assert.throws(()=>readConfirmedNarration(envelope,{...view,campaignId:'other'}),/scope/);
+ assert.throws(()=>readConfirmedNarration(envelope,{...view,revision:0}),/scope/);
+ assert.throws(()=>readConfirmedNarration({...envelope,seed:'secret'},view),/Unknown/);
+ const a=structuredClone(envelope);a.presentation.checks[0].visibility='dm';assert.throws(()=>readConfirmedNarration(a,view),/privadas/);
+ const b=structuredClone(envelope);b.presentation.text.push({check:b.presentation.checks[0].id});assert.throws(()=>readConfirmedNarration(b,view),/repetida/);
+ const c=structuredClone(envelope);c.presentation.text.push({html:'<img src=x>'});assert.throws(()=>readConfirmedNarration(c,view),/token/);
+});

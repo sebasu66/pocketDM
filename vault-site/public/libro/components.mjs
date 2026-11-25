@@ -1,4 +1,5 @@
 import {events} from './events.mjs';
+import {readConfirmedNarration} from './confirmed-narration.mjs';
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 import './book-skill-check.mjs';
 class BookPage extends HTMLElement{connectedCallback(){if(this.dataset.ready)return;this.dataset.ready='1';const contents=[...this.childNodes];const frag=document.getElementById('page').content.cloneNode(true);frag.querySelector('.leafbody').append(...contents);frag.querySelector('.number').textContent=this.getAttribute('number');this.append(frag)}}
@@ -9,7 +10,9 @@ class BookInset extends HTMLElement{connectedCallback(){if(this.dataset.ready)re
 const modal=document.getElementById('mechanics');
 modal?.addEventListener('click',e=>{if(e.target===modal){const r=modal.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)modal.close()}});
 class NarrativeEvent extends HTMLElement{
- connectedCallback(){if(this.dataset.ready)return;this.dataset.ready='1';const e=events[this.getAttribute('event')];if(!e)return;
+ setConfirmedNarration(envelope,scope){const e=readConfirmedNarration(envelope,scope);this._confirmed=e;this.dataset.eventId=e.id;this.dataset.revision=String(e.revision);if(this.isConnected)this.renderEvent(e)}
+ connectedCallback(){if(this.dataset.ready)return;this.dataset.ready='1';const e=this._confirmed||events[this.getAttribute('event')];if(e)this.renderEvent(e)}
+ renderEvent(e){
  const head=document.createElement('div');head.className='phasehead';head.innerHTML='<span class="roman">'+esc(e.roman)+'</span><h3>'+esc(e.title)+'</h3>';
  const p=document.createElement('p');const used=new Set();for(const t of e.text){if(typeof t==='string'){p.append(document.createTextNode(t));continue}if(used.has(t.check))continue;const c=e.checks.find(x=>x.id===t.check);if(!c)continue;const el=document.createElement('book-skill-check');el.check=c;p.append(el);used.add(t.check)}
  this.replaceChildren(head,p);
