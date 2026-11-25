@@ -1,0 +1,19 @@
+{
+  "id": "act-20261124-combat-narration-001",
+  "date": "2026-11-24",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-progreso",
+  "title": "Narración precalculada de combate",
+  "summary": "Prioridad del usuario: prosa épica sobre resultados resueltos, no otra interfaz. Primer corpus reproducible de duelo real del laboratorio, separado de crónica fixture. Adaptador de hechos y chequeos, cobertura acotada; no alterar motor.",
+  "changed": [
+    "vault-site/scripts/compile-combat-prose.mjs",
+    "vault-site/public/libro/combat-prose.mjs"
+  ],
+  "next": "Publicar ejemplo en lector, medir cobertura y coordinar compilación de ramas legales del motor avanzado.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0903",
+    "doc_0913"
+  ]
+}
