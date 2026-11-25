@@ -1,0 +1,18 @@
+{
+  "id": "act-20261125-world-bible-002",
+  "date": "2026-11-25",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "N01: biblia operativa de mundo v0.1",
+  "summary": "Propuesta de canon macro: seis ámbitos, ecología y economía, culturas, límites de magia, instituciones, creencias, cronología y dependencias causales. Distingue confirmado, propuesta, relato y abierto. Consultadas skill storyteller, GDD, manual DM IA y extractos de dos fuentes originales. Sin materializar nodos ni modificar reglas.",
+  "changed": [
+    "vault-site/public/docs/world-bible-v01.md"
+  ],
+  "next": "Revisión del usuario y simulación; consolidar límites aprobados y esquema de canon; N02 hub y N03 leyendas. No publicar secretos.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0020",
+    "doc_0021"
+  ]
+}
