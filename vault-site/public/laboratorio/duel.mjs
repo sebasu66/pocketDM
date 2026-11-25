@@ -5,13 +5,13 @@ import {engagement,rangeProfile,preferredPosition,changeRange,canChangeRange,cho
 const clone=structuredClone;
 const labels={standard:'Estándar',hard:'Difícil',formidable:'Formidable',herculean:'Hercúlea'};
 export function labRoller(seed){let h=2166136261;for(const c of String(seed))h=Math.imul(h^c.charCodeAt(0),16777619);return sides=>{h=(h+0x6D2B79F5)|0;let t=Math.imul(h^(h>>>15),1|h);t^=t+Math.imul(t^(t>>>7),61|t);return 1+Math.floor(((t^(t>>>14))>>>0)/4294967296*sides)}}
-const rollDice=(d,roll)=>Array.from({length:d.count},()=>roll(d.sides));
+const rollDice=(d,roll,purpose)=>Array.from({length:d.count},(_,i)=>roll(d.sides,purpose,i));
 const sum=xs=>xs.reduce((n,x)=>n+x,0);
 const isOut=s=>s.state.incapacitated||s.state.unconscious||s.state.fatigue>=6;
-function check(s,p,target,roll,role,id){const value=roll(100);return {schemaVersion:1,id:id+'.'+role+'.'+s.id,actorId:s.id,actorName:s.name,skillId:p.skill==='combat'?s.style.id:p.skill,skillName:p.skill==='combat'?s.style.name:p.skill,base:p.base,target,difficulty:labels[p.grade]??'Bloqueada',reason:p.mods.map(m=>m.reason).join('; ')||'Sin modificadores',dice:'D100',roll:value,outcome:gradeOf(value,target),visibility:'player',source:'pocketdm-lab-v1',role,formula:p.base+' × '+(p.grade==='hard'?'2/3':p.grade==='formidable'?'1/2':p.grade==='herculean'?'1/10':String(p.factor))+' → '+p.target+(target!==p.target?' → '+target+' (oposición)':''),modifiers:p.mods};}
+function check(s,p,target,roll,role,id){const value=roll(100,id+'.'+role+'.'+s.id,0);return {schemaVersion:1,id:id+'.'+role+'.'+s.id,actorId:s.id,actorName:s.name,skillId:p.skill==='combat'?s.style.id:p.skill,skillName:p.skill==='combat'?s.style.name:p.skill,base:p.base,target,difficulty:labels[p.grade]??'Bloqueada',reason:p.mods.map(m=>m.reason).join('; ')||'Sin modificadores',dice:'D100',roll:value,outcome:gradeOf(value,target),visibility:'player',source:'pocketdm-lab-v1',role,formula:p.base+' × '+(p.grade==='hard'?'2/3':p.grade==='formidable'?'1/2':p.grade==='herculean'?'1/10':String(p.factor))+' → '+p.target+(target!==p.target?' → '+target+' (oposición)':''),modifiers:p.mods};}
 function damageResolution(a,b,{aw,bw,mode,dc,ac,roll,id,locationId=null,checks}){
- const dieLocation=locationId?null:roll(20),l=locationId?b.locations.find(x=>x.id===locationId):b.locations.find(x=>dieLocation>=x.from&&dieLocation<=x.to);
- const weaponDice=rollDice(aw.damage,roll),modDice=rollDice(a.damageModifier,roll),modifier=sum(modDice)*a.damageModifier.sign,raw=Math.max(0,sum(weaponDice)+aw.damage.bonus+modifier),afterParry=mode==='parry'?parryDamage(raw,aw.size,bw.size,dc.outcome):raw,armor=armorAt(b,l.id),net=Math.max(0,afterParry-armor),before=l.hp;
+ const dieLocation=locationId?null:roll(20,id+'.hit-location',0),l=locationId?b.locations.find(x=>x.id===locationId):b.locations.find(x=>dieLocation>=x.from&&dieLocation<=x.to);
+ const weaponDice=rollDice(aw.damage,roll,id+'.weapon-damage'),modDice=rollDice(a.damageModifier,roll,id+'.damage-modifier'),modifier=sum(modDice)*a.damageModifier.sign,raw=Math.max(0,sum(weaponDice)+aw.damage.bonus+modifier),afterParry=mode==='parry'?parryDamage(raw,aw.size,bw.size,dc.outcome):raw,armor=armorAt(b,l.id),net=Math.max(0,afterParry-armor),before=l.hp;
  l.hp-=net;
  const damage={location:l.name,locationId:l.id,dieLocation,weaponDice,weaponBonus:aw.damage.bonus,modifier,modDice,raw,afterParry,parryFormula:mode==='parry'?aw.size+' vs '+bw.size+' · '+raw+' → '+afterParry:mode==='evade'?'Esquiva no evita el impacto':'Sin parada',armor,net,before,after:l.hp,formula:'max(0, '+afterParry+' − '+armor+') = '+net,weaponFormula:weaponDice.join(' + ')+' + '+aw.damage.bonus+' + ('+modifier+') = '+raw};
  let wound=null;
@@ -21,7 +21,7 @@ function damageResolution(a,b,{aw,bw,mode,dc,ac,roll,id,locationId=null,checks})
    const ep=conditionProfile(b,'endurance','resist'),ec=check(b,ep,ep.target,roll,'wound-endurance',id);checks.push(ec);
    const resisted=opposed(ac,ec)==='defender';wound.resisted=resisted;wound.opposedAgainst=ac.id;wound.referenceRoll=ac.roll;
    if(severity==='major'){l.disabled=true;b.state.incapacitated=true;b.state.prone=true;if(l.vital||!resisted)b.state.unconscious=true;wound.effect='Incapacitación; seguimiento de muerte/curación pendiente'}
-   else{b.state.stunTurns=Math.max(b.state.stunTurns,roll(3));wound.stunTurns=b.state.stunTurns;
+   else{b.state.stunTurns=Math.max(b.state.stunTurns,roll(3,id+'.stun-turns',0));wound.stunTurns=b.state.stunTurns;
     if(!resisted){if(l.limb){l.disabled=true;if(!l.id.includes('arm'))b.state.prone=true;wound.effect='Extremidad inutilizada'}else if(l.vital){b.state.unconscious=true;b.state.incapacitated=true;wound.effect='Inconsciencia'}}}
   }
  }
@@ -74,7 +74,7 @@ export function simulateDuel(a0,b0,{seed='demo-001',maxRounds=12,roll=labRoller(
  if(a0.id===b0.id||!Number.isInteger(maxRounds)||maxRounds<1||maxRounds>100)throw Error('Configuración de duelo inválida');
  let actors=[clone(validateSheet(a0)),clone(validateSheet(b0))],events=[],round=0,counts={attacks:0,success:0,damage:[0,0],wounds:[0,0],rangeChanges:0,grips:0,escapes:0,gripTicks:0},elapsed=0;
  const context=tactical?engagement(a0,b0,initialRange):null;
- const initiativeDice=[roll(10),roll(10)],initiative=actors.map((s,i)=>conditionProfile(s).initiative+initiativeDice[i]),order=initiative[0]>=initiative[1]?[0,1]:[1,0];
+ const initiativeDice=[roll(10,'initiative.'+actors[0].id,0),roll(10,'initiative.'+actors[1].id,0)],initiative=actors.map((s,i)=>conditionProfile(s).initiative+initiativeDice[i]),order=initiative[0]>=initiative[1]?[0,1]:[1,0];
  let winner=null,outcome='unresolved',effort=[0,0];
  const record=(e)=>{if(trace)events.push(e)};
  const recordDamage=(i,r)=>{counts.damage[i]+=r.damage?.net??0;counts.wounds[i]+=Number(r.wound?.severity==='serious'||r.wound?.severity==='major')};
