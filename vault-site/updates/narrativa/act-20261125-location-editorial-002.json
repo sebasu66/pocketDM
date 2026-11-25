@@ -1,0 +1,24 @@
+{
+    "id":  "act-20261125-location-editorial-002",
+    "date":  "2026-11-25",
+    "area":  "Narrativa / Contenido",
+    "owner":  "Agente narrador / presentacion",
+    "status":  "en-revision",
+    "title":  "Editorial-5: escala del titulo y contraste PWA",
+    "summary":  "Titulo de 61px y encabezado blanco. Pruebas de navegacion en seis resoluciones, editorial en tres y tiradas confirmadas superadas. Version live anterior a47cd58a4178ad0b identificada para rollback. No se cambia estado de campana.",
+    "changed":  [
+                    "vault-site/public/libro/edition/location-pages.css",
+                    "vault-site/public/libro/index.html",
+                    "vault-site/public/app/index.html",
+                    "vault-site/public/libro/pwa.mjs",
+                    "vault-site/public/sw-pocketdm.js",
+                    "vault-site/public/data/pwa-release.json",
+                    "vault-site/scripts/test-location-editorial-browser.mjs"
+                ],
+    "next":  "Publicar misma version en PWA y web, verificar Android instalado y conectar MOD-01 al lector.",
+    "source":  "https://github.com/sebasu66/pocketDM/blob/feature/narrative-coordination-20261124/vault-site/public/docs/editorial-location-pages.md",
+    "nodeIds":  [
+                    "doc_0914",
+                    "doc_0913"
+                ]
+}

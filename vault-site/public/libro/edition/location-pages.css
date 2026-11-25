@@ -5,8 +5,8 @@ book-edition .location-edition::after{content:"";position:absolute;inset:0;backg
 book-edition .location-art-box{position:absolute;inset:0 auto 0 0;width:40%;height:100%;z-index:1;overflow:hidden;pointer-events:none;clip-path:inset(0 10% 0 0)}
 book-edition .location-art{width:100%;height:100%;display:block;object-fit:cover;object-position:19% 50%}
 book-edition .location-heading{position:absolute;z-index:3;top:clamp(10px,2vh,24px);left:calc(36% + 27px);right:clamp(16px,2vw,36px);background:none;margin:0;padding:0;pointer-events:none;display:block;height:auto;border:0;box-shadow:none}
-book-edition .location-kicker{font:600 clamp(10px,1.6vh,13px)/1.4 system-ui;letter-spacing:.16em;color:var(--loc-title);text-shadow:0 1px 4px #000;opacity:.94}
-book-edition .location-title{font:400 clamp(30px,11.15vh,61px)/1.04 'Germania One',Georgia,serif;color:var(--loc-title);letter-spacing:0;text-transform:none;text-align:left;margin:4px 0 0;text-shadow:0 3px 10px #000d;-webkit-text-stroke:1px #181821;paint-order:stroke fill;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased;font-kerning:normal;text-rendering:optimizeLegibility;opacity:.96}
+book-edition .location-kicker{font:600 clamp(10px,1.6vh,13px)/1.4 system-ui;letter-spacing:.16em;color:#fff;text-shadow:0 1px 4px #000;opacity:1}
+book-edition .location-title{font:400 61px/1.04 'Germania One',Georgia,serif;color:var(--loc-title);letter-spacing:0;text-transform:none;text-align:left;margin:4px 0 0;text-shadow:0 3px 10px #000d;-webkit-text-stroke:1px #181821;paint-order:stroke fill;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased;font-kerning:normal;text-rendering:optimizeLegibility;opacity:.96}
 book-edition .location-rule{color:#fff3df;opacity:.74;margin-top:8px;width:min(260px,100%);height:18px;filter:drop-shadow(0 1px 2px #0009)}
 book-edition .location-rule svg{width:100%;height:100%;display:block}
 book-edition .location-reading{position:absolute;z-index:2;left:0;right:0;top:var(--location-top,115px);bottom:14px;overflow-y:auto;overflow-x:hidden;overflow-anchor:none;overscroll-behavior:contain;scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:#fff8ed60 transparent;touch-action:pan-y;padding:8px clamp(16px,2vw,36px) 10px 14px;color:#fff8ed;opacity:.96;mix-blend-mode:normal;font:16px/1.6 'Palatino Linotype',Palatino,'Book Antiqua',serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-kerning:normal;text-rendering:optimizeLegibility}
@@ -25,5 +25,5 @@ book-edition .location-intro .location-art{object-position:left center}
 book-edition .location-intro .location-art-box::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 48%,var(--loc-paper) 100%);opacity:.8}
 book-edition .location-intro .location-heading{left:63%;right:3%;top:12%}
 book-edition .location-intro .location-reading{left:63%;right:3%;padding-left:0;padding-right:0}
-@media(max-height:450px){book-edition .location-title{font-size:clamp(25px,8.2vh,39px)}book-edition .location-rule{height:13px;margin-top:5px}}
+@media(max-height:450px){book-edition .location-title{font-size:61px}book-edition .location-rule{height:13px;margin-top:5px}}
 @media(max-width:700px){book-edition .location-intro .location-heading,book-edition .location-intro .location-reading{left:58%;right:3%}}
