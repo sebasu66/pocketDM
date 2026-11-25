@@ -75,6 +75,7 @@ class BookHome extends HTMLElement {
    '<p>Este es el espacio de entrada a las campañas. El lector narrativo conserva su estética y funciona como interfaz de historia, personaje, diario y mapa.</p>'+
    '<div class="home-campaign"><small>Campaña de demostración</small><h3>'+esc(campaign.title)+'</h3>'+
    '<p>'+esc(campaign.chapter)+'</p><book-link view="story">Continuar leyendo →</book-link></div>'+
+   '<div class="home-campaign"><h3>Laboratorio de pruebas</h3><p>Probá la conversación con un NPC de Stormkeep.</p><a href="/laboratorio/dialogo/">Probar diálogo →</a></div>'+
    '<div class="home-campaign muted"><small>Conexión futura</small><h3>Mis campañas</h3><p>La lista real aparecerá cuando se integre el servicio de usuarios y campañas.</p></div>'+
    '<p class="sample">Pantalla funcional de navegación. Todavía no representa una sesión autenticada.</p></section>';
  }

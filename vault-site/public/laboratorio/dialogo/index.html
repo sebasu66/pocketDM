@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#17222b">
+  <title>Diálogos de Stormkeep · Pocket DM</title>
+  <link rel="stylesheet" href="./dialogo.css">
+</head>
+<body>
+  <main class="lab" aria-labelledby="lab-title">
+    <img id="ambient" class="ambient" alt="" aria-hidden="true" hidden>
+    <header class="toolbar">
+      <a class="exit" href="/app/" aria-label="Volver al inicio de Pocket DM">‹ <span>Inicio</span></a>
+      <h1 id="lab-title">Laboratorio de diálogo</h1>
+      <label class="toolbar-field">NPC <select id="npc" disabled></select></label>
+      <label class="toolbar-field">Tirada <select id="roll">
+        <option value="success">Éxito</option>
+        <option value="failure">Fallo</option>
+        <option value="random">Al azar</option>
+      </select></label>
+      <button id="reset" type="button" disabled>Reiniciar</button>
+    </header>
+
+    <p id="loading" role="status">Cargando residentes de Stormkeep…</p>
+    <section class="scene" aria-labelledby="speaker" hidden>
+      <figure class="stage">
+        <img id="background" class="background" alt="">
+        <img id="portrait" class="portrait" alt="" hidden>
+        <figcaption id="location"></figcaption>
+      </figure>
+      <section class="dialogue">
+        <header class="speaker">
+          <h2 id="speaker"></h2>
+          <p id="occupation"></p>
+        </header>
+        <div id="reading" class="reading" tabindex="0" aria-label="Conversación actual">
+          <div id="exchange" aria-live="polite" aria-atomic="true">
+            <p id="chosen" class="chosen" hidden></p>
+            <div id="check" class="check" hidden></div>
+            <p id="line" class="line"></p>
+          </div>
+        </div>
+        <div id="choices" class="choices" role="group" aria-label="Respuestas"></div>
+      </section>
+    </section>
+  </main>
+  <script type="module" src="./dialogo.mjs"></script>
+</body>
+</html>
