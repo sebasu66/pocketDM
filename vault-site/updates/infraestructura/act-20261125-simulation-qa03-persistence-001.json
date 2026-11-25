@@ -1,0 +1,23 @@
+{
+  "id": "act-20261125-simulation-qa03-persistence-001",
+  "date": "2026-11-25",
+  "area": "Infraestructura / Firebase",
+  "owner": "Equipo de simulación",
+  "status": "en-revision",
+  "title": "QA-03: persistencia y confirmación atómica en Firestore emulado",
+  "summary": "Adaptador server-only en proyecto demo aislado, precondiciones de versión Firestore, recuperación desde otro proceso, reintento idempotente y pruebas concurrentes. 7/7 nuevas, 96/96 con emulador. No escritura en nube ni backend autenticado.",
+  "changed": [
+    "vault-site/firebase.qa03.json",
+    "vault-site/simulation/firestore-qa.rules",
+    "vault-site/simulation/firestore-campaign-store.mjs",
+    "vault-site/simulation/test-firestore-campaign-store.mjs",
+    "vault-site/public/docs/campaign-persistence-qa03.md"
+  ],
+  "next": "Validador revisa QA-03/08/10 en PR #5; integrar backend autorizado e identidad, separar documentos históricos y conectar QA-02/07. H01 permanece abierto.",
+  "source": "https://github.com/sebasu66/pocketDM/pull/5",
+  "nodeIds": [
+    "doc_0007",
+    "doc_0005",
+    "doc_0909"
+  ]
+}
