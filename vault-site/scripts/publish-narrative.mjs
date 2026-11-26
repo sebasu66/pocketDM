@@ -30,7 +30,7 @@ async function main(){
   else if(served.version!==base.version)throw Error('Live version differs from committed baseline; reconcile before deployment');
   if(served.sourceCommit===sha&&!check){console.log('Already published '+sha);return}
   tmp=mkdtempSync(join(tmpdir(),'pdm-release-'));const tar=join(tmp,'source.tar');
-  run('git',['-C',repo,'archive','--format=tar','--output='+tar,sha,'vault-site/public','vault-site/scripts','vault-site/updates','vault-site/firebase.json','vault-site/.firebaserc'],repo);
+  run('git',['-C',repo,'archive','--format=tar','--output='+tar,sha,'COORDINACION.md','vault-site/public','vault-site/scripts','vault-site/updates','vault-site/firebase.json','vault-site/.firebaserc'],repo);
   run('tar',['-xf','source.tar'],tmp);rmSync(tar);
   const staged=join(tmp,'vault-site'),pub=join(staged,'public'),version='narrative-'+sha.slice(0,12);
   run(process.execPath,['scripts/build-activity.mjs'],staged);run(process.execPath,['scripts/validate.mjs'],staged);
