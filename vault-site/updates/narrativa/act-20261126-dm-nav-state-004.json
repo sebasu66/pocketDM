@@ -1,0 +1,19 @@
+{
+  "id": "act-20261126-dm-nav-state-004",
+  "date": "2026-11-26",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Estados independientes de navegación del portal",
+  "summary": "Expansión independiente de grupos; el grupo del destino activo permanece abierto. El color expresa jerarquía; una única barra blanca marca el destino activo. Las subsecciones muestran únicamente el contenido seleccionado, con primer destino por defecto.",
+  "changed": [
+    "vault-site/public/dm/portal.js",
+    "vault-site/public/dm/portal.css",
+    "vault-site/public/dm/index.html",
+    "vault-site/public/dm/sistema/index.html",
+    "vault-site/public/dm/arte/index.html"
+  ],
+  "next": "Revisión de comportamiento y estética con el usuario.",
+  "source": "https://pocketdm-prototipos.web.app/dm/",
+  "nodeIds": []
+}

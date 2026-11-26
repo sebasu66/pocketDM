@@ -10,3 +10,12 @@
 .nav-group[open] .nav-icon:focus-visible{outline-color:white}
 .nav-group[open] .tip{border-color:var(--group)}
 .nav-group[open] .tip:before{border-left-color:var(--group);border-bottom-color:var(--group)}
+
+/* Expansion and page selection are independent. Only the current destination owns the selection bar. */
+.nav-group[open]>.subnav{border-left:0}
+.nav-group[open] .sub-icon{box-shadow:none}
+.nav-group[open] .sub-icon[aria-current=page]{background:var(--group-soft);color:white;box-shadow:inset 4px 0 #fff}
+.nav-group[data-active=true]>.group-icon{background:var(--group);color:var(--group-ink)}
+.nav-icon:not(.sub-icon)[aria-current=page]{box-shadow:inset 4px 0 #fff}
+.nav-group[open]>.group-icon{box-shadow:none}
+.section[hidden]{display:none}
