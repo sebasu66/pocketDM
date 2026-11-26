@@ -1,0 +1,27 @@
+{
+  "id": "act-20261126-editorial-arrastre-014",
+  "date": "2026-11-26",
+  "area": "Narrativa / Contenido",
+  "owner": "Narrativa / Dirección editorial",
+  "status": "en-revision",
+  "title": "Arrastre directo de elementos del diálogo",
+  "summary": "El editor permite seleccionar y arrastrar fondo, NPC transparente, placa y panel en coordenadas relativas a la página. La vista móvil crea excepciones independientes. Se corrige la inicialización de la sala de prueba para evitar clics antes de conectar. Pruebas Chromium cubren arrastre, persistencia y opciones táctiles.",
+  "changed": [
+    "vault-site/public/dm/libro/editorial/dialogue-page.mjs",
+    "vault-site/public/dm/libro/editorial/dialogue-page.css",
+    "vault-site/public/dm/libro/editorial/lab.mjs",
+    "vault-site/public/dm/libro/editorial/camera.mjs",
+    "vault-site/public/dm/libro/editorial/artwork.mjs",
+    "vault-site/public/dm/libro/editorial/editorial-page.mjs",
+    "vault-site/public/dm/libro/index.html",
+    "vault-site/public/dm/libro/stormkeep_laboratorio_editorial_v11.html",
+    "vault-site/public/laboratorio/test-sesiones/",
+    "vault-site/scripts/test-editorial-parent-browser.mjs",
+    "vault-site/public/docs/editorial-parent.md"
+  ],
+  "next": "Verificar la biblioteca con la cuenta propietaria y conectar la sala con la campaña real.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0914"
+  ]
+}

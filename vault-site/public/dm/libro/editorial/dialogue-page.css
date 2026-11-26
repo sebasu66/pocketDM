@@ -174,3 +174,37 @@
 .dialogue-sheet[data-dialogue-view='desktop'] .exchange {
   padding-left: clamp(20px, 5cqw, 55px);
 }
+
+.person {
+  overflow: visible;
+}
+.nameplate {
+  right: auto;
+  bottom: auto;
+  z-index: 3;
+  pointer-events: none;
+}
+.background-hit {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+:host([editor-mode]) :is(.background-hit, .person, .nameplate) {
+  pointer-events: auto;
+  cursor: grab;
+}
+:host([editor-mode]) .exchange {
+  cursor: grab;
+}
+:host([editor-mode]) [data-edit][data-selected] {
+  outline: 2px dashed #f5d99c;
+  outline-offset: -2px;
+}
+:host([editor-mode]) [data-edit]:active {
+  cursor: grabbing;
+}
+
+:host([editor-mode]) [data-edit] {
+  user-select: none;
+}

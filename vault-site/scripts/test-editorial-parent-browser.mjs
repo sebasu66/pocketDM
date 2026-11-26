@@ -168,6 +168,21 @@ try {
   await panel.locator('#component').selectOption('dialogue');
   const dialogue = f.locator('book-editorial-dialogue').nth(1);
   await dialogue.locator('.person img').waitFor();
+  await dialogue.locator('.person').scrollIntoViewIfNeeded();
+  const personBox = await dialogue.locator('.person').boundingBox();
+  const original = await dialogue.evaluate((element) => ({
+    mobile: element.effective.personLeft,
+    common: element.getSettings().base.personLeft,
+  }));
+  await p.mouse.move(personBox.x + personBox.width * 0.5, personBox.y + personBox.height * 0.3);
+  await p.mouse.down();
+  await p.mouse.move(personBox.x + personBox.width * 0.5 + 35, personBox.y + personBox.height * 0.3 + 5, {
+    steps: 6,
+  });
+  await p.mouse.up();
+  assert((await dialogue.evaluate((element) => element.effective.personLeft)) > original.mobile);
+  assert.equal(await dialogue.evaluate((element) => element.getSettings().base.personLeft), original.common);
+  assert.equal(await panel.locator('#scope').inputValue(), 'mobile');
   await dialogue.evaluate((el) => {
     const content = el.content;
     content.dialogue.line = 'Última respuesta del NPC';

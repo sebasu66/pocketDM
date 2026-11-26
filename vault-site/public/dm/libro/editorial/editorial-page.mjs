@@ -1,7 +1,7 @@
 import { EditorialSettingsElement, baseFields, normalizeValues } from '/libro/edition/editorial-settings.mjs';
 import { assets } from './assets.mjs';
-import { EditorialCamera } from './camera.mjs';
-import { contour, maskPath, drawArt, drawBurn } from './artwork.mjs';
+import { EditorialCamera } from './camera.mjs?v=15';
+import { contour, maskPath, drawArt, drawBurn } from './artwork.mjs?v=15';
 import { createTextFlow } from './text-flow.mjs';
 
 const css = new URL('./page.css', import.meta.url);

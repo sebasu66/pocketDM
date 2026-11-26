@@ -90,6 +90,7 @@ if (
         get('host').disabled = false;
       }
     };
+    get('host').disabled = false;
     get('copy').onclick = async () => {
       try {
         await navigator.clipboard.writeText(get('link').value);

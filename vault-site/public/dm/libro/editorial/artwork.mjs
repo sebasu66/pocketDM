@@ -1,5 +1,5 @@
 import { profile, bounds, shapes } from './contour-data.mjs';
-import { cropRect } from './camera.mjs';
+import { cropRect } from './camera.mjs?v=15';
 const [min, max, sourceWidth, sourceHeight] = bounds;
 function sample(t) {
   const u = Math.max(0, Math.min(1, t)) * (profile.length - 1),

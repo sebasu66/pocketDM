@@ -1,9 +1,9 @@
-import './editorial-page.mjs?v=14';
-import './dialogue-page.mjs?v=14';
-import { connectLibrary } from './cloud-library.mjs?v=14';
+import './editorial-page.mjs?v=15';
+import './dialogue-page.mjs?v=15';
+import { connectLibrary } from './cloud-library.mjs?v=15';
 import { assets } from './assets.mjs';
-import { cropRect, cameraFrame } from './camera.mjs';
-import { sampleContent, importDocument, readLocal, writeLocal, readLegacy } from './library.mjs?v=14';
+import { cropRect, cameraFrame } from './camera.mjs?v=15';
+import { sampleContent, importDocument, readLocal, writeLocal, readLegacy } from './library.mjs?v=15';
 
 const sidebar = document.querySelector('.sidebar'),
   nodes = Object.fromEntries([...sidebar.querySelectorAll('[id]')].map((el) => [el.id, el]));
@@ -386,6 +386,30 @@ async function openDesign(vault = false) {
       const p = document.createElement(tag);
       p.style.width = widths[i] + 'px';
       p.setAttribute('preview-view', i ? 'mobile' : 'desktop');
+      if (k === 'dialogue') {
+        p.setAttribute('editor-mode', '');
+        p.addEventListener('editor-move', (event) => {
+          const { phase, view, values, moved, label } = event.detail;
+          if (phase === 'start') {
+            if (view === 'mobile') nodes.scope.value = 'mobile';
+            else if (scope() === 'mobile') nodes.scope.value = 'desktop';
+            refresh();
+            const group = {
+              Fondo: 'Fondo',
+              Personaje: 'Encuadre del NPC',
+              'Placa de nombre': 'Placa',
+              'Panel de diálogo': 'Diálogo',
+            }[label];
+            const summary = [...nodes.groups.querySelectorAll('summary')].find(
+              (item) => item.textContent === group,
+            );
+            if (summary) summary.parentElement.open = true;
+            status(label + ' seleccionado. Arrastrá para moverlo.');
+          } else if (phase === 'move') change(values, false);
+          else if (phase === 'end' && moved) persist();
+        });
+      }
+
       box.replaceChildren(p);
       sizeObserver.observe(p);
       return p;
@@ -595,6 +619,7 @@ nodes.import.onchange = async () => {
   const file = nodes.import.files[0],
     token = epoch;
   if (!file) return;
+  status('Importando diseño…');
   try {
     const obj = JSON.parse(await file.text());
     if (token !== epoch) return;
@@ -700,7 +725,7 @@ nodes.css.onclick = async () => {
     status('El navegador bloqueó el portapapeles.');
   }
 };
-const styles = await (await fetch(new URL('./inspector.css?v=14', import.meta.url))).text();
+const styles = await (await fetch(new URL('./inspector.css?v=15', import.meta.url))).text();
 window.pocketDMContextTools = {
   mount(host) {
     document.querySelector('main').classList.add('mounted');

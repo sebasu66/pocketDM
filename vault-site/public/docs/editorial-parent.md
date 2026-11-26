@@ -72,3 +72,8 @@ El laboratorio de diálogo anterior prepara una tirada de demostración por encu
 La sala de prueba está disponible únicamente desde una vista previa. Usa identidades anónimas de Firebase aisladas en una colección de prueba, con un anfitrión y hasta cuatro jugadores que entran mediante enlace. La sala prueba la conexión del grupo. La conexión con la campaña jugable y el acceso Google de producción de la aplicación nueva quedan pendientes.
 
 Las reglas de Firestore cierran el acceso anónimo a datos anteriores y limitan su acceso desde clientes al propietario autorizado. Los agentes con permisos administrativos conservan su acceso. Los datos anteriores no se borran. Las reglas se prueban en el emulador con `firebase emulators:exec --config firebase.editorial-test.json --only firestore --project demo-pocket-editorial "node vault-site/scripts/test-firestore-rules.cjs"`. Las reglas son un prototipo que necesita revisión antes de abrir la aplicación a un público más amplio.
+
+
+## Edición directa en la página de diálogo
+
+En el editor, hacé clic en el escenario, el NPC, la placa de nombre o el panel y arrastralo con el mouse. La selección abre el grupo correspondiente en el inspector. Las posiciones se expresan en porcentaje de la página. Al arrastrar el NPC se mueve también su placa, que se puede ajustar por separado. El zoom se controla en el inspector. Al arrastrar la vista móvil se crean excepciones móviles; en escritorio se usan los ajustes comunes o las excepciones de escritorio seleccionadas. Los controles numéricos siguen disponibles para afinar las medidas.
