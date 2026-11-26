@@ -1,0 +1,16 @@
+{
+  "id": "act-20261126-dm-editorial-controls-005",
+  "date": "2026-11-26",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Proporciones accesibles y exportación agrupada en Libro/UI",
+  "summary": "Selector de proporción siempre visible al inicio del panel contextual, con 16:10 y 9:16 adicionales. Las siete utilidades de exportación, copia y carga se trasladan a un grupo plegable al final. La tercera columna conserva las vistas de composición. Pruebas Chromium de proporciones reales, descarga SVG, navegación y edición superadas.",
+  "changed": [
+    "vault-site/public/dm/libro/index.html",
+    "vault-site/public/dm/libro/stormkeep_laboratorio_editorial_v11.html"
+  ],
+  "next": "Separar plantillas por tipo de pantalla y adaptar composición vertical; definir persistencia compartida.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": []
+}
