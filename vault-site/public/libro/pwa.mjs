@@ -12,3 +12,5 @@ function announce(release){
 async function check(){if(checking||document.visibilityState==='hidden')return;checking=true;try{const response=await fetch('/data/pwa-release.json',{cache:'no-store'});if(!response.ok)return;const release=await response.json();if(release.version&&release.version!==BUILD)announce(release)}catch{}finally{checking=false}}
 if('serviceWorker' in navigator&&window.isSecureContext){navigator.serviceWorker.register('/sw-pocketdm.js',{scope:'/',updateViaCache:'none'}).then(reg=>{window.addEventListener('focus',()=>reg.update().catch(()=>{}));}).catch(e=>console.warn('Pocket DM PWA:',e.message))}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')check()});window.addEventListener('focus',check);window.addEventListener('online',check);setInterval(check,60000);check();
+
+// Narrative releases are stamped in the validated deployment snapshot.
