@@ -1,0 +1,16 @@
+{
+  "id": "act-20261126-dm-context-fixed-004",
+  "date": "2026-11-26",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Panel contextual fijo en Libro/UI, plegado opcional por componente",
+  "summary": "Elimina el botón Herramientas de la navegación primaria. La segunda columna es obligatoria para UI y sólo desaparece al salir de la sección. Otros módulos pueden activar el plegado desde su propio encabezado; el control de reapertura permanece en la columna contextual. Pruebas Chromium escritorio y móvil, cambios en vivo y scroll independiente superadas.",
+  "changed": [
+    "vault-site/public/dm/portal.js",
+    "vault-site/public/dm/portal.css",
+    "vault-site/public/dm/libro/index.html"
+  ],
+  "next": "Persistencia compartida y edición de plantillas.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124", "nodeIds": []
+}
