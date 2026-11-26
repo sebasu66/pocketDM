@@ -4,7 +4,7 @@ const num=(g,l,d,min,max,step=1)=>field(g,l,'number',d,{min,max,step});
 const choice=(g,l,d,options)=>field(g,l,'select',d,{options});
 const color=(g,l,d)=>field(g,l,'color',d);
 export const baseFields=Object.freeze({
- ratio:choice('Composición','Proporción','21/9',['21/9','16/10','16/9','4/3','3/4','9/16']),
+ ratio:choice('Composición','Proporción','21/9',['21/9','19.5/9','16/10','16/9','4/3','3/4','9/16','9/19.5']),
  orientation:choice('Composición','Distribución','horizontal',['horizontal','vertical']),
  side:choice('Composición','Posición de imagen','left',['left','right','top','bottom']),
  width:num('Ilustración','Tamaño de imagen',40,26,80),
@@ -26,7 +26,7 @@ export const baseFields=Object.freeze({
  indent:num('Texto','Sangría',2.4,0,3,.1),tabs:num('Texto','Tabulación',4,2,8),capital:field('Texto','Capitular','boolean',true),capitalSize:num('Texto','Altura de capitular',2,2,4),lineHeight:num('Texto','Interlineado',1.6,1.2,1.9,.05),paragraphGap:num('Texto','Separación de párrafos',.9,0,1.5,.1),edgeGap:num('Texto','Margen al borde',27,4,30),printBlend:choice('Tinta','Mezcla','auto',['auto','normal','multiply','screen','soft-light']),printOpacity:num('Tinta','Opacidad',96,65,100),
  cameraEnabled:field('Cámara','Animación','boolean',false),cameraStartX:num('Cámara','Centro inicial X',50,0,100),cameraStartY:num('Cámara','Centro inicial Y',50,0,100),cameraEndX:num('Cámara','Centro final X',50,0,100),cameraEndY:num('Cámara','Centro final Y',50,0,100),cameraStartZoom:num('Cámara','Zoom inicial',1,1,3,.05),cameraEndZoom:num('Cámara','Zoom final',1.25,1,3,.05),cameraDuration:num('Cámara','Duración (s)',4,.2,15,.1)
 });
-export const defaultResponsive=Object.freeze({mobile:Object.freeze({ratio:'9/16',orientation:'vertical',side:'top',width:40,columns:'one',titleSize:32,fs:17})});
+export const defaultResponsive=Object.freeze({mobile:Object.freeze({ratio:'9/19.5',orientation:'vertical',side:'top',width:40,columns:'one',titleSize:32,fs:17})});
 const record=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
 const copy=x=>structuredClone(x);
 export function normalizeValues(values,fields=baseFields){

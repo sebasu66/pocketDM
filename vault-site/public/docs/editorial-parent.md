@@ -51,3 +51,10 @@ El selector del laboratorio incluye «Página de diálogo». La muestra usa la i
 El componente emite el evento `dialogue-choice` con la respuesta seleccionada. El sistema que lo integre debe proveer el siguiente contenido de conversación. La muestra no decide resultados de campaña. El laboratorio original de diálogo presenta el resultado sin regresar a la lista de opciones.
 
 La vista móvil tiene un campo de ancho en su encabezado. Este valor se conserva en el navegador y sólo afecta la previsualización. El editor mantiene aplicadas las excepciones móviles aunque el ancho elegido supere 600 px. Fuera del editor, el componente usa el ancho de su contenedor para resolverlas. Para previsualizaciones se puede fijar el atributo preview-view a mobile o desktop.
+
+
+## Biblioteca de diseños
+
+El selector de tipo de página ofrece los componentes implementados. La lista muestra los diseños versionados de la bóveda y las copias guardadas en el navegador. Para crear una copia, escribí un nombre y usá «Crear copia del diseño actual». Los cambios se guardan automáticamente en la copia seleccionada. Los diseños publicados admiten borradores locales y restauración desde la bóveda. La base compartida requiere configurar acceso autorizado y todavía no está conectada. Para trasladar contenido e imágenes se puede descargar el proyecto completo.
+
+Las proporciones 9:19,5 y 19,5:9 aproximan pantallas modernas como Galaxy S23 e iPhone 16. No representan zonas recortadas ni barras del sistema. Los proyectos guardados conservan su proporción anterior.

@@ -42,7 +42,7 @@
   },
   "responsive": {
     "mobile": {
-      "ratio": "9/16",
+      "ratio": "9/19.5",
       "orientation": "vertical",
       "side": "top",
       "width": 40,

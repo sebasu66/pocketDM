@@ -1,0 +1,22 @@
+{
+  "id": "act-20261126-editorial-biblioteca-012",
+  "date": "2026-11-26",
+  "area": "Narrativa / Contenido",
+  "owner": "Narrativa / Dirección editorial",
+  "status": "en-revision",
+  "title": "Biblioteca de diseños editoriales y proporciones móviles",
+  "summary": "El editor lista diseños versionados de la bóveda y permite crear, guardar y recuperar copias con nombre en el navegador. Añadidas proporciones móviles modernas en ambas orientaciones. La escritura compartida en Firebase sigue en análisis por las reglas vigentes de la base.",
+  "changed": [
+    "vault-site/public/dm/libro/editorial/lab.mjs",
+    "vault-site/public/dm/libro/editorial/designs/",
+    "vault-site/public/dm/libro/stormkeep_laboratorio_editorial_v11.html",
+    "vault-site/public/libro/edition/editorial-settings.mjs",
+    "vault-site/scripts/test-editorial-settings.mjs",
+    "vault-site/public/docs/editorial-parent.md"
+  ],
+  "next": "Resolver una ubicación con permisos apropiados para almacenar diseños compartidos y revisar el selector con el usuario.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0914"
+  ]
+}

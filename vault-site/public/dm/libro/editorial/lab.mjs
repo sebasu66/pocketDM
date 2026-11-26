@@ -9,14 +9,22 @@ const sidebar = document.querySelector('.sidebar'),
 const boxes = [...document.querySelectorAll('.canvas')],
   widths = [960, 360];
 const mobileWidth = document.getElementById('mobileWidth');
-try { const saved = Number(localStorage.getItem('editorial:mobile-preview-width')); if (saved >= 240 && saved <= 1200) widths[1] = saved; } catch {}
+try {
+  const saved = Number(localStorage.getItem('editorial:mobile-preview-width'));
+  if (saved >= 240 && saved <= 1200) widths[1] = saved;
+} catch {}
 mobileWidth.value = widths[1];
 function updateMobileWidth() {
   if (!mobileWidth.validity.valid || !mobileWidth.value) return;
   widths[1] = Number(mobileWidth.value);
   mobileWidth.closest('figure').style.setProperty('--mobile-preview-width', widths[1] + 'px');
-  if (pages[1]) { pages[1].style.width = widths[1] + 'px'; pages[1].schedule(); }
-  try { localStorage.setItem('editorial:mobile-preview-width', String(widths[1])); } catch {}
+  if (pages[1]) {
+    pages[1].style.width = widths[1] + 'px';
+    pages[1].schedule();
+  }
+  try {
+    localStorage.setItem('editorial:mobile-preview-width', String(widths[1]));
+  } catch {}
   requestAnimationFrame(fit);
 }
 mobileWidth.addEventListener('input', updateMobileWidth);
@@ -37,6 +45,26 @@ let pages = [],
   phaseSelect,
   targetSelect;
 const page = () => pages[0];
+const catalogKey = 'editorial:design-library-v1';
+function getCatalog() {
+  try {
+    const data = JSON.parse(localStorage.getItem(catalogKey) || '[]');
+    return Array.isArray(data)
+      ? data.filter((x) => x && typeof x.id === 'string' && typeof x.name === 'string' && x.kind === kind())
+      : [];
+  } catch {
+    return [];
+  }
+}
+function showCatalog(selected = 'forja') {
+  nodes.design.replaceChildren(
+    new Option('Forja del Ancla · bóveda', 'forja'),
+    new Option('Plaza del Cuervo Gris · bóveda', 'plaza'),
+    ...getCatalog().map((x) => new Option(x.name + ' · en este navegador', x.id)),
+  );
+  nodes.design.value = [...nodes.design.options].some((x) => x.value === selected) ? selected : 'forja';
+  nodes.vault.disabled = !['forja', 'plaza'].includes(nodes.design.value);
+}
 const sourceURL = () => new URL('./designs/' + key() + '.json', import.meta.url);
 function download(blob, name) {
   const url = URL.createObjectURL(blob),
@@ -357,7 +385,40 @@ nodes.vault.onclick = () => {
   previousContent = page()?.content;
   openDesign(true);
 };
-nodes.component.onchange = nodes.design.onchange = () => openDesign();
+nodes.component.onchange = () => {
+  showCatalog(design());
+  openDesign();
+};
+nodes.design.onchange = () => {
+  nodes.vault.disabled = !['forja', 'plaza'].includes(design());
+  openDesign();
+};
+nodes.newDesign.onclick = async () => {
+  const name = nodes.newDesignName.value.trim();
+  if (!name) {
+    status('Escribí un nombre para el diseño.');
+    nodes.newDesignName.focus();
+    return;
+  }
+  if (!ready) return;
+  const currentKind = kind(),
+    id = 'local-' + crypto.randomUUID();
+  const data = { settings: page().getSettings(), content: page().content };
+  try {
+    await saveChain;
+    await writeLocal(currentKind + '-' + id, data);
+    const all = JSON.parse(localStorage.getItem(catalogKey) || '[]');
+    all.push({ id, name, kind: currentKind });
+    localStorage.setItem(catalogKey, JSON.stringify(all));
+    if (kind() !== currentKind) return;
+    nodes.newDesignName.value = '';
+    showCatalog(id);
+    await openDesign();
+    status('Diseño creado y guardado en este navegador.');
+  } catch (error) {
+    status('No se pudo crear el diseño: ' + error.message);
+  }
+};
 nodes.scope.onchange = refresh;
 for (const id of ['title', 'kicker', 'alt', 'paragraphs'])
   nodes[id].oninput = () => {
@@ -573,4 +634,5 @@ if (parent !== window) {
     if (host && !window.frameElement.closest('[hidden]')) window.pocketDMContextTools.mount(host);
   } catch {}
 }
+showCatalog();
 await openDesign();

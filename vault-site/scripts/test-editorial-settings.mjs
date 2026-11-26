@@ -15,7 +15,7 @@ const previous=p.settings;assert.throws(()=>p.applySettings({...previous,base:{w
 assert.throws(()=>p.applySettings({...previous,base:{css:'body{}'}}));assert.throws(()=>p.applySettings({...previous,component:'combat'}));
 class Child extends TestComponent {static componentType='book-dialogue';static editableProperties={...baseFields,portraitVisible:{type:'boolean',default:true}};}
 const child=new Child();const config=child.settings;config.base.portraitVisible=false;child.applySettings(config);assert.equal(child.getResolvedSettings('mobile').portraitVisible,false);
-const old=migrateV11({width:'47',capital:true,titleInk:'#123456',sceneText:'not part of style'});assert.equal(old.base.width,47);assert(!Object.hasOwn(old.base,'sceneText'));assert.equal(resolveSettings(old,'mobile').ratio,'9/16');
+const old=migrateV11({width:'47',capital:true,titleInk:'#123456',sceneText:'not part of style'});assert.equal(old.base.width,47);assert(!Object.hasOwn(old.base,'sceneText'));assert.equal(resolveSettings(old,'mobile').ratio,'9/19.5');
 globalThis.fetch=async url=>({ok:true,json:async()=>previous});await p.loadSettings('/data/layout.json');assert.deepEqual(p.settings,previous);await p.loadSettings(JSON.stringify(previous));assert.deepEqual(p.settings,previous);
 globalThis.fetch=async()=>({ok:false,status:404});await assert.rejects(p.loadSettings('/missing.json'));assert.deepEqual(p.settings,previous);
 console.log('PASS: JSON round-trip, URL load, inheritance, per-view overrides, subclass schema, migration, invalid settings and failed load preserve previous configuration');
