@@ -46,13 +46,19 @@ h1 {
 }
 .preview-grid {
   display: grid;
-  grid-template-columns: minmax(0, 2.8fr) minmax(155px, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(10px, 1.8vw, 24px);
   align-items: start;
 }
 .preview-grid figure {
   margin: 0;
   min-width: 0;
+}
+.preview-grid figure:first-child {
+  max-width: 960px;
+}
+.preview-grid figure:nth-child(2) {
+  max-width: 360px;
 }
 .preview-grid figcaption {
   display: flex;
