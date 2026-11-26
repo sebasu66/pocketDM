@@ -7,42 +7,21 @@
   <link rel="manifest" href="/app.webmanifest">
   <link rel="apple-touch-icon" href="/libro/assets/app-192.png">
   <title>Diálogos de Stormkeep · Pocket DM</title>
-  <link rel="stylesheet" href="./dialogo.css">
+  <link rel="stylesheet" href="./dialogo.css?v=editorial1">
 </head>
 <body>
   <main class="lab" aria-labelledby="lab-title">
-    <img id="ambient" class="ambient" alt="" aria-hidden="true" hidden>
     <header class="toolbar">
       <a class="exit" href="/app/" aria-label="Volver al inicio de Pocket DM">‹ <span>Inicio</span></a>
       <h1 id="lab-title">Laboratorio de diálogo</h1>
       <label class="toolbar-field">NPC <select id="npc" disabled></select></label>
-      <button id="reset" type="button" disabled>Reiniciar</button>
+      <label class="toolbar-field">Diseño <select id="layout" disabled></select></label><button id="reset" type="button" disabled>Reiniciar</button>
     </header>
 
     <p id="loading" role="status">Cargando residentes de Stormkeep…</p>
-    <section class="scene" aria-labelledby="speaker" hidden>
-      <figure class="stage">
-        <img id="background" class="background" alt="">
-        <img id="portrait" class="portrait" alt="" hidden>
-        <figcaption id="location"></figcaption>
-      </figure>
-      <section class="dialogue">
-        <header class="speaker">
-          <h2 id="speaker"></h2>
-          <p id="occupation"></p>
-        </header>
-        <div id="reading" class="reading" tabindex="0" aria-label="Conversación actual">
-          <div id="exchange" aria-live="polite" aria-atomic="true">
-            <p id="chosen" class="chosen" hidden></p>
-            <div id="check" class="check" hidden></div>
-            <p id="line" class="line"></p>
-          </div>
-        </div>
-        <div id="choices" class="choices" role="group" aria-label="Respuestas"></div>
-      </section>
-    </section>
+    <section class="scene" aria-label="Conversación de prueba" hidden><book-editorial-dialogue></book-editorial-dialogue></section>
   </main>
-  <script type="module" src="./dialogo.mjs"></script>
+  <script type="module" src="./dialogo.mjs?v=editorial1"></script>
   <script type="module" src="/libro/pwa.mjs"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 import './editorial-page.mjs?v=15';
-import './dialogue-page.mjs?v=15';
+import './dialogue-page.mjs?v=16';
 import { connectLibrary } from './cloud-library.mjs?v=15';
 import { assets } from './assets.mjs';
 import { cropRect, cameraFrame } from './camera.mjs?v=15';
@@ -46,6 +46,7 @@ let sharedLibrary = null;
 let sharedLayouts = new Map();
 const sharedRevisions = new Map();
 const catalogKey = 'editorial:design-library-v1';
+function markDialogueDesign(k,d,settings,name){if(k==='dialogue')try{localStorage.setItem('editorial:active-dialogue-v1',JSON.stringify({id:d,name:name||d,settings,time:Date.now()}))}catch{}}
 function getCatalog() {
   try {
     const data = JSON.parse(localStorage.getItem(catalogKey) || '[]');
@@ -97,6 +98,7 @@ function persist() {
     .then(async () => {
       const revision = sharedRevisions.get(cloudId) ?? 0;
       await writeLocal(id, { ...data, cloudPending: Boolean(sharedLibrary), cloudRevision: revision });
+      if(epoch===generation)markDialogueDesign(selectedKind,selectedDesign,data.settings,label);
       if (sharedLibrary) {
         try {
           const next = await sharedLibrary.save(
@@ -416,6 +418,7 @@ async function openDesign(vault = false) {
       content: vault && previousContent ? previousContent : probe.content,
     });
     activeDesign = { kind: k, design: d };
+    if(k==='dialogue')markDialogueDesign(k,d,page().getSettings(),nodes.design.selectedOptions[0]?.textContent);
     nodes.dialogueEditor.hidden = k !== 'dialogue';
     document.getElementById('pageType').textContent = nodes.component.selectedOptions[0].textContent;
     ready = true;

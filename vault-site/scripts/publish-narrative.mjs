@@ -5,7 +5,7 @@ import {tmpdir} from 'node:os';
 import {fileURLToPath} from 'node:url';
 const vault=resolve(dirname(fileURLToPath(import.meta.url)),'..'),repo=resolve(vault,'..');
 const branch='feature/narrative-coordination-20261124',project='lore-weaver-rt9pc',site='pocketdm-prototipos',url='https://'+site+'.web.app',channel='narrative-auto';
-const auto=process.argv.includes('--auto'),check=process.argv.includes('--check');
+const auto=process.argv.includes('--auto'),check=process.argv.includes('--check'),committedOnly=process.argv.includes('--committed-only');
 const git=(...a)=>execFileSync('git',['-C',repo,...a],{encoding:'utf8',timeout:120000}).trim();
 function run(cmd,args,cwd=vault){const r=spawnSync(cmd,args,{cwd,stdio:'inherit',timeout:300000});if(r.status!==0)throw Error(cmd+' failed: '+(r.error?.message??r.status));}
 function firebase(args,cwd=vault,json=false){const opts={cwd,encoding:'utf8',timeout:300000,stdio:json?['ignore','pipe','pipe']:'inherit'};const all=[...args,'--project',project,'--non-interactive'];if(json)all.push('--json');const r=process.platform==='win32'?spawnSync('cmd.exe',['/d','/s','/c','firebase.cmd '+all.join(' ')],opts):spawnSync('firebase',all,opts);if(r.status!==0)throw Error('Firebase '+args[0]+' failed: '+(r.error?.message??r.stderr??r.status));return json?JSON.parse(r.stdout):null;}
@@ -14,12 +14,12 @@ const live=()=>{const c=channels().find(x=>x.name.endsWith('/live'));if(!c?.rele
 async function release(base){const r=await fetch(base+'/data/pwa-release.json?check='+Date.now(),{cache:'no-store',signal:AbortSignal.timeout(15000)});if(!r.ok)throw Error('Release HTTP '+r.status);return r.json();}
 function ancestor(a,b){try{git('merge-base','--is-ancestor',a,b);return true}catch{return false}}
 function remoteHead(){const line=git('ls-remote','--heads','origin','refs/heads/'+branch);if(!line)throw Error('Missing remote branch');return line.split(/\s+/)[0]}
-const publicContent=p=>p==='vault-site/scripts/publish-narrative.mjs'||/^vault-site\/public\/(?:libro\/|laboratorio\/dialogo\/|docs\/art-references\/|data\/(?:stormkeep-[^/]+\.json|narrative\/))/.test(p);
+const publicContent=p=>p==='vault-site/scripts/publish-narrative.mjs'||/^vault-site\/public\/(?:libro\/|dm\/libro\/|laboratorio\/dialogo\/|docs\/art-references\/|data\/(?:stormkeep-[^/]+\.json|narrative\/))/.test(p);
 async function main(){
  if(git('branch','--show-current')!==branch){if(auto)return;throw Error('Only the coordinated narrative branch can deploy');}
  const sha=git('rev-parse','HEAD'),changes=git('diff','--name-only','HEAD^','HEAD').split('\n');
  if(auto&&!changes.some(publicContent))return;
- if(git('status','--porcelain','--untracked-files=no'))throw Error('Tracked changes pending; commit the intended release first');
+ if(git('status','--porcelain','--untracked-files=no')){if(!committedOnly)throw Error('Tracked changes pending; commit the intended release first');const dirty=git('diff','--name-only','HEAD').split('\n').filter(Boolean);if(dirty.some(p=>changes.includes(p)))throw Error('Uncommitted changes overlap this release');console.log('Publishing committed snapshot only; unrelated working files excluded');}
  const lock=resolve(repo,git('rev-parse','--git-common-dir'),'pdm-narrative-deploy.lock');
  let fd;try{fd=openSync(lock,'wx')}catch{throw Error('Another narrative deployment is active, or a stale lock needs review')}
  let tmp;

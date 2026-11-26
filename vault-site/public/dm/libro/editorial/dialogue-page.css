@@ -230,3 +230,5 @@
 .choice-send:disabled { opacity: .45; cursor: default; }
 .choice-send:focus-visible { outline: 2px solid #f5d99c; }
 .choices button[aria-pressed="true"] { outline: 2px solid #edca8e; background: #524331; }
+
+.message.check{color:#f4dfb9;background:#252e38;font-size:.86em;border-color:#786b53}

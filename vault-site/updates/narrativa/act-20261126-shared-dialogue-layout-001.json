@@ -1,0 +1,23 @@
+{
+  "id": "act-20261126-shared-dialogue-layout-001",
+  "date": "2026-11-26",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Demos de diálogo consumen el layout del editor",
+  "summary": "Un único componente editorial para edición y demos; selección y sincronización del diseño activo en el mismo navegador, con historial y chequeos de demostración preservados. Pruebas de navegador en tres tamaños y guardado real del editor aprobadas.",
+  "changed": [
+    "vault-site/public/laboratorio/dialogo/dialogo.mjs",
+    "vault-site/public/laboratorio/dialogo/editorial-layout.mjs",
+    "vault-site/public/dm/libro/editorial/dialogue-page.mjs",
+    "vault-site/public/dm/libro/editorial/lab.mjs",
+    "vault-site/public/docs/dialogue-editorial-layout.md",
+    "vault-site/scripts/test-dialogue-demo-editorial-browser.mjs"
+  ],
+  "next": "Comprobar publicación automática y definir selección autorizada del diseño entre dispositivos; integrar la proyección de campaña sin duplicar renderer.",
+  "source": "https://github.com/sebasu66/pocketDM/blob/feature/narrative-coordination-20261124/vault-site/public/docs/dialogue-editorial-layout.md",
+  "nodeIds": [
+    "doc_0913",
+    "doc_0914"
+  ]
+}

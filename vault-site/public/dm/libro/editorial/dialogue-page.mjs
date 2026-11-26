@@ -76,7 +76,7 @@ export class BookEditorialDialogue extends BookEditorialPage {
     super();
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = new URL('./dialogue-page.css?v=15', import.meta.url);
+    link.href = new URL('./dialogue-page.css?v=16', import.meta.url);
     link.onload = () => this.schedule();
     this.shadowRoot.append(link);
     this.panel = document.createElement('section');
@@ -330,9 +330,9 @@ export class BookEditorialDialogue extends BookEditorialPage {
     messages.forEach((message) => {
       if (!message || typeof message.text !== 'string') return;
       const item = document.createElement('p');
-      item.className = message.speaker === 'player' ? 'message player' : 'message npc';
+      item.className = message.speaker === 'check' ? 'message check' : message.speaker === 'player' ? 'message player' : 'message npc';
       const speaker = document.createElement('strong');
-      speaker.textContent = message.speaker === 'player' ? 'Vos' : (data.people[0].name || 'NPC');
+      speaker.textContent = message.speaker === 'check' ? 'Chequeo de demostración' : message.speaker === 'player' ? 'Vos' : (data.people[0].name || 'NPC');
       item.append(speaker, document.createTextNode(message.text));
       history.append(item);
     });
