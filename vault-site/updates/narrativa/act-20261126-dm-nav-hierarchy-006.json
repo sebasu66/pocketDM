@@ -1,0 +1,18 @@
+{
+  "id": "act-20261126-dm-nav-hierarchy-006",
+  "date": "2026-11-26",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Jerarquía visual del menú Dungeon Master",
+  "summary": "Padre expandido con contorno cromático sin relleno. Hijos inactivos con barra lateral del color del padre. Solo el destino activo recibe relleno pleno e icono oscuro; Inicio usa el color general. No cambia el comportamiento ni la preferencia de ancho.",
+  "changed": [
+    "vault-site/public/dm/portal.css",
+    "vault-site/public/dm/index.html",
+    "vault-site/public/dm/sistema/index.html",
+    "vault-site/public/dm/arte/index.html"
+  ],
+  "next": "Revisión visual con el usuario.",
+  "source": "https://pocketdm-prototipos.web.app/dm/",
+  "nodeIds": []
+}
