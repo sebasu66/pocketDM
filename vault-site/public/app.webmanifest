@@ -27,5 +27,12 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
+  ],
+  "shortcuts": [
+    {
+      "name": "Laboratorio de diálogo",
+      "short_name": "Diálogo",
+      "url": "/laboratorio/dialogo/"
+    }
   ]
 }

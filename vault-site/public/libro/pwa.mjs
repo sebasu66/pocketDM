@@ -1,4 +1,4 @@
-const BUILD='2026-11-25-fullscreen-2';
+const BUILD='2026-11-25-dialogue-lab-1';
 let displayed=false, checking=false;
 function announce(release){
  if(displayed)return;displayed=true;

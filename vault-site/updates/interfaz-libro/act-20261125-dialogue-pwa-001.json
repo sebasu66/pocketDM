@@ -1,0 +1,13 @@
+{
+  "id": "act-20261125-dialogue-pwa-001",
+  "date": "2026-11-25",
+  "area": "Interfaz / Libro",
+  "owner": "Pocket DM · Presentación narrativa",
+  "status": "en-revision",
+  "title": "Laboratorio de diálogo dentro de la PWA",
+  "summary": "El laboratorio comparte el manifiesto, el alcance y el servicio de actualización de la PWA. Inicio mantiene su acceso, y Android puede ofrecer un acceso directo de la aplicación instalada.",
+  "changed": ["vault-site/public/app.webmanifest", "vault-site/public/laboratorio/dialogo/index.html", "vault-site/public/libro/pwa.mjs", "vault-site/public/sw-pocketdm.js", "vault-site/public/data/pwa-release.json", "vault-site/firebase.json"],
+  "next": "Verificar la primera apertura desde una instalación Android y probar luego el flujo de combate.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124/vault-site/public/laboratorio/dialogo",
+  "nodeIds": ["doc_0913", "doc_0914"]
+}
