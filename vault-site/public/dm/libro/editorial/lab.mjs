@@ -1,4 +1,5 @@
 import './editorial-page.mjs';
+import './dialogue-page.mjs';
 import { assets } from './assets.mjs';
 import { cropRect, cameraFrame } from './camera.mjs';
 import { sampleContent, importDocument, readLocal, writeLocal, readLegacy } from './library.mjs';
@@ -229,6 +230,15 @@ function refresh() {
     hint.textContent = Object.hasOwn(layer, id) ? 'Excepción' : 'Heredado';
     reset.hidden = !specific || !Object.hasOwn(layer, id);
   }
+  if (kind() === 'dialogue') {
+    const dialogue = c.dialogue;
+    for (let i = 1; i <= 1; i++) {
+      nodes['person' + i + 'Name'].value = dialogue.people[i - 1].name;
+      nodes['person' + i + 'Emotion'].value = dialogue.people[i - 1].emotion;
+    }
+    nodes.dialogueLine.value = dialogue.line;
+    nodes.dialogueChoices.value = dialogue.choices.map((x) => x.label).join('\n');
+  }
   for (const id of ['title', 'kicker', 'alt']) nodes[id].value = c[id];
   nodes.paragraphs.value = c.paragraphs.join('\n\n');
   if (mapImage.getAttribute('src') !== c.image) mapImage.src = c.image;
@@ -299,6 +309,7 @@ async function openDesign(vault = false) {
       content: vault && previousContent ? previousContent : probe.content,
     });
     activeDesign = { kind: k, design: d };
+    nodes.dialogueEditor.hidden = k !== 'dialogue';
     document.getElementById('pageType').textContent = nodes.component.selectedOptions[0].textContent;
     ready = true;
     build();
@@ -341,6 +352,56 @@ for (const id of ['title', 'kicker', 'alt', 'paragraphs'])
     c[id] = id === 'paragraphs' ? nodes[id].value.split(/\n\s*\n/) : nodes[id].value;
     setContent(c);
   };
+for (let i = 1; i <= 1; i++) {
+  for (const field of ['Name', 'Emotion'])
+    nodes['person' + i + field].onchange = () => {
+      const c = page().content;
+      c.dialogue.people[i - 1][field.toLowerCase()] = nodes['person' + i + field].value;
+      setContent(c);
+    };
+  for (const field of ['Image', 'Mood'])
+    nodes['person' + i + field].onchange = async (e) => {
+      const file = e.target.files[0],
+        token = epoch;
+      if (!file) return;
+      try {
+        const src = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+        const img = new Image();
+        img.src = src;
+        await img.decode();
+        if (token !== epoch) return;
+        const c = page().content,
+          person = c.dialogue.people[i - 1];
+        if (field === 'Mood') {
+          if (!person.emotion.trim()) throw Error('Indicá primero una emoción');
+          person.emotions[person.emotion] = src;
+        } else person.image = src;
+        setContent(c);
+      } catch (err) {
+        status('No se pudo cargar la imagen: ' + err.message);
+      } finally {
+        e.target.value = '';
+      }
+    };
+}
+nodes.dialogueLine.onchange = () => {
+  const c = page().content;
+  c.dialogue.line = nodes.dialogueLine.value;
+  setContent(c);
+};
+nodes.dialogueChoices.onchange = () => {
+  const c = page().content;
+  c.dialogue.choices = nodes.dialogueChoices.value
+    .split('\n')
+    .filter(Boolean)
+    .map((label) => ({ label }));
+  setContent(c);
+};
 nodes.upload.onchange = async () => {
   const file = nodes.upload.files[0],
     token = epoch;

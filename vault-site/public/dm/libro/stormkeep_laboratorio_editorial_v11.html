@@ -18,6 +18,7 @@
           <label
             >Tipo de página<select id="component">
               <option value="scene">Página genérica</option>
+              <option value="dialogue">Página de diálogo</option>
               <option value="intro">Presentación de lugar</option>
             </select></label
           >
@@ -36,6 +37,17 @@
           >
           <p class="status" role="status" id="status"></p>
         </div>
+        <details id="dialogueEditor" hidden>
+          <summary>Personaje del diálogo</summary>
+          <div class="fields">
+            <label>Nombre del NPC<input id="person1Name" /></label
+            ><label>Imagen principal del NPC<input type="file" accept="image/*" id="person1Image" /></label
+            ><label>Emoción del NPC<input id="person1Emotion" placeholder="neutral" /></label
+            ><label>Imagen para esta emoción<input type="file" accept="image/*" id="person1Mood" /></label>
+            <label>Texto del diálogo<textarea id="dialogueLine"></textarea></label
+            ><label>Respuestas (una por línea)<textarea id="dialogueChoices"></textarea></label>
+          </div>
+        </details>
         <div id="groups"></div>
         <details>
           <summary>Contenido narrativo</summary>

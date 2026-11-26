@@ -43,3 +43,9 @@ La cámara del diseño admite duración en segundos, zoom de ambos extremos y ac
 El inspector guarda cada pareja de componente y diseño en IndexedDB, con almacenamiento local de respaldo. **Descargar diseño JSON** exporta sólo el estilo y la cámara reutilizable. **Descargar proyecto con contenido** incluye el diseño, la narración, las imágenes importadas y sus excepciones. El importador también admite archivos de proyecto V11. **Recargar diseño de la bóveda** vuelve a leer el diseño publicado y conserva el contenido en edición.
 
 Firebase Hosting sirve los archivos versionados en modo de lectura. Para compartir cambios, se exporta el JSON y se incorpora al repositorio mediante el protocolo de la bóveda. El guardado del navegador pertenece al origen y dispositivo actuales.
+
+## Página de diálogo
+
+El selector del laboratorio incluye «Página de diálogo». La muestra usa la imagen de Hald disponible en el catálogo de arte candidato. En «Personaje del diálogo» se puede cargar la imagen principal completa, escribir el nombre de una emoción y asociarle una imagen. Si la emoción indicada no tiene imagen o no se puede cargar, se muestra la imagen principal. Los controles de posición y zoom del grupo «Retratos» se aplican a todas las emociones y admiten excepciones por ancho. El diseño y el proyecto se guardan localmente. Para trasladar imágenes y emociones hay que descargar el proyecto con contenido.
+
+El componente emite el evento `dialogue-choice` con la respuesta seleccionada. El sistema que lo integre debe proveer el siguiente contenido de conversación. La muestra no decide resultados de campaña. El laboratorio original de diálogo presenta el resultado sin regresar a la lista de opciones.

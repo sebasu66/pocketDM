@@ -79,7 +79,6 @@ function presentResult(label, answer, result) {
   line.textContent = answer;
   reading.scrollTop = 0;
   choices.replaceChildren();
-  addChoice('Volver a las opciones', () => showOptions(true));
   reading.focus({ preventScroll: true });
 }
 

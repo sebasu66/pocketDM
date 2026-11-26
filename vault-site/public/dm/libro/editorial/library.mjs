@@ -11,6 +11,22 @@ export function sampleContent(kind, design) {
     alt: place.name,
     folio: intro ? '' : 'Muestra editorial · II',
     camera: {},
+    ...(kind === 'dialogue'
+      ? {
+          dialogue: {
+            line: '¿Qué noticias traés?',
+            people: [
+              {
+                name: 'Hald Eirik',
+                image: '/docs/art-references/stormkeep-work-20261125/assets/hald-capitan.png',
+                emotion: 'neutral',
+                emotions: {},
+              },
+            ],
+            choices: [{ label: 'Preguntar por el lugar' }, { label: 'Despedirse' }],
+          },
+        }
+      : {}),
   };
 }
 export function importDocument(obj, page, content, kind) {

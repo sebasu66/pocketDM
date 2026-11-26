@@ -1,0 +1,25 @@
+{
+  "id": "act-20261126-dialogo-editorial-009",
+  "date": "2026-11-26",
+  "area": "Narrativa / Contenido",
+  "owner": "Narrativa / Dirección editorial",
+  "status": "en-revision",
+  "title": "Página editorial de diálogo con imagen del NPC",
+  "summary": "Componente derivado con imagen principal de NPC, imágenes opcionales por emoción, encuadre y zoom responsive, exportación de proyecto y vista previa. Las respuestas emiten un evento para el sistema de diálogo. El laboratorio anterior ya no ofrece volver a las opciones tras una respuesta.",
+  "changed": [
+    "vault-site/public/dm/libro/editorial/dialogue-page.mjs",
+    "vault-site/public/dm/libro/editorial/dialogue-page.css",
+    "vault-site/public/dm/libro/editorial/designs/dialogue-forja.json",
+    "vault-site/public/dm/libro/editorial/designs/dialogue-plaza.json",
+    "vault-site/public/dm/libro/editorial/lab.mjs",
+    "vault-site/public/dm/libro/editorial/library.mjs",
+    "vault-site/public/dm/libro/stormkeep_laboratorio_editorial_v11.html",
+    "vault-site/public/laboratorio/dialogo/dialogo.mjs",
+    "vault-site/public/docs/editorial-parent.md"
+  ],
+  "next": "Conectar la progresión de conversación al sistema de narrativa y validar la dirección visual con el usuario.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0914"
+  ]
+}
