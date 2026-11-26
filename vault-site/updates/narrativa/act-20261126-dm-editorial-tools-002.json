@@ -1,0 +1,15 @@
+{
+  "id": "act-20261126-dm-editorial-tools-002",
+  "date": "2026-11-26",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Laboratorio editorial: panel de herramientas independiente",
+  "summary": "V11 conserva controles y composición; panel contextual junto a la navegación, ocho grupos plegables independientes, scroll separado del lienzo, ocultación y recuperación de ancho, panel móvil. Prueba Chromium 1440×850 y 390×740 superada, sin errores JS. Persistencia de plantillas no incluida.",
+  "changed": [
+    "vault-site/public/dm/libro/stormkeep_laboratorio_editorial_v11.html"
+  ],
+  "next": "Revisar ergonomía en preview y continuar integración de plantillas versionadas por tipo.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": []
+}
