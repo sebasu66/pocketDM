@@ -14,7 +14,7 @@ const live=()=>{const c=channels().find(x=>x.name.endsWith('/live'));if(!c?.rele
 async function release(base){const r=await fetch(base+'/data/pwa-release.json?check='+Date.now(),{cache:'no-store',signal:AbortSignal.timeout(15000)});if(!r.ok)throw Error('Release HTTP '+r.status);return r.json();}
 function ancestor(a,b){try{git('merge-base','--is-ancestor',a,b);return true}catch{return false}}
 function remoteHead(){const line=git('ls-remote','--heads','origin','refs/heads/'+branch);if(!line)throw Error('Missing remote branch');return line.split(/\s+/)[0]}
-const publicContent=p=>/^vault-site\/public\/(?:libro\/|laboratorio\/dialogo\/|docs\/art-references\/|data\/(?:stormkeep-[^/]+\.json|narrative\/))/.test(p);
+const publicContent=p=>p==='vault-site/scripts/publish-narrative.mjs'||/^vault-site\/public\/(?:libro\/|laboratorio\/dialogo\/|docs\/art-references\/|data\/(?:stormkeep-[^/]+\.json|narrative\/))/.test(p);
 async function main(){
  if(git('branch','--show-current')!==branch){if(auto)return;throw Error('Only the coordinated narrative branch can deploy');}
  const sha=git('rev-parse','HEAD'),changes=git('diff','--name-only','HEAD^','HEAD').split('\n');
@@ -31,7 +31,7 @@ async function main(){
   if(served.sourceCommit===sha&&!check){console.log('Already published '+sha);return}
   tmp=mkdtempSync(join(tmpdir(),'pdm-release-'));const tar=join(tmp,'source.tar');
   run('git',['-C',repo,'archive','--format=tar','--output='+tar,sha,'vault-site/public','vault-site/scripts','vault-site/updates','vault-site/firebase.json','vault-site/.firebaserc'],repo);
-  run('tar',['-xf',tar,'-C',tmp],repo);rmSync(tar);
+  run('tar',['-xf','source.tar'],tmp);rmSync(tar);
   const staged=join(tmp,'vault-site'),pub=join(staged,'public'),version='narrative-'+sha.slice(0,12);
   run(process.execPath,['scripts/build-activity.mjs'],staged);run(process.execPath,['scripts/validate.mjs'],staged);
   for(const p of changes.filter(p=>p.startsWith('vault-site/public/')&&/\.(mjs|js)$/.test(p))){const f=join(tmp,p);if(existsSync(f))run(process.execPath,['--check',f],staged)}
