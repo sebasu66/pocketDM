@@ -19,3 +19,21 @@
 .nav-icon:not(.sub-icon)[aria-current=page]{box-shadow:inset 4px 0 #fff}
 .nav-group[open]>.group-icon{box-shadow:none}
 .section[hidden]{display:none}
+
+/* Compact or labeled rail: the selection and group colors are unchanged. */
+.nav-label{display:none}
+.rail-toggle{margin-top:auto;flex-shrink:0;border-top:1px solid #30343b;font:inherit;min-height:52px;height:56px}
+.rail-toggle svg{transition:transform .15s}
+.rail-expanded{--rail-width:248px}
+.rail-expanded .nav-icon,.rail-expanded .mark{justify-content:flex-start;gap:12px;padding:0 16px}
+.rail-expanded .nav-icon svg{flex:0 0 26px}
+.rail-expanded .sub-icon{padding-left:25px}
+.rail-expanded .sub-icon svg{flex-basis:22px}
+.rail-expanded .nav-label{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:550;text-align:left}
+.rail-expanded .mark .nav-label{font-weight:700;font-size:15px}
+.rail-expanded .group-icon .nav-label{padding-right:10px;font-weight:650}
+.rail-expanded .tip{display:none}
+.rail-expanded .rail-toggle svg{transform:scaleX(-1)}
+.rail-expanded .rail-toggle .nav-label{font-size:13px}
+@media(max-width:600px){.rail-expanded{--rail-width:min(248px,80vw)}.rail-expanded body{padding-left:56px}.rail-expanded .rail{box-shadow:8px 0 24px #0008}.rail-toggle{height:48px;min-height:48px}}
+@media(max-height:560px){.rail nav{overflow-y:auto;overflow-x:hidden}.rail:not(:hover) .tip{visibility:hidden}}
