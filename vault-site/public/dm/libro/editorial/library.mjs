@@ -18,12 +18,19 @@ export function sampleContent(kind, design) {
             people: [
               {
                 name: 'Hald Eirik',
+                role: 'Capitán de la guardia',
                 image: '/docs/art-references/stormkeep-work-20261125/assets/hald-capitan.png',
                 emotion: 'neutral',
                 emotions: {},
               },
             ],
-            choices: [{ label: 'Preguntar por el lugar' }, { label: 'Despedirse' }],
+            choices: [
+              { label: 'Preguntar por el lugar' },
+              { label: '¿Qué ocurre en Stormkeep?' },
+              { label: '¿Necesitás ayuda?' },
+              { label: 'Contar lo que vi en el camino' },
+              { label: 'Despedirse' },
+            ],
           },
         }
       : {}),

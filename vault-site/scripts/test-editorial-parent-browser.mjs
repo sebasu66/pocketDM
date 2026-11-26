@@ -101,8 +101,10 @@ try {
   const resized = await first.evaluate(async (el) => {
     const p = document.createElement('book-editorial-base');
     p.style.width = '700px';
-    el.parentNode.after(p);
+    document.body.append(p);
     p.content = el.content;
+    const style = p.shadowRoot.querySelector('link');
+    if (!style.sheet) await new Promise((resolve) => style.addEventListener('load', resolve, { once: true }));
     await new Promise(requestAnimationFrame);
     const desktop = p.view;
     p.style.width = '400px';
@@ -163,6 +165,24 @@ try {
   await panel.locator('#component').selectOption('intro');
   await first.getByText('La plaza del Cuervo Gris').waitFor();
   assert.equal(await first.evaluate((x) => x.localName), 'book-editorial-intro');
+  await panel.locator('#component').selectOption('dialogue');
+  const dialogue = f.locator('book-editorial-dialogue').nth(1);
+  await dialogue.locator('.person img').waitFor();
+  await dialogue.evaluate((el) => {
+    const content = el.content;
+    content.dialogue.line = 'Última respuesta del NPC';
+    content.dialogue.choices = Array.from({ length: 8 }, (_, i) => ({ label: 'Opción ' + (i + 1) }));
+    el.content = content;
+  });
+  const rail = dialogue.locator('.choices');
+  await rail.waitFor();
+  assert(await rail.evaluate((element) => element.scrollWidth > element.clientWidth));
+  await dialogue.locator('[data-slide="1"]').click();
+  assert(await rail.evaluate((element) => element.scrollLeft > 0));
+  await dialogue.locator('[data-index="4"]').click();
+  assert.equal(await dialogue.locator('.line').textContent(), 'Última respuesta del NPC');
+  assert.equal(await dialogue.locator('.selected-answer').textContent(), 'Opción 5');
+  assert.equal(await dialogue.locator('.nameplate span').textContent(), 'Capitán de la guardia');
   await p.locator('a[href="/dm/libro/#navegacion"]').click();
   await p.locator('#navegacion').waitFor();
   await panel.waitFor({ state: 'hidden' });

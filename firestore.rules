@@ -1,18 +1,75 @@
-rules_version='2'
+rules_version = '2';
 
+// Editorial members: { role: 'owner' } provisioned only through the Firebase admin account.
+// Editorial designs: { name, component, settings, revision, updatedAt }.
+// Test rooms: { host, players, createdAt }; players is a list of at most four anonymous UIDs.
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      // This rule allows anyone with your database reference to view, edit,
-      // and delete all data in your database. It is useful for getting
-      // started, but it is configured to expire after 30 days because it
-      // leaves your app open to attackers. At that time, all client
-      // requests to your database will be denied.
-      //
-      // Make sure to write security rules for your app before that time, or
-      // else all client requests to your database will be denied until you
-      // update your rules.
-      allow read, write: if request.time < timestamp.date(2025, 11, 1);
+    function signedIn() {
+      return request.auth != null;
+    }
+    function isEditorialOwner() {
+      return signedIn() && request.auth.token.firebase.sign_in_provider == 'google.com' &&
+        request.auth.token.email_verified == true &&
+        exists(/databases/$(database)/documents/editorial_members/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/editorial_members/$(request.auth.uid)).data.role == 'owner';
+    }
+    function isTestIdentity() {
+      return signedIn() && request.auth.token.firebase.sign_in_provider == 'anonymous';
+    }
+    function validLayout() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['name', 'component', 'settings', 'revision', 'updatedAt']) &&
+        d.keys().hasAll(['name', 'component', 'settings', 'revision', 'updatedAt']) &&
+        d.name is string && d.name.size() > 0 && d.name.size() <= 100 &&
+        d.component in ['scene', 'intro', 'dialogue'] &&
+        d.settings is string && d.settings.size() <= 500000 &&
+        d.revision is int && d.revision > 0 && d.updatedAt is timestamp;
+    }
+    function validRoom() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['host', 'players', 'createdAt']) &&
+        d.keys().hasAll(['host', 'players', 'createdAt']) &&
+        d.host is string && d.players is list && d.players.size() <= 4 &&
+        d.createdAt is timestamp;
+    }
+    function validLegacyData() {
+      return request.resource.data is map && request.resource.data.size() <= 1000;
+    }
+    match /editorial_members/{uid} {
+      allow get: if signedIn() && request.auth.uid == uid;
+      allow list, write: if false;
+    }
+    match /editorial_layouts/{layoutId} {
+      allow read: if isEditorialOwner();
+      allow create: if isEditorialOwner() && validLayout() && request.resource.data.revision == 1;
+      allow update: if isEditorialOwner() && validLayout() && request.resource.data.revision == resource.data.revision + 1;
+      allow delete: if false;
+    }
+    match /test_rooms/{roomId} {
+      allow get: if isTestIdentity();
+      allow list, delete: if false;
+      allow create: if isTestIdentity() && validRoom() &&
+        request.resource.data.host == request.auth.uid &&
+        request.resource.data.players.size() == 0;
+      allow update: if isTestIdentity() && validRoom() &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['players']) &&
+        request.resource.data.players.hasAll(resource.data.players) &&
+        request.resource.data.players.size() == resource.data.players.size() + 1 &&
+        request.resource.data.players.hasAll([request.auth.uid]) &&
+        !(request.auth.uid in resource.data.players) &&
+        request.auth.uid != resource.data.host;
+    }
+    // Legacy collections are available only to the verified owner. Existing
+    // documents are retained; their old unauthenticated development client must
+    // be migrated to Firebase Auth before it can access them.
+    match /{collection}/{document=**} {
+      allow read: if collection != 'editorial_members' &&
+        collection != 'editorial_layouts' && collection != 'test_rooms' && isEditorialOwner();
+      allow create, update: if collection != 'editorial_members' &&
+        collection != 'editorial_layouts' && collection != 'test_rooms' &&
+        isEditorialOwner() && validLegacyData();
+      allow delete: if false;
     }
   }
 }

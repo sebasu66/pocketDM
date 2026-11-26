@@ -1,8 +1,9 @@
-import './editorial-page.mjs';
-import './dialogue-page.mjs';
+import './editorial-page.mjs?v=14';
+import './dialogue-page.mjs?v=14';
+import { connectLibrary } from './cloud-library.mjs?v=14';
 import { assets } from './assets.mjs';
 import { cropRect, cameraFrame } from './camera.mjs';
-import { sampleContent, importDocument, readLocal, writeLocal, readLegacy } from './library.mjs';
+import { sampleContent, importDocument, readLocal, writeLocal, readLegacy } from './library.mjs?v=14';
 
 const sidebar = document.querySelector('.sidebar'),
   nodes = Object.fromEntries([...sidebar.querySelectorAll('[id]')].map((el) => [el.id, el]));
@@ -45,6 +46,9 @@ let pages = [],
   phaseSelect,
   targetSelect;
 const page = () => pages[0];
+let sharedLibrary = null;
+let sharedLayouts = new Map();
+const sharedRevisions = new Map();
 const catalogKey = 'editorial:design-library-v1';
 function getCatalog() {
   try {
@@ -61,6 +65,9 @@ function showCatalog(selected = 'forja') {
     new Option('Forja del Ancla · bóveda', 'forja'),
     new Option('Plaza del Cuervo Gris · bóveda', 'plaza'),
     ...getCatalog().map((x) => new Option(x.name + ' · en este navegador', x.id)),
+    ...[...sharedLayouts.values()]
+      .filter((x) => x.component === kind())
+      .map((x) => new Option(x.name + ' · bóveda compartida', 'cloud:' + x.id)),
   );
   nodes.design.value = [...nodes.design.options].some((x) => x.value === selected) ? selected : 'forja';
   nodes.vault.disabled = !['forja', 'plaza'].includes(nodes.design.value);
@@ -81,7 +88,36 @@ function persist() {
   const id = key(),
     generation = epoch,
     data = { settings: page().getSettings(), content: page().content };
-  saveChain = saveChain.catch(() => {}).then(() => writeLocal(id, data));
+  const selectedKind = kind(),
+    selectedDesign = design();
+  const label =
+    nodes.design.selectedOptions[0]?.textContent.replace(
+      / · (bóveda|en este navegador|bóveda compartida)$/,
+      '',
+    ) || 'Diseño';
+  const cloudId = selectedDesign.startsWith('cloud:') ? selectedDesign.slice(6) : id;
+  saveChain = saveChain
+    .catch(() => {})
+    .then(async () => {
+      const revision = sharedRevisions.get(cloudId) ?? 0;
+      await writeLocal(id, { ...data, cloudPending: Boolean(sharedLibrary), cloudRevision: revision });
+      if (sharedLibrary) {
+        try {
+          const next = await sharedLibrary.save(
+            cloudId,
+            { name: label, component: selectedKind, settings: JSON.stringify(data.settings) },
+            revision,
+          );
+          sharedRevisions.set(cloudId, next);
+          await writeLocal(id, { ...data, cloudPending: false, cloudRevision: next });
+          if (epoch === generation)
+            nodes.cloudStatus.textContent = 'Guardado en la bóveda y en este navegador.';
+        } catch (error) {
+          if (epoch === generation)
+            nodes.cloudStatus.textContent = 'Guardado local. No se pudo sincronizar: ' + error.message;
+        }
+      }
+    });
   saveChain.then(
     () => {
       if (epoch === generation) status('Guardado en este navegador.');
@@ -275,6 +311,7 @@ function refresh() {
     const dialogue = c.dialogue;
     for (let i = 1; i <= 1; i++) {
       nodes['person' + i + 'Name'].value = dialogue.people[i - 1].name;
+      nodes['person' + i + 'Role'].value = dialogue.people[i - 1].role || '';
       nodes['person' + i + 'Emotion'].value = dialogue.people[i - 1].emotion;
     }
     nodes.dialogueLine.value = dialogue.line;
@@ -331,8 +368,15 @@ async function openDesign(vault = false) {
       tag = 'book-editorial-' + k,
       cached = vault ? null : await readLocal(id),
       probe = document.createElement(tag);
-    const legacy = !vault && !cached ? await readLegacy(d) : null;
-    const restored = cached || (legacy ? importDocument(legacy, probe, sampleContent(k, d), k) : null);
+    const remote = d.startsWith('cloud:') ? sharedLayouts.get(d.slice(6)) : null;
+    if (d.startsWith('cloud:') && !remote) throw Error('El diseño compartido ya no está disponible');
+    const legacy = !vault && !cached && !remote ? await readLegacy(d) : null;
+    const restored = remote
+      ? cached?.cloudPending
+        ? cached
+        : { settings: JSON.parse(remote.settings), content: cached?.content ?? sampleContent(k, 'forja') }
+      : cached || (legacy ? importDocument(legacy, probe, sampleContent(k, d), k) : null);
+    if (remote) sharedRevisions.set(remote.id, cached?.cloudPending ? cached.cloudRevision : remote.revision);
     if (restored) probe.applySettings(restored.settings);
     else await probe.loadSettingsFromURL(url);
     probe.content = restored?.content ?? sampleContent(k, d);
@@ -358,9 +402,13 @@ async function openDesign(vault = false) {
     status(
       legacy
         ? 'Proyecto V11 recuperado.'
-        : cached
-          ? 'Borrador local recuperado.'
-          : 'Diseño cargado desde la bóveda.',
+        : cached?.cloudPending
+          ? 'Borrador local pendiente de sincronización. Creá una copia para conservarlo en la bóveda.'
+          : remote
+            ? 'Diseño cargado desde la bóveda compartida.'
+            : cached
+              ? 'Borrador local recuperado.'
+              : 'Diseño cargado desde la bóveda.',
     );
     if (vault || legacy) persist();
   } catch (error) {
@@ -414,12 +462,44 @@ nodes.newDesign.onclick = async () => {
     nodes.newDesignName.value = '';
     showCatalog(id);
     await openDesign();
+    if (sharedLibrary) persist();
     status('Diseño creado y guardado en este navegador.');
   } catch (error) {
     status('No se pudo crear el diseño: ' + error.message);
   }
 };
 nodes.scope.onchange = refresh;
+nodes.cloudConnect.onclick = async () => {
+  if (sharedLibrary) {
+    await sharedLibrary.disconnect();
+    sharedLibrary = null;
+    sharedLayouts.clear();
+    sharedRevisions.clear();
+    nodes.cloudConnect.textContent = 'Conectar bóveda con Google';
+    nodes.cloudStatus.textContent = 'Sin conexión a la bóveda. Los cambios se guardan en este navegador.';
+    showCatalog();
+    await openDesign();
+    return;
+  }
+  nodes.cloudConnect.disabled = true;
+  try {
+    sharedLibrary = await connectLibrary((items, error) => {
+      if (error) {
+        nodes.cloudStatus.textContent = 'No se pudo leer la bóveda: ' + error.message;
+        return;
+      }
+      sharedLayouts = new Map(items.map((item) => [item.id, item]));
+      showCatalog(design());
+    });
+    nodes.cloudConnect.textContent = 'Desconectar bóveda';
+    nodes.cloudStatus.textContent = 'Bóveda conectada. Los cambios se guardan también en Firebase.';
+    if (ready) persist();
+  } catch (error) {
+    nodes.cloudStatus.textContent = 'No se pudo conectar: ' + error.message;
+  } finally {
+    nodes.cloudConnect.disabled = false;
+  }
+};
 for (const id of ['title', 'kicker', 'alt', 'paragraphs'])
   nodes[id].oninput = () => {
     if (!ready) return;
@@ -428,7 +508,7 @@ for (const id of ['title', 'kicker', 'alt', 'paragraphs'])
     setContent(c);
   };
 for (let i = 1; i <= 1; i++) {
-  for (const field of ['Name', 'Emotion'])
+  for (const field of ['Name', 'Role', 'Emotion'])
     nodes['person' + i + field].onchange = () => {
       const c = page().content;
       c.dialogue.people[i - 1][field.toLowerCase()] = nodes['person' + i + field].value;
@@ -620,7 +700,7 @@ nodes.css.onclick = async () => {
     status('El navegador bloqueó el portapapeles.');
   }
 };
-const styles = await (await fetch(new URL('./inspector.css', import.meta.url))).text();
+const styles = await (await fetch(new URL('./inspector.css?v=14', import.meta.url))).text();
 window.pocketDMContextTools = {
   mount(host) {
     document.querySelector('main').classList.add('mounted');

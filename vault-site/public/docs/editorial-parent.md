@@ -42,11 +42,11 @@ La cámara del diseño admite duración en segundos, zoom de ambos extremos y ac
 
 El inspector guarda cada pareja de componente y diseño en IndexedDB, con almacenamiento local de respaldo. **Descargar diseño JSON** exporta sólo el estilo y la cámara reutilizable. **Descargar proyecto con contenido** incluye el diseño, la narración, las imágenes importadas y sus excepciones. El importador también admite archivos de proyecto V11. **Recargar diseño de la bóveda** vuelve a leer el diseño publicado y conserva el contenido en edición.
 
-Firebase Hosting sirve los archivos versionados en modo de lectura. Para compartir cambios, se exporta el JSON y se incorpora al repositorio mediante el protocolo de la bóveda. El guardado del navegador pertenece al origen y dispositivo actuales.
+Los archivos versionados de Firebase Hosting son de lectura. La biblioteca compartida de diseños guarda ajustes mediante Firestore al conectar una cuenta autorizada. El guardado local pertenece al navegador actual.
 
 ## Página de diálogo
 
-El selector del laboratorio incluye «Página de diálogo». La muestra usa la imagen de Hald disponible en el catálogo de arte candidato. En «Personaje del diálogo» se puede cargar la imagen principal completa, escribir el nombre de una emoción y asociarle una imagen. Si la emoción indicada no tiene imagen o no se puede cargar, se muestra la imagen principal. Los controles de posición y zoom del grupo «Retratos» se aplican a todas las emociones y admiten excepciones por ancho. El diseño y el proyecto se guardan localmente. Para trasladar imágenes y emociones hay que descargar el proyecto con contenido.
+El selector del laboratorio incluye «Página de diálogo». La muestra usa la imagen de Hald disponible en el catálogo de arte candidato. En «Personaje del diálogo» se puede cargar la imagen principal completa, escribir el nombre de una emoción y asociarle una imagen. Si la emoción indicada no tiene imagen o no se puede cargar, se muestra la imagen principal. Los controles de posición y zoom del grupo «Encuadre del NPC» se aplican a todas las emociones y admiten excepciones por ancho. El diseño y el proyecto se guardan localmente. Para trasladar imágenes y emociones hay que descargar el proyecto con contenido.
 
 El componente emite el evento `dialogue-choice` con la respuesta seleccionada. El sistema que lo integre debe proveer el siguiente contenido de conversación. La muestra no decide resultados de campaña. El laboratorio original de diálogo presenta el resultado sin regresar a la lista de opciones.
 
@@ -55,6 +55,20 @@ La vista móvil tiene un campo de ancho en su encabezado. Este valor se conserva
 
 ## Biblioteca de diseños
 
-El selector de tipo de página ofrece los componentes implementados. La lista muestra los diseños versionados de la bóveda y las copias guardadas en el navegador. Para crear una copia, escribí un nombre y usá «Crear copia del diseño actual». Los cambios se guardan automáticamente en la copia seleccionada. Los diseños publicados admiten borradores locales y restauración desde la bóveda. La base compartida requiere configurar acceso autorizado y todavía no está conectada. Para trasladar contenido e imágenes se puede descargar el proyecto completo.
+El selector de tipo de página ofrece los componentes implementados. La lista muestra los diseños versionados de la bóveda y las copias guardadas en el navegador. Para crear una copia, escribí un nombre y usá «Crear copia del diseño actual». Los cambios se guardan automáticamente en la copia seleccionada. Los diseños publicados admiten borradores locales y restauración desde la bóveda. La biblioteca compartida se habilita mediante la cuenta Google autorizada. Para trasladar contenido e imágenes se puede descargar el proyecto completo.
 
 Las proporciones 9:19,5 y 19,5:9 aproximan pantallas modernas como Galaxy S23 e iPhone 16. No representan zonas recortadas ni barras del sistema. Los proyectos guardados conservan su proporción anterior.
+
+## Composición del diálogo
+
+La ilustración del escenario ocupa toda la página. El NPC transparente se superpone al escenario y ligeramente al panel, con una placa para nombre y puesto. Los grupos «Encuadre del NPC» y «Diálogo» permiten cambiar posición y tamaño por ancho. Las respuestas se distribuyen en una grilla horizontal que admite arrastre táctil y botones para desplazarse. El último texto del NPC permanece visible después de elegir. El componente entrega la elección al sistema narrativo y no resuelve tiradas.
+
+El laboratorio de diálogo anterior prepara una tirada de demostración por encuentro y la revela sólo al elegir el chequeo. Esa demostración usa una tirada aleatoria local. La integración con las tiradas preparadas por la semilla de campaña queda pendiente.
+
+## Biblioteca compartida y sesiones de prueba
+
+«Conectar bóveda con Google» conecta la biblioteca editorial con Firestore. Las reglas exigen una cuenta Google verificada registrada como propietaria. Los agentes que usan credenciales administrativas de Firebase pueden trabajar con la misma base. Sólo se sincroniza el JSON de estilo, incluidos los ajustes responsive. El contenido narrativo y las imágenes cargadas se conservan en el navegador y pueden trasladarse con «Descargar proyecto con contenido». Una revisión evita sobrescribir silenciosamente cambios concurrentes. Si hay conflicto, el borrador sigue guardado localmente.
+
+La sala de prueba está disponible únicamente desde una vista previa. Usa identidades anónimas de Firebase aisladas en una colección de prueba, con un anfitrión y hasta cuatro jugadores que entran mediante enlace. La sala prueba la conexión del grupo. La conexión con la campaña jugable y el acceso Google de producción de la aplicación nueva quedan pendientes.
+
+Las reglas de Firestore cierran el acceso anónimo a datos anteriores y limitan su acceso desde clientes al propietario autorizado. Los agentes con permisos administrativos conservan su acceso. Los datos anteriores no se borran. Las reglas se prueban en el emulador con `firebase emulators:exec --config firebase.editorial-test.json --only firestore --project demo-pocket-editorial "node vault-site/scripts/test-firestore-rules.cjs"`. Las reglas son un prototipo que necesita revisión antes de abrir la aplicación a un público más amplio.

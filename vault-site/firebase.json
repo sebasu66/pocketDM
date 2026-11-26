@@ -83,6 +83,15 @@
             "value": "application/manifest+json"
           }
         ]
+      },
+      {
+        "source": "/dm/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
       }
     ]
   }

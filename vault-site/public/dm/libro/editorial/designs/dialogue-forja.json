@@ -48,7 +48,15 @@
       "width": 40,
       "columns": "one",
       "titleSize": 32,
-      "fs": 17
+      "fs": 17,
+      "personLeft": 0,
+      "personTop": 0,
+      "personWidth": 100,
+      "personHeight": 50,
+      "dialogLeft": 2,
+      "dialogTop": 52,
+      "dialogWidth": 96,
+      "dialogHeight": 46
     }
   }
 }

@@ -3,7 +3,7 @@ import { encounterSites, preferredViews, scenes, skills } from './escenas.mjs';
 
 const artPath = '/docs/art-references/stormkeep-work-20261125/';
 const selection = document.querySelector('#npc');
-const rollMode = document.querySelector('#roll');
+let pendingRoll;
 const reset = document.querySelector('#reset');
 const scene = document.querySelector('.scene');
 const loading = document.querySelector('#loading');
@@ -92,8 +92,7 @@ function showOptions(focusFirst = false) {
   addChoice(dialogue.ask, () => presentResult(dialogue.ask, dialogue.answer));
   const skill = skills[dialogue.skill];
   addChoice(dialogue.attempt, () => {
-    const presetRolls = { success: 28, failure: 76 };
-    const roll = presetRolls[rollMode.value] ?? 1 + Math.floor(Math.random() * 100);
+    const roll = pendingRoll;
     const result = demoCheck({
       id: 'demo-dialogue-' + selection.value,
       actorId: 'demo-visitor',
@@ -111,6 +110,7 @@ function showOptions(focusFirst = false) {
 }
 
 function changeNPC() {
+  pendingRoll = 1 + Math.floor(Math.random() * 100);
   const npc = cast.get(selection.value);
   speaker.textContent = npc.name;
   occupation.textContent = npc.role;
@@ -140,7 +140,7 @@ async function init() {
   selection.disabled = false;
   reset.disabled = false;
   selection.addEventListener('change', changeNPC);
-  reset.addEventListener('click', () => showOptions(true));
+  reset.addEventListener('click', () => { pendingRoll = 1 + Math.floor(Math.random() * 100); showOptions(true); });
 }
 
 init().catch(error => {

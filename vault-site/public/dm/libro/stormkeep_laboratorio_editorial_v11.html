@@ -8,8 +8,8 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Almendra+SC&family=Germania+One&family=MedievalSharp&display=swap"
     />
-    <link rel="stylesheet" href="./editorial/lab.css" />
-    <link rel="stylesheet" href="./editorial/inspector.css" />
+    <link rel="stylesheet" href="./editorial/lab.css?v=14" />
+    <link rel="stylesheet" href="./editorial/inspector.css?v=14" />
   </head>
   <body>
     <main>
@@ -30,7 +30,10 @@
           >
           <label>Nombre del nuevo diseño<input id="newDesignName" type="text" maxlength="80" /></label
           ><button type="button" id="newDesign">Crear copia del diseño actual</button>
-          <p class="note">Los diseños nuevos y las ediciones se guardan en este navegador.</p>
+          <button type="button" id="cloudConnect">Conectar bóveda con Google</button>
+          <p class="note" id="cloudStatus">
+            Sin conexión a la bóveda. Los cambios se guardan en este navegador.
+          </p>
           <label
             >Editar propiedades<select id="scope">
               <option value="base">Comunes</option>
@@ -44,6 +47,7 @@
           <summary>Personaje del diálogo</summary>
           <div class="fields">
             <label>Nombre del NPC<input id="person1Name" /></label
+            ><label>Profesión o puesto<input id="person1Role" /></label
             ><label>Imagen principal del NPC<input type="file" accept="image/*" id="person1Image" /></label
             ><label>Emoción del NPC<input id="person1Emotion" placeholder="neutral" /></label
             ><label>Imagen para esta emoción<input type="file" accept="image/*" id="person1Mood" /></label>
@@ -77,8 +81,7 @@
             ><button id="png">Descargar recorte PNG</button><button id="svg">Descargar máscara SVG</button
             ><button id="edge">Descargar borde original</button><button id="css">Copiar contorno CSS</button>
             <p class="note">
-              La bóveda sirve diseños versionados. Los ajustes y el contenido se guardan en este navegador.
-              Exportá una copia para trasladarlos.
+              La bóveda compartida guarda los ajustes cuando conectás tu cuenta. Exportá el proyecto para trasladar también contenido e imágenes.
             </p>
           </div>
         </details>
@@ -107,6 +110,6 @@
         </div>
       </section>
     </main>
-    <script type="module" src="./editorial/lab.mjs"></script>
+    <script type="module" src="./editorial/lab.mjs?v=14"></script>
   </body>
 </html>
