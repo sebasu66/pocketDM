@@ -1,0 +1,21 @@
+{
+  "id": "act-20261125-stormkeep-guard-001",
+  "date": "2026-11-25",
+  "area": "Narrativa / Contenido",
+  "owner": "Pocket DM · Presentación narrativa",
+  "status": "implementado-en-live",
+  "title": "Guardia veterana de Stormkeep y Runa en el Cuervo Gris",
+  "summary": "Hald Eirik, capitán y veterano de infantería, recibe al viajero en la Puerta Oriental. Bjar Kol es antiguo infante de marina. Runa es barda y tiene nuevo retrato y diálogo en el Cuervo Gris. Publicado en Firebase en la versión e9877c6151d87c69. El canal temporal verificó ambos retratos, lugares y respuestas de chequeo de Hald.",
+  "changed": [
+    "vault-site/public/data/stormkeep-population-v02.json",
+    "vault-site/public/laboratorio/dialogo/",
+    "vault-site/public/docs/stormkeep-first-session.md",
+    "vault-site/public/docs/art-references/stormkeep-work-20261125/"
+  ],
+  "next": "Reutilizar el reparto revisado en la primera llegada cuando el módulo se materialice.",
+  "source": "https://pocketdm-prototipos.web.app/laboratorio/dialogo/",
+  "nodeIds": [
+    "doc_0913",
+    "doc_0914"
+  ]
+}
