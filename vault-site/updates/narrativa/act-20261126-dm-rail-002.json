@@ -1,0 +1,19 @@
+{
+  "id": "act-20261126-dm-rail-002",
+  "date": "2026-11-26",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Navegación vertical del Portal Dungeon Master",
+  "summary": "Barra de iconos con grupos desplegables en la misma columna, indicadores triangulares y tooltips propios al hover y foco. Solo Sistema y Dirección artística, con apartados ya acordados sin contenido migrado.",
+  "changed": [
+    "vault-site/public/dm/index.html",
+    "vault-site/public/dm/sistema/index.html",
+    "vault-site/public/dm/arte/index.html",
+    "vault-site/public/dm/portal.css",
+    "vault-site/public/dm/portal.js"
+  ],
+  "next": "Revisar interacción y navegación con el usuario; incorporar contenido verificado posteriormente.",
+  "source": "https://pocketdm-prototipos.web.app/dm/",
+  "nodeIds": []
+}
