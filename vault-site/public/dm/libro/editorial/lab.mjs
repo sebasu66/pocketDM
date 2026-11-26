@@ -299,6 +299,7 @@ async function openDesign(vault = false) {
       content: vault && previousContent ? previousContent : probe.content,
     });
     activeDesign = { kind: k, design: d };
+    document.getElementById('pageType').textContent = nodes.component.selectedOptions[0].textContent;
     ready = true;
     build();
     status(
