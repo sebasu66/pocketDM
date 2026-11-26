@@ -55,3 +55,9 @@
 .nav-icon:not(.sub-icon)[aria-current=page]:hover,
 .nav-icon:not(.sub-icon)[aria-current=page]:focus-visible{background:var(--gold);color:#141414;box-shadow:none}
 .nav-group[open] .nav-icon:focus-visible,.nav-icon[aria-current=page]:focus-visible{outline:2px dashed currentColor;outline-offset:-5px}
+ 
+/* Book/UI: the original interactive lab retains its own internal layout. */
+.nav-group[data-group=book]{--group:#c0a0ed;--group-soft:#7d689d;--group-deep:#493858;--group-light:#ede0fa}
+.editorial-workspace{width:100%;min-width:0;height:100vh;height:100dvh;padding:0}
+.editorial-workspace .section{height:100%;margin:0;padding:0;border:0}
+.editorial-frame{display:block;width:100%;height:100%;border:0;background:#141922}
