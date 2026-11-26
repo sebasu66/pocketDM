@@ -1,0 +1,18 @@
+{
+  "id": "act-20261126-dm-colors-003",
+  "date": "2026-11-26",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Identidad cromática de grupos del Portal Dungeon Master",
+  "summary": "Grupos expandidos con fondo de color pleno e icono oscuro; hijos con tonos derivados y estado seleccionado diferenciado. Sistema amarillo y Dirección artística turquesa, colores provisionales. Tooltips conservan estilo y adoptan borde del grupo.",
+  "changed": [
+    "vault-site/public/dm/portal.css",
+    "vault-site/public/dm/index.html",
+    "vault-site/public/dm/sistema/index.html",
+    "vault-site/public/dm/arte/index.html"
+  ],
+  "next": "Revisar visualmente con el usuario.",
+  "source": "https://pocketdm-prototipos.web.app/dm/",
+  "nodeIds": []
+}
