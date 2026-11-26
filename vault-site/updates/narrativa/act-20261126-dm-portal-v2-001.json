@@ -1,0 +1,18 @@
+{
+  "id": "act-20261126-dm-portal-v2-001",
+  "date": "2026-11-26",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Portal Dungeon Master V2: estructura inicial",
+  "summary": "Ruta independiente /dm/ con navegación horizontal y solo Sistema y Dirección artística. Secciones sin contenido migrado; la bóveda anterior y la aplicación no se modifican.",
+  "changed": [
+    "vault-site/public/dm/index.html",
+    "vault-site/public/dm/portal.css",
+    "vault-site/public/dm/sistema/index.html",
+    "vault-site/public/dm/arte/index.html"
+  ],
+  "next": "Revisar navegación con el usuario antes de clasificar documentación técnica y referencias visuales originales.",
+  "source": "https://pocketdm-prototipos.web.app/dm/",
+  "nodeIds": []
+}
