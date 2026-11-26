@@ -15,23 +15,24 @@ export class BookEditorialDialogue extends BookEditorialPage {
   static editableProperties = Object.freeze({
     ...super.editableProperties,
     dialogLayoutVersion: number('Diálogo', 'Versión', 2, 1, 2),
-    backgroundX: number('Fondo', 'Posición horizontal (%)', 50, 0, 100),
-    backgroundY: number('Fondo', 'Posición vertical (%)', 50, 0, 100),
-    backgroundZoom: number('Fondo', 'Zoom', 1, 1, 3, 0.05),
+    backgroundX: number('Fondo', 'Posición horizontal (%)', 50, -500, 500),
+    backgroundY: number('Fondo', 'Posición vertical (%)', 50, -500, 500),
+    backgroundZoom: number('Fondo', 'Zoom', 1, 0.05, 20, 0.05),
     nameLeft: number('Placa', 'Posición horizontal (%)', 29, -100, 100),
     nameTop: number('Placa', 'Posición vertical (%)', 84, -100, 100),
-    nameWidth: number('Placa', 'Ancho (%)', 30, 5, 100),
+    nameWidth: number('Placa', 'Ancho (%)', 30, 1, 500),
     person1X: number('Encuadre del NPC', 'Encuadre horizontal', 50, 0, 100),
     person1Y: number('Encuadre del NPC', 'Encuadre vertical', 0, 0, 100),
-    person1Zoom: number('Encuadre del NPC', 'Zoom', 1, 1, 3, 0.05),
+    person1Zoom: number('Encuadre del NPC', 'Zoom', 1, 0.05, 20, 0.05),
     personLeft: number('Encuadre del NPC', 'Posición horizontal (%)', 25, -100, 100),
     personTop: number('Encuadre del NPC', 'Posición vertical (%)', 0, -100, 100),
-    personWidth: number('Encuadre del NPC', 'Ancho (%)', 38, 10, 100),
-    personHeight: number('Encuadre del NPC', 'Alto (%)', 100, 10, 100),
+    personWidth: number('Encuadre del NPC', 'Ancho (%)', 38, 1, 500),
+    personHeight: number('Encuadre del NPC', 'Alto (%)', 100, 1, 500),
+    dialogLayer: { group: 'Diálogo', label: 'Orden del panel', type: 'select', default: 'detrás del personaje', options: ['detrás del personaje', 'delante del personaje'] },
     dialogLeft: number('Diálogo', 'Posición horizontal (%)', 59, -100, 100),
     dialogTop: number('Diálogo', 'Posición vertical (%)', 4, -100, 100),
-    dialogWidth: number('Diálogo', 'Ancho (%)', 38, 15, 100),
-    dialogHeight: number('Diálogo', 'Alto (%)', 92, 15, 100),
+    dialogWidth: number('Diálogo', 'Ancho (%)', 38, 1, 500),
+    dialogHeight: number('Diálogo', 'Alto (%)', 92, 1, 500),
   });
   static responsiveDefaults = Object.freeze({
     mobile: Object.freeze({
@@ -82,9 +83,12 @@ export class BookEditorialDialogue extends BookEditorialPage {
     this.sheet.classList.add('dialogue-sheet');
     this.panel.className = 'conversation';
     this.panel.innerHTML =
-      '<div class="background-hit" data-edit="background" aria-label="Fondo"></div><figure class="person" data-edit="person"><img draggable="false"></figure><div class="nameplate" data-edit="name"><strong></strong><span></span></div><section class="exchange" data-edit="dialog"><p class="line" aria-live="polite"></p><p class="selected-answer" hidden></p><div class="choice-area"><div class="choices" role="group" aria-label="Respuestas"></div><div class="choice-nav"><button type="button" data-slide="-1" aria-label="Respuestas anteriores">‹</button><button type="button" data-slide="1" aria-label="Respuestas siguientes">›</button></div></div></section>';
+      '<div class="background-hit" data-edit="background" aria-label="Fondo"></div><figure class="person" data-edit="person"><img draggable="false"></figure><div class="nameplate" data-edit="name"><strong></strong><span></span></div><section class="exchange" data-edit="dialog"><div class="history" role="log" aria-label="Historial de diálogo" aria-live="polite"></div><div class="choice-area"><div class="choices" role="group" aria-label="Respuestas" hidden></div><div class="choice-controls"><button type="button" class="choice-toggle" aria-expanded="false">Elegir respuesta ▴</button><button type="button" class="choice-send" aria-label="Enviar respuesta" disabled>➤</button></div></div></section>';
     this.sheet.append(this.panel);
     this.selected = null;
+    this.history = [];
+    this.pendingChoice = null;
+    this.choicesOpen = null;
     let drag = null;
     const label = {
       background: 'Fondo',
@@ -127,8 +131,8 @@ export class BookEditorialDialogue extends BookEditorialPage {
       const initial = drag.start,
         values = {};
       if (drag.kind === 'background') {
-        values.backgroundX = clamp(initial.backgroundX - dx, 0, 100);
-        values.backgroundY = clamp(initial.backgroundY - dy, 0, 100);
+        values.backgroundX = clamp(initial.backgroundX - dx, -500, 500);
+        values.backgroundY = clamp(initial.backgroundY - dy, -500, 500);
       } else {
         const prefix = drag.kind === 'person' ? 'person' : drag.kind === 'name' ? 'name' : 'dialog';
         values[prefix + 'Left'] = clamp(initial[prefix + 'Left'] + dx, -100, 100);
@@ -161,20 +165,27 @@ export class BookEditorialDialogue extends BookEditorialPage {
     this.panel.addEventListener('pointerup', endDrag);
     this.panel.addEventListener('pointercancel', endDrag);
     this.panel.addEventListener('click', (event) => {
-      const slide = event.target.closest('button[data-slide]');
-      if (slide) {
-        const rail = this.panel.querySelector('.choices');
-        rail.scrollBy({
-          left: Number(slide.dataset.slide) * rail.clientWidth * 0.75,
-          behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
-        });
+      const toggle = event.target.closest('.choice-toggle');
+      if (toggle && this.selected === null) {
+        this.choicesOpen = this.panel.querySelector('.choices').hidden;
+        this.renderDialogue();
         return;
       }
       const button = event.target.closest('button[data-index]');
-      if (!button || this.selected !== null) return;
-      const choice = this.content.dialogue?.choices[Number(button.dataset.index)];
+      if (button && this.selected === null) {
+        const index = Number(button.dataset.index);
+        if (!this.content.dialogue?.choices[index]) return;
+        this.pendingChoice = index;
+        this.choicesOpen = false;
+        this.renderDialogue();
+        return;
+      }
+      if (!event.target.closest('.choice-send') || this.selected !== null || this.pendingChoice === null) return;
+      const choice = this.content.dialogue?.choices[this.pendingChoice];
       if (!choice) return;
-      this.selected = Number(button.dataset.index);
+      this.selected = this.pendingChoice;
+      this.pendingChoice = null;
+      this.choicesOpen = false;
       this.renderDialogue();
       this.dispatchEvent(
         new CustomEvent('dialogue-choice', {
@@ -233,8 +244,16 @@ export class BookEditorialDialogue extends BookEditorialPage {
       ...person,
       role: person.role ?? (person.name === 'Hald Eirik' ? 'Capitán de la guardia' : ''),
     }));
+    const previous = this._content?.dialogue;
+    if (previous && previous.line !== dialogue.line && this.selected !== null) {
+      this.history.push({ speaker: 'npc', text: previous.line });
+      if (this.selected !== null && previous.choices[this.selected]) this.history.push({ speaker: 'player', text: previous.choices[this.selected].label });
+      this.selected = null;
+      this.pendingChoice = null;
+      this.choicesOpen = null;
+    }
+    if (Array.isArray(dialogue.history)) this.history = structuredClone(dialogue.history);
     super.content = content;
-    this.selected = null;
   }
   paintArt() {
     const settings = this.effective;
@@ -244,7 +263,7 @@ export class BookEditorialDialogue extends BookEditorialPage {
           x: settings.backgroundX / 100,
           y: settings.backgroundY / 100,
           zoom: settings.backgroundZoom,
-          alignment: true,
+          alignment: 'free',
         };
     drawArt(this.artCanvas, this.art, pose, null, this.imageRatio);
   }
@@ -278,6 +297,7 @@ export class BookEditorialDialogue extends BookEditorialPage {
       width: settings.dialogWidth + '%',
       height: settings.dialogHeight + '%',
     });
+    exchange.style.zIndex = settings.dialogLayer === 'delante del personaje' ? '4' : '1';
     exchange.style.setProperty('--dialog-text', settings.ink);
     exchange.style.setProperty('--dialog-paper', settings.paper);
     exchange.style.setProperty('--dialog-size', settings.fs + 'px');
@@ -301,21 +321,39 @@ export class BookEditorialDialogue extends BookEditorialPage {
       plate.querySelector('strong').textContent = person.name;
       plate.querySelector('span').textContent = person.role || '';
     });
-    this.panel.querySelector('.line').textContent = data.line;
-    const selected = this.panel.querySelector('.selected-answer');
-    selected.hidden = this.selected === null;
-    selected.textContent = this.selected === null ? '' : data.choices[this.selected].label;
-    this.panel.querySelector('.choice-area').hidden = this.selected !== null;
+    const history = this.panel.querySelector('.history');
+    const oldScroll = history.scrollTop;
+    const wasAtBottom = history.scrollHeight - history.clientHeight - oldScroll < 8;
+    history.replaceChildren();
+    const messages = [...this.history, { speaker: 'npc', text: data.line }];
+    if (this.selected !== null && data.choices[this.selected]) messages.push({ speaker: 'player', text: data.choices[this.selected].label });
+    messages.forEach((message) => {
+      if (!message || typeof message.text !== 'string') return;
+      const item = document.createElement('p');
+      item.className = message.speaker === 'player' ? 'message player' : 'message npc';
+      const speaker = document.createElement('strong');
+      speaker.textContent = message.speaker === 'player' ? 'Vos' : (data.people[0].name || 'NPC');
+      item.append(speaker, document.createTextNode(message.text));
+      history.append(item);
+    });
+    history.scrollTop = wasAtBottom ? history.scrollHeight : oldScroll;
     const choices = this.panel.querySelector('.choices');
+    const toggle = this.panel.querySelector('.choice-toggle');
     choices.replaceChildren();
-    if (this.selected === null)
-      data.choices.forEach((choice, index) => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.dataset.index = index;
-        button.textContent = choice.label;
-        choices.append(button);
-      });
+    const open = this.choicesOpen ?? (this.view === 'desktop' && exchange.clientHeight >= 380);
+    choices.hidden = !open || this.selected !== null;
+    toggle.disabled = this.selected !== null || data.choices.length === 0;
+    const pending = this.pendingChoice === null ? null : data.choices[this.pendingChoice];
+    toggle.textContent = this.selected !== null ? 'Esperando respuesta…' : pending ? pending.label + (open ? ' ▾' : ' ▴') : open ? 'Cerrar respuestas ▾' : 'Elegir respuesta ▴';
+    const send = this.panel.querySelector('.choice-send');
+    send.disabled = !pending || this.selected !== null;
+    toggle.setAttribute('aria-expanded', String(!choices.hidden));
+    if (this.selected === null) data.choices.forEach((choice, index) => {
+      const button = document.createElement('button');
+      button.type = 'button'; button.dataset.index = index; button.textContent = choice.label;
+      button.setAttribute('aria-pressed', String(index === this.pendingChoice));
+      choices.append(button);
+    });
   }
 }
 customElements.define(BookEditorialDialogue.componentType, BookEditorialDialogue);

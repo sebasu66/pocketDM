@@ -4,8 +4,8 @@ export function cropRect(sourceRatio, targetRatio, { x, y, zoom, alignment = fal
   const width = Math.min(1, targetRatio / sourceRatio) / zoom;
   const height = Math.min(1, sourceRatio / targetRatio) / zoom;
   return {
-    x: alignment ? (1 - width) * x : clamp(x - width / 2, 0, 1 - width),
-    y: alignment ? (1 - height) * y : clamp(y - height / 2, 0, 1 - height),
+    x: alignment === 'free' ? (1 - width) / 2 + (x - 0.5) * width : alignment ? (1 - width) * x : clamp(x - width / 2, 0, 1 - width),
+    y: alignment === 'free' ? (1 - height) / 2 + (y - 0.5) * height : alignment ? (1 - height) * y : clamp(y - height / 2, 0, 1 - height),
     width,
     height,
   };

@@ -9,26 +9,22 @@ const sidebar = document.querySelector('.sidebar'),
   nodes = Object.fromEntries([...sidebar.querySelectorAll('[id]')].map((el) => [el.id, el]));
 const boxes = [...document.querySelectorAll('.canvas')],
   widths = [960, 360];
-const mobileWidth = document.getElementById('mobileWidth');
-try {
-  const saved = Number(localStorage.getItem('editorial:mobile-preview-width'));
-  if (saved >= 240 && saved <= 1200) widths[1] = saved;
-} catch {}
-mobileWidth.value = widths[1];
-function updateMobileWidth() {
-  if (!mobileWidth.validity.valid || !mobileWidth.value) return;
-  widths[1] = Number(mobileWidth.value);
-  mobileWidth.closest('figure').style.setProperty('--mobile-preview-width', widths[1] + 'px');
-  if (pages[1]) {
-    pages[1].style.width = widths[1] + 'px';
-    pages[1].schedule();
-  }
-  try {
-    localStorage.setItem('editorial:mobile-preview-width', String(widths[1]));
-  } catch {}
+const widthInputs = [document.getElementById('desktopWidth'), document.getElementById('mobileWidth')];
+for (const [i, input] of widthInputs.entries()) {
+  const storageKey = i ? 'editorial:mobile-preview-width' : 'editorial:desktop-preview-width';
+  try { const saved = Number(localStorage.getItem(storageKey)); if (saved >= 100 && saved <= 10000) widths[i] = saved; } catch {}
+  input.value = widths[i];
+  input.addEventListener('input', () => updatePreviewWidth(i));
+}
+function updatePreviewWidth(i) {
+  const input = widthInputs[i];
+  if (!input.validity.valid || !input.value) return;
+  widths[i] = Number(input.value);
+  input.closest('figure').style.setProperty(i ? '--mobile-preview-width' : '--desktop-preview-width', widths[i] + 'px');
+  if (pages[i]) { pages[i].style.width = widths[i] + 'px'; pages[i].schedule(); }
+  try { localStorage.setItem(i ? 'editorial:mobile-preview-width' : 'editorial:desktop-preview-width', String(widths[i])); } catch {}
   requestAnimationFrame(fit);
 }
-mobileWidth.addEventListener('input', updateMobileWidth);
 const kind = () => nodes.component.value,
   design = () => nodes.design.value,
   key = () => kind() + '-' + design(),
@@ -140,7 +136,8 @@ function fit() {
 }
 const sizeObserver = new ResizeObserver(fit);
 boxes.forEach((b) => sizeObserver.observe(b));
-updateMobileWidth();
+updatePreviewWidth(0);
+updatePreviewWidth(1);
 for (const b of boxes)
   b.previousElementSibling.querySelector('button').onclick = () =>
     document.fullscreenElement ? document.exitFullscreen() : b.parentElement.requestFullscreen();

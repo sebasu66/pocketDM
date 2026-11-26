@@ -55,7 +55,7 @@ h1 {
   min-width: 0;
 }
 .preview-grid figure:first-child {
-  max-width: 960px;
+  max-width: var(--desktop-preview-width, 960px);
 }
 .preview-grid figure:nth-child(2) {
   max-width: var(--mobile-preview-width, 360px);
@@ -99,7 +99,7 @@ h1 {
     grid-template-columns: minmax(0, 1fr);
   }
   .preview-grid figure:nth-child(2) {
-    max-width: 360px;
+    max-width: var(--mobile-preview-width, 360px);
   }
 }
 @media (max-width: 520px) {
