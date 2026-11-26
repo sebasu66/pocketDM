@@ -29,13 +29,13 @@ export const encounterSites = {
 // Una pregunta directa y una alternativa con chequeo por residente.
 export const scenes = {
   runa: {
-    opening: '¿Venís de paso o pensás quedarte? Decime qué buscás y te indico por dónde empezar.',
-    ask: 'Preguntar dónde alojarse',
-    answer: 'Bajá hasta la plaza. El Cuervo Gris tiene la entrada bajo el alero ancho.',
-    attempt: 'Pedir que te recomiende una ruta tranquila',
+    opening: 'Ahí. Antes de la reja. Sacá las manos de la capa. Nombre, de dónde venís y cuántos salieron con vos.',
+    ask: 'Dar tu nombre y decir de dónde venís',
+    answer: 'Quedate donde pueda verte. Cuando coteje tu nombre en el registro, te digo si podés pasar.',
+    attempt: 'Pedir que revise tu historia junto al brasero',
     skill: 'influence',
-    success: 'Seguí el muro hasta la plaza. A esta hora las carretas van por la calle de abajo.',
-    failure: 'Cerca de la salida puedo orientarte. Para elegir un camino más tranquilo, preguntá por alguien que lo recorra a diario.',
+    success: 'Al brasero, bajo el arco. La reja queda baja. Ahora decime quién te vio salir.',
+    failure: 'Ahí te quedás. Decime dónde pasaste la noche. Si venís con alguien, que salga donde pueda verlo.',
   },
   vesna: {
     opening: 'Primero decidí si necesitás una cama, algo caliente o una dirección.',
