@@ -1,0 +1,16 @@
+{
+  "id": "act-20261126-dm-editorial-settings-006",
+  "date": "2026-11-26",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Contrato de settings heredable del componente editorial",
+  "summary": "Implementada clase base de configuración con esquema declarativo de propiedades visuales, carga desde JSON o URL, validación, serialización, migración de valores V11 y excepciones responsive. Pruebas Node verifican herencia, extensión de esquema, ida y vuelta y conservación de configuración ante errores. No implementa todavía el renderizador V11 independiente ni persistencia remota; no se declara integrado ni publicado.",
+  "changed": [
+    "vault-site/public/libro/edition/editorial-settings.mjs",
+    "vault-site/scripts/test-editorial-settings.mjs"
+  ],
+  "next": "Extraer el renderizador V11 al componente visual padre, conectar su esquema al inspector existente, probar paridad visual y luego integrar biblioteca compartida de versiones. No duplicar el lector canónico.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": []
+}
