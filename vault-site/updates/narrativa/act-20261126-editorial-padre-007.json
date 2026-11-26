@@ -1,0 +1,42 @@
+{
+  "id": "act-20261126-editorial-padre-007",
+  "date": "2026-11-26",
+  "area": "Narrativa / Contenido",
+  "owner": "Narrativa / Dirección editorial",
+  "status": "en-revision",
+  "title": "Padre editorial de Stormkeep y laboratorio responsive",
+  "summary": "Componente padre con dos especializaciones, inspector en la segunda columna, cuatro diseños de bóveda y dos vistas simultáneas. Chromium verificó aislamiento, JSON por URL y archivo, herencia, movimiento reducido, encuadres y scroll. En la Forja a 960 px, la comparación de ambos lienzos con V11 coincidió en la prueba de rasterización por software.",
+  "changed": [
+    "vault-site/public/data/catalog.json",
+    "vault-site/public/dm/libro/editorial/artwork.mjs",
+    "vault-site/public/dm/libro/editorial/assets.mjs",
+    "vault-site/public/dm/libro/editorial/assets/burn.png",
+    "vault-site/public/dm/libro/editorial/assets/extended.webp",
+    "vault-site/public/dm/libro/editorial/assets/forja.webp",
+    "vault-site/public/dm/libro/editorial/assets/paper.webp",
+    "vault-site/public/dm/libro/editorial/assets/plaza.webp",
+    "vault-site/public/dm/libro/editorial/camera.mjs",
+    "vault-site/public/dm/libro/editorial/contour-data.mjs",
+    "vault-site/public/dm/libro/editorial/designs/intro-forja.json",
+    "vault-site/public/dm/libro/editorial/designs/intro-plaza.json",
+    "vault-site/public/dm/libro/editorial/designs/scene-forja.json",
+    "vault-site/public/dm/libro/editorial/designs/scene-plaza.json",
+    "vault-site/public/dm/libro/editorial/editorial-page.mjs",
+    "vault-site/public/dm/libro/editorial/inspector.css",
+    "vault-site/public/dm/libro/editorial/lab.css",
+    "vault-site/public/dm/libro/editorial/lab.mjs",
+    "vault-site/public/dm/libro/editorial/library.mjs",
+    "vault-site/public/dm/libro/editorial/page.css",
+    "vault-site/public/dm/libro/editorial/text-flow.mjs",
+    "vault-site/public/dm/libro/index.html",
+    "vault-site/public/dm/libro/stormkeep_laboratorio_editorial_v11.html",
+    "vault-site/public/docs/editorial-parent.md",
+    "vault-site/scripts/test-editorial-parent-browser.mjs"
+  ],
+  "next": "Revisar el preview editorial. Para edición compartida se requiere diseñar y autorizar la persistencia. Hoy el inspector guarda localmente y exporta JSON.",
+  "source": "https://github.com/sebasu66/pocketDM/commit/aa6fe3ae4bbb44a5bacfff2cf82776ddfd4a5971",
+  "preview": "https://pocketdm-prototipos--editorial-padre-6ot0k0om.web.app/dm/libro/#ui",
+  "nodeIds": [
+    "doc_0914"
+  ]
+}
