@@ -1,0 +1,18 @@
+{
+  "id": "act-20261126-dm-editorial-context-003",
+  "date": "2026-11-26",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Libro: UI y Navegación; panel contextual reutilizable del portal",
+  "summary": "Libro es nivel 1, UI y Navegación nivel 2. El componente dm-context-panel del portal aloja los controles reales de V11 fuera del iframe y mantiene edición en vivo, scroll independiente y ocultación automática por ruta. Navegación inventaría destinos existentes; su editor de botonera queda pendiente. Prueba Chromium escritorio/móvil superada.",
+  "changed": [
+    "vault-site/public/dm/portal.js",
+    "vault-site/public/dm/portal.css",
+    "vault-site/public/dm/libro/index.html",
+    "vault-site/public/dm/libro/stormkeep_laboratorio_editorial_v11.html"
+  ],
+  "next": "Implementar editor del componente de navegación del libro y persistencia compartida de plantillas por tipo; conservar rutas existentes.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": []
+}
