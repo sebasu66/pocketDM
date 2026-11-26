@@ -124,7 +124,7 @@ export class BookEditorialPage extends EditorialSettingsElement {
     return this.loadToken === token ? this.applySettings(data) : this.getSettings();
   }
   get view() {
-    return this.clientWidth <= 600 ? 'mobile' : 'desktop';
+    return this.getAttribute('preview-view') || (this.clientWidth <= 600 ? 'mobile' : 'desktop');
   }
   get effective() {
     return { ...this.getResolvedSettings(this.view), ...this._content.camera };

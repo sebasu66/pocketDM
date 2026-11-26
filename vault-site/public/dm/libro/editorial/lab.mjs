@@ -8,6 +8,18 @@ const sidebar = document.querySelector('.sidebar'),
   nodes = Object.fromEntries([...sidebar.querySelectorAll('[id]')].map((el) => [el.id, el]));
 const boxes = [...document.querySelectorAll('.canvas')],
   widths = [960, 360];
+const mobileWidth = document.getElementById('mobileWidth');
+try { const saved = Number(localStorage.getItem('editorial:mobile-preview-width')); if (saved >= 240 && saved <= 1200) widths[1] = saved; } catch {}
+mobileWidth.value = widths[1];
+function updateMobileWidth() {
+  if (!mobileWidth.validity.valid || !mobileWidth.value) return;
+  widths[1] = Number(mobileWidth.value);
+  mobileWidth.closest('figure').style.setProperty('--mobile-preview-width', widths[1] + 'px');
+  if (pages[1]) { pages[1].style.width = widths[1] + 'px'; pages[1].schedule(); }
+  try { localStorage.setItem('editorial:mobile-preview-width', String(widths[1])); } catch {}
+  requestAnimationFrame(fit);
+}
+mobileWidth.addEventListener('input', updateMobileWidth);
 const kind = () => nodes.component.value,
   design = () => nodes.design.value,
   key = () => kind() + '-' + design(),
@@ -64,6 +76,7 @@ function fit() {
 }
 const sizeObserver = new ResizeObserver(fit);
 boxes.forEach((b) => sizeObserver.observe(b));
+updateMobileWidth();
 for (const b of boxes)
   b.previousElementSibling.querySelector('button').onclick = () =>
     document.fullscreenElement ? document.exitFullscreen() : b.parentElement.requestFullscreen();
@@ -300,6 +313,7 @@ async function openDesign(vault = false) {
     pages = boxes.map((box, i) => {
       const p = document.createElement(tag);
       p.style.width = widths[i] + 'px';
+      p.setAttribute('preview-view', i ? 'mobile' : 'desktop');
       box.replaceChildren(p);
       sizeObserver.observe(p);
       return p;
