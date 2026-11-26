@@ -11,7 +11,7 @@ Canon confirmado: nombre Stormkeep y marco de fantasía medieval propio. Propues
 | Hospicio | draft.stormkeep.hospice | propuesta |
 | Mercado | draft.stormkeep.market | propuesta |
 | Puerta Oriental | draft.stormkeep.east-gate | propuesta |
-| Isveld, Aldra, Runa, Nils | draft.npc.isveld, draft.npc.aldra, draft.npc.runa, draft.npc.nils | propuesta; no canon privilegiado para Isveld |
+| Isveld, Aldra, Hald, Nils | draft.npc.isveld, draft.npc.aldra, draft.npc.hald, draft.npc.nils | propuesta; no canon privilegiado para Isveld |
 | Camino oriental y corredor | hex.0.0, hex.1.0, hex.2.0 | IDs del fixture, no geografía definitiva |
 | Aldea y puente | pilot.village, pilot.bridge | IDs del fixture, sujetos a aprobación |
 | Mara, Ivo, Neris | pilot.mara, pilot.ivo, pilot.neris | actores del fixture; identidad narrativa propuesta |

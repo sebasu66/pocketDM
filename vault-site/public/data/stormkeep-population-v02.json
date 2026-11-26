@@ -133,24 +133,24 @@
       "role": "Capitán de la guardia",
       "homeAreaId": "draft.stormkeep.homes",
       "workplaceId": "draft.stormkeep.barracks",
-      "appearance": "Nariz torcida, barba blanca, vieja capa de marinero",
-      "background": "Perdió a un hermano en un rescate durante la tormenta. Aceptó la jefatura de guardia al año siguiente.",
+      "appearance": "Nariz torcida, barba cana, casco de hierro abollado y capa forrada de piel",
+      "background": "Veterano de infantería, se retiró de campaña antes de la tormenta en que perdió a su hermano. Volvió al servicio para hacerse cargo de la guardia del bastión.",
       "voice": "Lacónico, observa manos y equipo antes de hablar.",
       "goal": "Mantener seguridad sin agotar a sus seis guardias",
-      "routine": "Inspecciona puerta y muelles, ronda según turno."
+      "routine": "Recibe a los recién llegados en la Puerta Oriental cuando está de turno. Inspecciona el cuartel y los muelles."
     },
     {
       "id": "draft.npc.runa",
       "name": "Runa Eirik",
       "age": 25,
-      "role": "Guardia de la puerta",
+      "role": "Barda del Cuervo Gris",
       "homeAreaId": "draft.stormkeep.homes",
-      "workplaceId": "draft.stormkeep.east-gate",
-      "appearance": "Pecas, pelo corto, guantes reparados",
-      "background": "Aprendió de su padre Hald y de caravanas que esperaba en la puerta. Entró en guardia para dejar de depender de trabajos familiares.",
-      "voice": "Pregunta con curiosidad, no usa fórmulas de nobleza.",
-      "goal": "Ganarse el respeto por su criterio",
-      "routine": "Turnos de puerta y descanso en casa."
+      "workplaceId": "draft.stormkeep.inn",
+      "appearance": "Pecas, pelo corto, guantes remendados y laúd gastado",
+      "background": "Creció escuchando historias de las caravanas que esperaba su padre, Hald. Aprendió a cantar sus versos en el Cuervo Gris.",
+      "voice": "Curiosa y franca. Pregunta por nombres y detalles antes de convertir una historia en canción.",
+      "goal": "Conservar los nombres y canciones de quienes cruzan el camino oriental",
+      "routine": "Toca al anochecer en el Cuervo Gris y escucha a las tripulaciones y caminantes."
     },
     {
       "id": "draft.npc.bjar",
@@ -160,8 +160,8 @@
       "homeAreaId": "draft.stormkeep.homes",
       "workplaceId": "draft.stormkeep.harbor",
       "appearance": "Ancho, cicatriz en mentón, bufanda verde",
-      "background": "Trabajó de estibador con Fen y quedó sin empleo tras una temporada mala; su madre Tessa lo animó a entrar en guardia.",
-      "voice": "Sociable, incómodo al imponer límites a conocidos.",
+      "background": "Sirvió como infante de marina. Al dejar las campañas trabajó como estibador con Fen antes de incorporarse a la guardia de los muelles.",
+      "voice": "Directo y áspero en turno. Da instrucciones breves que se oyen por encima del viento.",
       "goal": "Evitar accidentes y que sus amigos abusen de su puesto",
       "routine": "Vigila descargas y accesos según turno."
     },
@@ -176,7 +176,7 @@
       "background": "Llegó con una caravana antes de la tormenta y recibió trabajo registrando entregas. Conserva un criterio independiente de la casa Varn.",
       "voice": "Seco, pide fechas y nombres.",
       "goal": "Hacer que los acuerdos escritos puedan comprobarse",
-      "routine": "Trabaja con Runa en horas de acceso."
+      "routine": "Coteja con Hald los registros de acceso cuando coinciden en la Puerta Oriental."
     },
     {
       "id": "draft.npc.vesna",
@@ -579,12 +579,6 @@
     {
       "source": "draft.npc.hald",
       "rel": "superior-of",
-      "target": "draft.npc.runa",
-      "reason": "Turnos"
-    },
-    {
-      "source": "draft.npc.hald",
-      "rel": "superior-of",
       "target": "draft.npc.bjar",
       "reason": "Turnos"
     },
@@ -663,7 +657,7 @@
     {
       "source": "draft.npc.corwin",
       "rel": "related-to",
-      "target": "draft.npc.runa",
+      "target": "draft.npc.hald",
       "reason": "Registro de acceso"
     },
     {
@@ -795,7 +789,7 @@
     {
       "source": "draft.npc.runa",
       "rel": "works-at",
-      "target": "draft.stormkeep.east-gate",
+      "target": "draft.stormkeep.inn",
       "reason": "Actividad habitual propuesta"
     },
     {

@@ -83,16 +83,14 @@
       "role": "Capitán de la guardia",
       "species": "elfo",
       "speciesStatus": "propuesta",
-      "priority": "P1",
+      "priority": "P0",
       "type": "retrato",
       "status": "candidato",
-      "image": "assets/hald.png",
+      "image": "assets/hald-capitan.png",
       "engine": "Generador nativo de ChatGPT",
-      "prompt": "Hald Eirik, a 55-year-old elf captain of the guard from Stormkeep, a crooked nose, short white beard, subtly pointed ears and a worn sailor’s cloak, with a watchful gaze. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "prompt": "Veterano elfo. Referencia del usuario: mariscal.png. Casco de hierro, malla, brigantina y capa forrada.",
       "references": [
-        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
-        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
-        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+        "assets/hald.png"
       ],
       "file": {
         "width": 1086,
@@ -101,28 +99,26 @@
           0,
           255
         ],
-        "sha256": "809d5c0863809ff4a3e7f56dcebcef4e7b00997e83a3cb2565ca3ff7eb813b8f"
+        "sha256": "d3e462d4a18d05ec5d0bdc9effac7183417ee4fa7a23a1d42efabb0c88a11ba9"
       },
-      "notes": "Capa marinera y rasgos élficos visibles. Revisar continuidad del uniforme con Runa."
+      "notes": "Veterano elfo. Referencia del usuario: mariscal.png. Casco de hierro, malla, brigantina y capa forrada."
     },
     {
       "key": "runa",
       "id": "draft.npc.runa",
       "name": "Runa Eirik",
       "age": 25,
-      "role": "Guardia de la puerta",
+      "role": "Barda del Cuervo Gris",
       "species": "elfo",
       "speciesStatus": "propuesta",
       "priority": "P0",
       "type": "retrato",
       "status": "candidato",
-      "image": "assets/runa.png",
+      "image": "assets/runa-barda.png",
       "engine": "Generador nativo de ChatGPT",
-      "prompt": "Runa Eirik, a 25-year-old elf gate guard from Stormkeep, short chestnut hair, freckles, subtly pointed ears, a dark cloak and mended gloves, with an open and curious gaze. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "prompt": "Reinterpreta el retrato previo con laúd, ropa de viaje y guantes remendados.",
       "references": [
-        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
-        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
-        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+        "assets/runa.png"
       ],
       "file": {
         "width": 1086,
@@ -131,9 +127,9 @@
           0,
           255
         ],
-        "sha256": "867b6c8544370145b3a965497d27fd0bebe40e7381ffe15c469ffa7c25d76953"
+        "sha256": "f63c6b8642e08aead3daa104da5822b342f57f031ff9699fc33cb8ce3b6cc41b"
       },
-      "notes": "Pecas y guantes remendados legibles. La alabarda y el emblema requieren revisión de vestuario."
+      "notes": "Reinterpreta el retrato previo con laúd, ropa de viaje y guantes remendados."
     },
     {
       "key": "bjar",
@@ -1790,6 +1786,66 @@
         "sha256": "de67c88204d361b0fbc288764c85abb0c45dbda0552191fb5a828909086fa0db"
       },
       "notes": "Granero abierto a la nieve y al agua. El catálogo pide una reserva seca."
+    },
+    {
+      "key": "hald-retrato-anterior",
+      "id": "draft.npc.hald",
+      "name": "Hald Eirik",
+      "age": 55,
+      "role": "Capitán de la guardia",
+      "species": "elfo",
+      "speciesStatus": "propuesta",
+      "priority": "P1",
+      "type": "retrato",
+      "status": "rechazado",
+      "image": "assets/hald.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Hald Eirik, a 55-year-old elf captain of the guard from Stormkeep, a crooked nose, short white beard, subtly pointed ears and a worn sailor’s cloak, with a watchful gaze. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "809d5c0863809ff4a3e7f56dcebcef4e7b00997e83a3cb2565ca3ff7eb813b8f"
+      },
+      "notes": "Retrato anterior a la revisión de los roles de Stormkeep."
+    },
+    {
+      "key": "runa-retrato-anterior",
+      "id": "draft.npc.runa",
+      "name": "Runa Eirik",
+      "age": 25,
+      "role": "Guardia de la puerta",
+      "species": "elfo",
+      "speciesStatus": "propuesta",
+      "priority": "P0",
+      "type": "retrato",
+      "status": "rechazado",
+      "image": "assets/runa.png",
+      "engine": "Generador nativo de ChatGPT",
+      "prompt": "Runa Eirik, a 25-year-old elf gate guard from Stormkeep, short chestnut hair, freckles, subtly pointed ears, a dark cloak and mended gloves, with an open and curious gaze. Three-quarter-length character, vertical 3:4, isolated on a transparent background, in the same visual style as the reference images, from the same set.",
+      "references": [
+        "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+        "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png"
+      ],
+      "file": {
+        "width": 1086,
+        "height": 1448,
+        "alphaRange": [
+          0,
+          255
+        ],
+        "sha256": "867b6c8544370145b3a965497d27fd0bebe40e7381ffe15c469ffa7c25d76953"
+      },
+      "notes": "Retrato anterior a la revisión de los roles de Stormkeep."
     }
   ],
   "pending": [

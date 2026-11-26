@@ -22,6 +22,7 @@ export const preferredViews = {
 };
 
 export const encounterSites = {
+  hald: 'draft.stormkeep.east-gate',
   emil: 'draft.stormkeep.inn',
   kestrel: 'draft.stormkeep.east-gate',
 };
@@ -29,13 +30,13 @@ export const encounterSites = {
 // Una pregunta directa y una alternativa con chequeo por residente.
 export const scenes = {
   runa: {
-    opening: 'Ahí. Antes de la reja. Sacá las manos de la capa. Nombre, de dónde venís y cuántos salieron con vos.',
-    ask: 'Dar tu nombre y decir de dónde venís',
-    answer: 'Quedate donde pueda verte. Cuando coteje tu nombre en el registro, te digo si podés pasar.',
-    attempt: 'Pedir que revise tu historia junto al brasero',
+    opening: 'La cuerda se me endureció de frío. Acercate, si querés. Estoy juntando historias de la gente que llegó por el este.',
+    ask: 'Pedirle una canción de Stormkeep',
+    answer: 'Te canto la de los que dejaron una lámpara en el muelle. Los nombres cambian según quién la cuente.',
+    attempt: 'Pedir que te cuente por qué dejó un verso sin cantar',
     skill: 'influence',
-    success: 'Al brasero, bajo el arco. La reja queda baja. Ahora decime quién te vio salir.',
-    failure: 'Ahí te quedás. Decime dónde pasaste la noche. Si venís con alguien, que salga donde pueda verlo.',
+    success: 'Era de una carretera que se quedó afuera durante la última nevada. Su hijo viene al salón. Todavía no le pregunté si quiere escucharla.',
+    failure: 'Ese verso me lo contaron a mí. Si alguna vez me piden que lo cante, lo vas a oír.',
   },
   vesna: {
     opening: 'Primero decidí si necesitás una cama, algo caliente o una dirección.',
@@ -92,16 +93,16 @@ export const scenes = {
     failure: 'Prefiero revisar el asiento completo antes de responderte.',
   },
   hald: {
-    opening: 'Un momento. Tengo que cerrar la ronda de los muelles.',
-    ask: 'Preguntar cómo organiza la guardia',
-    answer: 'Divido los turnos entre puerta y costa. Si sube el viento, refuerzo el muelle.',
-    attempt: 'Entender qué le preocupa de la ronda',
-    skill: 'insight',
-    success: 'Nos faltan manos descansadas. Una ronda larga se nota cuando alguien deja de mirar.',
-    failure: 'La ronda sigue. Avisame si viste algo que haya que recorrer.',
+    opening: 'Ahí. Antes de la reja. Sacá las manos de la capa. Nombre, de dónde venís y cuántos salieron con vos.',
+    ask: 'Dar tu nombre y decir de dónde venís',
+    answer: 'Quedate donde pueda verte. Cuando coteje tu nombre en el registro, te digo si podés pasar.',
+    attempt: 'Pedir que revise tu historia junto al brasero',
+    skill: 'influence',
+    success: 'Al brasero, bajo el arco. La reja queda baja. Ahora decime quién te vio salir.',
+    failure: 'Ahí te quedás. Decime dónde pasaste la noche. Si venís con alguien, que salga donde pueda verlo.',
   },
   bjar: {
-    opening: 'Dejá libre ese tablón. El próximo carro tiene que pasar por acá.',
+    opening: 'Detrás de la marca. Con este hielo, si el carro patina te lleva por delante.',
     ask: 'Preguntar dónde esperar una descarga',
     answer: 'Junto al poste verde. Desde ahí ves a la tripulación sin entorpecerla.',
     attempt: 'Pedir un momento para revisar el embarcadero',

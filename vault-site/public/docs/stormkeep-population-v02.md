@@ -8,16 +8,16 @@ Heredó la obligación de defender el muelle y firmó la renovación de la Carta
 Era joven cuando se repartieron los créditos de la tormenta. Estudió con un escribiente de un puerto meridional y regresó para llevar las cuentas. **Objetivo:** Demostrar que el bastión puede sostenerse con ingresos regulares. **Voz:** Preciso, impaciente con las anécdotas. **Aspecto:** Delgado, cabello oscuro, dedos manchados de tinta. **Rutina:** Revisa depósitos y manifiestos durante el día..
 
 ## 3. Hald Eirik (55) · Capitán de la guardia
-Perdió a un hermano en un rescate durante la tormenta. Aceptó la jefatura de guardia al año siguiente. **Objetivo:** Mantener seguridad sin agotar a sus seis guardias. **Voz:** Lacónico, observa manos y equipo antes de hablar. **Aspecto:** Nariz torcida, barba blanca, vieja capa de marinero. **Rutina:** Inspecciona puerta y muelles, ronda según turno..
+Veterano de infantería, se retiró de campaña antes de la tormenta en que perdió a su hermano. Volvió al servicio para hacerse cargo de la guardia del bastión. **Objetivo:** Mantener seguridad sin agotar a sus seis guardias. **Voz:** Lacónico, observa manos y equipo antes de hablar. **Aspecto:** Nariz torcida, barba cana, casco de hierro abollado y capa forrada de piel. **Rutina:** Recibe a los recién llegados en la Puerta Oriental cuando está de turno. Inspecciona el cuartel y los muelles.
 
-## 4. Runa Eirik (25) · Guardia de la puerta
-Aprendió de su padre Hald y de caravanas que esperaba en la puerta. Entró en guardia para dejar de depender de trabajos familiares. **Objetivo:** Ganarse el respeto por su criterio. **Voz:** Pregunta con curiosidad, no usa fórmulas de nobleza. **Aspecto:** Pecas, pelo corto, guantes reparados. **Rutina:** Turnos de puerta y descanso en casa..
+## 4. Runa Eirik (25) · Barda del Cuervo Gris
+Creció escuchando historias de las caravanas que esperaba su padre, Hald. Aprendió a cantar sus versos en el Cuervo Gris. **Objetivo:** Conservar los nombres y canciones de quienes cruzan el camino oriental. **Voz:** Curiosa y franca. Pregunta por nombres y detalles antes de convertir una historia en canción. **Aspecto:** Pecas, pelo corto, guantes remendados y laúd gastado. **Rutina:** Toca al anochecer en el Cuervo Gris y escucha a las tripulaciones y caminantes.
 
 ## 5. Bjar Kol (34) · Guardia de los muelles
-Trabajó de estibador con Fen y quedó sin empleo tras una temporada mala; su madre Tessa lo animó a entrar en guardia. **Objetivo:** Evitar accidentes y que sus amigos abusen de su puesto. **Voz:** Sociable, incómodo al imponer límites a conocidos. **Aspecto:** Ancho, cicatriz en mentón, bufanda verde. **Rutina:** Vigila descargas y accesos según turno..
+Sirvió como infante de marina. Al dejar las campañas trabajó como estibador con Fen antes de incorporarse a la guardia de los muelles. **Objetivo:** Evitar accidentes y que sus amigos abusen de su puesto. **Voz:** Directo y áspero en turno. Da instrucciones breves que se oyen por encima del viento. **Aspecto:** Ancho, cicatriz en mentón, bufanda verde. **Rutina:** Vigila descargas y accesos según turno.
 
 ## 6. Corwin (39) · Escribiente de tránsito
-Llegó con una caravana antes de la tormenta y recibió trabajo registrando entregas. Conserva un criterio independiente de la casa Varn. **Objetivo:** Hacer que los acuerdos escritos puedan comprobarse. **Voz:** Seco, pide fechas y nombres. **Aspecto:** Ojos claros, barba corta, carpeta de cuero. **Rutina:** Trabaja con Runa en horas de acceso..
+Llegó con una caravana antes de la tormenta y recibió trabajo registrando entregas. Conserva un criterio independiente de la casa Varn. **Objetivo:** Hacer que los acuerdos escritos puedan comprobarse. **Voz:** Seco, pide fechas y nombres. **Aspecto:** Ojos claros, barba corta, carpeta de cuero. **Rutina:** Coteja con Hald los registros de acceso cuando coinciden en la Puerta Oriental.
 
 ## 7. Vesna Rauk (44) · Posadera del Cuervo Gris
 Su madre inició el hospedaje para tripulaciones; tras la tormenta Vesna convirtió el salón en dormitorio de damnificados, acumulando deudas. **Objetivo:** Mantener el alojamiento abierto y pagar sus deudas. **Voz:** Humor seco, recuerda nombres y costumbres. **Aspecto:** Pelo rojizo canoso, ceja marcada, delantal azul. **Rutina:** Recibe viajeros por la tarde, limpia y compra por la mañana..

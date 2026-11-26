@@ -134,7 +134,7 @@ async function init() {
   const residents = buildCast(population, manifest);
   cast = new Map(residents.map(npc => [npc.key, npc]));
   selection.replaceChildren(...residents.map(npc => new Option(npc.name, npc.key)));
-  selection.value = 'runa';
+  selection.value = 'hald';
   changeNPC();
   loading.hidden = true;
   scene.hidden = false;
