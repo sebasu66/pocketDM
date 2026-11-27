@@ -96,6 +96,13 @@ export class NarrativeRepository {
   // Do not return the job, private key, review details, other branches or options as authority.
   return copy({revision:v.revision,locale:j.locale,title:v.draft.title,text:v.draft.text});
  }
+ // Internal worker export for the SYS-06 immutable fragment store, never a player response.
+ approvedArtifact(principal,job){
+  const j=normalizedJob(job);auth(principal,j,'worker');
+  const v=this.#rows.get(key(j))?.versions.at(-1);
+  ok(v?.status==='validated','Narration missing or unapproved');
+  return copy({schemaVersion:1,job:j,...v});
+ }
  coverage(principal,manifest){
   ok(Array.isArray(manifest)&&manifest.length>0,'Authoritative manifest required');
   const jobs=manifest.map(normalizedJob);for(const j of jobs)auth(principal,j,'worker');
@@ -104,4 +111,17 @@ export class NarrativeRepository {
   // Narrative gate only; compiler completeness and assets must also pass independently.
   return {narrativeReady:missing.length===0,missing};
  }
+}
+
+// Validate persisted private artifacts again; callers must independently authenticate the store and pin the exact version.
+export function validateApprovedArtifact(job,artifact){
+ const j=normalizedJob(job);
+ shape(artifact,['schemaVersion','job','revision','status','draft','review']);
+ ok(artifact.schemaVersion===1&&artifact.status==='validated'&&Number.isSafeInteger(artifact.revision)&&artifact.revision>=3,'Invalid approved artifact');
+ const saved=normalizedJob(artifact.job);
+ ok(key(j)===key(saved)&&hash(j)===hash(saved),'Artifact job mismatch');
+ const draft=validateDraft(j,artifact.draft);
+ shape(artifact.review,['fidelity','privacy','checks','reviewId']);
+ ok(id(artifact.review.reviewId)&&['fidelity','privacy','checks'].every(k=>artifact.review[k]===true),'Artifact not approved');
+ return copy({...artifact,job:saved,draft});
 }
