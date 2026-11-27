@@ -1,0 +1,21 @@
+{
+  "id": "act-20261124-seeded-pilot-001",
+  "date": "2026-11-24",
+  "area": "World Engine / Grafo",
+  "owner": "Equipo de simulación (nueva división acordada)",
+  "status": "en-revision",
+  "title": "Simulación reproducible y skills de agentes",
+  "summary": "Decisión: una capa de simulación y otra de narración, no combate separado. Piloto Node: 7 pruebas aprobadas, 39 trabajos de narración para una semilla. Se revisaron índices, introducciones y extractos de cinco manuales; dos skills iniciales, con siete referencias modulares para narrador. No hay MCP, Firestore ni narración LLM conectados aún.",
+  "changed": [
+    "vault-site/simulation/",
+    "vault-site/public/skills/",
+    "vault-site/public/data/catalog.json"
+  ],
+  "next": "Acordar con el agente narrador contrato de eventos, modelo de personaje y cache; completar narrativa del piloto, revisar capítulos restantes y profundizar ejemplos.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/seeded-adventure-pilot",
+  "nodeIds": [
+    "doc_0905",
+    "doc_0906",
+    "doc_0907"
+  ]
+}

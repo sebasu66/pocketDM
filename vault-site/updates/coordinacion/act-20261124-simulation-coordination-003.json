@@ -1,0 +1,24 @@
+{
+  "id": "act-20261124-simulation-coordination-003",
+  "date": "2026-11-24",
+  "area": "Coordinación",
+  "owner": "Equipo de simulación",
+  "status": "en-revision",
+  "title": "Respuesta a las 14 preguntas del narrador",
+  "summary": "Respuestas numeradas, responsabilidades, estado real, contrato propuesto y ejemplos reproducidos del piloto. 39 trabajos y 22 pruebas aprobadas. Se incorporan sin cambios las dos publicaciones previas del narrador. Propuestas de ventana, cache, lote, fallback, visibilidad y confirmación pendientes de consenso; no se implementó backend.",
+  "changed": [
+    "vault-site/public/docs/simulation-coordination-response-20261124.md",
+    "vault-site/updates/coordinacion/act-20261124-simulation-coordination-003.json"
+  ],
+  "next": "Narrador revisar respuestas y acordar N04/N06; empezar N01–N03/N09 y adaptador con fixtures. Simulación unifica actor/estado y contrato de comandos/eventos. Respuesta completa: https://pocketdm-prototipos.web.app/docs/simulation-coordination-response-20261124.md",
+  "source": "https://github.com/sebasu66/pocketDM/pull/3",
+  "nodeIds": [
+    "doc_0905",
+    "doc_0907",
+    "doc_0908",
+    "doc_0909",
+    "doc_0901",
+    "doc_0913",
+    "doc_0009"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "act-20261124-unified-reader-001",
+  "date": "2026-11-24",
+  "area": "Interfaz / Libro",
+  "owner": "Agente narrador / presentación",
+  "status": "en-progreso",
+  "title": "Unificar folios y navegación; corregir layout horizontal",
+  "summary": "Eliminar salida irreversible del grupo de portada e introducción; usar el índice del lector existente. Ilustración fija, scroll exclusivo de texto, orientación horizontal y aviso de actualización.",
+  "changed": [
+    "vault-site/public/libro/reader.mjs",
+    "vault-site/public/libro/edition/",
+    "vault-site/public/libro/mobile-reader.mjs",
+    "vault-site/public/app.webmanifest"
+  ],
+  "next": "Probar avance y retroceso entre folios 1–3, rotación y despliegue sin regresiones.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0903",
+    "doc_0913"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "act-20261124-condition-lab-001",
+  "date": "2026-11-24",
+  "area": "Combate / Simulador V2",
+  "owner": "Equipo de simulación",
+  "status": "en-revision",
+  "title": "Ficha común v1, motor de condiciones y laboratorio de duelos",
+  "summary": "Ficha estructurada de Galahad y referencias numéricas de lobo/jabalí; condiciones, daño localizado, duelos 1v1 con AP y registro plegable de cálculos, lotes 1000. 46 pruebas Node y navegador escritorio/móvil. Perfil restringido, no balance final ni estado real de campaña; no nueva escala de niveles.",
+  "changed": [
+    "vault-site/public/laboratorio/",
+    "vault-site/simulation/combat-rules.mjs",
+    "vault-site/simulation/test-condition-combat-lab.mjs",
+    "vault-site/scripts/test-condition-lab-browser.mjs",
+    "vault-site/public/docs/condition-combat-lab.md"
+  ],
+  "next": "Probar https://pocketdm-prototipos.web.app/laboratorio/ . Narrador: consumir contrato de ficha v1 mediante adaptador al lector y estado confirmado (no modificar narración fixture). Simulación: integrar fichas MEG por rango, alcance y efectos, unificar actor/overlay y ampliar políticas. Contrato: https://pocketdm-prototipos.web.app/docs/condition-combat-lab.md",
+  "source": "https://github.com/sebasu66/pocketDM/pull/3",
+  "nodeIds": [
+    "doc_0907",
+    "doc_0909",
+    "doc_0911",
+    "doc_0912",
+    "doc_0913",
+    "doc_0901"
+  ]
+}

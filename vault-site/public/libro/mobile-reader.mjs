@@ -52,5 +52,5 @@ export function createMobileReader({viewport,turn,home,zoomBy,resetZoom,getZoom}
  viewport.addEventListener('touchstart',e=>{gesture=null;if(!document.body.classList.contains('mobile-story')||getZoom()!==1||e.touches.length!==1||e.target.closest('button,a,input,summary'))return;const t=e.touches[0];gesture={x:t.clientX,y:t.clientY}},{passive:true});
  viewport.addEventListener('touchend',e=>{if(!gesture)return;const t=e.changedTouches[0],dx=t.clientX-gesture.x,dy=t.clientY-gesture.y;gesture=null;if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.5)open(dx>0?'character':'notes')},{passive:true});
  viewport.addEventListener('touchcancel',()=>{gesture=null},{passive:true});
- return {update({active,index,total}){document.body.classList.toggle('mobile-story',active);rail.hidden=!active;if(!active){close();return}rail.querySelector('[data-mobile=prev]').disabled=index===0;rail.querySelector('[data-mobile=next]').disabled=index>=total-1;rail.querySelector('.mobile-progress').textContent=(index+1)+'/'+total},close};
+ return {open,update({active,index,total}){document.body.classList.toggle('mobile-story',active);rail.hidden=!active;if(!active){close();return}rail.querySelector('[data-mobile=prev]').disabled=index===0;rail.querySelector('[data-mobile=next]').disabled=index>=total-1;rail.querySelector('.mobile-progress').textContent=(index+1)+'/'+total},close};
 }

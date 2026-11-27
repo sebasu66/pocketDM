@@ -1,0 +1,26 @@
+{
+  "id": "act-20261124-tactical-engagement-001",
+  "date": "2026-11-24",
+  "area": "Combate / Simulador V2",
+  "owner": "Equipo de simulación",
+  "status": "en-revision",
+  "title": "Simulador táctico v2: alcance, agarre y liberación",
+  "summary": "Sin modificar fichas: alcance dinámico, cambio opuesto con AP, arma encajonada, selección de efectos, agarre persistente y liberación. Comparación 1000 duelos: lobo 0 victorias base vs 228 táctico; Galahad 960 vs 680. 54 pruebas Node y navegador. Perfil experimental, falta contraataque al cambio, demás efectos y grupos.",
+  "changed": [
+    "vault-site/public/laboratorio/engagement.mjs",
+    "vault-site/public/laboratorio/duel.mjs",
+    "vault-site/public/laboratorio/index.html",
+    "vault-site/public/laboratorio/lab.mjs",
+    "vault-site/simulation/test-tactical-engagement.mjs",
+    "vault-site/scripts/test-condition-lab-browser.mjs",
+    "vault-site/public/docs/tactical-engagement.md"
+  ],
+  "next": "Probar perfiles y alcance en https://pocketdm-prototipos.web.app/laboratorio/ . Continuar selección de arma secundaria, daño de arma, bloqueo pasivo y efectos; carga/Frenzy; grupos y estado único. Documento: https://pocketdm-prototipos.web.app/docs/tactical-engagement.md",
+  "source": "https://github.com/sebasu66/pocketDM/pull/3",
+  "nodeIds": [
+    "doc_0911",
+    "doc_0912",
+    "doc_0901",
+    "doc_0909"
+  ]
+}

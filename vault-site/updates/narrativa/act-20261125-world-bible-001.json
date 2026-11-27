@@ -1,0 +1,18 @@
+{
+  "id": "act-20261125-world-bible-001",
+  "date": "2026-11-25",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-progreso",
+  "title": "N01: biblia del mundo y límites de generación",
+  "summary": "Consultar skill storyteller, GDD, manual DM IA y capítulos de worldbuilding. Proponer canon macro original, separar decisiones aprobadas, propuestas, creencias y vacíos; no materializar mapa ni cambiar motor.",
+  "changed": [
+    "vault-site/public/docs/world-bible-v01.md"
+  ],
+  "next": "Redactar biblia operativa y revisar con usuario/simulación.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0020",
+    "doc_0021"
+  ]
+}

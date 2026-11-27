@@ -1,0 +1,69 @@
+/* Mobile-first layered edition, scoped to the opening pages. */
+book-edition{display:block;position:fixed;inset:0;z-index:30;background:#14202b;color:#2b211c;overflow:hidden;font:16px/1.45 Georgia,serif}
+book-edition[hidden]{display:none!important}
+book-edition .edition-grid{display:grid;grid-template-columns:clamp(24px,4vw,46px) minmax(0,1fr) clamp(54px,8vw,94px);height:100%;padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px);box-sizing:border-box}
+book-edition-spine{background:#172430 url('./assets/spine.webp') center/100% 100% no-repeat;display:flex;align-items:center;justify-content:space-evenly;flex-direction:column;min-height:0;color:#f1d6a6;font:600 clamp(11px,1.8vh,17px) Georgia;letter-spacing:.08em}
+book-edition-spine .vertical{writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap}book-edition-spine .number{font-size:clamp(15px,3vh,23px)}
+book-edition-nav{background:#14202b url('./assets/nav.webp') center/100% 100% no-repeat;display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;min-height:0;padding:8px 3px;gap:2px;color:#f1d6a6}
+book-edition-nav button{width:clamp(40px,5.5vw,62px);height:clamp(40px,11vh,60px);border:1px solid #ad8053;background:#182733b8;color:#f6d9a7;border-radius:4px;font:24px Georgia;display:grid;place-items:center;touch-action:manipulation;cursor:pointer}
+book-edition-nav button:disabled{opacity:.35}book-edition-nav button:focus-visible,book-edition .reading:focus-visible{outline:2px solid #d76b32;outline-offset:2px}book-edition-nav output{font:600 12px Georgia}
+book-edition .edition-page{min-width:0;min-height:0;position:relative;overflow:hidden;background:#eee3ce url('./assets/paper.webp') center/480px auto}
+book-edition .cover{background:#17232e;display:flex;justify-content:center;align-items:center}book-edition .cover img{width:100%;height:100%;object-fit:contain;object-position:center}
+book-edition .reading{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;touch-action:pan-y;scrollbar-width:thin;scrollbar-color:#a44527 #e9dac0;padding:clamp(9px,2vh,22px) clamp(12px,2.5vw,34px) 12px 0}
+book-edition .prose{display:flow-root;font-size:clamp(16px,2.1vh,24px);line-height:1.49;overflow-wrap:break-word;color:#2e241d}
+book-edition .collage{float:left;width:min(59%,calc(100dvh * 1.25));height:auto;margin:0 8px 3px 0;shape-outside:url('./assets/collage.webp');shape-image-threshold:.34;shape-margin:8px}
+book-edition .title{font:bold italic clamp(26px,5.8vh,62px)/.92 Georgia,serif;color:#902d20;letter-spacing:-.045em;margin:0 0 10px;text-transform:uppercase}
+book-edition .kicker{color:#973c27;font:700 clamp(11px,1.8vh,15px) system-ui;letter-spacing:.16em;text-transform:uppercase;margin:0 0 4px}
+book-edition .prose p{margin:0 0 .85em}
+book-edition .prose p:first-of-type:first-letter{float:left;font-size:3.4em;line-height:.79;color:#a6321e;padding:5px 7px 0 0}
+book-edition .reading-full{border:1px solid #ae6944;background:#f0e3cb url('./assets/paper.webp') center/480px auto;color:#2e241d;width:min(90vw,900px);max-height:90dvh;padding:0;overflow:hidden}
+book-edition .reading-full[open]{display:flex;flex-direction:column}book-edition .reading-full::backdrop{background:#0e1925d9}
+book-edition .reading-full header{background:#172430;color:#e9d5ae;display:flex;justify-content:space-between;align-items:center;padding:8px 18px;font:600 19px Georgia}
+book-edition .reading-full button{font:24px Georgia;color:#f6d9a7;background:none;border:1px solid #aa8057;min-width:44px;min-height:44px}
+book-edition .full-body{padding:16px 24px;overflow:auto;font-size:clamp(17px,3vh,24px);line-height:1.55}
+book-edition .edition-menu{position:absolute;right:0;top:0;bottom:0;width:min(300px,80vw);z-index:2;background:#182733;color:#f1d6a6;padding:20px;display:flex;flex-direction:column;gap:12px}
+book-edition .edition-menu[hidden]{display:none}book-edition .edition-menu button{font:16px Georgia;background:#253747;color:#f1d6a6;border:1px solid #ad8053;min-height:44px}
+@media(orientation:portrait){book-edition .edition-grid{grid-template-columns:25px minmax(0,1fr) 53px}book-edition .collage{width:100%;float:none;shape-outside:none;display:block;margin:0 0 8px}book-edition .reading{padding:10px}book-edition .title{font-size:30px}book-edition .prose{font-size:16px}book-edition .cover img{object-fit:contain}}
+@media(min-width:1100px) and (min-height:700px){book-edition .prose{font-size:24px}.book-edition .collage{width:min(60%,850px)}}
+book-edition .reading{padding-left:10px}book-edition .title{font-size:clamp(27px,8vh,62px)}book-edition .collage{margin-left:-10px} @media(orientation:portrait){book-edition .collage{margin-left:0}}
+/* The reader owns the page index; this is only the rendering of its first two folios. */
+body.edition-opening .mobile-rail{display:none!important}
+body.edition-opening .mobile-drawer{z-index:50}
+book-edition{inset:0;width:100%;height:100dvh}
+book-edition .edition-grid{grid-template-columns:clamp(34px,4.3vw,50px) minmax(0,1fr) clamp(60px,8vw,96px);padding:0}
+book-edition-spine{font-size:clamp(14px,2.5vh,19px);letter-spacing:.035em;padding:0 2px}
+book-edition-spine .number{font-size:clamp(19px,4vh,27px)}
+book-edition-nav{padding-right:max(3px,env(safe-area-inset-right));box-sizing:border-box}
+book-edition-nav output{font-size:clamp(15px,3vh,21px)}
+book-edition-nav button{font-size:28px}
+book-edition .edition-page:not(.cover){display:grid;grid-template-columns:minmax(0,43%) minmax(0,1fr);background-size:cover}
+book-edition .fixed-art{position:relative;overflow:hidden;height:100%;min-width:0;display:flex;align-items:center;justify-content:center}
+book-edition .fixed-art img{height:100%;width:100%;object-fit:contain;object-position:center bottom}
+book-edition .reading{position:relative;inset:auto;min-height:0;height:100%;padding:clamp(10px,2.8vh,22px) clamp(13px,2.5vw,34px) 14px 8px;box-sizing:border-box}
+book-edition .title{font-size:clamp(25px,7vh,58px);line-height:.99}
+book-edition .prose{font-size:clamp(16px,3.65vh,23px)}
+book-edition .cover{background:#17232e;overflow:hidden}
+book-edition .cover::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#17232e40,#17232e),url('./assets/cover.webp') center/cover;filter:blur(22px);transform:scale(1.1)}
+book-edition .cover img{position:relative;height:100%;width:100%;object-fit:contain;mask-image:linear-gradient(to right,#000 0%,#000 94%,transparent 100%)}
+.rotation-notice{display:none}
+@media(orientation:portrait){.rotation-notice{position:fixed;inset:0;z-index:2147482000;background:#172430;color:#f1d6a6;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font:20px Georgia;padding:24px}.rotation-notice span{font-size:70px}.rotation-notice p{font-size:16px}}
+
+/* Editorial v3. The artwork and title never move with the narrative. */
+book-edition .edition-page:not(.cover){display:block;isolation:isolate;background-size:cover}
+book-edition .fixed-art{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1;display:block}
+book-edition .fixed-art .contour-art{position:absolute;left:0;bottom:0;width:min(70%,calc(100dvh * 1.84));height:auto;max-height:100%;object-fit:contain;object-position:left bottom}
+book-edition .fixed-art .editorial-heading{position:absolute;z-index:2;left:2.8%;top:3.5%;width:max-content;max-width:57%;color:#152c3e;line-height:.9;pointer-events:none}
+book-edition .editorial-heading .kicker{font-size:clamp(12px,2.5vh,18px);color:#8b3320;letter-spacing:.21em;text-shadow:0 0 7px #f4e6cb,0 0 3px #f4e6cb}
+book-edition .editorial-heading .title{font:900 italic clamp(32px,9.5vh,82px)/.88 Georgia,serif;letter-spacing:-.055em;margin:0;color:#922c1d;text-shadow:1px 1px #f4e6cb,-1px -1px #f4e6cb,0 0 8px #f4e6cb}
+book-edition .editorial-heading .title span{display:block}
+book-edition .editorial-heading .title span:last-child{color:#f6e2bd;text-shadow:1px 2px #182936,-1px -1px #182936,2px 0 #182936,0 0 9px #182936}
+book-edition .reading{position:absolute;inset:0;z-index:2;min-height:0;height:100%;padding:clamp(10px,3vh,23px) clamp(12px,2.2vw,32px) 12px 0;overflow-y:auto;overflow-x:hidden;overflow-anchor:none;overscroll-behavior:contain;scrollbar-gutter:stable}
+book-edition .prose{font-size:clamp(16px,3.8vh,24px);line-height:1.42}
+book-edition .contour-exclusion{float:left;width:100%;height:100dvh;pointer-events:none;shape-outside:inset(0 55% 0 0)}
+book-edition .prose p:first-of-type:first-letter{font-size:3.2em}
+@media(max-aspect-ratio: 19/10){book-edition .fixed-art .contour-art{width:min(68%,calc(100dvh * 1.38))}book-edition .editorial-heading .title{font-size:clamp(30px,8vh,70px)}}
+@media(max-height:360px){book-edition .prose{font-size:16px}book-edition .editorial-heading .title{font-size:clamp(30px,10vh,42px)}}
+
+book-edition .prose p{text-align:left;text-indent:0}
+book-edition .prose p:first-of-type:first-letter{float:none;font-size:2.6em;line-height:.85;vertical-align:-.11em;padding:0 3px 0 0;color:#a6321e}
+book-edition .editorial-heading{filter:drop-shadow(0 1px 0 #f4e6cb55)}

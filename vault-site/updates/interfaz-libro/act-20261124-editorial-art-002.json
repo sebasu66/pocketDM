@@ -1,0 +1,22 @@
+{
+  "id": "act-20261124-editorial-art-002",
+  "date": "2026-11-24",
+  "area": "Interfaz / Libro",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Composición editorial pintada con lectura viva",
+  "summary": "Nueva ilustración específica en acuarela, óxido, azul y marfil, sin texto rasterizado, con reserva de lectura integrada. Primer panel del laboratorio. Texto real, scroll y overlay. Capturas Edge inspeccionadas a 844x390 y 1396x547; pruebas de cuatro tamaños aprobadas. No cambia lector principal ni reglas; falta revisión del usuario y arte de los demás paneles.",
+  "changed": [
+    "vault-site/public/libro/editorial/stormkeep-art.webp",
+    "vault-site/public/libro/editorial/panel.mjs",
+    "vault-site/public/libro/editorial/editorial.css",
+    "vault-site/public/libro/editorial/demo.mjs",
+    "vault-site/scripts/test-editorial-browser.mjs"
+  ],
+  "next": "Aprobar dirección visual y desarrollar más composiciones específicas; integrar al lector canónico después.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0903",
+    "doc_0913"
+  ]
+}

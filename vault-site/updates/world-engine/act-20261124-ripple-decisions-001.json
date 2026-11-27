@@ -1,0 +1,25 @@
+{
+  "id": "act-20261124-ripple-decisions-001",
+  "date": "2026-11-24",
+  "area": "World Engine / Grafo",
+  "owner": "Equipo de simulación",
+  "status": "en-revision",
+  "title": "Ripple v0.1 y decisiones de NPC por utilidad",
+  "summary": "Consecuencias tipadas con validación y presupuesto; prototipo de perfiles, conocimiento explícito y Utility AI. Mundo sintético separado del canon; devuelve intenciones, no acciones ejecutadas. 71 pruebas Node. GOAP, propagación de noticias e integración de campaña pendientes.",
+  "changed": [
+    "vault-site/simulation/ripple-engine.mjs",
+    "vault-site/simulation/npc-decisions.mjs",
+    "vault-site/simulation/ripple-demo.mjs",
+    "vault-site/simulation/test-ripple-decisions.mjs",
+    "vault-site/public/docs/ripple-decisions.md"
+  ],
+  "next": "Acordar con narrador contrato de entidades/perfiles, creencias y acciones soportadas. Unificar recursos/ficha y estado de campaña; resolver intenciones con motor, planificador acotado y agenda. https://pocketdm-prototipos.web.app/docs/ripple-decisions.md",
+  "source": "https://github.com/sebasu66/pocketDM/pull/3",
+  "nodeIds": [
+    "doc_0008",
+    "doc_0908",
+    "doc_0909",
+    "doc_0907",
+    "doc_0913"
+  ]
+}

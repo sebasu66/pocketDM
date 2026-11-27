@@ -1,0 +1,18 @@
+{
+  "id": "act-20261125-stormkeep-hub-002",
+  "date": "2026-11-25",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "N02: dossier de Stormkeep y grafo de dependencias",
+  "summary": "Ocho sitios candidatos, seis NPC con objetivos y voces, diez relaciones semánticas, cuatro situaciones y plan visual. Conserva Corvin e Isveld como referencias previas; Gideon reservado. Recuperación parcial de fuentes, perfiles privados fuera de Hosting. Atlas Azgaar preservado.",
+  "changed": [
+    "vault-site/public/docs/stormkeep-hub-v01.md"
+  ],
+  "next": "Validar IDs, dependencias y autoridad con simulación; recuperar fichas antiguas antes de canonizar; elaborar N03 y profundizar MOD-01.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0020",
+    "doc_0021"
+  ]
+}

@@ -447,7 +447,7 @@
       "name": "Atlas por teselas (etapa futura)",
       "category": "Diseño",
       "summary": "Mapa navegable independiente del grafo conceptual.",
-      "description_md": "# Atlas\n\nConcepto de mapa con teselas, zoom, marcadores y capas. Los lugares contienen coordenadas; los actores hacen referencia a su ubicación por ID. Es una vista distinta del grafo de relaciones y no bloquea la publicación de la bóveda.",
+      "description_md": "# Atlas\n\nConcepto de mapa con teselas, zoom, marcadores y capas. Los lugares contienen coordenadas; los actores hacen referencia a su ubicación por ID. Es una vista distinta del grafo de relaciones y no bloquea la publicación de la bóveda.\n\n**Actualización:** priorizar el contrato de generación progresiva West Marches (doc_0908) antes de construir el atlas; el piloto debe anclarse al mundo compartido.",
       "status": "active",
       "tags": [
         "mapa",
@@ -461,6 +461,10 @@
         {
           "type": "propuesto_en",
           "target": "doc_0002"
+        },
+        {
+          "type": "actualizado_por",
+          "target": "doc_0908"
         }
       ],
       "source": {
@@ -795,7 +799,7 @@
       "name": "Coordinación de motores y estado compartido",
       "category": "Tecnología",
       "summary": "Un libro y un personaje; el motor de mundo y el de combate intercambian eventos y consecuencias.",
-      "description_md": "# División de trabajo acordada\n\n- Agente mundo: generación de mundo, escenas, narrativa general, exploración, navegación, cuenta e integración del lector.\n- Agente combate: resolución de enfrentamientos, tácticas, mecánicas, pruebas y eventos de combate. Mantiene el laboratorio como herramienta de desarrollo, no como una segunda aplicación de juego.\n- Compartido: personaje, contrato de chequeos, evento narrativo, componentes de libro y bóveda. El personaje evoluciona con TODAS las acciones, no solo combate.\n\n# Propuesta de integración (por acordar)\n\nUn único servicio de estado de campaña recibe comandos con IDs de actor/campaña y revisión esperada. Cada motor devuelve eventos resueltos y cambios de estado; el servicio valida y aplica una sola vez en transacción, actualiza personaje/diario y entrega la vista autorizada al libro. El libro jamás escribe directamente heridas, experiencia o inventario desde una tirada visual. Las decisiones del narrador no sustituyen los resultados del motor.\n\nFirestore como estado operativo según doc_0007; Git para versión de esquemas, código y snapshots autorizados. No desplegar sobre el canal del otro agente mientras trabaja. Integrar vía PR y actualizar la misma bóveda. Las reglas exactas, el esquema persistente y la autenticación aún requieren acuerdo.",
+      "description_md": "# División de trabajo acordada\n\n- Agente mundo: generación de mundo, escenas, narrativa general, exploración, navegación, cuenta e integración del lector.\n- Agente combate: resolución de enfrentamientos, tácticas, mecánicas, pruebas y eventos de combate. Mantiene el laboratorio como herramienta de desarrollo, no como una segunda aplicación de juego.\n- Compartido: personaje, contrato de chequeos, evento narrativo, componentes de libro y bóveda. El personaje evoluciona con TODAS las acciones, no solo combate.\n\n# Propuesta de integración (por acordar)\n\nUn único servicio de estado de campaña recibe comandos con IDs de actor/campaña y revisión esperada. Cada motor devuelve eventos resueltos y cambios de estado; el servicio valida y aplica una sola vez en transacción, actualiza personaje/diario y entrega la vista autorizada al libro. El libro jamás escribe directamente heridas, experiencia o inventario desde una tirada visual. Las decisiones del narrador no sustituyen los resultados del motor.\n\nFirestore como estado operativo según doc_0007; Git para versión de esquemas, código y snapshots autorizados. No desplegar sobre el canal del otro agente mientras trabaja. Integrar vía PR y actualizar la misma bóveda. Las reglas exactas, el esquema persistente y la autenticación aún requieren acuerdo.\n\n**Actualización:** la división combate/mundo queda sustituida por simulación/acontecimientos y narración/presentación. Ver doc_0905.",
       "status": "active",
       "tags": [
         "coordinación",
@@ -823,6 +827,10 @@
         {
           "type": "depende_de",
           "target": "doc_0019"
+        },
+        {
+          "type": "actualizado_por",
+          "target": "doc_0905"
         }
       ],
       "source": {
@@ -898,6 +906,353 @@
       "source": {
         "label": "PR de integración",
         "href": "https://github.com/sebasu66/pocketDM/pull/2"
+      }
+    },
+    {
+      "id": "doc_0905",
+      "type": "decision",
+      "name": "Simulación y narrador: dos responsabilidades, un mundo",
+      "category": "Tecnología",
+      "summary": "Separar por capas, no por combate y aventura. Simulación genera eventos y ramas; narrador convierte hechos visibles en contenido persistente.",
+      "description_md": "# Decisión de diseño del usuario\n\nEquipo de simulación: generación y validación de mundo, acciones, reglas, combate, semillas, ramas, consecuencias, estado y servicio MCP operativo. Equipo de narrativa: diseño literario de situaciones y NPC como propuestas, narración de eventos resueltos, caché de fragmentos, diálogos y presentación. Compartido: contratos, personaje, grafo y libro. Las propuestas del narrador no alteran estado hasta validación por simulación.\n\nUna sola aventura piloto, pequeña, generada proceduralmente desde situaciones y parámetros, no guion de desenlace. Anticipar ramas legales dentro de un presupuesto; completar contenido faltante al elegir ruta nueva. No publicar futuras ramas ni semillas. El jugador conserva agencia. Las decisiones sustituyen la división anterior combate/mundo; los equipos deben acordar la integración y no duplicar implementaciones.",
+      "status": "active",
+      "tags": [
+        "arquitectura",
+        "simulación",
+        "narración"
+      ],
+      "links": [
+        {
+          "type": "actualiza",
+          "target": "doc_0902"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0008"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0009"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0023"
+        }
+      ],
+      "source": {
+        "label": "Tablero de actividad",
+        "href": "/actividad/"
+      }
+    },
+    {
+      "id": "doc_0906",
+      "type": "document",
+      "name": "Skills para agentes de PocketDM",
+      "category": "Tecnología",
+      "summary": "Dos skills: protocolo operativo MCP y dirección narrativa modular, con fuentes, fichas y tablas originales.",
+      "description_md": "# PocketDM System\nProtocolo de consultas, propuestas, ramas, confirmación idempotente y lectura de resultados. Los métodos MCP son capacidades previstas, no herramientas desplegadas.\n\n# PocketDM Storyteller\nMódulos de mundo, NPC, aventuras, emergencia, exploración y narración. Basado en la revisión del manual de síntesis local y los índices, introducciones y extractos de cinco PDF: Mythic 2e, Anatomy of Adventure, Worldbuilding Blueprint, Lazy Dungeon Master y Forbidden Lands Players Handbook. Tablas y ejemplos propios; no se redistribuyen libros ni tablas originales. Profundizar capítulos identificados en sources.md.",
+      "status": "active",
+      "tags": [
+        "skills",
+        "MCP",
+        "narrativa",
+        "NPC"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0905"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0901"
+        }
+      ],
+      "source": {
+        "label": "Storyteller Skill",
+        "href": "/skills/pocketdm-storyteller/SKILL.md"
+      }
+    },
+    {
+      "id": "doc_0907",
+      "type": "architecture",
+      "name": "Piloto de simulación con semilla",
+      "category": "Tecnología",
+      "summary": "Primer motor Node privado: tiradas por dirección estable, ramas aisladas, chequeos compatibles y trabajos de narración.",
+      "description_md": "# Implementación inicial\n\nCódigo en vault-site/simulation, fuera de public/. HMAC-SHA256 con semilla y dirección de tirada (camino, actor/acción y slot según corresponda), rechazo de sesgo. Misma semilla, reglas, estado y decisiones reproducen eventos. Los IDs de rama son distintos. Explorar ramas no cambia estado original. Una semilla de desarrollo produjo Aldea del Hielo, disputa por medicina y 39 trabajos de narración a profundidad tres. Siete pruebas automatizadas aprobadas, incluyendo contrato del libro. Las estadísticas son provisionales, no Mythras completo; NPC, combate y generación de mundo son muy simples.\n\nPendiente: modelo común de personaje, grafo real, persistencia transaccional, servicio MCP, cola/caché persistente y narración LLM validada. Los resultados todavía no alimentan al lector en vivo. No exponer semillas ni futuros eventos.\n\n**Actualización:** priorizar el contrato de generación progresiva West Marches (doc_0908) antes de construir el atlas; el piloto debe anclarse al mundo compartido.",
+      "status": "active",
+      "tags": [
+        "semilla",
+        "motor",
+        "piloto",
+        "pruebas"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0905"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0901"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0018"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0009"
+        },
+        {
+          "type": "actualizado_por",
+          "target": "doc_0908"
+        }
+      ],
+      "source": {
+        "label": "Código del piloto",
+        "href": "https://github.com/sebasu66/pocketDM/tree/feature/seeded-adventure-pilot/vault-site/simulation"
+      }
+    },
+    {
+      "id": "doc_0908",
+      "type": "architecture",
+      "name": "West Marches: mundo progresivo, snapshot y atlas",
+      "category": "Tecnología",
+      "summary": "Canon inicial y geografía preliminar; materialización territorial por aventura, campañas aisladas sobre snapshot y mapa multiescala filtrado.",
+      "description_md": "# Decisión de diseño\n\nGenerar únicamente lo necesario para visitar la zona y resolver la aventura. Stormkeep como hub inicial. Referencias de lore y entidades con IDs estables pueden existir sin coordenadas precisas. Separar grado de generación, conocimiento y posición temporal. Propuesta: hexágonos axiales y grafo de rutas, con zoom regional, hexágono, localidad y sitio.\n\nCada campaña fija snapshot base inmutable y aplica su propio overlay. Hereda contenido canónico y caché compatible, no los resultados particulares de otra campaña. El atlas es proyección del grafo; vista DM autorizada y jugador filtrado por conocimiento. El zoom no dispara generación.\n\nSiguiente: contratos de mundo y materialización de corredor para una aventura piloto; atlas vectorial después. No implementado todavía. Referencia completa en skill.",
+      "status": "active",
+      "tags": [
+        "west-marches",
+        "atlas",
+        "snapshot",
+        "generación"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0905"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0005"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0007"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0009"
+        },
+        {
+          "type": "actualiza",
+          "target": "doc_0015"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0020"
+        },
+        {
+          "type": "amplia",
+          "target": "doc_0906"
+        }
+      ],
+      "source": {
+        "label": "Contrato de generación West Marches",
+        "href": "/skills/pocketdm-storyteller/west-marches.md"
+      }
+    },
+    {
+      "id": "doc_0909",
+      "type": "architecture",
+      "name": "Burbuja contextual y resolvedor de mundo efectivo",
+      "category": "Tecnología",
+      "summary": "Adaptación de IADM a Node: snapshot inmutable, cambios por campaña, escalas geográficas y selección contextual acotada.",
+      "description_md": "# Implementación inicial\n\nReutiliza los conceptos verificados de IADM: world_state.py, world_scale.py, world_resolver.py, multi_models.py, dm_context_builder.py, dm_context_enricher.py y dm_context_views.py. No se copia el backend anterior. El resolvedor admite adiciones, reemplazos y tombstones por campaña; valida referencias, hexágonos y rutas, con revisión esperada. Contexto a partir de ubicación efectiva, jerarquía, hexágonos próximos, entidades presentes y relaciones/focos explícitos. Proyecciones resumidas y completas con presupuesto de registros. La visibilidad del jugador se filtra antes de proyectar; el rol y conocimiento deben venir de un servicio autorizado, no del cliente.\n\nPiloto territorial provisional: Stormkeep y corredor oriental a Llanuras Heladas, aldea, puente y tres NPC. Materialización de dependencias predefinida, no generador general ni integración con el combate aún. Pruebas: seis nuevas y siete anteriores aprobadas. Estado en memoria, sin persistencia ni índice espacial de producción.\n\nSiguiente: integrar actor y estado del piloto de acontecimientos, búsqueda por coste de ruta y presupuesto de tokens, conocimiento autorizado, generación territorial extensible y almacenamiento. No modificar IADM original.",
+      "status": "active",
+      "tags": [
+        "contexto",
+        "LOD",
+        "snapshot",
+        "IADM"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0908"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0005"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0907"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0019"
+        }
+      ],
+      "source": {
+        "label": "Implementación y pruebas",
+        "href": "https://github.com/sebasu66/pocketDM/pull/3"
+      }
+    },
+    {
+      "id": "doc_0910",
+      "type": "decision",
+      "name": "Responsabilidad del simulador avanzado de combate",
+      "category": "Diseño",
+      "summary": "El equipo de simulación mantiene el combate avanzado y su laboratorio; el narrador presenta sus eventos en el libro compartido.",
+      "description_md": "# División de responsabilidades\n\nEl equipo de simulación mantiene el mundo, contexto, reglas y resolución avanzada de combate. El equipo de narrativa mantiene el narrador, diálogos, caché narrativo y presentación editorial. El laboratorio de combate es una herramienta de desarrollo del mismo motor, no una segunda experiencia de juego. Recuperar y evaluar especificaciones y prototipos originales de IADM; conservar estrategias programadas, prioridades, condiciones, ventanas de intervención y trazas reproducibles. Validar reglas, habilidades, equipo, fatiga, defensa, heridas y efectos con pruebas y comparativas estadísticas. No sustituir el combate original por un ejemplo de atacar por turnos sin acuerdo. Los eventos resueltos, anotaciones de chequeo y cambios de estado alimentan al libro y a la misma ficha. Pendiente: revisar prototipo original y fijar reglas de referencia/licencias antes de integrar.\n\nEspecificación y tareas de implementación: doc_0911.",
+      "status": "active",
+      "tags": [
+        "combate",
+        "responsabilidades",
+        "simulación"
+      ],
+      "links": [
+        {
+          "type": "especializa",
+          "target": "doc_0905"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0901"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0018"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0909"
+        },
+        {
+          "type": "detallado_en",
+          "target": "doc_0911"
+        }
+      ],
+      "source": {
+        "label": "Tablero compartido",
+        "href": "/actividad/"
+      }
+    },
+    {
+      "id": "doc_0911",
+      "type": "architecture",
+      "name": "Especificación y backlog del simulador avanzado de combate",
+      "category": "Tecnología",
+      "summary": "Fuentes mecánicas, ingesta validada, resolvedor Mythras, tácticas, laboratorio estadístico e integración al mundo y libro.",
+      "description_md": "# Estado y especificación\n\nEl libro actual usa acontecimientos y tiradas prefijados; el prototipo IADM D10 y el piloto PocketDM D100 simplificado son cálculos reales pero no Mythras completo. El manual Mythras completo local (306 páginas) es la referencia primaria de verificación. Los materiales de encounter gen aportan perfiles, estilos, rasgos, dificultad, defensa y efectos; el HTML del Encounter Generator depende parcialmente de un servidor. No hay ingesta aprobada ni simulador estadístico avanzado todavía.\n\nTres capas: catálogo mecánico versionado, canon del mundo, instancias por campaña. Pipeline de ingesta con procedencia, permisos, normalización, validación y revisión. Motor determinista con resolución Mythras y capa de tácticas; mismo motor para partida y laboratorio estadístico. Pruebas por semillas reproducibles y métricas de resultados, lesiones, duración, fatiga y consumo. Eventos resueltos alimentan al narrador, no al revés.\n\nBacklog ADV-C01 a ADV-C13, dependencias y criterios de aceptación en documento completo. Prioridad: inventario y permisos, esquema de datos, muestra piloto de equipo/estilos/criaturas y verificación de reglas. El equipo de simulación es responsable. Estado: documentado, implementación pendiente. Sin redistribución de catálogos protegidos.\n\n**Avance parcial:** catálogo de fixtures, verificación de algunas reglas, resolvedor inicial y micro-lab de intercambios en doc_0912. No se completaron aún C02/C05/C06/C10 ni la ingesta.",
+      "status": "active",
+      "tags": [
+        "Mythras",
+        "combate",
+        "ingesta",
+        "estadística",
+        "backlog"
+      ],
+      "links": [
+        {
+          "type": "amplia",
+          "target": "doc_0910"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0018"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0901"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0907"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0909"
+        },
+        {
+          "type": "avance",
+          "target": "doc_0912"
+        }
+      ],
+      "source": {
+        "label": "Especificación completa y tareas",
+        "href": "/docs/advanced-combat-spec.md"
+      }
+    },
+    {
+      "id": "doc_0912",
+      "type": "architecture",
+      "name": "Núcleo mecánico y micro-laboratorio de combate",
+      "category": "Tecnología",
+      "summary": "Catálogo original validado, grados D100, oposición, diferencial, parada y ensayos reproducibles de intercambios.",
+      "description_md": "# Implementación parcial C02/C05/C06/C10\n\nCatálogo versionado de prueba: tres armas, dos estilos, dos anatomías, tres plantillas; IDs, procedencia y referencias validadas. No es ingesta de datos externos. Manual completo verificado en pp.37–38,51,94–95 para grados, límites, oposición/diferencial y parada. Pendiente revisar redondeos y fumbles con modificadores, reacciones retroactivas y resto de reglas. Entitlement de efectos no ejecuta efectos. Micro-lab: 1000 intercambios por política, mismas semillas, 1.821 vs 2.475 daño medio antes de armadura, con y sin parada. 22 pruebas totales aprobadas. No hay combate completo, scheduler, lesiones, integración de mundo o libro. C01 pendiente de permisos/huellas; C03/C04 sin ingesta. Siguiente: consolidar esquema, verificar reglas y resolver un combate completo 1v1 con estados y efectos.",
+      "status": "active",
+      "tags": [
+        "combate",
+        "D100",
+        "pruebas",
+        "catálogo"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0911"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0901"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0907"
+        }
+      ],
+      "source": {
+        "label": "Implementación y pruebas",
+        "href": "https://github.com/sebasu66/pocketDM/pull/3"
+      }
+    },
+    {
+      "id": "doc_0913",
+      "type": "task",
+      "name": "Backlog paralelo del agente narrador",
+      "category": "Diseño",
+      "summary": "N01–N09: biblia, hub, lore, contrato, caché, composición de libro, presentación, skill y aventura.",
+      "description_md": "# Trabajo paralelo\n\nPriorizar N01–N04 y N09: canon propio, Stormkeep, referencias aún sin posición, contrato narrativo y situaciones de aventura. N05/N06: caché y composición dinámica del libro con eventos resueltos; N07/N08: presentación y profundización de skills. Responsable narración/presentación; pendiente confirmación de tareas por el otro agente. No modificar estado ni resolver dados desde el narrador. Ver backlog completo.",
+      "status": "active",
+      "tags": [
+        "narrador",
+        "backlog",
+        "coordinación"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0905"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0906"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0908"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0912"
+        }
+      ],
+      "source": {
+        "label": "Backlog narrador",
+        "href": "/docs/narrator-backlog.md"
       }
     }
   ]

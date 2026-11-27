@@ -1,0 +1,25 @@
+{
+  "id": "act-20261124-combat-core-001",
+  "date": "2026-11-24",
+  "area": "Combate / Simulador V2",
+  "owner": "Equipo de simulación",
+  "status": "en-revision",
+  "title": "Catálogo inicial, núcleo D100 y micro-laboratorio",
+  "summary": "22 pruebas aprobadas. Fixtures originales versionados, grados, oposición, diferencial, parada y micro-lab reproducible de intercambios aislados. 1000 ensayos por política: 1.821 daño medio con parada vs 2.475 sin parada, antes de armadura. Sin efectos aplicados, heridas ni combate completo. Backlog N01–N09 para narrador publicado en documentación.",
+  "changed": [
+    "vault-site/simulation/combat-catalog.mjs",
+    "vault-site/simulation/combat-rules.mjs",
+    "vault-site/simulation/combat-micro-lab.mjs",
+    "vault-site/simulation/test-combat-core.mjs",
+    "vault-site/simulation/README.md",
+    "vault-site/public/docs/narrator-backlog.md",
+    "vault-site/public/data/catalog.json"
+  ],
+  "next": "Cerrar decisiones de reglas, ingesta autorizada y esquema de ficha común; implementar scheduler 1v1, efectos, daño y estados; coordinar N04 y N06 con narrador.",
+  "source": "https://github.com/sebasu66/pocketDM/pull/3",
+  "nodeIds": [
+    "doc_0912",
+    "doc_0913",
+    "doc_0911"
+  ]
+}

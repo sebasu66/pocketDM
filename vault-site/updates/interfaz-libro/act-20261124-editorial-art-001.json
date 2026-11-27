@@ -1,0 +1,18 @@
+{
+  "id": "act-20261124-editorial-art-001",
+  "date": "2026-11-24",
+  "area": "Interfaz / Libro",
+  "owner": "Agente narrador / presentación",
+  "status": "en-progreso",
+  "title": "Revisión visual de panel narrativo",
+  "summary": "Usuario rechaza la estética de la prueba anterior. Nueva pintura editorial específica sin texto, con espacio reservado y lectura viva. Laboratorio aislado, sin cambiar lector principal.",
+  "changed": [
+    "vault-site/public/libro/editorial/"
+  ],
+  "next": "Validación visual y de scroll en apaisado.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0903",
+    "doc_0913"
+  ]
+}

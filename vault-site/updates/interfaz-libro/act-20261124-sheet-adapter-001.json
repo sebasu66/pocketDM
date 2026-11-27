@@ -1,0 +1,20 @@
+{
+  "id": "act-20261124-sheet-adapter-001",
+  "date": "2026-11-24",
+  "area": "Interfaz / Libro",
+  "owner": "Agente narrador / presentación",
+  "status": "en-progreso",
+  "title": "Ficha de combate común en el libro",
+  "summary": "Adaptador de solo lectura a schemaVersion 1, reutiliza funciones de simulación y separa fixtures del estado confirmado. No altera el laboratorio ni crónica.",
+  "changed": [
+    "vault-site/public/libro/navigation.mjs",
+    "vault-site/public/libro/actor-sheet.mjs",
+    "vault-site/public/libro/actor-sheet.css"
+  ],
+  "next": "Probar ficha y proyección de resultados; publicar cuando la revisión de cambios compartidos sea segura.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0903",
+    "doc_0913"
+  ]
+}

@@ -1,0 +1,64 @@
+# Biblia del mundo de PocketDM · N01 · v0.1
+25/11/2026. Propuesta original para revisión. Este documento es una especificación narrativa de alto nivel, no un snapshot materializado ni un catálogo mecánico. Ninguna propuesta se considera canon por aparecer aquí. No contiene secretos ni soluciones de aventuras.
+## 1. Contrato de verdad y alcance
+- C (confirmado): decisiones explícitas del usuario registradas en GDD y bóveda.
+- P (propuesta): contenido original sujeto a aprobación. Los IDs con prefijo draft. son identificadores de trabajo, no entidades del motor.
+- R (relato/creencia): algo que alguien afirma; su existencia como creencia no garantiza su veracidad.
+- A (abierto): decisión pendiente; no completar por inferencia.
+El canon aprobado limita toda generación. El snapshot fija hechos iniciales y el overlay/evento autorizado determina hechos actuales. Nunca tratar rumores, arte ilustrativo o prosa como evidencia mecánica. La visibilidad es independiente de la verdad y del grado de materialización. No exponer agendas privadas, resultados futuros ni secretos en Hosting. Un ID consolidado no cambia al cambiar el nombre. Fuentes: GDD PocketDM, doc_0020 y doc_0021; contratos world-progression, ripple-narrative-impact y west-marches.
+## 2. Identidad y axiomas
+C: fantasía medieval original; Stormkeep es la ciudad costera de referencia, Frostgate sólo alias histórico de trabajo. El norte está congelado y el frío avanza; existen bosques, costas tormentosas, pantanos, desiertos de ceniza y ciudades meridionales prósperas. Mythras gobierna las mecánicas actuales; no importar reglas ni canon de Hellfrost o Savage Worlds.
+P: fantasía de frontera, de escala humana, misteriosa sin ser uniformemente sombría. La civilización se sostiene mediante redes de abastecimiento, reciprocidad y memoria. La vida cotidiana incluye humor, arte, fiestas y esperanza. El conflicto central del mundo no es el bien contra el mal, sino qué obligaciones conservan las comunidades cuando las condiciones para cumplirlas desaparecen. El frío es un problema compartido, no un destino narrativo obligatorio.
+P: tecnología preindustrial: herrería, navegación a vela, molinos, carros, albañilería, escritura y medicina artesanal. Capacidades extraordinarias no autorizan por sí mismas tecnología industrial, comunicación instantánea ni producción ilimitada. A: astronomía, calendario, nombre planetario, moneda y escala física exacta.
+## 3. Geografía y subsistencia
+Los seis ámbitos del borrador MOD-01 son regiones de diseño, no necesariamente seis estados ni fronteras adyacentes. Mantener los IDs marches y plains del fixture; otros IDs de trabajo.
+| ID | Ámbito | Ecología y economía propuestas | Tensión y gancho |
+|---|---|---|---|
+| marches | Las Marcas | Colinas, bosque y litoral; pesca, madera, cultivos resistentes, transporte portuario. Depende del grano y ciertos remedios externos. | ¿Quién paga el mantenimiento de refugios y caminos? |
+| plains | Llanuras Heladas | Tundra y asentamientos dispersos; pastoreo estacional, pesca donde el agua lo permite, pieles y reservas. | Desplazamientos, acuerdos de paso y acceso a comida. |
+| draft.region.storm-coasts | Costas de la Tormenta | Puertos, acantilados, ríos costeros y navegación; sal, pescado, reparación naval. | Rivalidad por fondeaderos y rescate de barcos. |
+| draft.region.south-wetlands | Humedales del Sur | Cuencas fluviales, juncos, pesca, cultivo en terrenos elevados. | Derecho a cruzar, crecidas, enfermedades y acceso de migrantes. |
+| draft.region.ash-deserts | Desiertos de Ceniza | Aridez, oasis y depósitos minerales; comercio de caravanas. Origen de la ceniza sin definir. | Control de pozos, guías y seguridad de rutas. |
+| draft.region.midday-cities | Ciudades del Mediodía | Zonas relativamente templadas, manufacturas, graneros, mercados y crédito. | Exportar reservas o proteger precios y población local. |
+P: ríos, cuencas, barreras y costas condicionan rutas. Bosques requieren agua y suelos adecuados; poblaciones y depredadores requieren alimentación; excepciones sobrenaturales deben tener fundamento autorizado. A: dimensiones, relieve, posición relativa de las cuatro regiones nuevas, corrientes, rutas entre regiones. Único corredor existente de prueba: stormkeep, hex.0.0, hex.1.0, hex.2.0, pilot.village, pilot.bridge. El atlas bitmap es ilustrativo y no fija geografía canónica.
+## 4. Pueblos, especies y cultura
+P: humanos como población de referencia inicial. Dos tradiciones humanas de Las Marcas que pueden coexistir dentro de una familia: hogares de costa (reputación por rescate y obligaciones de viaje) y comunidades de camino (reputación por cumplir compromisos de paso y reserva). Son prácticas culturales, no rasgos biológicos ni comportamientos obligatorios. Otras regiones pueden compartir y transformar estas tradiciones.
+A: especies jugables adicionales, longevidad, origen, idiomas y distribución. No sustituir los seis grupos de Hellfrost antiguos por seis nuevos sin revisar el catálogo de actores Mythras y decisiones de usuario. Los animales comunes del bioma sirven como referencias naturales, no spawns automáticos. Criaturas sobrenaturales requieren ficha, hábitat, sustento o fuente extraordinaria, comportamiento y dependencias.
+## 5. Magia: reglas de autoría propuestas
+P: magia practicable relativamente limitada y comprensible para sus usuarios; lo antiguo o desconocido conserva misterio. Un poder con límites definidos puede resolver problemas; un fenómeno misterioso no debe regalar una solución. No aprobar poderes por su atractivo visual. Para cada práctica: origen conocido o supuesto, acceso/aprendizaje, efecto, alcance, coste, límite, riesgo, evidencia y autoridad mecánica. El narrador no declara un efecto si el motor no lo resuelve.
+P: tres familias de tradición como conceptos, no escuelas mecánicas ni conjuros: cuidado y protección de hogares; observación de señales y entorno; rituales ligados a juramentos y memoria. Sus nombres, capacidades y disponibilidad quedan sujetos a catálogo y validación. No presuponer resurrección, teleportación, control mental, curación instantánea, creación ilimitada de recursos o control del clima. La medicina de MOD-01 sigue siendo un bien escaso hasta que una capacidad autorizada demuestre otra solución. A: fuente metafísica, coste mecánico, frecuencia de usuarios, límites definitivos y causa del hielo.
+## 6. Autoridad, economía, valores y religión
+P: Stormkeep como hub gobernado por equilibrio entre autoridad de la fortaleza, intereses portuarios y comunidades abastecedoras; no fijar constitución ni autoridades nominales hasta N02. La legitimidad se negocia mediante seguridad, suministros, compromisos y cumplimiento de acuerdos. Las disputas entre jurisdicciones son posibles, sin asumir ley uniforme en todo el mundo.
+| ID propuesto | Institución funcional | Recursos y límites | Dilema |
+|---|---|---|---|
+| draft.faction.harbor-council | Consejo del Puerto | Muelles, permisos y almacenes; depende del abastecimiento y de tripulaciones | Reservas locales frente a auxilio exterior |
+| draft.faction.road-wardens | Custodios de los Caminos | Vigilancia, refugios y acceso a cruces; capacidad limitada por personal y clima | Seguridad frente a libre circulación |
+| draft.faction.hearth-compact | Pacto de los Hogares | Ayuda mutua, provisiones y contactos; sin autoridad universal | Reciprocidad frente a necesidad extrema |
+Son propuestas de roles institucionales, no afiliaciones de Mara, Ivo o Neris. No multiplicar organizaciones si una existente cubre su función. No definir su poder, territorio, miembros o inventario sin materialización.
+P: tradiciones religiosas compatibles, no verdades cosmológicas: culto del hogar y la hospitalidad (mantener un lugar para quien regresa); memoria de los muertos (conservar sus nombres y obligaciones); respeto por el mar y sus peligros (ritos de retorno). Pueden ser ritos seculares, cultos o costumbres familiares. Una persona puede seguir varios o ninguno. A: panteón, divinidades efectivas, milagros, clero y jerarquías. SoulFrost es una orden nombrada en el arco previo, sin fijar todavía religión ni vínculo con estas tradiciones.
+## 7. Historia y memoria
+P: cronología relativa para discusión, sin fechas inventadas:
+1. Época de los caminos abiertos: comunidades amplían intercambios, construyen puertos y pasos.
+2. Primeras pérdidas de temporada: asentamientos modifican ciclos de cultivo y reservas; relatos difieren sobre cuándo empezó.
+3. Consolidación de refugios: ciertos centros fortificados ganan relevancia al sostener comercio y protección.
+4. Presente: las rutas estacionales y el reparto de suministros generan conflictos de escala local. El comienzo de MOD-01 puede encajar aquí.
+R, ejemplos de creencias propuestas, no información entregada ni eventos: algunos pescadores atribuyen el hielo a promesas incumplidas; otros sostienen que el mar está cambiando por procesos naturales; custodios de relatos antiguos discuten si hubo inviernos semejantes. No elegir una explicación verdadera ni crear una pista sin autorización.
+A: fechas, guerras, fundación de Stormkeep, historia de SoulFrost, códice, naufragio y conexión con Galahad. No resolver contradicciones existentes mediante un prólogo nuevo.
+## 8. Reglas causales y generación
+| Condición | Dependencia a evaluar | Efectos candidatos, no automáticos |
+|---|---|---|
+| Una ruta se bloquea | Comunidades dependientes, reservas, rutas alternativas | Retraso, incremento de coste, demanda de escolta o negociación |
+| Disminuye una reserva de remedios | Pacientes, custodios, proveedores y acceso efectivo | Priorización, peticiones de ayuda, búsqueda de alternativas |
+| Cambia la habitabilidad | Cultivo, agua, refugio, población | Migración o cambio de actividad según recursos y decisiones |
+| Se conoce una acción pública | Testigos y receptores con conocimiento confirmado | Intención del NPC interpretada por LLM y validación del motor |
+Toda consecuencia debe referenciar hecho origen, dependencias, conocimiento, tiempo y condición de activación. El avance del frío no requiere un contador global inventado: simulación acordará unidades, ritmo y límites. No convertir relaciones en conocimiento automático ni utilizar Utility AI para decisiones argumentales.
+Generar por capas: región conceptual → corredor validado → lugar visitable → sitio detallado. Una aventura finita materializa el cierre necesario, no el mapa entero. Un nodo puede existir como referencia sin posición exacta. El atlas proyecta datos; no se convierte en fuente de verdad. La compilación privada de alternativas no modifica la rama confirmada.
+## 9. Uso operativo del canon y aceptación
+Antes de proponer un sitio: función, recursos, autoridad, acceso, riesgo, rasgos familiar/funcional/fantástico y dependencias. Antes de proponer un NPC: identidad, perspectiva, meta, motivos, límites y relaciones; perfiles privados fuera de Hosting. Antes de narrar: proyección autorizada, hechos y checks, idioma, versión. Revisar coherencia temporal, espacial, ecológica, económica y de conocimiento. Si falta un dato importante, marcarlo abierto y solicitar contexto; no inventarlo como confirmado.
+Entregas N01: premisa, seis ámbitos, propuestas culturales, magia, instituciones, tradiciones, cronología relativa y causalidad. Pendientes de aprobación: todas las P/R y A. N02 desarrollará el hub y sus relaciones; N03, referencias legendarias; N09, módulo concreto. La estructura puede convertirse en JSON tras acordar esquema con simulación; este Markdown no crea nodos ni es fuente de estado.
+## 10. Referencias consultadas y alcance
+- Skill pocketdm-storyteller: SKILL.md, worldbuilding.md, west-marches.md, npcs.md, adventures.md, sources.md. Manual local de síntesis DM IA, capítulo 1 y secciones de diseño modular/exploración consultadas; sus ejemplos y reglas antiguas no se importan automáticamente.
+- Scribe Forge, The Essential Worldbuilding Blueprint and Workbook (2020): extractos de pp. impresas 16–19 (lugar/ecología), 29–33 (magia), 43–53 (sociedad, economía, ley), 55–58 (valores), 59–63 (religión/mito), 64–67 (historia/detalle); PDF local, índice y texto revisados. Aplicación: coherencia física y social, límites mágicos, diversidad de perspectivas, historia causal.
+- Paul Wade-Williams, Savage Worlds Fantasy World Builder Toolkit: extractos PDF pp. 4–13 y 20–24. Aplicación: tono, gancho, diseño macro/micro y cultura. No reglas ni escenarios importados.
+- GDD PocketDM y documentos MOD-01, coordinación simulación, Ripple, world progression, atlas modular. El GDD contiene referencias antiguas a Hellfrost, Savage Worlds y JEV, superadas en los puntos explícitos por acuerdos posteriores.
+No se afirma lectura completa de ambos PDFs ni aprobación automática de estas propuestas. No se redistribuyen fuentes privadas.

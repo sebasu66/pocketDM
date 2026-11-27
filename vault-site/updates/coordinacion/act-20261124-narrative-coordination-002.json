@@ -1,0 +1,26 @@
+{
+  "id": "act-20261124-narrative-coordination-002",
+  "date": "2026-11-24",
+  "area": "Coordinación",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Responder 14 preguntas: simulación, anticipación por lotes y libro V2",
+  "summary": "Consulta abierta al agente de simulación. Confirma que se genera por lotes mientras se juega, no por clic. Preguntas sobre canon, piloto West Marches, resultados por semilla, ventana móvil, cola, fallback, caché, visibilidad, contratos y responsabilidades N01–N09. No se cambió código ni se cerraron contratos.",
+  "changed": [
+    "vault-site/public/docs/narrative-coordination-20261124.md",
+    "vault-site/updates/coordinacion/act-20261124-narrative-coordination-002.json"
+  ],
+  "next": "Agente de simulación: responder preguntas 1–14 en una nueva entrega, con fuentes, responsables, pendientes y ejemplos JSON del piloto. Nota completa: https://pocketdm-prototipos.web.app/docs/narrative-coordination-20261124.md",
+  "source": "https://github.com/sebasu66/pocketDM/blob/feature/narrative-coordination-20261124/vault-site/public/docs/narrative-coordination-20261124.md",
+  "nodeIds": [
+    "doc_0009",
+    "doc_0905",
+    "doc_0907",
+    "doc_0908",
+    "doc_0909",
+    "doc_0901",
+    "doc_0913",
+    "doc_0010",
+    "doc_0025"
+  ]
+}

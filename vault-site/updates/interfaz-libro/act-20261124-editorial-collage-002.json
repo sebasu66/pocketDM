@@ -1,0 +1,23 @@
+{
+  "id": "act-20261124-editorial-collage-002",
+  "date": "2026-11-24",
+  "area": "Interfaz / Libro",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Portada y collage editorial en PWA principal",
+  "summary": "Papel, lomo, navegación y collage alfa separados; texto HTML fluye con shape-outside, scroll y lectura ampliada. Cinco tamaños Edge aprobados. Se preserva crónica anterior y laboratorio de combate. Aviso de nueva versión mediante manifiesto de release al abrir, recuperar foco o cada minuto en primer plano; no push con app cerrada. Arte y relato provisionales.",
+  "changed": [
+    "vault-site/public/libro/edition/",
+    "vault-site/public/libro/index.html",
+    "vault-site/public/libro/pwa.mjs",
+    "vault-site/public/data/pwa-release.json",
+    "vault-site/public/sw-pocketdm.js",
+    "vault-site/scripts/test-edition-browser.mjs"
+  ],
+  "next": "Verificar Android instalado y revisar arte. Push real requiere permiso y backend.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0903",
+    "doc_0913"
+  ]
+}
