@@ -1,0 +1,19 @@
+{
+  "id": "act-20261127-sys10-auditoria-001",
+  "date": "2026-11-27",
+  "area": "Combate / Simulador V2",
+  "owner": "SYS-10 · Auditoría de fuentes",
+  "status": "en-revision",
+  "title": "SYS-10 · Fuentes Mythras y compatibilidad del importador",
+  "summary": "Manual completo identificado y biblioteca privada indexada. IADM reconstruyó una ficha guardada. Dos registros reales de MEG fueron rechazados por los contratos V2. Las pruebas focalizadas dieron 30 aprobadas en development y 19 aprobadas con una omitida en SYS-01.",
+  "changed": [
+    "vault-site/public/docs/sys-task-status/sys-10.md",
+    "vault-site/public/dm/sistema/index.html",
+    "vault-site/updates/combate/act-20261127-sys10-auditoria-001.json"
+  ],
+  "next": "Verificar con SYS-01 el adaptador al contrato común, la trazabilidad por campo y la prueba de una plantilla aprobada en un encuentro.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/audit/sys-10-fuentes-20261127",
+  "nodeIds": [
+    "doc_0912"
+  ]
+}
