@@ -1,0 +1,13 @@
+{
+  "id":"act-20261127-dialogue-mobile-rail-001",
+  "date":"2026-11-27",
+  "area":"Narrativa / Contenido",
+  "owner":"Narrativa / Dirección editorial",
+  "status":"en-revision",
+  "title":"Barra móvil de diálogo en la web app",
+  "summary":"El laboratorio de diálogo de la web app reutiliza la barra móvil del libro para abrir respuestas, elegir y confirmar. Se probaron edición compartida en el mismo navegador, escritorios y móviles, y la ocultación del resultado de prueba antes de confirmar.",
+  "changed":["vault-site/public/laboratorio/dialogo/index.html","vault-site/public/laboratorio/dialogo/dialogo.css","vault-site/public/laboratorio/dialogo/dialogo.mjs","vault-site/public/docs/dialogue-editorial-layout.md","vault-site/scripts/test-dialogue-demo-editorial-browser.mjs"],
+  "next":"Conectar el diálogo al estado canónico de campaña y a resoluciones pregeneradas por semilla; probar diseños compartidos entre dispositivos.",
+  "source":"https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds":["doc_0914"]
+}

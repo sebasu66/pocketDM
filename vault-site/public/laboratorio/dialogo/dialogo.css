@@ -1,1 +1,10 @@
 :root{color-scheme:dark;background:#151e26;color:#f7e8ce;font:16px/1.4 system-ui,sans-serif}*{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}.lab{height:100dvh;display:flex;flex-direction:column;overflow:hidden}.toolbar{display:flex;align-items:center;gap:8px;padding:5px 10px;flex-wrap:wrap}.toolbar h1{font-size:14px;margin:0 auto 0 0}.toolbar-field{display:flex;gap:4px;align-items:center;font-size:12px}button,select,a{font:inherit;color:inherit;background:#28323a;border:1px solid #8c765b;border-radius:4px;padding:5px;max-width:40vw}.scene{flex:1;min-height:0;display:grid;place-items:center;overflow:hidden}.scene book-editorial-dialogue{display:block;max-width:100%}#loading{padding:8px}@media(max-height:450px){.toolbar h1{display:none}.toolbar{padding:3px 6px}.toolbar-field{font-size:11px}}
+
+/* Identical reader rail, with dialogue controls in place of page turning. */
+body.pdm-mobile-full .lab { padding-right: calc(60px + env(safe-area-inset-right,0px)); }
+body.pdm-mobile-full .mobile-rail { display:flex; align-items:center; justify-content:center; gap:8px; }
+body.pdm-mobile-full .mobile-rail svg { width:23px; height:23px; fill:none; stroke:currentColor; stroke-width:2; }
+body.pdm-mobile-full .mobile-rail button { display:grid; place-items:center; padding:0; flex:0 0 42px; cursor:pointer; }
+body.pdm-mobile-full .mobile-rail button:disabled { opacity:.4; }
+body.pdm-mobile-full .mobile-progress { color:#f6d9a7; font:12px system-ui,sans-serif; }
+body:not(.pdm-mobile-full) .mobile-rail { display:none; }

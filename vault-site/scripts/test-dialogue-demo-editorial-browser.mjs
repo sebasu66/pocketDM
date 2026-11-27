@@ -28,6 +28,20 @@ await call('Emulation.setDeviceMetricsOverride',{width:1400,height:900,deviceSca
  assert.equal(await ev("document.querySelector('#npc').disabled"),false);
  const before=await ev("(()=>{const p=document.querySelector('book-editorial-dialogue');return {name:p.content.dialogue.people[0].name,choices:p.content.dialogue.choices.length,view:p.view}})()");
  assert.equal(before.name,'Hald Eirik');assert.equal(before.choices,2);assert.equal(before.view,view);
+ if(width===844){
+  assert.equal(await ev("!document.querySelector('.mobile-rail').hidden"),true);
+  await ev("document.querySelector('[data-mobile=next]').click()");
+  assert.equal(await ev("document.querySelector('book-editorial-dialogue').pendingChoice"),0);
+  await ev("document.querySelector('[data-mobile=next]').click()");
+  assert.equal(await ev("document.querySelector('book-editorial-dialogue').pendingChoice"),1);
+  assert.equal(await ev("document.querySelector('book-editorial-dialogue').shadowRoot.querySelectorAll('.message.check').length"),0);
+  await ev("document.querySelector('.mobile-rail [aria-label=\"Enviar respuesta elegida\"]').click()");
+  await sleep(120);
+  assert.equal(await ev("document.querySelector('book-editorial-dialogue').shadowRoot.querySelectorAll('.message.check').length"),1);
+  await ev("document.querySelector('#reset').click()");
+  console.log('Rail: choose, confirm, reveal and reset OK');
+ }
+
  await ev("(()=>{const p=document.querySelector('book-editorial-dialogue'),s=p.getSettings();s.base.personLeft=11;s.base.dialogLeft=52;s.responsive.mobile={...s.responsive.mobile,personLeft:7,dialogLeft:3};localStorage.setItem('editorial:active-dialogue-v1',JSON.stringify({id:'forja',name:'Test editor',settings:s,time:Date.now()}));window.dispatchEvent(new StorageEvent('storage',{key:'editorial:active-dialogue-v1'}))})()");
  await sleep(200);
  assert.equal(await ev("document.querySelector('book-editorial-dialogue').effective.personLeft"),view==='mobile'?7:11);
