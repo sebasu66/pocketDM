@@ -1,4 +1,7 @@
 # QA-06 / QA-07 · La última llama del norte · propuesta v0.2
+
+> **Nota de vigencia (27/11/2026):** antecedente histórico. La premisa de abastecimiento ya no es la referencia principal. Consultar [módulo 01 v1.0.0](./stormkeep-module-01-reference.md). Se conserva este documento como registro de autoría y requisitos; no usar sus rutas como las del nuevo argumento.
+
 25/11/2026. Entrega de autoría para revisión. No equivale a aprobación de canon ni a aventura ejecutable. Se conserva la premisa del módulo candidato y se la vincula al asentamiento de N02 v0.2.
 ## Sinopsis para aprobación
 Un envío de remedios destinado a la Aldea del Hielo queda retenido en el Puente del Vado. Las obligaciones de abastecimiento de Stormkeep y la escasez del invierno ponen a varias personas en desacuerdo. El jugador puede aceptar un encargo, averiguar qué ocurre y buscar una solución. No presupone Galahad, clase, género o facción; no determina un combate obligatorio.
