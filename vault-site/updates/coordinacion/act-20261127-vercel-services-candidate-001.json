@@ -1,0 +1,24 @@
+{
+  "id": "act-20261127-vercel-services-candidate-001",
+  "date": "2026-11-27",
+  "area": "Coordinación",
+  "owner": "Narrativa / Infraestructura",
+  "status": "en-revision",
+  "title": "Vercel Services: candidato aislado para V2",
+  "summary": "Se configura el servicio público pocketdm y el servicio interno simulation. El binding SIMULATION_URL se consume desde /api/simulation-status en servidor; el lector usa la ruta relativa. Sólo diagnóstico de conexión; no expone comandos, estado ni semillas. Se elimina la configuración Vercel duplicada de vault-site/ en esta rama.",
+  "changed": [
+    "vercel.json",
+    "vault-site/package.json",
+    "vault-site/api/simulation-status.mjs",
+    "vault-site/simulation/package.json",
+    "vault-site/simulation/api/status.mjs",
+    "vault-site/public/libro/player-edition.mjs",
+    "vault-site/scripts/build-portable-pwa.mjs"
+  ],
+  "next": "Confirmar nombres, rutas y binding; conceder acceso del repositorio a Vercel, probar build y vercel dev. Integrar autenticación, persistencia y transporte de campaña en una entrega posterior; no usar el diagnóstico como prueba de aventura jugable.",
+  "source": "https://github.com/sebasu66/pocketDM/blob/feature/pocketdm-vercel-services-20261127/vercel.json",
+  "nodeIds": [
+    "doc_0913",
+    "doc_0915"
+  ]
+}
