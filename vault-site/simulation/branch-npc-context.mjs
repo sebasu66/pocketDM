@@ -40,13 +40,13 @@ export function evaluateReaction(c,policy,{production=false}={}){
  const allowed=new Set(c.legalOptionIds),fallback=ids(policy.fallbackOptionIds);need(fallback.every(k=>allowed.has(k)),"Illegal fallback");
  need(Array.isArray(policy.rules)&&policy.rules.length<=100,"Invalid rules");
  const seen=new Set(),view=perceive(c),trace=[];
- const fields=new Set(["actor.race","actor.gender","actor.class","actor.hygiene","actor.attitude","npc.mood","npc.relationship","intent.kind","intent.id","locationId"]);
+ const fields=new Set(["actor.race","actor.gender","actor.class","actor.hygiene","actor.attitude","npc.mood","npc.relationship","intent.kind","intent.id","locationId","elapsedSeconds","actor.equipment","actor.weapons","npc.personality","npc.agenda","npc.prejudices"]);
  const read=k=>{if(fields.has(k))return k.split(".").reduce((o,p)=>o?.[p],view);if(k.startsWith("fact.")&&id(k.slice(5)))return view.knownFacts[k.slice(5)]?.belief;if(k.startsWith("flag.")&&id(k.slice(5)))return view.knownFlags[k.slice(5)];throw Error("Invalid perception predicate "+k)};
  let selected=null;
  for(const rule of policy.rules){
   need(obj(rule)&&id(rule.id)&&!seen.has(rule.id)&&id(rule.posture)&&Array.isArray(rule.when)&&rule.when.length>0,"Invalid reaction rule");seen.add(rule.id);
   const options=ids(rule.optionIds);need(options.every(k=>allowed.has(k)),"Illegal reaction option");
-  const clauses=rule.when.map(t=>{need(obj(t)&&typeof t.field==="string"&&scalar(t.equals)&&t.equals!==null,"Invalid predicate");const actual=read(t.field);return {field:t.field,result:actual==null?"unknown":Object.is(actual,t.equals)?"match":"different"}});
+  const clauses=rule.when.map(t=>{need(obj(t)&&typeof t.field==="string"&&Object.hasOwn(t,"equals")!==Object.hasOwn(t,"contains"),"Invalid predicate");const membership=Object.hasOwn(t,"contains");need(membership?id(t.contains):scalar(t.equals)&&t.equals!==null,"Invalid predicate value");const actual=read(t.field);need(actual==null||membership===Array.isArray(actual),"Predicate type mismatch");return {field:t.field,result:actual==null?"unknown":(membership?actual.includes(t.contains):Object.is(actual,t.equals))?"match":"different"}});
   const matches=clauses.every(t=>t.result==="match");trace.push({ruleId:rule.id,clauses,matches});
   if(matches&&!selected)selected={ruleId:rule.id,posture:rule.posture,optionIds:options};
  }

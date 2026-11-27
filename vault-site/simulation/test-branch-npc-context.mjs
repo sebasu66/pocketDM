@@ -9,6 +9,9 @@ function exercise(assert){
  const rumor=buildBranchContext(fixture({worldFacts:[{id:"stolen",value:false}],npcKnowledge:[{factId:"stolen",belief:true,source:"reported",evidenceId:"report"}]}));assert.equal(evaluateReaction(rumor,p).posture,"questioning");assert.equal(rumor.worldTruth.stolen,false);
  const missing=buildBranchContext(fixture({observedActor:{}}));assert.equal(evaluateReaction(missing,p).posture,"uncertain");assert.deepEqual(evaluateReaction(missing,p).optionIds,["wait"]);
  assert.throws(()=>evaluateReaction(c,p,{production:true}),/Unapproved/);assert.throws(()=>evaluateReaction(c,{...p,fallbackOptionIds:["enter"]}),/Illegal/);assert.throws(()=>buildBranchContext(fixture({npcKnowledge:[{factId:"stolen",belief:false,source:"witnessed",evidenceId:"witness"}]})),/contradicts/);
+
+ const armed=buildBranchContext(fixture({observedActor:{weapons:["sword"]}})),weaponRule={...p,rules:[{id:"weapon-duty",when:[{field:"actor.weapons",contains:"sword"},{field:"npc.agenda",contains:"duty"},{field:"npc.personality",contains:"cautious"}],posture:"request-stow",optionIds:["explain","wait"]}]};
+ assert.equal(evaluateReaction(armed,weaponRule).posture,"request-stow");assert.equal(evaluateReaction(missing,weaponRule).posture,"uncertain");assert.equal(evaluateReaction(c,weaponRule).trace[0].clauses[0].result,"different");assert.throws(()=>evaluateReaction(c,{...p,rules:[{id:"secret",when:[{field:"worldTruth.stolen",equals:true}],posture:"bad",optionIds:["wait"]}]}),/Invalid perception/);
  assert.equal(prepareSocialCheck(c,{callMasterRules(){throw Error("must not call")}}).status,"not-required");
  for(const [kind,skills] of [["deceit",["deceit","insight"]],["persuasion",["influence","willpower"]]]){
   const s=buildBranchContext(fixture({intentKind:kind,intentId:"ask"})),calls=[],draws=[];

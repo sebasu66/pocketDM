@@ -5,7 +5,7 @@
   "owner": "SYS-03",
   "status": "en-revision",
   "title": "SYS-03 contexto de rama y reacción NPC candidata",
-  "summary": "Contrato privado y política sintética; 31 aserciones JS, API real y suite Node pendientes. Sin canon ni despliegue.",
+  "summary": "Contrato privado y política sintética; 35 aserciones JS, API real y suite Node pendientes. Sin canon ni despliegue.",
   "changed": [
     "vault-site/simulation/branch-npc-context.mjs",
     "vault-site/simulation/branch-npc-fixture.mjs",
@@ -13,6 +13,6 @@
     "vault-site/public/docs/sys-task-status/sys-03.md"
   ],
   "next": "SYS-09 revisar; SYS-01/02/04/05/06 acordar adaptadores, SYS-08 aprobar canon; regenerar índice y validar.",
-  "source": "https://github.com/sebasu66/pocketDM/tree/feature/sys-03-npc-context",
+  "source": "https://github.com/sebasu66/pocketDM/pull/10",
   "nodeIds": []
 }
