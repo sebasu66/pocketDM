@@ -1,6 +1,6 @@
 {
   "version": "pocketdm-vault-v1",
-  "updatedAt": "2026-11-25",
+  "updatedAt": "2026-11-27",
   "source": "GDD PocketDM y README del paquete 2026-11-23; auditoría local 2026-11-24",
   "nodes": [
     {
@@ -1339,6 +1339,80 @@
       "source": {
         "label": "Backlog QA y criterios H01",
         "href": "/docs/qa-playable-stormkeep.md"
+      }
+    },
+    {
+      "id": "doc_0916",
+      "type": "document",
+      "name": "La Última Llama del Norte · módulo 01 v1.0.0",
+      "category": "Narrativa / Arte",
+      "summary": "Nueva referencia argumental seleccionada para la primera aventura: Escarcha Lenta, 14 páginas y tres familias de cierre. Integración pendiente.",
+      "description_md": "El original JSON del máster se conserva en Google Drive con acceso restringido. La ficha documental describe su alcance y conciliación pendiente sin revelar soluciones. Sustituye la propuesta argumental QA-07 v0.2, no el canon ni el estado de simulación.",
+      "status": "active",
+      "tags": [
+        "Stormkeep",
+        "aventura",
+        "módulo",
+        "narrativa"
+      ],
+      "links": [
+        {
+          "type": "usa",
+          "target": "doc_0906"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0913"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0915"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0917"
+        }
+      ],
+      "source": {
+        "label": "Registro del módulo y acceso autorizado",
+        "href": "/docs/stormkeep-module-01-reference.md"
+      }
+    },
+    {
+      "id": "doc_0917",
+      "type": "document",
+      "name": "Guía de acceso del Dungeon Master",
+      "category": "Documentación",
+      "summary": "Índice operativo del mundo, NPC, economía, personajes, reglas, skills, narrativa y presentación, actualizado para el módulo 01.",
+      "description_md": "Punto de partida para el máster: consultar la actividad, las skills, el mundo y el módulo seleccionado; distinguir las fuentes públicas de las privadas. No duplicar el lector ni generar narración durante la partida.",
+      "status": "active",
+      "tags": [
+        "DM",
+        "guía",
+        "documentación",
+        "contexto"
+      ],
+      "links": [
+        {
+          "type": "usa",
+          "target": "doc_0906"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0025"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0916"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0023"
+        }
+      ],
+      "source": {
+        "label": "Guía completa",
+        "href": "/docs/dm-guide.md"
       }
     }
   ]
