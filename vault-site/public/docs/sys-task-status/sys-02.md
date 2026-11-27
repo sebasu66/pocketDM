@@ -47,3 +47,20 @@ Reproducción desde checkout de la rama: cd vault-site && node --test simulation
 2. SYS-04 debe confirmar IDs semánticos y versión persistida para preparación/replay, SYS-06 autoridad de entrada y proyección. Entregar contrato mediante este informe y PR; sin afirmar que otros agentes lo leyeron.
 3. SYS-09 ejecutar suite sobre SHA del PR, revisar privacidad y regresiones del laboratorio/piloto, comparar políticas de combate reales, verificar integración y consolidar actividad; no marcar validado antes de ello.
 4. No se hizo merge ni despliegue a producción.
+
+## Iteración 3: compatibilidad QA-01 y regresión completa con emulador
+- Código probado: 52ac471c8ae555839be8ac31990bdf0257cd057d, rama SYS-02. Se agregaron LEGACY_CAMPAIGN_VERSION, legacyCampaignRoll(seed,address,sides), createLegacyCampaignRoller(seed,scope), sin modificar archivos de consumidores.
+- Coincidencia exacta del adaptador con addressedRoll y combatRoller reales de campaign-state para 27 combinaciones de propósito/ordinal/caras; copia defensiva de scope y validación de semilla/dirección. La validación rechaza entradas inválidas de forma anticipada; no cambia draws válidos.
+- Prueba nueva: simulateDuel real Galahad/lobo con createCombatRoller, replay completo, propósito/ordinal únicos, diagnóstico ajeno y draws homólogos con políticas tácticas/no tácticas emparejadas. El campo seed del laboratorio recibe únicamente el marcador privado, no la semilla. No se modifica el proveedor secuencial por defecto de la UI.
+- SYS-04 confirmó direcciones semánticas persistentes y RNG versionado en preparación, ninguna tirada al confirmar (PR #12 comentario 7225000856). Ratificación SYS-01/06 sobre reexportación todavía pendiente.
+- Propuesta para SYS-06: reexportar legacyCampaignRoll como addressedRoll, createLegacyCampaignRoller como combatRoller y LEGACY_CAMPAIGN_VERSION como RNG_VERSION al integrar, conservando firma y versión. SYS-01: usar createLegacyCombatRoller para ediciones antiguas; new provider para nuevas preparaciones, según versión persistida. No hacer esos cambios compartidos sin acuerdo.
+- Windows, Node 24.14.1, Java Temurin 21.0.9, Firestore emulator 1.22.0, proyecto exclusivamente demo-pocketdm-qa03, 127.0.0.1:18382, reglas simulation/firestore-qa.rules. Se verificó puerto libre, se inició el emulador propio, se detuvo al finalizar. No se conectó a nube.
+| Prueba | Resultado |
+|---|---|
+| node --test simulation/test-rng.mjs | 8 PASS / 0 FAIL / 0 SKIP, exit 0 |
+| node --test simulation/test-*.mjs (sin emulador) | 112 PASS / 0 FAIL / 8 SKIP, exit 0 |
+| node --test simulation/test-*.mjs (con emulador demo) | 120 PASS / 0 FAIL / 0 SKIP, exit 0 |
+| node scripts/build-activity.mjs | PASS, 108 registros, exit 0 |
+| node scripts/validate.mjs | PASS, exit 0 |
+- Las 8 pruebas antes omitidas por falta de emulador se ejecutaron satisfactoriamente. Evidencia local sobre SHA probado, no CI. El build de actividad se ejecutó antes de anexar la entrada nueva.
+- development observado c3b21f6024c899ca1c45934b75a7665a31757eb9 (SYS-10 añadido); no se afirma ejecución sobre esa revisión ni combinación de PRs. Pendientes: consolidar consumidores al ratificar contratos, replay con compilador real y privacidad HTTP/Hosting, revisión SYS-09. Estado sigue en revisión, sin merge remoto ni despliegue.
