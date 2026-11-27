@@ -1,0 +1,24 @@
+{
+  "id": "act-20261125-simulation-qa01-state-001",
+  "date": "2026-11-25",
+  "area": "World Engine / Grafo",
+  "owner": "Equipo de simulación",
+  "status": "en-revision",
+  "title": "QA-01: estado común y resolvedor de acciones v0.1",
+  "summary": "Ficha mecánica única en overlay; raciones, viajes y duelo táctico real; preview aislado, confirmación idempotente en memoria, proyección explícita de jugador y Ripple confirmado. QA-04: proveedor HMAC direccionado inyectado en duelo. 89/89 pruebas Node (9 nuevas). No persistencia, API, lector conectado ni canon.",
+  "changed": [
+    "vault-site/simulation/campaign-state.mjs",
+    "vault-site/simulation/test-campaign-state.mjs",
+    "vault-site/public/laboratorio/duel.mjs",
+    "vault-site/public/docs/campaign-state-qa01.md"
+  ],
+  "next": "Validador revisa QA-01/04/08/10; narrador acuerda QA-02 y adaptador de ficha/diario; simulación integra compilador y persistencia QA-03, migra proveedor del laboratorio y materializa canon aprobado. No cerrar H01.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/simulation-qa01-state-20261125",
+  "nodeIds": [
+    "doc_0005",
+    "doc_0007",
+    "doc_0909",
+    "doc_0912",
+    "doc_0008"
+  ]
+}

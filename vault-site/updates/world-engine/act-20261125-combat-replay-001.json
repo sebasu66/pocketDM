@@ -1,0 +1,23 @@
+{
+  "id": "act-20261125-combat-replay-001",
+  "date": "2026-11-25",
+  "area": "World Engine / Grafo",
+  "owner": "Equipo de simulación",
+  "status": "en-revision",
+  "title": "Registro de combate por acción para narración gráfica",
+  "summary": "El evento y job narrativo conservan replay v1 con iniciativa, arma, objetivo, defensa, daño localizado, efectos y cambios observables por acción. Reconstrucción de estado y referencias a dados verificados.",
+  "changed": [
+    "vault-site/public/laboratorio/combat-log.mjs",
+    "vault-site/public/laboratorio/duel.mjs",
+    "vault-site/public/laboratorio/group-combat.mjs",
+    "vault-site/simulation/combat-replay.mjs",
+    "vault-site/simulation/campaign-state.mjs",
+    "vault-site/public/docs/combat-replay.md"
+  ],
+  "next": "Narrador: consumir combat.replay en escenas de combate del mismo libro, derivar viñetas de acciones confirmadas. Validador: revisar proyección y reconstrucción; no generar interfaz paralela.",
+  "source": "https://github.com/sebasu66/pocketDM/pull/6",
+  "nodeIds": [
+    "doc_0915",
+    "doc_0909"
+  ]
+}

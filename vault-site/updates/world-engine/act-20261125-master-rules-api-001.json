@@ -1,0 +1,21 @@
+{
+  "id": "act-20261125-master-rules-api-001",
+  "date": "2026-11-25",
+  "area": "World Engine / Grafo",
+  "owner": "Equipo de simulación",
+  "status": "en-revision",
+  "title": "API del máster: chequeos de habilidad, oposición, resistencia y combate",
+  "summary": "Dispatcher privado master-rules-v1 con nueve operaciones parametrizadas, dificultad base obligatoria, lectura de ficha efectiva, carga relativa y restricciones de tarea. Chequeos sociales, físicos, grupales y combate reutilizan reglas existentes. Resultados compatibles con libro; sin historia ni tirada en UI.",
+  "changed": [
+    "vault-site/simulation/master-rules.mjs",
+    "vault-site/simulation/skill-check.mjs",
+    "vault-site/simulation/test-master-rules.mjs",
+    "vault-site/public/docs/master-rules-api.md"
+  ],
+  "next": "Narrador: invocar API en preparación de escenas con dificultad, ficha y dados de rama; completar habilidades de las fichas que falten. Integrar contrato y verificar proyección de información privada. No crear otro lector.",
+  "source": "https://github.com/sebasu66/pocketDM/pull/5",
+  "nodeIds": [
+    "doc_0915",
+    "doc_0909"
+  ]
+}

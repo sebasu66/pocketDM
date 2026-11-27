@@ -31,6 +31,8 @@ export function validateSheet(s){
  assert(s.style.weaponIds.includes(s.equippedWeaponId)&&s.style.weaponIds.every(id=>s.inventory.some(i=>i.id===id&&i.kind==='weapon')),'Arma fuera de estilo');
  const t=s.state;assert(int(t.fatigue,0,9)&&int(t.stunTurns,0,100)&&int(t.extraLoad,0,1000)&&['none','shaken','flee'].includes(t.fear)&&['none','exposed'].includes(t.cold)&&['normal','dim','dark'].includes(t.light),'Estado inválido');
  for(const k of ['bleeding','prone','incapacitated','unconscious'])assert(typeof t[k]==='boolean','Estado inválido '+k);
+ if(t.dead!==undefined)assert(typeof t.dead==='boolean','Invalid death state');
+ if(t.wounds!==undefined){assert(Array.isArray(t.wounds)&&t.wounds.length<=1000,'Invalid wounds');const seen=new Set();for(const w of t.wounds){assert(typeof w.id==='string'&&w.id&&!seen.has(w.id)&&ids.has(w.locationId)&&['minor','serious','major'].includes(w.severity)&&typeof w.treated==='boolean'&&typeof w.stabilized==='boolean'&&(w.remainingSeconds===null||int(w.remainingSeconds,0,10000000)),'Invalid wound');seen.add(w.id)}}
  return s;
 }
 export const equipped=s=>s.inventory.find(x=>x.id===s.equippedWeaponId);

@@ -1,6 +1,31 @@
 # QA: primer hito jugable de Stormkeep
 25/11/2026. Backlog de aceptación aprobado por el usuario tras la auditoría. Estado inicial: pendiente; no implica que las tareas estén implementadas. Responsable por rol, no por cuenta de GitHub. Leer actividad y coordinar contratos antes de tocar archivos compartidos.
 
+## Decisión de producto del 25/11/2026 — corte vertical en orden de juego
+
+Esta decisión del usuario sustituye el orden de ejecución anterior, no sus criterios de seguridad ni las pruebas ya realizadas. H01 sigue abierto. El objetivo es una aventura RPG completa, visible y jugable en el libro existente desde el primer paso; no completar sistemas genéricos por separado.
+
+- Stormkeep es el hogar estable: inicio, rumores, conversaciones, preparación y regreso. La primera expedición ocurre en un lugar vecino, materializado sólo hasta donde la aventura lo necesita. No se presupone un conflicto dentro de la ciudad.
+- Tres personajes pregenerados con fichas, capacidades, personalidades y comportamientos por defecto definidos por narrativa y traducidos a números por simulación. Personalización limitada posterior; no creador libre ni catálogo exhaustivo en H01.
+- Simular sólo situaciones relevantes para la aventura (hazañas, peligros, decisiones, progreso, consecuencias). Abstraer provisiones y necesidades ordinarias; activarlas cuando sean relevantes, sin calorías, resfriados ni economía/logística cotidiana. No ampliar custodia, transporte de mercancías u obligaciones salvo necesidad explícita de una escena aprobada.
+- Preparar las rutas argumentales compatibles con los tres personajes y sus elecciones, con precondiciones, resultados mecánicos y desenlaces; compartir fragmentos y ramas compatibles. El DM mediante MCP compara estado y perfil real con la base y las variantes aprobadas; genera sólo diferencias necesarias. La caché compartida almacena posibilidades reutilizables versionadas y validadas, nunca el historial privado ni tiradas confirmadas de otro jugador.
+
+### Secuencia prioritaria (cada fase visible en el mismo libro)
+
+| Hito | Experiencia del jugador | Soporte técnico mínimo y criterio de salida |
+| --- | --- | --- |
+| VS-01 | Seleccionar personaje y abrir la aventura en Stormkeep | Tres fichas predefinidas, snapshot de campaña, localización inicial y primera página en lector canónico; seleccionar, guardar, reabrir, ver la misma ficha. QA-01/03/06/08. |
+| VS-02 | Hablar con NPC, descubrir y elegir un encargo, prepararse | Sólo NPC, lugares, diálogo, información, equipo y compras relevantes de apertura. Opción legal resuelta en servidor y reflejada en libro, ficha y diario. QA-02/06/07. |
+| VS-03 | Salir a la localización vecina | Ruta persistente, paso del tiempo abstracto, descubrimientos y peligros definidos para la expedición. No generar territorios innecesarios. QA-04/05/06/07. |
+| VS-04 | Explorar y superar obstáculos, encuentros o combate | Chequeos Mythras, habilidades, magia si requerida, heridas y combate real con los 3–4 enemigos como máximo que exija la aventura (cantidad orientativa, no canon). Alternativas y resultados reales, sin imponer combate. QA-02/04/07. |
+| VS-05 | Resolver la aventura y regresar | Desenlaces, consecuencias Ripple pertinentes, recompensas y progresión del personaje conforme a reglas aprobadas, persistencia del regreso. QA-02/03/07. |
+| VS-06 | Rejugar y aprovechar variantes | Compilar las rutas alcanzables de los tres perfiles base, validar cada transición, replay y convergencia sólo con equivalencia de estado relevante; demostrar reutilización y generación incremental ante una variante. QA-02/07/08/10. |
+
+La anticipación y el caché comienzan en VS-02 y se amplían con cada nueva escena, no se dejan para el final. QA-08/10 son transversales. Cada fase entrega una interacción de principio a fin en el libro, con pruebas y revisión del validador. El siguiente trabajo de simulación es VS-01, no ampliar las capacidades del cargamento. Reutilizar el motor y la persistencia existentes; adaptar al lector canónico sin mantener una copia divergente. Narrador define personajes, escenas y opciones; simulación asigna reglas, valida y confirma estado; validador revisa. El canon y la premisa MOD-01 siguen sujetos a aprobación; esta decisión no los aprueba ni elige automáticamente una historia de transporte.
+
+Después de completar H01, ampliar catálogo de monstruos/NPC, reglas y mundo genéricos, creación de personajes y personalización avanzada según evidencia de juego. No declarar H01 cerrado sin ejecución real.
+
+
 ## Hito H01 — aventura completa en Stormkeep
 El objetivo es una experiencia real de extremo a extremo, sin sustituir los componentes centrales por fixtures ni duplicar el lector. En un entorno de prueba autorizado, demostrar:
 
