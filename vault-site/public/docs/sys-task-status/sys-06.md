@@ -22,3 +22,16 @@ No despliegue ni merge autorizado. Siguiente: acuerdo de puertos con SYS-04/05/0
 
 ## Handoff SYS-09 · PR #11
 [PR #11 (borrador)](https://github.com/sebasu66/pocketDM/pull/11), commit inicial 28ae4e41894246f71631ef017b0441a30ed91a62. Se añade verificación de commandId del recibo y prueba de errores inesperados. Intento de acceso Git desde contenedor: FAIL de infraestructura (DNS de github.com no resolvió); pruebas Node del repositorio, emulador y staging: SKIP. No se confirmó ejecución CI asociada al commit inicial. No hay aprobación ni integración final; evidencia queda en este PR para revisión independiente.
+
+## Validación posterior · 27/11/2026 13:03 ART
+Se recuperó acceso operativo a Git y Node mediante el equipo autorizado SEBASU (Windows), con clon temporal independiente del SHA `12ee28ae909a4a4f4a3dafa93796a0b7eab61699`; no se alteró el checkout de otros agentes. Este resultado reemplaza el SKIP anterior para las pruebas locales y de emulador.
+
+| Verificación | Resultado |
+|---|---|
+| Git ls-remote y clon de rama | PASS |
+| node --test simulation/test-sys06-transport.mjs | PASS 5/5, 0 fallos, 0 omitidas |
+| node --test simulation/test-*.mjs sin emulador | PASS 109, FAIL 0, SKIP 8 (117 total) |
+| firebase emulators:exec --only firestore --project demo-pocketdm-qa03 --config firebase.qa03.json 'node --test simulation/test-*.mjs' | PASS 117/117, FAIL 0, SKIP 0, exit 0 |
+| Staging real, identidad real y Admin SDK de campaña | SKIP, sin autorización/configuración |
+
+Entorno: Git 2.51.1.windows.1; Node 24.14.1; Firebase CLI 15.27.0; Java JBR 21.0.8; Firestore emulator 1.22.0. Puerto local 18083, proyecto demo aislado. El emulador se detuvo al finalizar. Las pruebas de recuperación, concurrencia distinta/idéntica, pérdida de respuesta, aislamiento, denegación directa y recuperación de módulo aprobaron. El repositorio privado nuevo se prueba con SDK falso; no equivale a integración Admin SDK en nube. Sigue pendiente confirmPrepared atómico sobre ramas reales SYS-04 y el gateway autenticado. No cerrar H01 ni promover el PR aún.
