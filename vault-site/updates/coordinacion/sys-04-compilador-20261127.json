@@ -1,0 +1,18 @@
+{
+  "id": "sys-04-compilador-20261127",
+  "date": "2026-11-27",
+  "area": "Coordinación",
+  "owner": "SYS-04",
+  "status": "en-revision",
+  "title": "SYS-04: compilación finita privada (fixture)",
+  "summary": "Transición preparada sin resolver al confirmar; contrato de bindings sintéticos y pruebas de cobertura. Integración real bloqueada; Node suite pendiente.",
+  "changed": [
+    "simulation/adventure-compiler.mjs",
+    "simulation/bound-adventure-compiler.mjs",
+    "simulation/test-bound-adventure-compiler.mjs",
+    "public/docs/sys-task-status/sys-04.md"
+  ],
+  "next": "SYS-09 validar suite y coordinar contratos SYS-01/02/03/05/06/08. No publicar.",
+  "source": "https://github.com/sebasu66/pocketDM/commit/9713edeb1211a30500d2f3fc4527d2624cea0db6",
+  "nodeIds": []
+}

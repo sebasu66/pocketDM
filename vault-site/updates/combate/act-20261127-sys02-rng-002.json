@@ -1,0 +1,22 @@
+{
+  "id": "act-20261127-sys02-rng-002",
+  "date": "2026-11-27",
+  "area": "Combate / Simulador V2",
+  "owner": "SYS-02",
+  "status": "en-revision",
+  "title": "SYS-02 · Compatibilidad QA-01 y suite con emulador",
+  "summary": "Adaptador histórico addressed-d100-v1 y prueba real del duelo con RNG común. En SHA 52ac471: 8/8 propios y 120/120 suite con Firestore demo aislado; 0 FAIL/SKIP, emulador detenido. Validación de bóveda aprobada. Sin editar consumidores ni desplegar.",
+  "changed": [
+    "vault-site/simulation/rng.mjs",
+    "vault-site/simulation/test-rng.mjs",
+    "vault-site/public/docs/sys-task-status/sys-02.md"
+  ],
+  "next": "SYS-01/06 ratificar reexportación y versión; SYS-04 confirmó dirección semántica y ausencia de tiradas al confirmar. SYS-09 verificar combinación de PRs y privacidad HTTP.",
+  "source": "https://github.com/sebasu66/pocketDM/pull/14",
+  "nodeIds": [
+    "doc_0907",
+    "doc_0911",
+    "doc_0912",
+    "doc_0915"
+  ]
+}

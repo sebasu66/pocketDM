@@ -1,0 +1,17 @@
+{
+  "id": "act-20261127-sys09-book-mini-003",
+  "date": "2026-11-27",
+  "area": "Coordinación",
+  "owner": "SYS-09",
+  "status": "en-progreso",
+  "title": "Miniaventura editorial El farol del paso",
+  "summary": "Muestrario navegable en el libro existente: 11 folios e índice, un diálogo, dos chequeos narrativos y tres finales; combate sintético precalculado. Pruebas Edge 1280x900 y 844x390 PASS.",
+  "changed": [
+    "vault-site/public/libro/book-examples.mjs",
+    "vault-site/public/libro/reader.mjs",
+    "vault-site/scripts/test-book-examples-browser.mjs"
+  ],
+  "next": "Revisión visual del titular; no confundir muestra con edición H01 real. No promover a producción.",
+  "source": "https://github.com/sebasu66/pocketDM/pull/18",
+  "nodeIds": []
+}

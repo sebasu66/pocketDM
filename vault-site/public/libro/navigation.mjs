@@ -1,3 +1,4 @@
+import {getPlayerEdition} from './player-edition.mjs';
 import {campaign} from './campaign.mjs';
 import {renderActorSheet} from './actor-sheet.mjs';
 
@@ -18,6 +19,7 @@ class BookLink extends HTMLElement {
 class BookSheet extends HTMLElement {
  connectedCallback(){
   if(this.dataset.ready)return;this.dataset.ready='1';
+  if(this.hasAttribute('confirmed')){const p=getPlayerEdition()?.projection;if(!p){this.textContent='Sin estado confirmado';return;}const c=campaign.characters.find(x=>x.id===p.actorId);renderActorSheet(this,p.actorId,c?.portrait||'',{actorId:p.actorId,revision:p.revision,status:'confirmed',sheet:p.sheet});return;}
   const c=campaign.characters.find(x=>x.id===this.getAttribute('character'));
   if(!c){this.textContent='Personaje no encontrado';return;}
   if(renderActorSheet(this,c.id,c.portrait))return;
@@ -40,6 +42,7 @@ class BookActions extends HTMLElement {
 class BookJournal extends HTMLElement {
  connectedCallback(){
   if(this.dataset.ready)return;this.dataset.ready='1';
+  if(this.hasAttribute('confirmed')){const e=getPlayerEdition();if(!e?.projection){this.textContent='Sin estado confirmado';return;}this.innerHTML='<section class="folio-module"><h2>Diario de aventura</h2><p>Revision '+e.revision+'</p><ol class="journal-list">'+e.pages.flatMap(p=>p.events).map(n=>'<li><h3>'+esc(n.presentation.title)+'</h3><p>Evento confirmado</p></li>').join('')+'</ol><book-link view="story">Volver a la cronica</book-link></section>';return;}
   let choice='';try{choice=sessionStorage.getItem('pocketdm-demo-choice')||'';}catch{}
   const labels={defend:'Proteger al compañero',observe:'Observar',withdraw:'Retirarse'};
   this.innerHTML='<section class="folio-module"><div class="eyebrow">Registro de la campaña · ejemplo</div>'+
@@ -52,6 +55,7 @@ class BookJournal extends HTMLElement {
 class BookMap extends HTMLElement {
  connectedCallback(){
   if(this.dataset.ready)return;this.dataset.ready='1';
+  if(this.hasAttribute('confirmed')){const p=getPlayerEdition()?.projection;if(!p){this.textContent='Sin estado confirmado';return;}const names=new Map(p.nodes.map(n=>[n.id,n.name]));this.innerHTML='<section class="folio-module"><h2>Mapa de campana</h2><p>Ubicacion actual: '+esc(names.get(p.locationId))+'</p><p>Revision '+p.revision+'</p><h3>Lugares conocidos</h3><ul>'+p.nodes.map(n=>'<li>'+esc(n.name)+(n.id===p.locationId?' (actual)':'')+'</li>').join('')+'</ul><h3>Rutas visibles</h3><ul>'+p.routes.map(r=>'<li>'+esc(names.get(r.a))+' / '+esc(names.get(r.b))+' - '+esc(r.status)+' ('+esc(r.minutes)+' min)</li>').join('')+'</ul><book-link view="story">Volver a la cronica</book-link></section>';return;}
   const m=campaign.map;
   this.innerHTML='<section class="folio-module"><div class="eyebrow">Mapa narrativo · prototipo</div>'+
    '<h2>'+esc(m.title)+'</h2><p class="subtitle">'+esc(m.subtitle)+'</p>'+

@@ -1,0 +1,22 @@
+{
+  "id": "act-20261127-sys02-rng-001",
+  "date": "2026-11-27",
+  "area": "Combate / Simulador V2",
+  "owner": "SYS-02",
+  "status": "en-revision",
+  "title": "SYS-02 · Servicio privado de azar direccionado",
+  "summary": "Servicio HMAC versionado que reutiliza die/newSeed, adaptadores y dominio editorial independiente. 6 pruebas aisladas Node PASS; checkout completo bloqueado por DNS, integración y regresiones pendientes. No se editan resolvedores ni se despliega. Actualización: checkout autorizado Windows/Node 24.14.1, 110 PASS/0 FAIL/8 SKIP Firestore; proveedor addressed-d100-v1 existente identificado y preservado.",
+  "changed": [
+    "vault-site/simulation/rng.mjs",
+    "vault-site/simulation/test-rng.mjs",
+    "vault-site/public/docs/sys-task-status/sys-02.md"
+  ],
+  "next": "SYS-01/04/06 coordinar consolidación de versiones históricas y autoridad, SYS-09 validar combinación de PRs y emulador; no promover producción.",
+  "source": "https://github.com/sebasu66/pocketDM/pull/14",
+  "nodeIds": [
+    "doc_0907",
+    "doc_0911",
+    "doc_0912",
+    "doc_0915"
+  ]
+}

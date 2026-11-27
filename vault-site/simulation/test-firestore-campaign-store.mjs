@@ -87,3 +87,19 @@ run('private window over persisted state: prepare and confirm selected branch on
  assert.equal(r.receipt.event.id,edge.eventId);assert.equal(rations(r.view),2);
  assert.equal(r.view.journal.length,1);noPrivate(r);
 });
+run('prepared group encounter persists once with exact original checks and rejects direct resolution',async()=>{
+ const w=initialWorld(),wolf=wolfSheet(),other={...wolfSheet(),id:'wolf-2',name:'Synthetic wolf B'};
+ const base=snapshot({canon:w.canon,nodes:Object.values(w.nodes),entities:[...Object.values(w.entities),...([wolf,other].map(s=>({id:s.id,kind:'creature',name:s.name,locationId:'stormkeep',visibility:'public'})))],routes:Object.values(w.routes)});
+ const campaignId='qa03-group-'+randomUUID(),actorId='galahad',uid='owner-'+randomUUID(),principal={campaignId,actorId,uid,role:'player'};
+ const participant=(actorId,side)=>({actorId,side,targetPriority:[],difficulty:{attack:'standard',defense:'standard'},defense:'auto'});
+ const state=createState(base,{id:campaignId,actorId,actorSheets:[galahadSheet(),wolf,other],encounters:[{id:'group',locationId:'stormkeep',maxRounds:4,initialRange:'short',surprisedIds:[],limbLifeThreat:false,participants:[participant(actorId,'heroes'),participant(wolf.id,'wolves'),participant(other.id,'wolves')]}],seed:'PRIVATE-GROUP-FIXTURE'});
+ const s=store();await s.create(base,state,{ownerUid:uid});const v=await s.view(principal);
+ const window=await s.prepare({...principal,role:'worker'},{maxDepth:1,maxEdges:40}),edge=window.nodes[0].choices.find(e=>e.command.action==='duel'),prepared=window.preparedTransitions[edge.command.commandId];
+ assert.ok(prepared);await assert.rejects(s.confirm(principal,edge.command),/must be prepared/);
+ assert.deepEqual(await s.view(principal),v);
+ const opts={expectedPreviewHash:edge.previewHash,preparedTransition:prepared};
+ const [a,b]=await Promise.all([store().confirm(principal,edge.command,opts),store().confirm(principal,edge.command,opts)]);
+ assert.equal(Number(a.duplicate)+Number(b.duplicate),1);assert.deepEqual(a.receipt,b.receipt);
+ assert.deepEqual(a.receipt.event.checks,window.jobs.find(j=>j.eventId===edge.eventId).input.event.checks);
+ assert.equal(a.receipt.event.combat.actorIds.length,3);assert.deepEqual(await store().view(principal),a.view);noPrivate(a);
+});
