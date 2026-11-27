@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {die} from './engine.mjs';
-import {addressedRoll,createCombatRoller,createLegacyCombatRoller,editorialIndex,newSeed,RNG_VERSION} from './rng.mjs';
+import {addressedRoll,createCombatRoller,createLegacyCombatRoller,editorialIndex,newSeed,RNG_VERSION,legacyCampaignRoll,createLegacyCampaignRoller,LEGACY_CAMPAIGN_VERSION} from './rng.mjs';
 
 const seed='sys02-public-test-fixture'; // Synthetic, never a campaign seed.
 const address={moduleId:'mod',branchId:'branch',eventId:'event',purpose:'attack',ordinal:0,actorId:'hero'};
@@ -66,4 +66,47 @@ test('seed creation and provider output do not expose seed',()=>{
  assert.equal(typeof result,'number');
  assert.equal(JSON.stringify(roll),undefined);
  assert.ok(!JSON.stringify({roll:result}).includes(seed));
+});
+
+test('QA-01 campaign legacy adapter matches actual existing provider',async()=>{
+ const old=await import('./campaign-state.mjs');
+ assert.equal(LEGACY_CAMPAIGN_VERSION,old.RNG_VERSION);
+ const scope=['campaign',7,'module','v1'];
+ const a=createLegacyCampaignRoller(seed,scope),b=old.combatRoller(seed,scope);
+ for(const purpose of ['attack.hero','initiative.hero','damage.hero'])
+  for(const ordinal of [0,1,2])
+   for(const sides of [6,20,100]){
+    assert.equal(a(sides,purpose,ordinal),b(sides,purpose,ordinal));
+    assert.equal(legacyCampaignRoll(seed,[...scope,purpose,ordinal],sides),old.addressedRoll(seed,[...scope,purpose,ordinal],sides));
+   }
+ const before=a(100,'attack.hero');scope.push('unrelated');
+ assert.equal(a(100,'attack.hero'),before);
+ assert.throws(()=>legacyCampaignRoll(seed,[],6));
+});
+test('actual duel accepts common RNG; same trace, unrelated draw, paired policies',async()=>{
+ const {simulateDuel}=await import('../public/laboratorio/duel.mjs');
+ const {galahadSheet,wolfSheet}=await import('../public/laboratorio/character-sheet.mjs');
+ function run(tactical,diagnostics){
+  const provider=createCombatRoller({seed,moduleId:'module',branchId:'branch',eventId:'duel'});
+  const draws=new Map();
+  const roll=(sides,purpose,ordinal)=>{
+   if(diagnostics)provider(20,'sys02.unrelated-diagnostic',draws.size);
+   const key=JSON.stringify([purpose,ordinal]);
+   assert.ok(!draws.has(key),'Duplicate semantic draw '+key);
+   const value=provider(sides,purpose,ordinal);
+   draws.set(key,{sides,value});
+   return value;
+  };
+  const result=simulateDuel(galahadSheet(),wolfSheet(),{seed:'private-provider',roll,tactical});
+  assert.ok(!JSON.stringify(result).includes(seed));
+  return {result,draws};
+ }
+ const a=run(true,false),b=run(true,true),c=run(false,false);
+ assert.deepEqual(a,b);
+ let common=0;
+ for(const [key,value] of a.draws){
+  const other=c.draws.get(key);
+  if(other&&other.sides===value.sides){assert.equal(value.value,other.value);common++}
+ }
+ assert.ok(common>=2);
 });
