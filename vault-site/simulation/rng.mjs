@@ -2,6 +2,7 @@
 import {die,newSeed} from './engine.mjs';
 export {newSeed};
 export const RNG_VERSION='pocketdm-addressed-v1';
+export const LEGACY_CAMPAIGN_VERSION='addressed-d100-v1';
 export const LEGACY_COMBAT_VERSION='master-rules-v1';
 const require=(ok,message)=>{if(!ok)throw new Error(message)};
 const id=(value)=>typeof value==='string'&&value.length>0&&value.length<=512&&value.trim()===value;
@@ -45,5 +46,24 @@ export function createLegacyCombatRoller({seed,address}){
   require(id(purpose),'Unaddressed combat draw');
   validateOrdinal(ordinal);
   return die(seed,[LEGACY_COMBAT_VERSION,address,purpose,ordinal],sides);
+ };
+}
+
+// QA-01 compatibility: preserve the exact persisted campaign address tuple.
+// These signatures permit existing campaign-state consumers to re-export the
+// shared implementation after coordinated review, without changing a draw.
+export function legacyCampaignRoll(seed,address,sides){
+ validateSeed(seed);
+ require(Array.isArray(address)&&address.length>0&&address.every(x=>typeof x==='string'||Number.isSafeInteger(x)),'Invalid roll address');
+ return die(seed,[LEGACY_CAMPAIGN_VERSION,...address],sides);
+}
+export function createLegacyCampaignRoller(seed,scope){
+ validateSeed(seed);
+ require(Array.isArray(scope)&&scope.length>0&&scope.every(x=>typeof x==='string'||Number.isSafeInteger(x)),'Invalid combat scope');
+ const stableScope=[...scope];
+ return (sides,purpose,ordinal=0)=>{
+  require(typeof purpose==='string'&&purpose.length>0,'Missing combat draw purpose');
+  validateOrdinal(ordinal);
+  return legacyCampaignRoll(seed,[...stableScope,purpose,ordinal],sides);
  };
 }
