@@ -1,6 +1,7 @@
 # SYS-07 · Libro y proyección de partida
 Fecha: 27/11/2026. Agente: SYS-07. Estado: en revisión parcial / bloqueado para integración real.
 Base development: ebe06f9f5aac2968b7f3f74b2f627ebe062faa92. Rama: [feature/sys-07-libro](https://github.com/sebasu66/pocketDM/tree/feature/sys-07-libro).
+PR: [#15 hacia development (borrador)](https://github.com/sebasu66/pocketDM/pull/15). SHA de entrega técnica previa al enlace: 63c030168c5ea774b10422f9cb402d4f223a6d51.
 Alcance: QA-02/09 · MOD-07. No validado, no H01, no producción.
 
 ## Fuentes y coordinación
