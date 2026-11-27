@@ -1,3 +1,4 @@
+import {readCampaignProjection} from '../public/libro/campaign-projection.mjs';
 // SYS-06 candidate: server-only Fetch API boundary, not a mounted route.
 // No fallback to confirmCommand: prepared transitions must be provided by SYS-04.
 const id = s => typeof s === 'string' && /^[a-z][a-z0-9_.-]{0,100}$/.test(s) && !['constructor','prototype','__proto__'].includes(s);
@@ -50,6 +51,7 @@ export function createCampaignHttp({verifyIdToken,lookupGrant,player}={}) {
     }else edition=await player.book(scope);
     if(!plain(edition)||edition.kind!=='pocketdm-player-edition'||edition.campaignId!==campaignId||edition.actorId!==scope.actorId||!Number.isSafeInteger(edition.revision)||!Array.isArray(edition.pages))throw fail(503,'INVALID_PROJECTION');
     const keys=['schemaVersion','kind','campaignId','actorId','revision','title','pages'];
+    if(edition.projection!==undefined){try{readCampaignProjection(edition.projection,edition);keys.push('projection')}catch{throw fail(503,'INVALID_PROJECTION')}}
     return json(200,Object.fromEntries(keys.map(k=>[k,edition[k]])));
    }
    const operation=part==='commands'?'confirmPrepared':part==='start'?'start':'view';

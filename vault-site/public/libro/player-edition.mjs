@@ -1,3 +1,4 @@
+import {readCampaignProjection} from './campaign-projection.mjs';
 import {createBookCampaignSession} from './book-campaign-session.mjs';
 import {readConfirmedNarration} from './confirmed-narration.mjs';
 import {makeModuleLayout,loadModuleLayout} from './edition/module-layout.mjs';
@@ -7,7 +8,7 @@ const str=(x,max=12000)=>typeof x==='string'&&x.trim().length>0&&x.length<=max;
 const id=x=>str(x,160)&&/^[a-zA-Z0-9_.:-]+$/.test(x);
 const assets=x=>typeof x==='string'&&/^\/(?:libro\/assets|libro\/edition\/assets|docs\/art-references)\/[a-zA-Z0-9_./-]+\.(?:png|webp|jpg|jpeg|svg)$/i.test(x)&&!x.includes('..');
 export function readEdition(value){
- fail(record(value,['schemaVersion','kind','campaignId','actorId','revision','title','pages'])&&value.schemaVersion===1&&value.kind==='pocketdm-player-edition','Formato de edición no admitido');
+ fail(record(value,['schemaVersion','kind','campaignId','actorId','revision','title','pages','projection'])&&value.schemaVersion===1&&value.kind==='pocketdm-player-edition','Formato de edición no admitido');
  const {campaignId,actorId,revision,title,pages}=value;
  fail(id(campaignId)&&id(actorId)&&Number.isSafeInteger(revision)&&revision>=0&&str(title,240)&&Array.isArray(pages)&&pages.length>0&&pages.length<=200,'Contexto de edición inválido');
  const scope={campaignId,actorId,revision},ids=new Set(),events=new Set(),checks=new Set();
@@ -26,6 +27,7 @@ export function readEdition(value){
   for(const c of p.choices){fail(record(c,['id','label'])&&id(c.id)&&str(c.label,500)&&!choices.has(c.id),'Opción inválida');choices.add(c.id)}
   if(p!==pages.at(-1))fail(p.choices.length===0,'No se admiten opciones de ramas pasadas o futuras');
  }
+ if(value.projection!==undefined)readCampaignProjection(value.projection,scope);
  return structuredClone(value);
 }
 let edition=null,submit=null;

@@ -1,6 +1,7 @@
 // SYS-06: bridge to SYS-04/05/07, no simulation or authoring at play time.
 // Dependency functions are injected from the reviewed agent revisions.
 import {createHash} from 'node:crypto';
+import {makeCampaignProjection} from '../public/libro/campaign-projection.mjs';
 import {playerState} from './campaign-state.mjs';
 import {narrativeManifest,persistApprovedArtifact,confirmedNarrativeFragment} from './narrative-integration.mjs';
 const need=(v,m)=>{if(!v)throw Error(m)};
@@ -48,7 +49,7 @@ export function createPreparedPlayer({store,startBoundEdition,confirmBoundChoice
   }
   pages.at(-1).choices=choices(pkg.edition,row.session).map(({id,edge})=>({id,label:pkg.labels[edge.action.intentId]}));
   need(pages.at(-1).id===pageId(v.revision),'Book revision mismatch');
-  return {schemaVersion:1,kind:'pocketdm-player-edition',campaignId:scope.campaignId,actorId:scope.actorId,revision:v.revision,title:pkg.title,pages};
+  return {schemaVersion:1,kind:'pocketdm-player-edition',campaignId:scope.campaignId,actorId:scope.actorId,revision:v.revision,title:pkg.title,pages,projection:makeCampaignProjection(v)};
  }
  // Private install only. All candidate branches must have exact validated artifacts before first play.
  // No production approval is implied by this fixture path.

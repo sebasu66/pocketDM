@@ -76,7 +76,12 @@ test('SYS-04/05/07 integrated prepared choice, approved persistence, book retry 
  assert.equal(race.filter(r=>r.status==='fulfilled').length,1);assert.equal(race.find(r=>r.status==='rejected').reason.code,'REVISION_CONFLICT');
  const result=race.find(r=>r.status==='fulfilled').value;assert.equal(result.view.revision,first.revision+3);assert.equal(result.view.module.status,'closed');
  assert.equal((await newPlayer().confirmPrepared(scope,race[0].status==='fulfilled'?c:c2)).duplicate,true);
- const final=await transport.resume({campaignId,actorId});assert.equal(final.revision,first.revision+3);assert.equal(final.pages.at(-1).choices.length,0);
+ const final=await transport.resume({campaignId,actorId});assert.equal(final.revision,first.revision+3);
+ assert.equal(final.projection.revision,final.revision);assert.equal(final.projection.actorId,actorId);assert.deepEqual(final.projection.sheet,result.view.sheet);assert.deepEqual(final.projection.nodes,result.view.nodes);assert.deepEqual(final.projection.routes,result.view.routes);
+ const {readCampaignProjection}=await import('../public/libro/campaign-projection.mjs');
+ assert.throws(()=>readCampaignProjection({...final.projection,revision:final.revision-1},final),/scope/);
+ assert.throws(()=>readCampaignProjection({...final.projection,sheet:{...final.projection.sheet,privateState:{secret:true}}},final),/sheet/);
+ assert.throws(()=>readCampaignProjection({...final.projection,nodes:[...final.projection.nodes,{id:'leak',name:'leak',privateState:{}}]},final),/nodes/);assert.equal(final.pages.at(-1).choices.length,0);
  assert.equal(prepared,4);
  assert.equal(JSON.stringify(final).includes('PRIVATE-FIXTURE-SEED'),false);
  assert.equal(JSON.stringify(final).includes('PRIVATE-FIXTURE-CONTEXT'),false);
