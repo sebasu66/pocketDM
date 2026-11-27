@@ -9,7 +9,7 @@ const canonical=x=>Array.isArray(x)?x.map(canonical):x&&typeof x==='object'?Obje
 const hash=x=>createHash('sha256').update(JSON.stringify(canonical(x))).digest('hex');
 const id=x=>typeof x==='string'&&/^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,120}$/.test(x)&&!['constructor','prototype','__proto__'].includes(x);
 const pageId=r=>'page-'+r;
-const choiceId=e=>'choice-'+hash(e.branchId).slice(0,32);
+export const preparedChoiceId=e=>'choice-'+hash(e.branchId).slice(0,32);
 const artifactRef=(job,revision)=>({kind:'fragment',key:'fragment-'+hash([job.editionId,job.branchId,job.slotId,job.locale,job.contextHash]).slice(0,48),version:'v'+revision});
 const worker=(campaignId)=>({uid:'sys06-internal',role:'worker',campaignId});
 const same=(a,b)=>hash(a)===hash(b);
@@ -20,7 +20,7 @@ export function createPreparedPlayer({store,startBoundEdition,confirmBoundChoice
  function access(scope){return {campaignId:scope.campaignId,actorId:scope.actorId,role:'player'}}
  function verifyScope(row,scope){if(scope?.role!=='player'||row.ownerUid!==scope.uid||row.actorId!==scope.actorId||row.campaignId!==scope.campaignId)throw fail('NOT_FOUND')}
  async function getPrivate(c,ref){const item=await store.get(worker(c),ref);if(!item||item.digest!==ref.digest)throw fail('PREPARATION_UNAVAILABLE');return item.payload}
- function choices(edition,session){const v=boundChoiceView(edition,session),node=edition.nodes[session.nodeId];need(node.edges.length===v.choices.length,'Prepared choice mismatch');return node.edges.map(e=>({id:choiceId(e),edge:e}))}
+ function choices(edition,session){const v=boundChoiceView(edition,session),node=edition.nodes[session.nodeId];need(node.edges.length===v.choices.length,'Prepared choice mismatch');return node.edges.map(e=>({id:preparedChoiceId(e),edge:e}))}
  function viewFor(row,pkg,scope){
   const v=playerState(pkg.base,row.session.state,access(scope));
   const cs=choices(pkg.edition,row.session);
@@ -62,6 +62,7 @@ export function createPreparedPlayer({store,startBoundEdition,confirmBoundChoice
   need(typeof title==='string'&&title.trim()&&title.length<=240,'Invalid title');
   const c=scope.campaignId,player={uid:ownerUid,campaignId:c,actorId,role:'player'},fragments=Object.create(null);
   const edges=Object.values(edition.nodes).flatMap(n=>n.edges);
+  need(labels&&typeof labels==='object'&&edges.every(e=>own(labels,e.action.intentId)&&typeof labels[e.action.intentId]==='string'&&labels[e.action.intentId].trim()&&labels[e.action.intentId].length<=500),'Missing approved choice label');
   need(edges.length>0&&edges.length===edition.coverage.edges&&edges.length===artifacts.length,'Incomplete artifact coverage');
   for(const edge of edges){
    need(typeof labels[edge.action.intentId]==='string'&&labels[edge.action.intentId].trim()&&labels[edge.action.intentId].length<=500,'Missing approved choice label');
@@ -70,7 +71,9 @@ export function createPreparedPlayer({store,startBoundEdition,confirmBoundChoice
    need(job.campaignId===c&&job.editionId===edition.editionId&&job.slotId===edge.slotId&&job.locale==='es-AR'&&job.required===true,'Narrative scope mismatch');
    const projected=playerState(base,edge.state,access(player)),event=projected.journal.find(e=>e.id===edge.event.id);
    need(event&&event.action==='module-intent'&&event.revision===edge.event.revision&&same(event,edge.event),'Prepared visible event mismatch');
-   need(keySet(job.facts.map(f=>f.id),event.facts.map(f=>f.id))&&keySet(Object.keys(checkMap),job.checks.map(k=>k.slotId))&&keySet(Object.values(checkMap),event.checks.map(k=>k.id)),'Narrative fact or check binding mismatch');
+   const expectedOptions=edition.nodes[edge.nextId].edges.map(e=>({id:preparedChoiceId(e),text:labels[e.action.intentId]}));
+   need(same(job.context,edge.context)&&keySet(job.options.map(o=>o.id),expectedOptions.map(o=>o.id))&&job.options.every(o=>expectedOptions.find(x=>x.id===o.id)?.text===o.text),'Narrative context or option binding mismatch');
+   need(job.facts.every(f=>event.facts.find(x=>x.id===f.id)?.description===f.text)&&keySet(job.facts.map(f=>f.id),event.facts.map(f=>f.id))&&keySet(Object.keys(checkMap),job.checks.map(k=>k.slotId))&&keySet(Object.values(checkMap),event.checks.map(k=>k.id)),'Narrative fact or check binding mismatch');
    need(job.checks.every(k=>event.checks.find(x=>x.id===checkMap[k.slotId])?.outcome===k.outcome),'Narrative outcome mismatch');
    const ref=artifactRef(job,validated.revision),stored=await store.put(scope,{...ref,payload:validated});
    fragments[edge.branchId]={job,checkMap,ref:{...ref,digest:stored.digest}};

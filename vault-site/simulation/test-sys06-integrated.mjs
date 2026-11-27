@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {randomUUID} from 'node:crypto';
 import {createEmulatedPreparedStore} from './prepared-campaign-store.mjs';
-import {createPreparedPlayer} from './prepared-campaign-player.mjs';
+import {createPreparedPlayer,preparedChoiceId} from './prepared-campaign-player.mjs';
 import {createCampaignHttp} from './campaign-http.mjs';
 import {createSys06BookTransport} from '../public/libro/sys06-book-transport.mjs';
 import {initialWorld} from './world-pilot.mjs';
@@ -28,24 +28,25 @@ test('SYS-04/05/07 integrated prepared choice, approved persistence, book retry 
   {id:'close',capability:'module-close',locationId:'stormkeep',status:'active',seconds:15,requires:['inspect'],knownEvidence:[]}
  ]};
  const initial=createState(base,{id:campaignId,actorId,actorSheets:[galahadSheet()],seed:'PRIVATE-FIXTURE-SEED',moduleDefinition:def});
+ const labels={accept:'Aceptar',decline:'Rechazar',inspect:'Inspeccionar',close:'Cerrar'};
  let prepared=0;
  const edition=compileBoundEdition({module:{id:'test.sys06',version:'v1',mode:'mechanical-fixture',intentIds:['accept','decline','inspect','close'],endingIds:['accept-end','decline-end']},initial,bindings:{
   enumerate:s=>playerState(base,s,access).actions.filter(a=>a.action==='module-intent'),
-  prepare:(s,a,{branchId})=>{prepared++;const r=confirmCommand(base,s,access,{...a,campaignId,actorId,expectedRevision:s.delta.revision,commandId:'prep-'+branchId});const event=playerState(base,r.state,access).journal.at(-1);return {state:r.state,event,context:{fixture:true},slotId:'slot-'+a.intentId}},
+  prepare:(s,a,{branchId})=>{prepared++;const r=confirmCommand(base,s,access,{...a,campaignId,actorId,expectedRevision:s.delta.revision,commandId:'prep-'+branchId});const event=playerState(base,r.state,access).journal.at(-1);return {state:r.state,event,context:{actorVisible:'Actor sintético',npcVisible:'Ninguno',place:'Lugar de prueba',time:'Día',known:[],intent:a.intentId},slotId:'slot-'+a.intentId}},
   ending:s=>({declined:'decline-end',closed:'accept-end'})[playerState(base,s,access).module.status]??null
  }});
  const repository=new NarrativeRepository(),artifacts=[];
  for(const edge of Object.values(edition.nodes).flatMap(n=>n.edges)){
   const checkMap=Object.fromEntries(edge.event.checks.map((c,i)=>['check-'+i,c.id]));
-  const job=prepareNarrativeJob({campaignId,editionId:edition.editionId,branchId:edge.branchId,slotId:edge.slotId,audience:'player',locale:'es-AR',versions:{module:'v1',rules:'v1',canon:'v1',narrator:'v1',context:'v1'},context:{actorVisible:'Actor sintético',npcVisible:'Ninguno',place:'Lugar de prueba',time:'Día',known:[],intent:edge.action.intentId},facts:edge.event.facts.map(f=>({id:f.id,text:f.description})),options:[],checks:edge.event.checks.map((c,i)=>({slotId:'check-'+i,outcome:c.outcome})),required:true});
+  const job=prepareNarrativeJob({campaignId,editionId:edition.editionId,branchId:edge.branchId,slotId:edge.slotId,audience:'player',locale:'es-AR',versions:{module:'v1',rules:'v1',canon:'v1',narrator:'v1',context:'v1'},context:edge.context,facts:edge.event.facts.map(f=>({id:f.id,text:f.description})),options:edition.nodes[edge.nextId].edges.map(e=>({id:preparedChoiceId(e),text:labels[e.action.intentId]})),checks:edge.event.checks.map((c,i)=>({slotId:'check-'+i,outcome:c.outcome})),required:true});
   const p={...worker,editionId:edition.editionId};
   repository.enqueue(p,job);
-  const generated=await repository.generate(p,job,async()=>({title:'Escena '+edge.action.intentId,text:['Narración sintética.',...job.checks.map(c=>({checkSlot:c.slotId}))],factIds:job.facts.map(f=>f.id),optionIds:[]}));
+  const generated=await repository.generate(p,job,async()=>({title:'Escena '+edge.action.intentId,text:['Narración sintética.',...job.checks.map(c=>({checkSlot:c.slotId}))],factIds:job.facts.map(f=>f.id),optionIds:job.options.map(o=>o.id)}));
   await repository.review({...p,role:'reviewer'},job,generated.revision,async()=>({fidelity:true,privacy:true,checks:true,reviewId:'fixture-review'}));
   artifacts.push({job,artifact:repository.approvedArtifact(p,job),checkMap});
  }
  const newPlayer=()=>createPreparedPlayer({environment:'fixture',store:createEmulatedPreparedStore(),startBoundEdition,confirmBoundChoice,boundChoiceView,validateApprovedArtifact,confirmedModuleNarration});
- const service=newPlayer(),installation={base,edition,artifacts,title:'Fixture SYS-06',labels:{accept:'Aceptar',decline:'Rechazar',inspect:'Inspeccionar',close:'Cerrar'},ownerUid:uid,actorId};
+ const service=newPlayer(),installation={base,edition,artifacts,title:'Fixture SYS-06',labels,ownerUid:uid,actorId};
  await assert.rejects(service.install(worker,{...installation,artifacts:artifacts.slice(0,1)}),/coverage/);
  await service.install(worker,installation);
  const makeHttp=s=>createCampaignHttp({verifyIdToken:async token=>{if(token!=='valid')throw Error('bad');return {uid}},lookupGrant:async(u,c)=>u===uid&&c===campaignId?scope:null,player:s});
@@ -69,8 +70,11 @@ test('SYS-04/05/07 integrated prepared choice, approved persistence, book retry 
  const check=checked.pages.at(-1).events[0].presentation.checks[0];assert.ok(check);assert.equal(checked.pages.at(-1).events[0].presentation.text.filter(t=>t?.check===check.id).length,1);
  const original=edition.nodes[edition.nodes[edition.rootId].edges.find(e=>e.action.intentId==='accept').nextId].edges[0].event.checks[0];assert.deepEqual(check,original);
  const c={campaignId,actorId,commandId:'close-'+randomUUID(),expectedRevision:checked.revision,action:'module-intent',intentId:'close'};
- const result=await newPlayer().confirmPrepared(scope,c);assert.equal(result.view.revision,first.revision+3);assert.equal(result.view.module.status,'closed');
- assert.equal((await newPlayer().confirmPrepared(scope,c)).duplicate,true);
+ const c2={...c,commandId:'other-'+randomUUID()};
+ const race=await Promise.allSettled([newPlayer().confirmPrepared(scope,c),newPlayer().confirmPrepared(scope,c2)]);
+ assert.equal(race.filter(r=>r.status==='fulfilled').length,1);assert.equal(race.find(r=>r.status==='rejected').reason.code,'REVISION_CONFLICT');
+ const result=race.find(r=>r.status==='fulfilled').value;assert.equal(result.view.revision,first.revision+3);assert.equal(result.view.module.status,'closed');
+ assert.equal((await newPlayer().confirmPrepared(scope,race[0].status==='fulfilled'?c:c2)).duplicate,true);
  const final=await transport.resume({campaignId,actorId});assert.equal(final.revision,first.revision+3);assert.equal(final.pages.at(-1).choices.length,0);
  assert.equal(prepared,4);
  assert.equal(JSON.stringify(final).includes('PRIVATE-FIXTURE-SEED'),false);
