@@ -1,6 +1,6 @@
 # SYS-09 · Validación cruzada y coordinación
 27/11/2026 · Agente: SYS-09 (validador independiente) · P0 · Estado: en curso; ejecución integral bloqueada.
-Base fijada: development @ ebe06f9f5aac2968b7f3f74b2f627ebe062faa92. Rama: feature/sys-09-validacion-coordinacion. PR: consultar [comparación con development](https://github.com/sebasu66/pocketDM/compare/development...feature/sys-09-validacion-coordinacion); PR de arranque en borrador, no aprobación de H01.
+Base fijada: development @ ebe06f9f5aac2968b7f3f74b2f627ebe062faa92. Rama: feature/sys-09-validacion-coordinacion. PR: [#8 hacia development](https://github.com/sebasu66/pocketDM/pull/8), abierto en borrador; no aprobación de H01.
 
 ## Alcance y fuentes revisadas
 - [Plan SYS-09](https://github.com/sebasu66/pocketDM/blob/ebe06f9f5aac2968b7f3f74b2f627ebe062faa92/vault-site/public/dm/sistema/index.html#L45), [H01 y QA-01–10](/docs/qa-playable-stormkeep.md), [compilador](/docs/finite-adventure-compiler.md), [contrato narrativo](/docs/narrative-contract-qa02.md), [módulo seleccionado](/docs/stormkeep-module-01-reference.md), COORDINACION.md, scripts de actividad/validación/build y metadatos GitHub.
