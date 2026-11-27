@@ -26,3 +26,14 @@
 
 ## PR y entrega
 PR de borrador [#12](https://github.com/sebasu66/pocketDM/pull/12) abierto hacia development, cinco archivos propios. Evidencia a SYS-09 vía conversación del PR #8. Estado: en revisión parcial, integración bloqueada. No merge ni despliegue.
+
+## 27/11/2026 · Validación real y coordinación
+- Equipo autorizado Windows, Node 24.14.1, Git 2.51.1; checkout temporal independiente del SHA `179c642ce975d9805cf8f5748aca0f6adbef2803`. Se supera el bloqueo de acceso anterior.
+- PASS 15/15 tests propios y piloto: `node --test simulation/test-bound-adventure-compiler.mjs simulation/test-adventure-compiler.mjs` (exit 0).
+- PASS suite Node sin emulador: 108 PASS/0 FAIL/8 SKIP, 116 total, exit 0.
+- PASS suite completa con Firestore local: `firebase emulators:exec --only firestore --project demo-pocketdm-qa03 --config firebase.qa03.json 'node --test simulation/test-*.mjs'`, Java JBR de Android Studio, puerto 18083, 116 PASS/0 FAIL/0 SKIP, exit 0; emulador detenido. Estos tests de persistencia existentes NO acreditan confirmPrepared transaccional de SYS-04.
+- PASS `node scripts/build-activity.mjs` y `node scripts/validate.mjs`: 108 entradas, 42 nodos, 146 relaciones, integridad y componentes OK.
+- Revisión privada SYS-08 v0.1 autorizada por usuario: preflight ejecutado sobre JSON original sin copiarlo a Git ni máquina remota. 14 páginas, 21 intenciones, 0 referencias de destino o ruta rotas. 21 intenciones bloqueadas hasta aprobación, 8 páginas sin ubicación, 4 conflictos de actores, 5 actores sin ID candidato, 3 habilidades sin ID, 2 encuentros sin plantilla, 3 finales sin aprobación. Estado proposal / canonGate user-approval-required / realModeSupported false / publicationReady false. Resultado: PASS estructural, compilación mecánica real BLOQUEADA (0 intenciones autorizadas); no sustituir con fixture. No publicar contenidos privados.
+- SYS-06: [propuesta transaccional enviada al PR #11](https://github.com/sebasu66/pocketDM/pull/11#issuecomment-7225000313). CAS revisión/nodo, recibo idempotente antes de CAS, lectura de rama inmutable y comprobación de scope/integridad, snapshot posterior + recibo + puntero atómicos, sin resolve/RNG; proyección autorizada y fragmento fijado. Revisado campaign-http y private-preparation-store; puerto confirmPrepared aún no implementado. Espera ratificación de SYS-06; no editar campaign-state ni store ajeno.
+- SYS-05/02: [respuesta de coordinación](https://github.com/sebasu66/pocketDM/pull/12#issuecomment-7225000856). Jobs 1:1, proyección explícita de audiencia, slots por índice del check, referencia inmutable de fragmento y RNG versionado sólo en preparación.
+- Decisión: mantener PR #12 draft y no promover a modo real sin canon y bindings. No merge ni despliegue. SYS-09 debe revisar la combinación de PRs y repetir suite del candidato integrado. 
