@@ -21,4 +21,3 @@ class Edition extends HTMLElement{
 for(const [name,cls] of [['book-edition-spine',Spine],['book-edition-nav',Rail],['book-edition',Edition]])if(!customElements.get(name))customElements.define(name,cls);
 let edition;
 export function syncOpening(state){if(!edition){edition=document.createElement('book-edition');document.body.append(edition)}edition.update(state)}
-const rotation=document.createElement('div');rotation.className='rotation-notice';rotation.setAttribute('role','status');rotation.innerHTML='<span aria-hidden="true">↻</span><strong>Girá el dispositivo</strong><p>PocketDM se lee en horizontal.</p>';document.body.append(rotation);

@@ -1,3 +1,4 @@
+import {renderBookFolio} from './book-example-folio.mjs';
 import {readConfirmedNarration} from './confirmed-narration.mjs';
 const fail=(ok,msg)=>{if(!ok)throw Error(msg)};
 const record=(o,keys)=>o&&typeof o==='object'&&!Array.isArray(o)&&Object.keys(o).every(k=>keys.includes(k));
@@ -30,16 +31,7 @@ export function bindEditionTransport(fn){if(fn!==null&&typeof fn!=='function')th
 const el=(tag,text)=>{const node=document.createElement(tag);if(text!==undefined)node.textContent=text;return node};
 class PlayerPage extends HTMLElement{
  connectedCallback(){if(this.dataset.ready)return;this.dataset.ready='1';const p=edition?.pages[Number(this.getAttribute('index'))];if(!p)return;
-  const section=el('section');section.className='folio-module';
-  const title=el('book-title');title.setAttribute('heading',p.title);title.setAttribute('kicker',edition.title);
-  if(p.image){title.setAttribute('image',p.image);title.setAttribute('alt',p.title)}section.append(title);
-  if(p.portrait){const portrait=el('book-portrait');portrait.setAttribute('src',p.portrait);portrait.setAttribute('name',p.speaker||'');section.append(portrait)}
-  else if(p.speaker)section.append(el('h3',p.speaker));
-  for(const t of p.text)section.append(el('p',t));
-  const scope={campaignId:edition.campaignId,actorId:edition.actorId,revision:edition.revision};
-  for(const event of p.events){const node=el(p.type==='combat'?'combat-phase':'book-narrative-event');node.setConfirmedNarration(event,scope);section.append(node)}
-  if(p.choices.length){const group=el('div');group.className='decision';const status=el('p',submit?'Elegí una acción.':'Opciones preparadas. Hace falta conectar el servicio de campaña para confirmarlas.');status.className='sample';status.setAttribute('aria-live','polite');
-   for(const choice of p.choices){const b=el('button',choice.label);b.type='button';b.disabled=!submit;b.onclick=async()=>{if(!submit)return;for(const c of group.querySelectorAll('button'))c.disabled=true;try{await submit({campaignId:scope.campaignId,actorId:scope.actorId,expectedRevision:scope.revision,pageId:p.id,choiceId:choice.id});status.textContent='Solicitud enviada; esperando la edición autorizada.'}catch(e){status.textContent='No se confirmó la acción.';for(const c of group.querySelectorAll('button'))c.disabled=false}};group.append(b)}section.append(group,status)}
+  const section=renderBookFolio(p,edition,{onSubmit:submit});
   this.replaceChildren(section);
  }
 }

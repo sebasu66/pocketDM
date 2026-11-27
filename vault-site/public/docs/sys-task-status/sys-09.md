@@ -127,3 +127,7 @@ En el mismo lector, enlace Ejemplos (`/libro/?view=examples`), accesible desde l
 ### Publicación y entrada oficial de la bóveda
 
 El titular autorizó publicar la miniaventura por separado: commit f7987fc35dcf3e728e37095acddebeaa62992e3b en main; Vercel READY, dominio público comprobado, navegador PASS en 1280×900 y 844×390. No se publicó el motor candidato. La entrada oficial de documentación es https://pocketdm.vercel.app/dm/; el portal de Sistema incluye el tablero actualizado y referencias de los diez frentes.
+
+### Revisión del lector móvil y componente editorial padre — 27/11/2026
+
+Por indicación del titular, la PWA declara orientación portrait-primary. La escena activa conserva una sola superficie editorial compartida: la composición móvil crece según su contenido, y paneles, chequeos, combate y navegación se proyectan en slots del componente padre BookEditorialPage. El lector de campaña y la miniaventura reutilizan renderBookFolio y makeModuleLayout. Las transiciones de la miniaventura se resuelven por destino explícito; no por orden de folio. Los gestos de desplazamiento, teclas y controles de siguiente/anterior no cambian escenas de campaña o miniaventura. Los finales ofrecen reinicio explícito; los archivos de demostración y el atlas no son ramas de campaña. La portada oficial usa el mismo componente. Pruebas en escritorio, 844x390, 390x844 y 360x640; 30 párrafos largos, navegación por decisiones, 3 cierres y editor móvil con 25 párrafos: PASS. Android físico no verificado; la campaña real y el backend candidato siguen sin publicarse.

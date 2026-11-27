@@ -513,3 +513,23 @@
 .sheet[data-intro='true'] .folio {
   display: none;
 }
+
+/* Shared page surface, including supplemental content and decisions. */
+.page-shell{display:block;min-width:0;border-radius:5px;overflow:hidden;background:#132e51}
+.page-tail{background:var(--paper,#132e51);color:var(--ink,#fff8ed);font:var(--fs,17px)/1.5 var(--body-font,Georgia);padding:0 14px 16px;overflow-wrap:anywhere}
+.page-navigation{display:block;margin-top:12px}
+#previewChoices{display:grid;gap:8px}
+#previewChoices[hidden]{display:none}
+#previewChoices button{font:inherit;text-align:left;color:inherit;background:#142430;border:1px solid #ad8c5e;border-radius:5px;padding:12px}
+::slotted([slot=navigation]){display:block;max-width:100%;margin-top:12px}
+:host([data-flow]) .page-shell{overflow:clip}
+:host([data-flow]) .sheet{aspect-ratio:auto;height:auto;min-height:0;overflow:visible;display:flex;flex-direction:column;border-radius:0}
+:host([data-flow]) .sheet .scene-heading{position:relative;inset:auto;width:100%!important;order:0;padding:18px 16px 10px}
+:host([data-flow]) .sheet .scene-content{position:relative;inset:auto;display:flex;flex-direction:column;flex:auto;min-height:0;order:1}
+:host([data-flow]) .sheet .artFloat{position:relative;inset:auto;width:100%!important;height:auto!important;aspect-ratio:4/3;flex:none;display:block}
+:host([data-flow]) .sheet .artFloat[hidden]{display:none}
+:host([data-flow]) .sheet article{position:relative;inset:auto!important;height:auto;min-height:0;overflow:visible;opacity:1;padding:16px!important;scrollbar-gutter:auto}
+:host([data-flow]) #paragraphs{height:auto!important;overflow:visible;display:block}
+:host([data-flow]) .sheet .folio{position:relative;inset:auto;order:2;text-align:center;padding:6px}
+:host([data-flow]) .sheet[data-intro=true] .scene-content:before{display:none}
+:host([data-flow]) .sheet[data-intro=true] .artFloat{aspect-ratio:3/4}

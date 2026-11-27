@@ -7,9 +7,9 @@ import { createTextFlow } from './text-flow.mjs';
 const css = new URL('./page.css', import.meta.url);
 const sheetTemplate = document.createElement('template');
 sheetTemplate.innerHTML = `<link rel="stylesheet" href="${css}">
-<section class="sheet" id="sheet"><header class="scene-heading"><div class="eyebrow"></div><h2></h2><div class="title-rule" aria-hidden="true"><span class="orn">❦</span></div></header>
+<div class="page-shell"><slot name="tools"></slot><section class="sheet" id="sheet"><header class="scene-heading"><div class="eyebrow"></div><h2></h2><div class="title-rule" aria-hidden="true"><span class="orn">❦</span></div></header>
 <div class="scene-content"><figure class="artFloat" id="fig"><canvas id="artCanvas" role="img" width="1000" height="1000"></canvas><canvas class="burnLayer" id="burnCanvas" width="1000" height="1000" aria-hidden="true"></canvas></figure>
-<article id="reading" tabindex="0" aria-label="Narración desplazable"><div id="paragraphs"><div id="textContour" aria-hidden="true"></div></div></article></div><div class="folio"></div></section>`;
+<article id="reading" tabindex="0" aria-label="Narración desplazable"><div id="paragraphs"><div id="textContour" aria-hidden="true"></div></div></article></div><div class="folio"></div></section><div class="page-tail" id="pageTail"><slot></slot><nav class="page-navigation" aria-label="Opciones de la escena"><slot name="navigation"></slot><div id="previewChoices" hidden></div></nav></div></div>`;
 const blank = { title: '', kicker: '', paragraphs: [], image: '', alt: '', folio: '', camera: {} };
 export class BookEditorialPage extends EditorialSettingsElement {
   static editableProperties = Object.freeze({
@@ -31,6 +31,7 @@ export class BookEditorialPage extends EditorialSettingsElement {
     this.attachShadow({ mode: 'open' }).append(sheetTemplate.content.cloneNode(true));
     const root = this.shadowRoot;
     this.sheet = root.getElementById('sheet');
+    this.pageTail=root.getElementById('pageTail');
     this.fig = root.getElementById('fig');
     this.artCanvas = root.getElementById('artCanvas');
     this.burnCanvas = root.getElementById('burnCanvas');
@@ -126,6 +127,7 @@ export class BookEditorialPage extends EditorialSettingsElement {
   get view() {
     return this.getAttribute('preview-view') || (this.clientWidth <= 600 ? 'mobile' : 'desktop');
   }
+  get flowing(){return this.view==='mobile'||this.hasAttribute('reading-flow')}
   get effective() {
     return { ...this.getResolvedSettings(this.view), ...this._content.camera };
   }
@@ -139,6 +141,7 @@ export class BookEditorialPage extends EditorialSettingsElement {
     drawArt(this.artCanvas, this.art, this.camera.pose(this.effective), this.mask, this.imageRatio);
   }
   updateFlow() {
+    if(this.flowing)return;
     this.flow(
       this.constructor.introduction ? { ...this.effective, columns: 'one' } : this.effective,
       this.geometry,
@@ -158,8 +161,10 @@ export class BookEditorialPage extends EditorialSettingsElement {
       if (source) this.art.src = source;
       else this.art.removeAttribute('src');
     }
-    this.stacked = s.orientation === 'vertical' || ['top', 'bottom'].includes(s.side);
-    const side = this.stacked ? (['right', 'bottom'].includes(s.side) ? 'bottom' : 'top') : s.side;
+    this.toggleAttribute('data-flow',this.flowing);
+    this.sheet.dataset.flow=String(this.flowing);
+    this.stacked = this.flowing || s.orientation === 'vertical' || ['top', 'bottom'].includes(s.side);
+    const side = this.flowing?'top':this.stacked ? (['right', 'bottom'].includes(s.side) ? 'bottom' : 'top') : s.side;
     el.dataset.side = side;
     el.dataset.intro = intro;
     el.dataset.align = s.titleAlign;
@@ -206,6 +211,10 @@ export class BookEditorialPage extends EditorialSettingsElement {
       w: s.width + '%',
     };
     for (const [k, v] of Object.entries(vars)) el.style.setProperty('--' + k, v);
+    for(const [k,v] of Object.entries(vars))this.pageTail.style.setProperty('--'+k,v);
+    const preview=this.shadowRoot.getElementById('previewChoices');
+    const options=this.hasAttribute('editor-mode')&&!c.dialogue?(c.navigation??[{id:'inspect',label:'Examinar el lugar'},{id:'leave',label:'Seguir el camino'}]):[];
+    const sig=JSON.stringify(options);if(preview.dataset.signature!==sig){preview.dataset.signature=sig;preview.replaceChildren(...options.map(o=>{const b=document.createElement('button');b.type='button';b.textContent=o.label;b.onclick=()=>this.dispatchEvent(new CustomEvent('book-page-choice',{detail:o,bubbles:true,composed:true}));return b}));}preview.hidden=!options.length;
     this.heading.dataset.align = s.titleAlign;
     this.heading.style.textAlign = s.titleAlign;
     this.heading.querySelector('h2').textContent = c.title;
@@ -216,6 +225,14 @@ export class BookEditorialPage extends EditorialSettingsElement {
       .classList.toggle('capital', intro ? s.introCapital : s.capital);
     this.artCanvas.setAttribute('aria-label', c.alt || c.title);
     this.burnCanvas.style.mixBlendMode = s.blend;
+    this.fig.hidden=!source;
+    if(this.flowing){
+      this.heading.removeAttribute('style');this.heading.style.textAlign=s.titleAlign;this.reading.removeAttribute('style');
+      const paragraphs=this.shadowRoot.getElementById('paragraphs'),signature=JSON.stringify(c.paragraphs);
+      if(this.flowText!==signature||!paragraphs.querySelector('p')&&c.paragraphs.length){this.flowText=signature;paragraphs.classList.remove('two-column');paragraphs.style.height='auto';paragraphs.replaceChildren(...c.paragraphs.map(t=>{const p=document.createElement('p');p.textContent=t;return p}));}
+      const fw=Math.max(1,this.fig.clientWidth),fh=Math.max(1,this.fig.clientHeight);this.geometry=contour(s,fw,fh,true);this.mask=intro?null:maskPath(this.geometry,'top',1000);if(!intro)drawBurn(this.burnCanvas,this.burnImage,s,this.geometry,'top');this.paintArt();return;
+    }
+    if(this.flowText!==undefined){this.flowText=undefined;const flow=this.shadowRoot.getElementById('paragraphs');flow.replaceChildren();const obstacle=document.createElement('div');obstacle.id='textContour';obstacle.setAttribute('aria-hidden','true');flow.append(obstacle);this.flow=createTextFlow(this.shadowRoot);}
     const fw = Math.max(1, this.fig.clientWidth),
       fh = Math.max(1, this.fig.clientHeight);
     this.geometry = contour(s, fw, fh, this.stacked);

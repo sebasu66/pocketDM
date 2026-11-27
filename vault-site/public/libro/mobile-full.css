@@ -42,3 +42,18 @@ body.pdm-mobile-full[data-reader-view=character] .roster-card img,body.pdm-mobil
 body.pdm-mobile-full[data-reader-view=character] .roster-card strong{font-size:14px}
 body.pdm-mobile-full[data-reader-view=character] .roster-select{font-size:14px;min-height:40px;padding:6px 14px;margin:6px 0}
 body.pdm-mobile-full[data-reader-view=character] .roster-status{font-size:12px;margin:2px 0 6px}
+
+/* Adventure reading: no implicit next/previous controls or gesture-driven changes. */
+body.choice-navigation :is(#prev,#next,#mode,#folio,.mobile-progress,.mobile-pager,[data-mobile=prev],[data-mobile=next],book-edition-nav [data-action=prev],book-edition-nav [data-action=next],book-edition-nav output){display:none!important}
+body.choice-navigation #book.single .leaf{height:auto;min-height:0}
+body.choice-navigation .leafbody{min-width:0;overflow-wrap:anywhere}
+body.choice-navigation book-example-page> [data-flow],body.choice-navigation book-player-page> [data-flow]{display:block;width:100%;max-width:100%}
+body.choice-navigation [slot=navigation] button,body.choice-navigation button[slot=navigation]{min-height:44px;max-width:100%;white-space:normal}
+body.choice-navigation .leafbody .decision{display:grid;gap:8px}
+body.choice-navigation .leafbody .decision button{width:100%}
+@media(orientation:portrait){
+body.pdm-mobile-full:not(.edition-opening) .mobile-rail{inset:auto 0 0;width:100%;height:calc(56px + env(safe-area-inset-bottom,0px));flex-direction:row;justify-content:center;padding:5px 8px calc(5px + env(safe-area-inset-bottom,0px));background:#14202b}
+body.pdm-mobile-full:not(.edition-opening) #viewport{height:calc(100dvh - 56px - env(safe-area-inset-bottom,0px));width:100vw;overflow-y:auto;overflow-x:hidden;touch-action:pan-y}
+body.pdm-mobile-full:not(.edition-opening) #book.single{width:100vw}
+body.pdm-mobile-full:not(.edition-opening) #book.single .leaf{padding:8px;min-height:0}
+}

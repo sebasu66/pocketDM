@@ -67,3 +67,5 @@ book-edition .prose p:first-of-type:first-letter{font-size:3.2em}
 book-edition .prose p{text-align:left;text-indent:0}
 book-edition .prose p:first-of-type:first-letter{float:none;font-size:2.6em;line-height:.85;vertical-align:-.11em;padding:0 3px 0 0;color:#a6321e}
 book-edition .editorial-heading{filter:drop-shadow(0 1px 0 #f4e6cb55)}
+
+.rotation-notice{display:none!important}

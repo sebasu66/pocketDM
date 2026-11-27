@@ -385,6 +385,7 @@ async function openDesign(vault = false) {
       const p = document.createElement(tag);
       p.style.width = widths[i] + 'px';
       p.setAttribute('preview-view', i ? 'mobile' : 'desktop');
+      p.setAttribute('editor-mode', '');
       if (k === 'dialogue') {
         p.setAttribute('editor-mode', '');
         p.addEventListener('editor-move', (event) => {

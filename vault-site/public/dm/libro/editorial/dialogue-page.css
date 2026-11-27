@@ -245,3 +245,17 @@
 .context-description { margin:.55em 0 0; font:clamp(11px,1.45cqw,19px)/1.35 Georgia,serif; white-space:pre-wrap; }
 :host([editor-mode]) .scene-context { cursor:grab; }
 .choice-toggle[hidden] { display:none; }
+
+/* Portrait conversation grows with its history and responses. */
+:host([data-flow]) .dialogue-sheet .scene-heading,:host([data-flow]) .dialogue-sheet #reading{display:none}
+:host([data-flow]) .dialogue-sheet .scene-content{position:absolute;inset:0 0 auto;height:min(100cqw,540px);overflow:hidden}
+:host([data-flow]) .dialogue-sheet .artFloat{height:100%!important}
+:host([data-flow]) .conversation{position:relative;inset:auto;overflow:visible;display:flex;flex-direction:column;gap:8px;padding:14px;min-width:0}
+:host([data-flow]) .conversation .scene-context,:host([data-flow]) .conversation .person,:host([data-flow]) .conversation .nameplate,:host([data-flow]) .conversation .exchange{position:relative;inset:auto!important;width:100%!important;height:auto!important;max-width:100%}
+:host([data-flow]) .conversation .scene-context{padding:10px;background:#172430d9}
+:host([data-flow]) .conversation .person{height:clamp(180px,66cqw,340px)!important;overflow:hidden}
+:host([data-flow]) .conversation .exchange-backdrop{display:none}
+:host([data-flow]) .conversation .exchange{background:#211c18;border:1px solid #ad8c5e;border-radius:5px;padding:12px}
+:host([data-flow]) .conversation .history{overflow:visible;max-height:none;flex:auto}
+:host([data-flow]) .conversation .choices{grid-auto-flow:row;grid-template-columns:1fr;grid-template-rows:none;overflow:visible;touch-action:pan-y}
+:host([data-flow]) .conversation .choice-area{flex:auto}

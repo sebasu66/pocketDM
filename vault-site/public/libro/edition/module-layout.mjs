@@ -7,7 +7,7 @@ export const pageKinds=Object.freeze({cover:'cover',location:'scene',dialogue:'d
 export function makeModuleLayout(page,{title='',allowChoices=false,onChoice=()=>{},previewView}={}){
  const kind=pageKinds[page.type];if(!kind)throw Error('Tipo de página no admitido');
  const node=document.createElement('book-editorial-'+kind);node.style.display='block';node.style.width='100%';
- node.setAttribute('preview-view',previewView||((innerWidth>innerHeight||innerWidth>800)?'desktop':'mobile'));
+ node.setAttribute('preview-view',previewView||(matchMedia('(max-width: 800px), (max-height: 660px), (any-pointer: coarse)').matches?'mobile':'desktop'));if(node.getAttribute('preview-view')==='mobile')node.setAttribute('reading-flow','');
  const content={title:page.title,kicker:title,paragraphs:[...page.text],image:page.image||'',alt:page.title,folio:page.id,camera:{},moduleRows:page.details??[]};
  if(kind==='dialogue'){
   content.dialogue={people:[{name:page.speaker||'Escena',role:page.speakerRole||'',image:page.portrait||'',emotion:'neutral',emotions:{}}],line:page.line||page.text.join('\n\n'),history:page.history??[],choices:allowChoices?page.choices:[]};
