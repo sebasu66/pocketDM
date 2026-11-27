@@ -1,0 +1,128 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "pocketdm": {
+      "root": "vault-site",
+      "buildCommand": "node scripts/build-portable-pwa.mjs",
+      "installCommand": "echo 'Static build; no dependencies'",
+      "outputDirectory": "public",
+      "bindings": [
+        {
+          "type": "service",
+          "service": "simulation",
+          "format": "url",
+          "env": "SIMULATION_URL"
+        }
+      ],
+      "rewrites": [
+        {
+          "source": "/boveda",
+          "destination": "/index.html"
+        },
+        {
+          "source": "/boveda/:path*",
+          "destination": "/index.html"
+        },
+        {
+          "source": "/grafo",
+          "destination": "/index.html"
+        },
+        {
+          "source": "/grafo/:path*",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    "simulation": {
+      "root": "vault-site/simulation",
+      "installCommand": "echo 'Node built-ins only'",
+      "outputDirectory": "public"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": {
+        "service": "pocketdm"
+      }
+    }
+  ],
+  "headers": [
+    {
+      "source": "/data/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/libro/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/app/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/dm/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/laboratorio/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/sw-pocketdm.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/api/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/app.webmanifest",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/manifest+json"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    }
+  ]
+}
