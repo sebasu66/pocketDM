@@ -1,0 +1,18 @@
+{
+  "id": "act-20261127-sys09-universal-editorial-004",
+  "date": "2026-11-27",
+  "area": "Coordinación",
+  "owner": "SYS-09",
+  "status": "en-progreso",
+  "title": "Componente editorial universal v0.1",
+  "summary": "Candidato aislado: plantilla, composición, bindings y panel único; prueba manual de 11 folios y dos resoluciones móviles. Contrato y navegador PASS. No publicado.",
+  "changed": [
+    "vault-site/public/libro/edition/universal/contract.mjs",
+    "vault-site/public/libro/edition/universal/book-page.mjs",
+    "vault-site/public/dm/libro/universal/index.html",
+    "vault-site/public/docs/editorial-universal-v01.md"
+  ],
+  "next": "Maquetar y corregir ejemplos reales; después integrar editor y documentar la skill multimodal. No desplegar el candidato sin autorización.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/editorial-universal-page-20261127",
+  "nodeIds": []
+}
