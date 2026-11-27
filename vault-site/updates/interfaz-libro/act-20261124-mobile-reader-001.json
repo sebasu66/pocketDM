@@ -1,0 +1,23 @@
+{
+  "id": "act-20261124-mobile-reader-001",
+  "date": "2026-11-24",
+  "area": "Interfaz / Libro",
+  "owner": "Equipo de combate",
+  "status": "en-revision",
+  "title": "Navegación móvil inmersiva sin duplicar menús",
+  "summary": "En la rama de integración, móvil vertical y apaisado muestran secciones de la misma historia con navegación mínima, panel izquierdo de personaje y derecho de mapa/diario/misiones; escritorio conserva las barras y doble página. Prueba Edge 390x844 y 844x390 aprobada. Datos aún de demostración.",
+  "changed": [
+    "vault-site/public/libro/mobile-reader.mjs",
+    "vault-site/public/libro/reader.mjs",
+    "vault-site/public/libro/app.css",
+    "vault-site/scripts/test-checks-browser.mjs",
+    "vault-site/public/data/catalog.json"
+  ],
+  "next": "Revisión en dispositivo real y coordinación de consolidación del lector; el equipo de combate vuelve a priorizar las reglas.",
+  "source": "https://github.com/sebasu66/pocketDM/pull/2",
+  "nodeIds": [
+    "doc_0903",
+    "doc_0023",
+    "doc_0024"
+  ]
+}
