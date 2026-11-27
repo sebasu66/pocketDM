@@ -19,3 +19,16 @@ Revisar PR de sys-01/rules-integration hacia development; validar las 15 operaci
 - PR #9 (borrador): https://github.com/sebasu66/pocketDM/pull/9. Commit de código: 553d17cfa0cd90ac95ff491475e0c15090b7a865. Comparación contra development: 21 archivos, 1 commit por delante y 0 por detrás al abrirlo.
 - GitHub Actions: sin ejecuciones PR reportadas para ese SHA al consultar; Vercel pending (preview automático, no promovido a producción).
 - Solicitud de coordinación registrada en PR #5, comentario 7221557280. No se encontró PR/issue abierto de SYS-09; evidencia disponible en el PR #9, recepción directa no confirmada.
+
+## Actualización: pruebas ejecutadas en equipo autorizado
+2026-11-27. Esta sección sustituye el bloqueo de equipo offline y el estado NO EJECUTADAS anterior. Copia temporal aislada de la rama, Windows, Git 2.51.1, Node v24.14.1, SHA probado 4468eecbf63bad15fed46e8b38a986214169a678 (código 553d17c sin modificaciones).
+
+| Comando | PASS | FAIL | SKIP | Exit |
+|---|---:|---:|---:|---:|
+| Suite específica (4 archivos descritos arriba) | 19 | 0 | 1 | 0 |
+| node --test simulation/test-*.mjs | 123 | 0 | 9 | 0 |
+| node scripts/build-activity.mjs | 107 registros | 0 | — | 0 |
+| node scripts/validate.mjs | Integridad OK | 0 | — | 0 |
+| node scripts/build-portable-pwa.mjs | Build OK | 0 | — | 0 |
+
+El test de snapshots de campaña grupal continúa omitido deliberadamente; no se certifica Firestore ni integración completa. Los conteos de la suite específica están incluidos en la general, no se suman. Actividad generada y revisada: 107 registros, 9 áreas; últimas entradas del 27/11 sobre Vercel Services aislado, consolidación V2, módulo 01, portal DM y diálogo. Validación del grafo: 42 nodos, 146 relaciones, 10 áreas. Build exclusivamente local; sin promoción. Logs en copia temporal local sys01-targeted.log, sys01-full.log y sys01-{build-activity,validate,build-portable-pwa}.log. No tocar directorios de trabajo de otros agentes. SYS-09 debe revisar los SKIP y coordinar las dependencias antes de cerrar.
