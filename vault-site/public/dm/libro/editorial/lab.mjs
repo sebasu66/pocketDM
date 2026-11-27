@@ -396,6 +396,7 @@ async function openDesign(vault = false) {
             const group = {
               Fondo: 'Fondo',
               Personaje: 'Encuadre del NPC',
+              'Ubicación y descripción': 'Ubicación y descripción',
               'Placa de nombre': 'Placa',
               'Panel de diálogo': 'Diálogo',
             }[label];

@@ -4,9 +4,9 @@ export function sampleContent(kind, design) {
   const place = locationPlace(design === 'plaza' ? 0 : 2),
     intro = kind === 'intro';
   return {
-    kicker: intro ? 'Stormkeep / Las Marcas' : 'Stormkeep / Cuaderno de viaje',
-    title: intro ? place.name : place.title,
-    paragraphs: intro ? [place.intro] : [...place.paragraphs],
+    kicker: kind === 'dialogue' ? 'Stormkeep' : intro ? 'Stormkeep / Las Marcas' : 'Stormkeep / Cuaderno de viaje',
+    title: kind === 'dialogue' ? place.name : intro ? place.name : place.title,
+    paragraphs: kind === 'dialogue' ? ['Al aproximarte a la entrada, un guardia de gesto severo te corta el paso.'] : intro ? [place.intro] : [...place.paragraphs],
     image: new URL(assets[intro && design === 'plaza' ? 'extended' : design]).pathname,
     alt: place.name,
     folio: intro ? '' : 'Muestra editorial · II',

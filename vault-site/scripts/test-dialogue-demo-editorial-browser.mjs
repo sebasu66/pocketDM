@@ -28,6 +28,12 @@ await call('Emulation.setDeviceMetricsOverride',{width:1400,height:900,deviceSca
  assert.equal(await ev("document.querySelector('#npc').disabled"),false);
  const before=await ev("(()=>{const p=document.querySelector('book-editorial-dialogue');return {name:p.content.dialogue.people[0].name,choices:p.content.dialogue.choices.length,view:p.view}})()");
  assert.equal(before.name,'Hald Eirik');assert.equal(before.choices,2);assert.equal(before.view,view);
+ assert.equal(await ev("document.querySelector('book-editorial-dialogue').shadowRoot.querySelector('.context-kicker').textContent"),'Stormkeep');
+ assert.ok(await ev("document.querySelector('book-editorial-dialogue').shadowRoot.querySelector('.context-title').textContent"));
+ assert.ok(await ev("document.querySelector('book-editorial-dialogue').shadowRoot.querySelector('.context-description').textContent.includes('guardia')"));
+ assert.equal(await ev("(()=>{const s=document.querySelector('book-editorial-dialogue').shadowRoot;return +getComputedStyle(s.querySelector('.exchange-backdrop')).zIndex < +getComputedStyle(s.querySelector('.person')).zIndex && +getComputedStyle(s.querySelector('.person')).zIndex < +getComputedStyle(s.querySelector('.exchange')).zIndex})()"),true);
+ if(width===1280) assert.equal(await ev("document.querySelector('book-editorial-dialogue').shadowRoot.querySelector('.choices').hidden"),false);
+
  if(width===844){
   assert.equal(await ev("!document.querySelector('.mobile-rail').hidden"),true);
   await ev("document.querySelector('[data-mobile=next]').click()");

@@ -18,6 +18,9 @@ export class BookEditorialDialogue extends BookEditorialPage {
     backgroundX: number('Fondo', 'Posición horizontal (%)', 50, -500, 500),
     backgroundY: number('Fondo', 'Posición vertical (%)', 50, -500, 500),
     backgroundZoom: number('Fondo', 'Zoom', 1, 0.05, 20, 0.05),
+    contextLeft: number('Ubicación y descripción', 'Posición horizontal (%)', 3, -100, 100),
+    contextTop: number('Ubicación y descripción', 'Posición vertical (%)', 5, -100, 100),
+    contextWidth: number('Ubicación y descripción', 'Ancho (%)', 25, 1, 500),
     nameLeft: number('Placa', 'Posición horizontal (%)', 29, -100, 100),
     nameTop: number('Placa', 'Posición vertical (%)', 84, -100, 100),
     nameWidth: number('Placa', 'Ancho (%)', 30, 1, 500),
@@ -37,6 +40,9 @@ export class BookEditorialDialogue extends BookEditorialPage {
   static responsiveDefaults = Object.freeze({
     mobile: Object.freeze({
       ...BookEditorialPage.responsiveDefaults.mobile,
+      contextLeft: 4,
+      contextTop: 3,
+      contextWidth: 90,
       personLeft: 0,
       personTop: 0,
       personWidth: 100,
@@ -83,7 +89,7 @@ export class BookEditorialDialogue extends BookEditorialPage {
     this.sheet.classList.add('dialogue-sheet');
     this.panel.className = 'conversation';
     this.panel.innerHTML =
-      '<div class="background-hit" data-edit="background" aria-label="Fondo"></div><figure class="person" data-edit="person"><img draggable="false"></figure><div class="nameplate" data-edit="name"><strong></strong><span></span></div><section class="exchange" data-edit="dialog"><div class="history" role="log" aria-label="Historial de diálogo" aria-live="polite"></div><div class="choice-area"><div class="choices" role="group" aria-label="Respuestas" hidden></div><div class="choice-controls"><button type="button" class="choice-toggle" aria-expanded="false">Elegir respuesta ▴</button><button type="button" class="choice-send" aria-label="Enviar respuesta" disabled>➤</button></div></div></section>';
+      '<div class="background-hit" data-edit="background" aria-label="Fondo"></div><div class="scene-context" data-edit="context"><p class="context-kicker"></p><h2 class="context-title"></h2><p class="context-description"></p></div><figure class="person" data-edit="person"><img draggable="false"></figure><div class="nameplate" data-edit="name"><strong></strong><span></span></div><div class="exchange-backdrop" aria-hidden="true"></div><section class="exchange" data-edit="dialog"><div class="history" role="log" aria-label="Historial de diálogo" aria-live="polite"></div><div class="choice-area"><div class="choices" role="group" aria-label="Respuestas" hidden></div><div class="choice-controls"><button type="button" class="choice-toggle" aria-expanded="false">Elegir respuesta ▴</button><button type="button" class="choice-send" aria-label="Enviar respuesta" disabled>➤</button></div></div></section>';
     this.sheet.append(this.panel);
     this.selected = null;
     this.history = [];
@@ -93,6 +99,7 @@ export class BookEditorialDialogue extends BookEditorialPage {
     const label = {
       background: 'Fondo',
       person: 'Personaje',
+      context: 'Ubicación y descripción',
       name: 'Placa de nombre',
       dialog: 'Panel de diálogo',
     };
@@ -134,7 +141,7 @@ export class BookEditorialDialogue extends BookEditorialPage {
         values.backgroundX = clamp(initial.backgroundX - dx, -500, 500);
         values.backgroundY = clamp(initial.backgroundY - dy, -500, 500);
       } else {
-        const prefix = drag.kind === 'person' ? 'person' : drag.kind === 'name' ? 'name' : 'dialog';
+        const prefix = drag.kind === 'person' ? 'person' : drag.kind === 'name' ? 'name' : drag.kind === 'context' ? 'context' : 'dialog';
         values[prefix + 'Left'] = clamp(initial[prefix + 'Left'] + dx, -100, 100);
         values[prefix + 'Top'] = clamp(initial[prefix + 'Top'] + dy, -100, 100);
         if (prefix === 'person') {
@@ -176,7 +183,7 @@ export class BookEditorialDialogue extends BookEditorialPage {
         const index = Number(button.dataset.index);
         if (!this.content.dialogue?.choices[index]) return;
         this.pendingChoice = index;
-        this.choicesOpen = false;
+        this.choicesOpen = this.directChoices ? null : false;
         this.renderDialogue();
         return;
       }
@@ -279,6 +286,13 @@ export class BookEditorialDialogue extends BookEditorialPage {
       settings = this.effective;
     const figure = this.panel.querySelector('figure');
     const exchange = this.panel.querySelector('.exchange');
+    const backdrop = this.panel.querySelector('.exchange-backdrop');
+    const context = this.panel.querySelector('.scene-context');
+    Object.assign(context.style, {left: settings.contextLeft + '%', top: settings.contextTop + '%', width: settings.contextWidth + '%'});
+    context.querySelector('.context-kicker').textContent = this._content.kicker;
+    context.querySelector('.context-title').textContent = this._content.title;
+    context.querySelector('.context-description').textContent = this._content.paragraphs.join('\n\n');
+    context.hidden = !this._content.kicker && !this._content.title && !this._content.paragraphs.length;
     const plate = this.panel.querySelector('.nameplate');
     Object.assign(plate.style, {
       left: settings.nameLeft + '%',
@@ -297,7 +311,9 @@ export class BookEditorialDialogue extends BookEditorialPage {
       width: settings.dialogWidth + '%',
       height: settings.dialogHeight + '%',
     });
-    exchange.style.zIndex = settings.dialogLayer === 'delante del personaje' ? '4' : '1';
+    for (const key of ['left', 'top', 'width', 'height']) backdrop.style[key] = exchange.style[key];
+    backdrop.style.zIndex = settings.dialogLayer === 'delante del personaje' ? '4' : '1';
+    exchange.style.zIndex = '5';
     exchange.style.setProperty('--dialog-text', settings.ink);
     exchange.style.setProperty('--dialog-paper', settings.paper);
     exchange.style.setProperty('--dialog-size', settings.fs + 'px');
@@ -338,9 +354,12 @@ export class BookEditorialDialogue extends BookEditorialPage {
     });
     history.scrollTop = wasAtBottom ? history.scrollHeight : oldScroll;
     const choices = this.panel.querySelector('.choices');
+    this.panel.querySelector('.choice-area').hidden = data.choices.length === 0;
     const toggle = this.panel.querySelector('.choice-toggle');
     choices.replaceChildren();
-    const open = this.choicesOpen ?? (this.view === 'desktop' && exchange.clientHeight >= 380);
+    this.directChoices = this.view === 'desktop' && this.clientWidth >= 900 && exchange.clientHeight >= 240;
+    const open = this.directChoices || (this.choicesOpen ?? false);
+    toggle.hidden = this.directChoices && this.selected === null && data.choices.length > 0;
     choices.hidden = !open || this.selected !== null;
     toggle.disabled = this.selected !== null || data.choices.length === 0;
     const pending = this.pendingChoice === null ? null : data.choices[this.pendingChoice];

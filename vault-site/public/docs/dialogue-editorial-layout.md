@@ -4,3 +4,5 @@ Al abrir o guardar un diseño de tipo diálogo, el editor registra el diseño ac
 Alcance: sincronización en el mismo navegador/perfil/origen; no se publican los diseños privados ni se modifican permisos Firestore. La selección automática de un diseño privado entre dispositivos queda pendiente. Prueba reproducible: node scripts/test-dialogue-demo-editorial-browser.mjs (edición real, escritorio, teléfono horizontal y vertical, historial y chequeo).
 
 La vista de prueba reutiliza la barra móvil del lector: las flechas eligen una respuesta, el botón de lista la despliega y la flecha de enviar confirma. El chequeo de demostración se muestra solo después de confirmar. La campaña real y la resolución con semilla siguen pendientes de integración.
+
+La escena de diálogo reutiliza encabezado, título y párrafos del contenido narrativo como ubicación y descripción, posicionables y con ajustes responsive. El panel de fondo y el contenido se dibujan en capas distintas para mantener mensajes legibles por encima del personaje. En espacio amplio las respuestas se muestran directamente y requieren confirmación; en vista reducida se despliegan.

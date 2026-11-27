@@ -1,0 +1,13 @@
+{
+  "id":"act-20261127-dialogue-scene-context-002",
+  "date":"2026-11-27",
+  "area":"Narrativa / Contenido",
+  "owner":"Narrativa / Dirección editorial",
+  "status":"en-revision",
+  "title":"Contexto de escena y capas de diálogo",
+  "summary":"La página de diálogo muestra la ubicación, el título y la descripción narrativa con posición editable. Se separan el fondo del panel y los mensajes para que el personaje quede delante del fondo y detrás de los mensajes. En pantallas amplias las respuestas quedan a la vista y requieren confirmación. Se probaron diseños, capas, selección, barra móvil y arrastre en navegador.",
+  "changed":["vault-site/public/dm/libro/editorial/dialogue-page.mjs","vault-site/public/dm/libro/editorial/dialogue-page.css","vault-site/public/dm/libro/editorial/library.mjs","vault-site/public/dm/libro/editorial/lab.mjs","vault-site/public/laboratorio/dialogo/dialogo.mjs","vault-site/public/docs/dialogue-editorial-layout.md","vault-site/scripts/test-dialogue-demo-editorial-browser.mjs"],
+  "next":"Revisar la composición visual con la usuaria y conectar el diálogo al estado canónico de campaña y a resoluciones por semilla.",
+  "source":"https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds":["doc_0914"]
+}
