@@ -1,0 +1,17 @@
+{
+  "id": "act-20261127-sys05-narrative-repository-001",
+  "date": "2026-11-27",
+  "area": "Narrativa / Contenido",
+  "owner": "SYS-05",
+  "status": "en-revision",
+  "title": "SYS-05 · repositorio narrativo privado candidato",
+  "summary": "Pipeline previo y caché exacta en memoria; cinco pruebas sintéticas PASS con blobs verificados. No es integración del módulo real ni almacenamiento persistente.",
+  "changed": [
+    "vault-site/simulation/narrative-repository.mjs",
+    "vault-site/simulation/test-narrative-repository.mjs",
+    "vault-site/public/docs/sys-task-status/sys-05.md"
+  ],
+  "next": "Coordinar PR #7 y contratos SYS-03/04/06/07/08; revisión SYS-09 y suite integral pendientes. No desplegar.",
+  "source": "https://github.com/sebasu66/pocketDM/commit/9a1e2108dca97d3c3f70b3414be2cd14c3a779e9",
+  "nodeIds": []
+}
