@@ -14,3 +14,8 @@
 
 ## Entrega y coordinación SYS-09
 Revisar PR de sys-01/rules-integration hacia development; validar las 15 operaciones, inválidos, 1v1, grupos, heridas y retirada, regresiones y privacidad. SYS-02: conservar firmas de die y direcciones existentes hasta acuerdo de versión. SYS-06/04: integrar snapshots efectivos, confirmación sin repetir checks y replay, reactivar test grupal de campaña y revisar cambios candidatos de campaign-state/module-runtime/store. No fusionar hasta revisión y coordinación.
+
+## Entrega registrada
+- PR #9 (borrador): https://github.com/sebasu66/pocketDM/pull/9. Commit de código: 553d17cfa0cd90ac95ff491475e0c15090b7a865. Comparación contra development: 21 archivos, 1 commit por delante y 0 por detrás al abrirlo.
+- GitHub Actions: sin ejecuciones PR reportadas para ese SHA al consultar; Vercel pending (preview automático, no promovido a producción).
+- Solicitud de coordinación registrada en PR #5, comentario 7221557280. No se encontró PR/issue abierto de SYS-09; evidencia disponible en el PR #9, recepción directa no confirmada.
