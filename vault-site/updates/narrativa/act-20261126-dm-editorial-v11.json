@@ -1,0 +1,23 @@
+{
+    "source":  "https://pocketdm-prototipos.web.app/dm/libro/#laboratorio",
+    "summary":  "Archivo original del usuario integrado sin modificar en el portal DM, conservando recursos y controles. Nueva seccion Libro/UI con acceso al laboratorio.",
+    "id":  "act-20261126-dm-editorial-v11",
+    "next":  "Probar interaccion, exportacion y autoguardado en navegador.",
+    "title":  "Libro/UI: laboratorio editorial Stormkeep V11",
+    "owner":  "Agente narrador / presentacion",
+    "date":  "2026-11-26",
+    "changed":  [
+                    "vault-site/public/dm/index.html",
+                    "vault-site/public/dm/sistema/index.html",
+                    "vault-site/public/dm/arte/index.html",
+                    "vault-site/public/dm/portal.css",
+                    "vault-site/public/dm/portal.js",
+                    "vault-site/public/dm/libro/index.html",
+                    "vault-site/public/dm/libro/stormkeep_laboratorio_editorial_v11.html"
+                ],
+    "area":  "Narrativa / Contenido",
+    "status":  "en-revision",
+    "nodeIds":  [
+
+                ]
+}

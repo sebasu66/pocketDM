@@ -1,0 +1,18 @@
+{
+  "id": "act-20261125-cartography-evaluation-001",
+  "date": "2026-11-25",
+  "area": "World Engine / Grafo",
+  "owner": "Equipo de simulación",
+  "status": "en-revision",
+  "title": "Evaluación Watabou y Fantasy Town Generator",
+  "summary": "Generación urbana Watabou verificada visualmente; exportación automatizada sin descarga. FTG formulario temporal verificado, intento de generación no entregó asentamiento. Contratos documentados, sin importación ni canon nuevos.",
+  "changed": [
+    "vault-site/public/docs/cartography-tools-evaluation.md"
+  ],
+  "next": "Obtener SVG+JSON de una misma ciudad y GeoJSON+población de FTG mediante exportación manual o mecanismo soportado; validar campos y licencias antes de importar.",
+  "source": "https://watabou.github.io/faq.html",
+  "nodeIds": [
+    "doc_0018",
+    "doc_0909"
+  ]
+}

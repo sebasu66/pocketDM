@@ -1,0 +1,44 @@
+/* Landscape PWA: same lateral navigation for every reader view. */
+.roster-large-art{display:none}
+body.pdm-mobile-full:not(.edition-opening){overflow:hidden;background:#172430}
+body.pdm-mobile-full:not(.edition-opening) #viewport{width:calc(100vw - 60px - env(safe-area-inset-right,0px));height:100dvh;min-height:0;padding:0;overflow:auto}
+body.pdm-mobile-full:not(.edition-opening) #book.single{width:calc(100vw - 60px - env(safe-area-inset-right,0px));max-width:none;border:0;border-radius:0;box-shadow:none}
+body.pdm-mobile-full:not(.edition-opening) #book.single .leaf{min-height:100dvh;height:auto;padding:14px 18px;background:#172b3b url('/libro/edition/assets/paper.webp') center/cover;background-blend-mode:multiply;color:#fff8ed}
+body.pdm-mobile-full:not(.edition-opening) .running,body.pdm-mobile-full:not(.edition-opening) .pagenum,body.pdm-mobile-full:not(.edition-opening) .mobile-pager{display:none}
+body.pdm-mobile-full:not(.edition-opening) .leafbody{padding:0;min-height:0}
+body.pdm-mobile-full:not(.edition-opening) .leafbody h2,body.pdm-mobile-full:not(.edition-opening) .leafbody h3{color:#efa76b}
+body.pdm-mobile-full:not(.edition-opening) .leafbody a{color:#f6d9a7}
+body.pdm-mobile-full:not(.edition-opening) .mobile-rail{position:fixed;inset:0 0 0 auto;width:calc(60px + env(safe-area-inset-right,0px));height:100dvh;display:flex;flex-direction:column;padding:5px max(5px,env(safe-area-inset-right)) 5px 5px;background:#14202b url('/libro/edition/assets/nav.webp') center/100% 100%;border:0}
+body.pdm-mobile-full:not(.edition-opening) .mobile-rail button{border:1px solid #ad8053;background:#182733b8;color:#f6d9a7;width:42px;height:42px}
+body.pdm-mobile-full[data-reader-view=character] #book.single .leaf{height:100dvh;min-height:0;padding:0;overflow:hidden}
+body.pdm-mobile-full[data-reader-view=character] #book.single .leafbody,body.pdm-mobile-full[data-reader-view=character] .leafbody>.folio-module,body.pdm-mobile-full[data-reader-view=character] stormkeep-roster{height:100%;min-height:0;display:block;overflow:hidden}
+body.pdm-mobile-full[data-reader-view=character] .roster-stage{height:100%;display:grid;grid-template-columns:minmax(0,41%) minmax(0,59%);gap:0}
+body.pdm-mobile-full[data-reader-view=character] .roster-large-art{display:block;position:relative;height:100%;overflow:hidden;background:#111b25}
+body.pdm-mobile-full[data-reader-view=character] .roster-large-art img{width:100%;height:100%;object-fit:contain;object-position:center;display:block}
+body.pdm-mobile-full[data-reader-view=character] .roster-right{overflow:auto;min-height:0;padding:10px 14px;overscroll-behavior:contain}
+body.pdm-mobile-full[data-reader-view=character] .roster-right>h2{font-size:23px;margin:0 0 4px}
+body.pdm-mobile-full[data-reader-view=character] .roster-right>p{font-size:13px;margin:0 0 6px}
+body.pdm-mobile-full[data-reader-view=character] .roster-cards{gap:4px;margin:6px 0;position:sticky;top:0;background:#172b3b;z-index:3}
+body.pdm-mobile-full[data-reader-view=character] .roster-card{padding:4px;gap:2px;min-width:0}
+body.pdm-mobile-full[data-reader-view=character] .roster-card img{height:46px;width:100%;object-fit:contain}
+body.pdm-mobile-full[data-reader-view=character] .roster-card strong{font-size:12px;line-height:1.15}
+body.pdm-mobile-full[data-reader-view=character] .roster-card span,body.pdm-mobile-full[data-reader-view=character] .roster-card small{font-size:10px;line-height:1.15}
+body.pdm-mobile-full[data-reader-view=character] .roster-detail{border:0;padding:0;background:transparent;margin:8px 0}
+body.pdm-mobile-full[data-reader-view=character] .roster-detail .actor .portrait{display:none}
+body.pdm-mobile-full[data-reader-view=character] .roster-detail .actor h2{font-size:26px}
+body.pdm-mobile-full[data-reader-view=character] .roster-detail details{margin:4px 0}
+body.pdm-mobile-full .mobile-drawer:not(.from-left){width:min(350px,80vw);background:#172430;color:#fff8ed}
+body.pdm-mobile-full .mobile-drawer .drawer-head{padding:8px 12px}
+body.pdm-mobile-full .mobile-drawer .drawer-head h2{font-size:23px;color:#efa76b}
+body.pdm-mobile-full .mobile-drawer .drawer-body{padding:8px 12px}
+body.pdm-mobile-full .mobile-drawer .drawer-menu{gap:6px}
+body.pdm-mobile-full .mobile-drawer .drawer-menu button{min-height:40px}
+@media(orientation:portrait){body.pdm-mobile-full:not(.edition-opening) #viewport{width:100vw;height:calc(100dvh - 60px);padding:0}body.pdm-mobile-full:not(.edition-opening) #book.single{width:100vw}}
+
+/* Compact selector: reserve the screen for the sheet, not three mini cards. */
+body.pdm-mobile-full[data-reader-view=character] .roster-cards{position:static;gap:5px;margin:5px 0 8px}
+body.pdm-mobile-full[data-reader-view=character] .roster-card{min-height:34px;justify-content:center}
+body.pdm-mobile-full[data-reader-view=character] .roster-card img,body.pdm-mobile-full[data-reader-view=character] .roster-card span,body.pdm-mobile-full[data-reader-view=character] .roster-card small{display:none}
+body.pdm-mobile-full[data-reader-view=character] .roster-card strong{font-size:14px}
+body.pdm-mobile-full[data-reader-view=character] .roster-select{font-size:14px;min-height:40px;padding:6px 14px;margin:6px 0}
+body.pdm-mobile-full[data-reader-view=character] .roster-status{font-size:12px;margin:2px 0 6px}

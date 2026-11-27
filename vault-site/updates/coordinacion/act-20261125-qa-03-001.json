@@ -1,0 +1,19 @@
+{
+  "id": "act-20261125-qa-03-001",
+  "date": "2026-11-25",
+  "area": "Infraestructura / Firebase",
+  "owner": "Simulación",
+  "status": "pendiente",
+  "title": "QA-03 · P0 · Persistencia y confirmación transaccional",
+  "summary": "Tarea aprobada para H01; no implementada. Implementar almacenamiento persistente de campaña, snapshot/overlay, revisión esperada, comandos idempotentes y transacciones; separar entorno de prueba y datos públicos. Aceptación: Cerrar y reabrir recupera estado, ubicación, diario y elecciones; dos comandos concurrentes con misma revisión no duplican efectos; reintento devuelve recibo; campañas aisladas y recuperación tras fallo. Prueba contra entorno autorizado, no solo memoria.",
+  "changed": [
+    "vault-site/public/docs/qa-playable-stormkeep.md"
+  ],
+  "next": "Dependencias: QA-01, QA-08; contrato QA-02. Referencias: ADV-C11; doc_0007. Registrar evidencia y revisión cruzada al cerrar.",
+  "source": "https://github.com/sebasu66/pocketDM/blob/feature/qa-playable-stormkeep-20261125/vault-site/public/docs/qa-playable-stormkeep.md",
+  "nodeIds": [
+    "doc_0007",
+    "doc_0909",
+    "doc_0915"
+  ]
+}

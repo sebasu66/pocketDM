@@ -1,0 +1,19 @@
+{
+  "id": "act-20261124-contour-sheet-001",
+  "date": "2026-11-24",
+  "area": "Interfaz / Libro",
+  "owner": "Agente narrador / presentación",
+  "status": "en-progreso",
+  "title": "Contorno fijo y ficha común",
+  "summary": "Título superpuesto desde lomo, arte nuevo con borde izquierdo recto, exclusión de texto por silueta fija, ajustes rail; adaptador de ficha v1 de Galahad sin duplicar reglas.",
+  "changed": [
+    "vault-site/public/libro/edition/",
+    "vault-site/public/libro/navigation.mjs"
+  ],
+  "next": "Validar scroll fijo, rail y ficha; publicar sin alterar simulación.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0903",
+    "doc_0913"
+  ]
+}

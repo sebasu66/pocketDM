@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sala de prueba · PocketDM</title>
+    <link rel="stylesheet" href="./test.css" />
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">PocketDM · Entorno de prueba</p>
+      <h1>Sala de prueba</h1>
+      <p>
+        Reuní un anfitrión y hasta cuatro jugadores sin crear cuentas. Esta sala prueba la conexión del grupo.
+      </p>
+      <section id="start">
+        <button id="host" disabled>Crear sala como anfitrión</button>
+        <p>Compartí el enlace de la sala para que entren los jugadores.</p>
+      </section>
+      <section id="room" hidden>
+        <h2 id="role"></h2>
+        <p id="status" role="status"></p>
+        <ol id="players"></ol>
+        <div id="invite" hidden>
+          <label for="link">Enlace para jugadores</label><input id="link" readonly /><button id="copy">
+            Copiar enlace
+          </button>
+        </div>
+        <p>La conexión de esta sala con la campaña jugable está pendiente.</p>
+      </section>
+      <p id="error" role="alert"></p>
+      <a href="/app/">Volver al libro</a>
+    </main>
+    <script type="module" src="./test.mjs"></script>
+  </body>
+</html>

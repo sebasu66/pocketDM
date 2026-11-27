@@ -1,0 +1,128 @@
+* {
+  box-sizing: border-box;
+}
+.sidebar {
+  font:
+    13px/1.45 system-ui,
+    sans-serif;
+  color: #e8e4de;
+  background: #1b222b;
+  min-width: 0;
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.sidebar label,
+.sidebar .field {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.sidebar label span {
+  color: #d7dee4;
+}
+.sidebar .section,
+.sidebar details {
+  padding: 12px;
+  border-bottom: 1px solid #394351;
+}
+.sidebar summary {
+  cursor: pointer;
+  font-weight: 650;
+  color: #d9c6ef;
+}
+.sidebar .fields,
+.sidebar .section {
+  display: grid;
+  gap: 10px;
+}
+.sidebar .fields {
+  margin-top: 12px;
+}
+.sidebar :is(select, textarea, input:not([type='checkbox']), button) {
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  color: inherit;
+  background: #202a36;
+  border: 1px solid #4b5664;
+  border-radius: 5px;
+  padding: 6px;
+  font: inherit;
+}
+.sidebar button {
+  cursor: pointer;
+}
+.sidebar .pair {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.sidebar .pair input,
+.sidebar .pair select {
+  flex: 1;
+}
+.sidebar button.restore {
+  width: auto;
+  font-size: 11px;
+}
+.sidebar .field small,
+.sidebar .status,
+.sidebar .note {
+  color: #bdc6d0;
+  font-size: 11px;
+  margin: 0;
+}
+.sidebar input[type='checkbox'] {
+  justify-self: start;
+  accent-color: #c0a0ed;
+}
+.sidebar input[type='color'] {
+  height: 34px;
+}
+.sidebar [hidden] {
+  display: none !important;
+}
+.camera-map {
+  position: relative;
+  width: 100%;
+  line-height: 0;
+  margin: 6px 0;
+  touch-action: none;
+  background: #111;
+}
+.camera-map img {
+  width: 100%;
+  height: auto;
+}
+.camera-map .frame {
+  position: absolute;
+  pointer-events: none;
+  border: 2px solid #fff0ad;
+  box-shadow: 0 0 0 1px #181818;
+  font: 600 10px system-ui;
+  text-align: left;
+  color: #fff0ad;
+  text-shadow: 0 1px 2px #000;
+}
+.camera-map .end {
+  border: 2px dashed #7df6f2;
+  color: #7df6f2;
+}
+.sidebar :focus-visible {
+  outline: 2px solid #d7b1f7;
+  outline-offset: 2px;
+}
+.sidebar input[type='file'] {
+  font-size: 11px;
+}
+.sidebar .status {
+  min-height: 1.3em;
+  color: #eccfa6;
+}
+.sidebar textarea {
+  min-height: 4.5em;
+  resize: vertical;
+}

@@ -1,0 +1,24 @@
+{
+  "id": "act-20261125-azgaar-trial-001",
+  "date": "2026-11-25",
+  "area": "World Engine / Grafo",
+  "owner": "Equipo de simulación",
+  "status": "en-revision",
+  "title": "Azgaar MCP: generación y exportación cartográfica",
+  "summary": "Instalación aislada, 18 herramientas MCP reales, generación por semilla, puerto amurallado candidato a Stormkeep, PNG/JSON/GeoJSON exportados. Vista alternativa del atlas, no canon; importación topológica pendiente.",
+  "changed": [
+    "vault-site/public/atlas/maps/azgaar.json",
+    "vault-site/public/atlas/assets/terrain/azgaar-world.png",
+    "vault-site/public/atlas/atlas.mjs",
+    "vault-site/public/atlas/index.html",
+    "vault-site/scripts/import-azgaar-trial.mjs",
+    "vault-site/public/docs/azgaar-trial.md"
+  ],
+  "next": "Revisar https://pocketdm-prototipos.web.app/atlas/?project=azgaar ; acordar con narrador clima/ubicación/escala y vincular celdas y rutas al grafo. https://pocketdm-prototipos.web.app/docs/azgaar-trial.md",
+  "source": "https://github.com/aznan-triks/mcp-for-Azgaar",
+  "nodeIds": [
+    "doc_0909",
+    "doc_0018",
+    "doc_0908"
+  ]
+}

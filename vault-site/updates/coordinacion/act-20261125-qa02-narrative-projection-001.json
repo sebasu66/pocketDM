@@ -1,0 +1,22 @@
+{
+  "id": "act-20261125-qa02-narrative-projection-001",
+  "date": "2026-11-25",
+  "area": "Coordinación",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "QA-02/08/10: adaptador narrativo con eventos reales confirmados",
+  "summary": "Se integró backlog QA y candidato aa98c48. Adaptador server-only de playerState/recibos y componente existente del libro; fallback de hechos, checks sin duplicación. 93/93 Node y tres suites de navegador locales aprobadas. Sin backend, LLM, canon aprobado ni H01 completo.",
+  "changed": [
+    "vault-site/simulation/narrative-projection.mjs",
+    "vault-site/public/libro/confirmed-narration.mjs",
+    "vault-site/public/libro/components.mjs",
+    "vault-site/simulation/test-narrative-projection.mjs",
+    "vault-site/scripts/test-narrative-browser.mjs",
+    "vault-site/public/docs/narrative-contract-qa02.md"
+  ],
+  "next": "Simulación y validador revisan contrato; acordar QA-06/07 y conectar API/diario/ficha. Preview solamente.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124/vault-site/public/docs/narrative-contract-qa02.md",
+  "nodeIds": [
+    "doc_0913"
+  ]
+}

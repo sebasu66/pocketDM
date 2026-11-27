@@ -1,0 +1,20 @@
+{
+  "id": "act-20261125-stormkeep-gate-opening-001",
+  "date": "2026-11-25",
+  "area": "Narrativa / Contenido",
+  "owner": "Pocket DM · Presentación narrativa",
+  "status": "implementado-en-live",
+  "title": "Apertura de Hald ante un viajero solo",
+  "summary": "Hald abre preguntando si el viajero busca refugio. Nombre y procedencia pasan a la rama de ingreso, y el chequeo de Influencia trata de esperar junto al brasero. La guía de NPC documenta cómo anclar número y propósito a la situación visible. Versión Firebase ec6fefdea1b5222e.",
+  "changed": [
+    "vault-site/public/laboratorio/dialogo/escenas.mjs",
+    "vault-site/public/docs/stormkeep-first-session.md",
+    "vault-site/public/skills/pocketdm-storyteller/npcs.md"
+  ],
+  "next": "Aplicar el mismo criterio al materializar la llegada a Stormkeep.",
+  "source": "https://pocketdm-prototipos.web.app/laboratorio/dialogo/",
+  "nodeIds": [
+    "doc_0913",
+    "doc_0914"
+  ]
+}

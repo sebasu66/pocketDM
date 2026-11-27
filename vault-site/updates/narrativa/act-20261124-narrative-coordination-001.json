@@ -1,0 +1,20 @@
+{
+  "id": "act-20261124-narrative-coordination-001",
+  "date": "2026-11-24",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-progreso",
+  "title": "Consulta al agente de simulación: anticipación narrativa y reparto",
+  "summary": "Tarea previa: contrastar backlog N01–N09, piloto de tres niveles y contrato de chequeos con la generación continua por lotes solicitada por el usuario. Alcance documental únicamente; no se cambian reglas, entidades, lector, catálogo ni contratos.",
+  "changed": [
+    "vault-site/updates/narrativa/act-20261124-narrative-coordination-001.json"
+  ],
+  "next": "Redactar preguntas numeradas, propuesta de tareas y mecanismo de respuesta; registrar cierre documental y publicar en la bóveda.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0905",
+    "doc_0907",
+    "doc_0913",
+    "doc_0025"
+  ]
+}

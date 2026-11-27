@@ -1,0 +1,38 @@
+{
+  "id": "/libro/",
+  "name": "Pocket DM · Libro de aventuras",
+  "short_name": "Pocket DM",
+  "description": "Tu aventura ilustrada interactiva",
+  "lang": "es",
+  "start_url": "/libro/",
+  "scope": "/",
+  "display": "fullscreen",
+  "display_override": [
+    "fullscreen",
+    "standalone"
+  ],
+  "orientation": "landscape",
+  "theme_color": "#211a17",
+  "background_color": "#211a17",
+  "icons": [
+    {
+      "src": "/libro/assets/app-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/libro/assets/app-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Laboratorio de diálogo",
+      "short_name": "Diálogo",
+      "url": "/laboratorio/dialogo/"
+    }
+  ]
+}

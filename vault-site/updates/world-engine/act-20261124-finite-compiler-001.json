@@ -1,0 +1,25 @@
+{
+  "id": "act-20261124-finite-compiler-001",
+  "date": "2026-11-24",
+  "area": "World Engine / Grafo",
+  "owner": "Equipo de simulación",
+  "status": "en-revision",
+  "title": "Compilador finito v0.1: árbol completo y cobertura editorial",
+  "summary": "421 nodos, 420 transiciones, 281 hojas; 327 trabajos semánticos candidatos y 6 assets requeridos. 33 pruebas aprobadas incluido replay de todas las transiciones. Firma aproximada de perfil, caché candidata privada, selección aislada e idempotencia en memoria. Fixture antiguo, no combate avanzado ni edición lista; no LLM/MCP/persistencia.",
+  "changed": [
+    "vault-site/simulation/adventure-compiler.mjs",
+    "vault-site/simulation/test-adventure-compiler.mjs",
+    "vault-site/simulation/README.md",
+    "vault-site/public/docs/finite-adventure-compiler.md"
+  ],
+  "next": "Acordar MOD-01 con narrador (módulo original, cierres y referencias) y contratos de edición; MOD-02 ficha/overlay, MOD-03 combate avanzado, MOD-04 cache y assets validados. Documento: https://pocketdm-prototipos.web.app/docs/finite-adventure-compiler.md",
+  "source": "https://github.com/sebasu66/pocketDM/pull/3",
+  "nodeIds": [
+    "doc_0905",
+    "doc_0907",
+    "doc_0909",
+    "doc_0911",
+    "doc_0913",
+    "doc_0009"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "id": "act-20261125-stormkeep-roster-001",
+  "date": "2026-11-25",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Tres fichas iniciales y selector cerrado de Stormkeep",
+  "summary": "Paladín, pícaro y maga: presets originales de 86 puntos, modelo compartido, equipo e ilustraciones originales verificados. Selector y consulta de ficha probados en tres resoluciones; selección local persistente. Magia y doble arma pendientes; no se crea campaña real.",
+  "changed": [
+    "vault-site/public/laboratorio/stormkeep-presets.mjs",
+    "vault-site/public/libro/stormkeep-roster.mjs",
+    "vault-site/public/libro/reader.mjs",
+    "vault-site/public/docs/stormkeep-starting-roster.md",
+    "vault-site/scripts/test-stormkeep-presets.mjs",
+    "vault-site/scripts/test-stormkeep-roster-browser.mjs"
+  ],
+  "next": "Simulación consume stormkeepSheet(presetId,actorId) en estado autorizado; integrar oferta/aceptación y salida; verificar Android físico.",
+  "source": "https://github.com/sebasu66/pocketDM/blob/feature/narrative-coordination-20261124/vault-site/public/docs/stormkeep-starting-roster.md",
+  "nodeIds": [
+    "doc_0913",
+    "doc_0907"
+  ]
+}

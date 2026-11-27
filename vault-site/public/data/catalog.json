@@ -1,0 +1,1419 @@
+{
+  "version": "pocketdm-vault-v1",
+  "updatedAt": "2026-11-27",
+  "source": "GDD PocketDM y README del paquete 2026-11-23; auditoría local 2026-11-24",
+  "nodes": [
+    {
+      "id": "doc_0001",
+      "type": "document",
+      "name": "Pocket DM · visión del proyecto",
+      "category": "Dirección",
+      "summary": "Juego asíncrono de cartas con Dungeon Master asistido por IA.",
+      "description_md": "# Visión del proyecto\n\n- Las cartas son escenas autocontenidas con elecciones cerradas, reglas y consecuencias.\n- El mundo se organiza como un grafo de entidades conectadas.\n- El servidor determina tiradas y estado; las IA ayudan a generar, ensamblar y narrar.\n- La documentación de diseño y operación se centraliza en esta bóveda.",
+      "status": "active",
+      "tags": [
+        "visión",
+        "juego"
+      ],
+      "links": [
+        {
+          "type": "documentado_en",
+          "target": "doc_0002"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0004"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0005"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0017"
+        }
+      ],
+      "source": {
+        "label": "GDD PocketDM",
+        "href": "https://docs.google.com/document/d/13cKvD6hb_-rVodySOk0U9_Xp9YsoQJ1XpVhZOQ5z9Xg/edit"
+      }
+    },
+    {
+      "id": "doc_0002",
+      "type": "reference",
+      "name": "GDD PocketDM · documento vigente",
+      "category": "Referencias",
+      "summary": "Diseño actual: juego, mundo, sistemas, prototipos y decisiones recientes.",
+      "description_md": "# GDD vigente\n\nFuente principal de decisiones fechadas del 21 al 23 de noviembre de 2026. Incluye arquitectura de cartas, grafo, mundo propio, IA narrativa, economía y decisiones abiertas.\n\nLa bóveda presenta resúmenes y vínculos; el documento completo permanece en Drive.",
+      "status": "active",
+      "tags": [
+        "fuente",
+        "diseño"
+      ],
+      "links": [
+        {
+          "type": "documenta",
+          "target": "doc_0001"
+        },
+        {
+          "type": "documenta",
+          "target": "doc_0005"
+        },
+        {
+          "type": "documenta",
+          "target": "doc_0008"
+        },
+        {
+          "type": "documenta",
+          "target": "doc_0017"
+        }
+      ],
+      "source": {
+        "label": "Abrir en Google Drive",
+        "href": "https://docs.google.com/document/d/13cKvD6hb_-rVodySOk0U9_Xp9YsoQJ1XpVhZOQ5z9Xg/edit"
+      }
+    },
+    {
+      "id": "doc_0003",
+      "type": "reference",
+      "name": "README del paquete del proyecto",
+      "category": "Referencias",
+      "summary": "Inventario del paquete de trabajo fechado el 23 de noviembre de 2026.",
+      "description_md": "# README del paquete\n\nDescribe el contenido y estado de GDD, narrativa, grafo-json-git, prototipo de combate, mundo, reglas, arte y configuración técnica. El ZIP incluye archivos de ejemplo y recursos pesados; no hace falta duplicarlos aquí.\n\n**Importante:** el README del repositorio Next.js no sustituye a este documento.",
+      "status": "active",
+      "tags": [
+        "fuente",
+        "inventario"
+      ],
+      "links": [
+        {
+          "type": "referencia",
+          "target": "doc_0002"
+        },
+        {
+          "type": "referencia",
+          "target": "doc_0011"
+        },
+        {
+          "type": "referencia",
+          "target": "doc_0010"
+        }
+      ],
+      "source": {
+        "label": "Abrir en Google Drive",
+        "href": "https://docs.google.com/document/d/1sClTs8JXj18KSlMxxkQdHqpYhgLbedfdxenGn0FwHxU/edit"
+      }
+    },
+    {
+      "id": "doc_0004",
+      "type": "concept",
+      "name": "Sistema de cartas asíncronas",
+      "category": "Diseño",
+      "summary": "Acciones acotadas y cartas con escena, decisiones, tiradas y resultados.",
+      "description_md": "# Sistema de cartas\n\n- Una carta reúne escena, opciones cerradas, tiradas de habilidad y consecuencias.\n- El jugador elige acciones de listas, no introduce texto libre.\n- Las cartas se ensamblan con arte, diálogos y reglas reutilizables.\n- El máster puede revisar cartas generadas antes de publicarlas.",
+      "status": "active",
+      "tags": [
+        "cartas",
+        "narrativa"
+      ],
+      "links": [
+        {
+          "type": "depende_de",
+          "target": "doc_0005"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0008"
+        },
+        {
+          "type": "implementado_en",
+          "target": "doc_0010"
+        }
+      ],
+      "source": {
+        "label": "Diseño en GDD",
+        "href": "https://docs.google.com/document/d/13cKvD6hb_-rVodySOk0U9_Xp9YsoQJ1XpVhZOQ5z9Xg/edit"
+      }
+    },
+    {
+      "id": "doc_0005",
+      "type": "architecture",
+      "name": "Grafo de mundo: JSON versionado",
+      "category": "Tecnología",
+      "summary": "Un documento JSON por actor/lugar con IDs estables y enlaces tipados.",
+      "description_md": "# Arquitectura del grafo\n\n- Entidades tipadas: lugares, PNJ, facciones, objetos, monstruos, eventos y jugadores.\n- Cada nodo usa **id**, **type**, **name**, **description_md**, **state** y **links**.\n- La fuente versionada vive en Git; las campañas pueden ser ramas y las sesiones commits.\n- La aplicación muestra vínculos de entrada y salida y la diferencia entre commits.",
+      "status": "active",
+      "tags": [
+        "grafo",
+        "git",
+        "esquema"
+      ],
+      "links": [
+        {
+          "type": "rige",
+          "target": "doc_0006"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0014"
+        },
+        {
+          "type": "visualizado_en",
+          "target": "doc_0011"
+        },
+        {
+          "type": "complementa",
+          "target": "doc_0007"
+        }
+      ],
+      "source": {
+        "label": "Documentación del grafo",
+        "href": "https://drive.google.com/drive/folders/1bKwy9Z6O7-uyr5ZES1UFGV7RgMioODAF"
+      }
+    },
+    {
+      "id": "doc_0006",
+      "type": "decision",
+      "name": "Los IDs nunca cambian",
+      "category": "Decisiones",
+      "summary": "Renombrar un elemento no debe romper su historial ni sus relaciones.",
+      "description_md": "# Decisión: identificadores inmutables\n\nEl nombre **Stormkeep** pasó a ser canónico y **Frostgate** quedó como alias. Renombrar el ID provocó pérdida aparente de continuidad en Git.\n\nLa regla es usar referencias por ID estable; el nombre y los alias pueden modificarse libremente.",
+      "status": "active",
+      "tags": [
+        "ids",
+        "integridad"
+      ],
+      "links": [
+        {
+          "type": "afecta",
+          "target": "doc_0005"
+        },
+        {
+          "type": "afecta",
+          "target": "doc_0012"
+        }
+      ],
+      "source": {
+        "label": "Decisión registrada en GDD",
+        "href": "https://docs.google.com/document/d/13cKvD6hb_-rVodySOk0U9_Xp9YsoQJ1XpVhZOQ5z9Xg/edit"
+      }
+    },
+    {
+      "id": "doc_0007",
+      "type": "architecture",
+      "name": "Estado en vivo y Firestore",
+      "category": "Tecnología",
+      "summary": "Firestore resuelve datos operativos; Git preserva instantáneas y versiones del mundo.",
+      "description_md": "# Estado en vivo\n\n- Las sesiones necesitan acceso rápido a estado y reglas desde el servidor.\n- Firestore puede mantener el estado actual de campañas y acciones.\n- Al finalizar cada sesión, una instantánea puede pasar a Git.\n- La bóveda documental **no** necesita escrituras públicas en Firestore para su MVP estático.",
+      "status": "active",
+      "tags": [
+        "firebase",
+        "backend"
+      ],
+      "links": [
+        {
+          "type": "complementa",
+          "target": "doc_0005"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0013"
+        }
+      ],
+      "source": {
+        "label": "Arquitectura en GDD",
+        "href": "https://docs.google.com/document/d/13cKvD6hb_-rVodySOk0U9_Xp9YsoQJ1XpVhZOQ5z9Xg/edit"
+      }
+    },
+    {
+      "id": "doc_0008",
+      "type": "concept",
+      "name": "Motor de consecuencias",
+      "category": "Diseño",
+      "summary": "Una acción propaga efectos sobre actores relacionados en el grafo.",
+      "description_md": "# Motor de consecuencias\n\nEl servidor resuelve la acción y genera una marca. La propagación por relaciones identifica actores relevantes; un modelo de decisión elige una reacción finita por actor. El resultado modifica el estado de campaña e informa la narración.\n\nEl sistema debe calcular reglas y efectos fuera de la IA narradora.",
+      "status": "active",
+      "tags": [
+        "consecuencias",
+        "IA"
+      ],
+      "links": [
+        {
+          "type": "depende_de",
+          "target": "doc_0005"
+        },
+        {
+          "type": "alimenta",
+          "target": "doc_0009"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0004"
+        }
+      ],
+      "source": {
+        "label": "Diseño en GDD",
+        "href": "https://docs.google.com/document/d/13cKvD6hb_-rVodySOk0U9_Xp9YsoQJ1XpVhZOQ5z9Xg/edit"
+      }
+    },
+    {
+      "id": "doc_0009",
+      "type": "concept",
+      "name": "Caché narrativo de ramas",
+      "category": "Diseño",
+      "summary": "Reutilizar ramas aprobadas cuando grupos distintos alcanzan situaciones equivalentes.",
+      "description_md": "# Caché de ramas\n\n- Cada rama se identifica con una clave de módulo, carta y decisiones relevantes.\n- Se reutilizan ramas aprobadas; las nuevas empiezan como provisionales.\n- Los puntos de reencuentro limitan el crecimiento combinatorio.\n- Tiradas, combate y estado individual se recalculan siempre.",
+      "status": "active",
+      "tags": [
+        "cache",
+        "narrativa"
+      ],
+      "links": [
+        {
+          "type": "depende_de",
+          "target": "doc_0008"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0004"
+        }
+      ],
+      "source": {
+        "label": "Diseño en GDD",
+        "href": "https://docs.google.com/document/d/13cKvD6hb_-rVodySOk0U9_Xp9YsoQJ1XpVhZOQ5z9Xg/edit"
+      }
+    },
+    {
+      "id": "doc_0010",
+      "type": "prototype",
+      "name": "Crónica del invierno · Libro narrativo V2",
+      "category": "Prototipos",
+      "summary": "Un lector de campaña para narración, combate, Personaje, Diario y Mapa.",
+      "description_md": "# Libro narrativo V2\n\nEl lector de Crónica del invierno presenta escenas, ilustraciones, personajes y fases de combate como parte de una sola experiencia. Su diseño es también la base para hojas de personaje, diario, mapa y decisiones cerradas.\n\nLas resoluciones mecánicas del ejemplo original son ilustrativas, no tiradas de un motor en vivo. La conexión a Firestore y al servicio de campañas queda pendiente.\n\nLa demo obsoleta de tres carriles se retira de la bóveda.",
+      "status": "active",
+      "tags": [
+        "libro",
+        "interfaz",
+        "narrativa",
+        "combate"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0004"
+        },
+        {
+          "type": "referenciado_por",
+          "target": "doc_0012"
+        },
+        {
+          "type": "es_interfaz_de",
+          "target": "doc_0023"
+        }
+      ],
+      "source": {
+        "label": "Abrir libro narrativo",
+        "href": "/libro/"
+      }
+    },
+    {
+      "id": "doc_0011",
+      "type": "prototype",
+      "name": "Visor original del grafo JSON + Git",
+      "category": "Prototipos",
+      "summary": "HTML con visualización SVG, fichas y navegación entre ramas y commits.",
+      "description_md": "# Visor HTML recuperado\n\nEl archivo fuente vive en `grafo-json-git/viewer/index.html` dentro del paquete de proyecto. Tiene una representación SVG de nodos y enlaces, tarjetas de documentos y selección de rama/commit.\n\nLa nueva vista documental aprovecha el mismo modelo de nodos y relaciones. El explorador histórico original sigue como referencia técnica y **no se publica con contenido de campaña sin revisar derechos y privacidad**.",
+      "status": "active",
+      "tags": [
+        "visor",
+        "html"
+      ],
+      "links": [
+        {
+          "type": "visualiza",
+          "target": "doc_0005"
+        },
+        {
+          "type": "inspira",
+          "target": "doc_0012"
+        }
+      ],
+      "source": {
+        "label": "Paquete original en Drive",
+        "href": "https://drive.google.com/drive/folders/1bKwy9Z6O7-uyr5ZES1UFGV7RgMioODAF"
+      }
+    },
+    {
+      "id": "doc_0012",
+      "type": "prototype",
+      "name": "Bóveda documental y navegación",
+      "category": "Prototipos",
+      "summary": "Portal de documentos, búsqueda, fichas vinculadas y grafo por niveles.",
+      "description_md": "# Bóveda y libro\n\nLa bóveda /boveda/ y el grafo /grafo/ son herramientas de documentación y administración del proyecto. La experiencia del jugador utiliza el libro /libro/ para las escenas y vistas de campaña.\n\nLa entrada /app/ y el usuario /app/?view=profile emplean provisionalmente la misma base visual. /combate/ remite a un encuentro del libro, nunca a la demo antigua de carriles.",
+      "status": "active",
+      "tags": [
+        "documentación",
+        "mvp"
+      ],
+      "links": [
+        {
+          "type": "usa",
+          "target": "doc_0013"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0014"
+        },
+        {
+          "type": "respeta",
+          "target": "doc_0006"
+        },
+        {
+          "type": "referencia",
+          "target": "doc_0010"
+        },
+        {
+          "type": "documenta",
+          "target": "doc_0025"
+        }
+      ],
+      "source": null
+    },
+    {
+      "id": "doc_0013",
+      "type": "architecture",
+      "name": "Firebase Hosting: sitios separados",
+      "category": "Tecnología",
+      "summary": "Proyecto Firebase verificado con sitio principal y sitio de prototipos.",
+      "description_md": "# Firebase Hosting\n\nProyecto verificado lore-weaver-rt9pc. Sitios lore-weaver-rt9pc y pocketdm-prototipos.\n\nLa bóveda y el libro integrado se prueban en un canal de vista previa de prototipos, sin modificar producción. El lector original proviene de la vista V2 del sitio, no de la demo anterior.\n\nLa producción anterior puede conservar aún el combate antiguo hasta su migración formal.\n\n**Decisión posterior del usuario:** el libro integrado V2 pasa a ser la aplicación principal de pocketdm-prototipos; se autoriza promover la versión revisada a live. Ver doc_0904.",
+      "status": "active",
+      "tags": [
+        "firebase",
+        "hosting"
+      ],
+      "links": [
+        {
+          "type": "aloja",
+          "target": "doc_0010"
+        },
+        {
+          "type": "aloja",
+          "target": "doc_0012"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0007"
+        },
+        {
+          "type": "actualizado_por",
+          "target": "doc_0904"
+        }
+      ],
+      "source": {
+        "label": "Repositorio técnico",
+        "href": "https://github.com/sebasu66/pocketDM"
+      }
+    },
+    {
+      "id": "doc_0014",
+      "type": "architecture",
+      "name": "GitHub y gestión de archivos grandes",
+      "category": "Tecnología",
+      "summary": "Versionar fuentes y enlazar los recursos sin duplicar binarios grandes.",
+      "description_md": "# Versionado y recursos\n\n- El repositorio `sebasu66/pocketDM` es la fuente pública de código Next.js existente.\n- Los JSON y Markdown se pueden versionar por archivo y referenciar por URL estable.\n- Imágenes pesadas, vídeos y arte fuente conservan su origen, con enlace y metadatos.\n- La bóveda no incluye claves privadas ni exportaciones completas de usuarios.",
+      "status": "active",
+      "tags": [
+        "git",
+        "archivos"
+      ],
+      "links": [
+        {
+          "type": "sirve_a",
+          "target": "doc_0005"
+        },
+        {
+          "type": "sirve_a",
+          "target": "doc_0012"
+        }
+      ],
+      "source": {
+        "label": "Repositorio en GitHub",
+        "href": "https://github.com/sebasu66/pocketDM"
+      }
+    },
+    {
+      "id": "doc_0015",
+      "type": "concept",
+      "name": "Atlas por teselas (etapa futura)",
+      "category": "Diseño",
+      "summary": "Mapa navegable independiente del grafo conceptual.",
+      "description_md": "# Atlas\n\nConcepto de mapa con teselas, zoom, marcadores y capas. Los lugares contienen coordenadas; los actores hacen referencia a su ubicación por ID. Es una vista distinta del grafo de relaciones y no bloquea la publicación de la bóveda.\n\n**Actualización:** priorizar el contrato de generación progresiva West Marches (doc_0908) antes de construir el atlas; el piloto debe anclarse al mundo compartido.",
+      "status": "active",
+      "tags": [
+        "mapa",
+        "futuro"
+      ],
+      "links": [
+        {
+          "type": "depende_de",
+          "target": "doc_0005"
+        },
+        {
+          "type": "propuesto_en",
+          "target": "doc_0002"
+        },
+        {
+          "type": "actualizado_por",
+          "target": "doc_0908"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0914"
+        }
+      ],
+      "source": {
+        "label": "Concepto en GDD",
+        "href": "https://docs.google.com/document/d/13cKvD6hb_-rVodySOk0U9_Xp9YsoQJ1XpVhZOQ5z9Xg/edit"
+      }
+    },
+    {
+      "id": "doc_0016",
+      "type": "document",
+      "name": "Dirección artística y assets",
+      "category": "Arte",
+      "summary": "Cartas con fondos, sprites de estados y composición adaptable.",
+      "description_md": "# Arte y presentación\n\nEl paquete incluye muestras de estilo, sprites de personaje, escenarios y variantes de interfaz de combate. Los archivos originales pueden permanecer en su repositorio o Drive; la bóveda almacena índices, notas y vínculos a sus fuentes.",
+      "status": "active",
+      "tags": [
+        "arte",
+        "assets"
+      ],
+      "links": [
+        {
+          "type": "relacionado_con",
+          "target": "doc_0010"
+        },
+        {
+          "type": "apoya",
+          "target": "doc_0004"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0914"
+        }
+      ],
+      "source": {
+        "label": "Carpeta PocketDM",
+        "href": "https://drive.google.com/drive/folders/1bKwy9Z6O7-uyr5ZES1UFGV7RgMioODAF"
+      }
+    },
+    {
+      "id": "doc_0017",
+      "type": "document",
+      "name": "Modelo comercial (síntesis no sensible)",
+      "category": "Administración",
+      "summary": "Opciones de membresías y campañas pregeneradas en evaluación.",
+      "description_md": "# Modelo de negocio (idea)\n\nSe estudia un anfitrión de pago que crea campañas y conecta su propia IA, con participantes invitados sin costo, y una suscripción superior que incluya IA con límite mensual. También se consideran módulos pregenerados.\n\nNo se publican aquí contratos, cuentas ni credenciales.",
+      "status": "active",
+      "tags": [
+        "negocio",
+        "administración"
+      ],
+      "links": [
+        {
+          "type": "documentado_en",
+          "target": "doc_0002"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0001"
+        }
+      ],
+      "source": null
+    },
+    {
+      "id": "doc_0018",
+      "type": "task",
+      "name": "Decisiones abiertas del motor de reglas",
+      "category": "Decisiones",
+      "summary": "Elegir entre variantes de Mythras y el material de Savage Worlds.",
+      "description_md": "# Decisión pendiente\n\nEl GDD registra Mythras Imperative, Mythras completo y datos de Savage Worlds/Hellfrost como alternativas. No se fija un sistema hasta cerrar la comparación técnica, la licencia y el alcance del motor de resolución.",
+      "status": "active",
+      "tags": [
+        "reglas",
+        "pendiente"
+      ],
+      "links": [
+        {
+          "type": "impacta",
+          "target": "doc_0004"
+        },
+        {
+          "type": "documentado_en",
+          "target": "doc_0002"
+        }
+      ],
+      "source": {
+        "label": "Opciones en GDD",
+        "href": "https://docs.google.com/document/d/13cKvD6hb_-rVodySOk0U9_Xp9YsoQJ1XpVhZOQ5z9Xg/edit"
+      }
+    },
+    {
+      "id": "doc_0019",
+      "type": "task",
+      "name": "Seguridad y separación de entornos",
+      "category": "Tecnología",
+      "summary": "Antes de publicación definitiva, validar reglas de Firestore y contenido público.",
+      "description_md": "# Seguridad operativa\n\n- El sitio estático de la bóveda no tiene inicio de sesión ni roles en el MVP.\n- No desplegar documentos con claves, contraseñas, información contractual o datos de usuarios.\n- Validar las reglas reales de Firestore en una tarea de seguridad independiente.\n- Cambios de Hosting se prueban primero en un canal preview y con plan de reversión.",
+      "status": "active",
+      "tags": [
+        "seguridad",
+        "prioritario"
+      ],
+      "links": [
+        {
+          "type": "protege",
+          "target": "doc_0013"
+        },
+        {
+          "type": "protege",
+          "target": "doc_0012"
+        }
+      ],
+      "source": null
+    },
+    {
+      "id": "doc_0020",
+      "type": "decision",
+      "name": "Mundo propio y nombre Stormkeep",
+      "category": "Decisiones",
+      "summary": "Adaptación original; Stormkeep es el nombre canónico y Frostgate, un alias.",
+      "description_md": "# Mundo propio\n\nEl mundo final no reproduce textualmente Hellfrost. El hielo avanza, pero también hay costas de tormenta, pantanos, desiertos de ceniza y ciudades ricas. **Stormkeep** se conserva como nombre canónico; **Frostgate**, sólo como alias de referencia.",
+      "status": "active",
+      "tags": [
+        "narrativa",
+        "mundo"
+      ],
+      "links": [
+        {
+          "type": "relacionado_con",
+          "target": "doc_0005"
+        },
+        {
+          "type": "ilustra",
+          "target": "doc_0006"
+        }
+      ],
+      "source": {
+        "label": "Decisión en GDD",
+        "href": "https://docs.google.com/document/d/13cKvD6hb_-rVodySOk0U9_Xp9YsoQJ1XpVhZOQ5z9Xg/edit"
+      }
+    },
+    {
+      "id": "doc_0021",
+      "type": "document",
+      "name": "Arco narrativo de Galahad",
+      "category": "Diseño",
+      "summary": "Estructura del primer arco: el códice perdido y cartas por reconstruir.",
+      "description_md": "# Primer arco\n\nLa línea de Galahad y el códice perdido de SoulFrost está documentada como trabajo narrativo. El paquete conserva cartas parciales; la introducción definitiva requiere resolver contradicciones con el inicio en el naufragio.\n\nNo se incorpora aquí texto extenso de fuentes de terceros.",
+      "status": "active",
+      "tags": [
+        "Galahad",
+        "historia"
+      ],
+      "links": [
+        {
+          "type": "usa",
+          "target": "doc_0004"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0020"
+        }
+      ],
+      "source": {
+        "label": "Documentación de narrativa",
+        "href": "https://drive.google.com/drive/folders/1bKwy9Z6O7-uyr5ZES1UFGV7RgMioODAF"
+      }
+    },
+    {
+      "id": "doc_0022",
+      "type": "task",
+      "name": "Pipeline de publicación de la bóveda",
+      "category": "Tecnología",
+      "summary": "Validar datos, generar índice y publicar en Firebase preview antes de live.",
+      "description_md": "# Etapas de publicación\n\n1. Reutilizar el libro V2 como interfaz principal de juego.\n2. Mantener documentación y administración en vistas separadas.\n3. Validar JSON, rutas, libro y componentes.\n4. Publicar solo en Firebase preview y comprobar el conjunto.\n5. Conectar estado, autenticación, eventos y reglas reales más adelante.\n6. Publicar live con rollback y revisión de contenidos, sin restaurar la demo obsoleta.",
+      "status": "active",
+      "tags": [
+        "CI",
+        "deploy"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0012"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0013"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0019"
+        }
+      ],
+      "source": null
+    },
+    {
+      "id": "doc_0023",
+      "type": "architecture",
+      "name": "Libro como interfaz unificada del jugador",
+      "category": "Diseño",
+      "summary": "El libro muestra historia, opciones, combate, personaje, diario y mapa con una misma estética.",
+      "description_md": "# El libro es la interfaz\n\nHistoria: narración, ilustraciones, elecciones y resultados.\n\nPersonaje: fichas y estados en páginas del libro.\n\nDiario: acciones y decisiones registradas por campaña.\n\nMapa: vista de lugares y posiciones con capa ilustrada.\n\nInicio y usuario: permiten salir de la campaña sin abandonar el lenguaje visual del libro.\n\nComponentes reutilizables: book-page, book-title, book-portrait, book-inset, combat-phase, book-sheet, book-journal, book-map, book-home, book-profile, book-link.\n\nPendiente: datos auténticos, sincronización, identidad y opciones calculadas por servidor.",
+      "status": "active",
+      "tags": [
+        "libro",
+        "interfaz",
+        "web components",
+        "jugador"
+      ],
+      "links": [
+        {
+          "type": "basado_en",
+          "target": "doc_0010"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0024"
+        },
+        {
+          "type": "separa",
+          "target": "doc_0012"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0007"
+        }
+      ],
+      "source": {
+        "label": "Abrir libro integrado",
+        "href": "/libro/"
+      }
+    },
+    {
+      "id": "doc_0024",
+      "type": "architecture",
+      "name": "Navegación de campaña y aplicación",
+      "category": "Tecnología",
+      "summary": "Rutas funcionales de Historia, Personaje, Diario, Mapa, Home y Usuario.",
+      "description_md": "# Navegación\n\nDentro de campaña: /libro/, /libro/?view=character, /libro/?view=journal y /libro/?view=map.\n\nFuera de campaña: /app/ para inicio y /app/?view=profile para usuario. Son pantallas demostrativas, sin login conectado.\n\n/combate/ dirige al encuentro dentro del libro; no contiene los tres carriles antiguos.\n\nLa documentación del proyecto permanece separada en /boveda/ y /grafo/.",
+      "status": "active",
+      "tags": [
+        "navegación",
+        "rutas",
+        "campaña",
+        "usuario"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0023"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0019"
+        }
+      ],
+      "source": {
+        "label": "Inicio de la aplicación",
+        "href": "/app/"
+      }
+    },
+    {
+      "id": "doc_0025",
+      "type": "document",
+      "name": "Coordinación compartida y registro de avances",
+      "category": "Administración",
+      "summary": "Antes de desarrollar, leer los últimos cambios de todos los equipos y registrar resultados por área con enlaces a GitHub.",
+      "description_md": "# Cómo trabajamos sin pisarnos\n\n1. **Leer antes de modificar:** abrir Actividad, filtrar por área si hace falta y revisar las últimas entradas de todos los equipos. Consultar commits y PRs, no sólo la versión cacheada en Firebase.\n2. **Verificar Git:** ejecutar git fetch origin y el preflight del repositorio; integrar cambios remotos relevantes antes de modificar archivos, APIs o modelos compartidos.\n3. **Coordinar responsable y alcance:** cada subsistema tiene un equipo dueño. Si dos equipos deben tocar un contrato, decidir primero cómo se integrará.\n4. **Registrar al cerrar:** crear un archivo nuevo en updates/<area>/<id>.json con área, equipo, fecha, estado, hechos, archivos, enlace fuente, riesgos y próximo paso; modificar la ficha relacionada si se cambió una decisión.\n5. **Publicar en preview:** validar y desplegar la vista previa para que los demás puedan leerlo. No asumir que el registro web se actualiza solo al subir Git.\n\n**Responsabilidades:** el equipo de combate es dueño del Simulador V2 y las reglas; la bóveda administra documentos, catálogo y grafo. El libro es interfaz compartida y requiere coordinación. **No registrar avances que otro equipo aún no confirmó.**\n\n**Limitación:** esto es un proceso colaborativo basado en GitHub y un visor de Firebase, no edición multiusuario ni bloqueo automático. El preflight avisa, pero cada equipo debe seguir la práctica.\n\nDetalle operativo: archivo COORDINACION.md del repositorio; tablero web en /actividad/.",
+      "status": "active",
+      "tags": [
+        "coordinación",
+        "registro",
+        "protocolo",
+        "equipos",
+        "git"
+      ],
+      "links": [
+        {
+          "type": "relacionado_con",
+          "target": "doc_0012"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0019"
+        },
+        {
+          "type": "coordina",
+          "target": "doc_0010"
+        },
+        {
+          "type": "coordina",
+          "target": "doc_0023"
+        }
+      ],
+      "source": {
+        "label": "Abrir tablero de actividad",
+        "href": "/actividad/"
+      }
+    },
+    {
+      "id": "doc_0901",
+      "type": "architecture",
+      "name": "Contrato compartido de chequeos",
+      "category": "Tecnología",
+      "summary": "Una tirada resuelta, una anotación con habilidad y resultado; reutilizable por aventura y combate.",
+      "description_md": "# Componente book-skill-check\n\nImplementación en rama de integración: el nombre de la habilidad y el resultado aparecen juntos dentro de la narración. Al pulsar, se muestra solamente la tirada asociada: actor, valor base, dificultad, valor efectivo, dado, resultado y consecuencia visible. No se recalcula ni se modifica el personaje al abrir la ventana.\n\nCada chequeo tiene ID estable; no se repite en un mismo bloque. Visión nocturna, frío, cobertura y otros factores no son chequeos independientes si no hubo tirada. Los resultados privados se filtran antes de enviar al lector. Las etiquetas son castellanas; los IDs son independientes del idioma.\n\nEl ejemplo incluye Percepción fallida de Galahad y exitosa de Zhalan; las tiradas están prefijadas. Pendiente: conectar los eventos reales del servidor.",
+      "status": "active",
+      "tags": [
+        "libro",
+        "reglas",
+        "contrato",
+        "integración"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0023"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0018"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0006"
+        }
+      ],
+      "source": {
+        "label": "Código del componente en rama de integración",
+        "href": "https://github.com/sebasu66/pocketDM/tree/feature/combat-checks-v2/vault-site/public/libro"
+      }
+    },
+    {
+      "id": "doc_0902",
+      "type": "architecture",
+      "name": "Coordinación de motores y estado compartido",
+      "category": "Tecnología",
+      "summary": "Un libro y un personaje; el motor de mundo y el de combate intercambian eventos y consecuencias.",
+      "description_md": "# División de trabajo acordada\n\n- Agente mundo: generación de mundo, escenas, narrativa general, exploración, navegación, cuenta e integración del lector.\n- Agente combate: resolución de enfrentamientos, tácticas, mecánicas, pruebas y eventos de combate. Mantiene el laboratorio como herramienta de desarrollo, no como una segunda aplicación de juego.\n- Compartido: personaje, contrato de chequeos, evento narrativo, componentes de libro y bóveda. El personaje evoluciona con TODAS las acciones, no solo combate.\n\n# Propuesta de integración (por acordar)\n\nUn único servicio de estado de campaña recibe comandos con IDs de actor/campaña y revisión esperada. Cada motor devuelve eventos resueltos y cambios de estado; el servicio valida y aplica una sola vez en transacción, actualiza personaje/diario y entrega la vista autorizada al libro. El libro jamás escribe directamente heridas, experiencia o inventario desde una tirada visual. Las decisiones del narrador no sustituyen los resultados del motor.\n\nFirestore como estado operativo según doc_0007; Git para versión de esquemas, código y snapshots autorizados. No desplegar sobre el canal del otro agente mientras trabaja. Integrar vía PR y actualizar la misma bóveda. Las reglas exactas, el esquema persistente y la autenticación aún requieren acuerdo.\n\n**Actualización:** la división combate/mundo queda sustituida por simulación/acontecimientos y narración/presentación. Ver doc_0905.",
+      "status": "active",
+      "tags": [
+        "coordinación",
+        "estado",
+        "combate",
+        "mundo"
+      ],
+      "links": [
+        {
+          "type": "complementa",
+          "target": "doc_0007"
+        },
+        {
+          "type": "rige",
+          "target": "doc_0023"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0008"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0901"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0019"
+        },
+        {
+          "type": "actualizado_por",
+          "target": "doc_0905"
+        }
+      ],
+      "source": {
+        "label": "Contrato y coordinación",
+        "href": "https://github.com/sebasu66/pocketDM/tree/feature/combat-checks-v2/vault-site"
+      }
+    },
+    {
+      "id": "doc_0903",
+      "type": "decision",
+      "name": "Lectura móvil inmersiva y navegación lateral",
+      "category": "Diseño",
+      "summary": "Móvil: una sección por vez, orientación apaisada preferente, paneles laterales y navegación mínima; escritorio conserva el libro de doble página.",
+      "description_md": "# Decisión de diseño\n\nEn móvil desaparecen las barras redundantes de navegación durante la aventura. La lectura vertical dispone retratos a ancho completo y texto arriba o abajo. En apaisado, las ilustraciones se sitúan junto al texto cuando hay espacio, con controles a la derecha para el pulgar. Se muestran fragmentos editoriales derivados de la misma historia, sin duplicar el estado.\n\nPersonaje se abre desde el lado izquierdo; mapa, diario y misiones desde el derecho. Deslizamiento horizontal o menú accesible. Los paneles no cambian la posición de lectura. Inicio se accede desde el menú, sin mostrarlo duplicado durante la aventura. En pantallas grandes se conserva la navegación de escritorio. Las fichas, diario y mapa reutilizan los componentes compartidos; misiones es un espacio reservado hasta conexión al estado real.\n\nEstado: prototipo integrado en PR #2, no fusionado ni publicado live. Pendiente: revisar ergonomía en dispositivo real y acordar la fuente única del lector con el otro equipo.",
+      "status": "active",
+      "tags": [
+        "móvil",
+        "responsive",
+        "libro",
+        "UX"
+      ],
+      "links": [
+        {
+          "type": "especializa",
+          "target": "doc_0023"
+        },
+        {
+          "type": "actualiza",
+          "target": "doc_0024"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0901"
+        }
+      ],
+      "source": {
+        "label": "PR de integración",
+        "href": "https://github.com/sebasu66/pocketDM/pull/2"
+      }
+    },
+    {
+      "id": "doc_0904",
+      "type": "decision",
+      "name": "Pocket DM como PWA principal",
+      "category": "Tecnología",
+      "summary": "El libro integrado V2 reemplaza los prototipos anteriores como experiencia principal; instalación web y futura mensajería push.",
+      "description_md": "# Decisión del usuario (24/11/2026)\n\nEl lector integrado V2 es la aplicación principal. Se autoriza publicar en el sitio pocketdm-prototipos live, sin mantener los prototipos obsoletos como entrada de juego. Se conserva el historial Git y una versión de Hosting para reversión. La bóveda y el tablero permanecen disponibles en el mismo sitio.\n\nPWA: manifiesto, iconos 192/512, modo fullscreen/standalone según navegador, orientación adaptable y service worker con navegación network-first. Sin caché de estado privado. En pantallas bajas o dispositivos táctiles se prioriza el lector móvil; se comprobó 1396 × 547 además de las resoluciones anteriores.\n\nPendientes: instalar en dispositivo físico; FCM y suscripción push con consentimiento, autenticación y asociación de tokens al usuario; definir backend y reglas de seguridad. El modo offline muestra aviso de conexión; no ejecuta partidas offline. El motor de combate todavía no está conectado.\n\nLa revisión se integra por PR #2; no fusionar ni editar las ramas de otros equipos sin acuerdo.",
+      "status": "active",
+      "tags": [
+        "PWA",
+        "móvil",
+        "Firebase",
+        "notificaciones"
+      ],
+      "links": [
+        {
+          "type": "actualiza",
+          "target": "doc_0013"
+        },
+        {
+          "type": "implementa",
+          "target": "doc_0903"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0019"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0025"
+        }
+      ],
+      "source": {
+        "label": "PR de integración",
+        "href": "https://github.com/sebasu66/pocketDM/pull/2"
+      }
+    },
+    {
+      "id": "doc_0905",
+      "type": "decision",
+      "name": "Simulación y narrador: dos responsabilidades, un mundo",
+      "category": "Tecnología",
+      "summary": "Separar por capas, no por combate y aventura. Simulación genera eventos y ramas; narrador convierte hechos visibles en contenido persistente.",
+      "description_md": "# Decisión de diseño del usuario\n\nEquipo de simulación: generación y validación de mundo, acciones, reglas, combate, semillas, ramas, consecuencias, estado y servicio MCP operativo. Equipo de narrativa: diseño literario de situaciones y NPC como propuestas, narración de eventos resueltos, caché de fragmentos, diálogos y presentación. Compartido: contratos, personaje, grafo y libro. Las propuestas del narrador no alteran estado hasta validación por simulación.\n\nUna sola aventura piloto, pequeña, generada proceduralmente desde situaciones y parámetros, no guion de desenlace. Anticipar ramas legales dentro de un presupuesto; completar contenido faltante al elegir ruta nueva. No publicar futuras ramas ni semillas. El jugador conserva agencia. Las decisiones sustituyen la división anterior combate/mundo; los equipos deben acordar la integración y no duplicar implementaciones.",
+      "status": "active",
+      "tags": [
+        "arquitectura",
+        "simulación",
+        "narración"
+      ],
+      "links": [
+        {
+          "type": "actualiza",
+          "target": "doc_0902"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0008"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0009"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0023"
+        }
+      ],
+      "source": {
+        "label": "Tablero de actividad",
+        "href": "/actividad/"
+      }
+    },
+    {
+      "id": "doc_0906",
+      "type": "document",
+      "name": "Skills para agentes de PocketDM",
+      "category": "Tecnología",
+      "summary": "Dos skills: protocolo operativo MCP y dirección narrativa modular, con fuentes, fichas y tablas originales.",
+      "description_md": "# PocketDM System\nProtocolo de consultas, propuestas, ramas, confirmación idempotente y lectura de resultados. Los métodos MCP son capacidades previstas, no herramientas desplegadas.\n\n# PocketDM Storyteller\nMódulos de mundo, NPC, aventuras, emergencia, exploración y narración. Basado en la revisión del manual de síntesis local y los índices, introducciones y extractos de cinco PDF: Mythic 2e, Anatomy of Adventure, Worldbuilding Blueprint, Lazy Dungeon Master y Forbidden Lands Players Handbook. Tablas y ejemplos propios; no se redistribuyen libros ni tablas originales. Profundizar capítulos identificados en sources.md.",
+      "status": "active",
+      "tags": [
+        "skills",
+        "MCP",
+        "narrativa",
+        "NPC"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0905"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0901"
+        }
+      ],
+      "source": {
+        "label": "Storyteller Skill",
+        "href": "/skills/pocketdm-storyteller/SKILL.md"
+      }
+    },
+    {
+      "id": "doc_0907",
+      "type": "architecture",
+      "name": "Piloto de simulación con semilla",
+      "category": "Tecnología",
+      "summary": "Primer motor Node privado: tiradas por dirección estable, ramas aisladas, chequeos compatibles y trabajos de narración.",
+      "description_md": "# Implementación inicial\n\nCódigo en vault-site/simulation, fuera de public/. HMAC-SHA256 con semilla y dirección de tirada (camino, actor/acción y slot según corresponda), rechazo de sesgo. Misma semilla, reglas, estado y decisiones reproducen eventos. Los IDs de rama son distintos. Explorar ramas no cambia estado original. Una semilla de desarrollo produjo Aldea del Hielo, disputa por medicina y 39 trabajos de narración a profundidad tres. Siete pruebas automatizadas aprobadas, incluyendo contrato del libro. Las estadísticas son provisionales, no Mythras completo; NPC, combate y generación de mundo son muy simples.\n\nPendiente: modelo común de personaje, grafo real, persistencia transaccional, servicio MCP, cola/caché persistente y narración LLM validada. Los resultados todavía no alimentan al lector en vivo. No exponer semillas ni futuros eventos.\n\n**Actualización:** priorizar el contrato de generación progresiva West Marches (doc_0908) antes de construir el atlas; el piloto debe anclarse al mundo compartido.",
+      "status": "active",
+      "tags": [
+        "semilla",
+        "motor",
+        "piloto",
+        "pruebas"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0905"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0901"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0018"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0009"
+        },
+        {
+          "type": "actualizado_por",
+          "target": "doc_0908"
+        }
+      ],
+      "source": {
+        "label": "Código del piloto",
+        "href": "https://github.com/sebasu66/pocketDM/tree/feature/seeded-adventure-pilot/vault-site/simulation"
+      }
+    },
+    {
+      "id": "doc_0908",
+      "type": "architecture",
+      "name": "West Marches: mundo progresivo, snapshot y atlas",
+      "category": "Tecnología",
+      "summary": "Canon inicial y geografía preliminar; materialización territorial por aventura, campañas aisladas sobre snapshot y mapa multiescala filtrado.",
+      "description_md": "# Decisión de diseño\n\nGenerar únicamente lo necesario para visitar la zona y resolver la aventura. Stormkeep como hub inicial. Referencias de lore y entidades con IDs estables pueden existir sin coordenadas precisas. Separar grado de generación, conocimiento y posición temporal. Propuesta: hexágonos axiales y grafo de rutas, con zoom regional, hexágono, localidad y sitio.\n\nCada campaña fija snapshot base inmutable y aplica su propio overlay. Hereda contenido canónico y caché compatible, no los resultados particulares de otra campaña. El atlas es proyección del grafo; vista DM autorizada y jugador filtrado por conocimiento. El zoom no dispara generación.\n\nSiguiente: contratos de mundo y materialización de corredor para una aventura piloto; atlas vectorial después. No implementado todavía. Referencia completa en skill.",
+      "status": "active",
+      "tags": [
+        "west-marches",
+        "atlas",
+        "snapshot",
+        "generación"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0905"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0005"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0007"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0009"
+        },
+        {
+          "type": "actualiza",
+          "target": "doc_0015"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0020"
+        },
+        {
+          "type": "amplia",
+          "target": "doc_0906"
+        }
+      ],
+      "source": {
+        "label": "Contrato de generación West Marches",
+        "href": "/skills/pocketdm-storyteller/west-marches.md"
+      }
+    },
+    {
+      "id": "doc_0909",
+      "type": "architecture",
+      "name": "Burbuja contextual y resolvedor de mundo efectivo",
+      "category": "Tecnología",
+      "summary": "Adaptación de IADM a Node: snapshot inmutable, cambios por campaña, escalas geográficas y selección contextual acotada.",
+      "description_md": "# Implementación inicial\n\nReutiliza los conceptos verificados de IADM: world_state.py, world_scale.py, world_resolver.py, multi_models.py, dm_context_builder.py, dm_context_enricher.py y dm_context_views.py. No se copia el backend anterior. El resolvedor admite adiciones, reemplazos y tombstones por campaña; valida referencias, hexágonos y rutas, con revisión esperada. Contexto a partir de ubicación efectiva, jerarquía, hexágonos próximos, entidades presentes y relaciones/focos explícitos. Proyecciones resumidas y completas con presupuesto de registros. La visibilidad del jugador se filtra antes de proyectar; el rol y conocimiento deben venir de un servicio autorizado, no del cliente.\n\nPiloto territorial provisional: Stormkeep y corredor oriental a Llanuras Heladas, aldea, puente y tres NPC. Materialización de dependencias predefinida, no generador general ni integración con el combate aún. Pruebas: seis nuevas y siete anteriores aprobadas. Estado en memoria, sin persistencia ni índice espacial de producción.\n\nSiguiente: integrar actor y estado del piloto de acontecimientos, búsqueda por coste de ruta y presupuesto de tokens, conocimiento autorizado, generación territorial extensible y almacenamiento. No modificar IADM original.",
+      "status": "active",
+      "tags": [
+        "contexto",
+        "LOD",
+        "snapshot",
+        "IADM"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0908"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0005"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0907"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0019"
+        }
+      ],
+      "source": {
+        "label": "Implementación y pruebas",
+        "href": "https://github.com/sebasu66/pocketDM/pull/3"
+      }
+    },
+    {
+      "id": "doc_0910",
+      "type": "decision",
+      "name": "Responsabilidad del simulador avanzado de combate",
+      "category": "Diseño",
+      "summary": "El equipo de simulación mantiene el combate avanzado y su laboratorio; el narrador presenta sus eventos en el libro compartido.",
+      "description_md": "# División de responsabilidades\n\nEl equipo de simulación mantiene el mundo, contexto, reglas y resolución avanzada de combate. El equipo de narrativa mantiene el narrador, diálogos, caché narrativo y presentación editorial. El laboratorio de combate es una herramienta de desarrollo del mismo motor, no una segunda experiencia de juego. Recuperar y evaluar especificaciones y prototipos originales de IADM; conservar estrategias programadas, prioridades, condiciones, ventanas de intervención y trazas reproducibles. Validar reglas, habilidades, equipo, fatiga, defensa, heridas y efectos con pruebas y comparativas estadísticas. No sustituir el combate original por un ejemplo de atacar por turnos sin acuerdo. Los eventos resueltos, anotaciones de chequeo y cambios de estado alimentan al libro y a la misma ficha. Pendiente: revisar prototipo original y fijar reglas de referencia/licencias antes de integrar.\n\nEspecificación y tareas de implementación: doc_0911.",
+      "status": "active",
+      "tags": [
+        "combate",
+        "responsabilidades",
+        "simulación"
+      ],
+      "links": [
+        {
+          "type": "especializa",
+          "target": "doc_0905"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0901"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0018"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0909"
+        },
+        {
+          "type": "detallado_en",
+          "target": "doc_0911"
+        }
+      ],
+      "source": {
+        "label": "Tablero compartido",
+        "href": "/actividad/"
+      }
+    },
+    {
+      "id": "doc_0911",
+      "type": "architecture",
+      "name": "Especificación y backlog del simulador avanzado de combate",
+      "category": "Tecnología",
+      "summary": "Fuentes mecánicas, ingesta validada, resolvedor Mythras, tácticas, laboratorio estadístico e integración al mundo y libro.",
+      "description_md": "# Estado y especificación\n\nEl libro actual usa acontecimientos y tiradas prefijados; el prototipo IADM D10 y el piloto PocketDM D100 simplificado son cálculos reales pero no Mythras completo. El manual Mythras completo local (306 páginas) es la referencia primaria de verificación. Los materiales de encounter gen aportan perfiles, estilos, rasgos, dificultad, defensa y efectos; el HTML del Encounter Generator depende parcialmente de un servidor. No hay ingesta aprobada ni simulador estadístico avanzado todavía.\n\nTres capas: catálogo mecánico versionado, canon del mundo, instancias por campaña. Pipeline de ingesta con procedencia, permisos, normalización, validación y revisión. Motor determinista con resolución Mythras y capa de tácticas; mismo motor para partida y laboratorio estadístico. Pruebas por semillas reproducibles y métricas de resultados, lesiones, duración, fatiga y consumo. Eventos resueltos alimentan al narrador, no al revés.\n\nBacklog ADV-C01 a ADV-C13, dependencias y criterios de aceptación en documento completo. Prioridad: inventario y permisos, esquema de datos, muestra piloto de equipo/estilos/criaturas y verificación de reglas. El equipo de simulación es responsable. Estado: documentado, implementación pendiente. Sin redistribución de catálogos protegidos.\n\n**Avance parcial:** catálogo de fixtures, verificación de algunas reglas, resolvedor inicial y micro-lab de intercambios en doc_0912. No se completaron aún C02/C05/C06/C10 ni la ingesta.",
+      "status": "active",
+      "tags": [
+        "Mythras",
+        "combate",
+        "ingesta",
+        "estadística",
+        "backlog"
+      ],
+      "links": [
+        {
+          "type": "amplia",
+          "target": "doc_0910"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0018"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0901"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0907"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0909"
+        },
+        {
+          "type": "avance",
+          "target": "doc_0912"
+        }
+      ],
+      "source": {
+        "label": "Especificación completa y tareas",
+        "href": "/docs/advanced-combat-spec.md"
+      }
+    },
+    {
+      "id": "doc_0912",
+      "type": "architecture",
+      "name": "Núcleo mecánico y micro-laboratorio de combate",
+      "category": "Tecnología",
+      "summary": "Catálogo original validado, grados D100, oposición, diferencial, parada y ensayos reproducibles de intercambios.",
+      "description_md": "# Implementación parcial C02/C05/C06/C10\n\nCatálogo versionado de prueba: tres armas, dos estilos, dos anatomías, tres plantillas; IDs, procedencia y referencias validadas. No es ingesta de datos externos. Manual completo verificado en pp.37–38,51,94–95 para grados, límites, oposición/diferencial y parada. Pendiente revisar redondeos y fumbles con modificadores, reacciones retroactivas y resto de reglas. Entitlement de efectos no ejecuta efectos. Micro-lab: 1000 intercambios por política, mismas semillas, 1.821 vs 2.475 daño medio antes de armadura, con y sin parada. 22 pruebas totales aprobadas. No hay combate completo, scheduler, lesiones, integración de mundo o libro. C01 pendiente de permisos/huellas; C03/C04 sin ingesta. Siguiente: consolidar esquema, verificar reglas y resolver un combate completo 1v1 con estados y efectos.",
+      "status": "active",
+      "tags": [
+        "combate",
+        "D100",
+        "pruebas",
+        "catálogo"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0911"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0901"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0907"
+        }
+      ],
+      "source": {
+        "label": "Implementación y pruebas",
+        "href": "https://github.com/sebasu66/pocketDM/pull/3"
+      }
+    },
+    {
+      "id": "doc_0913",
+      "type": "task",
+      "name": "Backlog paralelo del agente narrador",
+      "category": "Diseño",
+      "summary": "N01–N09: biblia, hub, lore, contrato, caché, composición de libro, presentación, skill y aventura.",
+      "description_md": "# Trabajo paralelo\n\nPriorizar N01–N04 y N09: canon propio, Stormkeep, referencias aún sin posición, contrato narrativo y situaciones de aventura. N05/N06: caché y composición dinámica del libro con eventos resueltos; N07/N08: presentación y profundización de skills. Responsable narración/presentación; pendiente confirmación de tareas por el otro agente. No modificar estado ni resolver dados desde el narrador. Ver backlog completo.",
+      "status": "active",
+      "tags": [
+        "narrador",
+        "backlog",
+        "coordinación"
+      ],
+      "links": [
+        {
+          "type": "implementa",
+          "target": "doc_0905"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0906"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0908"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0912"
+        }
+      ],
+      "source": {
+        "label": "Backlog narrador",
+        "href": "/docs/narrator-backlog.md"
+      }
+    },
+    {
+      "id": "doc_0914",
+      "type": "document",
+      "name": "Atlas narrativo persistente y direccion artistica editorial",
+      "category": "Narrativa / Arte",
+      "summary": "Regiones fijas, mapas de asentamientos con hotspots, estampas de localizacion e ilustraciones vivas; referencias visuales preferidas.",
+      "description_md": "# Decision del usuario 25/11/2026\n\nGenerar cada region una vez. Usar cartografia como estructura, no como arte final. Interiores de referencia privados, no VTT. Simular aventuras y consecuencias, no rutinas exhaustivas. El libro muestra estampas pictoricas y animaciones ambientales. Cuatro nuevas referencias preferidas; ver documento y muestra visual.\n\nCuatro referencias adicionales de escenarios a resolución completa: [galería de bosque, callejón, herrería y templo](/docs/art-references/escenarios-20261125.html).\n\n[Galería completa de ocho originales](/docs/art-references/escenarios-20261125.html): cuatro referencias editoriales principales y cuatro complementarias de escenarios.\n\n[Laboratorio de composición](/dm/libro/#ui) y [contrato del componente editorial](/docs/editorial-parent.md).",
+      "status": "active",
+      "tags": [
+        "atlas",
+        "arte",
+        "narrativa",
+        "libro"
+      ],
+      "links": [
+        {
+          "type": "relacionado_con",
+          "target": "doc_0010"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0016"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0015"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0023"
+        },
+        {
+          "type": "relacionado_con",
+          "target": "doc_0020"
+        }
+      ],
+      "source": {
+        "label": "Decision de diseno y referencias visuales",
+        "href": "/docs/narrative-atlas-art-direction.md"
+      }
+    },
+    {
+      "id": "doc_0915",
+      "type": "task",
+      "name": "H01: backlog QA para la primera aventura jugable",
+      "category": "Diseño",
+      "summary": "QA-01 a QA-10, prioridades, dependencias, responsables y criterios verificables de integración.",
+      "description_md": "Backlog aprobado por el usuario tras auditoría del 25/11/2026. H01 exige una aventura original de Stormkeep integrada con motor, libro, Ripple y persistencia; las tareas están pendientes y no reemplazan ADV-C ni N01–N09. Consultar documento completo y actividad.",
+      "status": "active",
+      "tags": [
+        "QA",
+        "backlog",
+        "coordinación",
+        "Stormkeep"
+      ],
+      "links": [
+        {
+          "type": "conecta",
+          "target": "doc_0025"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0911"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0913"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0023"
+        }
+      ],
+      "source": {
+        "label": "Backlog QA y criterios H01",
+        "href": "/docs/qa-playable-stormkeep.md"
+      }
+    },
+    {
+      "id": "doc_0916",
+      "type": "document",
+      "name": "La Última Llama del Norte · módulo 01 v1.0.0",
+      "category": "Narrativa / Arte",
+      "summary": "Nueva referencia argumental seleccionada para la primera aventura: Escarcha Lenta, 14 páginas y tres familias de cierre. Integración pendiente.",
+      "description_md": "El original JSON del máster se conserva en Google Drive con acceso restringido. La ficha documental describe su alcance y conciliación pendiente sin revelar soluciones. Sustituye la propuesta argumental QA-07 v0.2, no el canon ni el estado de simulación.",
+      "status": "active",
+      "tags": [
+        "Stormkeep",
+        "aventura",
+        "módulo",
+        "narrativa"
+      ],
+      "links": [
+        {
+          "type": "usa",
+          "target": "doc_0906"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0913"
+        },
+        {
+          "type": "depende_de",
+          "target": "doc_0915"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0917"
+        }
+      ],
+      "source": {
+        "label": "Registro del módulo y acceso autorizado",
+        "href": "/docs/stormkeep-module-01-reference.md"
+      }
+    },
+    {
+      "id": "doc_0917",
+      "type": "document",
+      "name": "Guía de acceso del Dungeon Master",
+      "category": "Documentación",
+      "summary": "Índice operativo del mundo, NPC, economía, personajes, reglas, skills, narrativa y presentación, actualizado para el módulo 01.",
+      "description_md": "Punto de partida para el máster: consultar la actividad, las skills, el mundo y el módulo seleccionado; distinguir las fuentes públicas de las privadas. No duplicar el lector ni generar narración durante la partida.",
+      "status": "active",
+      "tags": [
+        "DM",
+        "guía",
+        "documentación",
+        "contexto"
+      ],
+      "links": [
+        {
+          "type": "usa",
+          "target": "doc_0906"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0025"
+        },
+        {
+          "type": "usa",
+          "target": "doc_0916"
+        },
+        {
+          "type": "conecta",
+          "target": "doc_0023"
+        }
+      ],
+      "source": {
+        "label": "Guía completa",
+        "href": "/docs/dm-guide.md"
+      }
+    }
+  ]
+}

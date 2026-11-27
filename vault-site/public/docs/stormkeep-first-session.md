@@ -1,0 +1,25 @@
+# Stormkeep · Primera sesión: reparto y escenarios
+
+> **Nota de vigencia (27/11/2026):** reparto y recorrido de la propuesta anterior. Consultar [módulo 01 v1.0.0](./stormkeep-module-01-reference.md) antes de preparar la sesión; reutilizar NPC, escenas y arte sólo si el contexto es compatible.
+
+Estado: entrega de autoría y arte candidato para la primera sesión de La última llama del norte. No es un guion ejecutado ni un estado de campaña.
+Base: stormkeep-foundation-v02, stormkeep-population-v02, stormkeep-module-qa07-v02 y criterio de recorrido mínimo del usuario. No sustituye al dossier privado ni define nuevos comandos del motor.
+
+## Recorrido recomendado
+Entrada por la Puerta Oriental → plaza y orientación → Cuervo Gris (opcional, no bloquear la misión) → Hospicio del Umbral (oferta) → Mercado de las Balanzas (aclarar condiciones y logística) → salida por el camino oriental.
+La presencia efectiva de cada NPC depende de su agenda, horario, posición y estado autorizado. La primera llegada debe ofrecer orientación, no una secuencia forzada. Hald, Isveld, Aldra y Nils son las dependencias locales del módulo; Vesna es el primer contacto social propuesto. No revelar actores ni resultados exteriores antes de su descubrimiento.
+
+## Reparto
+- Hald Eirik (55), capitán de la guardia y veterano de infantería, draft.npc.hald. Recibe a los recién llegados en la Puerta Oriental, verifica su procedencia y decide el acceso según el estado autorizado. «Alto, viajero. ¿Buscas refugio en Stormkeep?».
+- Runa Eirik (25), barda elfa del Cuervo Gris, draft.npc.runa. Hija de Hald. Escucha a quienes llegan del camino oriental y conserva sus nombres y canciones. Contacto social opcional junto a Vesna.
+- Vesna Rauk (44), posadera, draft.npc.vesna. Pelo rojizo entrecano, marca en ceja, delantal azul. Sostiene el hospedaje familiar pese a deudas de la tormenta. Recibe y orienta, ofrece servicios cuando el motor confirme disponibilidad/precios; puede sugerir el hospicio sin entregar una misión ajena. Voz de humor seco. «Primero decidí si necesitás una cama, algo caliente o una dirección». vesna.jpg.
+- Isveld (43), curandera, draft.npc.isveld. Cabello ceniza, abrigo gris, bolsa de remedios. Se instaló tras asistir a damnificados; quiere abastecimiento fiable. Es el punto de oferta candidato: explica qué envío falta y qué ayuda solicita, sin presuponer aceptación. Confirma datos solo desde conocimiento autorizado. Voz amable y precisa. «Necesito que alguien averigüe qué ocurre con un envío de remedios. Antes de aceptar, escuchá las condiciones». isveld.jpg.
+- Aldra Neral (49), mercader y acreedora, draft.npc.aldra. Pelo oscuro recogido, abrigo ocre, libreta. Mantiene crédito para importar suministros. Aporta condiciones comerciales verificables, no posee automáticamente el cargamento ni controla la decisión del jugador. Voz calmada, exacta. «Veamos qué se acordó y quién se hizo cargo. Las palabras no bastan si faltan las cuentas». aldra.jpg.
+- Nils Dorn (26), carretero, draft.npc.nils. Rubio oscuro, hombros anchos, chaleco de cuero. Hijo de Hessa; quiere comprar su propio transporte. Explica logística, ruta y hechos que haya presenciado; no se le asigna disponibilidad o acompañamiento sin estado. Voz animada, impaciente ante demoras. «Puedo contarte cómo se hacen estos trayectos. Otra cosa es prometerte un carro disponible». nils.jpg.
+
+## Escenarios
+Puerta Oriental (puerta.jpg), plaza (original), interior del Cuervo Gris (candidato previo), hospicio (hospicio.jpg), mercado (mercado.jpg), camino oriental (pendiente de arte dedicado). La forja original sigue disponible como lugar opcional. El puente y la aldea se reservan para el tramo siguiente.
+## Arte
+Los cinco retratos se generaron con el original herrero-retrato.png como referencia visual directa. Los exteriores usaron plaza-cuervo-gris.png; hospicio usó herreria.png. Los resultados son candidatos: los retratos tienen contorno de novela gráfica más marcado que el original pictórico, Isveld/Vesna heredaron detalles de fondo de herrería, y puerta/hospicio son más lineales. Mercado se aproxima más a la referencia. No aprobar estilo definitivo ni arquitectura por el mero resultado de generación. Mantener arte original sin sustituciones. Galería de revisión: /docs/art-references/stormkeep-inicio/index.html.
+## Entrega a simulación
+Los IDs son referencias de autoría, no nuevos actores materializados. No adjudicar diálogo, disponibilidad, prueba, recompensa o resolución sin contrato. El motor prepara oportunidades legales y hechos, la presentación utiliza las imágenes asociadas. Los textos de apertura son propuestas, no registros. No publicar el dossier privado.

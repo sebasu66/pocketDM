@@ -1,0 +1,24 @@
+{
+  "id": "act-20261124-unified-reader-002",
+  "date": "2026-11-24",
+  "area": "Interfaz / Libro",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Navegación unificada y lectura horizontal",
+  "summary": "Portada e introducción pertenecen al mismo índice de folios que la crónica. Retroceso 3→2→1 probado. Arte fijo de altura completa, columna de texto con scroll independiente, laterales mayores, portada con fondo extendido y fade, manifest landscape y aviso de giro. Seis tamaños Edge y prueba de regresión de chequeos aprobados. Release editorial-2.",
+  "changed": [
+    "vault-site/public/libro/reader.mjs",
+    "vault-site/public/libro/edition/",
+    "vault-site/public/libro/mobile-reader.mjs",
+    "vault-site/public/app.webmanifest",
+    "vault-site/public/data/pwa-release.json",
+    "vault-site/scripts/test-edition-browser.mjs",
+    "vault-site/scripts/test-checks-browser.mjs"
+  ],
+  "next": "Validar físicamente en Android instalado. Texto ahora en columna recta; adaptación irregular avanzada pendiente. Push con aplicación cerrada pendiente.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0903",
+    "doc_0913"
+  ]
+}

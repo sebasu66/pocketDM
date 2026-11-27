@@ -1,0 +1,29 @@
+{
+  "id": "act-20261126-editorial-dialogo-seguridad-013",
+  "date": "2026-11-26",
+  "area": "Narrativa / Contenido",
+  "owner": "Narrativa / Dirección editorial",
+  "status": "en-revision",
+  "title": "Diálogo editorial, diseños compartidos y sala de prueba",
+  "summary": "Preparados diálogo responsive con personaje transparente, placa de función y respuestas táctiles, biblioteca Firestore con cuenta Google autorizada y sala aislada de anfitrión y cuatro jugadores. Emulador verificó permisos, integridad, límite de participantes y flujos sin credenciales reales. La sala aún no conecta la campaña jugable y el dado de la demo no usa la semilla de campaña.",
+  "changed": [
+    "firestore.rules",
+    "firebase.editorial-test.json",
+    "package.json",
+    "package-lock.json",
+    "vault-site/scripts/test-firestore-rules.cjs",
+    "vault-site/public/dm/libro/editorial/",
+    "vault-site/public/dm/libro/index.html",
+    "vault-site/public/dm/libro/stormkeep_laboratorio_editorial_v11.html",
+    "vault-site/public/laboratorio/dialogo/",
+    "vault-site/public/laboratorio/test-sesiones/",
+    "vault-site/public/libro/reader.mjs",
+    "vault-site/firebase.json",
+    "vault-site/public/docs/editorial-parent.md"
+  ],
+  "next": "Verificar Google y sincronización en la cuenta real, revisar arte con el usuario y conectar sala y tiradas al motor canónico.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0914"
+  ]
+}

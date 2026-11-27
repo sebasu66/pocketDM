@@ -1,0 +1,25 @@
+{
+  "id": "act-20261125-first-session-art-fullscreen-001",
+  "date": "2026-11-25",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Reparto inicial, ocho ilustraciones y PWA apaisada",
+  "summary": "Runa, Vesna, Isveld, Aldra y Nils: perfiles y retratos candidatos; puerta, hospicio y mercado con referencia visual original. Manifiesto de assets por ID de autoría. PWA sin barras superiores/inferiores, retrato de ficha fijo y navegación lateral en todas las vistas.",
+  "changed": [
+    "vault-site/public/docs/stormkeep-first-session.md",
+    "vault-site/public/docs/art-references/stormkeep-inicio/",
+    "vault-site/public/data/stormkeep-first-session-assets.json",
+    "vault-site/public/libro/mobile-full.css",
+    "vault-site/public/libro/mobile-reader.mjs",
+    "vault-site/public/libro/stormkeep-roster.mjs",
+    "vault-site/public/app.webmanifest",
+    "vault-site/scripts/test-mobile-full-browser.mjs"
+  ],
+  "next": "Revisar fidelidad pictórica, arte de camino, puente y aldea; conectar IDs a estado autorizado y probar Android físico. Promoción live tras revisión.",
+  "source": "https://github.com/sebasu66/pocketDM/blob/feature/narrative-coordination-20261124/vault-site/public/docs/stormkeep-first-session.md",
+  "nodeIds": [
+    "doc_0913",
+    "doc_0914"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+    "id":  "act-20261125-location-editorial-003",
+    "date":  "2026-11-25",
+    "area":  "Narrativa / Contenido",
+    "owner":  "Agente narrador / presentacion",
+    "status":  "en-revision",
+    "title":  "Editorial-6: scroll completo y separacion de pruebas",
+    "summary":  "Titulo, encabezado y moldura en scroll con arte fijo. Aislamiento de muestras antiguas, atlas de dos lugares originales y vistas sin eventos ficticios. Primer modulo limitado a tres personajes fijos por indicacion del usuario; assets definitivos pendientes. Pruebas de lector, scroll y evento confirmado superadas.",
+    "changed":  [
+                    "vault-site/public/libro/edition/location-pages.mjs",
+                    "vault-site/public/libro/edition/location-pages.css",
+                    "vault-site/public/libro/edition/edition.mjs",
+                    "vault-site/public/libro/reader.mjs",
+                    "vault-site/public/libro/index.html",
+                    "vault-site/public/app/index.html",
+                    "vault-site/public/docs/editorial-location-pages.md"
+                ],
+    "next":  "Integrar plantel entregado por combate y MOD-01 con estado real, probar Android instalado.",
+    "source":  "https://github.com/sebasu66/pocketDM/blob/feature/narrative-coordination-20261124/vault-site/public/docs/editorial-location-pages.md",
+    "nodeIds":  [
+                    "doc_0914",
+                    "doc_0913"
+                ]
+}

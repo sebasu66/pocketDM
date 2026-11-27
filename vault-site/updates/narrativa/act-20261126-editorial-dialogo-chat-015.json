@@ -1,0 +1,22 @@
+{
+  "id": "act-20261126-editorial-dialogo-chat-015",
+  "date": "2026-11-26",
+  "area": "Narrativa / Contenido",
+  "owner": "Narrativa / Dirección editorial",
+  "status": "en-revision",
+  "title": "Encuadre libre y conversación en el editor",
+  "summary": "Las vistas permiten definir anchos de prueba de escritorio y móvil. El fondo y la escala admiten encuadres ampliados; el panel puede situarse delante o detrás del NPC. El diálogo presenta historial y respuestas finitas desplegables con desplazamiento táctil vertical. Chromium verificó ajustes, capas, historial y arrastre táctil; la usuaria confirmó el guardado compartido con su cuenta. La respuesta seleccionada queda pendiente hasta que se confirma con la flecha; se verifica que no se emite antes.",
+  "changed": [
+    "vault-site/public/dm/libro/editorial/camera.mjs",
+    "vault-site/public/dm/libro/editorial/dialogue-page.mjs",
+    "vault-site/public/dm/libro/editorial/dialogue-page.css",
+    "vault-site/public/dm/libro/editorial/lab.mjs",
+    "vault-site/public/dm/libro/editorial/lab.css",
+    "vault-site/public/dm/libro/stormkeep_laboratorio_editorial_v11.html"
+  ],
+  "next": "Conectar el diálogo al motor narrativo y reutilizar los controles de navegación móvil del libro durante el diálogo; revisar el diseño con la usuaria.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0914"
+  ]
+}

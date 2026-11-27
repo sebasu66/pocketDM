@@ -1,0 +1,20 @@
+{
+  "id": "act-20261127-v2-main-cleanup-001",
+  "date": "2026-11-27",
+  "area": "Coordinación",
+  "owner": "Narrativa / Infraestructura",
+  "status": "en-revision",
+  "title": "Consolidación de la raíz del repositorio en PocketDM V2",
+  "summary": "La V1 y el prototipo V2 anterior se conservan en archive/pocketdm-v1-20261127. La base de integración narrativa vigente se selecciona como árbol de trabajo principal sin duplicar lectores. El historial de ambas ramas se conserva mediante commit con dos padres. La propuesta Vercel Services queda separada hasta confirmar arquitectura y validar. Los avances no fusionados de otros equipos permanecen en sus ramas.",
+  "changed": [
+    "README.md",
+    "AGENTS.md",
+    "vault-site/scripts/build-portable-pwa.mjs"
+  ],
+  "next": "Reconciliar los avances pendientes de simulación y demás ramas con la base V2; verificar build y navegador; confirmar configuración Services. No se han desplegado cambios a Firebase ni a Vercel.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/archive/pocketdm-v1-20261127",
+  "nodeIds": [
+    "doc_0913",
+    "doc_0915"
+  ]
+}

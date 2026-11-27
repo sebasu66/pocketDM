@@ -1,4 +1,18 @@
-Galagad y la quest por el codex perdido:
-lo que no abe Galagad hasta ahora es que el autor de la carta es un Paladin muerto d la orden de SoulFrost, una especie de grupo templario que juro combatir las ferzas del emperador del hielo,ellos tomaron el coodice, un libro de antigua magia sagrada que tenia el potencial de derrotar al emperador. 
-en su plan de traducir el codex fueron sorprendidos por un brujo y las fuerzas del hielo, todos murieron, menos uno, un niño escudero, que logro tomar el codex en el caos de la batalla y uir sin ser visto, durante años vajo por el continente distribuyendo paginas del libro en diferentres escondites para progegerlo de manos malvadas hasta que un dia surgiera alguien capaz de usar el libro. Años despues, un anciano ya, descubrio la forma de leer el libro, debe ser tocado por una gota de sangre de un ser digno de la orden, y el libro debe estar a temperatura exremo fria. 
-El espiritu de este guardian del ibro es quien se aparecera para guiarlos en la busqueda de las paginas del libro y como leerlo para activar sus poderes. Esta hoja en particular le dara a quien la active una resistencia al frio sobrenatural, capacidad activa de emitir calor 8hasta 70 grados), y la inmunidad a ser convertidos en caminantes al morir en este contiente.
+# PocketDM V2
+
+Única base activa de la aplicación: `vault-site/`. La PWA, el libro, el editor y la bóveda comparten `vault-site/public/`. El motor de simulación está en `vault-site/simulation/` y no forma parte del directorio público.
+
+- [Coordinación](vault-site/COORDINACION.md) y [registro de actividad](vault-site/updates/).
+- [Guía del Dungeon Master](vault-site/public/docs/dm-guide.md).
+- [Módulo vigente](vault-site/public/docs/stormkeep-module-01-reference.md), con el original privado en Drive.
+- [Archivo V1 y prototipo histórico](https://github.com/sebasu66/pocketDM/tree/archive/pocketdm-v1-20261127).
+
+## Preparación
+
+Desde la raíz: `node vault-site/scripts/build-portable-pwa.mjs`. El script valida el catálogo, genera la actividad y actualiza la revisión PWA. El resultado público es `vault-site/public/`. No necesita Firebase CLI ni claves para preparar ese resultado. Firestore y autenticación siguen siendo dependencias donde se utilizan.
+
+Para probar el estado y el motor: `cd vault-site && node --test simulation/test-*.mjs`. Las pruebas con emulador requieren su configuración aislada; no apuntar a producción.
+
+## Estado de integración
+
+La base seleccionada corresponde a la revisión narrativa d12744ade8b875ac4669874a53d1e55ee71cb6f7. La V1 y el lector inicial de `main/v2/` se conservan en la rama de archivo, no en el árbol activo. No se declaran fusionados ni verificados los desarrollos que permanecen en ramas de otros equipos. Revisar las diferencias antes de integrar. La configuración Vercel Services se evalúa en `feature/pocketdm-vercel-services-20261127`; no se ha publicado. No se cambia Firebase Hosting mediante esta reorganización.

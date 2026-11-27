@@ -1,0 +1,48 @@
+// Location editorial renderer, shared by the real book. No campaign mutations.
+const assets='/libro/edition/assets/';
+const originals='/docs/art-references/';
+const places={
+ plaza:{name:'La plaza del Cuervo Gris',art:originals+'plaza-cuervo-gris.png',hero:assets+'plaza-extendida.png',paper:'#132e51',ink:'#da3107',intro:'La niebla azul recorre los adoquines. Bajo el último resplandor del día, el viejo pozo reúne a viajeros y vecinos de Stormkeep.',title:'Una voz entre la niebla',paragraphs:['El viento arrastra la niebla entre las casas de madera y piedra. Las últimas luces del día se reflejan sobre los charcos, mientras el viejo pozo preside la plaza.','Una figura se detiene junto al brocal. Desde la taberna llega el sonido apagado de una conversación; las ventanas iluminadas apenas consiguen romper el frío de la tarde.','Podés acercarte al pozo, buscar refugio en El Cuervo Gris o detenerte a escuchar. Cada paso te aproxima a una historia diferente.']},
+ forja:{name:'La Forja del Ancla',art:originals+'herreria.png',paper:'#252b32',ink:'#efa76b',intro:'El resplandor de las brasas ilumina los muros de piedra. En el aire se mezclan el calor del hogar, el hollín y el olor del metal.',title:'El eco del yunque',paragraphs:['El golpe del martillo resuena bajo la bóveda de piedra. Un puñado de chispas se pierde entre las sombras del taller.','Cerca del fuego descansan herramientas y piezas de hierro. La luz de las brasas dibuja sus perfiles sobre la piedra oscura.','Podés observar el trabajo de la forja o acercarte a conversar. La muestra no supone ninguna acción ni resultado de campaña.']}
+};
+places.puerto={name:'Muelles del Regreso',art:assets+'muelles-regreso-candidato.png',paper:'#192e49',ink:'#f25248',candidate:true,intro:'Las barcas se balancean junto al embarcadero. La niebla llega desde el agua y los tejados de Stormkeep se dibujan contra el cielo.',title:'La marea del regreso',paragraphs:['Las cuerdas tensas crujen sobre la madera húmeda. Entre las barcas se acumulan redes y cestas, mientras el agua devuelve los colores del cielo.','Desde los muelles se distingue la ladera de la población. La niebla oculta por momentos los tejados más cercanos.','La ilustración de este lugar es una propuesta de dirección artística. La escena no registra acciones ni resultados de campaña.']};
+places.taberna={name:'El Cuervo Gris',art:assets+'cuervo-gris-interior-candidato.png',paper:'#242b34',ink:'#ee9758',candidate:true,intro:'El calor del hogar llega hasta las mesas. Dos figuras descansan cerca del fuego, apartadas de la puerta y de la niebla de la plaza.',title:'Al calor de las brasas',paragraphs:['El fuego ilumina los bancos y las jarras. Los viajeros se recortan contra las llamas mientras el resto del salón permanece en penumbra.','La luz cambia sobre las mesas a medida que arden los leños. El murmullo de las conversaciones se mezcla con el sonido de la madera.','Podés observar el salón y decidir a quién acercarte. Esta página muestra el entorno; no determina la reacción de ningún personaje.']};
+export const locationPages=Object.entries(places).flatMap(([id])=>['intro','scene'].map(mode=>({id,mode})));
+export const locationPlace=(index)=>places[locationPages[index]?.id];
+function el(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n}
+const ornament='<svg viewBox="0 0 320 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"><path d="M3 12H133l10-4 7 4-7 4-10-4M317 12H187l-10-4-7 4 7 4 10-4M160 3l9 9-9 9-9-9z"/><path d="M151 12c-18 0-20-9-11-9 5 0 5 5 1 5M169 12c18 0 20-9 11-9-5 0-5 5-1 5M151 12c-18 0-20 9-11 9 5 0 5-5 1-5M169 12c18 0 20 9 11 9-5 0-5-5-1-5"/></g><g fill="currentColor"><path d="M3 9l5 3-5 3-3-3zM317 9l-5 3 5 3 3-3zM160 8l4 4-4 4-4-4z"/></g></svg>';
+let edgePromise;
+function getEdge(){
+ if(!edgePromise)edgePromise=new Promise((resolve,reject)=>{
+ const im=new Image();im.onload=()=>{try{
+ const c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;const ctx=c.getContext('2d',{willReadFrequently:true});ctx.drawImage(im,0,0);
+ const d=ctx.getImageData(0,0,c.width,c.height).data,profile=[];for(let x=0;x<c.width;x++){let y=0;while(y<c.height&&d[(y*c.width+x)*4+3]<86)y++;profile.push(y<c.height?y:null)}
+ const valid=profile.filter(v=>v!==null);if(!valid.length)throw Error('No alpha contour');const min=Math.min(...valid),max=Math.max(...valid);resolve({profile:profile.map(v=>v??max),min,max,width:c.width});
+ }catch(e){reject(e)}};im.onerror=reject;im.src=assets+'contorno-original.png';
+ });return edgePromise;
+}
+function splitParagraphs(paragraphs){const total=paragraphs.reduce((s,p)=>s+p.length,0);let count=0,best=1,dist=Infinity;for(let i=1;i<paragraphs.length;i++){count+=paragraphs[i-1].length;const d=Math.abs(count-total/2);if(d<dist){dist=d;best=i}}return [paragraphs.slice(0,best),paragraphs.slice(best)]}
+export function renderLocation(page,index,override=null){
+ const entry=locationPages[index],place=places[entry.id],intro=entry.mode==='intro';page.classList.add('location-edition');page.classList.toggle('location-intro',intro);page.style.setProperty('--loc-paper',place.paper);page.style.setProperty('--loc-title',place.ink);
+ const art=el('img','location-art');art.src=intro?(place.hero||place.art):place.art;art.alt=place.name;
+ const heading=el('header','location-heading');heading.append(el('div','location-kicker',place.candidate?'STORMKEEP / ARTE CANDIDATO':intro?'STORMKEEP / LOCALIZACIONES':'STORMKEEP / MUESTRA NARRATIVA'),el('h1','location-title',intro?place.name:place.title));const rule=el('div','location-rule');rule.innerHTML=ornament;heading.append(rule);
+ const read=el('section','location-reading');read.tabIndex=0;read.setAttribute('aria-label',intro?'Descripción de la localización':'Narración desplazable');const prose=el('div','location-prose');read.append(heading,prose);
+ const content=override?.paragraphs?.length?override.paragraphs:intro?[place.intro]:place.paragraphs;const makeP=(t,first=false)=>el('p',first?'location-capital':'',t);
+ const artBox=el('div','location-art-box');artBox.append(art);page.replaceChildren(artBox,read);
+ let disposed=false,raf=0,profile=null,lastCols=0,mask=null;
+ function boundary(y){const a=artBox.getBoundingClientRect(),h=Math.max(1,a.height),w=Math.max(1,a.width);if(!profile)return w*.85;const u=Math.min(1,Math.max(0,y/h))*(profile.profile.length-1),i=Math.floor(u),t=u-i;const v=profile.profile[i]*(1-t)+profile.profile[Math.min(i+1,profile.profile.length-1)]*t;const scale=Math.min(.00085,h/w/profile.width);return w*(.9-(profile.max-profile.min)*scale+(v-profile.min)*scale)}
+ function clip(){if(intro)return;const w=artBox.clientWidth,h=artBox.clientHeight;if(!w||!h)return;const p=['0px 0px'];for(let y=0;y<h;y+=2)p.push(boundary(y).toFixed(2)+'px '+y+'px');p.push(boundary(h).toFixed(2)+'px '+h+'px','0px '+h+'px');artBox.style.clipPath='polygon('+p.join(',')+')'}
+ function update(){if(disposed||!page.clientWidth)return;
+ if(intro){prose.style.height='auto';if(!prose.childElementCount)prose.append(makeP(content[0],true));return}
+ clip();const w=read.clientWidth,cs=getComputedStyle(read),usable=w-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight),artW=artBox.clientWidth;let max=0;for(let y=0;y<=artBox.clientHeight;y+=4)max=Math.max(max,boundary(y));const inset=max+27-parseFloat(cs.paddingLeft),gap=24,narrow=(usable-inset-gap)/2;const cols=narrow>=210&&content.length>1?2:1;prose.style.setProperty('--loc-a',(cols===2?narrow+inset:usable)+'px');prose.style.setProperty('--loc-b',narrow+'px');
+ if(cols!==lastCols){lastCols=cols;prose.classList.toggle('location-two',cols===2);mask=el('div','location-exclusion');mask.setAttribute('aria-hidden','true');if(cols===1)prose.replaceChildren(mask,...content.map((p,i)=>makeP(p,i===0)));else{const [a,b]=splitParagraphs(content),left=el('div','location-column'),right=el('div','location-column');left.append(mask,...a.map((p,i)=>makeP(p,i===0)));right.append(...b.map(p=>makeP(p)));prose.replaceChildren(left,right)}}
+ const fr=artBox.getBoundingClientRect(),rr=read.getBoundingClientRect(),pr=mask.parentElement.getBoundingClientRect(),offset=fr.left-pr.left,maxW=Math.min(Math.max(0,inset),mask.parentElement.clientWidth-130),y0=Math.max(0,rr.top+parseFloat(cs.paddingTop)-pr.top),y1=Math.max(y0,rr.bottom-pr.top),height=Math.max(100000,y1+1000),pts=['0px 0px',maxW+'px 0px',maxW+'px '+y0+'px'];
+ for(let y=y0;y<y1;y+=2)pts.push(Math.min(maxW,Math.max(0,offset+boundary(pr.top+y-fr.top)+27)).toFixed(2)+'px '+y+'px');
+ pts.push(maxW+'px '+y1+'px',maxW+'px '+height+'px','0px '+height+'px');mask.style.width=maxW+'px';mask.style.height=height+'px';mask.style.shapeOutside='polygon('+pts.join(',')+')';
+ const base=prose.getBoundingClientRect().top,bottom=Math.max(1,...[...prose.querySelectorAll('p')].map(p=>p.getBoundingClientRect().bottom-base));prose.style.height=Math.ceil(bottom)+'px';
+ }
+ function schedule(){if(!raf)raf=requestAnimationFrame(()=>{raf=0;update()})}
+ const ro=new ResizeObserver(schedule);ro.observe(page);ro.observe(heading);read.addEventListener('scroll',schedule,{passive:true});document.fonts?.ready.then(schedule);
+ if(!intro)getEdge().then(p=>{if(!disposed){profile=p;schedule()}}).catch(()=>{if(!disposed)page.dataset.contourError='true'});
+ schedule();return ()=>{disposed=true;ro.disconnect();read.removeEventListener('scroll',schedule);cancelAnimationFrame(raf);page.classList.remove('location-edition','location-intro');delete page.dataset.contourError}
+}

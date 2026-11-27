@@ -1,0 +1,21 @@
+{
+  "id": "act-20261126-editorial-ancho-movil-011",
+  "date": "2026-11-26",
+  "area": "Narrativa / Contenido",
+  "owner": "Narrativa / Dirección editorial",
+  "status": "en-revision",
+  "title": "Ancho configurable de la vista móvil",
+  "summary": "El laboratorio permite ajustar el ancho de la vista móvil y lo recuerda localmente. La vista del editor aplica explícitamente las excepciones móviles incluso a anchos horizontales. Chromium verificó ancho, herencia y recuperación.",
+  "changed": [
+    "vault-site/public/dm/libro/editorial/lab.mjs",
+    "vault-site/public/dm/libro/editorial/lab.css",
+    "vault-site/public/dm/libro/editorial/editorial-page.mjs",
+    "vault-site/public/dm/libro/stormkeep_laboratorio_editorial_v11.html",
+    "vault-site/public/docs/editorial-parent.md"
+  ],
+  "next": "Revisar con el usuario las dimensiones de vista deseadas.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0914"
+  ]
+}

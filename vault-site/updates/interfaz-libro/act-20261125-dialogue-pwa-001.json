@@ -1,0 +1,23 @@
+{
+  "id": "act-20261125-dialogue-pwa-001",
+  "date": "2026-11-25",
+  "area": "Interfaz / Libro",
+  "owner": "Pocket DM · Presentación narrativa",
+  "status": "implementado-en-live",
+  "title": "Laboratorio de diálogo dentro de la PWA",
+  "summary": "Publicada la PWA con el laboratorio accesible desde Inicio y un acceso directo en el manifiesto. El canal temporal verificó los 30 residentes y el diseño en cinco tamaños de pantalla. En producción se verificó Inicio, dos residentes, éxito y fallo D100 y registro del service worker. Hosting: versión 8bd1df54f57b8f70. Versión anterior para reversión: 9878a2a927a5d927.",
+  "changed": [
+    "vault-site/public/app.webmanifest",
+    "vault-site/public/laboratorio/dialogo/index.html",
+    "vault-site/public/libro/pwa.mjs",
+    "vault-site/public/sw-pocketdm.js",
+    "vault-site/public/data/pwa-release.json",
+    "vault-site/firebase.json"
+  ],
+  "next": "Verificar la primera apertura desde una instalación Android y probar luego el flujo de combate.",
+  "source": "https://pocketdm-prototipos.web.app/laboratorio/dialogo/",
+  "nodeIds": [
+    "doc_0913",
+    "doc_0914"
+  ]
+}

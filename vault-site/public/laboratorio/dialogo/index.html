@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#17222b">
+  <link rel="manifest" href="/app.webmanifest">
+  <link rel="apple-touch-icon" href="/libro/assets/app-192.png">
+  <title>Diálogos de Stormkeep · Pocket DM</title>
+  <link rel="stylesheet" href="/libro/mobile-full.css?v=1">
+  <link rel="stylesheet" href="./dialogo.css?v=rail1">
+</head>
+<body>
+  <main class="lab" aria-labelledby="lab-title">
+    <header class="toolbar">
+      <a class="exit" href="/app/" aria-label="Volver al inicio de Pocket DM">‹ <span>Inicio</span></a>
+      <h1 id="lab-title">Laboratorio de diálogo</h1>
+      <label class="toolbar-field">NPC <select id="npc" disabled></select></label>
+      <label class="toolbar-field">Diseño <select id="layout" disabled></select></label><button id="reset" type="button" disabled>Reiniciar</button>
+    </header>
+
+    <p id="loading" role="status">Cargando residentes de Stormkeep…</p>
+    <section class="scene" aria-label="Conversación de prueba" hidden><book-editorial-dialogue></book-editorial-dialogue></section>
+  </main>
+  <script type="module" src="./dialogo.mjs?v=rail1"></script>
+  <script type="module" src="/libro/pwa.mjs"></script>
+</body>
+</html>

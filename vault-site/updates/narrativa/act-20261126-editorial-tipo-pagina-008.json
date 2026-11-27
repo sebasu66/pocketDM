@@ -1,0 +1,18 @@
+{
+  "id": "act-20261126-editorial-tipo-pagina-008",
+  "date": "2026-11-26",
+  "area": "Narrativa / Contenido",
+  "owner": "Narrativa / Dirección editorial",
+  "status": "en-revision",
+  "title": "Tipo de página visible en el laboratorio editorial",
+  "summary": "El inspector presenta la página genérica y el título del laboratorio refleja el tipo seleccionado. La página genérica utiliza el componente de escena existente.",
+  "changed": [
+    "vault-site/public/dm/libro/stormkeep_laboratorio_editorial_v11.html",
+    "vault-site/public/dm/libro/editorial/lab.mjs"
+  ],
+  "next": "Revisar el nombre y la presentación de los futuros tipos especializados.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0914"
+  ]
+}

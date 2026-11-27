@@ -1,0 +1,71 @@
+:root{color-scheme:dark;--bg:#11151a;--rail:#151515;--panel:#1b222b;--line:#394350;--ink:#e6e8ea;--muted:#aeb8c2;--gold:#d3b27d;--rail-width:76px}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,sans-serif;padding-left:var(--rail-width)}.rail{position:fixed;inset:0 auto 0 0;width:var(--rail-width);background:var(--rail);border-right:1px solid #353b43;z-index:5}.rail nav{height:100%;display:flex;flex-direction:column;overflow:visible}.mark,.nav-icon{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:64px;min-height:48px;color:#aeb8c2;text-decoration:none;cursor:pointer;border:0;background:transparent;list-style:none;outline-offset:-3px}.mark{background:#891e26;color:white;font-weight:800;letter-spacing:.04em;font-size:21px;height:76px}.nav-icon svg{width:26px;height:26px}.nav-icon:hover,.nav-icon:focus-visible,.nav-icon[aria-current=page],.nav-group[data-active=true]>.group-icon{background:#101114;color:var(--gold)}.nav-icon[aria-current=page]{box-shadow:inset 3px 0 var(--gold)}.nav-group{border-top:1px solid #30343b}.nav-group[open]{border-bottom:1px solid #30343b}.group-icon::-webkit-details-marker{display:none}.group-icon::marker{content:""}.corner{position:absolute;bottom:5px;right:5px;width:11px;height:11px;background:currentColor;clip-path:polygon(100% 0,100% 100%,0 100%);opacity:.65;transition:transform .16s}.nav-group[open] .corner{transform:rotate(180deg)}.subnav{background:#0e1013;border-left:2px solid #3a5269}.sub-icon{height:52px}.sub-icon svg{width:22px;height:22px}.tip{position:absolute;top:50%;left:calc(100% + 12px);transform:translate(-5px,-50%);white-space:nowrap;background:#1b222b;border:1px solid #465260;color:#e6e8ea;padding:9px 14px;font:600 14px/1.3 system-ui,sans-serif;letter-spacing:0;border-radius:5px;box-shadow:0 6px 20px #0005;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .13s,transform .13s,visibility .13s;z-index:10}.tip:before{content:"";position:absolute;left:-6px;top:50%;width:10px;height:10px;background:#1b222b;border-left:1px solid #465260;border-bottom:1px solid #465260;transform:translateY(-50%) rotate(45deg)}.nav-icon:hover>.tip,.nav-icon:focus-visible>.tip,.mark:hover>.tip,.mark:focus-visible>.tip{opacity:1;visibility:visible;transform:translate(0,-50%)}.wrap{max-width:1160px;margin:auto;padding:60px 36px 70px}h1{font-size:clamp(2rem,4vw,3.3rem);font-weight:600;line-height:1.15;margin:0 0 16px}p{color:var(--muted);max-width:70ch}.eyebrow{font-size:.78rem;text-transform:uppercase;letter-spacing:.15em;color:var(--gold);margin:0 0 12px}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:40px}.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:28px;color:var(--ink);text-decoration:none;min-height:170px}.card:hover,.card:focus-visible{border-color:var(--gold)}.card h2{margin:0;font-size:1.35rem}.card p{margin:12px 0 0}.section{border-top:1px solid var(--line);margin-top:36px;padding:18px 0;scroll-margin-top:25px}.section h2{font-weight:600;font-size:1.2rem}.section p{font-size:.95rem}.nav-icon:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--gold)}@media(max-width:600px){:root{--rail-width:56px}.mark{height:60px;font-size:17px}.nav-icon{height:52px}.sub-icon{height:45px;min-height:42px}.nav-icon svg{width:23px;height:23px}.wrap{padding:36px 18px}.cards{grid-template-columns:1fr}.tip{max-width:calc(100vw - 80px);white-space:normal}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+/* Section identity: saturated parent, related child tones, neutral when collapsed. */
+.nav-group{--group:#ebc95c;--group-soft:#8a793f;--group-deep:#5a4d2b;--group-ink:#141414;--group-light:#f6e7b2}
+.nav-group[data-group=art]{--group:#62d2c4;--group-soft:#387e77;--group-deep:#254e4c;--group-light:#c7f4ed}
+.nav-group[open]>.group-icon,.nav-group[open]>.group-icon:hover,.nav-group[open]>.group-icon:focus-visible{background:var(--group);color:var(--group-ink);box-shadow:none}
+.nav-group[open]>.subnav{background:var(--group-deep);border-left:3px solid var(--group)}
+.nav-group[open] .sub-icon{background:var(--group-deep);color:var(--group-light);border-bottom:1px solid #ffffff12}
+.nav-group[open] .sub-icon:hover,.nav-group[open] .sub-icon:focus-visible{background:var(--group-soft);color:white}
+.nav-group[open] .sub-icon[aria-current=page]{background:var(--group-soft);color:white;box-shadow:inset 3px 0 var(--group)}
+.nav-group[open] .nav-icon:focus-visible{outline-color:white}
+.nav-group[open] .tip{border-color:var(--group)}
+.nav-group[open] .tip:before{border-left-color:var(--group);border-bottom-color:var(--group)}
+
+/* Expansion and page selection are independent. Only the current destination owns the selection bar. */
+.nav-group[open]>.subnav{border-left:0}
+.nav-group[open] .sub-icon{box-shadow:none}
+.nav-group[open] .sub-icon[aria-current=page]{background:var(--group-soft);color:white;box-shadow:inset 4px 0 #fff}
+.nav-group[data-active=true]>.group-icon{background:var(--group);color:var(--group-ink)}
+.nav-icon:not(.sub-icon)[aria-current=page]{box-shadow:inset 4px 0 #fff}
+.nav-group[open]>.group-icon{box-shadow:none}
+.section[hidden]{display:none}
+
+/* Compact or labeled rail: the selection and group colors are unchanged. */
+.nav-label{display:none}
+.rail-toggle{margin-top:auto;flex-shrink:0;border-top:1px solid #30343b;font:inherit;min-height:52px;height:56px}
+.rail-toggle svg{transition:transform .15s}
+.rail-expanded{--rail-width:248px}
+.rail-expanded .nav-icon,.rail-expanded .mark{justify-content:flex-start;gap:12px;padding:0 16px}
+.rail-expanded .nav-icon svg{flex:0 0 26px}
+.rail-expanded .sub-icon{padding-left:25px}
+.rail-expanded .sub-icon svg{flex-basis:22px}
+.rail-expanded .nav-label{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:550;text-align:left}
+.rail-expanded .mark .nav-label{font-weight:700;font-size:15px}
+.rail-expanded .group-icon .nav-label{padding-right:10px;font-weight:650}
+.rail-expanded .tip{display:none}
+.rail-expanded .rail-toggle svg{transform:scaleX(-1)}
+.rail-expanded .rail-toggle .nav-label{font-size:13px}
+@media(max-width:600px){.rail-expanded{--rail-width:min(248px,80vw)}.rail-expanded body{padding-left:56px}.rail-expanded .rail{box-shadow:8px 0 24px #0008}.rail-toggle{height:48px;min-height:48px}}
+@media(max-height:560px){.rail nav{overflow-y:auto;overflow-x:hidden}.rail:not(:hover) .tip{visibility:hidden}}
+
+/* Visual hierarchy: outline = expanded group, stripe = membership, fill = current page. */
+.nav-group[open]>.group-icon,
+.nav-group[open]>.group-icon:hover,
+.nav-group[open]>.group-icon:focus-visible,
+.nav-group[data-active=true]>.group-icon{
+ background:var(--rail);color:var(--group);box-shadow:inset 0 0 0 2px var(--group);
+}
+.nav-group[open]>.subnav{background:var(--rail);border:0}
+.nav-group[open] .sub-icon{background:var(--rail);color:var(--ink);border-bottom:1px solid #ffffff12;box-shadow:inset 4px 0 var(--group)}
+.nav-group[open] .sub-icon:hover,.nav-group[open] .sub-icon:focus-visible{background:#25282d;color:white}
+.nav-group[open] .sub-icon[aria-current=page],
+.nav-group[open] .sub-icon[aria-current=page]:hover,
+.nav-group[open] .sub-icon[aria-current=page]:focus-visible{background:var(--group);color:var(--group-ink);box-shadow:none}
+.nav-icon:not(.sub-icon)[aria-current=page],
+.nav-icon:not(.sub-icon)[aria-current=page]:hover,
+.nav-icon:not(.sub-icon)[aria-current=page]:focus-visible{background:var(--gold);color:#141414;box-shadow:none}
+.nav-group[open] .nav-icon:focus-visible,.nav-icon[aria-current=page]:focus-visible{outline:2px dashed currentColor;outline-offset:-5px}
+ 
+/* Book/UI: the original interactive lab retains its own internal layout. */
+.nav-group[data-group=book]{--group:#c0a0ed;--group-soft:#7d689d;--group-deep:#493858;--group-light:#ede0fa}
+.editorial-workspace{width:100%;min-width:0;height:100vh;height:100dvh;padding:0}
+.editorial-workspace .section{height:100%;margin:0;padding:0;border:0}
+.editorial-frame{display:block;width:100%;height:100%;border:0;background:#141922}
+
+/* Route-owned contextual extension; collapse is opt-in and controlled in column two. */
+:root{--context-width:300px}
+dm-context-panel{position:fixed;inset:0 auto 0 var(--rail-width);width:var(--context-width);max-width:calc(100vw - var(--rail-width));border-right:1px solid #394351;z-index:4}
+dm-context-panel[hidden]{display:none!important}
+.context-open body{padding-left:calc(var(--rail-width) + var(--context-width))}
+.context-collapsed{--context-width:42px}
+@media(max-width:600px){.context-open:not(.context-collapsed){--context-width:min(300px,45vw)}.context-open body,.rail-expanded.context-open body{padding-left:calc(56px + var(--context-width))}.rail-expanded dm-context-panel{left:56px;max-width:calc(100vw - 56px)}.rail-expanded .rail:has(dm-context-panel:not([hidden])){z-index:6}.rail-expanded dm-context-panel{z-index:-1}}

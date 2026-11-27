@@ -1,0 +1,18 @@
+{
+  "id": "act-20261125-stormkeep-hub-001",
+  "date": "2026-11-25",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-progreso",
+  "title": "N02: desarrollo de Stormkeep y relaciones del hub",
+  "summary": "Recuperar referencias históricas del GDD/README y diseñar lugares, dependencias y perfiles públicos originales. No publicar secretos ni cambiar coordenadas, reglas o estado.",
+  "changed": [
+    "vault-site/public/docs/stormkeep-hub-v01.md"
+  ],
+  "next": "Entregar propuesta de hub a simulación y mantener perfiles anteriores no verificados como pendientes.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0020",
+    "doc_0021"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "act-20261125-stormkeep-art-work-002",
+  "date": "2026-11-25",
+  "area": "Arte / Assets",
+  "owner": "Pocket DM · Arte narrativo",
+  "status": "en-revision",
+  "title": "Stormkeep · Galería narrativa y propuesta de reparto multiespecie",
+  "summary": "Catálogo de 30 residentes revisado. Galería con 55 candidatos, 2 aprobaciones previas y 2 originales conservados. La entrega vive en la rama de narrativa y continúa en revisión visual.",
+  "changed": [
+    "vault-site/public/docs/art-references/stormkeep-work-20261125/index.html",
+    "vault-site/public/docs/art-references/stormkeep-work-20261125/manifest.json",
+    "vault-site/public/data/stormkeep-first-session-assets.json",
+    "vault-site/public/docs/art-references/stormkeep-inicio/index.html"
+  ],
+  "next": "Revisar candidatos y especies. Confirmar por canal DM los retratos exteriores y las vistas opcionales antes de publicar.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124/vault-site/public/docs/art-references/stormkeep-work-20261125",
+  "nodeIds": [
+    "doc_0914",
+    "doc_0913"
+  ]
+}

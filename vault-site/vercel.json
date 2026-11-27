@@ -1,0 +1,84 @@
+{
+  "framework": null,
+  "buildCommand": "node scripts/build-portable-pwa.mjs",
+  "installCommand": "echo 'Static build; no dependencies'",
+  "outputDirectory": "public",
+  "rewrites": [
+    {
+      "source": "/boveda",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/boveda/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/grafo",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/grafo/:path*",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/data/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/libro/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/app/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/dm/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/sw-pocketdm.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/app.webmanifest",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/manifest+json"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    }
+  ]
+}

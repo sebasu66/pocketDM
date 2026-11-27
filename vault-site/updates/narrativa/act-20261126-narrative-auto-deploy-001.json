@@ -1,0 +1,20 @@
+{
+  "id": "act-20261126-narrative-auto-deploy-001",
+  "date": "2026-11-26",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Publicación automática de narrativa integrada",
+  "summary": "Disparador local por commit narrativo, instantánea validada, control de release concurrente, preview, promoción live y versión PWA. No publica registros de autoría privados.",
+  "changed": [
+    "vault-site/scripts/publish-narrative.mjs",
+    "vault-site/public/docs/narrative-deployment.md",
+    "vault-site/public/libro/pwa.mjs"
+  ],
+  "next": "Verificar primera publicación automatizada; reconciliar publicación externa si existe divergencia.",
+  "source": "https://github.com/sebasu66/pocketDM/blob/feature/narrative-coordination-20261124/vault-site/public/docs/narrative-deployment.md",
+  "nodeIds": [
+    "doc_0913",
+    "doc_0914"
+  ]
+}

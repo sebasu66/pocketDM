@@ -1,0 +1,24 @@
+{
+  "id": "act-20261127-module01-reference-001",
+  "date": "2026-11-27",
+  "area": "Narrativa / Contenido",
+  "owner": "Narrativa / Dirección editorial",
+  "status": "en-revision",
+  "title": "Nuevo módulo 01 y guía de acceso del máster",
+  "summary": "Se registra La Última Llama del Norte v1.0.0 como referencia argumental seleccionada. Se conserva el JSON original en Drive restringido, se indexan guía y ficha sin publicar desenlaces, y se marcan como antecedentes la propuesta de abastecimiento y el recorrido anterior.",
+  "changed": [
+    "vault-site/public/docs/dm-guide.md",
+    "vault-site/public/docs/stormkeep-module-01-reference.md",
+    "vault-site/public/docs/stormkeep-module-qa07-v02.md",
+    "vault-site/public/docs/stormkeep-first-session.md",
+    "vault-site/public/data/catalog.json"
+  ],
+  "next": "Conciliar identidades, rutas, habilidades y resultados con el canon y el simulador. Sincronizar la rama en el equipo autorizado, regenerar actividad, validar y publicar la bóveda. No hay integración jugable ni deployment verificado.",
+  "source": "https://github.com/sebasu66/pocketDM/blob/feature/narrative-coordination-20261124/vault-site/public/docs/stormkeep-module-01-reference.md",
+  "nodeIds": [
+    "doc_0916",
+    "doc_0917",
+    "doc_0913",
+    "doc_0915"
+  ]
+}

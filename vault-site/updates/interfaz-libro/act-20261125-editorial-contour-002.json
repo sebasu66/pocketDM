@@ -1,0 +1,25 @@
+{
+  "id": "act-20261125-editorial-contour-002",
+  "date": "2026-11-25",
+  "area": "Interfaz / Libro",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Texto adaptable al contorno de la ilustración fija",
+  "summary": "Collage alfa con retrato y fortaleza, título superpuesto independiente, exclusión irregular calculada desde el alfa y actualizada al desplazarse. Variante de arte con borde suavizado para pantallas menos anchas. Seis tamaños Edge y regresión del lector aprobados; capturas inspeccionadas. Texto y arte provisionales, sin canon nuevo.",
+  "changed": [
+    "vault-site/public/libro/edition/",
+    "vault-site/public/libro/reader.mjs",
+    "vault-site/public/libro/index.html",
+    "vault-site/public/libro/pwa.mjs",
+    "vault-site/public/sw-pocketdm.js",
+    "vault-site/public/data/pwa-release.json",
+    "vault-site/scripts/test-edition-browser.mjs",
+    "vault-site/public/app/index.html"
+  ],
+  "next": "Verificar Android físico; ajustar estabilidad del reflujo y refinamiento tipográfico. Definir módulo y NPCs antes de producir arte canónico.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0903",
+    "doc_0913"
+  ]
+}

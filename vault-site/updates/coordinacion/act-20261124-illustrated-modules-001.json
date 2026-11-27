@@ -1,0 +1,24 @@
+{
+  "id": "act-20261124-illustrated-modules-001",
+  "date": "2026-11-24",
+  "area": "Coordinación",
+  "owner": "Simulación y narración",
+  "status": "decidido",
+  "title": "Aventuras finitas como revistas ilustradas: alcance y referencias",
+  "summary": "Usuario confirma módulos finitos personalizados, host de pago, LLM por MCP que completa cobertura faltante, caché reutilizable y mundo base con burbuja detallada. Ocho referencias verificadas idénticas en IADM; índice de PDFs y seis imágenes editoriales, sin redistribuir originales. Pipeline y criterios propuestos, no implementados.",
+  "changed": [
+    "vault-site/public/docs/illustrated-adventure-modules.md",
+    "vault-site/updates/coordinacion/act-20261124-illustrated-modules-001.json"
+  ],
+  "next": "Narrador: consultar referencias locales y diseñar primer módulo original de Stormkeep con plan editorial/visual y desenlaces. Simulación: acordar contratos de módulo/edición y compilador acotado, continuar ADV-C01–C13. Documento: https://pocketdm-prototipos.web.app/docs/illustrated-adventure-modules.md",
+  "source": "https://github.com/sebasu66/pocketDM/pull/3",
+  "nodeIds": [
+    "doc_0905",
+    "doc_0908",
+    "doc_0909",
+    "doc_0911",
+    "doc_0913",
+    "doc_0009",
+    "doc_0010"
+  ]
+}

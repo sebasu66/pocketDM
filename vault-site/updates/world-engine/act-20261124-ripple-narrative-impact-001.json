@@ -1,0 +1,24 @@
+{
+  "id": "act-20261124-ripple-narrative-impact-001",
+  "date": "2026-11-24",
+  "area": "World Engine / Grafo",
+  "owner": "Equipo de simulación",
+  "status": "en-revision",
+  "title": "Corrección de Ripple: analista del grafo y roleo por IA",
+  "summary": "Decisiones argumentales reservadas al LLM narrador; Utility AI histórico. Recorrido tipado del grafo con evidencia de caminos, afectados potenciales, conocimiento por hecho y contrato de entrega al narrador. 76 pruebas Node. No llamadas LLM ni MCP real ni ejecución automática.",
+  "changed": [
+    "vault-site/simulation/ripple-impact.mjs",
+    "vault-site/simulation/test-ripple-impact.mjs",
+    "vault-site/simulation/npc-decisions.mjs",
+    "vault-site/public/docs/ripple-narrative-impact.md",
+    "vault-site/public/docs/ripple-decisions.md"
+  ],
+  "next": "Narrador: definir perfiles, relaciones, motivaciones y creencias; acordar análisis e intenciones. Simulación: herramientas MCP para recorrer grafo, transmisión y validación de acciones. https://pocketdm-prototipos.web.app/docs/ripple-narrative-impact.md",
+  "source": "https://github.com/sebasu66/pocketDM/pull/3",
+  "nodeIds": [
+    "doc_0008",
+    "doc_0909",
+    "doc_0913",
+    "doc_0907"
+  ]
+}

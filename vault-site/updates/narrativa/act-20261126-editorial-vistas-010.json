@@ -1,0 +1,17 @@
+{
+  "id": "act-20261126-editorial-vistas-010",
+  "date": "2026-11-26",
+  "area": "Narrativa / Contenido",
+  "owner": "Narrativa / Dirección editorial",
+  "status": "en-revision",
+  "title": "Vistas editoriales apiladas",
+  "summary": "Las previsualizaciones de escritorio y móvil se muestran una debajo de la otra, con anchos de referencia 960 y 360 píxeles cuando hay espacio. Comprobado en Chromium.",
+  "changed": [
+    "vault-site/public/dm/libro/editorial/lab.css"
+  ],
+  "next": "Revisar la disposición con el usuario.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0914"
+  ]
+}

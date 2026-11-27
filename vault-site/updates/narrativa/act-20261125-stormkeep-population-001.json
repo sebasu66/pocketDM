@@ -1,0 +1,19 @@
+{
+  "id": "act-20261125-stormkeep-population-001",
+  "date": "2026-11-25",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-progreso",
+  "title": "N02 ampliado: población orgánica de Stormkeep",
+  "summary": "Corrección del usuario: Corwin e Isveld eran ejemplos, no pilares. Diseñar un asentamiento costero pequeño con 30 NPC relevantes, hogares, economía, oficios, parentescos, autoridades y criminalidad; perfiles privados no publicados.",
+  "changed": [
+    "vault-site/public/docs/stormkeep-population-v02.md",
+    "vault-site/public/data/stormkeep-population-v02.json"
+  ],
+  "next": "Validar referencias y proponer integración con simulación.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/narrative-coordination-20261124",
+  "nodeIds": [
+    "doc_0020",
+    "doc_0021"
+  ]
+}

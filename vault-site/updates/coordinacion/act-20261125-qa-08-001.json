@@ -1,0 +1,20 @@
+{
+  "id": "act-20261125-qa-08-001",
+  "date": "2026-11-25",
+  "area": "Coordinación",
+  "owner": "Simulación + narrador/presentación",
+  "status": "pendiente",
+  "title": "QA-08 · P1 · Separación DM/jugador y seguridad de datos",
+  "summary": "Tarea aprobada para H01; no implementada. Definir visibilidad por hecho y proyecciones autorizadas, separar semilla, agendas privadas, resultados futuros y secretos del Hosting público y caché compartida; validar acceso del backend. Aceptación: Tests negativos: jugador no recibe secretos, ramas futuras ni semillas por API, archivos públicos, caché o URL; campañas aisladas; narrador solo recibe contexto autorizado; revisar reglas de acceso y no publicar material de fuentes sin permiso.",
+  "changed": [
+    "vault-site/public/docs/qa-playable-stormkeep.md"
+  ],
+  "next": "Dependencias: —; transversal desde el inicio. Referencias: N04/N05; ADV-C11/C12; doc_0019. Registrar evidencia y revisión cruzada al cerrar.",
+  "source": "https://github.com/sebasu66/pocketDM/blob/feature/qa-playable-stormkeep-20261125/vault-site/public/docs/qa-playable-stormkeep.md",
+  "nodeIds": [
+    "doc_0019",
+    "doc_0905",
+    "doc_0009",
+    "doc_0915"
+  ]
+}

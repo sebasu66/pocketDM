@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "lore-weaver-rt9pc"
+  },
+  "targets": {
+    "lore-weaver-rt9pc": {
+      "hosting": {
+        "prototipos": [
+          "pocketdm-prototipos"
+        ]
+      }
+    }
+  }
+}

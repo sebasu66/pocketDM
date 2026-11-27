@@ -1,0 +1,19 @@
+{
+  "id": "act-20261126-dm-sidebar-width-005",
+  "date": "2026-11-26",
+  "area": "Narrativa / Contenido",
+  "owner": "Agente narrador / presentación",
+  "status": "en-revision",
+  "title": "Modo compacto y expandido del menú lateral",
+  "summary": "Control inferior para alternar iconos solos e iconos con etiquetas. Preferencia local persistente; mantiene la navegación activa y la expansión de grupos. En pantallas pequeñas el modo amplio se superpone al contenido.",
+  "changed": [
+    "vault-site/public/dm/portal.js",
+    "vault-site/public/dm/portal.css",
+    "vault-site/public/dm/index.html",
+    "vault-site/public/dm/sistema/index.html",
+    "vault-site/public/dm/arte/index.html"
+  ],
+  "next": "Revisión visual con el usuario.",
+  "source": "https://pocketdm-prototipos.web.app/dm/",
+  "nodeIds": []
+}
