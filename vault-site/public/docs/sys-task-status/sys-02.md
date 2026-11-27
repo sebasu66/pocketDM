@@ -1,6 +1,6 @@
 # SYS-02 · Servicio común de azar determinista
 Fecha: 27/11/2026. Agente: SYS-02 (Simulación). Estado: en revisión parcial; integración bloqueada por coordinación de consumidores. No validado.
-Base: development, ebe06f9f5aac2968b7f3f74b2f627ebe062faa92. Rama: feature/sys-02-deterministic-rng. PR: pendiente de apertura al redactar este informe.
+Base: development, ebe06f9f5aac2968b7f3f74b2f627ebe062faa92. Rama: feature/sys-02-deterministic-rng. PR: [#14 (borrador hacia development)](https://github.com/sebasu66/pocketDM/pull/14).
 Prioridad P0 del plan SYS; QA-04 (P1 histórico), ADV-C06/C10.
 
 ## Fuentes y coordinación
