@@ -1,0 +1,25 @@
+name: PocketDM V2 Services check
+on:
+  push:
+    branches: [feature/pocketdm-vercel-services-20261127]
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Validate portable public build
+        run: node vault-site/scripts/build-portable-pwa.mjs
+      - name: Validate service routing and runtime binding contract
+        run: node --test vault-site/scripts/test-vercel-services.mjs
+      - name: Check reader modules
+        run: |
+          node --check vault-site/public/libro/reader.mjs
+          node --check vault-site/public/libro/player-edition.mjs
+      - name: Run existing simulator tests
+        working-directory: vault-site
+        run: node --test simulation/test-*.mjs
