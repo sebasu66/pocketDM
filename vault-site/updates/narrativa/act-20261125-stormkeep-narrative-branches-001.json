@@ -1,0 +1,19 @@
+{
+  "id": "act-20261125-stormkeep-narrative-branches-001",
+  "date": "2026-11-25",
+  "area": "Narrativa / Contenido",
+  "owner": "Pocket DM · Presentación narrativa",
+  "status": "en-revision",
+  "title": "Registro de ramas para narración preparada",
+  "summary": "La Puerta Oriental tiene once solicitudes de autoría con condiciones, contexto, historia por rama y estado pendiente. El formato enlaza texto de autoría por ID de rama y revisión y documenta el vínculo con las claves semánticas del compilador.",
+  "changed": [
+    "vault-site/public/docs/narrative-branch-registry.md",
+    "vault-site/public/docs/illustrated-adventure-modules.md",
+    "vault-site/public/data/catalog.json"
+  ],
+  "next": "Enviar el lote al modelo de narración, revisar el texto y acordar con simulación los vínculos a eventos autorizados.",
+  "source": "https://github.com/sebasu66/pocketDM/blob/feature/stormkeep-narrative-branch-registry/vault-site/public/docs/narrative-branch-registry.md",
+  "nodeIds": [
+    "doc_0913"
+  ]
+}

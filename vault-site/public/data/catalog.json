@@ -1233,7 +1233,7 @@
       "name": "Backlog paralelo del agente narrador",
       "category": "Diseño",
       "summary": "N01–N09: biblia, hub, lore, contrato, caché, composición de libro, presentación, skill y aventura.",
-      "description_md": "# Trabajo paralelo\n\nPriorizar N01–N04 y N09: canon propio, Stormkeep, referencias aún sin posición, contrato narrativo y situaciones de aventura. N05/N06: caché y composición dinámica del libro con eventos resueltos; N07/N08: presentación y profundización de skills. Responsable narración/presentación; pendiente confirmación de tareas por el otro agente. No modificar estado ni resolver dados desde el narrador. Ver backlog completo.",
+      "description_md": "# Trabajo paralelo\n\nPriorizar N01–N04 y N09: canon propio, Stormkeep, referencias aún sin posición, contrato narrativo y situaciones de aventura. N05/N06: caché y composición dinámica del libro con eventos resueltos; N07/N08: presentación y profundización de skills. Responsable narración/presentación; pendiente confirmación de tareas por el otro agente. No modificar estado ni resolver dados desde el narrador. Ver backlog completo.\n\n[Registro de ramas y narración preparada](/docs/narrative-branch-registry.md).",
       "status": "active",
       "tags": [
         "narrador",
