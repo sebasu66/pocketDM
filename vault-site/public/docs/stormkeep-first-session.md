@@ -1,4 +1,7 @@
 # Stormkeep · Primera sesión: reparto y escenarios
+
+> **Nota de vigencia (27/11/2026):** reparto y recorrido de la propuesta anterior. Consultar [módulo 01 v1.0.0](./stormkeep-module-01-reference.md) antes de preparar la sesión; reutilizar NPC, escenas y arte sólo si el contexto es compatible.
+
 Estado: entrega de autoría y arte candidato para la primera sesión de La última llama del norte. No es un guion ejecutado ni un estado de campaña.
 Base: stormkeep-foundation-v02, stormkeep-population-v02, stormkeep-module-qa07-v02 y criterio de recorrido mínimo del usuario. No sustituye al dossier privado ni define nuevos comandos del motor.
 
