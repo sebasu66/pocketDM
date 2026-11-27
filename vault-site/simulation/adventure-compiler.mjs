@@ -80,7 +80,8 @@ export function compileEdition(prepared,{maxEdges=1200,cachedKeys=[],availableAs
    if(!jobs.has(job.key))jobs.set(job.key,{key:job.key,semantic:job.semantic,mode:'fixture',scope:job.scope,eventBindings:[],status:cached.has(job.key)?'candidate':'missing'});
    jobs.get(job.key).eventBindings.push({eventId:event.id,checkIds:job.checkIds});
    const nextId=walk(state);
-   node.edges.push({action,event,nextId,narrativeKey:job.key});
+   const branchId='branch-'+digest([prepared.editionId,id,action,nextId]).slice(0,32);
+   node.edges.push({action,branchId,event,nextId,preparedState:copy(state),preparedDigest:digest([branchId,event,state,nextId]),narrativeKey:job.key});
   }
   return id;
  }
@@ -90,7 +91,7 @@ export function compileEdition(prepared,{maxEdges=1200,cachedKeys=[],availableAs
  });
  const narrativeJobs=[...jobs.values()];
  return {schemaVersion:1,mode:'fixture',editionId:prepared.editionId,moduleId:MODULE.id,moduleVersion:MODULE.version,baseSnapshotId:prepared.baseSnapshotId,worldRevision:prepared.worldRevision,campaignId:prepared.campaignId,compatibilitySignature:compatibilitySignature(prepared),
- rootId,nodes,narrativeJobs,assets,coverage:{mechanicalComplete:true,nodes:Object.keys(nodes).length,edges,leaves,maxDepth,endings:endingsCount,uniqueNarrativeJobs:jobs.size,candidateNarrativeJobs:narrativeJobs.filter(j=>j.status==='candidate').length,missingNarrativeJobs:narrativeJobs.filter(j=>j.status==='missing').length,missingAssets:assets.filter(a=>a.status==='missing').length},
+ rootId,nodes,narrativeJobs,assets,coverage:{mechanicalComplete:true,meaningfulEndingsComplete:!endingsCount.unresolved,nodes:Object.keys(nodes).length,edges,leaves,maxDepth,endings:endingsCount,uniqueNarrativeJobs:jobs.size,candidateNarrativeJobs:narrativeJobs.filter(j=>j.status==='candidate').length,missingNarrativeJobs:narrativeJobs.filter(j=>j.status==='missing').length,missingAssets:assets.filter(a=>a.status==='missing').length},
  publicationReady:false, // candidate keys are NOT evidence of validated text/asset contents.
  privatePreparation:copy(prepared)};
 }
@@ -107,8 +108,8 @@ export function confirmChoice(edition,session,command){
  check(command.worldRevision===edition.worldRevision,'World revision conflict');
  const node=edition.nodes[session.nodeId];check(node?.revision===session.state.revision&&node.stateDigest===digest(session.state),'Node/state mismatch');
  const edge=node.edges.find(e=>e.action===command.action);check(edge&&actions(session.state).includes(command.action),'Action not allowed');
- const {state,event}=resolve(session.state,command.action);
- check(digest(event)===digest(edge.event)&&edition.nodes[edge.nextId]?.stateDigest===digest(state),'Compiled result mismatch');
+ const state=copy(edge.preparedState),event=copy(edge.event);
+ check(edge.preparedDigest===digest([edge.branchId,event,state,edge.nextId])&&edition.nodes[edge.nextId]?.stateDigest===digest(state),'Compiled result mismatch');
  const next=copy(session);next.state=state;next.nodeId=edge.nextId;next.receipts[command.commandId]={key,event:copy(event)};
  return {session:next,event:copy(event),duplicate:false};
 }
