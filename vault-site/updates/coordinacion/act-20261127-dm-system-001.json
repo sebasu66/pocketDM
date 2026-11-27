@@ -1,0 +1,22 @@
+{
+  "id": "act-20261127-dm-system-001",
+  "date": "2026-11-27",
+  "area": "Coordinación",
+  "owner": "Narrativa / Infraestructura",
+  "status": "en-revision",
+  "title": "Portal DM: estado, API y reglas",
+  "summary": "Se completan las tres secciones del sistema con contratos del código existente, enlaces a la rama candidata de simulación, diagnóstico HTTP del entorno y calculador percentil que usa funciones reales. No se modifican las reglas ni se declara una API de campaña disponible. Prioridad del alcance: módulo independiente.",
+  "changed": [
+    "vault-site/public/dm/sistema/index.html",
+    "vault-site/public/dm/sistema/system.css",
+    "vault-site/public/dm/sistema/system.mjs"
+  ],
+  "next": "Verificar preview, conservar main estable; integrar transporte del módulo y revisar ramas de simulación antes de declarar juego completo.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/development/vault-site/public/dm/sistema",
+  "nodeIds": [
+    "doc_0905",
+    "doc_0911",
+    "doc_0913",
+    "doc_0915"
+  ]
+}
