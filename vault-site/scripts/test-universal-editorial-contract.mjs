@@ -32,3 +32,5 @@ assert.equal(resolvePage(change(x=>{x.content.interaction.terminal=true;x.conten
 assert.equal(resolvePage(doc,'mobile').pageId,'scene');
 const camera=change(x=>x.composition.overrides.sky={base:{cameraEnabled:true,cameraStartX:20,cameraEndX:80,cameraStartZoom:1,cameraEndZoom:2,cameraDuration:4,cameraEasing:'ease-in-out'},mobile:{cameraEndZoom:1.5}});assert.equal(resolvePage(camera,'mobile').nodes[0].children[0].style.cameraEndZoom,1.5);assert.equal(resolvePage(camera,'desktop').nodes[0].children[0].style.cameraEndZoom,2);
 console.log('PASS universal contract: responsive overrides, missing bindings, title image, overlays, symbols, strict validation, trusted choices, terminal');
+
+const canonical=change(x=>{x.assets['BKG/red_sky']=x.assets.day;x.content.bindings.sky='BKG/red_sky';x.template.elements[0].children[0].contentType='BACKGROUND';x.template.elements[0].children[0].tags=['sky','sunset']});assert.equal(resolvePage(canonical,'mobile').nodes[0].children[0].value.id,'BKG/red_sky');assert.throws(()=>resolvePage(change(x=>{x.template.elements[0].contentType='BAD'}),'mobile'));

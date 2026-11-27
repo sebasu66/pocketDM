@@ -60,14 +60,46 @@ service cloud.firestore {
         !(request.auth.uid in resource.data.players) &&
         request.auth.uid != resource.data.host;
     }
+    // Art uploads are private, immutable drafts. Publication is a separate release operation.
+    match /editorial_assets/{assetKey} {
+      function validAsset() {
+        let d = request.resource.data;
+        let extension = d.mime == 'image/png' ? '.png' : d.mime == 'image/jpeg' ? '.jpg' : d.mime == 'image/webp' ? '.webp' : '.avif';
+        return d.keys().hasOnly(['id','storagePath','mime','alt','size','status','createdAt']) &&
+          d.keys().hasAll(['id','storagePath','mime','alt','size','status','createdAt']) &&
+          d.id is string && d.id.matches('^(BKG|LOGO|TITLE|COS|PC|NPC|MONSTER|OBJ|UI|ICON)/[a-z][a-z0-9_]{0,63} are available only to the verified owner. Existing
+    // documents are retained; their old unauthenticated development client must
+    // be migrated to Firebase Auth before it can access them.
+    match /{collection}/{document=**} {
+      allow read: if collection != 'editorial_members' &&
+        collection != 'editorial_layouts' && collection != 'editorial_assets' && collection != 'test_rooms' && isEditorialOwner();
+      allow create, update: if collection != 'editorial_members' &&
+        collection != 'editorial_layouts' && collection != 'editorial_assets' && collection != 'test_rooms' &&
+        isEditorialOwner() && validLegacyData();
+      allow delete: if false;
+    }
+  }
+}
+) &&
+          assetKey == d.id.replace('/', '__') &&
+          d.mime in ['image/png','image/jpeg','image/webp','image/avif'] &&
+          d.storagePath == 'editorial-assets/' + d.id + extension &&
+          d.alt is string && d.alt.size() > 0 && d.alt.size() <= 300 &&
+          d.size is int && d.size > 0 && d.size <= 10485760 &&
+          d.status == 'draft' && d.createdAt == request.time;
+      }
+      allow read: if isEditorialOwner();
+      allow create: if isEditorialOwner() && validAsset();
+      allow update, delete: if false;
+    }
     // Legacy collections are available only to the verified owner. Existing
     // documents are retained; their old unauthenticated development client must
     // be migrated to Firebase Auth before it can access them.
     match /{collection}/{document=**} {
       allow read: if collection != 'editorial_members' &&
-        collection != 'editorial_layouts' && collection != 'test_rooms' && isEditorialOwner();
+        collection != 'editorial_layouts' && collection != 'editorial_assets' && collection != 'test_rooms' && isEditorialOwner();
       allow create, update: if collection != 'editorial_members' &&
-        collection != 'editorial_layouts' && collection != 'test_rooms' &&
+        collection != 'editorial_layouts' && collection != 'editorial_assets' && collection != 'test_rooms' &&
         isEditorialOwner() && validLegacyData();
       allow delete: if false;
     }

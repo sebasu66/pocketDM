@@ -1,9 +1,11 @@
+import {validAssetId,contentTypes} from '../../../dm/arte/asset-catalog.mjs';
 import {validateCheck} from '../../check-contract.mjs';
 // Presentation-only contract. Author instructions are inert data, never evaluated.
 const record=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
 const own=(o,k)=>Object.hasOwn(o,k);
 const fail=(ok,msg)=>{if(!ok)throw new TypeError(msg)};
 const identifier=v=>typeof v==='string'&&/^[A-Za-z][A-Za-z0-9_.-]{0,95}$/.test(v)&&!v.split('.').some(x=>['__proto__','prototype','constructor'].includes(x));
+const assetId=v=>identifier(v)||validAssetId(v);
 const text=(v,n=16000)=>typeof v==='string'&&v.length<=n;
 const num=(v,min,max)=>typeof v==='number'&&Number.isFinite(v)&&v>=min&&v<=max;
 const keys=(o,allowed)=>record(o)&&Object.keys(o).every(k=>allowed.includes(k));
@@ -17,7 +19,7 @@ export function validateVisual(v={}){
  for(const [k,x] of Object.entries(v)){
   const limits={x:[-100,200],y:[-100,200],width:[1,100],height:[1,200],z:[-100,100],opacity:[0,1],rotation:[-180,180],scale:[.05,5],ratio:[.1,10],objectX:[0,100],objectY:[0,100],gap:[0,80],padding:[0,80],fontSize:[10,96],radius:[0,60],duration:[0,3000],cameraStartX:[0,100],cameraStartY:[0,100],cameraEndX:[0,100],cameraEndY:[0,100],cameraStartZoom:[1,5],cameraEndZoom:[1,5],cameraDuration:[.1,30],optionMinHeight:[44,160]};
   const options={position:positions,align:['left','center','right'],fit:['contain','cover','fill'],transition:['none','fade'],overflow:['visible','clip'],direction:['column','row'],cameraEasing:['linear','ease-in','ease-out','ease-in-out']};
-  fail(limits[k]?num(x,...limits[k]):options[k]?options[k].includes(x):['panelSkin','optionNormal','optionHover','optionSelected'].includes(k)?x===''||identifier(x):['hidden','cameraEnabled'].includes(k)?typeof x==='boolean':colors(x),'Valor visual inválido: '+k);
+  fail(limits[k]?num(x,...limits[k]):options[k]?options[k].includes(x):['panelSkin','optionNormal','optionHover','optionSelected'].includes(k)?x===''||assetId(x):['hidden','cameraEnabled'].includes(k)?typeof x==='boolean':colors(x),'Valor visual inválido: '+k);
  }
  return clone(v);
 }
@@ -25,7 +27,7 @@ const layout=v=>{fail(keys(v,['base','desktop','mobile']),'Layout inválido');re
 function assetPath(v){return typeof v==='string'&&/^\/(?:libro|docs\/art-references|dm\/libro\/editorial\/assets|atlas\/assets)\/[A-Za-z0-9_./-]+\.(?:png|webp|jpe?g|svg|avif|gif)$/i.test(v)&&!v.split('/').some(x=>x==='..'||x==='.')&&!v.includes('//')}
 export function validateAssets(assets){
  fail(record(assets)&&Object.keys(assets).length<=2000,'Catálogo inválido');
- for(const [id,a] of Object.entries(assets)){fail(identifier(id)&&keys(a,['src','alt','cell','slice'])&&assetPath(a.src)&&text(a.alt,300),'Recurso inválido: '+id);if(a.cell){const c=a.cell;fail(!a.slice&&keys(c,['columns','rows','column','row'])&&[c.columns,c.rows,c.column,c.row].every(Number.isInteger)&&c.columns>=1&&c.columns<=32&&c.rows>=1&&c.rows<=32&&c.column>=0&&c.column<c.columns&&c.row>=0&&c.row<c.rows,'Celda de símbolo inválida: '+id)}if(a.slice){const c=a.slice;fail(keys(c,['top','right','bottom','left','width'])&&['top','right','bottom','left'].every(k=>num(c[k],1,49))&&num(c.width,1,48),'Cortes 9-slice inválidos: '+id)}}
+ for(const [id,a] of Object.entries(assets)){fail(assetId(id)&&keys(a,['src','alt','cell','slice'])&&assetPath(a.src)&&text(a.alt,300),'Recurso inválido: '+id);if(a.cell){const c=a.cell;fail(!a.slice&&keys(c,['columns','rows','column','row'])&&[c.columns,c.rows,c.column,c.row].every(Number.isInteger)&&c.columns>=1&&c.columns<=32&&c.rows>=1&&c.rows<=32&&c.column>=0&&c.column<c.columns&&c.row>=0&&c.row<c.rows,'Celda de símbolo inválida: '+id)}if(a.slice){const c=a.slice;fail(keys(c,['top','right','bottom','left','width'])&&['top','right','bottom','left'].every(k=>num(c[k],1,49))&&num(c.width,1,48),'Cortes 9-slice inválidos: '+id)}}
  return clone(assets);
 }
 export function validateTemplate(t){
@@ -36,17 +38,19 @@ export function validateTemplate(t){
  function visit(list,depth=0,parent=null){
   fail(depth<=8&&Array.isArray(list),'Jerarquía inválida');
   for(const e of list){
-   fail(++total<=150&&keys(e,['id','type','name','instructions','viewInstructions','binding','value','fallback','when','layout','children','role','slotName','skillSymbols'])&&identifier(e.id)&&!ids.has(e.id)&&types.includes(e.type)&&text(e.name,200)&&text(e.instructions??''),'Elemento inválido o repetido');
+   fail(++total<=150&&keys(e,['id','type','name','instructions','viewInstructions','binding','value','fallback','when','layout','children','role','slotName','skillSymbols','contentType','tags'])&&identifier(e.id)&&!ids.has(e.id)&&types.includes(e.type)&&text(e.name,200)&&text(e.instructions??''),'Elemento inválido o repetido');
    ids.add(e.id);
    if(e.viewInstructions!==undefined)fail(keys(e.viewInstructions,['desktop','mobile'])&&Object.values(e.viewInstructions).every(x=>text(x)),'Instrucciones de vista inválidas');
+   if(e.contentType!==undefined)fail(Object.hasOwn(contentTypes,e.contentType),'Tipo semántico inválido');
+   if(e.tags!==undefined)fail(Array.isArray(e.tags)&&e.tags.length<=32&&e.tags.every(x=>identifier(x)),'Etiquetas inválidas');
    if(e.binding!==undefined)fail(identifier(e.binding),'Binding inválido');
    if(e.when!==undefined)fail(keys(e.when,['binding','present'])&&identifier(e.when.binding)&&typeof e.when.present==='boolean','Condición inválida');
    if(e.layout)layout(e.layout);
-   if(e.skillSymbols!==undefined)fail(e.type==='interaction'&&record(e.skillSymbols)&&Object.entries(e.skillSymbols).length<=150&&Object.entries(e.skillSymbols).every(([k,v])=>identifier(k)&&identifier(v)),'Mapa de símbolos inválido');
+   if(e.skillSymbols!==undefined)fail(e.type==='interaction'&&record(e.skillSymbols)&&Object.entries(e.skillSymbols).length<=150&&Object.entries(e.skillSymbols).every(([k,v])=>identifier(k)&&assetId(v)),'Mapa de símbolos inválido');
    if(e.type==='interaction'){panels++;fail(parent===null,'El panel obligatorio debe pertenecer al flujo raíz');fail(!e.binding&&!own(e,'value')&&!own(e,'fallback')&&!e.when,'El panel recibe solo interacción autorizada');}
    if(e.type==='slot')fail(identifier(e.slotName),'Slot inválido');
    if(e.type==='text'){fail(['heading','paragraph','label'].includes(e.role??'paragraph'),'Rol de texto inválido');for(const v of [e.value,e.fallback])if(v!==undefined)fail(text(v)||Array.isArray(v)&&v.length<=100&&v.every(x=>text(x)),'Texto inválido')}
-   if(e.type==='image')for(const v of [e.value,e.fallback])if(v!==undefined)fail(identifier(v),'Imagen inválida');
+   if(e.type==='image')for(const v of [e.value,e.fallback])if(v!==undefined)fail(assetId(v),'Imagen inválida');
    if(e.children!==undefined){fail(['group','interaction'].includes(e.type),'Solo los contenedores admiten hijos');visit(e.children,depth+1,e)}
    if(parent===null)fail(Object.values(e.layout??{}).every(v=>v.position!=='overlay'),'Una capa libre requiere contenedor');
   }
@@ -59,8 +63,8 @@ export function validateComposition(c,t){
  fail(keys(c,['schemaVersion','id','templateId','templateRevision','overrides','assets','optionSkins'])&&c.schemaVersion===1&&identifier(c.id)&&c.templateId===t.id&&c.templateRevision===t.revision&&record(c.overrides??{})&&record(c.assets??{}),'Composición inválida o revisión incompatible');
  const elements=new Map();function walk(xs){for(const x of xs){elements.set(x.id,x);if(x.children)walk(x.children)}}walk(t.elements);
  for(const [id,v] of Object.entries(c.overrides??{})){fail(elements.has(id),'Elemento de composición desconocido: '+id);layout(v)}
- for(const [id,v] of Object.entries(c.assets??{}))fail(elements.get(id)?.type==='image'&&identifier(v),'Override de recurso inválido');
- if(c.optionSkins!==undefined){fail(record(c.optionSkins)&&Object.keys(c.optionSkins).length<=200,'Apariencia de opciones inválida');for(const [id,skin] of Object.entries(c.optionSkins))fail(identifier(id)&&keys(skin,['normal','hover','selected'])&&Object.values(skin).every(identifier),'Apariencia de opción inválida')}
+ for(const [id,v] of Object.entries(c.assets??{}))fail(elements.get(id)?.type==='image'&&assetId(v),'Override de recurso inválido');
+ if(c.optionSkins!==undefined){fail(record(c.optionSkins)&&Object.keys(c.optionSkins).length<=200,'Apariencia de opciones inválida');for(const [id,skin] of Object.entries(c.optionSkins))fail(identifier(id)&&keys(skin,['normal','hover','selected'])&&Object.values(skin).every(assetId),'Apariencia de opción inválida')}
  return clone(c);
 }
 export function validateContent(c){
@@ -69,7 +73,7 @@ export function validateContent(c){
  const a=c.interaction;
  fail(keys(a,['title','subtitle','text','options','terminal','status','history'])&&text(a.title??'',300)&&text(a.subtitle??'',300)&&text(a.text??'')&&text(a.status??'',1000)&&typeof a.terminal==='boolean'&&Array.isArray(a.options)&&a.options.length<=40,'Interacción inválida');
  fail(a.options.length>0||a.terminal,'Una página activa requiere opciones');
- const ids=new Set();for(const o of a.options){fail(keys(o,['id','label','disabled','symbol','skill'])&&identifier(o.id)&&text(o.label,500)&&o.label.trim().length>0&&!ids.has(o.id)&&(o.disabled===undefined||typeof o.disabled==='boolean')&&(o.symbol===undefined||identifier(o.symbol)),'Opción inválida');ids.add(o.id);if(o.skill!==undefined)fail(keys(o.skill,['id','label'])&&identifier(o.skill.id)&&text(o.skill.label,200)&&o.skill.label.trim().length>0,'Habilidad de opción inválida')}
+ const ids=new Set();for(const o of a.options){fail(keys(o,['id','label','disabled','symbol','skill'])&&identifier(o.id)&&text(o.label,500)&&o.label.trim().length>0&&!ids.has(o.id)&&(o.disabled===undefined||typeof o.disabled==='boolean')&&(o.symbol===undefined||assetId(o.symbol)),'Opción inválida');ids.add(o.id);if(o.skill!==undefined)fail(keys(o.skill,['id','label'])&&identifier(o.skill.id)&&text(o.skill.label,200)&&o.skill.label.trim().length>0,'Habilidad de opción inválida')}
  if(a.history!==undefined){
   fail(Array.isArray(a.history)&&a.history.length<=200,'Historial inválido');const entries=new Set(),checks=new Set();
   for(const h of a.history){fail(keys(h,['id','kind','text','speaker','choiceId','check','title'])&&identifier(h.id)&&!entries.has(h.id)&&['speech','choice','narration','check','attack'].includes(h.kind)&&text(h.text??'')&&text(h.speaker??'',300)&&text(h.title??'',300),'Entrada de historial inválida');entries.add(h.id);

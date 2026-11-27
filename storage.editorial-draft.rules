@@ -1,0 +1,24 @@
+// Proposed scoped policy: review against deployed bucket rules before merging/deploying.
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isEditorialOwner() {
+      return request.auth != null &&
+        request.auth.token.firebase.sign_in_provider == 'google.com' &&
+        request.auth.token.email_verified == true &&
+        firestore.get(/databases/(default)/documents/editorial_members/$(request.auth.uid)).data.role == 'owner';
+    }
+    match /editorial-assets/{category}/{file} {
+      allow read: if isEditorialOwner();
+      allow create: if isEditorialOwner() &&
+        category.matches('^(BKG|LOGO|TITLE|COS|PC|NPC|MONSTER|OBJ|UI|ICON)$') &&
+        request.resource.size > 0 && request.resource.size <= 10485760 &&
+        request.resource.metadata.assetId.matches('^' + category + '/[a-z][a-z0-9_]{0,63}$') &&
+        ((request.resource.contentType == 'image/png' && category + '/' + file == request.resource.metadata.assetId + '.png') ||
+         (request.resource.contentType == 'image/jpeg' && category + '/' + file == request.resource.metadata.assetId + '.jpg') ||
+         (request.resource.contentType == 'image/webp' && category + '/' + file == request.resource.metadata.assetId + '.webp') ||
+         (request.resource.contentType == 'image/avif' && category + '/' + file == request.resource.metadata.assetId + '.avif'));
+      allow update, delete: if false;
+    }
+  }
+}

@@ -143,3 +143,7 @@ Modificada la misma entrada editorial Libro → UI; editor anterior preservado p
 ### Panel universal con historial y 9-slice
 
 Candidato PR #19: pieles configurables 9-slice para marco y estados de opción; historial confirmado, resultados CSS/SVG y símbolo de habilidad antes de elegir (incluye celdas de grilla, fallback dado). Pruebas de contrato, 11 escenas en tres viewports, texto multilínea y 24 entradas desplazables, inspector y revisiones PASS. Pendientes grilla/arte definitivo, integración PWA y publicación autorizada.
+
+### Biblioteca gráfica y tipos semánticos
+
+PR #19 incorpora /dm/arte/#assets y navegación desde todo el portal, catálogo de 93 recursos existentes (38 NPC, 45 fondos/localizaciones, 10 otros), búsqueda, filtros y códigos categoría/nombre. Se preservan fuentes y aprobaciones históricas. Contrato de contentType/tags y referencias BKG/nombre, selector del editor integrado. Pruebas de catálogo, contrato y navegadores PASS. Subida privada candidata mediante Firebase; reglas propuestas, sin despliegue ni prueba autenticada en el bucket real. No hay grilla de símbolos ni red_sky verificados en el repo.

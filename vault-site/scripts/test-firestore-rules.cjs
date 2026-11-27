@@ -67,6 +67,17 @@ const fs = require('fs');
     await assertFails(getDoc(doc(anon, 'campaigns', 'legacy')));
     await assertFails(setDoc(doc(other, 'campaigns', 'legacy'), { name: 'x' }));
     await assertSucceeds(setDoc(doc(owner, 'campaigns', 'legacy'), { name: 'x' }));
+    const art = (db, id='BKG__red_sky') => doc(db,'editorial_assets',id);
+    const draft = {id:'BKG/red_sky',storagePath:'editorial-assets/BKG/red_sky.png',mime:'image/png',alt:'Cielo rojo',size:4096,status:'draft',createdAt:serverTimestamp()};
+    await assertFails(setDoc(art(anon),draft));
+    await assertFails(setDoc(art(other),draft));
+    await assertFails(setDoc(art(fake),draft));
+    await assertFails(setDoc(art(owner,'bad'),draft));
+    await assertFails(setDoc(art(owner),{...draft,storagePath:'private/red_sky.png'}));
+    await assertSucceeds(setDoc(art(owner),draft));
+    await assertSucceeds(getDoc(art(owner)));
+    await assertFails(getDoc(art(anon)));
+    await assertFails(updateDoc(art(owner),{status:'published'}));
     console.log('PASS: biblioteca, identidad, cuatro jugadores, integridad y protección de datos anteriores');
   } finally {
     await env.cleanup();

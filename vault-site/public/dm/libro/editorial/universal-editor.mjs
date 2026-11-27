@@ -1,3 +1,4 @@
+import {contentTypes,renderAssets,canonicalId} from '../../arte/asset-catalog.mjs';
 import '/libro/edition/universal/book-page.mjs';
 import {resolvePage} from '/libro/edition/universal/contract.mjs';
 import {template,assets,make} from '/libro/edition/universal/demo-design.mjs';
@@ -24,7 +25,7 @@ function status(text,error=false){$('saveStatus').textContent=text;$('saveStatus
 function mark(){dirty=true;status('Cambios sin guardar · biblioteca local')}
 function docFor(){
  const p=samples.find(x=>x.id===scene),d=make(p,$('samples').checked&&p.id==='dialogue'?p.responses.accept:'');
- d.template=copy(state.template);d.assets=copy(state.assets);d.composition={schemaVersion:1,id:'preview.'+scene,templateId:d.template.id,templateRevision:d.template.revision,overrides:{},assets:{}};
+ d.template=copy(state.template);d.assets={...renderAssets,...copy(state.assets)};d.composition={schemaVersion:1,id:'preview.'+scene,templateId:d.template.id,templateRevision:d.template.revision,overrides:{},assets:{}};
  d.content.bindings={...d.content.bindings,...state.previewBindings};
  if($('samples').checked)for(const x of all()){
   if(!x.binding||Object.hasOwn(d.content.bindings,x.binding))continue;
@@ -109,12 +110,14 @@ function renderInspector(){
   field(props,'Nombre',a.name,v=>commit(()=>active().name=v),{key:'name'});
   if(!selected){props.append(el('p','muted','ID: '+a.id+' · revisión '+a.revision));return}
   props.append(el('p','muted','ID: '+a.id));
+    field(props,'Tipo de contenido',a.contentType??'',v=>commit(()=>{if(v)active().contentType=v;else delete active().contentType}),{options:[['','Sin clasificar'],...Object.keys(contentTypes)],key:'contentType'});
+    field(props,'Tags (separados por coma)',(a.tags??[]).join(', '),v=>commit(()=>{active().tags=v.split(',').map(x=>x.trim()).filter(Boolean)}),{key:'tags'});
   if(['image','text','slot'].includes(a.type)){
    field(props,'Código de vinculación',a.binding??'',v=>commit(()=>{const x=active();if(v.trim()){x.binding=v.trim();delete x.value}else delete x.binding}),{key:'binding'});
    if(a.type==='image'){
     const key=a.binding?state.previewBindings[a.binding]??docFor().content.bindings[a.binding]??'':a.value??'';
-    field(props,a.binding?'Imagen de muestra (no cambia el módulo)':'Imagen fija',key,v=>commit(()=>{const x=active();if(x.binding){if(v)state.previewBindings[x.binding]=v;else delete state.previewBindings[x.binding]}else if(v)x.value=v;else delete x.value}),{options:[['','Automática / vacía'],...Object.keys(state.assets).map(k=>[k,state.assets[k].alt||k])],key:'asset'});
-    if(state.assets[key]){const im=el('img','asset-preview');im.src=state.assets[key].src;im.alt=state.assets[key].alt;props.append(im)}
+    field(props,a.binding?'Imagen de muestra (no cambia el módulo)':'Imagen fija',key,v=>commit(()=>{const x=active();if(x.binding){if(v)state.previewBindings[x.binding]=canonicalId(v);else delete state.previewBindings[x.binding]}else if(v)x.value=canonicalId(v);else delete x.value}),{options:[['','Automática / vacía'],...Object.keys({...renderAssets,...state.assets}).sort((a,b)=>a.localeCompare(b)).filter(k=>!a.contentType||!contentTypes[a.contentType]||k.startsWith(contentTypes[a.contentType]+'/')||k===key).map(k=>[k,k.includes('/')?k:(state.assets[k].alt||k)])],key:'asset'});
+    if(({...renderAssets,...state.assets})[key]){const im=el('img','asset-preview');im.src=({...renderAssets,...state.assets})[key].src;im.alt=({...renderAssets,...state.assets})[key].alt;props.append(im)}
    }
    if(a.type==='text'){const raw=a.binding?state.previewBindings[a.binding]??docFor().content.bindings[a.binding]??'':a.value??'';field(props,a.binding?'Texto de muestra':'Texto fijo',Array.isArray(raw)?raw.join('\n\n'):raw,v=>commit(()=>{const x=active();if(x.binding){if(v)state.previewBindings[x.binding]=v;else delete state.previewBindings[x.binding]}else x.value=v}),{multiline:true,key:'text'});field(props,'Tipo de texto',a.role??'paragraph',v=>commit(()=>active().role=v),{options:[['heading','Título'],['paragraph','Párrafo'],['label','Etiqueta']],key:'role'})}
    if(a.type==='slot')field(props,'Código de ranura',a.slotName,v=>commit(()=>active().slotName=v),{key:'slot'});
@@ -163,7 +166,7 @@ document.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{
  const type=b.dataset.add,k=id(),parent=locate(selected)?.item;
  if(commit(()=>{const nest=parent&&['group','interaction'].includes(parent.type),list=nest?(parent.children??=[]):state.template.elements;
  const layer={id:k,type,name:names[type]+' nueva',instructions:'',layout:{base:{position:nest&&type==='image'?'overlay':'flow',width:nest&&type==='image'?30:100}}};
- if(type==='image'){layer.value='forest';if(nest)Object.assign(layer.layout.base,{x:20,y:20,height:40,z:6})}
+ if(type==='image'){layer.value='BKG/snow_forest';if(nest)Object.assign(layer.layout.base,{x:20,y:20,height:40,z:6})}
  if(type==='text'){layer.value='Texto nuevo';layer.role='paragraph'}
  if(type==='group'){layer.children=[];layer.layout.base.ratio=1.5}
  if(type==='slot')layer.slotName='mechanics';list.push(layer)
@@ -202,7 +205,7 @@ function refreshLibrary(){
 function canLeave(){return !saving&&(!dirty||confirm('Hay cambios sin guardar. ¿Descartarlos?'))}
 function openDesign(key,rev=null){
  const d=library.designs.find(x=>x.id===key),v=d?.versions.find(x=>x.revision===rev)??d?.versions.at(-1);
- state=v?copy(v.data):initial();current=d?d.id:'builtin';revision=v?.revision??1;selected=null;past=[];future=[];dirty=false;tab='design';refreshLibrary();render();status('Biblioteca local · versión '+revision)
+ state=v?copy(v.data):initial();state.assets={...renderAssets,...state.assets};current=d?d.id:'builtin';revision=v?.revision??1;selected=null;past=[];future=[];dirty=false;tab='design';refreshLibrary();render();status('Biblioteca local · versión '+revision)
 }
 $('design').onchange=()=>{const k=$('design').value;if(canLeave())openDesign(k);else refreshLibrary()};
 $('revision').onchange=()=>{const v=Number($('revision').value);if(canLeave())openDesign(current,v);else refreshLibrary()};

@@ -1,7 +1,8 @@
+import {renderAssets} from '../../../dm/arte/asset-catalog.mjs';
 const visual=(base,mobile={},desktop={})=>({base,mobile,desktop});
 const image=(id,name,binding,layout,instructions='',extra={})=>({id,name,type:'image',binding,layout,instructions,...extra});
 const copy=(id,name,binding,role,layout,instructions='',extra={})=>({id,name,type:'text',binding,role,layout,instructions,...extra});
-const assets={
+const assets={...renderAssets,
  plaza:{src:'/docs/art-references/plaza-cuervo-gris.png',alt:'Plaza del Cuervo Gris'},
  forest:{src:'/libro/assets/bosque.png',alt:'Bosque nevado'},
  forge:{src:'/docs/art-references/herreria.png',alt:'Forja iluminada'},
@@ -53,4 +54,5 @@ const make=(p,response='')=>{
  const composition={schemaVersion:1,id:'farol.'+p.id,templateId:template.id,templateRevision:template.revision,overrides,assets:{}};
  return {template,composition,assets,content:{pageId:p.id,bindings,interaction:{title:isDialogue?p.speaker:terminal?'Desenlace':'¿Qué hacés?',subtitle:isDialogue?p.speakerRole:'',text:response||p.line||'',history,options,terminal}}};
 };
+const semantic={background:'BACKGROUND',character:'NPC','title-art':'TITLE','hero-title':'TITLE',narrative:'PARAGRAPH',interaction:'INTERACTION','panel-decoration':'COSMETIC'};function tag(items){for(const x of items){if(semantic[x.id])x.contentType=semantic[x.id];if(x.children)tag(x.children)}}tag(template.elements);
 export {template,assets,make,route};
