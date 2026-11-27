@@ -1,0 +1,50 @@
+name: PocketDM Firebase Hosting
+on:
+  push:
+    branches: [feature/narrative-coordination-20261124]
+    paths:
+      - 'vault-site/public/**'
+      - 'vault-site/updates/**'
+      - 'vault-site/scripts/**'
+      - 'vault-site/firebase.json'
+      - 'vault-site/.firebaserc'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: pocketdm-firebase-hosting-live
+  cancel-in-progress: false
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/feature/narrative-coordination-20261124'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/narrative-coordination-20261124
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Firebase authorization
+        shell: bash
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          if [ -z "$FIREBASE_SERVICE_ACCOUNT" ]; then
+            echo "::error::Missing repository secret FIREBASE_SERVICE_ACCOUNT"
+            exit 1
+          fi
+          umask 077
+          printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/pocketdm-firebase.json"
+          node -e 'const j=JSON.parse(require("fs").readFileSync(process.argv[1])); if(j.type!=="service_account"||j.project_id!=="lore-weaver-rt9pc")process.exit(1)' "$RUNNER_TEMP/pocketdm-firebase.json"
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$RUNNER_TEMP/pocketdm-firebase.json" >> "$GITHUB_ENV"
+      - name: Install Firebase CLI
+        run: npm install --global firebase-tools@14
+      - name: Validate and publish current branch snapshot
+        working-directory: vault-site
+        run: node scripts/publish-narrative.mjs --ci
+      - name: Clean credentials
+        if: always()
+        run: rm -f "$RUNNER_TEMP/pocketdm-firebase.json"
