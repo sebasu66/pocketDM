@@ -23,7 +23,7 @@ export function conditionProfile(s,skill='combat',action='attack'){
  const light=t.light==='dark'&&s.abilities.includes('night-sight')?'dim':t.light==='dim'&&s.abilities.includes('night-sight')?'normal':t.light;
  if(['combat','perception','evade'].includes(skill)&&light!=='normal')add('light',light==='dark'?'herculean':'hard','Visibilidad '+light+' (perfil de laboratorio)');
  if(s.locations.some(l=>l.disabled&&(l.id.includes('leg')||l.id.includes('hind')||l.id.includes('fore')))){move=0;gait='none'}
- if(t.incapacitated||t.unconscious||t.fatigue>=6)blocked.push('Incapacitado para combatir');
+ if(t.dead||t.incapacitated||t.unconscious||t.fatigue>=6)blocked.push('Incapacitado para combatir');
  if(t.stunTurns>0&&action==='attack')blocked.push('Aturdimiento: no puede atacar');
  if(t.fear==='shaken'&&action==='attack')blocked.push('Temor: acción ofensiva bloqueada');
  if(t.fear==='flee'&&action==='attack')blocked.push('Terror: intención de huir');
