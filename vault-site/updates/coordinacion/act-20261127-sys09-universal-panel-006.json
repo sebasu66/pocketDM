@@ -1,0 +1,18 @@
+{
+  "id": "act-20261127-sys09-universal-panel-006",
+  "date": "2026-11-27",
+  "area": "Coordinación",
+  "owner": "SYS-09",
+  "status": "en-progreso",
+  "title": "Panel universal con historial y 9-slice",
+  "summary": "Opciones con imágenes adaptables, historial confirmado y resultados CSS/SVG; símbolos por habilidad. Contrato, editor y pruebas de texto largo PASS.",
+  "changed": [
+    "vault-site/public/libro/edition/universal/contract.mjs",
+    "vault-site/public/libro/edition/universal/book-page.mjs",
+    "vault-site/public/libro/edition/universal/page.css",
+    "vault-site/public/dm/libro/editorial/universal-editor.mjs"
+  ],
+  "next": "Incorporar arte y grilla aprobados; revisión visual e integración del lector.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/editorial-universal-page-20261127",
+  "nodeIds": []
+}

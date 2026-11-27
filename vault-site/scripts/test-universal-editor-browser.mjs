@@ -49,7 +49,7 @@ await change('#revision',1);assert.equal(await get("return p.document.template.e
 await change('#revision',2);assert.equal(await get("return p.document.template.elements[0].children[0].layout.base.cameraEndZoom"),2);
 await call('Page.reload');for(let i=0;i<50;i++){if(await ev("document.querySelectorAll('#design option').length>1"))break;await sleep(100)}
 await change('#design',design);assert.equal(await get("return p.document.template.elements[0].children[0].layout.base.cameraEndZoom"),2);
-await layer('background');await click('[data-tab=camera]');
+await layer('interaction');await click('[data-tab=design]');await change('#scope','base');await field('optionMinHeight',64);assert.equal(await get("return p.document.template.elements.find(e=>e.id==='interaction').layout.base.optionMinHeight"),64);await field('optionNormal','choice-selected');assert.ok(await get("return p.shadowRoot.querySelector('.choice-row').style.getPropertyValue('--normal-image').includes('choice-selected.svg')"));await change('#scene','perception');assert.equal(await get("return p.shadowRoot.querySelectorAll('.result-head[data-check-id]').length"),1);await change('#scene','dialogue');await change('#samples',true);assert.equal(await get("return p.shadowRoot.querySelectorAll('.history-entry.chosen').length"),1);
 const shot=await call('Page.captureScreenshot',{format:'png'});await writeFile(join(tmpdir(),'pocketdm-universal-editor-1440.png'),Buffer.from(shot.data,'base64'));
 await call('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});await sleep(200);assert.ok(await ev("document.documentElement.scrollWidth<=392"));
 assert.deepEqual(errors,[]);

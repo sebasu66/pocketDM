@@ -10,8 +10,6 @@ function show(id,{keepResponse=false}={}){
  const p=samples.find(x=>x.id===id);if(!p)throw Error('Destino desconocido');if(!keepResponse)response='';active=p;selector.value=p.id;
  const doc=make(p,response);
  page.replaceChildren();
- if(p.check){const check=document.createElement('book-skill-check');check.slot='mechanics';check.check=p.check;page.append(check)}
- for(const event of p.events){const n=document.createElement('combat-phase');n.slot='mechanics';n.setConfirmedNarration(event,combatSample.scope);page.append(n)}
  page.confirmPage(doc);data.textContent=JSON.stringify(doc,null,2);document.getElementById('current').textContent=p.label;
 }
 for(const p of samples){const o=document.createElement('option');o.value=p.id;o.textContent=p.label;selector.append(o)}

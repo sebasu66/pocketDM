@@ -139,3 +139,7 @@ Se construyó book-universal-page con contrato de plantilla, composición, conte
 ### Editor universal y cámara — continuación de PR #19
 
 Modificada la misma entrada editorial Libro → UI; editor anterior preservado para diseños históricos. Capas, inspector contextual, dos previsualizaciones, revisiones locales inmutables y prompts. Cámara por imagen con dos encuadres, paneo/zoom, easing, duración, previsualización y arrastre del contenido, reutilizando el motor de cámara anterior. PASS contrato, navegador editor y regresión del lector/archivo. Pendiente sincronización compartida, subida de recursos, migración de diseños históricos y aprobación visual. No desplegado.
+
+### Panel universal con historial y 9-slice
+
+Candidato PR #19: pieles configurables 9-slice para marco y estados de opción; historial confirmado, resultados CSS/SVG y símbolo de habilidad antes de elegir (incluye celdas de grilla, fallback dado). Pruebas de contrato, 11 escenas en tres viewports, texto multilínea y 24 entradas desplazables, inspector y revisiones PASS. Pendientes grilla/arte definitivo, integración PWA y publicación autorizada.

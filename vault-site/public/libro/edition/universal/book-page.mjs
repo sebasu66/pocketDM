@@ -1,3 +1,4 @@
+import {outcomes} from '../../check-contract.mjs';
 import {resolvePage} from './contract.mjs';
 import {cropRect,EditorialCamera} from '/dm/libro/editorial/camera.mjs';
 const el=(tag,cls)=>{const n=document.createElement(tag);if(cls)n.className=cls;return n};
@@ -20,6 +21,21 @@ function apply(n,s={}){
  if(s.borderColor){n.style.borderColor=s.borderColor;n.style.borderStyle='solid';n.style.borderWidth='1px'}
  if(s.overflow)n.style.overflow=s.overflow;
  if(s.direction)n.style.flexDirection=s.direction;
+}
+function skin(n,prefix,a){if(!a)return;const c=a.slice;n.style.setProperty('--'+prefix+'-image','url("'+a.src+'")');n.style.setProperty('--'+prefix+'-slice',[c.top,c.right,c.bottom,c.left].map(x=>x+'%').join(' ')+' fill');n.style.setProperty('--'+prefix+'-width',c.width+'px');n.classList.add('has-'+prefix)}
+function svgDie(){const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg'),path=document.createElementNS(ns,'path');svg.setAttribute('viewBox','0 0 32 32');svg.setAttribute('aria-hidden','true');path.setAttribute('d','M16 2 29 9 29 23 16 30 3 23 3 9Z M16 2 8 12 3 23 M16 2 24 12 29 23 M8 12 24 12 16 30Z');path.setAttribute('fill','none');path.setAttribute('stroke','currentColor');path.setAttribute('stroke-width','1.5');svg.append(path);return svg}
+function symbol(a){if(a.cell){const c=a.cell,n=el('span','symbol sprite');n.setAttribute('aria-hidden','true');n.style.backgroundImage='url("'+a.src+'")';n.style.backgroundSize=(c.columns*100)+'% '+(c.rows*100)+'%';n.style.backgroundPosition=(c.columns===1?0:c.column/(c.columns-1)*100)+'% '+(c.rows===1?0:c.row/(c.rows-1)*100)+'%';return n}const im=el('img','symbol');im.src=a.src;im.alt='';return im}
+function choiceSkin(n,s={}){skin(n,'normal',s.normal);skin(n,'hover',s.hover);skin(n,'selected',s.selected)}
+function historyEntry(h,defaults){
+ const n=el('div','history-entry '+h.kind);n.dataset.historyId=h.id;
+ if(h.kind==='choice'){n.classList.add('choice-row','chosen');choiceSkin(n,{...defaults,...h.skin});n.append(textNode(h.text));return n}
+ if(h.kind==='check'){
+  const c=h.check,head=el('div','result-head');head.dataset.checkId=c.id;head.classList.add(c.outcome);head.append(svgDie());const badge=el('span','result-badge');badge.textContent=c.skillName+' · '+outcomes[c.outcome]+' ('+c.roll+')';head.append(badge);n.append(head);
+  const body=h.text||c.consequence;if(body){const p=el('p','result-prose');p.textContent=body;n.append(p)}
+  const details=el('details','result-details'),summary=el('summary');summary.textContent='Ver tirada';const p=el('p');p.textContent=c.actorName+' · Base '+c.base+'% · '+c.difficulty+' · Objetivo '+c.target+'% · '+c.dice+': '+c.roll+' · '+c.reason;details.append(summary,p);n.append(details);return n
+ }
+ if(h.kind==='attack'){const head=el('div','result-head attack-result'),badge=el('span','result-badge');badge.textContent=h.title;head.append(svgDie(),badge);n.append(head)}
+ const p=el('p',h.kind==='attack'?'result-prose':'');if(h.speaker){const strong=el('strong','speaker');strong.textContent=h.speaker+': ';p.append(strong)}p.append(textNode(h.text??''));n.append(p);return n
 }
 export class BookUniversalPage extends HTMLElement{
  #document=null;#observer;#resolved=null;#view=null;#images=new Map();#busy=false;#handler=null;#generation=0;#cameras=[];
@@ -58,9 +74,15 @@ export class BookUniversalPage extends HTMLElement{
    else if(type==='slot'){n=el('div','embedded');const s=el('slot');s.name=item.slotName;n.append(s)}
    else if(type==='interaction'){
     n=el('section','interaction');n.setAttribute('aria-label','Opciones de la situación');
-    const a=r.interaction;if(a.title){const h=el('h3');h.textContent=a.title;n.append(h)}
+    const a=r.interaction,k=item.skin??{},defaults={normal:k.optionNormal,hover:k.optionHover,selected:k.optionSelected};
+    skin(n,'panel',k.panelSkin);
+    if(style.optionTextColor)n.style.setProperty('--option-text',style.optionTextColor);
+    if(style.optionHoverTextColor)n.style.setProperty('--option-hover-text',style.optionHoverTextColor);
+    if(style.optionMinHeight)n.style.setProperty('--option-height',style.optionMinHeight+'px');
+    if(a.title||a.subtitle){const head=el('header','interaction-header');if(a.title){const h=el('h3');h.textContent=a.title;head.append(h)}if(a.subtitle){const p=el('p','subtitle');p.textContent=a.subtitle;head.append(p)}n.append(head)}
+    const history=el('div','interaction-history');history.append(...a.history.map(h=>historyEntry(h,defaults)));if(a.history.length)n.append(history);
     if(a.text){const p=el('p','interaction-text');p.textContent=a.text;n.append(p)}
-    const opts=el('div','options');for(const o of a.options){const b=el('button');b.type='button';b.dataset.choiceId=o.id;b.disabled=!!o.disabled||this.#busy;if(o.image){const im=el('img','symbol');im.src=o.image.src;im.alt='';b.append(im)}b.append(textNode(o.label));b.onclick=()=>this.#choose(r,o,b);opts.append(b)}n.append(opts);
+    const opts=el('div','options');for(const o of a.options){const b=el('button','choice-row');b.type='button';b.dataset.choiceId=o.id;b.disabled=!!o.disabled||this.#busy;choiceSkin(b,{...defaults,...o.skin});if(o.image)b.append(symbol(o.image));else if(o.skill){const icon=el('span','symbol');icon.append(svgDie());b.append(icon)}const label=el('span','choice-label');label.append(textNode(o.label));if(o.skill){const skill=el('span','choice-skill');skill.textContent='Chequeo · '+o.skill.label;label.append(skill)}b.append(label);b.onclick=()=>this.#choose(r,o,b);opts.append(b)}n.append(opts);
     const status=el('p','status');status.setAttribute('role','status');status.textContent=a.status??'';if(a.terminal&&!status.textContent)status.textContent='Fin de la aventura';n.append(status,...children.map(build));
    }
    n.dataset.elementId=id;n.dataset.kind=type;apply(n,style);return n;
