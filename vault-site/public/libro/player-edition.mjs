@@ -37,19 +37,21 @@ export function getPlayerEdition(){return edition}
 export function connectPlayerCampaign(transport,scope,reader=window.PocketDMEdition){return createBookCampaignSession({reader,readEdition,transport,scope})}
 export function bindEditionTransport(fn){if(fn!==null&&typeof fn!=='function')throw Error('Transporte inválido');submit=fn}
 const el=(tag,text)=>{const node=document.createElement(tag);if(text!==undefined)node.textContent=text;return node};
-class PlayerPage extends HTMLElement{
- connectedCallback(){if(this.dataset.ready)return;this.dataset.ready='1';const p=edition?.pages[Number(this.getAttribute('index'))];if(!p)return;
+export function renderBookFolio(p,context,{onSubmit=null,demo=false,legacyEvent=null,onDemoChoice=null}={}){
   const section=el('section');section.className='folio-module';
-  const layout=makeModuleLayout(p,{title:edition.title});
+  const layout=makeModuleLayout(p,{title:context.title});
   section.append(layout);
   const layoutStatus=el('p','');layoutStatus.className='sample';layoutStatus.setAttribute('aria-live','polite');section.append(layoutStatus);
   loadModuleLayout(layout,p.layoutRef).catch(error=>{layoutStatus.textContent='Diseño no disponible: '+error.message+' · Se muestran ajustes base.'});
-  const scope={campaignId:edition.campaignId,actorId:edition.actorId,revision:edition.revision};
+  const scope={campaignId:context.campaignId,actorId:context.actorId,revision:context.revision};
+  if(legacyEvent&&demo){const node=el('book-narrative-event');node.setAttribute('event',legacyEvent);section.append(node)}
   for(const event of p.events){const node=el(p.type==='combat'?'combat-phase':'book-narrative-event');node.setConfirmedNarration(event,scope);section.append(node)}
-  if(p.choices.length){const group=el('div');group.className='decision';const status=el('p',submit?'Elegí una acción.':'Opciones preparadas. Hace falta conectar el servicio de campaña para confirmarlas.');status.className='sample';status.setAttribute('aria-live','polite');
-   for(const choice of p.choices){const b=el('button',choice.label);b.type='button';b.disabled=!submit;b.onclick=async()=>{if(!submit)return;for(const c of group.querySelectorAll('button'))c.disabled=true;try{await submit({campaignId:scope.campaignId,actorId:scope.actorId,expectedRevision:scope.revision,pageId:p.id,choiceId:choice.id});status.textContent='Solicitud enviada; esperando la edición autorizada.'}catch(e){status.textContent=e?.message==='Error de preparación: falta narración aprobada'?'Error de preparación: falta narración aprobada.':'No se confirmó la acción. Reintentá la misma opción o reanudá la campaña.';for(const c of group.querySelectorAll('button'))c.disabled=false}};group.append(b)}section.append(group,status)}
-  this.replaceChildren(section);
- }
+  if(p.choices.length){const group=el('div');group.className='decision';const status=el('p',demo?'Elegí una opción de muestra. No modifica la campaña.':onSubmit?'Elegí una acción.':'Opciones preparadas. Hace falta conectar el servicio de campaña para confirmarlas.');status.className='sample';status.setAttribute('aria-live','polite');
+   for(const choice of p.choices){const b=el('button',choice.label);b.type='button';b.disabled=demo?!onDemoChoice:!onSubmit;b.onclick=async()=>{if(demo){if(!onDemoChoice)return;for(const c of group.querySelectorAll('button'))c.setAttribute('aria-pressed',String(c===b));status.textContent=onDemoChoice(choice.id);return}if(!onSubmit)return;for(const c of group.querySelectorAll('button'))c.disabled=true;try{await onSubmit({campaignId:scope.campaignId,actorId:scope.actorId,expectedRevision:scope.revision,pageId:p.id,choiceId:choice.id});status.textContent='Solicitud enviada; esperando la edición autorizada.'}catch(e){status.textContent=e?.message==='Error de preparación: falta narración aprobada'?'Error de preparación: falta narración aprobada.':'No se confirmó la acción. Reintentá la misma opción o reanudá la campaña.';for(const c of group.querySelectorAll('button'))c.disabled=false}};group.append(b)}section.append(group,status)}
+  return section;
+}
+class PlayerPage extends HTMLElement{
+ connectedCallback(){if(this.dataset.ready)return;this.dataset.ready='1';const p=edition?.pages[Number(this.getAttribute('index'))];if(p)this.replaceChildren(renderBookFolio(p,edition,{onSubmit:submit}))}
 }
 class PlayerEditionImport extends HTMLElement{
  connectedCallback(){if(this.dataset.ready)return;this.dataset.ready='1';const label=el('label','Abrir edición JSON del máster (vista local)');const input=el('input');input.type='file';input.accept='.json,application/json';const status=el('p','Solo contenido autorizado para este jugador. No se sube el archivo ni se confirma estado de campaña.');status.className='sample';status.setAttribute('aria-live','polite');label.append(input);const probe=el('button','Comprobar conexión al simulador');probe.type='button';const connection=el('p','');connection.className='sample';connection.setAttribute('aria-live','polite');probe.onclick=async()=>{probe.disabled=true;connection.textContent='Comprobando…';try{const r=await fetch('/api/simulation-status',{cache:'no-store',signal:AbortSignal.timeout(8000)});if(!r.ok)throw Error('No disponible');const data=await r.json();if(data.ok!==true)throw Error('Sin conexión');connection.textContent='Motor conectado: '+data.campaignContract+'. Transporte de campaña pendiente.';}catch{connection.textContent='Servicio de simulación no disponible en este alojamiento.'}finally{probe.disabled=false}};this.append(label,status,probe,connection);input.onchange=async()=>{try{const file=input.files[0];if(!file)return;if(file.size>2*1024*1024)throw Error('Archivo superior a 2 MB');window.PocketDMEdition.load(JSON.parse(await file.text()));}catch(e){status.textContent='No se abrió la edición: '+e.message}}}
