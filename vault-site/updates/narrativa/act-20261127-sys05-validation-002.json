@@ -1,0 +1,15 @@
+{
+  "id": "act-20261127-sys05-validation-002",
+  "date": "2026-11-27",
+  "area": "Narrativa / Contenido",
+  "owner": "SYS-05",
+  "status": "en-revision",
+  "title": "SYS-05 · suite completa y emulador verificados",
+  "summary": "Checkout aislado del SHA f18ebe8; 117/117 PASS con emulador Firestore demo, 0 fallidas/omitidas; actividad y bóveda PASS. No implica integración narrativa persistente ni H01.",
+  "changed": [
+    "vault-site/public/docs/sys-task-status/sys-05.md"
+  ],
+  "next": "SYS-09 revisar evidencia y conciliar con development actualizado; integración de contratos y módulo real pendiente. Sin despliegue.",
+  "source": "https://github.com/sebasu66/pocketDM/pull/13",
+  "nodeIds": []
+}
