@@ -1,0 +1,104 @@
+// Presentation-only contract. Author instructions are inert data, never evaluated.
+const record=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
+const own=(o,k)=>Object.hasOwn(o,k);
+const fail=(ok,msg)=>{if(!ok)throw new TypeError(msg)};
+const identifier=v=>typeof v==='string'&&/^[A-Za-z][A-Za-z0-9_.-]{0,95}$/.test(v)&&!v.split('.').some(x=>['__proto__','prototype','constructor'].includes(x));
+const text=(v,n=16000)=>typeof v==='string'&&v.length<=n;
+const num=(v,min,max)=>typeof v==='number'&&Number.isFinite(v)&&v>=min&&v<=max;
+const keys=(o,allowed)=>record(o)&&Object.keys(o).every(k=>allowed.includes(k));
+const clone=v=>structuredClone(v);
+const types=['group','image','text','interaction','slot'];
+const positions=['flow','overlay'];
+const fields=['position','x','y','width','height','ratio','z','opacity','rotation','scale','align','fit','objectX','objectY','gap','padding','fontSize','color','background','borderColor','radius','duration','transition','hidden','overflow','direction'];
+const colors=v=>typeof v==='string'&&(/^#[0-9a-f]{6}([0-9a-f]{2})?$/i.test(v)||v==='transparent');
+export function validateVisual(v={}){
+ fail(keys(v,fields),'Propiedad visual no admitida');
+ for(const [k,x] of Object.entries(v)){
+  const limits={x:[-100,200],y:[-100,200],width:[1,100],height:[1,200],z:[-100,100],opacity:[0,1],rotation:[-180,180],scale:[.05,5],ratio:[.1,10],objectX:[0,100],objectY:[0,100],gap:[0,80],padding:[0,80],fontSize:[10,96],radius:[0,60],duration:[0,3000]};
+  const options={position:positions,align:['left','center','right'],fit:['contain','cover','fill'],transition:['none','fade'],overflow:['visible','clip'],direction:['column','row']};
+  fail(limits[k]?num(x,...limits[k]):options[k]?options[k].includes(x):k==='hidden'?typeof x==='boolean':colors(x),'Valor visual inválido: '+k);
+ }
+ return clone(v);
+}
+const layout=v=>{fail(keys(v,['base','desktop','mobile']),'Layout inválido');return Object.fromEntries(Object.entries(v).map(([k,x])=>[k,validateVisual(x)]))};
+function assetPath(v){return typeof v==='string'&&/^\/(?:libro|docs\/art-references|dm\/libro\/editorial\/assets|atlas\/assets)\/[A-Za-z0-9_./-]+\.(?:png|webp|jpe?g|svg|avif|gif)$/i.test(v)&&!v.split('/').some(x=>x==='..'||x==='.')&&!v.includes('//')}
+export function validateAssets(assets){
+ fail(record(assets)&&Object.keys(assets).length<=2000,'Catálogo inválido');
+ for(const [id,a] of Object.entries(assets))fail(identifier(id)&&keys(a,['src','alt'])&&assetPath(a.src)&&text(a.alt,300),'Recurso inválido: '+id);
+ return clone(assets);
+}
+export function validateTemplate(t){
+ fail(keys(t,['schemaVersion','id','revision','name','instructions','viewInstructions','layout','elements'])&&t.schemaVersion===1&&identifier(t.id)&&Number.isInteger(t.revision)&&t.revision>0&&text(t.name,200)&&text(t.instructions)&&Array.isArray(t.elements)&&t.elements.length>0,'Plantilla inválida');
+ if(t.viewInstructions!==undefined)fail(keys(t.viewInstructions,['desktop','mobile'])&&Object.values(t.viewInstructions).every(x=>text(x)),'Instrucciones de vista inválidas');
+ if(t.layout)layout(t.layout);
+ const ids=new Set();let panels=0,total=0;
+ function visit(list,depth=0,parent=null){
+  fail(depth<=8&&Array.isArray(list),'Jerarquía inválida');
+  for(const e of list){
+   fail(++total<=150&&keys(e,['id','type','name','instructions','viewInstructions','binding','value','fallback','when','layout','children','role','slotName'])&&identifier(e.id)&&!ids.has(e.id)&&types.includes(e.type)&&text(e.name,200)&&text(e.instructions??''),'Elemento inválido o repetido');
+   ids.add(e.id);
+   if(e.viewInstructions!==undefined)fail(keys(e.viewInstructions,['desktop','mobile'])&&Object.values(e.viewInstructions).every(x=>text(x)),'Instrucciones de vista inválidas');
+   if(e.binding!==undefined)fail(identifier(e.binding),'Binding inválido');
+   if(e.when!==undefined)fail(keys(e.when,['binding','present'])&&identifier(e.when.binding)&&typeof e.when.present==='boolean','Condición inválida');
+   if(e.layout)layout(e.layout);
+   if(e.type==='interaction'){panels++;fail(parent===null,'El panel obligatorio debe pertenecer al flujo raíz');fail(!e.binding&&!own(e,'value')&&!own(e,'fallback')&&!e.when,'El panel recibe solo interacción autorizada');}
+   if(e.type==='slot')fail(identifier(e.slotName),'Slot inválido');
+   if(e.type==='text'){fail(['heading','paragraph','label'].includes(e.role??'paragraph'),'Rol de texto inválido');for(const v of [e.value,e.fallback])if(v!==undefined)fail(text(v)||Array.isArray(v)&&v.length<=100&&v.every(x=>text(x)),'Texto inválido')}
+   if(e.type==='image')for(const v of [e.value,e.fallback])if(v!==undefined)fail(identifier(v),'Imagen inválida');
+   if(e.children!==undefined){fail(['group','interaction'].includes(e.type),'Solo los contenedores admiten hijos');visit(e.children,depth+1,e)}
+   if(parent===null)fail(Object.values(e.layout??{}).every(v=>v.position!=='overlay'),'Una capa libre requiere contenedor');
+  }
+ }
+ visit(t.elements);
+ fail(panels===1,'La plantilla debe tener exactamente un panel de interacción');
+ return clone(t);
+}
+export function validateComposition(c,t){
+ fail(keys(c,['schemaVersion','id','templateId','templateRevision','overrides','assets'])&&c.schemaVersion===1&&identifier(c.id)&&c.templateId===t.id&&c.templateRevision===t.revision&&record(c.overrides??{})&&record(c.assets??{}),'Composición inválida o revisión incompatible');
+ const elements=new Map();function walk(xs){for(const x of xs){elements.set(x.id,x);if(x.children)walk(x.children)}}walk(t.elements);
+ for(const [id,v] of Object.entries(c.overrides??{})){fail(elements.has(id),'Elemento de composición desconocido: '+id);layout(v)}
+ for(const [id,v] of Object.entries(c.assets??{}))fail(elements.get(id)?.type==='image'&&identifier(v),'Override de recurso inválido');
+ return clone(c);
+}
+export function validateContent(c){
+ fail(keys(c,['pageId','bindings','interaction'])&&identifier(c.pageId)&&record(c.bindings)&&Object.keys(c.bindings).length<=200,'Contenido de página inválido');
+ for(const [k,v] of Object.entries(c.bindings))fail(identifier(k)&&(v===null||typeof v==='boolean'||num(v,-1e9,1e9)||text(v)||Array.isArray(v)&&v.length<=100&&v.every(x=>text(x))),'Binding inválido: '+k);
+ const a=c.interaction;
+ fail(keys(a,['title','text','options','terminal','status'])&&text(a.title??'',300)&&text(a.text??'')&&text(a.status??'',1000)&&typeof a.terminal==='boolean'&&Array.isArray(a.options)&&a.options.length<=40,'Interacción inválida');
+ fail(a.options.length>0||a.terminal,'Una página activa requiere opciones');
+ const ids=new Set();for(const o of a.options){fail(keys(o,['id','label','disabled','symbol'])&&identifier(o.id)&&text(o.label,500)&&o.label.trim().length>0&&!ids.has(o.id)&&(o.disabled===undefined||typeof o.disabled==='boolean')&&(o.symbol===undefined||identifier(o.symbol)),'Opción inválida');ids.add(o.id)}
+ return clone(c);
+}
+const present=v=>v!==undefined&&v!==null&&v!==''&&v!==false&&(!Array.isArray(v)||v.length>0);
+export function resolvePage({template,composition,content,assets},view){
+ fail(['mobile','desktop'].includes(view),'Vista inválida');
+ const t=validateTemplate(template),c=validateComposition(composition,t),p=validateContent(content),a=validateAssets(assets);
+ const binding=k=>own(p.bindings,k)?p.bindings[k]:undefined;
+ const visual=(l={},o={})=>({...l.base,...l[view],...o.base,...o[view]});
+ function resolve(e,depth=0){
+  const style=visual(e.layout,c.overrides?.[e.id]);
+  if(t.elements.includes(e))fail(style.position!=='overlay','Una capa libre requiere contenedor');
+  if(e.type==='interaction'){fail(!style.hidden&&style.position!=='overlay'&&style.opacity!==0,'El panel de interacción debe ser visible y estar en flujo')}
+  if(style.hidden||e.when&&present(binding(e.when.binding))!==e.when.present)return null;
+  const bound=e.binding?binding(e.binding):e.value;
+  let value=present(bound)?bound:e.fallback;
+  if(e.type==='image'){
+   const id=c.assets?.[e.id]??value;
+   if(!present(id))return null;
+   fail(typeof id==='string'&&own(a,id),'Recurso no catalogado: '+id);
+   value={id,...a[id]};
+  }
+  if(e.type==='text'){if(!present(value))return null;fail(typeof value==='string'||typeof value==='number'||Array.isArray(value)&&value.every(x=>typeof x==='string'),'Tipo de texto inválido');}
+  const children=(e.children??[]).map(x=>resolve(x,depth+1)).filter(Boolean);
+  if(e.type==='group'&&!children.length)return null;
+  if(e.type==='slot'&&e.binding&&!present(bound))return null;
+  return {id:e.id,type:e.type,role:e.role,slotName:e.slotName,style,value,children};
+ }
+ const rootStyle=visual(t.layout);fail(rootStyle.position!=='overlay'&&!rootStyle.hidden&&rootStyle.opacity!==0,'La página raíz debe estar visible y en flujo');
+ const nodes=t.elements.map(resolve).filter(Boolean);
+ const count=xs=>xs.reduce((n,x)=>n+(x.type==='interaction'?1:0)+count(x.children),0);
+ fail(count(nodes)===1,'La composición oculta el panel obligatorio');
+ for(const o of p.interaction.options)if(o.symbol)fail(own(a,o.symbol),'Símbolo no catalogado');
+ const interaction={...p.interaction,options:p.interaction.options.map(o=>({...o,...(o.symbol?{image:a[o.symbol]}:{})}))};
+ return {pageId:p.pageId,style:rootStyle,nodes,interaction};
+}
