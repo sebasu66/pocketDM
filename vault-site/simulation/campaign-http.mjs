@@ -40,8 +40,8 @@ export function createCampaignHttp({verifyIdToken,lookupGrant,player}={}) {
    const scope=Object.freeze({uid:identity.uid,campaignId,actorId:grant.actorId,role:'player'});
    const operation=part==='commands'?'confirmPrepared':part==='start'?'start':'view';
    if(typeof player?.[operation]!=='function') throw fail(503,'PREPARATION_UNAVAILABLE');
-   let result;
-   if(part==='commands') result=await player.confirmPrepared(scope,command(await body(req),scope));
+   let result, submitted;
+   if(part==='commands') {submitted=command(await body(req),scope);result=await player.confirmPrepared(scope,submitted);}
    else if(part==='start') {
     // The grant identifies a preassigned campaign; no client-authored seed or definition.
     if(req.body!==null) throw fail(400,'START_BODY_FORBIDDEN');
@@ -55,14 +55,15 @@ export function createCampaignHttp({verifyIdToken,lookupGrant,player}={}) {
    if(part==='options') return json(200,{campaignId,actorId:scope.actorId,revision:safe.revision,actions:safe.actions});
    if(part==='commands'){
     const receipt=result.receipt, event=safe.journal.find(e=>e.id===receipt?.event?.id&&e.revision===receipt?.revision);
-    if(typeof result.duplicate!=='boolean'||!id(receipt?.commandId)||!event) throw fail(503,'INVALID_RECEIPT');
+    if(typeof result.duplicate!=='boolean'||receipt?.commandId!==submitted.commandId||!event) throw fail(503,'INVALID_RECEIPT');
     return json(200,{duplicate:result.duplicate,receipt:{commandId:receipt.commandId,revision:receipt.revision,event},view:safe});
    }
    return json(200,safe);
   } catch(e) {
    // Only stable, explicitly known errors reach the client. Never serialize stack or source.
    const known={UNAUTHENTICATED:401,NOT_FOUND:404,METHOD_NOT_ALLOWED:405,INVALID_COMMAND:400,INVALID_JSON:400,START_BODY_FORBIDDEN:400,JSON_REQUIRED:415,BODY_TOO_LARGE:413,REVISION_CONFLICT:409,COMMAND_ID_REUSED:409,ACTION_NOT_ALLOWED:422,PREPARATION_UNAVAILABLE:503,INVALID_PROJECTION:503,INVALID_RECEIPT:503};
-   return json(known[e?.code]||500,{error:own(known,e?.code)?e.code:'INTERNAL_ERROR'});
+   const recognized=typeof e?.code==='string'&&own(known,e.code);
+   return json(recognized?known[e.code]:500,{error:recognized?e.code:'INTERNAL_ERROR'});
   }
  };
 }

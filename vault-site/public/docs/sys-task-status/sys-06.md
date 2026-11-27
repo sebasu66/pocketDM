@@ -19,3 +19,6 @@ GET /api/campaigns/campaign-a -> playerState confirmado, revisión y journal. GE
 ## Evidencia / pruebas
 Ejecutar desde vault-site: `node --test simulation/test-sys06-transport.mjs`; `node --test simulation/test-*.mjs`; emulador aislado según /docs/campaign-persistence-qa03.md. En esta entrega: SKIP (no ejecución comprobada de Node/CI/emulador/staging al registrar). No convertir pruebas redactadas en PASS. SYS-09 debe revisar integración, concurrencia, reinicio, aislamiento y datos privados en respuestas/errores.
 No despliegue ni merge autorizado. Siguiente: acuerdo de puertos con SYS-04/05/07 y habilitación explícita de staging; validar los tests y revisar PR.
+
+## Handoff SYS-09 · PR #11
+[PR #11 (borrador)](https://github.com/sebasu66/pocketDM/pull/11), commit inicial 28ae4e41894246f71631ef017b0441a30ed91a62. Se añade verificación de commandId del recibo y prueba de errores inesperados. Intento de acceso Git desde contenedor: FAIL de infraestructura (DNS de github.com no resolvió); pruebas Node del repositorio, emulador y staging: SKIP. No se confirmó ejecución CI asociada al commit inicial. No hay aprobación ni integración final; evidencia queda en este PR para revisión independiente.

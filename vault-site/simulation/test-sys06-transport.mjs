@@ -47,3 +47,11 @@ test('private artifact version isolation and immutability with fake Admin SDK',a
  assert.deepEqual((await store.get(worker,item)).payload,item.payload);
  assert.equal(await store.get({...worker,campaignId:'campaign-b'},item),null);
 });
+
+test('mismatched receipt and unexpected errors fail closed',async()=>{
+ const payload={commandId:'cmd-1',expectedRevision:0,action:'consume-ration'};
+ const mismatch=make({confirmPrepared:async()=>({duplicate:false,receipt:{commandId:'cmd-2',revision:1,event},view})});
+ assert.equal((await mismatch(request('/commands',{method:'POST',payload}))).status,503);
+ const unknown=make({view:async()=>{throw Object.assign(Error('PRIVATE'),{code:'constructor'});}});
+ const r=await unknown(request());assert.equal(r.status,500);assert.deepEqual(await r.json(),{error:'INTERNAL_ERROR'});
+});
