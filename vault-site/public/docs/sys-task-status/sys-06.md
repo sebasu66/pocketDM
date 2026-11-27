@@ -1,0 +1,58 @@
+# SYS-06 · Backend, transporte y persistencia
+27/11/2026 · Agente SYS-06 · Estado: en curso / candidato parcial, no validado.
+- Base acordada por solicitud: development, `ebe06f9f5aac2968b7f3f74b2f627ebe062faa92`.
+- Rama: `feature/sys-06-backend-persistencia`. PR hacia development, entrega de revisión a SYS-09.
+- Prioridad P0 · QA-03/08 · MOD-05/06.
+## Fuentes revisadas y coordinación
+Plan SYS-06, QA-03, QA-02, QA-07, campaign-state, firestore-campaign-store, pruebas QA-03, configuración Vercel y actividad individual de 25/27 noviembre (persistencia, ventana, capacidades, Services, portal, módulo y lector). PRs abiertos #2, #3, #5, #6, #7. No modificar contratos compartidos sin acuerdo. PR #5 es candidato, no equivale a integración aprobada. Las 7/7 y 108/108 del informe anterior son históricas, no resultados de esta rama.
+## Entrega candidata
+- simulation/campaign-http.mjs: frontera Fetch API no montada. Verificación de token inyectada (revocación), lookup de grant server-side, ámbito player y campos estrictos. No acepta actor, rol, seed, resultados, hashes o definiciones del cliente. Respuestas sin caché, errores estables. Sin fallback a confirmCommand para no resolver de nuevo. El puerto confirmPrepared es obligatorio; sin él responde 503.
+- simulation/private-preparation-store.mjs: repositorio privado versionado por campaña/kind/key/version (edition/branch/fragment), transacción create inmutable, hash y límite de tamaño. Admin app/SDK inyectados; sólo staging explícito con proyecto aislado autorizado. El scope worker procede de autoridad privada, nunca de HTTP de jugador. No instalar SDK ni conectar credenciales de producción.
+- simulation/test-sys06-transport.mjs: pruebas sintéticas de frontera y repositorio con falso SDK, no emulador.
+No se tocan campaign-state, firestore-campaign-store, motor, reglas, UI ni gateway de diagnóstico.
+## Contrato propuesto a SYS-01/04/05/07 (pendiente acuerdo)
+GET /api/campaigns/campaign-a -> playerState confirmado, revisión y journal. GET /api/campaigns/campaign-a/options -> {campaignId,actorId,revision,actions}. POST /api/campaigns/campaign-a/start sin body, asignación previa en servidor, inicio idempotente requerido al implementar puerto. POST /api/campaigns/campaign-a/commands con Authorization: Bearer <token>, JSON {"commandId":"cmd-1","expectedRevision":0,"action":"module-intent","intentId":"talk"}; respuesta 200 {"duplicate":false,"receipt":{"commandId":"cmd-1","revision":1,"event":{...}},"view":{...}}. Acciones existentes consume-ration, travel/targetId, duel/encounterId, module-intent/intentId. 400 INVALID_COMMAND; 401 UNAUTHENTICATED; 404 NOT_FOUND (incluye falta de autorización); 409 REVISION_CONFLICT/COMMAND_ID_REUSED; 422 ACTION_NOT_ALLOWED; 503 PREPARATION_UNAVAILABLE. Puerto debe traducir errores a esos códigos y preservar recibos. No enviar payload privado. El allowlist superior no sustituye revisión semántica de los campos anidados de playerState.
+## Criterios y bloqueos
+- SYS-04: acordar transición preparada atómica y compatible con estado/recibo. El almacén QA-03 actual usa confirmCommand que vuelve a resolver determinísticamente; no certificarlo como confirmación sin nueva tirada. CAS, recuperación de respuesta y replay deben verificarse con el puerto real.
+- SYS-01/02: versión de reglas, contrato de estado y RNG. SYS-05: metadata/validación de fragmentos, acceso privado y selección aprobada. SYS-07: acordar proyección y gateway sin exposición de futuro.
+- No hay autorización/credenciales de staging, identidad real ni SDK instalado en esta entrega; no escribir en nube. Falta adapter Admin de estado/recibos, ACL/IAM, worker autenticado, inicio desde edición aprobada, aplicación Ripple sólo confirmada y gateway real. No montar rutas públicas hasta completar. No declarar QA-03/08, MOD ni H01 cerrados.
+## Evidencia / pruebas
+Ejecutar desde vault-site: `node --test simulation/test-sys06-transport.mjs`; `node --test simulation/test-*.mjs`; emulador aislado según /docs/campaign-persistence-qa03.md. En esta entrega: SKIP (no ejecución comprobada de Node/CI/emulador/staging al registrar). No convertir pruebas redactadas en PASS. SYS-09 debe revisar integración, concurrencia, reinicio, aislamiento y datos privados en respuestas/errores.
+No despliegue ni merge autorizado. Siguiente: acuerdo de puertos con SYS-04/05/07 y habilitación explícita de staging; validar los tests y revisar PR.
+
+## Handoff SYS-09 · PR #11
+[PR #11 (borrador)](https://github.com/sebasu66/pocketDM/pull/11), commit inicial 28ae4e41894246f71631ef017b0441a30ed91a62. Se añade verificación de commandId del recibo y prueba de errores inesperados. Intento de acceso Git desde contenedor: FAIL de infraestructura (DNS de github.com no resolvió); pruebas Node del repositorio, emulador y staging: SKIP. No se confirmó ejecución CI asociada al commit inicial. No hay aprobación ni integración final; evidencia queda en este PR para revisión independiente.
+
+## Validación posterior · 27/11/2026 13:03 ART
+Se recuperó acceso operativo a Git y Node mediante el equipo autorizado SEBASU (Windows), con clon temporal independiente del SHA `12ee28ae909a4a4f4a3dafa93796a0b7eab61699`; no se alteró el checkout de otros agentes. Este resultado reemplaza el SKIP anterior para las pruebas locales y de emulador.
+
+| Verificación | Resultado |
+|---|---|
+| Git ls-remote y clon de rama | PASS |
+| node --test simulation/test-sys06-transport.mjs | PASS 5/5, 0 fallos, 0 omitidas |
+| node --test simulation/test-*.mjs sin emulador | PASS 109, FAIL 0, SKIP 8 (117 total) |
+| firebase emulators:exec --only firestore --project demo-pocketdm-qa03 --config firebase.qa03.json 'node --test simulation/test-*.mjs' | PASS 117/117, FAIL 0, SKIP 0, exit 0 |
+| Staging real, identidad real y Admin SDK de campaña | SKIP, sin autorización/configuración |
+
+Entorno: Git 2.51.1.windows.1; Node 24.14.1; Firebase CLI 15.27.0; Java JBR 21.0.8; Firestore emulator 1.22.0. Puerto local 18083, proyecto demo aislado. El emulador se detuvo al finalizar. Las pruebas de recuperación, concurrencia distinta/idéntica, pérdida de respuesta, aislamiento, denegación directa y recuperación de módulo aprobaron. El repositorio privado nuevo se prueba con SDK falso; no equivale a integración Admin SDK en nube. Sigue pendiente confirmPrepared atómico sobre ramas reales SYS-04 y el gateway autenticado. No cerrar H01 ni promover el PR aún.
+
+
+## Integración cruzada SYS-04/05/07 · 27/11/2026 15 h ART
+Estado: candidato integrado en entorno local, pendiente de revisión y módulo real. PR #11 continúa borrador.
+### Fuentes fijadas para la prueba
+- SYS-04 PR #12: 0bf52ca7423c38c6ccf855563b11c867dbceaf86 (bound-adventure-compiler, adventure-compiler y test propio).
+- SYS-05 PR #13: fd4c6eeb5656b0c24876ba15b723be8f51b28737 (narrative-repository, approvedArtifact/validateApprovedArtifact y test propio).
+- SYS-07 PR #15: 1108f870945cf2a721fb2ec62cf9ea634550610e (approved-module-narration, confirmed-narration, book-campaign-session y sus pruebas).
+- SYS-06 código probado: faefe9e3e443f01a0a977aca31e3bc06b949cba1. Las dependencias se incorporaron por archivos desde sus SHA exactos sólo en un checkout temporal; no se copiaron en el PR ni se modificaron sus ramas. Los puertos se inyectan en el servicio; integrar esos PR antes de montar la ruta. La suite de una rama SYS-06 sola omite explícitamente la prueba cruzada si faltan fuentes.
+### Implementación
+- simulation/prepared-campaign-player.mjs: instala privadamente edición sintética completa, exige artefactos SYS-05 validados de cada rama, fija versión y digest, compara contexto, textos/IDs de hechos, opciones próximas, slots/outcomes/check IDs. Autoriza alcance y consume confirmBoundChoice (no confirmCommand) al jugar. Preserva snapshot precomputado y recibos, historial de ramas elegido y CAS en una operación; commandId/revisión idempotentes, reanudación después de crear otro servicio. Estado inicial puede empezar en revisión >0. Proyección del estado común (playerState) y edición del libro formada exclusivamente con eventos confirmados y opciones actuales. confirmPrepared admite las decisiones module-intent del fixture; para el libro mapea choiceId opaco de página a rama actual. No se llama al narrador en runtime.
+- simulation/prepared-campaign-store.mjs: persistencia de edición, artefactos inmutables y sesión con CAS usando transporte Firestore demo existente; adaptador Admin SDK para staging aislado inyectado, no ensayado en nube. Tope 500 KB por registro serializado; no es almacenamiento de campañas extensas. El almacén previo de QA-03 permanece sin cambios.
+- simulation/campaign-http.mjs: GET /api/campaigns/:id/book, POST /api/campaigns/:id/book/commands con {commandId,expectedRevision,pageId,choiceId}; identidad/actor/rol exclusivamente servidor, respuesta edición autorizada. Mantiene contrato de acciones previo. Se amplía formato de commandId para UUID de SYS-07 que inicia con dígito. No se monta endpoint público ni gateway Vercel.
+- public/libro/sys06-book-transport.mjs: resume y confirm del puente SYS-07 con token inyectado, rutas relativas, no-store y comprobación de scope. No cambia reader ni layouts. La edición y playerState se sirven por rutas distintas; falta decisión coordinada para snapshot combinado de ficha, diario y mapa. No se afirma integración DOM/navegador.
+### Evidencia
+Windows SEBASU, Node 24.14.1, Firebase CLI 15.27.0, JBR 21.0.8, Firestore demo local 18083. Dos intentos iniciales de integración fallaron por fixture sin cierre obligatorio y supuesto de revisión inicial cero; corregidos sin tocar motor. Tercera corrida 118/118 PASS. Última corrida con dependencias y sus tests: **132 PASS, 0 FAIL, 0 SKIP**, exit 0, emulador detenido. Incluye aceptación, inspección con chequeo idéntico al preparado, cierre real del fixture, alternativa de rechazo preparada, CAS con commandId idéntico y diferente, reapertura y recuperación de recibos, rechazo de acceso y de cobertura insuficiente; el revisor y el token son sintéticos. No se ejercita final de rechazo completo por transporte en la nueva prueba, ni módulo canónico real.
+Reproducir: checkout del SHA SYS-06 indicado, incorporar temporalmente los archivos indicados de los tres SHA, cd vault-site, usar JDK 21, ejecutar firebase emulators:exec --only firestore --project demo-pocketdm-qa03 --config firebase.qa03.json 'node --test simulation/test-*.mjs'. No exportar registros privados.
+### PR #11 y bloqueo de despliegue
+La consulta previa de GitHub devolvió mergeable=true, draft=true y mergeable_state=unstable. El status Vercel falló para 9374b6b; log del deployment dpl_An6ptNU6TstZVn1hyFhKDREgZ82B: Error: Wrong PocketDM branch en build-portable-pwa.mjs:8. La allowlist de ramas no contiene feature/sys-06-backend-persistencia. No editar ni desactivar guardia de infraestructura; SYS-09/infraestructura deben autorizar preview específico o validar en rama de integración aprobada. No asumir que un check Vercel verde o mergeable=true equivale a aprobación. No merge/deploy manual ni promoción.
+### Pendientes para cierre
+SYS-09 debe revisar las dependencias, los criterios de privacidad semántica, roles reales/IAM, persistencia de historial completo de autoría (actualmente sólo se importan artefactos aprobados y versión fijada), entorno Admin real, revisión de mundo concurrente más allá de la sesión, enlace Ripple confirmado, módulo real SYS-08, montaje de gateway y pruebas DOM/navegador. El bridge rechaza todo salvo entorno fixture y edition.publicationReady=false; no promover directamente a producción. Requiere coordinación de la forma exacta de contexto/etiquetas/slots y de la política de preview. No cerrar QA-03/08 ni H01.

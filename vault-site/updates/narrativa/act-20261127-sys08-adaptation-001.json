@@ -1,0 +1,20 @@
+{
+  "id": "act-20261127-sys08-adaptation-001",
+  "date": "2026-11-27",
+  "area": "Narrativa / Contenido",
+  "owner": "SYS-08",
+  "status": "en-revision",
+  "title": "SYS-08: inventario y adaptación privada candidata",
+  "summary": "Original autorizado leído sin modificar permisos; cobertura estructural de 14 páginas, 21 intenciones y tres recorridos hipotéticos. Manifiesto fuera de Git/Hosting; conflictos de canon, perfiles de criaturas y compilación real pendientes.",
+  "changed": [
+    "vault-site/public/docs/sys-task-status/sys-08.md",
+    "vault-site/updates/narrativa/act-20261127-sys08-adaptation-001.json"
+  ],
+  "next": "SYS-09 revisa evidencia; coordinar acceso privado con SYS-04/05, aprobación de canon y perfiles SYS-10 antes de validar módulo real.",
+  "source": "https://github.com/sebasu66/pocketDM/blob/feature/sys-08-adventure-adaptation/vault-site/public/docs/sys-task-status/sys-08.md",
+  "nodeIds": [
+    "doc_0916",
+    "doc_0917",
+    "doc_0913"
+  ]
+}

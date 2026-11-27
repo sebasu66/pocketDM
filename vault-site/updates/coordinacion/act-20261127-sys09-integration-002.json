@@ -1,0 +1,17 @@
+{
+  "id": "act-20261127-sys09-integration-002",
+  "date": "2026-11-27",
+  "area": "Coordinación",
+  "owner": "SYS-09",
+  "status": "en-progreso",
+  "title": "Integración consolidada SYS-01 a SYS-08 y pruebas conjuntas",
+  "summary": "PR #18: ocho entregas integradas, 168/168 pruebas con Firestore Emulator y navegación confirmada. Dos pruebas históricas de navegador fallan; H01 real y canon siguen pendientes.",
+  "changed": [
+    "vault-site/public/docs/sys-task-status/sys-09.md",
+    "vault-site/public/dm/sistema/index.html",
+    "vault-site/public/libro/campaign-projection.mjs"
+  ],
+  "next": "Revisar PR #18, completar canon y bestiario de fuentes verificadas, revisar regresiones históricas, validar H01 y staging autorizado. No promover live.",
+  "source": "https://github.com/sebasu66/pocketDM/pull/18",
+  "nodeIds": []
+}

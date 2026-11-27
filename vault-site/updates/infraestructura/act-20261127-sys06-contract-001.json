@@ -1,0 +1,18 @@
+{
+  "id": "act-20261127-sys06-contract-001",
+  "date": "2026-11-27",
+  "area": "Infraestructura / Firebase",
+  "owner": "SYS-06",
+  "status": "en-progreso",
+  "title": "SYS-06: candidato de transporte y repositorio privado",
+  "summary": "Frontera HTTP no montada y repositorio privado Admin SDK inyectado, sin modificar motor, gateway o UI. Contrato propuesto; integración de transición preparada y persistencia de campaña real pendientes. Pruebas sintéticas redactadas, no certificadas.",
+  "changed": [
+    "vault-site/simulation/campaign-http.mjs",
+    "vault-site/simulation/private-preparation-store.mjs",
+    "vault-site/simulation/test-sys06-transport.mjs",
+    "vault-site/public/docs/sys-task-status/sys-06.md"
+  ],
+  "next": "Acordar puertos SYS-01/04/05/07, revisar SYS-09, validar Node y emulador, habilitar staging autorizado. Sin producción.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/sys-06-backend-persistencia",
+  "nodeIds": []
+}

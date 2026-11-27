@@ -1,0 +1,16 @@
+{
+  "id": "act-20261127-sys09-coordinacion-001",
+  "date": "2026-11-27",
+  "area": "Coordinación",
+  "owner": "SYS-09",
+  "status": "en-progreso",
+  "title": "SYS-09: matriz inicial de validación independiente",
+  "summary": "Base development ebe06f9 fijada; candidato PR #5 diverge 7/91. Inventario inicial de entregas y matriz PASS/FAIL/SKIP registrados. No se ejecutó la suite ni se certifica H01; acceso al checkout, emulador y actividad publicada limitado.",
+  "changed": [
+    "vault-site/public/docs/sys-task-status/sys-09.md",
+    "vault-site/public/dm/sistema/index.html"
+  ],
+  "next": "Recibir PR y evidencia de SYS-01 a SYS-08; coordinar preview autorizado y ejecutar regresiones, privacidad y H01 sobre SHA integrado. No promover live.",
+  "source": "https://github.com/sebasu66/pocketDM/commit/fcff4e74e7e24c75150c8e866a13cb8025082f4b",
+  "nodeIds": []
+}
