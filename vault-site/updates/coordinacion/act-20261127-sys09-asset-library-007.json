@@ -1,0 +1,18 @@
+{
+  "id": "act-20261127-sys09-asset-library-007",
+  "date": "2026-11-27",
+  "area": "Coordinación",
+  "owner": "SYS-09",
+  "status": "en-progreso",
+  "title": "Biblioteca gráfica de la bóveda",
+  "summary": "93 recursos históricos con códigos por carpeta, filtros NPC/BKG, metadatos semánticos y selector editorial. Subida privada candidata no desplegada.",
+  "changed": [
+    "vault-site/public/dm/arte/asset-catalog.mjs",
+    "vault-site/public/dm/arte/index.html",
+    "vault-site/public/dm/arte/asset-library.mjs",
+    "vault-site/public/libro/edition/universal/contract.mjs"
+  ],
+  "next": "Validar Firebase y publicación de borradores, incorporar assets nuevos y desplegar solo con autorización.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/editorial-universal-page-20261127",
+  "nodeIds": []
+}

@@ -56,7 +56,7 @@ for(const [width,height] of [[1280,900],[844,390],[390,844],[360,640]]){
  console.log('PASS '+width+'x'+height+': 11 folios, dialogue, 2 skill checks, combat, 3 endings and index');
 }
 await call('Emulation.setDeviceMetricsOverride',{width:1280,height:900,deviceScaleFactor:1,mobile:false});
-await call('Page.navigate',{url:'http://127.0.0.1:'+server.address().port+'/dm/libro/stormkeep_laboratorio_editorial_v11.html'});
+await call('Page.navigate',{url:'http://127.0.0.1:'+server.address().port+'/dm/libro/editorial-legacy.html'});
 for(let i=0;i<80;i++){if(await ev("!!document.querySelector('book-editorial-scene[preview-view=mobile]')?.shadowRoot.querySelector('#previewChoices button')"))break;await sleep(100)}
 const preview=await ev("(()=>{const e=document.querySelector('book-editorial-scene[preview-view=mobile]');return {flow:e.hasAttribute('data-flow'),h:e.offsetHeight,choices:e.shadowRoot.querySelectorAll('#previewChoices button').length}})()");
 assert.ok(preview.flow);assert.equal(preview.choices,2);

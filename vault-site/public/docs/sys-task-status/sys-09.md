@@ -131,3 +131,23 @@ El titular autorizó publicar la miniaventura por separado: commit f7987fc35dcf3
 ### Revisión del lector móvil y componente editorial padre — 27/11/2026
 
 Por indicación del titular, la PWA declara orientación portrait-primary. La escena activa conserva una sola superficie editorial compartida: la composición móvil crece según su contenido, y paneles, chequeos, combate y navegación se proyectan en slots del componente padre BookEditorialPage. El lector de campaña y la miniaventura reutilizan renderBookFolio y makeModuleLayout. Las transiciones de la miniaventura se resuelven por destino explícito; no por orden de folio. Los gestos de desplazamiento, teclas y controles de siguiente/anterior no cambian escenas de campaña o miniaventura. Los finales ofrecen reinicio explícito; los archivos de demostración y el atlas no son ramas de campaña. La portada oficial usa el mismo componente. Pruebas en escritorio, 844x390, 390x844 y 360x640; 30 párrafos largos, navegación por decisiones, 3 cierres y editor móvil con 25 párrafos: PASS. Android físico no verificado; la campaña real y el backend candidato siguen sin publicarse.
+
+### Compositor editorial universal v0.1 — candidato independiente
+
+Se construyó book-universal-page con contrato de plantilla, composición, contenido y catálogo; instrucciones raíz y por capa como metadatos de autoría, variantes de escritorio/móvil, imágenes superpuestas, símbolos, título gráfico, panel único de interacción y slots de mecánica. El laboratorio de autoría /dm/libro/universal/ reutiliza los 11 folios del farol. Pruebas de contrato y navegador (1280×900, 390×844 y 360×640): PASS. Sin migrar lector publicado, sin desplegar, sin ejecutar IA ni redactar todavía la skill. Referencia: /docs/editorial-universal-v01.md.
+
+### Editor universal y cámara — continuación de PR #19
+
+Modificada la misma entrada editorial Libro → UI; editor anterior preservado para diseños históricos. Capas, inspector contextual, dos previsualizaciones, revisiones locales inmutables y prompts. Cámara por imagen con dos encuadres, paneo/zoom, easing, duración, previsualización y arrastre del contenido, reutilizando el motor de cámara anterior. PASS contrato, navegador editor y regresión del lector/archivo. Pendiente sincronización compartida, subida de recursos, migración de diseños históricos y aprobación visual. No desplegado.
+
+### Panel universal con historial y 9-slice
+
+Candidato PR #19: pieles configurables 9-slice para marco y estados de opción; historial confirmado, resultados CSS/SVG y símbolo de habilidad antes de elegir (incluye celdas de grilla, fallback dado). Pruebas de contrato, 11 escenas en tres viewports, texto multilínea y 24 entradas desplazables, inspector y revisiones PASS. Pendientes grilla/arte definitivo, integración PWA y publicación autorizada.
+
+### Biblioteca gráfica y tipos semánticos
+
+PR #19 incorpora /dm/arte/#assets y navegación desde todo el portal, catálogo de 93 recursos existentes (38 NPC, 45 fondos/localizaciones, 10 otros), búsqueda, filtros y códigos categoría/nombre. Se preservan fuentes y aprobaciones históricas. Contrato de contentType/tags y referencias BKG/nombre, selector del editor integrado. Pruebas de catálogo, contrato y navegadores PASS. Subida privada candidata mediante Firebase; reglas propuestas, sin despliegue ni prueba autenticada en el bucket real. No hay grilla de símbolos ni red_sky verificados en el repo.
+
+### Publicación autorizada de interfaz editorial
+
+Se libera únicamente la UI universal, el laboratorio y catálogo estático; sin cambios en simulación ni reglas Firebase. El lector vigente se conserva. Subida compartida deshabilitada mientras se valida. Los tres nuevos PNG quedan pendientes de transferencia.
