@@ -2,6 +2,7 @@
 // Dependency functions are injected from the reviewed agent revisions.
 import {createHash} from 'node:crypto';
 import {playerState} from './campaign-state.mjs';
+import {narrativeManifest,persistApprovedArtifact,confirmedNarrativeFragment} from './narrative-integration.mjs';
 const need=(v,m)=>{if(!v)throw Error(m)};
 const fail=code=>Object.assign(Error(code),{code});
 const own=(o,k)=>Object.hasOwn(o,k);
@@ -10,12 +11,10 @@ const hash=x=>createHash('sha256').update(JSON.stringify(canonical(x))).digest('
 const id=x=>typeof x==='string'&&/^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,120}$/.test(x)&&!['constructor','prototype','__proto__'].includes(x);
 const pageId=r=>'page-'+r;
 export const preparedChoiceId=e=>'choice-'+hash(e.branchId).slice(0,32);
-const artifactRef=(job,revision)=>({kind:'fragment',key:'fragment-'+hash([job.editionId,job.branchId,job.slotId,job.locale,job.contextHash]).slice(0,48),version:'v'+revision});
 const worker=(campaignId)=>({uid:'sys06-internal',role:'worker',campaignId});
 const same=(a,b)=>hash(a)===hash(b);
-const keySet=(a,b)=>a.length===b.length&&new Set(a).size===a.length&&a.every(x=>b.includes(x));
-export function createPreparedPlayer({store,startBoundEdition,confirmBoundChoice,boundChoiceView,validateApprovedArtifact,confirmedModuleNarration,environment}={}){
- need(environment==='fixture'&&[startBoundEdition,confirmBoundChoice,boundChoiceView,validateApprovedArtifact,confirmedModuleNarration].every(f=>typeof f==='function'),'Fixture-only reviewed dependency ports required');
+export function createPreparedPlayer({store,startBoundEdition,confirmBoundChoice,boundChoiceView,confirmedModuleNarration,projectVisibleContext,environment}={}){
+ need(environment==='fixture'&&[startBoundEdition,confirmBoundChoice,boundChoiceView,confirmedModuleNarration,projectVisibleContext].every(f=>typeof f==='function'),'Fixture-only reviewed dependency ports required');
  need(['read','create','cas','put','get'].every(k=>typeof store?.[k]==='function'),'Transactional store required');
  function access(scope){return {campaignId:scope.campaignId,actorId:scope.actorId,role:'player'}}
  function verifyScope(row,scope){if(scope?.role!=='player'||row.ownerUid!==scope.uid||row.actorId!==scope.actorId||row.campaignId!==scope.campaignId)throw fail('NOT_FOUND')}
@@ -36,12 +35,9 @@ export function createPreparedPlayer({store,startBoundEdition,confirmBoundChoice
  }
  async function narration(pkg,scope,state,edge){
   const binding=pkg.fragments[edge.branchId];if(!binding)throw fail('PREPARATION_UNAVAILABLE');
-  const artifact=validateApprovedArtifact(binding.job,await getPrivate(scope.campaignId,binding.ref));
-  return confirmedModuleNarration(pkg.base,state,access(scope),edge.event.id,async visible=>{
-   // Map exact SYS-05 semantic slots to confirmed visible check IDs, never to new rolls.
-   const text=artifact.draft.text.map(t=>typeof t==='string'?t:{check:binding.checkMap[t.checkSlot]});
-   return {schemaVersion:1,status:'approved',...visible,title:artifact.draft.title,roman:'',text};
-  });
+  const event=playerState(pkg.base,state,access(scope)).journal.find(e=>e.id===edge.event.id);
+  const f=await confirmedNarrativeFragment({store,scope:{...worker(scope.campaignId),editionId:pkg.edition.editionId},job:binding.job,binding:binding.binding,reference:binding.ref,confirmed:{branchId:edge.branchId,campaignId:scope.campaignId,editionId:pkg.edition.editionId,actorId:scope.actorId,event}});
+  return confirmedModuleNarration(pkg.base,state,access(scope),edge.event.id,async()=>f);
  }
  async function bookFor(row,pkg,scope){
   const v=viewFor(row,pkg,scope),pages=[{id:pageId(pkg.edition.initial.delta.revision),type:'location',title:pkg.title,text:[],events:[],choices:[]}];
@@ -64,19 +60,19 @@ export function createPreparedPlayer({store,startBoundEdition,confirmBoundChoice
   const edges=Object.values(edition.nodes).flatMap(n=>n.edges);
   need(labels&&typeof labels==='object'&&edges.every(e=>own(labels,e.action.intentId)&&typeof labels[e.action.intentId]==='string'&&labels[e.action.intentId].trim()&&labels[e.action.intentId].length<=500),'Missing approved choice label');
   need(edges.length>0&&edges.length===edition.coverage.edges&&edges.length===artifacts.length,'Incomplete artifact coverage');
-  for(const edge of edges){
-   need(typeof labels[edge.action.intentId]==='string'&&labels[edge.action.intentId].trim()&&labels[edge.action.intentId].length<=500,'Missing approved choice label');
-   const input=artifacts.find(x=>x.job.branchId===edge.branchId);need(input&&!own(fragments,edge.branchId),'Missing or duplicate branch artifact');
-   const {job,artifact,checkMap}=input,validated=validateApprovedArtifact(job,artifact);
-   need(job.campaignId===c&&job.editionId===edition.editionId&&job.slotId===edge.slotId&&job.locale==='es-AR'&&job.required===true,'Narrative scope mismatch');
+  // A single authoritative manifest and slot numbering from SYS-05, using explicit audience projection.
+  const versions=artifacts[0]?.job?.versions,manifest=narrativeManifest({edition,campaignId:c,actorId,versions,projectVisible:(edge,next)=>{
    const projected=playerState(base,edge.state,access(player)),event=projected.journal.find(e=>e.id===edge.event.id);
-   need(event&&event.action==='module-intent'&&event.revision===edge.event.revision&&same(event,edge.event),'Prepared visible event mismatch');
-   const expectedOptions=edition.nodes[edge.nextId].edges.map(e=>({id:preparedChoiceId(e),text:labels[e.action.intentId]}));
-   need(same(job.context,edge.context)&&keySet(job.options.map(o=>o.id),expectedOptions.map(o=>o.id))&&job.options.every(o=>expectedOptions.find(x=>x.id===o.id)?.text===o.text),'Narrative context or option binding mismatch');
-   need(job.facts.every(f=>event.facts.find(x=>x.id===f.id)?.description===f.text)&&keySet(job.facts.map(f=>f.id),event.facts.map(f=>f.id))&&keySet(Object.keys(checkMap),job.checks.map(k=>k.slotId))&&keySet(Object.values(checkMap),event.checks.map(k=>k.id)),'Narrative fact or check binding mismatch');
-   need(job.checks.every(k=>event.checks.find(x=>x.id===checkMap[k.slotId])?.outcome===k.outcome),'Narrative outcome mismatch');
-   const ref=artifactRef(job,validated.revision),stored=await store.put(scope,{...ref,payload:validated});
-   fragments[edge.branchId]={job,checkMap,ref:{...ref,digest:stored.digest}};
+   need(event&&event.action==='module-intent'&&same(event,edge.event),'Prepared visible event mismatch');
+   return {context:projectVisibleContext({edge,next,player:projected}),event,facts:event.facts.map(f=>({id:f.id,text:f.description})),options:next.edges.map(e=>({id:preparedChoiceId(e),text:labels[e.action.intentId]}))};
+  }});
+  for(const {job,binding} of manifest){
+   const input=artifacts.find(x=>x.job.branchId===job.branchId);
+   need(input&&!own(fragments,job.branchId)&&same(job,input.job),'Narrative manifest mismatch');
+   const checkMap=Object.fromEntries(binding.checks.map(c=>[c.slotId,c.id]));
+   if(input.checkMap!==undefined)need(same(input.checkMap,checkMap),'Narrative check binding mismatch');
+   const ref=await persistApprovedArtifact({store,scope:{...scope,editionId:edition.editionId},job,artifact:input.artifact});
+   fragments[job.branchId]={job,binding,ref};
   }
   const pkg={base,edition,fragments,title,labels},session=startBoundEdition(edition);
   // Validate every actual confirmed projection before publishing even the fixture.

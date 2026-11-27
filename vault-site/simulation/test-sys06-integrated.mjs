@@ -15,7 +15,8 @@ const missing=required.filter(p=>!existsSync(new URL(p,import.meta.url)));
 const reason=missing.length?'Requires SYS-04/05/07 reviewed files: '+missing.join(', '):!process.env.FIRESTORE_EMULATOR_HOST?'Requires isolated Firestore emulator':false;
 test('SYS-04/05/07 integrated prepared choice, approved persistence, book retry and CAS',{skip:reason},async()=>{
  const {compileBoundEdition,startBoundEdition,confirmBoundChoice,boundChoiceView}=await import('./bound-adventure-compiler.mjs');
- const {prepareNarrativeJob,NarrativeRepository,validateApprovedArtifact}=await import('./narrative-repository.mjs');
+ const {NarrativeRepository}=await import('./narrative-repository.mjs');
+ const {narrativeManifest}=await import('./narrative-integration.mjs');
  const {confirmedModuleNarration}=await import('./approved-module-narration.mjs');
  const {createBookCampaignSession}=await import('../public/libro/book-campaign-session.mjs');
  const w=initialWorld(),base=snapshot({canon:w.canon,nodes:Object.values(w.nodes),entities:Object.values(w.entities),routes:Object.values(w.routes)});
@@ -32,20 +33,20 @@ test('SYS-04/05/07 integrated prepared choice, approved persistence, book retry 
  let prepared=0;
  const edition=compileBoundEdition({module:{id:'test.sys06',version:'v1',mode:'mechanical-fixture',intentIds:['accept','decline','inspect','close'],endingIds:['accept-end','decline-end']},initial,bindings:{
   enumerate:s=>playerState(base,s,access).actions.filter(a=>a.action==='module-intent'),
-  prepare:(s,a,{branchId})=>{prepared++;const r=confirmCommand(base,s,access,{...a,campaignId,actorId,expectedRevision:s.delta.revision,commandId:'prep-'+branchId});const event=playerState(base,r.state,access).journal.at(-1);return {state:r.state,event,context:{actorVisible:'Actor sintético',npcVisible:'Ninguno',place:'Lugar de prueba',time:'Día',known:[],intent:a.intentId},slotId:'slot-'+a.intentId}},
+  prepare:(s,a,{branchId})=>{prepared++;const r=confirmCommand(base,s,access,{...a,campaignId,actorId,expectedRevision:s.delta.revision,commandId:'prep-'+branchId});const event=playerState(base,r.state,access).journal.at(-1);return {state:r.state,event,context:{actorVisible:'Actor sintético',npcVisible:'Ninguno',place:'Lugar de prueba',time:'Día',known:[],intent:a.intentId,privateMarker:'PRIVATE-FIXTURE-CONTEXT'},slotId:'slot-'+a.intentId}},
   ending:s=>({declined:'decline-end',closed:'accept-end'})[playerState(base,s,access).module.status]??null
  }});
  const repository=new NarrativeRepository(),artifacts=[];
- for(const edge of Object.values(edition.nodes).flatMap(n=>n.edges)){
-  const checkMap=Object.fromEntries(edge.event.checks.map((c,i)=>['check-'+i,c.id]));
-  const job=prepareNarrativeJob({campaignId,editionId:edition.editionId,branchId:edge.branchId,slotId:edge.slotId,audience:'player',locale:'es-AR',versions:{module:'v1',rules:'v1',canon:'v1',narrator:'v1',context:'v1'},context:edge.context,facts:edge.event.facts.map(f=>({id:f.id,text:f.description})),options:edition.nodes[edge.nextId].edges.map(e=>({id:preparedChoiceId(e),text:labels[e.action.intentId]})),checks:edge.event.checks.map((c,i)=>({slotId:'check-'+i,outcome:c.outcome})),required:true});
+ const projectVisibleContext=({edge})=>{const {actorVisible,npcVisible,place,time,known,intent}=edge.context;return {actorVisible,npcVisible,place,time,known,intent}};
+ const manifest=narrativeManifest({edition,campaignId,actorId,versions:{module:'v1',rules:'v1',canon:'v1',narrator:'v1',context:'v1'},projectVisible:(edge,next)=>({context:projectVisibleContext({edge}),event:edge.event,facts:edge.event.facts.map(f=>({id:f.id,text:f.description})),options:next.edges.map(e=>({id:preparedChoiceId(e),text:labels[e.action.intentId]}))})});
+ for(const {job,binding} of manifest){
   const p={...worker,editionId:edition.editionId};
   repository.enqueue(p,job);
-  const generated=await repository.generate(p,job,async()=>({title:'Escena '+edge.action.intentId,text:['Narración sintética.',...job.checks.map(c=>({checkSlot:c.slotId}))],factIds:job.facts.map(f=>f.id),optionIds:job.options.map(o=>o.id)}));
+  const generated=await repository.generate(p,job,async input=>{assert.ok(!JSON.stringify(input).includes('PRIVATE-FIXTURE-CONTEXT'));return {title:'Escena '+job.slotId,text:['Synthetic approved text.',...job.checks.map(c=>({checkSlot:c.slotId}))],factIds:job.facts.map(f=>f.id),optionIds:job.options.map(o=>o.id)}});
   await repository.review({...p,role:'reviewer'},job,generated.revision,async()=>({fidelity:true,privacy:true,checks:true,reviewId:'fixture-review'}));
-  artifacts.push({job,artifact:repository.approvedArtifact(p,job),checkMap});
+  artifacts.push({job,artifact:repository.approvedArtifact(p,job),checkMap:Object.fromEntries(binding.checks.map(c=>[c.slotId,c.id]))});
  }
- const newPlayer=()=>createPreparedPlayer({environment:'fixture',store:createEmulatedPreparedStore(),startBoundEdition,confirmBoundChoice,boundChoiceView,validateApprovedArtifact,confirmedModuleNarration});
+ const newPlayer=()=>createPreparedPlayer({environment:'fixture',store:createEmulatedPreparedStore(),startBoundEdition,confirmBoundChoice,boundChoiceView,confirmedModuleNarration,projectVisibleContext});
  const service=newPlayer(),installation={base,edition,artifacts,title:'Fixture SYS-06',labels,ownerUid:uid,actorId};
  await assert.rejects(service.install(worker,{...installation,artifacts:artifacts.slice(0,1)}),/coverage/);
  await service.install(worker,installation);
@@ -78,6 +79,7 @@ test('SYS-04/05/07 integrated prepared choice, approved persistence, book retry 
  const final=await transport.resume({campaignId,actorId});assert.equal(final.revision,first.revision+3);assert.equal(final.pages.at(-1).choices.length,0);
  assert.equal(prepared,4);
  assert.equal(JSON.stringify(final).includes('PRIVATE-FIXTURE-SEED'),false);
+ assert.equal(JSON.stringify(final).includes('PRIVATE-FIXTURE-CONTEXT'),false);
  assert.equal(JSON.stringify(final).includes('branch-'),false);
  assert.equal((await handler(new Request('https://fixture.invalid/api/campaigns/'+campaignId+'/book',{headers:{Authorization:'Bearer invalid'}}))).status,401);
  await assert.rejects(newPlayer().book({...scope,uid:'other'}),/NOT_FOUND/);

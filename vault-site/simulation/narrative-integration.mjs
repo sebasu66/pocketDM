@@ -43,7 +43,12 @@ export function narrativeManifest({edition,campaignId,actorId,locale='es-AR',ver
 // No implicit latest lookup or mutable publication pointer.
 export async function persistApprovedNarration({repository,store,scope,job}){
  const j=jobInput(job);worker(scope,j);
- const payload=validateApprovedArtifact(j,repository.approvedArtifact(scope,j));
+ return persistApprovedArtifact({store,scope,job:j,artifact:repository.approvedArtifact(scope,j)});
+}
+// Worker-only import of an already independently reviewed artifact, using the same immutable address.
+export async function persistApprovedArtifact({store,scope,job,artifact}){
+ const j=jobInput(job);worker(scope,j);
+ const payload=validateApprovedArtifact(j,artifact);
  const key=refKey(j),version='r'+payload.revision;
  const result=await store.put(scope,{kind:'fragment',key,version,payload});
  ok(result?.digest===rawHash(payload),'Store digest mismatch');

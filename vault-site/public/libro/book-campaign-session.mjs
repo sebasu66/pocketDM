@@ -12,7 +12,7 @@ export function createBookCampaignSession({reader,readEdition,transport,scope,ma
   for(const page of next.pages)for(const event of page.events)assert(event.presentation.phase!=='module-intent'||event.presentationStatus==='approved','Error de preparación: falta narración aprobada');
   return next;
  }
- function publish(next){assert(!closed,'Sesión cerrada');reader.load(structuredClone(next));current=next;return structuredClone(next)}
+ function publish(next){assert(!closed,'Sesión cerrada');reader.load(structuredClone(next),{focusLatest:true});current=next;return structuredClone(next)}
  async function resume(){
   assert(!closed&&!busy,'Sesión ocupada o cerrada');busy=true;
   try{

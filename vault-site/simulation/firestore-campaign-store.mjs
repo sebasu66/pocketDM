@@ -62,12 +62,13 @@ export class FirestoreCampaignStore {
   const row=await this.read(principal.campaignId);this.authorize(row,principal,principal.campaignId);
   return prepareWindow(row.base,row.state,{campaignId:principal.campaignId,actorId:principal.actorId,role:'worker'},budget);
  }
- async confirm(principal,command,{expectedPreviewHash}={}){
+ // preparedTransition is a trusted server record from prepare(), never a client field.
+ async confirm(principal,command,{expectedPreviewHash,preparedTransition}={}){
   ok(principal.role==='player','Player access required');
   for(let attempt=0;attempt<8;attempt++){
    const row=await this.read(principal.campaignId);this.authorize(row,principal,principal.campaignId);
    const access={campaignId:principal.campaignId,actorId:principal.actorId,role:'player'};
-   const r=confirmCommand(row.base,row.state,access,command,{expectedPreviewHash});
+   const r=confirmCommand(row.base,row.state,access,command,{expectedPreviewHash,preparedTransition});
    if(!r.duplicate){
     try{await this.write(principal.campaignId,row.base,r.state,row.ownerUid,{updateTime:row.version})}
     catch(e){if([409,412].includes(e.httpStatus)||e.message==='FAILED_PRECONDITION'||e.message==='ABORTED')continue;throw e}

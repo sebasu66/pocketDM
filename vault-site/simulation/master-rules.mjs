@@ -6,7 +6,7 @@ import {validateSheet} from '../public/laboratorio/character-sheet.mjs';
 import {validateCheck} from '../public/libro/check-contract.mjs';
 import {simulateGroup} from '../public/laboratorio/group-combat.mjs';
 import {exchange,simulateDuel} from '../public/laboratorio/duel.mjs';
-import {die} from './engine.mjs';
+import {createLegacyCombatRoller,createCombatRoller,RNG_VERSION,LEGACY_COMBAT_VERSION} from './rng.mjs';
 import {encounterOperations} from './encounter-rules.mjs';
 const ok=(v,m)=>{if(!v)throw Error(m)};
 const own=Object.hasOwn;
@@ -83,7 +83,11 @@ export function checkGroup(x){
 function roller(x){
  ok(typeof x.seed==='string'&&x.seed.length>0,'Private seed required');
  const address=checkId(x.id);
- return (sides,purpose,ordinal=0)=>{ok(typeof purpose==='string'&&purpose.length>0,'Unaddressed combat draw');return die(x.seed,[version,address,purpose,ordinal],sides)};
+ const rngVersion=x.rngVersion??LEGACY_COMBAT_VERSION;
+ if(rngVersion===LEGACY_COMBAT_VERSION)return createLegacyCombatRoller({seed:x.seed,address});
+ ok(rngVersion===RNG_VERSION&&x.rngAddress?.eventId===address,'Explicit stable RNG address required');
+ ok(Object.keys(x.rngAddress).every(k=>['moduleId','branchId','eventId','actorId'].includes(k)),'Unexpected RNG address field');
+ return createCombatRoller({...x.rngAddress,seed:x.seed,version:rngVersion});
 }
 export function resolveCombatExchange(x){
  validateSheet(x.attacker);validateSheet(x.defender);ok(x.attacker.id!==x.defender.id,'Distinct combatants required');

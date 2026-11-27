@@ -9,7 +9,7 @@ const edition=(revision=0,status='approved')=>({...scope,revision,pages:[{id:'pa
 // Explicit fixture reader, not DOM or actual HTTP.
 function fixture(transport){
  let loaded=[],bound,ids=0;
- const reader={load:e=>loaded.push(e),bindTransport:f=>{bound=f}};
+ const reader={load:(e,options)=>{assert.deepEqual(options,{focusLatest:true});loaded.push(e)},bindTransport:f=>{bound=f}};
  const session=createBookCampaignSession({reader,readEdition:e=>{for(const p of e.pages)for(const v of p.events)readConfirmedNarration(v,e);return structuredClone(e)},transport,scope,makeCommandId:()=>String(++ids)});
  return {session,loaded,bound:()=>bound};
 }

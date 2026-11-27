@@ -37,12 +37,17 @@ test('surprise and withdrawal apply to individual participants; no fabricated es
  assert.ok(!r.events.some(e=>e.actorId==='wolf-2'&&e.kind==='exchange'));
  c.state.fear='flee';const paused=resolveCombatEncounter(p);assert.equal(paused.outcome,'withdrawal-pending');assert.deepEqual(paused.withdrawalRequested,['wolf-2']);
 });
-test.skip('group encounter uses common campaign snapshots and confirms prepared checks with all participant changes',()=>{
+test('group encounter uses common campaign snapshots and confirms prepared checks with all participant changes',()=>{
  const source=initialWorld(),wolves=[wolfSheet(),wolf2()],base=snapshot({canon:source.canon,nodes:Object.values(source.nodes),routes:Object.values(source.routes),entities:[...Object.values(source.entities),...wolves.map(s=>({id:s.id,kind:'creature',name:s.name,locationId:'stormkeep',visibility:'public'}))]});
  const participants=[participant(galahadSheet(),'heroes'),...wolves.map(s=>participant(s,'wolves'))].map(({character,...p})=>({actorId:character.id,...p}));
  const state=createState(base,{id:'group-campaign',actorId:'galahad',actorSheets:[galahadSheet(),...wolves],encounters:[{id:'wolves',locationId:'stormkeep',maxRounds:8,initialRange:'short',surprisedIds:[],limbLifeThreat:false,participants}],seed:'GROUP-TEST'}),access={campaignId:state.id,actorId:state.actorId,role:'player'};
  const window=prepareWindow(base,state,{...access,role:'worker'},{maxDepth:1,maxEdges:40});const edge=window.nodes[0].choices.find(e=>e.command.action==='duel');assert.ok(edge);
- const job=window.jobs.find(j=>j.eventId===edge.eventId),r=confirmCommand(base,state,access,edge.command,{expectedPreviewHash:edge.previewHash,preparedTransition:window.preparedTransitions[edge.command.commandId]});
+ const job=window.jobs.find(j=>j.eventId===edge.eventId),prepared=window.preparedTransitions[edge.command.commandId];
+ assert.throws(()=>confirmCommand(base,state,access,edge.command),/must be prepared/);
+ const altered=structuredClone(prepared);altered.result.event.facts.push({id:'tampered'});
+ assert.throws(()=>confirmCommand(base,state,access,edge.command,{preparedTransition:altered}),/corrupted/);
+ const r=confirmCommand(base,state,access,edge.command,{expectedPreviewHash:edge.previewHash,preparedTransition:prepared});
+ assert.deepEqual(confirmCommand(base,r.state,access,edge.command).receipt,r.receipt);
  assert.deepEqual(r.receipt.event.checks,job.input.event.checks);assert.equal(r.receipt.event.combat.actorIds.length,3);assert.equal(r.receipt.event.combat.turnTrace.length,r.receipt.event.combat.apTrace.length);
  const w=effective(base,r.state.delta);for(const s of wolves)assert.equal(w.entities[s.id].privateState.sheet.id,s.id);
  assert.equal(playerState(base,r.state,access).journal.length,1);
