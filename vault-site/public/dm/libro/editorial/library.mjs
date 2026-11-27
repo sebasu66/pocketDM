@@ -3,7 +3,9 @@ import { locationPlace } from '/libro/edition/location-pages.mjs';
 export function sampleContent(kind, design) {
   const place = locationPlace(design === 'plaza' ? 0 : 2),
     intro = kind === 'intro';
+  const moduleSamples={cover:[{label:'Tipo',value:'Aventura independiente'}],exploration:[{label:'Observación',value:'Información visible de la escena'}],combat:[{label:'Estado',value:'Sin resultado mecánico en esta muestra'}],climax:[{label:'Decisión',value:'Opciones autorizadas por el módulo'}],resolution:[{label:'Resultado',value:'Sin consecuencias confirmadas en esta muestra'}]};
   return {
+    ...(moduleSamples[kind]?{moduleRows:moduleSamples[kind]}:{}),
     kicker: kind === 'dialogue' ? 'Stormkeep' : intro ? 'Stormkeep / Las Marcas' : 'Stormkeep / Cuaderno de viaje',
     title: kind === 'dialogue' ? place.name : intro ? place.name : place.title,
     paragraphs: kind === 'dialogue' ? ['Al aproximarte a la entrada, un guardia de gesto severo te corta el paso.'] : intro ? [place.intro] : [...place.paragraphs],

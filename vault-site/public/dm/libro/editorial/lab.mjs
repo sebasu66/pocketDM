@@ -1,5 +1,6 @@
 import './editorial-page.mjs?v=15';
 import './dialogue-page.mjs?v=16';
+import './module-pages.mjs?v=1';
 import { connectLibrary } from './cloud-library.mjs?v=15';
 import { assets } from './assets.mjs';
 import { cropRect, cameraFrame } from './camera.mjs?v=15';
@@ -97,9 +98,9 @@ function persist() {
     .catch(() => {})
     .then(async () => {
       const revision = sharedRevisions.get(cloudId) ?? 0;
-      await writeLocal(id, { ...data, cloudPending: Boolean(sharedLibrary), cloudRevision: revision });
+      await writeLocal(id, { ...data, cloudPending: Boolean(sharedLibrary && ['scene','intro','dialogue'].includes(selectedKind)), cloudRevision: revision });
       if(epoch===generation)markDialogueDesign(selectedKind,selectedDesign,data.settings,label);
-      if (sharedLibrary) {
+      if (sharedLibrary && ['scene','intro','dialogue'].includes(selectedKind)) {
         try {
           const next = await sharedLibrary.save(
             cloudId,
@@ -369,7 +370,7 @@ async function openDesign(vault = false) {
       probe = document.createElement(tag);
     const remote = d.startsWith('cloud:') ? sharedLayouts.get(d.slice(6)) : null;
     if (d.startsWith('cloud:') && !remote) throw Error('El diseño compartido ya no está disponible');
-    const legacy = !vault && !cached && !remote ? await readLegacy(d) : null;
+    const legacy = ['scene','intro','dialogue'].includes(k)&&!vault && !cached && !remote ? await readLegacy(d) : null;
     const restored = remote
       ? cached?.cloudPending
         ? cached

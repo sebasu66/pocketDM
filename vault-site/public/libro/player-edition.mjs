@@ -1,4 +1,5 @@
 import {readConfirmedNarration} from './confirmed-narration.mjs';
+import {makeModuleLayout,loadModuleLayout} from './edition/module-layout.mjs';
 const fail=(ok,msg)=>{if(!ok)throw Error(msg)};
 const record=(o,keys)=>o&&typeof o==='object'&&!Array.isArray(o)&&Object.keys(o).every(k=>keys.includes(k));
 const str=(x,max=12000)=>typeof x==='string'&&x.trim().length>0&&x.length<=max;
@@ -10,10 +11,13 @@ export function readEdition(value){
  fail(id(campaignId)&&id(actorId)&&Number.isSafeInteger(revision)&&revision>=0&&str(title,240)&&Array.isArray(pages)&&pages.length>0&&pages.length<=200,'Contexto de edición inválido');
  const scope={campaignId,actorId,revision},ids=new Set(),events=new Set();
  for(const p of pages){
-  fail(record(p,['id','type','title','text','image','speaker','portrait','events','choices'])&&id(p.id)&&!ids.has(p.id)&&['cover','location','dialogue','exploration','combat','resolution'].includes(p.type)&&str(p.title,240)&&Array.isArray(p.text)&&p.text.length<=100&&p.text.every(t=>str(t)), 'Página inválida');
+  fail(record(p,['id','type','title','text','image','speaker','portrait','events','choices','layoutRef','details','line','speakerRole'])&&id(p.id)&&!ids.has(p.id)&&['cover','location','dialogue','exploration','combat','climax','resolution'].includes(p.type)&&str(p.title,240)&&Array.isArray(p.text)&&p.text.length<=100&&p.text.every(t=>str(t)), 'Página inválida');
   ids.add(p.id);
   for(const k of ['image','portrait'])if(Object.hasOwn(p,k))fail(assets(p[k]),'Imagen fuera de la biblioteca pública');
   if(Object.hasOwn(p,'speaker'))fail(str(p.speaker,160),'Interlocutor inválido');
+  for(const k of ['line','speakerRole'])if(Object.hasOwn(p,k))fail(str(p[k]),'Texto de diálogo inválido');
+  if(p.details!==undefined)fail(Array.isArray(p.details)&&p.details.length<=40&&p.details.every(r=>record(r,['label','value'])&&str(r.label,160)&&str(r.value,2000)),'Contexto inválido');
+  if(p.layoutRef!==undefined)fail(record(p.layoutRef,['id','revision'])&&str(p.layoutRef.id,160)&&(p.layoutRef.revision===undefined||Number.isSafeInteger(p.layoutRef.revision)&&p.layoutRef.revision>=0),'Referencia editorial inválida');
   fail(Array.isArray(p.events)&&p.events.length<=100,'Eventos inválidos');
   for(const e of p.events){const confirmed=readConfirmedNarration(e,scope);fail(!events.has(confirmed.id),'Evento duplicado');events.add(confirmed.id)}
   fail(Array.isArray(p.choices)&&p.choices.length<=30,'Opciones inválidas');
@@ -31,11 +35,10 @@ const el=(tag,text)=>{const node=document.createElement(tag);if(text!==undefined
 class PlayerPage extends HTMLElement{
  connectedCallback(){if(this.dataset.ready)return;this.dataset.ready='1';const p=edition?.pages[Number(this.getAttribute('index'))];if(!p)return;
   const section=el('section');section.className='folio-module';
-  const title=el('book-title');title.setAttribute('heading',p.title);title.setAttribute('kicker',edition.title);
-  if(p.image){title.setAttribute('image',p.image);title.setAttribute('alt',p.title)}section.append(title);
-  if(p.portrait){const portrait=el('book-portrait');portrait.setAttribute('src',p.portrait);portrait.setAttribute('name',p.speaker||'');section.append(portrait)}
-  else if(p.speaker)section.append(el('h3',p.speaker));
-  for(const t of p.text)section.append(el('p',t));
+  const layout=makeModuleLayout(p,{title:edition.title});
+  section.append(layout);
+  const layoutStatus=el('p','');layoutStatus.className='sample';layoutStatus.setAttribute('aria-live','polite');section.append(layoutStatus);
+  loadModuleLayout(layout,p.layoutRef).catch(error=>{layoutStatus.textContent='Diseño no disponible: '+error.message+' · Se muestran ajustes base.'});
   const scope={campaignId:edition.campaignId,actorId:edition.actorId,revision:edition.revision};
   for(const event of p.events){const node=el(p.type==='combat'?'combat-phase':'book-narrative-event');node.setConfirmedNarration(event,scope);section.append(node)}
   if(p.choices.length){const group=el('div');group.className='decision';const status=el('p',submit?'Elegí una acción.':'Opciones preparadas. Hace falta conectar el servicio de campaña para confirmarlas.');status.className='sample';status.setAttribute('aria-live','polite');
