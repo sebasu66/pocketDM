@@ -1,6 +1,6 @@
 # SYS-05 · Narrador previo y repositorio de fragmentos
 Fecha: 27/11/2026. Agente: SYS-05 (narrativa). Estado: en revisión parcial; integración bloqueada. P0 · N04/N05/N06 · MOD-04/05 · QA-02/07/08. No cierre H01.
-Base development: ebe06f9f5aac2968b7f3f74b2f627ebe062faa92. Rama: sys-05-narrative-repository (independiente). PR: se abrirá como borrador hacia development. No merge ni despliegue.
+Base development: ebe06f9f5aac2968b7f3f74b2f627ebe062faa92. Rama: sys-05-narrative-repository (independiente). PR [#13](https://github.com/sebasu66/pocketDM/pull/13) abierto como borrador hacia development. No merge ni despliegue.
 ## Lecturas y coordinación
 Paquete SYS-05, narrative-contract-qa02.md, finite-adventure-compiler.md, module-runtime-qa07.md, qa-playable-stormkeep.md, código adventure-compiler, narrative-projection, firestore-campaign-store y check-contract en la base. Actividad: página y script de agregación revisados; índice generado public/data/activity.json ausente en Git y URL pública inaccesible desde herramienta. Se consultaron commits recientes de consolidación V2/Services y PRs abiertos #5–#9, en particular #7 (registro de ramas, 11 solicitudes pendientes en lote editorial privado) y #8 (matriz SYS-09). No se accedió al lote privado.
 ## Entrega
