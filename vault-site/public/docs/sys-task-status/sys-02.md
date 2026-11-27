@@ -9,7 +9,7 @@ Leídos dm/sistema/index.html (SYS-02/01/04/06/09), qa-playable-stormkeep.md (QA
 ## Entrega y contrato propuesto para SYS-01/04/06
 - vault-site/simulation/rng.mjs: export newSeed (existente), addressedRoll, createCombatRoller, createLegacyCombatRoller y editorialIndex.
 - vault-site/simulation/test-rng.mjs: 6 casos automatizados.
-- Este informe. No editar índice/actividad compartidos; SYS-09 puede consolidar esta entrega.
+- Este informe y registro individual nuevo vault-site/updates/combate/act-20261127-sys02-rng-001.json. No se editó índice ni actividad compartida; SYS-09 puede consolidar esta entrega.
 - Código: 510725d4072ebafaee98f045f221f23acb566c0b; tests: de395d698b4bbceb79bdb6c1c65537061f3ce354.
 - Importar exclusivamente en servidor. Semilla privada generada/recuperada por autoridad, nunca del jugador. No serializar proveedor, semilla, direcciones futuras ni edición privada. El módulo no sustituye autenticación/validación HTTP de SYS-06.
 - addressedRoll({seed,address:{moduleId,branchId,eventId,purpose,ordinal,actorId?},sides,version:'pocketdm-addressed-v1'}) devuelve entero 1..sides, 2..1000000 caras; ordinal entero no negativo explícito; IDs no vacíos. Versión desconocida rechazada. HMAC existente, dominio simulation y tuple canónica con caras. Sin contador global.
