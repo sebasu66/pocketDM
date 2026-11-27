@@ -22,7 +22,7 @@ assert.equal(mobile.interaction.options[0].image.alt,'Symbol');assert.deepEqual(
 const graphic=structuredClone(doc);graphic.content.bindings.titleArt='logo';graphic.composition.assets.sky='night';assert.deepEqual(resolvePage(graphic,'desktop').nodes[0].children.map(x=>x.id),['sky','titleArt']);assert.equal(resolvePage(graphic,'desktop').nodes[0].children[0].value.id,'night');
 const change=(f)=>{const x=structuredClone(doc);f(x);return x};
 for(const bad of [
- x=>x.composition.templateRevision=2,x=>x.composition.overrides.unknown={base:{x:1}},x=>x.composition.overrides.sky={base:{css:'url(evil)'}},x=>x.composition.options=[],
+ x=>x.composition.templateRevision=2,x=>x.composition.overrides.sky={base:{cameraStartZoom:0}},x=>x.composition.overrides.sky={base:{cameraEasing:'unknown'}},x=>x.composition.overrides.unknown={base:{x:1}},x=>x.composition.overrides.sky={base:{css:'url(evil)'}},x=>x.composition.options=[],
  x=>x.assets.day.src='https://example.com/x.png',x=>x.assets.day.src='/libro/../private.png',x=>x.content.bindings.sky='unknown',
  x=>x.content.interaction.options=[],x=>x.content.interaction.options.push({id:'enter',label:'Duplicate'}),x=>x.content.interaction.options[0].target='future',
  x=>x.composition.overrides.panel={mobile:{hidden:true}},x=>x.composition.overrides.panel={mobile:{position:'overlay'}},x=>x.template.elements.pop(),x=>x.template.layout={base:{hidden:true}},x=>x.composition.overrides.stage={mobile:{position:'overlay'}},x=>x.template.elements[0].children.push(x.template.elements.pop()),
@@ -30,4 +30,5 @@ for(const bad of [
 ])assert.throws(()=>resolvePage(change(bad),'mobile'));
 assert.equal(resolvePage(change(x=>{x.content.interaction.terminal=true;x.content.interaction.options=[]}),'mobile').interaction.terminal,true);
 assert.equal(resolvePage(doc,'mobile').pageId,'scene');
+const camera=change(x=>x.composition.overrides.sky={base:{cameraEnabled:true,cameraStartX:20,cameraEndX:80,cameraStartZoom:1,cameraEndZoom:2,cameraDuration:4,cameraEasing:'ease-in-out'},mobile:{cameraEndZoom:1.5}});assert.equal(resolvePage(camera,'mobile').nodes[0].children[0].style.cameraEndZoom,1.5);assert.equal(resolvePage(camera,'desktop').nodes[0].children[0].style.cameraEndZoom,2);
 console.log('PASS universal contract: responsive overrides, missing bindings, title image, overlays, symbols, strict validation, trusted choices, terminal');

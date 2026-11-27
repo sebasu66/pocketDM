@@ -1,0 +1,18 @@
+{
+  "id": "act-20261127-sys09-universal-editor-005",
+  "date": "2026-11-27",
+  "area": "Coordinación",
+  "owner": "SYS-09",
+  "status": "en-progreso",
+  "title": "Editor universal y cámara por imagen",
+  "summary": "Editor integrado en Libro/UI, capas y dos vistas, inspector contextual, versiones locales, cámara inicial/final con paneo/zoom. Pruebas navegador y regresión PASS. Sin despliegue.",
+  "changed": [
+    "vault-site/public/dm/libro/stormkeep_laboratorio_editorial_v11.html",
+    "vault-site/public/dm/libro/editorial/universal-editor.mjs",
+    "vault-site/public/libro/edition/universal/book-page.mjs",
+    "vault-site/scripts/test-universal-editor-browser.mjs"
+  ],
+  "next": "Revisión visual por el titular, sincronización compartida y recursos aprobados. Después composición manual y skill.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/editorial-universal-page-20261127",
+  "nodeIds": []
+}

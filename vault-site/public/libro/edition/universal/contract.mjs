@@ -9,14 +9,14 @@ const keys=(o,allowed)=>record(o)&&Object.keys(o).every(k=>allowed.includes(k));
 const clone=v=>structuredClone(v);
 const types=['group','image','text','interaction','slot'];
 const positions=['flow','overlay'];
-const fields=['position','x','y','width','height','ratio','z','opacity','rotation','scale','align','fit','objectX','objectY','gap','padding','fontSize','color','background','borderColor','radius','duration','transition','hidden','overflow','direction'];
+const fields=['position','x','y','width','height','ratio','z','opacity','rotation','scale','align','fit','objectX','objectY','gap','padding','fontSize','color','background','borderColor','radius','duration','transition','hidden','overflow','direction','cameraEnabled','cameraStartX','cameraStartY','cameraStartZoom','cameraEndX','cameraEndY','cameraEndZoom','cameraDuration','cameraEasing'];
 const colors=v=>typeof v==='string'&&(/^#[0-9a-f]{6}([0-9a-f]{2})?$/i.test(v)||v==='transparent');
 export function validateVisual(v={}){
  fail(keys(v,fields),'Propiedad visual no admitida');
  for(const [k,x] of Object.entries(v)){
-  const limits={x:[-100,200],y:[-100,200],width:[1,100],height:[1,200],z:[-100,100],opacity:[0,1],rotation:[-180,180],scale:[.05,5],ratio:[.1,10],objectX:[0,100],objectY:[0,100],gap:[0,80],padding:[0,80],fontSize:[10,96],radius:[0,60],duration:[0,3000]};
-  const options={position:positions,align:['left','center','right'],fit:['contain','cover','fill'],transition:['none','fade'],overflow:['visible','clip'],direction:['column','row']};
-  fail(limits[k]?num(x,...limits[k]):options[k]?options[k].includes(x):k==='hidden'?typeof x==='boolean':colors(x),'Valor visual inválido: '+k);
+  const limits={x:[-100,200],y:[-100,200],width:[1,100],height:[1,200],z:[-100,100],opacity:[0,1],rotation:[-180,180],scale:[.05,5],ratio:[.1,10],objectX:[0,100],objectY:[0,100],gap:[0,80],padding:[0,80],fontSize:[10,96],radius:[0,60],duration:[0,3000],cameraStartX:[0,100],cameraStartY:[0,100],cameraEndX:[0,100],cameraEndY:[0,100],cameraStartZoom:[1,5],cameraEndZoom:[1,5],cameraDuration:[.1,30]};
+  const options={position:positions,align:['left','center','right'],fit:['contain','cover','fill'],transition:['none','fade'],overflow:['visible','clip'],direction:['column','row'],cameraEasing:['linear','ease-in','ease-out','ease-in-out']};
+  fail(limits[k]?num(x,...limits[k]):options[k]?options[k].includes(x):['hidden','cameraEnabled'].includes(k)?typeof x==='boolean':colors(x),'Valor visual inválido: '+k);
  }
  return clone(v);
 }

@@ -135,3 +135,7 @@ Por indicación del titular, la PWA declara orientación portrait-primary. La es
 ### Compositor editorial universal v0.1 — candidato independiente
 
 Se construyó book-universal-page con contrato de plantilla, composición, contenido y catálogo; instrucciones raíz y por capa como metadatos de autoría, variantes de escritorio/móvil, imágenes superpuestas, símbolos, título gráfico, panel único de interacción y slots de mecánica. El laboratorio de autoría /dm/libro/universal/ reutiliza los 11 folios del farol. Pruebas de contrato y navegador (1280×900, 390×844 y 360×640): PASS. Sin migrar lector publicado, sin desplegar, sin ejecutar IA ni redactar todavía la skill. Referencia: /docs/editorial-universal-v01.md.
+
+### Editor universal y cámara — continuación de PR #19
+
+Modificada la misma entrada editorial Libro → UI; editor anterior preservado para diseños históricos. Capas, inspector contextual, dos previsualizaciones, revisiones locales inmutables y prompts. Cámara por imagen con dos encuadres, paneo/zoom, easing, duración, previsualización y arrastre del contenido, reutilizando el motor de cámara anterior. PASS contrato, navegador editor y regresión del lector/archivo. Pendiente sincronización compartida, subida de recursos, migración de diseños históricos y aprobación visual. No desplegado.
