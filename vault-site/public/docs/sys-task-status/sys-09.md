@@ -67,3 +67,55 @@ Revisar scripts de navegador presentes antes de ejecutarlos: test-narrative-brow
 
 ## Entregables y siguiente paso
 Informe SYS-09, enlace y estado de tablero en zona propia, registro individual de actividad (no editar historial ni índice generado). PR en borrador hacia development; auto-preview no solicitado, producción prohibida. Entrega a SYS-09 por este informe; cada agente remitirá PR/SHA base y head, archivos, contratos versionados, comandos, logs saneados y bloqueos, declarando si utilizó fixture. No fusionar PRs ajenos. Actualizar matriz al recibir evidencia, repetir pruebas sobre SHA integrado y solicitar autorización antes de cualquier promoción. Este arranque no es certificación ni cierre.
+
+## 27/11/2026 — toma de coordinación e integración (SYS-01 a SYS-08)
+
+El titular delegó la continuación de los ocho frentes a SYS-09. Se trabajó en un clon temporal aislado de SEBASU, sin cambiar ramas de los agentes ni development. PR consolidado [#18](https://github.com/sebasu66/pocketDM/pull/18), rama feature/sys-integration-20261127, base c3b21f6024c899ca1c45934b75a7665a31757eb9. Borrador, no promoción. Los PR originales permanecen abiertos para trazabilidad. Se incorporó el informe de #8 y su actividad individual, no su versión antigua del tablero (preservar SYS-10).
+
+### Revisiones incorporadas
+
+| Frente | PR | Head fijado |
+|---|---:|---|
+| SYS-01 | 9 | e5831cb19ea9b720aeb55292505ec65aef047783 |
+| SYS-02 | 14 | 2f24dde1a0cf6584a0b6c590b97ed2cae15237d9 |
+| SYS-03 | 10 | 9442c4b8c239451e1996ed2442f662e83eac7f6e |
+| SYS-04 | 12 | 0bf52ca7423c38c6ccf855563b11c867dbceaf86 |
+| SYS-05 | 13 | fd4c6eeb5656b0c24876ba15b723be8f51b28737 |
+| SYS-06 | 11 | e7e734f4b0e592f5bec2324db1f73a1ecb601247 |
+| SYS-07 | 15 | 1108f870945cf2a721fb2ec62cf9ea634550610e |
+| SYS-08 | 17 | 84e641b21cd7672a31d6aab96f714b643605aca5 |
+
+Ocho merges locales sin conflictos, SHA combinado c4476d80ea8f0215b844369ad0f0674628756f9a. Correcciones de integración 517171c20c2ed05bf0647cdc7789a7b8eebb5f47 y 330859ededbe1231b59e41146793d34a14076ca4. No se afirma que cambios posteriores de los agentes estén incluidos.
+
+| Frente | Cambio y evidencia | Estado |
+|---|---|---|
+| SYS-01 | Encuentros grupales, acciones legales, heridas, muerte, replay y persistencia de transición privada preparada. Se activó test previamente omitido. | PASS integrado sintético |
+| SYS-02 | Proveedor común de azar, versiones históricas preservadas, dirección semántica explícita en master API nueva; prueba con motor real. | PASS integrado sintético |
+| SYS-03 | Chequeos sociales opuestos con API real de reglas y RNG, rutina sin tiradas, sin consentimiento automático. | PASS integrado sintético |
+| SYS-04 | Compilación finita, elecciones preparadas y consumo del snapshot sin resolver otra vez en el recorrido de prueba. | PASS fixture; edición real pendiente |
+| SYS-05 | Manifiesto único, slots canónicos, contexto visible explícito, fragmento inmutable referenciado y validación de aprobación. Sin generación en juego. | PASS fixture; narración real no aprobada |
+| SYS-06 | Persistencia emulada, CAS, concurrencia, reintento, mismo recibo, reapertura y proyección; HTTP de prueba con identidad y grant inyectados. | PASS fixture; identidad y servicio real pendientes |
+| SYS-07 | Libro existente muestra último folio, ficha efectiva, diario y lugares/rutas visibles desde una sola revisión; proyección estricta, rechaza campos privados y revisión ajena. | PASS navegador de prueba; atlas completo pendiente |
+| SYS-08 | Manifiesto privado v0.1 revisado como propuesta; no publicar ni convertir a fixture real. Conservada entrega estructural de 14 páginas y 21 intenciones. | BLOQUEADO por canon, bindings y bestiario |
+
+### Matriz de ejecución
+
+Entorno Windows autorizado, Node 24.14.1, Git 2.51.1, Firebase CLI 15.27.0, JBR Java 21.0.8; Firestore Emulator, proyecto exclusivamente local demo-pocketdm-qa03. Config temporal con puertos libres en loopback para evitar colisiones; emulador detenido al finalizar. Ejecutar desde vault-site con JDK 21 y firebase.qa03.json (o copia de config con puertos locales libres) mediante firebase emulators:exec --only firestore --project demo-pocketdm-qa03 --config firebase.qa03.json "node --test simulation/test-*.mjs scripts/test-sys05-cross-agent.mjs".
+
+| Evidencia | SHA/entorno | Resultado |
+|---|---|---|
+| Suite inicial combinada con emulador | c4476d80 | 164 PASS / 1 SKIP (grupal) / 0 FAIL |
+| Suite final, incluidos tests de proyección privada y revisión | 330859e | 168 PASS / 0 FAIL / 0 SKIP, exit 0 |
+| scripts/test-narrative-browser.mjs | integración, Edge headless | PASS: 3 checks únicos, tirada exacta |
+| scripts/test-sys09-book-browser.mjs | 330859e, Edge headless | PASS: último folio, ficha, diario, mapa conocido y revisión común |
+| scripts/test-edition-browser.mjs | 330859e, Edge headless | PASS 6 tamaños de viewport, entrada desde home |
+| scripts/test-checks-browser.mjs | integración y base c3b21f6 | FAIL idéntico en línea 9: espera dos páginas en una ruta que ahora muestra una; no se rebajó el test para ocultarlo |
+| scripts/test-azgaar-view-browser.mjs | 330859e | FAIL: el viewBox no cambia como se espera al cambiar vista; problema histórico de QA-05 no cerrado |
+| scripts/build-activity.mjs y scripts/validate.mjs | 330859e | PASS: 116 entregas, 42 nodos, 146 relaciones, 10 áreas |
+| H01 real, servicios de nube/autenticación real, Android físico, rollback y preview | no autorizado/no disponible | SKIP / pendiente |
+
+### Decisiones y límites
+
+Se conservaron las versiones RNG y acciones de duelo antiguas; el nuevo combate grupal exige una transición preparada de autoridad privada. No se permite semilla del jugador. Se eligió un único adaptador narrativo para persistencia de fragmentos y una proyección atómica para las vistas del lector (lista de lugares/rutas reales visibles, sin inventar coordenadas ni declarar el atlas Azgaar aprobado). El adaptador de ejecución y sus identidades/revisores son de fixture; no se activó publicación real. No se ha validado H01. El manifiesto privado de SYS-08 exige aprobación de canon; no se copió a Git ni se divulgaron datos privados. Faltan decisiones de roles/identidades, portada, localizaciones, costes/tiempos/recompensas, habilidades, criaturas y cierres; SYS-10 debe aportar perfiles trazables. PR #16 de auditoría de fuentes no se fusionó (fuera del alcance 01–08 y no es un bestiario completo). No inventar estadísticas ni aprobar canon unilateralmente.
+
+El PR #18 es el punto de revisión consolidado; no fusionar los ocho por separado. Los cambios de infraestructura o publicación requieren autorización. Los fallos de navegador históricos siguen visibles y no cuentan como PASS; se requiere verificación en staging real y Android físico, además del recorrido real con Ripple y cierres válidos antes de aprobar.
