@@ -34,7 +34,7 @@ test('resume and confirm only send scope and legal choice; replay uses same comm
 test('reject missing approved module narration, wrong scope and stale response',async()=>{
  let r=edition(1,'fallback');const f=fixture({resume:async()=>edition(),confirm:async()=>r});
  await f.session.resume();await assert.rejects(f.session.confirm(request),/preparación/);
- r={...edition(1),campaignId:'other'};await assert.rejects(f.session.confirm(request),/ámbito/);
+ r={...edition(1),campaignId:'other'};r.pages[0].events[0].campaignId='other';await assert.rejects(f.session.confirm(request),/ámbito/);
  r=edition();await assert.rejects(f.session.confirm(request),/desactualizada/);
  assert.equal(f.loaded.length,1);
 });
