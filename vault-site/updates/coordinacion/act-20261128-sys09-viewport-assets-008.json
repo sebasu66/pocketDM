@@ -1,0 +1,18 @@
+{
+  "id": "act-20261128-sys09-viewport-assets-008",
+  "date": "2026-11-27",
+  "area": "Coordinación",
+  "owner": "SYS-09",
+  "status": "en-progreso",
+  "title": "Perfiles de pantalla y recursos originales de usuario",
+  "summary": "129 recursos, 24 iconos, grunge 9-slice y cielos; editor Fold y placeholders, tiradores. Ocho viewports PASS.",
+  "changed": [
+    "vault-site/public/dm/arte/asset-catalog.mjs",
+    "vault-site/public/dm/libro/editorial/universal-editor.mjs",
+    "vault-site/public/libro/edition/universal/contract.mjs",
+    "vault-site/public/dm/libro/editorial/assets"
+  ],
+  "next": "Validar en dispositivos físicos y sincronización de biblioteca.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/editorial-universal-page-20261127",
+  "nodeIds": []
+}

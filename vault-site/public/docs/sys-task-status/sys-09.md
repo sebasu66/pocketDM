@@ -151,3 +151,7 @@ PR #19 incorpora /dm/arte/#assets y navegación desde todo el portal, catálogo 
 ### Publicación autorizada de interfaz editorial
 
 Se libera únicamente la UI universal, el laboratorio y catálogo estático; sin cambios en simulación ni reglas Firebase. El lector vigente se conserva. Subida compartida deshabilitada mientras se valida. Los tres nuevos PNG quedan pendientes de transferencia.
+
+### Perfiles de pantalla y arte de usuario
+
+Integración editorial: 129 recursos en catálogo, 24 iconos y seis barras grunge, tres estados de selección 9-slice, logo y cielos cuadrados. Editor con perfiles Fold cerrado/abierto, teléfonos y desktop hasta ultrawide/4K, tirador de capas libres y siluetas de autoría. Contrato y pruebas de editor, biblioteca y once escenas en ocho viewports PASS. No se cambia simulación ni persistencia Firebase. Pendientes pruebas en hardware físico, cinco máscaras extra y sincronización compartida.

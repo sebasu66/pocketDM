@@ -49,3 +49,9 @@ La sección Dirección artística → Biblioteca (/dm/arte/#assets) reúne 93 re
 ## Publicación de interfaz
 
 Publicación autorizada del editor y catálogo estático de 93 recursos. No incluye cambios del motor, reglas Firebase, ni activación de subida. Los tres originales de logo y cielos están pendientes de transferencia al repositorio. Para cielos cuadrados: mantener sol o luna visibles, encuadrar con margen de recorte en ambos dispositivos y conservar el lienzo cubierto sin bordes expuestos durante el paneo. Los placeholders semánticos aún son una propuesta.
+
+## Perfiles y recursos de usuario (2026-11-28)
+
+El editor permite elegir Fold4 cerrado/abierto, S23, iPhone, Full HD, 4K y Ultrawide, más ancho y alto CSS personalizados. Los tamaños son referencias CSS, no simulación de hardware. La guía punteada marca el fin de la primera pantalla; el flujo narrativo continúa verticalmente. La familia fold hereda desktop y admite excepciones independientes; las vistas previas se editan por separado. El tirador de esquina de capas libres de imagen/grupo permite redimensionar con bloqueo de proporción. Los placeholders son exclusivamente de autoría: siluetas semánticas en SVG, nunca sustituyen recursos reales en ejecución.
+
+Se importaron de Drive los originales icons.png, grunge_bars.jpg, stormKeep_logo.png y ambos cielos. Catálogo 129 recursos: 24 símbolos recortados, seis barras alfa, tres pieles tintadas 9-slice, logo transparente y dos cielos WebP cuadrados de hasta 2048 px. Los originales permanecen en Drive. El icono acrobático se usa provisionalmente para Atletismo, el ojo para Percepción. No se importaron las cinco máscaras grunge adicionales; no se modifica el motor de campaña ni las reglas Firebase. Los tamaños personalizados de la mesa son ajustes de sesión; las posiciones y proporciones por familia se guardan con los diseños locales.

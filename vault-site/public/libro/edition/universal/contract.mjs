@@ -23,7 +23,7 @@ export function validateVisual(v={}){
  }
  return clone(v);
 }
-const layout=v=>{fail(keys(v,['base','desktop','mobile']),'Layout inválido');return Object.fromEntries(Object.entries(v).map(([k,x])=>[k,validateVisual(x)]))};
+const layout=v=>{fail(keys(v,['base','desktop','mobile','fold']),'Layout inválido');return Object.fromEntries(Object.entries(v).map(([k,x])=>[k,validateVisual(x)]))};
 function assetPath(v){return typeof v==='string'&&/^\/(?:libro|docs\/art-references|dm\/libro\/editorial\/assets|atlas\/assets)\/[A-Za-z0-9_./-]+\.(?:png|webp|jpe?g|svg|avif|gif)$/i.test(v)&&!v.split('/').some(x=>x==='..'||x==='.')&&!v.includes('//')}
 export function validateAssets(assets){
  fail(record(assets)&&Object.keys(assets).length<=2000,'Catálogo inválido');
@@ -32,15 +32,16 @@ export function validateAssets(assets){
 }
 export function validateTemplate(t){
  fail(keys(t,['schemaVersion','id','revision','name','instructions','viewInstructions','layout','elements'])&&t.schemaVersion===1&&identifier(t.id)&&Number.isInteger(t.revision)&&t.revision>0&&text(t.name,200)&&text(t.instructions)&&Array.isArray(t.elements)&&t.elements.length>0,'Plantilla inválida');
- if(t.viewInstructions!==undefined)fail(keys(t.viewInstructions,['desktop','mobile'])&&Object.values(t.viewInstructions).every(x=>text(x)),'Instrucciones de vista inválidas');
+ if(t.viewInstructions!==undefined)fail(keys(t.viewInstructions,['desktop','mobile','fold'])&&Object.values(t.viewInstructions).every(x=>text(x)),'Instrucciones de vista inválidas');
  if(t.layout)layout(t.layout);
  const ids=new Set();let panels=0,total=0;
  function visit(list,depth=0,parent=null){
   fail(depth<=8&&Array.isArray(list),'Jerarquía inválida');
   for(const e of list){
-   fail(++total<=150&&keys(e,['id','type','name','instructions','viewInstructions','binding','value','fallback','when','layout','children','role','slotName','skillSymbols','contentType','tags'])&&identifier(e.id)&&!ids.has(e.id)&&types.includes(e.type)&&text(e.name,200)&&text(e.instructions??''),'Elemento inválido o repetido');
+   fail(++total<=150&&keys(e,['id','type','name','instructions','viewInstructions','binding','value','fallback','when','layout','children','role','slotName','skillSymbols','contentType','tags','placeholder'])&&identifier(e.id)&&!ids.has(e.id)&&types.includes(e.type)&&text(e.name,200)&&text(e.instructions??''),'Elemento inválido o repetido');
    ids.add(e.id);
-   if(e.viewInstructions!==undefined)fail(keys(e.viewInstructions,['desktop','mobile'])&&Object.values(e.viewInstructions).every(x=>text(x)),'Instrucciones de vista inválidas');
+   if(e.viewInstructions!==undefined)fail(keys(e.viewInstructions,['desktop','mobile','fold'])&&Object.values(e.viewInstructions).every(x=>text(x)),'Instrucciones de vista inválidas');
+   if(e.placeholder!==undefined)fail(e.type==='image'&&['auto','landscape','square','portrait','figure','logo','ornament'].includes(e.placeholder),'Placeholder inválido');
    if(e.contentType!==undefined)fail(Object.hasOwn(contentTypes,e.contentType),'Tipo semántico inválido');
    if(e.tags!==undefined)fail(Array.isArray(e.tags)&&e.tags.length<=32&&e.tags.every(x=>identifier(x)),'Etiquetas inválidas');
    if(e.binding!==undefined)fail(identifier(e.binding),'Binding inválido');
@@ -86,10 +87,10 @@ export function validateContent(c){
 }
 const present=v=>v!==undefined&&v!==null&&v!==''&&v!==false&&(!Array.isArray(v)||v.length>0);
 export function resolvePage({template,composition,content,assets},view){
- fail(['mobile','desktop'].includes(view),'Vista inválida');
+ fail(['mobile','desktop','fold'].includes(view),'Vista inválida');
  const t=validateTemplate(template),c=validateComposition(composition,t),p=validateContent(content),a=validateAssets(assets);
  const binding=k=>own(p.bindings,k)?p.bindings[k]:undefined;
- const visual=(l={},o={})=>({...l.base,...l[view],...o.base,...o[view]});
+ const visual=(l={},o={})=>({...l.base,...(view==='fold'?l.desktop:{}),...l[view],...o.base,...(view==='fold'?o.desktop:{}),...o[view]});
  function resolve(e,depth=0){
   const style=visual(e.layout,c.overrides?.[e.id]);
   const skinKeys=['panelSkin','optionNormal','optionHover','optionSelected'];for(const k of skinKeys)if(style[k])fail(e.type==='interaction'&&own(a,style[k])&&a[style[k]].slice,'Recurso 9-slice no catalogado: '+style[k]);

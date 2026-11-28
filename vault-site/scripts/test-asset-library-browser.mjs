@@ -8,8 +8,8 @@ const call=(method,params={})=>new Promise((resolve,reject)=>{const n=++id;pendi
 await call('Runtime.enable');await call('Page.enable');
 await call('Emulation.setDeviceMetricsOverride',{width:1280,height:900,deviceScaleFactor:1,mobile:false});
 await call('Page.navigate',{url:'http://127.0.0.1:'+server.address().port+'/dm/arte/#assets'});
-for(let i=0;i<80;i++){if(await ev("document.querySelectorAll('.asset-card').length===93"))break;await sleep(100)}
-assert.equal(await ev("document.querySelectorAll('.asset-card').length"),93);
+for(let i=0;i<80;i++){if(await ev("document.querySelectorAll('.asset-card').length===129"))break;await sleep(100)}
+assert.equal(await ev("document.querySelectorAll('.asset-card').length"),129);
 assert.equal(await ev("document.getElementById('assets').hidden"),false);
 assert.equal(await ev("getComputedStyle(document.getElementById('asset-upload-form')).display"),'none');
 await ev("Array.from(document.querySelectorAll('#asset-folders button')).find(b=>b.textContent.startsWith('NPC (')).click()");
@@ -17,9 +17,9 @@ assert.equal(await ev("document.querySelectorAll('.asset-card').length"),38);
 await ev("(()=>{const x=document.getElementById('asset-search');x.value='isveld';x.dispatchEvent(new Event('input'))})()");
 assert.equal(await ev("document.querySelectorAll('.asset-card').length"),2);
 await ev("(()=>{const x=document.getElementById('asset-search');x.value='';x.dispatchEvent(new Event('input'));Array.from(document.querySelectorAll('#asset-folders button')).find(b=>b.textContent.startsWith('Fondos y localizaciones')).click()})()");
-assert.equal(await ev("document.querySelectorAll('.asset-card').length"),45);
+assert.equal(await ev("document.querySelectorAll('.asset-card').length"),47);
 const links=await ev("Array.from(document.querySelectorAll('.asset-card a')).map(a=>a.href)");
 for(const link of links)assert.equal((await fetch(link)).status,200);
 await call('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});await sleep(100);assert.ok(await ev("document.documentElement.scrollWidth<=392"));
-assert.deepEqual(errors,[]);console.log('PASS catalog: 93 assets, NPC and location filters, search, hidden upload form, location links and mobile');
+assert.deepEqual(errors,[]);console.log('PASS catalog: 129 assets, NPC and location filters, search, hidden upload form, location links and mobile');
 }finally{ws?.close();edge.kill();server.close();await sleep(400);await rm(dir,{recursive:true,force:true}).catch(()=>{})}

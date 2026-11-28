@@ -816,6 +816,403 @@ export const publicAssets={
     }
   }
 };
+Object.assign(publicAssets,{
+  "ICON/strength": {
+    "src": "/dm/libro/editorial/assets/ICON/strength.png",
+    "alt": "strength",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "ICON/defense": {
+    "src": "/dm/libro/editorial/assets/ICON/defense.png",
+    "alt": "defense",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "ICON/stealth": {
+    "src": "/dm/libro/editorial/assets/ICON/stealth.png",
+    "alt": "stealth",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "ICON/lore": {
+    "src": "/dm/libro/editorial/assets/ICON/lore.png",
+    "alt": "lore",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "ICON/medicine": {
+    "src": "/dm/libro/editorial/assets/ICON/medicine.png",
+    "alt": "medicine",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "ICON/precision": {
+    "src": "/dm/libro/editorial/assets/ICON/precision.png",
+    "alt": "precision",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "ICON/tracking": {
+    "src": "/dm/libro/editorial/assets/ICON/tracking.png",
+    "alt": "tracking",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "ICON/craft": {
+    "src": "/dm/libro/editorial/assets/ICON/craft.png",
+    "alt": "craft",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "ICON/intellect": {
+    "src": "/dm/libro/editorial/assets/ICON/intellect.png",
+    "alt": "intellect",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "ICON/justice": {
+    "src": "/dm/libro/editorial/assets/ICON/justice.png",
+    "alt": "justice",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "ICON/persuasion": {
+    "src": "/dm/libro/editorial/assets/ICON/persuasion.png",
+    "alt": "persuasion",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "ICON/deception": {
+    "src": "/dm/libro/editorial/assets/ICON/deception.png",
+    "alt": "deception",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "ICON/perception": {
+    "src": "/dm/libro/editorial/assets/ICON/perception.png",
+    "alt": "perception",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "ICON/dexterity": {
+    "src": "/dm/libro/editorial/assets/ICON/dexterity.png",
+    "alt": "dexterity",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "ICON/nature": {
+    "src": "/dm/libro/editorial/assets/ICON/nature.png",
+    "alt": "nature",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "ICON/crystals": {
+    "src": "/dm/libro/editorial/assets/ICON/crystals.png",
+    "alt": "crystals",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "ICON/mining": {
+    "src": "/dm/libro/editorial/assets/ICON/mining.png",
+    "alt": "mining",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "ICON/fire": {
+    "src": "/dm/libro/editorial/assets/ICON/fire.png",
+    "alt": "fire",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "ICON/frost": {
+    "src": "/dm/libro/editorial/assets/ICON/frost.png",
+    "alt": "frost",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "ICON/mountains": {
+    "src": "/dm/libro/editorial/assets/ICON/mountains.png",
+    "alt": "mountains",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "ICON/fortress": {
+    "src": "/dm/libro/editorial/assets/ICON/fortress.png",
+    "alt": "fortress",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "ICON/authority": {
+    "src": "/dm/libro/editorial/assets/ICON/authority.png",
+    "alt": "authority",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "ICON/death": {
+    "src": "/dm/libro/editorial/assets/ICON/death.png",
+    "alt": "death",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "ICON/navigation": {
+    "src": "/dm/libro/editorial/assets/ICON/navigation.png",
+    "alt": "navigation",
+    "status": "aportado-usuario",
+    "tags": [
+      "symbol",
+      "ivory"
+    ]
+  },
+  "UI/grunge_bar_1": {
+    "src": "/dm/libro/editorial/assets/UI/grunge_bar_1.png",
+    "alt": "grunge bar 1",
+    "status": "aportado-usuario",
+    "tags": [
+      "grunge",
+      "mask",
+      "9-slice"
+    ],
+    "slice": {
+      "top": 20,
+      "right": 14,
+      "bottom": 20,
+      "left": 14,
+      "width": 12
+    }
+  },
+  "UI/grunge_choice_normal": {
+    "src": "/dm/libro/editorial/assets/UI/grunge_choice_normal.png",
+    "alt": "grunge choice normal",
+    "status": "aportado-usuario",
+    "tags": [
+      "grunge",
+      "9-slice"
+    ],
+    "slice": {
+      "top": 20,
+      "right": 14,
+      "bottom": 20,
+      "left": 14,
+      "width": 12
+    }
+  },
+  "UI/grunge_choice_hover": {
+    "src": "/dm/libro/editorial/assets/UI/grunge_choice_hover.png",
+    "alt": "grunge choice hover",
+    "status": "aportado-usuario",
+    "tags": [
+      "grunge",
+      "9-slice"
+    ],
+    "slice": {
+      "top": 20,
+      "right": 14,
+      "bottom": 20,
+      "left": 14,
+      "width": 12
+    }
+  },
+  "UI/grunge_choice_selected": {
+    "src": "/dm/libro/editorial/assets/UI/grunge_choice_selected.png",
+    "alt": "grunge choice selected",
+    "status": "aportado-usuario",
+    "tags": [
+      "grunge",
+      "9-slice"
+    ],
+    "slice": {
+      "top": 20,
+      "right": 14,
+      "bottom": 20,
+      "left": 14,
+      "width": 12
+    }
+  },
+  "UI/grunge_bar_2": {
+    "src": "/dm/libro/editorial/assets/UI/grunge_bar_2.png",
+    "alt": "grunge bar 2",
+    "status": "aportado-usuario",
+    "tags": [
+      "grunge",
+      "mask",
+      "9-slice"
+    ],
+    "slice": {
+      "top": 20,
+      "right": 14,
+      "bottom": 20,
+      "left": 14,
+      "width": 12
+    }
+  },
+  "UI/grunge_bar_3": {
+    "src": "/dm/libro/editorial/assets/UI/grunge_bar_3.png",
+    "alt": "grunge bar 3",
+    "status": "aportado-usuario",
+    "tags": [
+      "grunge",
+      "mask",
+      "9-slice"
+    ],
+    "slice": {
+      "top": 20,
+      "right": 14,
+      "bottom": 20,
+      "left": 14,
+      "width": 12
+    }
+  },
+  "UI/grunge_bar_4": {
+    "src": "/dm/libro/editorial/assets/UI/grunge_bar_4.png",
+    "alt": "grunge bar 4",
+    "status": "aportado-usuario",
+    "tags": [
+      "grunge",
+      "mask",
+      "9-slice"
+    ],
+    "slice": {
+      "top": 20,
+      "right": 14,
+      "bottom": 20,
+      "left": 14,
+      "width": 12
+    }
+  },
+  "UI/grunge_bar_5": {
+    "src": "/dm/libro/editorial/assets/UI/grunge_bar_5.png",
+    "alt": "grunge bar 5",
+    "status": "aportado-usuario",
+    "tags": [
+      "grunge",
+      "mask",
+      "9-slice"
+    ],
+    "slice": {
+      "top": 20,
+      "right": 14,
+      "bottom": 20,
+      "left": 14,
+      "width": 12
+    }
+  },
+  "UI/grunge_bar_6": {
+    "src": "/dm/libro/editorial/assets/UI/grunge_bar_6.png",
+    "alt": "grunge bar 6",
+    "status": "aportado-usuario",
+    "tags": [
+      "grunge",
+      "mask",
+      "9-slice"
+    ],
+    "slice": {
+      "top": 20,
+      "right": 14,
+      "bottom": 20,
+      "left": 14,
+      "width": 12
+    }
+  },
+  "LOGO/stormkeep": {
+    "src": "/dm/libro/editorial/assets/LOGO/stormkeep.png",
+    "alt": "stormkeep",
+    "status": "aportado-usuario",
+    "tags": [
+      "logo",
+      "stormkeep"
+    ]
+  },
+  "BKG/orange_sky": {
+    "src": "/dm/libro/editorial/assets/BKG/orange_sky.webp",
+    "alt": "orange sky",
+    "status": "aportado-usuario",
+    "tags": [
+      "sky",
+      "orange",
+      "square"
+    ]
+  },
+  "BKG/night_sky": {
+    "src": "/dm/libro/editorial/assets/BKG/night_sky.webp",
+    "alt": "night sky",
+    "status": "aportado-usuario",
+    "tags": [
+      "sky",
+      "night",
+      "square"
+    ]
+  }
+});
 export const legacyAliases={"plaza":"BKG/plaza","forest":"BKG/snow_forest","forge":"BKG/forja_interior","cover":"TITLE/stormkeep_cover","smith":"NPC/blacksmith","paper":"COS/paper","galahad":"PC/galahad","mountains":"BKG/mountains","panel-frame":"UI/panel_frame","choice-normal":"UI/choice_normal","choice-hover":"UI/choice_hover","choice-selected":"UI/choice_selected"};
 export const canonicalId=id=>Object.hasOwn(legacyAliases,id)?legacyAliases[id]:id;
 export const validAssetId=id=>typeof id==="string"&&/^(BKG|LOGO|TITLE|COS|PC|NPC|MONSTER|OBJ|UI|ICON)\/[a-z][a-z0-9_]{0,63}$/.test(id);

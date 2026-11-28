@@ -49,10 +49,10 @@ export class BookUniversalPage extends HTMLElement{
  previewCamera(mode='play'){if(!['start','end','play'].includes(mode))throw Error('Modo de cámara inválido');this.setAttribute('camera-preview',mode==='play'?'start':mode);for(const c of this.#cameras)c.run(mode)}
  static get observedAttributes(){return ['preview-view']}
  attributeChangedCallback(){if(this.#document&&this.#view!==this.view)this.#render(this.#document)}
- get view(){const v=this.getAttribute('preview-view');return ['mobile','desktop'].includes(v)?v:(this.clientWidth<=680?'mobile':'desktop')}
+ get view(){const v=this.getAttribute('preview-view');return ['mobile','desktop','fold'].includes(v)?v:(this.clientWidth<=600?'mobile':this.clientWidth<=900?'fold':'desktop')}
  get document(){return this.#document?structuredClone(this.#document):null}
  set document(value){this.setPage(value)}
- setPage(value){const next=structuredClone(value);resolvePage(next,'mobile');resolvePage(next,'desktop');this.#render(next);this.#document=next;return this}
+ setPage(value){const next=structuredClone(value);resolvePage(next,'mobile');resolvePage(next,'desktop');resolvePage(next,'fold');this.#render(next);this.#document=next;return this}
  setChoiceHandler(handler){if(handler!==null&&typeof handler!=='function')throw new TypeError('Handler inválido');this.#handler=handler;return this}
  get pageId(){return this.#resolved?.pageId??null}
  #render(doc){
