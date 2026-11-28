@@ -159,3 +159,7 @@ Integración editorial: 129 recursos en catálogo, 24 iconos y seis barras grung
 ### Prueba del nuevo libro en PWA
 
 Ruta /libro/prueba/ accesible desde inicio y navegación del libro. Miniaventura de muestra reutiliza el compositor universal y los nuevos recursos, sin modificar estado de campañas ni backend. Prueba de entrada, continuidad de diálogo al cambiar ancho y recargar, tres desenlaces y seis tamaños CSS PASS.
+
+### Recuperación de acabado artístico del editor universal
+
+Se recuperan formato tipográfico, papel coloreado, contorno y sombra, borde configurable y máscaras geométricas con quemado del laboratorio original. El fondo de título se elimina por defecto; se permite transparencia en cada capa y se amplían rangos de transformación. Se preservan los perfiles y los 129 recursos. Evidencia: prueba de contrato e inspector, pruebas de lector y laboratorio. Pendiente paridad de flujo alrededor de siluetas y máscaras adicionales.

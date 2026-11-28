@@ -1,0 +1,18 @@
+{
+  "id": "act-20261128-sys09-editorial-finish-008",
+  "date": "2026-11-27",
+  "area": "Coordinación",
+  "owner": "SYS-09",
+  "status": "en-progreso",
+  "title": "Recuperación de acabados artísticos del editor universal",
+  "summary": "Tipografía, texto, sombras, transparencia, bordes, papel tintado y quemado original por capa y dispositivo. Se conserva el editor universal y perfiles de pantalla.",
+  "changed": [
+    "vault-site/public/libro/edition/universal/contract.mjs",
+    "vault-site/public/libro/edition/universal/book-page.mjs",
+    "vault-site/public/libro/edition/universal/page.css",
+    "vault-site/public/dm/libro/editorial/universal-editor.mjs"
+  ],
+  "next": "Paridad de flujo alrededor de siluetas, máscaras grunge adicionales y sincronización compartida.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/editorial-universal-page-20261127",
+  "nodeIds": []
+}

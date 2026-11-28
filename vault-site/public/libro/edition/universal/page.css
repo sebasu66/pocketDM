@@ -59,3 +59,19 @@ h2.copy{font-size:clamp(24px,4cqw,44px);font-weight:500;line-height:1.15}
 .interaction-history+.interaction-text{border-top:1px solid #d6c5a144;padding-top:12px}
 
 .interaction{min-height:0;max-width:100%}.options .choice-row:focus-visible{outline-offset:2px}.result-badge{max-width:100%}.interaction-header h3{font-size:1.35em;font-weight:500}.interaction-history .chosen{white-space:normal}
+
+/* Editorial finishes from the original V11 laboratory. */
+.copy p{margin-bottom:var(--paragraph-gap,.6em);text-indent:var(--indent,0em)}
+.copy.capital p:first-of-type{text-indent:0}
+.copy.capital p:first-of-type::first-letter{float:left;font-size:calc(var(--capital-size,3)*1em);line-height:.86;margin-right:.12em}
+.paper-texture{isolation:isolate}
+.paper-texture::after{content:"";position:absolute;inset:0;background-image:url('/dm/libro/editorial/assets/paper.webp');background-size:var(--paper-size,cover);background-position:center;mix-blend-mode:var(--paper-blend,multiply);opacity:var(--paper-opacity,.65);z-index:-1;pointer-events:none;border-radius:inherit}
+.edge-image-viewport,.burn-edge{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.burn-edge{z-index:1}
+.title-ornament{display:flex;align-items:center;gap:.5em;max-width:100%;font-size:.45em;line-height:1;pointer-events:none}
+.title-ornament::before,.title-ornament::after{content:"";height:1px;background:currentColor;flex:1}
+.copy[style*="text-align: center"] .title-ornament{margin-inline:auto}
+.copy[style*="text-align: right"] .title-ornament{margin-left:auto}
+.options{gap:var(--option-gap,8px)}
+.options button.choice-row,.history-entry.choice-row{padding:var(--option-padding,12px) calc(var(--option-padding,12px) + 4px)}
+.symbol{width:var(--symbol-size,30px);height:var(--symbol-size,30px)}
