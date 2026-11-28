@@ -30,6 +30,11 @@
   ],
   "shortcuts": [
     {
+      "name": "Prueba del nuevo libro",
+      "short_name": "Nuevo libro",
+      "url": "/libro/prueba/"
+    },
+    {
       "name": "Laboratorio de diálogo",
       "short_name": "Diálogo",
       "url": "/laboratorio/dialogo/"

@@ -155,3 +155,7 @@ Se libera únicamente la UI universal, el laboratorio y catálogo estático; sin
 ### Perfiles de pantalla y arte de usuario
 
 Integración editorial: 129 recursos en catálogo, 24 iconos y seis barras grunge, tres estados de selección 9-slice, logo y cielos cuadrados. Editor con perfiles Fold cerrado/abierto, teléfonos y desktop hasta ultrawide/4K, tirador de capas libres y siluetas de autoría. Contrato y pruebas de editor, biblioteca y once escenas en ocho viewports PASS. No se cambia simulación ni persistencia Firebase. Pendientes pruebas en hardware físico, cinco máscaras extra y sincronización compartida.
+
+### Prueba del nuevo libro en PWA
+
+Ruta /libro/prueba/ accesible desde inicio y navegación del libro. Miniaventura de muestra reutiliza el compositor universal y los nuevos recursos, sin modificar estado de campañas ni backend. Prueba de entrada, continuidad de diálogo al cambiar ancho y recargar, tres desenlaces y seis tamaños CSS PASS.

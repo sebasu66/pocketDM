@@ -1,0 +1,18 @@
+{
+  "id": "act-20261128-sys09-pwa-trial-009",
+  "date": "2026-11-27",
+  "area": "Coordinación",
+  "owner": "SYS-09",
+  "status": "en-progreso",
+  "title": "Nuevo libro disponible desde PWA",
+  "summary": "Ruta jugable independiente, inicio y navegación; nuevo arte, 3 desenlaces, continuidad al cambiar tamaño y recargar. PASS.",
+  "changed": [
+    "vault-site/public/libro/prueba/index.html",
+    "vault-site/public/libro/prueba/trial.mjs",
+    "vault-site/public/libro/reader.mjs",
+    "vault-site/public/app.webmanifest"
+  ],
+  "next": "Prueba física del Fold4 instalado y revisión editorial de la aventura real.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/editorial-universal-page-20261127",
+  "nodeIds": []
+}
