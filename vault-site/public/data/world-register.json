@@ -1,0 +1,4724 @@
+{
+  "schemaVersion": 1,
+  "scope": "Registros públicos de autoría y prototipos. No canon automático, estado de campaña, secretos ni posiciones reales.",
+  "records": [
+    {
+      "assets": [],
+      "fields": {
+        "id": "world",
+        "name": "Frontera del Norte",
+        "kind": "world",
+        "generation": "skeleton"
+      },
+      "sources": [
+        {
+          "label": "Atlas de prueba (no canónico)",
+          "href": "/atlas/"
+        },
+        {
+          "label": "Biblia del mundo v0.1",
+          "href": "/docs/world-bible-v01.md"
+        },
+        {
+          "label": "Fundamentos de Stormkeep v0.2",
+          "href": "/docs/stormkeep-foundation-v02.md"
+        },
+        {
+          "label": "Progresión del mundo",
+          "href": "/docs/world-progression.md"
+        }
+      ],
+      "id": "world",
+      "name": "Frontera del Norte",
+      "type": "world",
+      "status": "Atlas de prueba",
+      "summary": "Biblia, geografía, culturas, magia y autoridad; consultar la distinción entre confirmado, propuesta y abierto."
+    },
+    {
+      "assets": [],
+      "fields": {
+        "id": "marches",
+        "name": "Las Marcas",
+        "kind": "region",
+        "parentId": "world",
+        "generation": "skeleton",
+        "description": "Colinas, bosque y litoral; pesca, madera, cultivos resistentes, transporte portuario. Depende del grano y ciertos remedios externos.",
+        "tension": "¿Quién paga el mantenimiento de refugios y caminos?"
+      },
+      "sources": [
+        {
+          "label": "Atlas de prueba (no canónico)",
+          "href": "/atlas/"
+        },
+        {
+          "label": "Biblia del mundo v0.1",
+          "href": "/docs/world-bible-v01.md"
+        }
+      ],
+      "id": "marches",
+      "name": "Las Marcas",
+      "type": "world",
+      "status": "Atlas de prueba",
+      "summary": "region"
+    },
+    {
+      "assets": [],
+      "fields": {
+        "id": "plains",
+        "name": "Llanuras Heladas",
+        "kind": "region",
+        "parentId": "world",
+        "generation": "skeleton",
+        "description": "Tundra y asentamientos dispersos; pastoreo estacional, pesca donde el agua lo permite, pieles y reservas.",
+        "tension": "Desplazamientos, acuerdos de paso y acceso a comida."
+      },
+      "sources": [
+        {
+          "label": "Atlas de prueba (no canónico)",
+          "href": "/atlas/"
+        },
+        {
+          "label": "Biblia del mundo v0.1",
+          "href": "/docs/world-bible-v01.md"
+        }
+      ],
+      "id": "plains",
+      "name": "Llanuras Heladas",
+      "type": "world",
+      "status": "Atlas de prueba",
+      "summary": "region"
+    },
+    {
+      "assets": [
+        {
+          "id": "BKG/camino_oriental",
+          "status": "candidato",
+          "role": "lugar"
+        },
+        {
+          "id": "BKG/camino_oriental_legacy",
+          "status": "rechazado",
+          "role": "lugar"
+        }
+      ],
+      "fields": {
+        "id": "hex.0.0",
+        "name": "Alrededores del bastión",
+        "kind": "hex",
+        "parentId": "marches",
+        "generation": "visitable",
+        "q": 0,
+        "r": 0,
+        "terrain": "colinas"
+      },
+      "sources": [
+        {
+          "label": "Atlas de prueba (no canónico)",
+          "href": "/atlas/"
+        }
+      ],
+      "id": "hex.0.0",
+      "name": "Alrededores del bastión",
+      "type": "location",
+      "status": "Atlas de prueba",
+      "summary": "hex"
+    },
+    {
+      "assets": [
+        {
+          "id": "BKG/stormkeep",
+          "status": "candidato",
+          "role": "lugar"
+        },
+        {
+          "id": "BKG/plaza",
+          "status": "original",
+          "role": "lugar"
+        },
+        {
+          "id": "LOGO/stormkeep",
+          "status": "original",
+          "role": "Logo"
+        }
+      ],
+      "fields": {
+        "id": "stormkeep",
+        "name": "Stormkeep",
+        "kind": "settlement",
+        "parentId": "hex.0.0",
+        "generation": "visitable",
+        "population": {
+          "target": 260,
+          "range": [
+            200,
+            350
+          ],
+          "households": 55,
+          "namedResidents": 30,
+          "notCensus": true
+        }
+      },
+      "sources": [
+        {
+          "label": "Atlas de prueba (no canónico)",
+          "href": "/atlas/"
+        },
+        {
+          "label": "Fundamentos de Stormkeep v0.2",
+          "href": "/docs/stormkeep-foundation-v02.md"
+        },
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "stormkeep",
+      "name": "Stormkeep",
+      "type": "location",
+      "status": "Nombre confirmado · detalles propuestos",
+      "summary": "Ciudad costera de referencia; fundamentos y población propuestos."
+    },
+    {
+      "assets": [
+        {
+          "id": "BKG/camino_oriental",
+          "status": "candidato",
+          "role": "lugar"
+        },
+        {
+          "id": "BKG/camino_oriental_legacy",
+          "status": "rechazado",
+          "role": "lugar"
+        }
+      ],
+      "fields": {
+        "id": "hex.1.0",
+        "name": "Camino oriental",
+        "kind": "hex",
+        "parentId": "marches",
+        "generation": "visitable",
+        "q": 1,
+        "r": 0,
+        "terrain": "bosque"
+      },
+      "sources": [
+        {
+          "label": "Atlas de prueba (no canónico)",
+          "href": "/atlas/"
+        }
+      ],
+      "id": "hex.1.0",
+      "name": "Camino oriental",
+      "type": "location",
+      "status": "Atlas de prueba",
+      "summary": "hex"
+    },
+    {
+      "assets": [
+        {
+          "id": "BKG/camino_oriental",
+          "status": "candidato",
+          "role": "lugar"
+        },
+        {
+          "id": "BKG/camino_oriental_legacy",
+          "status": "rechazado",
+          "role": "lugar"
+        }
+      ],
+      "fields": {
+        "id": "hex.2.0",
+        "name": "Borde de las Llanuras Heladas",
+        "kind": "hex",
+        "parentId": "plains",
+        "generation": "visitable",
+        "q": 2,
+        "r": 0,
+        "terrain": "tundra"
+      },
+      "sources": [
+        {
+          "label": "Atlas de prueba (no canónico)",
+          "href": "/atlas/"
+        }
+      ],
+      "id": "hex.2.0",
+      "name": "Borde de las Llanuras Heladas",
+      "type": "location",
+      "status": "Atlas de prueba",
+      "summary": "hex"
+    },
+    {
+      "assets": [
+        {
+          "id": "BKG/aldea_hielo",
+          "status": "candidato",
+          "role": "lugar"
+        }
+      ],
+      "fields": {
+        "id": "pilot.village",
+        "name": "Aldea del Hielo",
+        "kind": "settlement",
+        "parentId": "hex.2.0",
+        "generation": "visitable"
+      },
+      "sources": [
+        {
+          "label": "Atlas de prueba (no canónico)",
+          "href": "/atlas/"
+        }
+      ],
+      "id": "pilot.village",
+      "name": "Aldea del Hielo",
+      "type": "location",
+      "status": "Atlas de prueba",
+      "summary": "settlement"
+    },
+    {
+      "assets": [
+        {
+          "id": "BKG/puente_vado",
+          "status": "candidato",
+          "role": "lugar"
+        }
+      ],
+      "fields": {
+        "id": "pilot.bridge",
+        "name": "Puente del Vado",
+        "kind": "site",
+        "parentId": "hex.2.0",
+        "generation": "visitable"
+      },
+      "sources": [
+        {
+          "label": "Atlas de prueba (no canónico)",
+          "href": "/atlas/"
+        }
+      ],
+      "id": "pilot.bridge",
+      "name": "Puente del Vado",
+      "type": "location",
+      "status": "Atlas de prueba",
+      "summary": "site"
+    },
+    {
+      "assets": [
+        {
+          "id": "BKG/bastion_exterior",
+          "status": "candidato",
+          "role": "lugar"
+        },
+        {
+          "id": "BKG/bastion_interior",
+          "status": "candidato",
+          "role": "lugar"
+        }
+      ],
+      "fields": {
+        "id": "draft.stormkeep.fort",
+        "parentId": "stormkeep",
+        "name": "Bastión Varn"
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        },
+        {
+          "label": "Fundamentos de Stormkeep v0.2",
+          "href": "/docs/stormkeep-foundation-v02.md"
+        }
+      ],
+      "id": "draft.stormkeep.fort",
+      "name": "Bastión Varn",
+      "type": "location",
+      "status": "Propuesta",
+      "summary": "Localización de Stormkeep"
+    },
+    {
+      "assets": [
+        {
+          "id": "BKG/cuartel_exterior",
+          "status": "candidato",
+          "role": "lugar"
+        },
+        {
+          "id": "BKG/cuartel_interior",
+          "status": "candidato",
+          "role": "lugar"
+        }
+      ],
+      "fields": {
+        "id": "draft.stormkeep.barracks",
+        "parentId": "stormkeep",
+        "name": "Cuartel"
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        },
+        {
+          "label": "Fundamentos de Stormkeep v0.2",
+          "href": "/docs/stormkeep-foundation-v02.md"
+        }
+      ],
+      "id": "draft.stormkeep.barracks",
+      "name": "Cuartel",
+      "type": "location",
+      "status": "Propuesta",
+      "summary": "Localización de Stormkeep"
+    },
+    {
+      "assets": [
+        {
+          "id": "BKG/puerta_oriental",
+          "status": "aprobado-usuario",
+          "role": "lugar"
+        },
+        {
+          "id": "BKG/puerta_inicio",
+          "status": "candidate",
+          "role": "Escenario de primera sesión"
+        }
+      ],
+      "fields": {
+        "id": "draft.stormkeep.east-gate",
+        "parentId": "stormkeep",
+        "name": "Puerta Oriental"
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        },
+        {
+          "label": "Fundamentos de Stormkeep v0.2",
+          "href": "/docs/stormkeep-foundation-v02.md"
+        }
+      ],
+      "id": "draft.stormkeep.east-gate",
+      "name": "Puerta Oriental",
+      "type": "location",
+      "status": "Propuesta",
+      "summary": "Localización de Stormkeep"
+    },
+    {
+      "assets": [
+        {
+          "id": "BKG/puerto",
+          "status": "candidato",
+          "role": "lugar"
+        }
+      ],
+      "fields": {
+        "id": "draft.stormkeep.harbor",
+        "parentId": "stormkeep",
+        "name": "Muelles del Regreso"
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        },
+        {
+          "label": "Fundamentos de Stormkeep v0.2",
+          "href": "/docs/stormkeep-foundation-v02.md"
+        }
+      ],
+      "id": "draft.stormkeep.harbor",
+      "name": "Muelles del Regreso",
+      "type": "location",
+      "status": "Propuesta",
+      "summary": "Localización de Stormkeep"
+    },
+    {
+      "assets": [
+        {
+          "id": "BKG/mercado",
+          "status": "candidato",
+          "role": "lugar"
+        },
+        {
+          "id": "BKG/mercado_legacy",
+          "status": "rechazado",
+          "role": "lugar"
+        },
+        {
+          "id": "BKG/mercado_inicio",
+          "status": "candidate",
+          "role": "Escenario de primera sesión"
+        }
+      ],
+      "fields": {
+        "id": "draft.stormkeep.market",
+        "parentId": "stormkeep",
+        "name": "Mercado de las Balanzas"
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        },
+        {
+          "label": "Fundamentos de Stormkeep v0.2",
+          "href": "/docs/stormkeep-foundation-v02.md"
+        }
+      ],
+      "id": "draft.stormkeep.market",
+      "name": "Mercado de las Balanzas",
+      "type": "location",
+      "status": "Propuesta",
+      "summary": "Localización de Stormkeep"
+    },
+    {
+      "assets": [
+        {
+          "id": "BKG/taberna_exterior",
+          "status": "candidato",
+          "role": "lugar"
+        },
+        {
+          "id": "BKG/taberna_interior",
+          "status": "candidato",
+          "role": "lugar"
+        }
+      ],
+      "fields": {
+        "id": "draft.stormkeep.inn",
+        "parentId": "stormkeep",
+        "name": "El Cuervo Gris"
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        },
+        {
+          "label": "Fundamentos de Stormkeep v0.2",
+          "href": "/docs/stormkeep-foundation-v02.md"
+        }
+      ],
+      "id": "draft.stormkeep.inn",
+      "name": "El Cuervo Gris",
+      "type": "location",
+      "status": "Propuesta",
+      "summary": "Localización de Stormkeep"
+    },
+    {
+      "assets": [
+        {
+          "id": "BKG/forja_exterior",
+          "status": "candidato",
+          "role": "lugar"
+        },
+        {
+          "id": "BKG/forja_interior",
+          "status": "original",
+          "role": "lugar"
+        },
+        {
+          "id": "BKG/forja_exterior_legacy",
+          "status": "rechazado",
+          "role": "lugar"
+        }
+      ],
+      "fields": {
+        "id": "draft.stormkeep.smithy",
+        "parentId": "stormkeep",
+        "name": "Forja del Ancla"
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        },
+        {
+          "label": "Fundamentos de Stormkeep v0.2",
+          "href": "/docs/stormkeep-foundation-v02.md"
+        }
+      ],
+      "id": "draft.stormkeep.smithy",
+      "name": "Forja del Ancla",
+      "type": "location",
+      "status": "Propuesta",
+      "summary": "Localización de Stormkeep"
+    },
+    {
+      "assets": [
+        {
+          "id": "BKG/hospicio_exterior",
+          "status": "candidato",
+          "role": "lugar"
+        },
+        {
+          "id": "BKG/hospicio_interior",
+          "status": "candidato",
+          "role": "lugar"
+        },
+        {
+          "id": "BKG/hospicio_inicio",
+          "status": "candidate",
+          "role": "Escenario de primera sesión"
+        }
+      ],
+      "fields": {
+        "id": "draft.stormkeep.hospice",
+        "parentId": "stormkeep",
+        "name": "Hospicio del Umbral"
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        },
+        {
+          "label": "Fundamentos de Stormkeep v0.2",
+          "href": "/docs/stormkeep-foundation-v02.md"
+        }
+      ],
+      "id": "draft.stormkeep.hospice",
+      "name": "Hospicio del Umbral",
+      "type": "location",
+      "status": "Propuesta",
+      "summary": "Localización de Stormkeep"
+    },
+    {
+      "assets": [
+        {
+          "id": "BKG/templo_exterior",
+          "status": "candidato",
+          "role": "lugar"
+        },
+        {
+          "id": "BKG/templo_interior",
+          "status": "candidato",
+          "role": "lugar"
+        }
+      ],
+      "fields": {
+        "id": "draft.stormkeep.shrine",
+        "parentId": "stormkeep",
+        "name": "Casa de las Lámparas"
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        },
+        {
+          "label": "Fundamentos de Stormkeep v0.2",
+          "href": "/docs/stormkeep-foundation-v02.md"
+        }
+      ],
+      "id": "draft.stormkeep.shrine",
+      "name": "Casa de las Lámparas",
+      "type": "location",
+      "status": "Propuesta",
+      "summary": "Localización de Stormkeep"
+    },
+    {
+      "assets": [
+        {
+          "id": "BKG/barrio_hogares",
+          "status": "candidato",
+          "role": "lugar"
+        },
+        {
+          "id": "BKG/callejon",
+          "status": "candidato",
+          "role": "lugar"
+        }
+      ],
+      "fields": {
+        "id": "draft.stormkeep.homes",
+        "parentId": "stormkeep",
+        "name": "Barrio de los Hogares"
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        },
+        {
+          "label": "Fundamentos de Stormkeep v0.2",
+          "href": "/docs/stormkeep-foundation-v02.md"
+        }
+      ],
+      "id": "draft.stormkeep.homes",
+      "name": "Barrio de los Hogares",
+      "type": "location",
+      "status": "Propuesta",
+      "summary": "Localización de Stormkeep"
+    },
+    {
+      "assets": [
+        {
+          "id": "BKG/varadero_exterior",
+          "status": "candidato",
+          "role": "lugar"
+        },
+        {
+          "id": "BKG/varadero_interior",
+          "status": "candidato",
+          "role": "lugar"
+        },
+        {
+          "id": "BKG/varadero_exterior_legacy",
+          "status": "rechazado",
+          "role": "lugar"
+        },
+        {
+          "id": "BKG/varadero_exterior_v2",
+          "status": "rechazado",
+          "role": "lugar"
+        }
+      ],
+      "fields": {
+        "id": "draft.stormkeep.shipyard",
+        "parentId": "stormkeep",
+        "name": "Varadero"
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        },
+        {
+          "label": "Fundamentos de Stormkeep v0.2",
+          "href": "/docs/stormkeep-foundation-v02.md"
+        }
+      ],
+      "id": "draft.stormkeep.shipyard",
+      "name": "Varadero",
+      "type": "location",
+      "status": "Propuesta",
+      "summary": "Localización de Stormkeep"
+    },
+    {
+      "assets": [
+        {
+          "id": "BKG/huertas",
+          "status": "candidato",
+          "role": "lugar"
+        }
+      ],
+      "fields": {
+        "id": "draft.stormkeep.farms",
+        "parentId": "stormkeep",
+        "name": "Huertas de la Ladera"
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        },
+        {
+          "label": "Fundamentos de Stormkeep v0.2",
+          "href": "/docs/stormkeep-foundation-v02.md"
+        }
+      ],
+      "id": "draft.stormkeep.farms",
+      "name": "Huertas de la Ladera",
+      "type": "location",
+      "status": "Propuesta",
+      "summary": "Localización de Stormkeep"
+    },
+    {
+      "assets": [
+        {
+          "id": "BKG/horno_elin",
+          "status": "candidato",
+          "role": "lugar"
+        }
+      ],
+      "fields": {
+        "id": "draft.stormkeep.bakery",
+        "parentId": "stormkeep",
+        "name": "Horno de Elin"
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        },
+        {
+          "label": "Fundamentos de Stormkeep v0.2",
+          "href": "/docs/stormkeep-foundation-v02.md"
+        }
+      ],
+      "id": "draft.stormkeep.bakery",
+      "name": "Horno de Elin",
+      "type": "location",
+      "status": "Propuesta",
+      "summary": "Localización de Stormkeep"
+    },
+    {
+      "assets": [
+        {
+          "id": "BKG/linde",
+          "status": "candidato",
+          "role": "lugar"
+        }
+      ],
+      "fields": {
+        "id": "draft.stormkeep.woodlot",
+        "parentId": "stormkeep",
+        "name": "Linde de los Leñadores"
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        },
+        {
+          "label": "Fundamentos de Stormkeep v0.2",
+          "href": "/docs/stormkeep-foundation-v02.md"
+        }
+      ],
+      "id": "draft.stormkeep.woodlot",
+      "name": "Linde de los Leñadores",
+      "type": "location",
+      "status": "Propuesta",
+      "summary": "Localización de Stormkeep"
+    },
+    {
+      "assets": [
+        {
+          "id": "BKG/fuente_cisterna",
+          "status": "candidato",
+          "role": "lugar"
+        }
+      ],
+      "fields": {
+        "id": "draft.stormkeep.spring",
+        "parentId": "stormkeep",
+        "name": "Fuente alta y cisterna"
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        },
+        {
+          "label": "Fundamentos de Stormkeep v0.2",
+          "href": "/docs/stormkeep-foundation-v02.md"
+        }
+      ],
+      "id": "draft.stormkeep.spring",
+      "name": "Fuente alta y cisterna",
+      "type": "location",
+      "status": "Propuesta",
+      "summary": "Localización de Stormkeep"
+    },
+    {
+      "assets": [
+        {
+          "id": "BKG/deposito_interior",
+          "status": "candidato",
+          "role": "lugar"
+        },
+        {
+          "id": "BKG/deposito_interior_legacy",
+          "status": "rechazado",
+          "role": "lugar"
+        }
+      ],
+      "fields": {
+        "id": "draft.stormkeep.reserve",
+        "parentId": "stormkeep",
+        "name": "Depósito común"
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        },
+        {
+          "label": "Fundamentos de Stormkeep v0.2",
+          "href": "/docs/stormkeep-foundation-v02.md"
+        }
+      ],
+      "id": "draft.stormkeep.reserve",
+      "name": "Depósito común",
+      "type": "location",
+      "status": "Propuesta",
+      "summary": "Localización de Stormkeep"
+    },
+    {
+      "assets": [
+        {
+          "id": "BKG/ahumadero",
+          "status": "candidato",
+          "role": "lugar"
+        }
+      ],
+      "fields": {
+        "id": "draft.stormkeep.smokehouse",
+        "parentId": "stormkeep",
+        "name": "Ahumaderos"
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        },
+        {
+          "label": "Fundamentos de Stormkeep v0.2",
+          "href": "/docs/stormkeep-foundation-v02.md"
+        }
+      ],
+      "id": "draft.stormkeep.smokehouse",
+      "name": "Ahumaderos",
+      "type": "location",
+      "status": "Propuesta",
+      "summary": "Localización de Stormkeep"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/edda",
+          "status": "candidato",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.edda",
+        "name": "Edda Varn",
+        "age": 51,
+        "role": "Señora de la fortaleza",
+        "homeAreaId": "draft.stormkeep.fort",
+        "workplaceId": "draft.stormkeep.fort",
+        "appearance": "Cabello gris recogido, broche de hierro, capa azul",
+        "background": "Heredó la obligación de defender el muelle y firmó la renovación de la Carta. Durante la tormenta autorizó créditos de emergencia.",
+        "voice": "Habla en términos de obligaciones; escucha antes de comprometerse.",
+        "goal": "Conservar autonomía y recuperar confianza en las cuentas",
+        "routine": "Audiencias al mediodía, revisión de cuentas al alba."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.edda",
+      "name": "Edda Varn",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Señora de la fortaleza"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/oren",
+          "status": "candidato",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.oren",
+        "name": "Oren Varn",
+        "age": 28,
+        "role": "Administrador y heredero",
+        "homeAreaId": "draft.stormkeep.fort",
+        "workplaceId": "draft.stormkeep.fort",
+        "appearance": "Delgado, cabello oscuro, dedos manchados de tinta",
+        "background": "Era joven cuando se repartieron los créditos de la tormenta. Estudió con un escribiente de un puerto meridional y regresó para llevar las cuentas.",
+        "voice": "Preciso, impaciente con las anécdotas.",
+        "goal": "Demostrar que el bastión puede sostenerse con ingresos regulares",
+        "routine": "Revisa depósitos y manifiestos durante el día."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.oren",
+      "name": "Oren Varn",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Administrador y heredero"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/hald",
+          "status": "candidato",
+          "role": "retrato"
+        },
+        {
+          "id": "NPC/hald_legacy",
+          "status": "rechazado",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.hald",
+        "name": "Hald Eirik",
+        "age": 55,
+        "role": "Capitán de la guardia",
+        "homeAreaId": "draft.stormkeep.homes",
+        "workplaceId": "draft.stormkeep.barracks",
+        "appearance": "Nariz torcida, barba cana, casco de hierro abollado y capa forrada de piel",
+        "background": "Veterano de infantería, se retiró de campaña antes de la tormenta en que perdió a su hermano. Volvió al servicio para hacerse cargo de la guardia del bastión.",
+        "voice": "Lacónico, observa manos y equipo antes de hablar.",
+        "goal": "Mantener seguridad sin agotar a sus seis guardias",
+        "routine": "Recibe a los recién llegados en la Puerta Oriental cuando está de turno. Inspecciona el cuartel y los muelles."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.hald",
+      "name": "Hald Eirik",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Capitán de la guardia"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/runa",
+          "status": "candidato",
+          "role": "retrato"
+        },
+        {
+          "id": "NPC/runa_legacy",
+          "status": "rechazado",
+          "role": "retrato"
+        },
+        {
+          "id": "NPC/runa_inicio",
+          "status": "candidate",
+          "role": "Retrato de primera sesión"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.runa",
+        "name": "Runa Eirik",
+        "age": 25,
+        "role": "Barda del Cuervo Gris",
+        "homeAreaId": "draft.stormkeep.homes",
+        "workplaceId": "draft.stormkeep.inn",
+        "appearance": "Pecas, pelo corto, guantes remendados y laúd gastado",
+        "background": "Creció escuchando historias de las caravanas que esperaba su padre, Hald. Aprendió a cantar sus versos en el Cuervo Gris.",
+        "voice": "Curiosa y franca. Pregunta por nombres y detalles antes de convertir una historia en canción.",
+        "goal": "Conservar los nombres y canciones de quienes cruzan el camino oriental",
+        "routine": "Toca al anochecer en el Cuervo Gris y escucha a las tripulaciones y caminantes."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.runa",
+      "name": "Runa Eirik",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Barda del Cuervo Gris"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/bjar",
+          "status": "candidato",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.bjar",
+        "name": "Bjar Kol",
+        "age": 34,
+        "role": "Guardia de los muelles",
+        "homeAreaId": "draft.stormkeep.homes",
+        "workplaceId": "draft.stormkeep.harbor",
+        "appearance": "Ancho, cicatriz en mentón, bufanda verde",
+        "background": "Sirvió como infante de marina. Al dejar las campañas trabajó como estibador con Fen antes de incorporarse a la guardia de los muelles.",
+        "voice": "Directo y áspero en turno. Da instrucciones breves que se oyen por encima del viento.",
+        "goal": "Evitar accidentes y que sus amigos abusen de su puesto",
+        "routine": "Vigila descargas y accesos según turno."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.bjar",
+      "name": "Bjar Kol",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Guardia de los muelles"
+    },
+    {
+      "assets": [],
+      "fields": {
+        "id": "draft.npc.corwin",
+        "name": "Corwin",
+        "age": 39,
+        "role": "Escribiente de tránsito",
+        "homeAreaId": "draft.stormkeep.homes",
+        "workplaceId": "draft.stormkeep.east-gate",
+        "appearance": "Ojos claros, barba corta, carpeta de cuero",
+        "background": "Llegó con una caravana antes de la tormenta y recibió trabajo registrando entregas. Conserva un criterio independiente de la casa Varn.",
+        "voice": "Seco, pide fechas y nombres.",
+        "goal": "Hacer que los acuerdos escritos puedan comprobarse",
+        "routine": "Coteja con Hald los registros de acceso cuando coinciden en la Puerta Oriental."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.corwin",
+      "name": "Corwin",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Escribiente de tránsito"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/vesna",
+          "status": "candidato",
+          "role": "retrato"
+        },
+        {
+          "id": "NPC/vesna_inicio",
+          "status": "candidate",
+          "role": "Retrato de primera sesión"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.vesna",
+        "name": "Vesna Rauk",
+        "age": 44,
+        "role": "Posadera del Cuervo Gris",
+        "homeAreaId": "draft.stormkeep.inn",
+        "workplaceId": "draft.stormkeep.inn",
+        "appearance": "Pelo rojizo canoso, ceja marcada, delantal azul",
+        "background": "Su madre inició el hospedaje para tripulaciones; tras la tormenta Vesna convirtió el salón en dormitorio de damnificados, acumulando deudas.",
+        "voice": "Humor seco, recuerda nombres y costumbres.",
+        "goal": "Mantener el alojamiento abierto y pagar sus deudas",
+        "routine": "Recibe viajeros por la tarde, limpia y compra por la mañana."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.vesna",
+      "name": "Vesna Rauk",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Posadera del Cuervo Gris"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/emil",
+          "status": "candidato",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.emil",
+        "name": "Emil Rauk",
+        "age": 40,
+        "role": "Cocinero y conservador de pescado",
+        "homeAreaId": "draft.stormkeep.inn",
+        "workplaceId": "draft.stormkeep.inn",
+        "appearance": "Barba rojiza, mangas arremangadas, risa fácil",
+        "background": "Hermano de Vesna. Aprendió a ahumar pescado con los Lonn y cocinó para los evacuados de la tormenta.",
+        "voice": "Conversador, evita discutir cuando hay trabajo.",
+        "goal": "Sostener la cocina y enseñar a otros a conservar alimento",
+        "routine": "Cocina antes del alba y al final del día."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.emil",
+      "name": "Emil Rauk",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Cocinero y conservador de pescado"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/toren",
+          "status": "candidato",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.toren",
+        "name": "Toren Brasa",
+        "age": 47,
+        "role": "Herrero",
+        "homeAreaId": "draft.stormkeep.smithy",
+        "workplaceId": "draft.stormkeep.smithy",
+        "appearance": "Manos grandes, delantal chamuscado, cabello oscuro",
+        "background": "Tras la tormenta reparó anclas y herrajes a crédito. Algunos de sus deudores nunca regresaron.",
+        "voice": "Usa metáforas de oficio, desconfía de promesas vagas.",
+        "goal": "Formar a su sobrina Liv y mantener la forja",
+        "routine": "Enciende la forja al alba, recibe encargos por la tarde."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.toren",
+      "name": "Toren Brasa",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Herrero"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/liv",
+          "status": "candidato",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.liv",
+        "name": "Liv Brasa",
+        "age": 21,
+        "role": "Aprendiz de herrería",
+        "homeAreaId": "draft.stormkeep.smithy",
+        "workplaceId": "draft.stormkeep.smithy",
+        "appearance": "Pelo rapado a un lado, brazos manchados, oreja perforada",
+        "background": "Hija de una hermana de Toren que emigró. Se quedó porque disfruta diseñar cierres y mecanismos.",
+        "voice": "Ingeniosa, se ríe cuando se equivoca.",
+        "goal": "Conseguir reconocimiento por su trabajo fino",
+        "routine": "Ayuda en la forja, aprende con Dain en ocasiones acordadas."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.liv",
+      "name": "Liv Brasa",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Aprendiz de herrería"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/aldra",
+          "status": "candidato",
+          "role": "retrato"
+        },
+        {
+          "id": "NPC/aldra_inicio",
+          "status": "candidate",
+          "role": "Retrato de primera sesión"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.aldra",
+        "name": "Aldra Neral",
+        "age": 49,
+        "role": "Mercader y acreedora",
+        "homeAreaId": "draft.stormkeep.homes",
+        "workplaceId": "draft.stormkeep.market",
+        "appearance": "Pelo negro recogido, abrigo ocre, libreta de cuero",
+        "background": "Vendió provisiones a crédito durante la tormenta y recibió garantías de varias familias. Su negocio evitó cierres y también acumuló poder.",
+        "voice": "Calmada, recuerda condiciones con exactitud.",
+        "goal": "Mantener crédito suficiente para importar grano y hierro",
+        "routine": "Supervisa mercancía al alba, mercado y reuniones."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.aldra",
+      "name": "Aldra Neral",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Mercader y acreedora"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/bram",
+          "status": "candidato",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.bram",
+        "name": "Bram Neral",
+        "age": 27,
+        "role": "Comerciante de sal y telas",
+        "homeAreaId": "draft.stormkeep.homes",
+        "workplaceId": "draft.stormkeep.market",
+        "appearance": "Bufanda clara, bigote fino, manos inquietas",
+        "background": "Viajó para aprender rutas propias y regresó al negocio de su madre tras perder un socio.",
+        "voice": "Entusiasta, promete demasiado cuando está nervioso.",
+        "goal": "Construir una actividad independiente de Aldra",
+        "routine": "Organiza pedidos y habla con carreteros."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.bram",
+      "name": "Bram Neral",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Comerciante de sal y telas"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/anja",
+          "status": "candidato",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.anja",
+        "name": "Anja Sorel",
+        "age": 37,
+        "role": "Tejedora y remendadora",
+        "homeAreaId": "draft.stormkeep.homes",
+        "workplaceId": "draft.stormkeep.homes",
+        "appearance": "Trenzas castañas, chal rojo, dedos ágiles",
+        "background": "Reparó velas para la flota dañada y enseñó a otras mujeres y hombres a usar retazos de lana.",
+        "voice": "Práctica, afectuosa sin exagerar.",
+        "goal": "Conservar un oficio útil y accesible",
+        "routine": "Trabaja en casa y entrega encargos al mercado."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.anja",
+      "name": "Anja Sorel",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Tejedora y remendadora"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/dain",
+          "status": "candidato",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.dain",
+        "name": "Dain Sorel",
+        "age": 39,
+        "role": "Carpintero naval",
+        "homeAreaId": "draft.stormkeep.homes",
+        "workplaceId": "draft.stormkeep.shipyard",
+        "appearance": "Alto, barba corta, manos con pequeñas marcas",
+        "background": "Hermano de Anja; ayudó a recuperar embarcaciones tras la tormenta y conoce los daños que no se ven desde cubierta.",
+        "voice": "Paciente, explica con bocetos.",
+        "goal": "Mantener barcos y techos seguros",
+        "routine": "Repara en el varadero según pedidos."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.dain",
+      "name": "Dain Sorel",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Carpintero naval"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/senn",
+          "status": "candidato",
+          "role": "retrato"
+        },
+        {
+          "id": "NPC/senn_legacy",
+          "status": "rechazado",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.senn",
+        "name": "Senn",
+        "age": 62,
+        "role": "Custodio de las Lámparas",
+        "homeAreaId": "draft.stormkeep.shrine",
+        "workplaceId": "draft.stormkeep.shrine",
+        "appearance": "Calvo, barba blanca, túnica remendada",
+        "background": "Ayudó a conservar la lista de damnificados y a mediar en la Carta. Entiende su fe como memoria y acogida.",
+        "voice": "Pausado, usa nombres y preguntas concretas.",
+        "goal": "Conservar memoria de hogares y acuerdos",
+        "routine": "Cuida lámparas, recibe visitas y conserva registros."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.senn",
+      "name": "Senn",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Custodio de las Lámparas"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/nola",
+          "status": "candidato",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.nola",
+        "name": "Nola Vey",
+        "age": 23,
+        "role": "Aprendiz del santuario",
+        "homeAreaId": "draft.stormkeep.shrine",
+        "workplaceId": "draft.stormkeep.shrine",
+        "appearance": "Cabello rizado, manos con cera, voz clara",
+        "background": "Hija de Orik. Eligió aprender lectura con Senn después de ayudar a las familias del puerto.",
+        "voice": "Inquieta, pregunta incluso a personas mayores.",
+        "goal": "Ordenar registros y enseñar lectura a otros",
+        "routine": "Copia registros y ayuda en acogida."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.nola",
+      "name": "Nola Vey",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Aprendiz del santuario"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/isveld",
+          "status": "aprobado-usuario",
+          "role": "retrato"
+        },
+        {
+          "id": "NPC/isveld_inicio",
+          "status": "candidate",
+          "role": "Retrato de primera sesión"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.isveld",
+        "name": "Isveld",
+        "age": 43,
+        "role": "Curandera",
+        "homeAreaId": "draft.stormkeep.hospice",
+        "workplaceId": "draft.stormkeep.hospice",
+        "appearance": "Cabello ceniza, abrigo gris, manos delgadas",
+        "background": "Sanadora itinerante que se instaló tras atender heridos de la tormenta. El hospicio funciona en una vivienda adaptada.",
+        "voice": "Amable, precisa, reconoce límites.",
+        "goal": "Mantener cuidados seguros y abastecer remedios",
+        "routine": "Visitas y atención diurna, descanso alternado con Tessa."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.isveld",
+      "name": "Isveld",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Curandera"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/tessa",
+          "status": "candidato",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.tessa",
+        "name": "Tessa Kol",
+        "age": 52,
+        "role": "Partera y cuidadora",
+        "homeAreaId": "draft.stormkeep.homes",
+        "workplaceId": "draft.stormkeep.hospice",
+        "appearance": "Rostro redondo, pelo entrecano, bolsa de paños",
+        "background": "Madre de Bjar; ayudó a hospedar desplazados y conoce dificultades domésticas que no llegan al registro.",
+        "voice": "Franca, pregunta por comida, familia y agua.",
+        "goal": "Sostener visitas domésticas y prevenir enfermedades",
+        "routine": "Visitas acordadas y apoyo al hospicio."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.tessa",
+      "name": "Tessa Kol",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Partera y cuidadora"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/orik",
+          "status": "candidato",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.orik",
+        "name": "Orik Vey",
+        "age": 55,
+        "role": "Maestro de puerto",
+        "homeAreaId": "draft.stormkeep.homes",
+        "workplaceId": "draft.stormkeep.harbor",
+        "appearance": "Pelo gris, nariz curtida, bastón de trabajo",
+        "background": "Durante la tormenta perdió su barco y se encargó de organizar rescates. Padre de Nola.",
+        "voice": "Autoritario sin gritar, distingue carga y tripulación.",
+        "goal": "Mantener atraques seguros y registrar salidas",
+        "routine": "Inspecciona amarres y movimientos portuarios."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.orik",
+      "name": "Orik Vey",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Maestro de puerto"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/kael",
+          "status": "candidato",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.kael",
+        "name": "Kael Lonn",
+        "age": 35,
+        "role": "Pescador",
+        "homeAreaId": "draft.stormkeep.homes",
+        "workplaceId": "draft.stormkeep.harbor",
+        "appearance": "Piel curtida, pelo rubio oscuro, capa impermeabilizada",
+        "background": "Su hogar perdió parte del equipo en la tormenta y obtuvo un préstamo de Aldra; comparte trabajo con Mira.",
+        "voice": "Optimista prudente, habla de mareas.",
+        "goal": "Pagar el préstamo sin arriesgar la tripulación",
+        "routine": "Pesca cuando es viable, ayuda a reparar redes en tierra."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.kael",
+      "name": "Kael Lonn",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Pescador"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/mira",
+          "status": "candidato",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.mira",
+        "name": "Mira Lonn",
+        "age": 34,
+        "role": "Redera y vendedora de pescado",
+        "homeAreaId": "draft.stormkeep.homes",
+        "workplaceId": "draft.stormkeep.market",
+        "appearance": "Pelo rojo oscuro, pañuelo azul, manos ásperas",
+        "background": "Pareja de Kael y hermana de Yarik. Durante la recuperación asumió parte de la venta y las cuentas familiares.",
+        "voice": "Incisiva, negocia con humor.",
+        "goal": "Diversificar ingresos y conservar el hogar",
+        "routine": "Remienda por la mañana, vende en mercado si hay producto."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.mira",
+      "name": "Mira Lonn",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Redera y vendedora de pescado"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/jorun",
+          "status": "candidato",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.jorun",
+        "name": "Jorun Skeld",
+        "age": 45,
+        "role": "Patrón de embarcación mercante",
+        "homeAreaId": "draft.stormkeep.homes",
+        "workplaceId": "draft.stormkeep.harbor",
+        "appearance": "Barba oscura, abrigo pesado, anillo sencillo",
+        "background": "Trajo grano durante el invierno que originó la Carta siendo aprendiz. Ahora dirige un pequeño negocio marítimo.",
+        "voice": "Calmo, describe riesgos sin grandilocuencia.",
+        "goal": "Mantener trabajo para su tripulación",
+        "routine": "Revisa carga y reparaciones cuando está en puerto."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.jorun",
+      "name": "Jorun Skeld",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Patrón de embarcación mercante"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/fen",
+          "status": "candidato",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.fen",
+        "name": "Fen Arvik",
+        "age": 24,
+        "role": "Estibador",
+        "homeAreaId": "draft.stormkeep.homes",
+        "workplaceId": "draft.stormkeep.harbor",
+        "appearance": "Delgado, pelo revuelto, manos callosas",
+        "background": "Llegó con su familia desde el interior después de la tormenta; vive con un pariente de Roan y busca un hogar propio.",
+        "voice": "Reservado, se anima al hablar de caminos.",
+        "goal": "Conseguir trabajo regular y derecho de participación local",
+        "routine": "Trabaja según jornadas disponibles."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.fen",
+      "name": "Fen Arvik",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Estibador"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/sava",
+          "status": "candidato",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.sava",
+        "name": "Sava Renn",
+        "age": 31,
+        "role": "Guía de navegación",
+        "homeAreaId": "draft.stormkeep.homes",
+        "workplaceId": "draft.stormkeep.harbor",
+        "appearance": "Pelo negro corto, mirada atenta, abrigo verde",
+        "background": "Aprendió a leer corrientes con Orik antes de la tormenta. Rechaza relatos de heroísmo que ignoran el peligro.",
+        "voice": "Distingue observaciones de conjeturas.",
+        "goal": "Ganarse contratos por navegación prudente",
+        "routine": "Consulta condiciones y guía cuando tiene contrato."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.sava",
+      "name": "Sava Renn",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Guía de navegación"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/hessa",
+          "status": "candidato",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.hessa",
+        "name": "Hessa Dorn",
+        "age": 50,
+        "role": "Agricultora y representante de huertas",
+        "homeAreaId": "draft.stormkeep.farms",
+        "workplaceId": "draft.stormkeep.farms",
+        "appearance": "Trenzas grises, botas de barro, manos fuertes",
+        "background": "Su familia aportó grano al depósito durante el gran invierno. Desde entonces exige que la Carta reconozca la labor de las huertas.",
+        "voice": "Directa, habla de estaciones y trabajo.",
+        "goal": "Conservar semillas, animales y voz de los hogares productores",
+        "routine": "Cuida huertas y participa en reuniones cuando se convocan."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.hessa",
+      "name": "Hessa Dorn",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Agricultora y representante de huertas"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/nils",
+          "status": "candidato",
+          "role": "retrato"
+        },
+        {
+          "id": "NPC/nils_inicio",
+          "status": "candidate",
+          "role": "Retrato de primera sesión"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.nils",
+        "name": "Nils Dorn",
+        "age": 26,
+        "role": "Carretero",
+        "homeAreaId": "draft.stormkeep.farms",
+        "workplaceId": "draft.stormkeep.market",
+        "appearance": "Chaleco de cuero, cabello claro, hombros anchos",
+        "background": "Hijo de Hessa, aprendió a transportar mercancías reparando el carro familiar con Toren.",
+        "voice": "Animado, impaciente ante esperas.",
+        "goal": "Ahorrar para transporte propio",
+        "routine": "Realiza encargos autorizados y descansa en hogar."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.nils",
+      "name": "Nils Dorn",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Carretero"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/elin",
+          "status": "candidato",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.elin",
+        "name": "Elin Dorn",
+        "age": 32,
+        "role": "Panadera",
+        "homeAreaId": "draft.stormkeep.homes",
+        "workplaceId": "draft.stormkeep.bakery",
+        "appearance": "Pelo recogido, delantal con harina, mejillas rosadas",
+        "background": "Hermana de Nils. Abrió el horno con apoyo de su madre y crédito de Aldra tras el invierno de escasez.",
+        "voice": "Cálida, precisa en medidas.",
+        "goal": "Mantener pan asequible y cubrir el préstamo",
+        "routine": "Amasa antes del alba y vende por la mañana."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.elin",
+      "name": "Elin Dorn",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Panadera"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/roan",
+          "status": "candidato",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.roan",
+        "name": "Roan Arvik",
+        "age": 46,
+        "role": "Leñador y carbonero",
+        "homeAreaId": "draft.stormkeep.homes",
+        "workplaceId": "draft.stormkeep.woodlot",
+        "appearance": "Barba oscura entrecana, chaqueta de piel",
+        "background": "Tío de Fen; se instaló junto al bosque antes de que su familia llegara. Ayudó a reconstruir techos.",
+        "voice": "Taciturno, prefiere acuerdos simples.",
+        "goal": "Mantener trabajo forestal sostenible y sostener a su familia",
+        "routine": "Corta y prepara combustible cuando es viable."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.roan",
+      "name": "Roan Arvik",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Leñador y carbonero"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/varek",
+          "status": "candidato",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.varek",
+        "name": "Varek Oss",
+        "age": 42,
+        "role": "Revendedor de materiales recuperados",
+        "homeAreaId": "draft.stormkeep.homes",
+        "workplaceId": "draft.stormkeep.market",
+        "appearance": "Cabello lacio, guantes gastados, sonrisa contenida",
+        "background": "Empezó rescatando piezas de embarcaciones abandonadas tras el temporal. Negocia materiales que otros no pueden comprar nuevos.",
+        "voice": "Cordial, evasivo ante preguntas personales.",
+        "goal": "Mantener clientela para materiales baratos",
+        "routine": "Compra y vende en mercado, visita talleres por encargo."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.varek",
+      "name": "Varek Oss",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Revendedor de materiales recuperados"
+    },
+    {
+      "assets": [
+        {
+          "id": "NPC/kestrel",
+          "status": "candidato",
+          "role": "retrato"
+        }
+      ],
+      "fields": {
+        "id": "draft.npc.kestrel",
+        "name": "Kestrel Vale",
+        "age": 30,
+        "role": "Guía terrestre",
+        "homeAreaId": "draft.stormkeep.homes",
+        "workplaceId": "draft.stormkeep.east-gate",
+        "appearance": "Capa parda, cabello negro con mechón claro",
+        "background": "Conoció el camino oriental acompañando a caravanas y perdió un contrato tras negarse a viajar durante una nevada.",
+        "voice": "Irónica, habla de referencias del terreno.",
+        "goal": "Conseguir trabajo independiente y mantener su reputación",
+        "routine": "Consulta viajeros y prepara salidas bajo contrato."
+      },
+      "sources": [
+        {
+          "label": "Población v0.2",
+          "href": "/docs/stormkeep-population-v02.md"
+        }
+      ],
+      "id": "draft.npc.kestrel",
+      "name": "Kestrel Vale",
+      "type": "npc",
+      "status": "Propuesta",
+      "summary": "Guía terrestre"
+    },
+    {
+      "assets": [],
+      "fields": {
+        "description": "Puertos, acantilados, ríos costeros y navegación; sal, pescado, reparación naval.",
+        "tension": "Rivalidad por fondeaderos y rescate de barcos."
+      },
+      "sources": [
+        {
+          "label": "Biblia del mundo v0.1",
+          "href": "/docs/world-bible-v01.md"
+        }
+      ],
+      "id": "draft.region.storm-coasts",
+      "name": "Costas de la Tormenta",
+      "type": "world",
+      "status": "Propuesta",
+      "summary": "Puertos, acantilados, ríos costeros y navegación; sal, pescado, reparación naval."
+    },
+    {
+      "assets": [],
+      "fields": {
+        "description": "Cuencas fluviales, juncos, pesca, cultivo en terrenos elevados.",
+        "tension": "Derecho a cruzar, crecidas, enfermedades y acceso de migrantes."
+      },
+      "sources": [
+        {
+          "label": "Biblia del mundo v0.1",
+          "href": "/docs/world-bible-v01.md"
+        }
+      ],
+      "id": "draft.region.south-wetlands",
+      "name": "Humedales del Sur",
+      "type": "world",
+      "status": "Propuesta",
+      "summary": "Cuencas fluviales, juncos, pesca, cultivo en terrenos elevados."
+    },
+    {
+      "assets": [],
+      "fields": {
+        "description": "Aridez, oasis y depósitos minerales; comercio de caravanas. Origen de la ceniza sin definir.",
+        "tension": "Control de pozos, guías y seguridad de rutas."
+      },
+      "sources": [
+        {
+          "label": "Biblia del mundo v0.1",
+          "href": "/docs/world-bible-v01.md"
+        }
+      ],
+      "id": "draft.region.ash-deserts",
+      "name": "Desiertos de Ceniza",
+      "type": "world",
+      "status": "Propuesta",
+      "summary": "Aridez, oasis y depósitos minerales; comercio de caravanas. Origen de la ceniza sin definir."
+    },
+    {
+      "assets": [],
+      "fields": {
+        "description": "Zonas relativamente templadas, manufacturas, graneros, mercados y crédito.",
+        "tension": "Exportar reservas o proteger precios y población local."
+      },
+      "sources": [
+        {
+          "label": "Biblia del mundo v0.1",
+          "href": "/docs/world-bible-v01.md"
+        }
+      ],
+      "id": "draft.region.midday-cities",
+      "name": "Ciudades del Mediodía",
+      "type": "world",
+      "status": "Propuesta",
+      "summary": "Zonas relativamente templadas, manufacturas, graneros, mercados y crédito."
+    },
+    {
+      "assets": [],
+      "fields": {
+        "description": "Muelles, permisos y almacenes; depende del abastecimiento y de tripulaciones",
+        "tension": "Reservas locales frente a auxilio exterior"
+      },
+      "sources": [
+        {
+          "label": "Biblia del mundo v0.1",
+          "href": "/docs/world-bible-v01.md"
+        }
+      ],
+      "id": "draft.faction.harbor-council",
+      "name": "Consejo del Puerto",
+      "type": "faction",
+      "status": "Propuesta",
+      "summary": "Muelles, permisos y almacenes; depende del abastecimiento y de tripulaciones"
+    },
+    {
+      "assets": [],
+      "fields": {
+        "description": "Vigilancia, refugios y acceso a cruces; capacidad limitada por personal y clima",
+        "tension": "Seguridad frente a libre circulación"
+      },
+      "sources": [
+        {
+          "label": "Biblia del mundo v0.1",
+          "href": "/docs/world-bible-v01.md"
+        }
+      ],
+      "id": "draft.faction.road-wardens",
+      "name": "Custodios de los Caminos",
+      "type": "faction",
+      "status": "Propuesta",
+      "summary": "Vigilancia, refugios y acceso a cruces; capacidad limitada por personal y clima"
+    },
+    {
+      "assets": [],
+      "fields": {
+        "description": "Ayuda mutua, provisiones y contactos; sin autoridad universal",
+        "tension": "Reciprocidad frente a necesidad extrema"
+      },
+      "sources": [
+        {
+          "label": "Biblia del mundo v0.1",
+          "href": "/docs/world-bible-v01.md"
+        }
+      ],
+      "id": "draft.faction.hearth-compact",
+      "name": "Pacto de los Hogares",
+      "type": "faction",
+      "status": "Propuesta",
+      "summary": "Ayuda mutua, provisiones y contactos; sin autoridad universal"
+    },
+    {
+      "assets": [
+        {
+          "id": "PC/paladin",
+          "status": "original",
+          "role": "Retrato"
+        }
+      ],
+      "fields": {
+        "preset": {
+          "id": "paladin",
+          "name": "Paladín",
+          "role": "Protección, resistencia y combate frontal",
+          "portrait": "/docs/art-references/personajes-20261125/assets/01_Paladin/personaje.png",
+          "face": "/docs/art-references/personajes-20261125/assets/01_Paladin/rostro_frente_y_perfil.png",
+          "professional": [
+            {
+              "id": "devotion",
+              "name": "Devoción",
+              "value": 55,
+              "status": "pending"
+            },
+            {
+              "id": "exhort",
+              "name": "Exhortación",
+              "value": 45,
+              "status": "pending"
+            }
+          ],
+          "notes": "Sin escudo ni casco añadidos. Devoción y poderes sagrados aún no resueltos por el motor."
+        },
+        "sheet": {
+          "schemaVersion": 1,
+          "id": "paladin",
+          "name": "Paladín",
+          "kind": "character",
+          "speciesId": "human",
+          "profession": "Guerrero juramentado",
+          "rank": "starting-preset",
+          "source": "PocketDM stormkeep-start-v1; características y entrenamiento originales, equipo provisional inspirado en Mythras; ilustraciones del ZIP del usuario. Sin efectos mágicos o raciales no implementados.",
+          "attributes": {
+            "STR": 15,
+            "CON": 14,
+            "SIZ": 13,
+            "DEX": 11,
+            "INT": 10,
+            "POW": 12,
+            "CHA": 11
+          },
+          "skills": {
+            "combat": 65,
+            "athletics": 45,
+            "brawn": 55,
+            "endurance": 65,
+            "evade": 40,
+            "perception": 45,
+            "stealth": 26,
+            "willpower": 60,
+            "influence": 55,
+            "track": 25,
+            "firstAid": 40
+          },
+          "style": {
+            "id": "oathblade",
+            "name": "Espada juramentada",
+            "weaponIds": [
+              "longsword"
+            ]
+          },
+          "baseMove": 6,
+          "magicPoints": 12,
+          "damageModifier": {
+            "count": 1,
+            "sides": 2,
+            "sign": 1
+          },
+          "locations": [
+            {
+              "id": "right-leg",
+              "name": "Pierna derecha",
+              "from": 1,
+              "to": 3,
+              "maxHp": 6,
+              "hp": 6,
+              "naturalAP": 0,
+              "vital": false,
+              "limb": true,
+              "disabled": false
+            },
+            {
+              "id": "left-leg",
+              "name": "Pierna izquierda",
+              "from": 4,
+              "to": 6,
+              "maxHp": 6,
+              "hp": 6,
+              "naturalAP": 0,
+              "vital": false,
+              "limb": true,
+              "disabled": false
+            },
+            {
+              "id": "abdomen",
+              "name": "Abdomen",
+              "from": 7,
+              "to": 9,
+              "maxHp": 7,
+              "hp": 7,
+              "naturalAP": 0,
+              "vital": true,
+              "limb": false,
+              "disabled": false
+            },
+            {
+              "id": "chest",
+              "name": "Pecho",
+              "from": 10,
+              "to": 12,
+              "maxHp": 8,
+              "hp": 8,
+              "naturalAP": 0,
+              "vital": true,
+              "limb": false,
+              "disabled": false
+            },
+            {
+              "id": "right-arm",
+              "name": "Brazo derecho",
+              "from": 13,
+              "to": 15,
+              "maxHp": 5,
+              "hp": 5,
+              "naturalAP": 0,
+              "vital": false,
+              "limb": true,
+              "disabled": false
+            },
+            {
+              "id": "left-arm",
+              "name": "Brazo izquierdo",
+              "from": 16,
+              "to": 18,
+              "maxHp": 5,
+              "hp": 5,
+              "naturalAP": 0,
+              "vital": false,
+              "limb": true,
+              "disabled": false
+            },
+            {
+              "id": "head",
+              "name": "Cabeza",
+              "from": 19,
+              "to": 20,
+              "maxHp": 6,
+              "hp": 6,
+              "naturalAP": 0,
+              "vital": true,
+              "limb": false,
+              "disabled": false
+            }
+          ],
+          "inventory": [
+            {
+              "id": "longsword",
+              "kind": "weapon",
+              "name": "Espada larga",
+              "damage": {
+                "count": 1,
+                "sides": 10,
+                "bonus": 0
+              },
+              "size": "large",
+              "reach": "long",
+              "hands": 2,
+              "enc": 2,
+              "ap": 6,
+              "maxHp": 12,
+              "hp": 12,
+              "natural": false,
+              "quantity": 1,
+              "carried": true
+            },
+            {
+              "id": "plate-cuirass",
+              "kind": "armor",
+              "name": "Peto de placas",
+              "enc": 6,
+              "ap": 6,
+              "coverage": [
+                "chest",
+                "abdomen"
+              ],
+              "maxHp": 12,
+              "hp": 12,
+              "worn": true,
+              "quantity": 1,
+              "carried": true
+            },
+            {
+              "id": "plate-limbs",
+              "kind": "armor",
+              "name": "Protecciones metálicas",
+              "enc": 8,
+              "ap": 5,
+              "coverage": [
+                "right-arm",
+                "left-arm",
+                "right-leg",
+                "left-leg"
+              ],
+              "maxHp": 10,
+              "hp": 10,
+              "worn": true,
+              "quantity": 1,
+              "carried": true
+            },
+            {
+              "id": "holy-symbol",
+              "kind": "gear",
+              "name": "Símbolo sagrado",
+              "enc": 0,
+              "quantity": 1,
+              "carried": true
+            },
+            {
+              "id": "cloak",
+              "kind": "gear",
+              "name": "Capa roja",
+              "enc": 1,
+              "quantity": 1,
+              "carried": true
+            },
+            {
+              "id": "pack",
+              "kind": "gear",
+              "name": "Mochila",
+              "enc": 1,
+              "quantity": 1,
+              "carried": true
+            },
+            {
+              "id": "rations",
+              "kind": "gear",
+              "name": "Raciones",
+              "enc": 1,
+              "quantity": 3,
+              "carried": true
+            },
+            {
+              "id": "water",
+              "kind": "gear",
+              "name": "Cantimplora llena",
+              "enc": 1,
+              "quantity": 1,
+              "carried": true
+            },
+            {
+              "id": "rope",
+              "kind": "gear",
+              "name": "Soga",
+              "enc": 1,
+              "quantity": 1,
+              "carried": true
+            }
+          ],
+          "equippedWeaponId": "longsword",
+          "abilities": [],
+          "pendingAbilities": [
+            "theism"
+          ],
+          "state": {
+            "fatigue": 0,
+            "bleeding": false,
+            "prone": false,
+            "stunTurns": 0,
+            "incapacitated": false,
+            "unconscious": false,
+            "fear": "none",
+            "cold": "none",
+            "extraLoad": 0,
+            "light": "normal"
+          }
+        }
+      },
+      "sources": [
+        {
+          "label": "Personajes iniciales",
+          "href": "/docs/stormkeep-starting-roster.md"
+        }
+      ],
+      "id": "preset.paladin",
+      "name": "Paladín",
+      "type": "pc",
+      "status": "Personaje inicial · plantilla",
+      "summary": "Protección, resistencia y combate frontal"
+    },
+    {
+      "assets": [],
+      "fields": {
+        "variants": [
+          {
+            "presetId": "preset.paladin",
+            "id": "longsword",
+            "kind": "weapon",
+            "name": "Espada larga",
+            "damage": {
+              "count": 1,
+              "sides": 10,
+              "bonus": 0
+            },
+            "size": "large",
+            "reach": "long",
+            "hands": 2,
+            "enc": 2,
+            "ap": 6,
+            "maxHp": 12,
+            "hp": 12,
+            "natural": false,
+            "quantity": 1,
+            "carried": true
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Personajes iniciales",
+          "href": "/docs/stormkeep-starting-roster.md"
+        }
+      ],
+      "id": "equipment.longsword",
+      "name": "Espada larga",
+      "type": "object",
+      "status": "Equipo de plantilla",
+      "summary": "weapon"
+    },
+    {
+      "assets": [],
+      "fields": {
+        "variants": [
+          {
+            "presetId": "preset.paladin",
+            "id": "plate-cuirass",
+            "kind": "armor",
+            "name": "Peto de placas",
+            "enc": 6,
+            "ap": 6,
+            "coverage": [
+              "chest",
+              "abdomen"
+            ],
+            "maxHp": 12,
+            "hp": 12,
+            "worn": true,
+            "quantity": 1,
+            "carried": true
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Personajes iniciales",
+          "href": "/docs/stormkeep-starting-roster.md"
+        }
+      ],
+      "id": "equipment.plate-cuirass",
+      "name": "Peto de placas",
+      "type": "object",
+      "status": "Equipo de plantilla",
+      "summary": "armor"
+    },
+    {
+      "assets": [],
+      "fields": {
+        "variants": [
+          {
+            "presetId": "preset.paladin",
+            "id": "plate-limbs",
+            "kind": "armor",
+            "name": "Protecciones metálicas",
+            "enc": 8,
+            "ap": 5,
+            "coverage": [
+              "right-arm",
+              "left-arm",
+              "right-leg",
+              "left-leg"
+            ],
+            "maxHp": 10,
+            "hp": 10,
+            "worn": true,
+            "quantity": 1,
+            "carried": true
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Personajes iniciales",
+          "href": "/docs/stormkeep-starting-roster.md"
+        }
+      ],
+      "id": "equipment.plate-limbs",
+      "name": "Protecciones metálicas",
+      "type": "object",
+      "status": "Equipo de plantilla",
+      "summary": "armor"
+    },
+    {
+      "assets": [],
+      "fields": {
+        "variants": [
+          {
+            "presetId": "preset.paladin",
+            "id": "holy-symbol",
+            "kind": "gear",
+            "name": "Símbolo sagrado",
+            "enc": 0,
+            "quantity": 1,
+            "carried": true
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Personajes iniciales",
+          "href": "/docs/stormkeep-starting-roster.md"
+        }
+      ],
+      "id": "equipment.holy-symbol",
+      "name": "Símbolo sagrado",
+      "type": "object",
+      "status": "Equipo de plantilla",
+      "summary": "gear"
+    },
+    {
+      "assets": [],
+      "fields": {
+        "variants": [
+          {
+            "presetId": "preset.paladin",
+            "id": "cloak",
+            "kind": "gear",
+            "name": "Capa roja",
+            "enc": 1,
+            "quantity": 1,
+            "carried": true
+          },
+          {
+            "presetId": "preset.rogue",
+            "id": "cloak",
+            "kind": "gear",
+            "name": "Capa",
+            "enc": 1,
+            "quantity": 1,
+            "carried": true
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Personajes iniciales",
+          "href": "/docs/stormkeep-starting-roster.md"
+        }
+      ],
+      "id": "equipment.cloak",
+      "name": "Capa roja",
+      "type": "object",
+      "status": "Equipo de plantilla",
+      "summary": "gear"
+    },
+    {
+      "assets": [],
+      "fields": {
+        "variants": [
+          {
+            "presetId": "preset.paladin",
+            "id": "pack",
+            "kind": "gear",
+            "name": "Mochila",
+            "enc": 1,
+            "quantity": 1,
+            "carried": true
+          },
+          {
+            "presetId": "preset.rogue",
+            "id": "pack",
+            "kind": "gear",
+            "name": "Mochila",
+            "enc": 1,
+            "quantity": 1,
+            "carried": true
+          },
+          {
+            "presetId": "preset.mage",
+            "id": "pack",
+            "kind": "gear",
+            "name": "Mochila",
+            "enc": 1,
+            "quantity": 1,
+            "carried": true
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Personajes iniciales",
+          "href": "/docs/stormkeep-starting-roster.md"
+        }
+      ],
+      "id": "equipment.pack",
+      "name": "Mochila",
+      "type": "object",
+      "status": "Equipo de plantilla",
+      "summary": "gear"
+    },
+    {
+      "assets": [],
+      "fields": {
+        "variants": [
+          {
+            "presetId": "preset.paladin",
+            "id": "rations",
+            "kind": "gear",
+            "name": "Raciones",
+            "enc": 1,
+            "quantity": 3,
+            "carried": true
+          },
+          {
+            "presetId": "preset.rogue",
+            "id": "rations",
+            "kind": "gear",
+            "name": "Raciones",
+            "enc": 1,
+            "quantity": 3,
+            "carried": true
+          },
+          {
+            "presetId": "preset.mage",
+            "id": "rations",
+            "kind": "gear",
+            "name": "Raciones",
+            "enc": 1,
+            "quantity": 3,
+            "carried": true
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Personajes iniciales",
+          "href": "/docs/stormkeep-starting-roster.md"
+        }
+      ],
+      "id": "equipment.rations",
+      "name": "Raciones",
+      "type": "object",
+      "status": "Equipo de plantilla",
+      "summary": "gear"
+    },
+    {
+      "assets": [],
+      "fields": {
+        "variants": [
+          {
+            "presetId": "preset.paladin",
+            "id": "water",
+            "kind": "gear",
+            "name": "Cantimplora llena",
+            "enc": 1,
+            "quantity": 1,
+            "carried": true
+          },
+          {
+            "presetId": "preset.rogue",
+            "id": "water",
+            "kind": "gear",
+            "name": "Cantimplora llena",
+            "enc": 1,
+            "quantity": 1,
+            "carried": true
+          },
+          {
+            "presetId": "preset.mage",
+            "id": "water",
+            "kind": "gear",
+            "name": "Cantimplora llena",
+            "enc": 1,
+            "quantity": 1,
+            "carried": true
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Personajes iniciales",
+          "href": "/docs/stormkeep-starting-roster.md"
+        }
+      ],
+      "id": "equipment.water",
+      "name": "Cantimplora llena",
+      "type": "object",
+      "status": "Equipo de plantilla",
+      "summary": "gear"
+    },
+    {
+      "assets": [],
+      "fields": {
+        "variants": [
+          {
+            "presetId": "preset.paladin",
+            "id": "rope",
+            "kind": "gear",
+            "name": "Soga",
+            "enc": 1,
+            "quantity": 1,
+            "carried": true
+          },
+          {
+            "presetId": "preset.rogue",
+            "id": "rope",
+            "kind": "gear",
+            "name": "Soga",
+            "enc": 1,
+            "quantity": 1,
+            "carried": true
+          },
+          {
+            "presetId": "preset.mage",
+            "id": "rope",
+            "kind": "gear",
+            "name": "Soga",
+            "enc": 1,
+            "quantity": 1,
+            "carried": true
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Personajes iniciales",
+          "href": "/docs/stormkeep-starting-roster.md"
+        }
+      ],
+      "id": "equipment.rope",
+      "name": "Soga",
+      "type": "object",
+      "status": "Equipo de plantilla",
+      "summary": "gear"
+    },
+    {
+      "assets": [
+        {
+          "id": "PC/drow",
+          "status": "original",
+          "role": "Retrato"
+        }
+      ],
+      "fields": {
+        "preset": {
+          "id": "rogue",
+          "name": "Pícaro",
+          "role": "Sigilo, percepción, movilidad y precisión",
+          "portrait": "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/personaje.png",
+          "face": "/docs/art-references/personajes-20261125/assets/02_Elfo_oscuro/rostro_frente_y_perfil.png",
+          "professional": [
+            {
+              "id": "lockpicking",
+              "name": "Cerrajería",
+              "value": 60,
+              "status": "pending"
+            },
+            {
+              "id": "sleight",
+              "name": "Prestidigitación",
+              "value": 60,
+              "status": "pending"
+            },
+            {
+              "id": "streetwise",
+              "name": "Callejeo",
+              "value": 50,
+              "status": "pending"
+            }
+          ],
+          "notes": "Ambas cimitarras existen en inventario; el motor actual equipa una. No se añade arco ni bonificación racial automática."
+        },
+        "sheet": {
+          "schemaVersion": 1,
+          "id": "rogue",
+          "name": "Pícaro",
+          "kind": "character",
+          "speciesId": "dark-elf",
+          "profession": "Explorador y ladrón",
+          "rank": "starting-preset",
+          "source": "PocketDM stormkeep-start-v1; características y entrenamiento originales, equipo provisional inspirado en Mythras; ilustraciones del ZIP del usuario. Sin efectos mágicos o raciales no implementados.",
+          "attributes": {
+            "STR": 11,
+            "CON": 11,
+            "SIZ": 11,
+            "DEX": 16,
+            "INT": 14,
+            "POW": 12,
+            "CHA": 11
+          },
+          "skills": {
+            "combat": 60,
+            "athletics": 65,
+            "brawn": 32,
+            "endurance": 40,
+            "evade": 70,
+            "perception": 65,
+            "stealth": 75,
+            "willpower": 40,
+            "influence": 45,
+            "track": 55,
+            "firstAid": 35
+          },
+          "style": {
+            "id": "twin-scimitars",
+            "name": "Cimitarras gemelas",
+            "weaponIds": [
+              "scimitar-right",
+              "scimitar-left"
+            ]
+          },
+          "baseMove": 6,
+          "magicPoints": 12,
+          "damageModifier": {
+            "count": 0,
+            "sides": 2,
+            "sign": 0
+          },
+          "locations": [
+            {
+              "id": "right-leg",
+              "name": "Pierna derecha",
+              "from": 1,
+              "to": 3,
+              "maxHp": 5,
+              "hp": 5,
+              "naturalAP": 0,
+              "vital": false,
+              "limb": true,
+              "disabled": false
+            },
+            {
+              "id": "left-leg",
+              "name": "Pierna izquierda",
+              "from": 4,
+              "to": 6,
+              "maxHp": 5,
+              "hp": 5,
+              "naturalAP": 0,
+              "vital": false,
+              "limb": true,
+              "disabled": false
+            },
+            {
+              "id": "abdomen",
+              "name": "Abdomen",
+              "from": 7,
+              "to": 9,
+              "maxHp": 6,
+              "hp": 6,
+              "naturalAP": 0,
+              "vital": true,
+              "limb": false,
+              "disabled": false
+            },
+            {
+              "id": "chest",
+              "name": "Pecho",
+              "from": 10,
+              "to": 12,
+              "maxHp": 7,
+              "hp": 7,
+              "naturalAP": 0,
+              "vital": true,
+              "limb": false,
+              "disabled": false
+            },
+            {
+              "id": "right-arm",
+              "name": "Brazo derecho",
+              "from": 13,
+              "to": 15,
+              "maxHp": 4,
+              "hp": 4,
+              "naturalAP": 0,
+              "vital": false,
+              "limb": true,
+              "disabled": false
+            },
+            {
+              "id": "left-arm",
+              "name": "Brazo izquierdo",
+              "from": 16,
+              "to": 18,
+              "maxHp": 4,
+              "hp": 4,
+              "naturalAP": 0,
+              "vital": false,
+              "limb": true,
+              "disabled": false
+            },
+            {
+              "id": "head",
+              "name": "Cabeza",
+              "from": 19,
+              "to": 20,
+              "maxHp": 5,
+              "hp": 5,
+              "naturalAP": 0,
+              "vital": true,
+              "limb": false,
+              "disabled": false
+            }
+          ],
+          "inventory": [
+            {
+              "id": "scimitar-right",
+              "kind": "weapon",
+              "name": "Cimitarra derecha",
+              "damage": {
+                "count": 1,
+                "sides": 8,
+                "bonus": 0
+              },
+              "size": "medium",
+              "reach": "medium",
+              "hands": 1,
+              "enc": 2,
+              "ap": 6,
+              "maxHp": 10,
+              "hp": 10,
+              "natural": false,
+              "quantity": 1,
+              "carried": true
+            },
+            {
+              "id": "scimitar-left",
+              "kind": "weapon",
+              "name": "Cimitarra izquierda",
+              "damage": {
+                "count": 1,
+                "sides": 8,
+                "bonus": 0
+              },
+              "size": "medium",
+              "reach": "medium",
+              "hands": 1,
+              "enc": 2,
+              "ap": 6,
+              "maxHp": 10,
+              "hp": 10,
+              "natural": false,
+              "quantity": 1,
+              "carried": true
+            },
+            {
+              "id": "hardened-leather",
+              "kind": "armor",
+              "name": "Cuero endurecido",
+              "enc": 5,
+              "ap": 2,
+              "coverage": [
+                "chest",
+                "abdomen",
+                "right-arm",
+                "left-arm",
+                "right-leg",
+                "left-leg"
+              ],
+              "maxHp": 8,
+              "hp": 8,
+              "worn": true,
+              "quantity": 1,
+              "carried": true
+            },
+            {
+              "id": "cloak",
+              "kind": "gear",
+              "name": "Capa",
+              "enc": 1,
+              "quantity": 1,
+              "carried": true
+            },
+            {
+              "id": "pack",
+              "kind": "gear",
+              "name": "Mochila",
+              "enc": 1,
+              "quantity": 1,
+              "carried": true
+            },
+            {
+              "id": "rations",
+              "kind": "gear",
+              "name": "Raciones",
+              "enc": 1,
+              "quantity": 3,
+              "carried": true
+            },
+            {
+              "id": "water",
+              "kind": "gear",
+              "name": "Cantimplora llena",
+              "enc": 1,
+              "quantity": 1,
+              "carried": true
+            },
+            {
+              "id": "rope",
+              "kind": "gear",
+              "name": "Soga",
+              "enc": 1,
+              "quantity": 1,
+              "carried": true
+            }
+          ],
+          "equippedWeaponId": "scimitar-right",
+          "abilities": [],
+          "pendingAbilities": [
+            "dual-wield",
+            "night-sight"
+          ],
+          "state": {
+            "fatigue": 0,
+            "bleeding": false,
+            "prone": false,
+            "stunTurns": 0,
+            "incapacitated": false,
+            "unconscious": false,
+            "fear": "none",
+            "cold": "none",
+            "extraLoad": 0,
+            "light": "normal"
+          }
+        }
+      },
+      "sources": [
+        {
+          "label": "Personajes iniciales",
+          "href": "/docs/stormkeep-starting-roster.md"
+        }
+      ],
+      "id": "preset.rogue",
+      "name": "Pícaro",
+      "type": "pc",
+      "status": "Personaje inicial · plantilla",
+      "summary": "Sigilo, percepción, movilidad y precisión"
+    },
+    {
+      "assets": [],
+      "fields": {
+        "variants": [
+          {
+            "presetId": "preset.rogue",
+            "id": "scimitar-right",
+            "kind": "weapon",
+            "name": "Cimitarra derecha",
+            "damage": {
+              "count": 1,
+              "sides": 8,
+              "bonus": 0
+            },
+            "size": "medium",
+            "reach": "medium",
+            "hands": 1,
+            "enc": 2,
+            "ap": 6,
+            "maxHp": 10,
+            "hp": 10,
+            "natural": false,
+            "quantity": 1,
+            "carried": true
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Personajes iniciales",
+          "href": "/docs/stormkeep-starting-roster.md"
+        }
+      ],
+      "id": "equipment.scimitar-right",
+      "name": "Cimitarra derecha",
+      "type": "object",
+      "status": "Equipo de plantilla",
+      "summary": "weapon"
+    },
+    {
+      "assets": [],
+      "fields": {
+        "variants": [
+          {
+            "presetId": "preset.rogue",
+            "id": "scimitar-left",
+            "kind": "weapon",
+            "name": "Cimitarra izquierda",
+            "damage": {
+              "count": 1,
+              "sides": 8,
+              "bonus": 0
+            },
+            "size": "medium",
+            "reach": "medium",
+            "hands": 1,
+            "enc": 2,
+            "ap": 6,
+            "maxHp": 10,
+            "hp": 10,
+            "natural": false,
+            "quantity": 1,
+            "carried": true
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Personajes iniciales",
+          "href": "/docs/stormkeep-starting-roster.md"
+        }
+      ],
+      "id": "equipment.scimitar-left",
+      "name": "Cimitarra izquierda",
+      "type": "object",
+      "status": "Equipo de plantilla",
+      "summary": "weapon"
+    },
+    {
+      "assets": [],
+      "fields": {
+        "variants": [
+          {
+            "presetId": "preset.rogue",
+            "id": "hardened-leather",
+            "kind": "armor",
+            "name": "Cuero endurecido",
+            "enc": 5,
+            "ap": 2,
+            "coverage": [
+              "chest",
+              "abdomen",
+              "right-arm",
+              "left-arm",
+              "right-leg",
+              "left-leg"
+            ],
+            "maxHp": 8,
+            "hp": 8,
+            "worn": true,
+            "quantity": 1,
+            "carried": true
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Personajes iniciales",
+          "href": "/docs/stormkeep-starting-roster.md"
+        }
+      ],
+      "id": "equipment.hardened-leather",
+      "name": "Cuero endurecido",
+      "type": "object",
+      "status": "Equipo de plantilla",
+      "summary": "armor"
+    },
+    {
+      "assets": [
+        {
+          "id": "PC/mage",
+          "status": "original",
+          "role": "Retrato"
+        }
+      ],
+      "fields": {
+        "preset": {
+          "id": "mage",
+          "name": "Maga",
+          "role": "Conocimiento, voluntad y hechicería",
+          "portrait": "/docs/art-references/personajes-20261125/assets/03_Maga/personaje.png",
+          "face": "/docs/art-references/personajes-20261125/assets/03_Maga/rostro_frente_y_perfil.png",
+          "professional": [
+            {
+              "id": "invocation",
+              "name": "Invocación (escuela arcana)",
+              "value": 65,
+              "status": "pending"
+            },
+            {
+              "id": "shaping",
+              "name": "Manipulación",
+              "value": 55,
+              "status": "pending"
+            },
+            {
+              "id": "lore",
+              "name": "Saber arcano",
+              "value": 70,
+              "status": "pending"
+            }
+          ],
+          "notes": "La túnica no da armadura metálica ni cuero. Poción y pergaminos no producen efectos automáticos; hechizos pendientes de contrato."
+        },
+        "sheet": {
+          "schemaVersion": 1,
+          "id": "mage",
+          "name": "Maga",
+          "kind": "character",
+          "speciesId": "human",
+          "profession": "Hechicera",
+          "rank": "starting-preset",
+          "source": "PocketDM stormkeep-start-v1; características y entrenamiento originales, equipo provisional inspirado en Mythras; ilustraciones del ZIP del usuario. Sin efectos mágicos o raciales no implementados.",
+          "attributes": {
+            "STR": 9,
+            "CON": 11,
+            "SIZ": 11,
+            "DEX": 12,
+            "INT": 16,
+            "POW": 16,
+            "CHA": 11
+          },
+          "skills": {
+            "combat": 40,
+            "athletics": 35,
+            "brawn": 22,
+            "endurance": 40,
+            "evade": 50,
+            "perception": 60,
+            "stealth": 40,
+            "willpower": 75,
+            "influence": 50,
+            "track": 25,
+            "firstAid": 50
+          },
+          "style": {
+            "id": "arcane-staff",
+            "name": "Báculo arcano",
+            "weaponIds": [
+              "staff"
+            ]
+          },
+          "baseMove": 6,
+          "magicPoints": 16,
+          "damageModifier": {
+            "count": 0,
+            "sides": 2,
+            "sign": 0
+          },
+          "locations": [
+            {
+              "id": "right-leg",
+              "name": "Pierna derecha",
+              "from": 1,
+              "to": 3,
+              "maxHp": 5,
+              "hp": 5,
+              "naturalAP": 0,
+              "vital": false,
+              "limb": true,
+              "disabled": false
+            },
+            {
+              "id": "left-leg",
+              "name": "Pierna izquierda",
+              "from": 4,
+              "to": 6,
+              "maxHp": 5,
+              "hp": 5,
+              "naturalAP": 0,
+              "vital": false,
+              "limb": true,
+              "disabled": false
+            },
+            {
+              "id": "abdomen",
+              "name": "Abdomen",
+              "from": 7,
+              "to": 9,
+              "maxHp": 6,
+              "hp": 6,
+              "naturalAP": 0,
+              "vital": true,
+              "limb": false,
+              "disabled": false
+            },
+            {
+              "id": "chest",
+              "name": "Pecho",
+              "from": 10,
+              "to": 12,
+              "maxHp": 7,
+              "hp": 7,
+              "naturalAP": 0,
+              "vital": true,
+              "limb": false,
+              "disabled": false
+            },
+            {
+              "id": "right-arm",
+              "name": "Brazo derecho",
+              "from": 13,
+              "to": 15,
+              "maxHp": 4,
+              "hp": 4,
+              "naturalAP": 0,
+              "vital": false,
+              "limb": true,
+              "disabled": false
+            },
+            {
+              "id": "left-arm",
+              "name": "Brazo izquierdo",
+              "from": 16,
+              "to": 18,
+              "maxHp": 4,
+              "hp": 4,
+              "naturalAP": 0,
+              "vital": false,
+              "limb": true,
+              "disabled": false
+            },
+            {
+              "id": "head",
+              "name": "Cabeza",
+              "from": 19,
+              "to": 20,
+              "maxHp": 5,
+              "hp": 5,
+              "naturalAP": 0,
+              "vital": true,
+              "limb": false,
+              "disabled": false
+            }
+          ],
+          "inventory": [
+            {
+              "id": "staff",
+              "kind": "weapon",
+              "name": "Báculo de cristal",
+              "damage": {
+                "count": 1,
+                "sides": 8,
+                "bonus": 0
+              },
+              "size": "medium",
+              "reach": "long",
+              "hands": 2,
+              "enc": 2,
+              "ap": 4,
+              "maxHp": 8,
+              "hp": 8,
+              "natural": false,
+              "quantity": 1,
+              "carried": true
+            },
+            {
+              "id": "robe",
+              "kind": "gear",
+              "name": "Túnica y capucha",
+              "enc": 1,
+              "quantity": 1,
+              "carried": true
+            },
+            {
+              "id": "grimoire",
+              "kind": "gear",
+              "name": "Grimorio",
+              "enc": 1,
+              "quantity": 1,
+              "carried": true
+            },
+            {
+              "id": "scrolls",
+              "kind": "gear",
+              "name": "Pergaminos",
+              "enc": 0,
+              "quantity": 2,
+              "carried": true
+            },
+            {
+              "id": "potion",
+              "kind": "gear",
+              "name": "Poción",
+              "enc": 1,
+              "quantity": 1,
+              "carried": true
+            },
+            {
+              "id": "pendant",
+              "kind": "gear",
+              "name": "Colgante arcano",
+              "enc": 0,
+              "quantity": 1,
+              "carried": true
+            },
+            {
+              "id": "pack",
+              "kind": "gear",
+              "name": "Mochila",
+              "enc": 1,
+              "quantity": 1,
+              "carried": true
+            },
+            {
+              "id": "rations",
+              "kind": "gear",
+              "name": "Raciones",
+              "enc": 1,
+              "quantity": 3,
+              "carried": true
+            },
+            {
+              "id": "water",
+              "kind": "gear",
+              "name": "Cantimplora llena",
+              "enc": 1,
+              "quantity": 1,
+              "carried": true
+            },
+            {
+              "id": "rope",
+              "kind": "gear",
+              "name": "Soga",
+              "enc": 1,
+              "quantity": 1,
+              "carried": true
+            }
+          ],
+          "equippedWeaponId": "staff",
+          "abilities": [],
+          "pendingAbilities": [
+            "sorcery",
+            "spellcasting"
+          ],
+          "state": {
+            "fatigue": 0,
+            "bleeding": false,
+            "prone": false,
+            "stunTurns": 0,
+            "incapacitated": false,
+            "unconscious": false,
+            "fear": "none",
+            "cold": "none",
+            "extraLoad": 0,
+            "light": "normal"
+          }
+        }
+      },
+      "sources": [
+        {
+          "label": "Personajes iniciales",
+          "href": "/docs/stormkeep-starting-roster.md"
+        }
+      ],
+      "id": "preset.mage",
+      "name": "Maga",
+      "type": "pc",
+      "status": "Personaje inicial · plantilla",
+      "summary": "Conocimiento, voluntad y hechicería"
+    },
+    {
+      "assets": [],
+      "fields": {
+        "variants": [
+          {
+            "presetId": "preset.mage",
+            "id": "staff",
+            "kind": "weapon",
+            "name": "Báculo de cristal",
+            "damage": {
+              "count": 1,
+              "sides": 8,
+              "bonus": 0
+            },
+            "size": "medium",
+            "reach": "long",
+            "hands": 2,
+            "enc": 2,
+            "ap": 4,
+            "maxHp": 8,
+            "hp": 8,
+            "natural": false,
+            "quantity": 1,
+            "carried": true
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Personajes iniciales",
+          "href": "/docs/stormkeep-starting-roster.md"
+        }
+      ],
+      "id": "equipment.staff",
+      "name": "Báculo de cristal",
+      "type": "object",
+      "status": "Equipo de plantilla",
+      "summary": "weapon"
+    },
+    {
+      "assets": [],
+      "fields": {
+        "variants": [
+          {
+            "presetId": "preset.mage",
+            "id": "robe",
+            "kind": "gear",
+            "name": "Túnica y capucha",
+            "enc": 1,
+            "quantity": 1,
+            "carried": true
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Personajes iniciales",
+          "href": "/docs/stormkeep-starting-roster.md"
+        }
+      ],
+      "id": "equipment.robe",
+      "name": "Túnica y capucha",
+      "type": "object",
+      "status": "Equipo de plantilla",
+      "summary": "gear"
+    },
+    {
+      "assets": [],
+      "fields": {
+        "variants": [
+          {
+            "presetId": "preset.mage",
+            "id": "grimoire",
+            "kind": "gear",
+            "name": "Grimorio",
+            "enc": 1,
+            "quantity": 1,
+            "carried": true
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Personajes iniciales",
+          "href": "/docs/stormkeep-starting-roster.md"
+        }
+      ],
+      "id": "equipment.grimoire",
+      "name": "Grimorio",
+      "type": "object",
+      "status": "Equipo de plantilla",
+      "summary": "gear"
+    },
+    {
+      "assets": [],
+      "fields": {
+        "variants": [
+          {
+            "presetId": "preset.mage",
+            "id": "scrolls",
+            "kind": "gear",
+            "name": "Pergaminos",
+            "enc": 0,
+            "quantity": 2,
+            "carried": true
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Personajes iniciales",
+          "href": "/docs/stormkeep-starting-roster.md"
+        }
+      ],
+      "id": "equipment.scrolls",
+      "name": "Pergaminos",
+      "type": "object",
+      "status": "Equipo de plantilla",
+      "summary": "gear"
+    },
+    {
+      "assets": [],
+      "fields": {
+        "variants": [
+          {
+            "presetId": "preset.mage",
+            "id": "potion",
+            "kind": "gear",
+            "name": "Poción",
+            "enc": 1,
+            "quantity": 1,
+            "carried": true
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Personajes iniciales",
+          "href": "/docs/stormkeep-starting-roster.md"
+        }
+      ],
+      "id": "equipment.potion",
+      "name": "Poción",
+      "type": "object",
+      "status": "Equipo de plantilla",
+      "summary": "gear"
+    },
+    {
+      "assets": [],
+      "fields": {
+        "variants": [
+          {
+            "presetId": "preset.mage",
+            "id": "pendant",
+            "kind": "gear",
+            "name": "Colgante arcano",
+            "enc": 0,
+            "quantity": 1,
+            "carried": true
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Personajes iniciales",
+          "href": "/docs/stormkeep-starting-roster.md"
+        }
+      ],
+      "id": "equipment.pendant",
+      "name": "Colgante arcano",
+      "type": "object",
+      "status": "Equipo de plantilla",
+      "summary": "gear"
+    }
+  ],
+  "relations": [
+    {
+      "from": "marches",
+      "to": "world",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "plains",
+      "to": "world",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "hex.0.0",
+      "to": "marches",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "stormkeep",
+      "to": "hex.0.0",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "hex.1.0",
+      "to": "marches",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "hex.2.0",
+      "to": "plains",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "pilot.village",
+      "to": "hex.2.0",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "pilot.bridge",
+      "to": "hex.2.0",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "draft.stormkeep.fort",
+      "to": "stormkeep",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "draft.stormkeep.barracks",
+      "to": "stormkeep",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "draft.stormkeep.east-gate",
+      "to": "stormkeep",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "draft.stormkeep.harbor",
+      "to": "stormkeep",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "draft.stormkeep.market",
+      "to": "stormkeep",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "draft.stormkeep.inn",
+      "to": "stormkeep",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "draft.stormkeep.smithy",
+      "to": "stormkeep",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "draft.stormkeep.hospice",
+      "to": "stormkeep",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "draft.stormkeep.shrine",
+      "to": "stormkeep",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "draft.stormkeep.homes",
+      "to": "stormkeep",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "draft.stormkeep.shipyard",
+      "to": "stormkeep",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "draft.stormkeep.farms",
+      "to": "stormkeep",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "draft.stormkeep.bakery",
+      "to": "stormkeep",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "draft.stormkeep.woodlot",
+      "to": "stormkeep",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "draft.stormkeep.spring",
+      "to": "stormkeep",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "draft.stormkeep.reserve",
+      "to": "stormkeep",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "draft.stormkeep.smokehouse",
+      "to": "stormkeep",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.edda",
+      "to": "draft.stormkeep.fort",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.edda",
+      "to": "draft.stormkeep.fort",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.oren",
+      "to": "draft.stormkeep.fort",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.oren",
+      "to": "draft.stormkeep.fort",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.hald",
+      "to": "draft.stormkeep.homes",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.hald",
+      "to": "draft.stormkeep.barracks",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.runa",
+      "to": "draft.stormkeep.homes",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.runa",
+      "to": "draft.stormkeep.inn",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.bjar",
+      "to": "draft.stormkeep.homes",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.bjar",
+      "to": "draft.stormkeep.harbor",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.corwin",
+      "to": "draft.stormkeep.homes",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.corwin",
+      "to": "draft.stormkeep.east-gate",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.vesna",
+      "to": "draft.stormkeep.inn",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.vesna",
+      "to": "draft.stormkeep.inn",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.emil",
+      "to": "draft.stormkeep.inn",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.emil",
+      "to": "draft.stormkeep.inn",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.toren",
+      "to": "draft.stormkeep.smithy",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.toren",
+      "to": "draft.stormkeep.smithy",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.liv",
+      "to": "draft.stormkeep.smithy",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.liv",
+      "to": "draft.stormkeep.smithy",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.aldra",
+      "to": "draft.stormkeep.homes",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.aldra",
+      "to": "draft.stormkeep.market",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.bram",
+      "to": "draft.stormkeep.homes",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.bram",
+      "to": "draft.stormkeep.market",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.anja",
+      "to": "draft.stormkeep.homes",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.anja",
+      "to": "draft.stormkeep.homes",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.dain",
+      "to": "draft.stormkeep.homes",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.dain",
+      "to": "draft.stormkeep.shipyard",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.senn",
+      "to": "draft.stormkeep.shrine",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.senn",
+      "to": "draft.stormkeep.shrine",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.nola",
+      "to": "draft.stormkeep.shrine",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.nola",
+      "to": "draft.stormkeep.shrine",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.isveld",
+      "to": "draft.stormkeep.hospice",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.isveld",
+      "to": "draft.stormkeep.hospice",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.tessa",
+      "to": "draft.stormkeep.homes",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.tessa",
+      "to": "draft.stormkeep.hospice",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.orik",
+      "to": "draft.stormkeep.homes",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.orik",
+      "to": "draft.stormkeep.harbor",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.kael",
+      "to": "draft.stormkeep.homes",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.kael",
+      "to": "draft.stormkeep.harbor",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.mira",
+      "to": "draft.stormkeep.homes",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.mira",
+      "to": "draft.stormkeep.market",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.jorun",
+      "to": "draft.stormkeep.homes",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.jorun",
+      "to": "draft.stormkeep.harbor",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.fen",
+      "to": "draft.stormkeep.homes",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.fen",
+      "to": "draft.stormkeep.harbor",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.sava",
+      "to": "draft.stormkeep.homes",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.sava",
+      "to": "draft.stormkeep.harbor",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.hessa",
+      "to": "draft.stormkeep.farms",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.hessa",
+      "to": "draft.stormkeep.farms",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.nils",
+      "to": "draft.stormkeep.farms",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.nils",
+      "to": "draft.stormkeep.market",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.elin",
+      "to": "draft.stormkeep.homes",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.elin",
+      "to": "draft.stormkeep.bakery",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.roan",
+      "to": "draft.stormkeep.homes",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.roan",
+      "to": "draft.stormkeep.woodlot",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.varek",
+      "to": "draft.stormkeep.homes",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.varek",
+      "to": "draft.stormkeep.market",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.kestrel",
+      "to": "draft.stormkeep.homes",
+      "rel": "vive-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.kestrel",
+      "to": "draft.stormkeep.east-gate",
+      "rel": "trabaja-en",
+      "reason": ""
+    },
+    {
+      "from": "draft.npc.edda",
+      "to": "draft.npc.oren",
+      "rel": "family-of",
+      "reason": "Tía y sobrino, sucesión pendiente"
+    },
+    {
+      "from": "draft.npc.hald",
+      "to": "draft.npc.runa",
+      "rel": "family-of",
+      "reason": "Padre e hija"
+    },
+    {
+      "from": "draft.npc.tessa",
+      "to": "draft.npc.bjar",
+      "rel": "family-of",
+      "reason": "Madre e hijo"
+    },
+    {
+      "from": "draft.npc.vesna",
+      "to": "draft.npc.emil",
+      "rel": "family-of",
+      "reason": "Hermanos, negocio compartido"
+    },
+    {
+      "from": "draft.npc.toren",
+      "to": "draft.npc.liv",
+      "rel": "family-of",
+      "reason": "Tío y sobrina"
+    },
+    {
+      "from": "draft.npc.aldra",
+      "to": "draft.npc.bram",
+      "rel": "family-of",
+      "reason": "Madre e hijo"
+    },
+    {
+      "from": "draft.npc.anja",
+      "to": "draft.npc.dain",
+      "rel": "family-of",
+      "reason": "Hermanos"
+    },
+    {
+      "from": "draft.npc.orik",
+      "to": "draft.npc.nola",
+      "rel": "family-of",
+      "reason": "Padre e hija"
+    },
+    {
+      "from": "draft.npc.kael",
+      "to": "draft.npc.mira",
+      "rel": "family-of",
+      "reason": "Pareja"
+    },
+    {
+      "from": "draft.npc.hessa",
+      "to": "draft.npc.nils",
+      "rel": "family-of",
+      "reason": "Madre e hijo"
+    },
+    {
+      "from": "draft.npc.hessa",
+      "to": "draft.npc.elin",
+      "rel": "family-of",
+      "reason": "Madre e hija"
+    },
+    {
+      "from": "draft.npc.nils",
+      "to": "draft.npc.elin",
+      "rel": "family-of",
+      "reason": "Hermanos"
+    },
+    {
+      "from": "draft.npc.roan",
+      "to": "draft.npc.fen",
+      "rel": "family-of",
+      "reason": "Tío y sobrino"
+    },
+    {
+      "from": "draft.npc.edda",
+      "to": "draft.npc.hald",
+      "rel": "superior-of",
+      "reason": "Autoridad limitada por Carta"
+    },
+    {
+      "from": "draft.npc.hald",
+      "to": "draft.npc.bjar",
+      "rel": "superior-of",
+      "reason": "Turnos"
+    },
+    {
+      "from": "draft.npc.edda",
+      "to": "draft.npc.oren",
+      "rel": "superior-of",
+      "reason": "Cuentas"
+    },
+    {
+      "from": "draft.npc.toren",
+      "to": "draft.npc.liv",
+      "rel": "superior-of",
+      "reason": "Aprendizaje"
+    },
+    {
+      "from": "draft.npc.senn",
+      "to": "draft.npc.nola",
+      "rel": "superior-of",
+      "reason": "Aprendizaje"
+    },
+    {
+      "from": "draft.npc.isveld",
+      "to": "draft.npc.tessa",
+      "rel": "ally-of",
+      "reason": "Cuidados"
+    },
+    {
+      "from": "draft.npc.kael",
+      "to": "draft.npc.aldra",
+      "rel": "owes-to",
+      "reason": "Préstamo tras tormenta, saldo a validar"
+    },
+    {
+      "from": "draft.npc.vesna",
+      "to": "draft.npc.aldra",
+      "rel": "owes-to",
+      "reason": "Crédito de posada"
+    },
+    {
+      "from": "draft.npc.elin",
+      "to": "draft.npc.aldra",
+      "rel": "owes-to",
+      "reason": "Préstamo de horno"
+    },
+    {
+      "from": "draft.npc.bram",
+      "to": "draft.npc.aldra",
+      "rel": "rival-of",
+      "reason": "Diferencias sobre independencia comercial, no enemistad"
+    },
+    {
+      "from": "draft.npc.hessa",
+      "to": "draft.npc.edda",
+      "rel": "related-to",
+      "reason": "Representación de productores"
+    },
+    {
+      "from": "draft.npc.orik",
+      "to": "draft.npc.jorun",
+      "rel": "related-to",
+      "reason": "Atraque y disputa de plazos"
+    },
+    {
+      "from": "draft.npc.orik",
+      "to": "draft.npc.sava",
+      "rel": "related-to",
+      "reason": "Experiencia y seguridad"
+    },
+    {
+      "from": "draft.npc.orik",
+      "to": "draft.npc.fen",
+      "rel": "related-to",
+      "reason": "Trabajo portuario"
+    },
+    {
+      "from": "draft.npc.corwin",
+      "to": "draft.npc.hald",
+      "rel": "related-to",
+      "reason": "Registro de acceso"
+    },
+    {
+      "from": "draft.npc.aldra",
+      "to": "draft.npc.orik",
+      "rel": "related-to",
+      "reason": "Cargas"
+    },
+    {
+      "from": "draft.npc.aldra",
+      "to": "draft.npc.isveld",
+      "rel": "related-to",
+      "reason": "Abastecimiento sanitario"
+    },
+    {
+      "from": "draft.npc.aldra",
+      "to": "draft.npc.nils",
+      "rel": "related-to",
+      "reason": "Transporte"
+    },
+    {
+      "from": "draft.npc.emil",
+      "to": "draft.npc.elin",
+      "rel": "related-to",
+      "reason": "Pan y cocina"
+    },
+    {
+      "from": "draft.npc.emil",
+      "to": "draft.npc.mira",
+      "rel": "related-to",
+      "reason": "Pescado y ahumado"
+    },
+    {
+      "from": "draft.npc.toren",
+      "to": "draft.npc.roan",
+      "rel": "related-to",
+      "reason": "Combustible"
+    },
+    {
+      "from": "draft.npc.dain",
+      "to": "draft.npc.toren",
+      "rel": "related-to",
+      "reason": "Herrajes"
+    },
+    {
+      "from": "draft.npc.dain",
+      "to": "draft.npc.jorun",
+      "rel": "related-to",
+      "reason": "Reparación naval"
+    },
+    {
+      "from": "draft.npc.anja",
+      "to": "draft.npc.mira",
+      "rel": "related-to",
+      "reason": "Redes y telas"
+    },
+    {
+      "from": "draft.npc.vesna",
+      "to": "draft.npc.kestrel",
+      "rel": "related-to",
+      "reason": "Viajeros"
+    },
+    {
+      "from": "draft.npc.sava",
+      "to": "draft.npc.kael",
+      "rel": "friend-of",
+      "reason": "Experiencia costera"
+    },
+    {
+      "from": "draft.npc.varek",
+      "to": "draft.npc.dain",
+      "rel": "related-to",
+      "reason": "Piezas recuperadas"
+    },
+    {
+      "from": "draft.npc.kestrel",
+      "to": "draft.npc.nils",
+      "rel": "related-to",
+      "reason": "Caminos"
+    },
+    {
+      "from": "draft.npc.senn",
+      "to": "draft.npc.orik",
+      "rel": "related-to",
+      "reason": "Memoria del puerto"
+    },
+    {
+      "from": "draft.npc.hessa",
+      "to": "draft.npc.elin",
+      "rel": "related-to",
+      "reason": "Semilla y harina"
+    },
+    {
+      "from": "draft.npc.bjar",
+      "to": "draft.npc.fen",
+      "rel": "friend-of",
+      "reason": "Antiguos compañeros de estiba"
+    },
+    {
+      "from": "draft.npc.senn",
+      "to": "draft.npc.edda",
+      "rel": "related-to",
+      "reason": "Historia de Carta"
+    },
+    {
+      "from": "draft.npc.isveld",
+      "to": "draft.npc.hessa",
+      "rel": "related-to",
+      "reason": "Necesidades de hogares productores"
+    },
+    {
+      "from": "draft.npc.edda",
+      "to": "draft.stormkeep.fort",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.oren",
+      "to": "draft.stormkeep.fort",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.hald",
+      "to": "draft.stormkeep.barracks",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.runa",
+      "to": "draft.stormkeep.inn",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.bjar",
+      "to": "draft.stormkeep.harbor",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.corwin",
+      "to": "draft.stormkeep.east-gate",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.vesna",
+      "to": "draft.stormkeep.inn",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.emil",
+      "to": "draft.stormkeep.inn",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.toren",
+      "to": "draft.stormkeep.smithy",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.liv",
+      "to": "draft.stormkeep.smithy",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.aldra",
+      "to": "draft.stormkeep.market",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.bram",
+      "to": "draft.stormkeep.market",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.anja",
+      "to": "draft.stormkeep.homes",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.dain",
+      "to": "draft.stormkeep.shipyard",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.senn",
+      "to": "draft.stormkeep.shrine",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.nola",
+      "to": "draft.stormkeep.shrine",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.isveld",
+      "to": "draft.stormkeep.hospice",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.tessa",
+      "to": "draft.stormkeep.hospice",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.orik",
+      "to": "draft.stormkeep.harbor",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.kael",
+      "to": "draft.stormkeep.harbor",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.mira",
+      "to": "draft.stormkeep.market",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.jorun",
+      "to": "draft.stormkeep.harbor",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.fen",
+      "to": "draft.stormkeep.harbor",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.sava",
+      "to": "draft.stormkeep.harbor",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.hessa",
+      "to": "draft.stormkeep.farms",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.nils",
+      "to": "draft.stormkeep.market",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.elin",
+      "to": "draft.stormkeep.bakery",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.roan",
+      "to": "draft.stormkeep.woodlot",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.varek",
+      "to": "draft.stormkeep.market",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.npc.kestrel",
+      "to": "draft.stormkeep.east-gate",
+      "rel": "works-at",
+      "reason": "Actividad habitual propuesta"
+    },
+    {
+      "from": "draft.region.storm-coasts",
+      "to": "world",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "draft.region.south-wetlands",
+      "to": "world",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "draft.region.ash-deserts",
+      "to": "world",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "draft.region.midday-cities",
+      "to": "world",
+      "rel": "pertenece-a",
+      "reason": ""
+    },
+    {
+      "from": "preset.paladin",
+      "to": "equipment.longsword",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.paladin",
+      "to": "equipment.plate-cuirass",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.paladin",
+      "to": "equipment.plate-limbs",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.paladin",
+      "to": "equipment.holy-symbol",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.paladin",
+      "to": "equipment.cloak",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.paladin",
+      "to": "equipment.pack",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.paladin",
+      "to": "equipment.rations",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.paladin",
+      "to": "equipment.water",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.paladin",
+      "to": "equipment.rope",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.rogue",
+      "to": "equipment.scimitar-right",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.rogue",
+      "to": "equipment.scimitar-left",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.rogue",
+      "to": "equipment.hardened-leather",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.rogue",
+      "to": "equipment.cloak",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.rogue",
+      "to": "equipment.pack",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.rogue",
+      "to": "equipment.rations",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.rogue",
+      "to": "equipment.water",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.rogue",
+      "to": "equipment.rope",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.mage",
+      "to": "equipment.staff",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.mage",
+      "to": "equipment.robe",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.mage",
+      "to": "equipment.grimoire",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.mage",
+      "to": "equipment.scrolls",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.mage",
+      "to": "equipment.potion",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.mage",
+      "to": "equipment.pendant",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.mage",
+      "to": "equipment.pack",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.mage",
+      "to": "equipment.rations",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.mage",
+      "to": "equipment.water",
+      "rel": "equipo-inicial",
+      "reason": ""
+    },
+    {
+      "from": "preset.mage",
+      "to": "equipment.rope",
+      "rel": "equipo-inicial",
+      "reason": ""
+    }
+  ],
+  "missingArt": [],
+  "unmatchedRelations": []
+}

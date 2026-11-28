@@ -69,3 +69,5 @@ dm-context-panel[hidden]{display:none!important}
 .context-open body{padding-left:calc(var(--rail-width) + var(--context-width))}
 .context-collapsed{--context-width:42px}
 @media(max-width:600px){.context-open:not(.context-collapsed){--context-width:min(300px,45vw)}.context-open body,.rail-expanded.context-open body{padding-left:calc(56px + var(--context-width))}.rail-expanded dm-context-panel{left:56px;max-width:calc(100vw - 56px)}.rail-expanded .rail:has(dm-context-panel:not([hidden])){z-index:6}.rail-expanded dm-context-panel{z-index:-1}}
+
+.nav-group[data-group=world]{--group:#8dba83;--group-soft:#456e45;--group-deep:#293f33;--group-light:#d7ebce}

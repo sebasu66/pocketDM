@@ -1,0 +1,18 @@
+{
+  "id": "act-20261128-sys09-world-register-009",
+  "date": "2026-11-27",
+  "area": "Coordinación",
+  "owner": "SYS-09",
+  "status": "en-progreso",
+  "title": "Registro del mundo y vínculos gráficos",
+  "summary": "84 registros, 192 relaciones y 55 fichas ilustradas a partir de fuentes públicas existentes. Navegación bidireccional con catálogo; canon y estado de campaña intactos.",
+  "changed": [
+    "vault-site/public/dm/mundo/index.html",
+    "vault-site/public/data/world-register.json",
+    "vault-site/scripts/build-world-register.mjs",
+    "vault-site/public/dm/arte/asset-library.mjs"
+  ],
+  "next": "Actualizar las fuentes de autoría y sus vínculos al aprobar nuevas fichas o imágenes.",
+  "source": "https://github.com/sebasu66/pocketDM/tree/feature/editorial-universal-page-20261127",
+  "nodeIds": []
+}

@@ -163,3 +163,7 @@ Ruta /libro/prueba/ accesible desde inicio y navegación del libro. Miniaventura
 ### Recuperación de acabado artístico del editor universal
 
 Se recuperan formato tipográfico, papel coloreado, contorno y sombra, borde configurable y máscaras geométricas con quemado del laboratorio original. El fondo de título se elimina por defecto; se permite transparencia en cada capa y se amplían rangos de transformación. Se preservan los perfiles y los 129 recursos. Evidencia: prueba de contrato e inspector, pruebas de lector y laboratorio. Pendiente paridad de flujo alrededor de siluetas y máscaras adicionales.
+
+### Registro del mundo en la bóveda
+
+Sección /dm/mundo/#registros: 84 registros de autoría y pruebas, 192 relaciones, 55 fichas ilustradas, vínculos bidireccionales con la biblioteca y fuentes originales. Generador e índice JSON para agentes. Sin modificaciones del motor, sin publicación de dossiers privados, sin aprobación implícita del canon. Pruebas de integridad y navegador PASS.
